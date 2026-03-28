@@ -459,6 +459,16 @@ def build_box(user_id, obj_spec, index, x, y):
             }
         }
 
+    # Presentation
+    pres = obj_spec.get("presentation")
+    if pres:
+        box["box"]["presentation"] = 1
+        if isinstance(pres, list):
+            if len(pres) == 2:
+                box["box"]["presentation_rect"] = [float(pres[0]), float(pres[1]), float(w), float(h)]
+            elif len(pres) >= 4:
+                box["box"]["presentation_rect"] = [float(v) for v in pres[:4]]
+
     # Extra attributes from spec
     attrs = obj_spec.get("attrs", {})
     for k, val in attrs.items():
@@ -588,6 +598,11 @@ def convert_patcher(spec):
         "default_fontsize": DEFAULT_FONT_SIZE,
         "default_fontname": DEFAULT_FONT_NAME,
     }
+
+    # Enable presentation mode if any object has presentation data
+    has_presentation = any(obj.get("presentation") for obj in objects.values())
+    if has_presentation:
+        patcher["openinpresentation"] = 1
 
     # Add name as title comment
     name = spec.get("name")
