@@ -6,7 +6,7 @@
     "loadmess": { "type": "newobj", "text": "loadmess 200 100 150", "pos": [250, 30] },
     "unpack_init": { "type": "newobj", "text": "unpack 0 0 0", "pos": [250, 55] },
 
-    "tempo_label": { "type": "comment", "text": "tempo (ms)", "pos": [80, 77], "presentation": [68, 10] },
+    "tempo_label": { "type": "comment", "text": "tempo (ms)", "pos": [80, 77], "presentation": [68, 5] },
     "tempo": { "type": "number", "pos": [65, 92], "attrs": { "minimum": 50, "maximum": 2000 }, "presentation": [65, 25, 60, 22] },
     "onoff": { "type": "toggle", "pos": [30, 125], "presentation": [10, 22] },
     "metro": { "type": "newobj", "text": "metro 200", "pos": [30, 150] },
@@ -18,7 +18,7 @@
     "fetch_pitch": { "type": "newobj", "text": "prepend fetch", "pos": [30, 270] },
     "fetch_rest": { "type": "newobj", "text": "prepend fetch", "pos": [150, 270] },
 
-    "pitch_label": { "type": "comment", "text": "pitch (MIDI 36-84)", "pos": [45, 303], "presentation": [15, 55] },
+    "pitch_label": { "type": "comment", "text": "pitch (MIDI 36-84)", "pos": [45, 303], "presentation": [15, 52] },
     "slider": {
       "type": "multislider",
       "pos": [30, 320],
@@ -36,7 +36,7 @@
     },
 
     "rest_init": { "type": "newobj", "text": "loadmess 1", "pos": [30, 428] },
-    "rest_label": { "type": "comment", "text": "rests (0=rest, 1=note)", "pos": [45, 448], "presentation": [15, 178] },
+    "rest_label": { "type": "comment", "text": "rests (0=rest, 1=note)", "pos": [45, 448], "presentation": [15, 175] },
     "rest_slider": {
       "type": "multislider",
       "pos": [30, 465],
@@ -57,9 +57,9 @@
     "pitch_display": { "type": "number", "pos": [250, 500], "presentation": [155, 10, 50, 22] },
     "note_gate": { "type": "newobj", "text": "gate 1", "pos": [250, 535] },
 
-    "vel_label": { "type": "comment", "text": "velocity", "pos": [355, 555], "presentation": [15, 228] },
+    "vel_label": { "type": "comment", "text": "velocity", "pos": [355, 555], "presentation": [15, 225] },
     "velocity": { "type": "number", "pos": [340, 573], "attrs": { "minimum": 1, "maximum": 127 }, "presentation": [10, 243, 55, 22] },
-    "dur_label": { "type": "comment", "text": "duration (ms)", "pos": [445, 555], "presentation": [85, 228] },
+    "dur_label": { "type": "comment", "text": "duration (ms)", "pos": [445, 555], "presentation": [85, 225] },
     "duration": { "type": "number", "pos": [430, 573], "attrs": { "minimum": 10, "maximum": 2000 }, "presentation": [80, 243, 65, 22] },
 
     "makenote": { "type": "newobj", "text": "makenote 100 150", "pos": [250, 610] },

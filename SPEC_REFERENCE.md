@@ -249,6 +249,21 @@ Lay out the main signal chain vertically, top to bottom. Place the primary input
 
 When a secondary control (velocity, duration, etc.) feeds into a later inlet of an object in the main chain, place it above and to the right of that object so the cable drops down naturally into the correct inlet. Label it with a comment using the same right-shift rule.
 
+## Presentation View
+
+Use the `presentation` field on objects to create a clean, user-facing layout separate from the patching view. Presentation mode hides all wiring and non-presented objects, showing only the controls the user needs.
+
+### When to use presentation
+
+Any patch with more than a handful of user-facing controls benefits from a presentation. Include all UI objects (toggles, number boxes, sliders, dials, gain controls, ezdac~, etc.) and their comment labels. Omit internal logic objects (newobj, message boxes used for routing, etc.).
+
+### Presentation layout
+
+- Place comment labels **above** the control they describe, with ~18px vertical gap so the label text clears the control cleanly. Comments render slightly taller in presentation than in patching view.
+- Group related controls together (e.g. all transport controls in one row, all note parameters in another).
+- Keep the layout compact — presentation is meant to be a minimal panel, not a spread-out canvas.
+- Presentation positions are independent of patching positions, so optimize each view for its own purpose.
+
 ## Complete Examples
 
 ### Random MIDI Note Player
