@@ -496,7 +496,7 @@ def build_spec_embed(spec, x, y):
     return {
         "box": {
             "id": "obj-spec-embed",
-            "maxclass": "codebox",
+            "maxclass": "text.codebox",
             "numinlets": 1,
             "numoutlets": 1,
             "outlettype": [""],
