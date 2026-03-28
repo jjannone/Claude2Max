@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Diff .maxpat files by their embedded Claude2Max spec only
+*.maxpat diff=claude2max
