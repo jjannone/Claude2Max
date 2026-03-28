@@ -501,7 +501,7 @@ def build_spec_embed(spec, x, y):
             "numoutlets": 1,
             "outlettype": [""],
             "patching_rect": [float(x), float(y), 500.0, 300.0],
-            "text": embed_text,
+            "code": embed_text,
             "fontsize": 9.0,
             "hidden": 1,
         }
@@ -513,7 +513,8 @@ def extract_spec(maxpat):
     boxes = maxpat.get("patcher", {}).get("boxes", [])
     for box_wrapper in boxes:
         box = box_wrapper.get("box", {})
-        text = box.get("text", "")
+        # Check both 'code' (codebox) and 'text' (legacy comment) fields
+        text = box.get("code", "") or box.get("text", "")
         if SPEC_MARKER_BEGIN in text:
             start = text.index(SPEC_MARKER_BEGIN) + len(SPEC_MARKER_BEGIN)
             end = text.index(SPEC_MARKER_END)
