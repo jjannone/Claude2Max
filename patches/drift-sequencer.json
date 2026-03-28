@@ -1,25 +1,28 @@
 {
   "name": "Drift Sequencer",
   "width": 650,
-  "height": 870,
+  "height": 880,
   "objects": {
     "loadmess": { "type": "newobj", "text": "loadmess 200 100 150", "pos": [250, 30] },
-    "unpack_init": { "type": "newobj", "text": "unpack 0 0 0", "pos": [250, 60] },
+    "unpack_init": { "type": "newobj", "text": "unpack 0 0 0", "pos": [250, 55] },
 
-    "tempo_label": { "type": "comment", "text": "tempo (ms)", "pos": [80, 82] },
-    "tempo": { "type": "number", "pos": [65, 100], "attrs": { "minimum": 50, "maximum": 2000 } },
-    "onoff": { "type": "toggle", "pos": [30, 140] },
-    "metro": { "type": "newobj", "text": "metro 200", "pos": [30, 170] },
+    "tempo_label": { "type": "comment", "text": "tempo (ms)", "pos": [80, 77] },
+    "tempo": { "type": "number", "pos": [65, 92], "attrs": { "minimum": 50, "maximum": 2000 } },
+    "onoff": { "type": "toggle", "pos": [30, 125] },
+    "metro": { "type": "newobj", "text": "metro 200", "pos": [30, 150] },
 
-    "steps": { "type": "newobj", "text": "counter 0 7", "pos": [30, 205] },
-    "step_plus1": { "type": "newobj", "text": "+ 1", "pos": [30, 240] },
-    "fetch": { "type": "newobj", "text": "prepend fetch", "pos": [30, 275] },
+    "steps": { "type": "newobj", "text": "counter 0 7", "pos": [30, 180] },
+    "step_plus1": { "type": "newobj", "text": "+ 1", "pos": [30, 210] },
+    "trig": { "type": "newobj", "text": "t i i", "pos": [30, 240] },
 
-    "pitch_label": { "type": "comment", "text": "pitch (8 steps, MIDI 36-84)", "pos": [45, 310] },
+    "fetch_pitch": { "type": "newobj", "text": "prepend fetch", "pos": [30, 270] },
+    "fetch_rest": { "type": "newobj", "text": "prepend fetch", "pos": [150, 270] },
+
+    "pitch_label": { "type": "comment", "text": "pitch (MIDI 36-84)", "pos": [45, 303] },
     "slider": {
       "type": "multislider",
-      "pos": [30, 330],
-      "size": [200, 120],
+      "pos": [30, 320],
+      "size": [200, 100],
       "attrs": {
         "size": 8,
         "setminmax": [36.0, 84.0],
@@ -31,29 +34,47 @@
       }
     },
 
-    "pitch_display": { "type": "number", "pos": [250, 475] },
+    "rest_label": { "type": "comment", "text": "rests (0=rest, 1=note)", "pos": [45, 428] },
+    "rest_slider": {
+      "type": "multislider",
+      "pos": [30, 445],
+      "size": [200, 25],
+      "attrs": {
+        "size": 8,
+        "setminmax": [0.0, 1.0],
+        "setstyle": 1,
+        "candicane2": [0.9, 0.5, 0.2, 1.0],
+        "slidercolor": [0.9, 0.5, 0.2, 1.0],
+        "bgcolor": [0.15, 0.15, 0.15, 1.0],
+        "orientation": 1
+      }
+    },
 
-    "vel_label": { "type": "comment", "text": "velocity", "pos": [355, 492] },
-    "velocity": { "type": "number", "pos": [340, 510], "attrs": { "minimum": 1, "maximum": 127 } },
-    "dur_label": { "type": "comment", "text": "duration (ms)", "pos": [445, 492] },
-    "duration": { "type": "number", "pos": [430, 510], "attrs": { "minimum": 10, "maximum": 2000 } },
+    "pitch_display": { "type": "number", "pos": [250, 440] },
+    "rest_int": { "type": "newobj", "text": "int", "pos": [250, 480] },
+    "note_gate": { "type": "newobj", "text": "gate 1", "pos": [250, 515] },
 
-    "makenote": { "type": "newobj", "text": "makenote 100 150", "pos": [250, 550] },
-    "pack_note": { "type": "newobj", "text": "pack 60 100", "pos": [250, 585] },
-    "midiformat": { "type": "newobj", "text": "midiformat", "pos": [250, 620] },
+    "vel_label": { "type": "comment", "text": "velocity", "pos": [355, 535] },
+    "velocity": { "type": "number", "pos": [340, 553], "attrs": { "minimum": 1, "maximum": 127 } },
+    "dur_label": { "type": "comment", "text": "duration (ms)", "pos": [445, 535] },
+    "duration": { "type": "number", "pos": [430, 553], "attrs": { "minimum": 10, "maximum": 2000 } },
+
+    "makenote": { "type": "newobj", "text": "makenote 100 150", "pos": [250, 590] },
+    "pack_note": { "type": "newobj", "text": "pack 60 100", "pos": [250, 620] },
+    "midiformat": { "type": "newobj", "text": "midiformat", "pos": [250, 650] },
     "drift": {
       "type": "newobj",
       "text": "abl.device.drift~",
-      "pos": [250, 655],
+      "pos": [250, 680],
       "inlets": 1,
       "outlets": 2,
       "outlettype": ["signal", "signal"]
     },
 
-    "gain": { "type": "gain~", "pos": [250, 695] },
-    "dac": { "type": "ezdac~", "pos": [250, 790] },
+    "gain": { "type": "gain~", "pos": [250, 710], "size": [22, 80] },
+    "dac": { "type": "ezdac~", "pos": [250, 800] },
 
-    "info": { "type": "comment", "text": "Turn on audio, set pitches, click toggle", "pos": [30, 840] }
+    "info": { "type": "comment", "text": "Turn on audio, set pitches and rests, click toggle", "pos": [30, 850] }
   },
   "connections": [
     ["loadmess", 0, "unpack_init", 0],
@@ -66,11 +87,20 @@
 
     ["metro", 0, "steps", 0],
     ["steps", 0, "step_plus1", 0],
-    ["step_plus1", 0, "fetch", 0],
-    ["fetch", 0, "slider", 0],
+    ["step_plus1", 0, "trig", 0],
+
+    ["trig", 1, "fetch_rest", 0],
+    ["trig", 0, "fetch_pitch", 0],
+
+    ["fetch_pitch", 0, "slider", 0],
+    ["fetch_rest", 0, "rest_slider", 0],
 
     ["slider", 1, "pitch_display", 0],
-    ["pitch_display", 0, "makenote", 0],
+    ["rest_slider", 1, "rest_int", 0],
+
+    ["rest_int", 0, "note_gate", 0],
+    ["pitch_display", 0, "note_gate", 1],
+    ["note_gate", 0, "makenote", 0],
 
     ["velocity", 0, "makenote", 1],
     ["duration", 0, "makenote", 2],
