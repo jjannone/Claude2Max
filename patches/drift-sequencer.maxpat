@@ -12,7 +12,7 @@
     "rect": [
       100.0,
       100.0,
-      580.0,
+      600.0,
       830.0
     ],
     "gridsize": [
@@ -45,90 +45,40 @@
           "numinlets": 1,
           "numoutlets": 1,
           "outlettype": [
-            "bang"
+            ""
           ],
           "patching_rect": [
             250.0,
             30.0,
-            76.0,
+            160.0,
             22.0
           ],
-          "text": "loadbang"
+          "text": "loadmess 200 100 150"
         }
       },
       {
         "box": {
           "id": "obj-2",
-          "maxclass": "message",
-          "numinlets": 2,
-          "numoutlets": 1,
+          "maxclass": "newobj",
+          "numinlets": 1,
+          "numoutlets": 3,
           "outlettype": [
+            "",
+            "",
             ""
           ],
           "patching_rect": [
-            65.0,
-            55.0,
-            41.0,
+            250.0,
+            60.0,
+            104.0,
             22.0
           ],
-          "text": "200"
+          "text": "unpack 0 0 0"
         }
       },
       {
         "box": {
           "id": "obj-3",
-          "maxclass": "message",
-          "numinlets": 2,
-          "numoutlets": 1,
-          "outlettype": [
-            ""
-          ],
-          "patching_rect": [
-            340.0,
-            55.0,
-            41.0,
-            22.0
-          ],
-          "text": "100"
-        }
-      },
-      {
-        "box": {
-          "id": "obj-4",
-          "maxclass": "message",
-          "numinlets": 2,
-          "numoutlets": 1,
-          "outlettype": [
-            ""
-          ],
-          "patching_rect": [
-            430.0,
-            55.0,
-            41.0,
-            22.0
-          ],
-          "text": "150"
-        }
-      },
-      {
-        "box": {
-          "id": "obj-5",
-          "maxclass": "comment",
-          "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            65.0,
-            82.0,
-            90.0,
-            22.0
-          ],
-          "text": "tempo (ms)"
-        }
-      },
-      {
-        "box": {
-          "id": "obj-6",
           "maxclass": "number",
           "numinlets": 1,
           "numoutlets": 2,
@@ -148,7 +98,23 @@
       },
       {
         "box": {
-          "id": "obj-7",
+          "id": "obj-4",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            120.0,
+            102.0,
+            90.0,
+            22.0
+          ],
+          "text": "tempo (ms)"
+        }
+      },
+      {
+        "box": {
+          "id": "obj-5",
           "maxclass": "toggle",
           "numinlets": 1,
           "numoutlets": 1,
@@ -165,7 +131,7 @@
       },
       {
         "box": {
-          "id": "obj-8",
+          "id": "obj-6",
           "maxclass": "newobj",
           "numinlets": 2,
           "numoutlets": 1,
@@ -183,7 +149,7 @@
       },
       {
         "box": {
-          "id": "obj-9",
+          "id": "obj-7",
           "maxclass": "newobj",
           "numinlets": 5,
           "numoutlets": 4,
@@ -204,7 +170,7 @@
       },
       {
         "box": {
-          "id": "obj-10",
+          "id": "obj-8",
           "maxclass": "newobj",
           "numinlets": 2,
           "numoutlets": 1,
@@ -222,7 +188,7 @@
       },
       {
         "box": {
-          "id": "obj-11",
+          "id": "obj-9",
           "maxclass": "newobj",
           "numinlets": 1,
           "numoutlets": 1,
@@ -240,23 +206,7 @@
       },
       {
         "box": {
-          "id": "obj-12",
-          "maxclass": "comment",
-          "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            30.0,
-            295.0,
-            125.0,
-            22.0
-          ],
-          "text": "pitch (8 steps)"
-        }
-      },
-      {
-        "box": {
-          "id": "obj-13",
+          "id": "obj-10",
           "maxclass": "multislider",
           "numinlets": 1,
           "numoutlets": 2,
@@ -266,7 +216,7 @@
           ],
           "patching_rect": [
             30.0,
-            315.0,
+            305.0,
             120.0,
             80.0
           ],
@@ -299,7 +249,23 @@
       },
       {
         "box": {
-          "id": "obj-14",
+          "id": "obj-11",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            240.0,
+            305.0,
+            125.0,
+            22.0
+          ],
+          "text": "pitch (8 steps)"
+        }
+      },
+      {
+        "box": {
+          "id": "obj-12",
           "maxclass": "number",
           "numinlets": 1,
           "numoutlets": 2,
@@ -309,7 +275,7 @@
           ],
           "patching_rect": [
             250.0,
-            390.0,
+            450.0,
             50.0,
             22.0
           ]
@@ -317,23 +283,7 @@
       },
       {
         "box": {
-          "id": "obj-15",
-          "maxclass": "comment",
-          "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            340.0,
-            400.0,
-            76.0,
-            22.0
-          ],
-          "text": "velocity"
-        }
-      },
-      {
-        "box": {
-          "id": "obj-16",
+          "id": "obj-13",
           "maxclass": "number",
           "numinlets": 1,
           "numoutlets": 2,
@@ -343,7 +293,7 @@
           ],
           "patching_rect": [
             340.0,
-            418.0,
+            450.0,
             50.0,
             22.0
           ],
@@ -353,23 +303,23 @@
       },
       {
         "box": {
-          "id": "obj-17",
+          "id": "obj-14",
           "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            430.0,
-            400.0,
-            111.0,
+            395.0,
+            452.0,
+            76.0,
             22.0
           ],
-          "text": "duration (ms)"
+          "text": "velocity"
         }
       },
       {
         "box": {
-          "id": "obj-18",
+          "id": "obj-15",
           "maxclass": "number",
           "numinlets": 1,
           "numoutlets": 2,
@@ -379,7 +329,7 @@
           ],
           "patching_rect": [
             430.0,
-            418.0,
+            450.0,
             50.0,
             22.0
           ],
@@ -389,7 +339,23 @@
       },
       {
         "box": {
-          "id": "obj-19",
+          "id": "obj-16",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            485.0,
+            452.0,
+            111.0,
+            22.0
+          ],
+          "text": "duration (ms)"
+        }
+      },
+      {
+        "box": {
+          "id": "obj-17",
           "maxclass": "newobj",
           "numinlets": 3,
           "numoutlets": 2,
@@ -399,7 +365,7 @@
           ],
           "patching_rect": [
             250.0,
-            455.0,
+            490.0,
             132.0,
             22.0
           ],
@@ -408,7 +374,7 @@
       },
       {
         "box": {
-          "id": "obj-20",
+          "id": "obj-18",
           "maxclass": "newobj",
           "numinlets": 2,
           "numoutlets": 1,
@@ -417,7 +383,7 @@
           ],
           "patching_rect": [
             250.0,
-            490.0,
+            525.0,
             97.0,
             22.0
           ],
@@ -426,7 +392,7 @@
       },
       {
         "box": {
-          "id": "obj-21",
+          "id": "obj-19",
           "maxclass": "newobj",
           "numinlets": 7,
           "numoutlets": 1,
@@ -435,7 +401,7 @@
           ],
           "patching_rect": [
             250.0,
-            525.0,
+            560.0,
             90.0,
             22.0
           ],
@@ -444,7 +410,7 @@
       },
       {
         "box": {
-          "id": "obj-22",
+          "id": "obj-20",
           "maxclass": "newobj",
           "numinlets": 1,
           "numoutlets": 2,
@@ -454,7 +420,7 @@
           ],
           "patching_rect": [
             250.0,
-            560.0,
+            595.0,
             139.0,
             22.0
           ],
@@ -463,7 +429,7 @@
       },
       {
         "box": {
-          "id": "obj-23",
+          "id": "obj-21",
           "maxclass": "gain~",
           "numinlets": 2,
           "numoutlets": 2,
@@ -473,7 +439,7 @@
           ],
           "patching_rect": [
             250.0,
-            595.0,
+            635.0,
             22.0,
             140.0
           ]
@@ -481,14 +447,14 @@
       },
       {
         "box": {
-          "id": "obj-24",
+          "id": "obj-22",
           "maxclass": "ezdac~",
           "numinlets": 2,
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
             250.0,
-            745.0,
+            785.0,
             45.0,
             45.0
           ]
@@ -496,14 +462,14 @@
       },
       {
         "box": {
-          "id": "obj-25",
+          "id": "obj-23",
           "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
             30.0,
-            795.0,
+            800.0,
             300.0,
             22.0
           ],
@@ -519,12 +485,12 @@
           "outlettype": [],
           "patching_rect": [
             50.0,
-            857.0,
+            870.0,
             500.0,
-            6336.0
+            5888.0
           ],
-          "text": "--- CLAUDE2MAX SPEC ---\n{\n  \"name\": \"Drift Sequencer\",\n  \"width\": 580,\n  \"height\": 830,\n  \"objects\": {\n    \"loadbang\": {\n      \"type\": \"newobj\",\n      \"text\": \"loadbang\",\n      \"pos\": [\n        250,\n        30\n      ]\n    },\n    \"init_tempo\": {\n      \"type\": \"message\",\n      \"text\": \"200\",\n      \"pos\": [\n        65,\n        55\n      ]\n    },\n    \"init_vel\": {\n      \"type\": \"message\",\n      \"text\": \"100\",\n      \"pos\": [\n        340,\n        55\n      ]\n    },\n    \"init_dur\": {\n      \"type\": \"message\",\n      \"text\": \"150\",\n      \"pos\": [\n        430,\n        55\n      ]\n    },\n    \"tempo_label\": {\n      \"type\": \"comment\",\n      \"text\": \"tempo (ms)\",\n      \"pos\": [\n        65,\n        82\n      ]\n    },\n    \"tempo\": {\n      \"type\": \"number\",\n      \"pos\": [\n        65,\n        100\n      ],\n      \"attrs\": {\n        \"minimum\": 50,\n        \"maximum\": 2000\n      }\n    },\n    \"onoff\": {\n      \"type\": \"toggle\",\n      \"pos\": [\n        30,\n        135\n      ]\n    },\n    \"metro\": {\n      \"type\": \"newobj\",\n      \"text\": \"metro 200\",\n      \"pos\": [\n        30,\n        165\n      ]\n    },\n    \"steps\": {\n      \"type\": \"newobj\",\n      \"text\": \"counter 0 7\",\n      \"pos\": [\n        30,\n        200\n      ]\n    },\n    \"step_plus1\": {\n      \"type\": \"newobj\",\n      \"text\": \"+ 1\",\n      \"pos\": [\n        30,\n        235\n      ]\n    },\n    \"fetch\": {\n      \"type\": \"newobj\",\n      \"text\": \"prepend fetch\",\n      \"pos\": [\n        30,\n        270\n      ]\n    },\n    \"pitch_label\": {\n      \"type\": \"comment\",\n      \"text\": \"pitch (8 steps)\",\n      \"pos\": [\n        30,\n        295\n      ]\n    },\n    \"slider\": {\n      \"type\": \"multislider\",\n      \"pos\": [\n        30,\n        315\n      ],\n      \"size\": [\n        200,\n        120\n      ],\n      \"attrs\": {\n        \"size\": 8,\n        \"setminmax\": [\n          36.0,\n          84.0\n        ],\n        \"setstyle\": 1,\n        \"candicane2\": [\n          0.14,\n          0.69,\n          0.78,\n          1.0\n        ],\n        \"slidercolor\": [\n          0.14,\n          0.69,\n          0.78,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.15,\n          0.15,\n          0.15,\n          1.0\n        ],\n        \"orientation\": 1\n      }\n    },\n    \"pitch_display\": {\n      \"type\": \"number\",\n      \"pos\": [\n        250,\n        390\n      ]\n    },\n    \"vel_label\": {\n      \"type\": \"comment\",\n      \"text\": \"velocity\",\n      \"pos\": [\n        340,\n        400\n      ]\n    },\n    \"velocity\": {\n      \"type\": \"number\",\n      \"pos\": [\n        340,\n        418\n      ],\n      \"attrs\": {\n        \"minimum\": 1,\n        \"maximum\": 127\n      }\n    },\n    \"dur_label\": {\n      \"type\": \"comment\",\n      \"text\": \"duration (ms)\",\n      \"pos\": [\n        430,\n        400\n      ]\n    },\n    \"duration\": {\n      \"type\": \"number\",\n      \"pos\": [\n        430,\n        418\n      ],\n      \"attrs\": {\n        \"minimum\": 10,\n        \"maximum\": 2000\n      }\n    },\n    \"makenote\": {\n      \"type\": \"newobj\",\n      \"text\": \"makenote 100 150\",\n      \"pos\": [\n        250,\n        455\n      ]\n    },\n    \"pack_note\": {\n      \"type\": \"newobj\",\n      \"text\": \"pack 60 100\",\n      \"pos\": [\n        250,\n        490\n      ]\n    },\n    \"midiformat\": {\n      \"type\": \"newobj\",\n      \"text\": \"midiformat\",\n      \"pos\": [\n        250,\n        525\n      ]\n    },\n    \"drift\": {\n      \"type\": \"newobj\",\n      \"text\": \"abl.device.drift~\",\n      \"pos\": [\n        250,\n        560\n      ],\n      \"inlets\": 1,\n      \"outlets\": 2,\n      \"outlettype\": [\n        \"signal\",\n        \"signal\"\n      ]\n    },\n    \"gain\": {\n      \"type\": \"gain~\",\n      \"pos\": [\n        250,\n        595\n      ]\n    },\n    \"dac\": {\n      \"type\": \"ezdac~\",\n      \"pos\": [\n        250,\n        745\n      ]\n    },\n    \"info\": {\n      \"type\": \"comment\",\n      \"text\": \"Turn on audio, set pitches, click toggle\",\n      \"pos\": [\n        30,\n        795\n      ]\n    }\n  },\n  \"connections\": [\n    [\n      \"loadbang\",\n      0,\n      \"init_tempo\",\n      0\n    ],\n    [\n      \"loadbang\",\n      0,\n      \"init_vel\",\n      0\n    ],\n    [\n      \"loadbang\",\n      0,\n      \"init_dur\",\n      0\n    ],\n    [\n      \"init_tempo\",\n      0,\n      \"tempo\",\n      0\n    ],\n    [\n      \"init_vel\",\n      0,\n      \"velocity\",\n      0\n    ],\n    [\n      \"init_dur\",\n      0,\n      \"duration\",\n      0\n    ],\n    [\n      \"onoff\",\n      0,\n      \"metro\",\n      0\n    ],\n    [\n      \"tempo\",\n      0,\n      \"metro\",\n      1\n    ],\n    [\n      \"metro\",\n      0,\n      \"steps\",\n      0\n    ],\n    [\n      \"steps\",\n      0,\n      \"step_plus1\",\n      0\n    ],\n    [\n      \"step_plus1\",\n      0,\n      \"fetch\",\n      0\n    ],\n    [\n      \"fetch\",\n      0,\n      \"slider\",\n      0\n    ],\n    [\n      \"slider\",\n      1,\n      \"pitch_display\",\n      0\n    ],\n    [\n      \"pitch_display\",\n      0,\n      \"makenote\",\n      0\n    ],\n    [\n      \"velocity\",\n      0,\n      \"makenote\",\n      1\n    ],\n    [\n      \"duration\",\n      0,\n      \"makenote\",\n      2\n    ],\n    [\n      \"makenote\",\n      0,\n      \"pack_note\",\n      0\n    ],\n    [\n      \"makenote\",\n      1,\n      \"pack_note\",\n      1\n    ],\n    [\n      \"pack_note\",\n      0,\n      \"midiformat\",\n      0\n    ],\n    [\n      \"midiformat\",\n      0,\n      \"drift\",\n      0\n    ],\n    [\n      \"drift\",\n      0,\n      \"gain\",\n      0\n    ],\n    [\n      \"drift\",\n      1,\n      \"gain\",\n      0\n    ],\n    [\n      \"gain\",\n      0,\n      \"dac\",\n      0\n    ],\n    [\n      \"gain\",\n      0,\n      \"dac\",\n      1\n    ]\n  ]\n}\n--- END SPEC ---",
-          "linecount": 396,
+          "text": "--- CLAUDE2MAX SPEC ---\n{\n  \"name\": \"Drift Sequencer\",\n  \"width\": 600,\n  \"height\": 830,\n  \"objects\": {\n    \"loadmess\": {\n      \"type\": \"newobj\",\n      \"text\": \"loadmess 200 100 150\",\n      \"pos\": [\n        250,\n        30\n      ]\n    },\n    \"unpack_init\": {\n      \"type\": \"newobj\",\n      \"text\": \"unpack 0 0 0\",\n      \"pos\": [\n        250,\n        60\n      ]\n    },\n    \"tempo\": {\n      \"type\": \"number\",\n      \"pos\": [\n        65,\n        100\n      ],\n      \"attrs\": {\n        \"minimum\": 50,\n        \"maximum\": 2000\n      }\n    },\n    \"tempo_label\": {\n      \"type\": \"comment\",\n      \"text\": \"tempo (ms)\",\n      \"pos\": [\n        120,\n        102\n      ]\n    },\n    \"onoff\": {\n      \"type\": \"toggle\",\n      \"pos\": [\n        30,\n        135\n      ]\n    },\n    \"metro\": {\n      \"type\": \"newobj\",\n      \"text\": \"metro 200\",\n      \"pos\": [\n        30,\n        165\n      ]\n    },\n    \"steps\": {\n      \"type\": \"newobj\",\n      \"text\": \"counter 0 7\",\n      \"pos\": [\n        30,\n        200\n      ]\n    },\n    \"step_plus1\": {\n      \"type\": \"newobj\",\n      \"text\": \"+ 1\",\n      \"pos\": [\n        30,\n        235\n      ]\n    },\n    \"fetch\": {\n      \"type\": \"newobj\",\n      \"text\": \"prepend fetch\",\n      \"pos\": [\n        30,\n        270\n      ]\n    },\n    \"slider\": {\n      \"type\": \"multislider\",\n      \"pos\": [\n        30,\n        305\n      ],\n      \"size\": [\n        200,\n        120\n      ],\n      \"attrs\": {\n        \"size\": 8,\n        \"setminmax\": [\n          36.0,\n          84.0\n        ],\n        \"setstyle\": 1,\n        \"candicane2\": [\n          0.14,\n          0.69,\n          0.78,\n          1.0\n        ],\n        \"slidercolor\": [\n          0.14,\n          0.69,\n          0.78,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.15,\n          0.15,\n          0.15,\n          1.0\n        ],\n        \"orientation\": 1\n      }\n    },\n    \"pitch_label\": {\n      \"type\": \"comment\",\n      \"text\": \"pitch (8 steps)\",\n      \"pos\": [\n        240,\n        305\n      ]\n    },\n    \"pitch_display\": {\n      \"type\": \"number\",\n      \"pos\": [\n        250,\n        450\n      ]\n    },\n    \"velocity\": {\n      \"type\": \"number\",\n      \"pos\": [\n        340,\n        450\n      ],\n      \"attrs\": {\n        \"minimum\": 1,\n        \"maximum\": 127\n      }\n    },\n    \"vel_label\": {\n      \"type\": \"comment\",\n      \"text\": \"velocity\",\n      \"pos\": [\n        395,\n        452\n      ]\n    },\n    \"duration\": {\n      \"type\": \"number\",\n      \"pos\": [\n        430,\n        450\n      ],\n      \"attrs\": {\n        \"minimum\": 10,\n        \"maximum\": 2000\n      }\n    },\n    \"dur_label\": {\n      \"type\": \"comment\",\n      \"text\": \"duration (ms)\",\n      \"pos\": [\n        485,\n        452\n      ]\n    },\n    \"makenote\": {\n      \"type\": \"newobj\",\n      \"text\": \"makenote 100 150\",\n      \"pos\": [\n        250,\n        490\n      ]\n    },\n    \"pack_note\": {\n      \"type\": \"newobj\",\n      \"text\": \"pack 60 100\",\n      \"pos\": [\n        250,\n        525\n      ]\n    },\n    \"midiformat\": {\n      \"type\": \"newobj\",\n      \"text\": \"midiformat\",\n      \"pos\": [\n        250,\n        560\n      ]\n    },\n    \"drift\": {\n      \"type\": \"newobj\",\n      \"text\": \"abl.device.drift~\",\n      \"pos\": [\n        250,\n        595\n      ],\n      \"inlets\": 1,\n      \"outlets\": 2,\n      \"outlettype\": [\n        \"signal\",\n        \"signal\"\n      ]\n    },\n    \"gain\": {\n      \"type\": \"gain~\",\n      \"pos\": [\n        250,\n        635\n      ]\n    },\n    \"dac\": {\n      \"type\": \"ezdac~\",\n      \"pos\": [\n        250,\n        785\n      ]\n    },\n    \"info\": {\n      \"type\": \"comment\",\n      \"text\": \"Turn on audio, set pitches, click toggle\",\n      \"pos\": [\n        30,\n        800\n      ]\n    }\n  },\n  \"connections\": [\n    [\n      \"loadmess\",\n      0,\n      \"unpack_init\",\n      0\n    ],\n    [\n      \"unpack_init\",\n      0,\n      \"tempo\",\n      0\n    ],\n    [\n      \"unpack_init\",\n      1,\n      \"velocity\",\n      0\n    ],\n    [\n      \"unpack_init\",\n      2,\n      \"duration\",\n      0\n    ],\n    [\n      \"onoff\",\n      0,\n      \"metro\",\n      0\n    ],\n    [\n      \"tempo\",\n      0,\n      \"metro\",\n      1\n    ],\n    [\n      \"metro\",\n      0,\n      \"steps\",\n      0\n    ],\n    [\n      \"steps\",\n      0,\n      \"step_plus1\",\n      0\n    ],\n    [\n      \"step_plus1\",\n      0,\n      \"fetch\",\n      0\n    ],\n    [\n      \"fetch\",\n      0,\n      \"slider\",\n      0\n    ],\n    [\n      \"slider\",\n      1,\n      \"pitch_display\",\n      0\n    ],\n    [\n      \"pitch_display\",\n      0,\n      \"makenote\",\n      0\n    ],\n    [\n      \"velocity\",\n      0,\n      \"makenote\",\n      1\n    ],\n    [\n      \"duration\",\n      0,\n      \"makenote\",\n      2\n    ],\n    [\n      \"makenote\",\n      0,\n      \"pack_note\",\n      0\n    ],\n    [\n      \"makenote\",\n      1,\n      \"pack_note\",\n      1\n    ],\n    [\n      \"pack_note\",\n      0,\n      \"midiformat\",\n      0\n    ],\n    [\n      \"midiformat\",\n      0,\n      \"drift\",\n      0\n    ],\n    [\n      \"drift\",\n      0,\n      \"gain\",\n      0\n    ],\n    [\n      \"drift\",\n      1,\n      \"gain\",\n      0\n    ],\n    [\n      \"gain\",\n      0,\n      \"dac\",\n      0\n    ],\n    [\n      \"gain\",\n      0,\n      \"dac\",\n      1\n    ]\n  ]\n}\n--- END SPEC ---",
+          "linecount": 368,
           "fontsize": 9.0,
           "textcolor": [
             0.5,
@@ -556,7 +522,7 @@
             0
           ],
           "source": [
-            "obj-1",
+            "obj-2",
             0
           ]
         }
@@ -564,12 +530,24 @@
       {
         "patchline": {
           "destination": [
-            "obj-4",
+            "obj-13",
             0
           ],
           "source": [
-            "obj-1",
+            "obj-2",
+            1
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "destination": [
+            "obj-15",
             0
+          ],
+          "source": [
+            "obj-2",
+            2
           ]
         }
       },
@@ -580,7 +558,7 @@
             0
           ],
           "source": [
-            "obj-2",
+            "obj-5",
             0
           ]
         }
@@ -588,8 +566,8 @@
       {
         "patchline": {
           "destination": [
-            "obj-16",
-            0
+            "obj-6",
+            1
           ],
           "source": [
             "obj-3",
@@ -600,11 +578,11 @@
       {
         "patchline": {
           "destination": [
-            "obj-18",
+            "obj-7",
             0
           ],
           "source": [
-            "obj-4",
+            "obj-6",
             0
           ]
         }
@@ -624,18 +602,6 @@
       {
         "patchline": {
           "destination": [
-            "obj-8",
-            1
-          ],
-          "source": [
-            "obj-6",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "destination": [
             "obj-9",
             0
           ],
@@ -660,35 +626,11 @@
       {
         "patchline": {
           "destination": [
-            "obj-11",
+            "obj-12",
             0
           ],
           "source": [
             "obj-10",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "destination": [
-            "obj-13",
-            0
-          ],
-          "source": [
-            "obj-11",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "destination": [
-            "obj-14",
-            0
-          ],
-          "source": [
-            "obj-13",
             1
           ]
         }
@@ -696,11 +638,11 @@
       {
         "patchline": {
           "destination": [
-            "obj-19",
+            "obj-17",
             0
           ],
           "source": [
-            "obj-14",
+            "obj-12",
             0
           ]
         }
@@ -708,11 +650,11 @@
       {
         "patchline": {
           "destination": [
-            "obj-19",
+            "obj-17",
             1
           ],
           "source": [
-            "obj-16",
+            "obj-13",
             0
           ]
         }
@@ -720,8 +662,44 @@
       {
         "patchline": {
           "destination": [
-            "obj-19",
+            "obj-17",
             2
+          ],
+          "source": [
+            "obj-15",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "destination": [
+            "obj-18",
+            0
+          ],
+          "source": [
+            "obj-17",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "destination": [
+            "obj-18",
+            1
+          ],
+          "source": [
+            "obj-17",
+            1
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "destination": [
+            "obj-19",
+            0
           ],
           "source": [
             "obj-18",
@@ -744,18 +722,6 @@
       {
         "patchline": {
           "destination": [
-            "obj-20",
-            1
-          ],
-          "source": [
-            "obj-19",
-            1
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "destination": [
             "obj-21",
             0
           ],
@@ -768,6 +734,18 @@
       {
         "patchline": {
           "destination": [
+            "obj-21",
+            0
+          ],
+          "source": [
+            "obj-20",
+            1
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "destination": [
             "obj-22",
             0
           ],
@@ -780,47 +758,11 @@
       {
         "patchline": {
           "destination": [
-            "obj-23",
-            0
-          ],
-          "source": [
-            "obj-22",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "destination": [
-            "obj-23",
-            0
-          ],
-          "source": [
             "obj-22",
             1
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "destination": [
-            "obj-24",
-            0
           ],
           "source": [
-            "obj-23",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "destination": [
-            "obj-24",
-            1
-          ],
-          "source": [
-            "obj-23",
+            "obj-21",
             0
           ]
         }
