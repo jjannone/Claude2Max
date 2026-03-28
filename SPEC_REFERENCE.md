@@ -259,6 +259,7 @@ Any patch with more than a handful of user-facing controls benefits from a prese
 
 ### Presentation layout
 
+- Every control in the presentation should have a comment label. If a control is worth showing to the user, it is worth labelling.
 - Place comment labels **above** the control they describe, with ~18px vertical gap so the label text clears the control cleanly. Comments render slightly taller in presentation than in patching view.
 - Group related controls together (e.g. all transport controls in one row, all note parameters in another).
 - Keep the layout compact — presentation is meant to be a minimal panel, not a spread-out canvas.

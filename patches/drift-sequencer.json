@@ -6,9 +6,10 @@
     "loadmess": { "type": "newobj", "text": "loadmess 200 100 150", "pos": [250, 30] },
     "unpack_init": { "type": "newobj", "text": "unpack 0 0 0", "pos": [250, 55] },
 
+    "onoff_label": { "type": "comment", "text": "on/off", "pos": [45, 110], "presentation": [10, 5] },
+    "onoff": { "type": "toggle", "pos": [30, 125], "presentation": [10, 22] },
     "tempo_label": { "type": "comment", "text": "tempo (ms)", "pos": [80, 77], "presentation": [68, 5] },
     "tempo": { "type": "number", "pos": [65, 92], "attrs": { "minimum": 50, "maximum": 2000 }, "presentation": [65, 25, 60, 22] },
-    "onoff": { "type": "toggle", "pos": [30, 125], "presentation": [10, 22] },
     "metro": { "type": "newobj", "text": "metro 200", "pos": [30, 150] },
 
     "steps": { "type": "newobj", "text": "counter 0 7", "pos": [30, 180] },
@@ -54,7 +55,8 @@
       }
     },
 
-    "pitch_display": { "type": "number", "pos": [250, 500], "presentation": [155, 10, 50, 22] },
+    "pitch_display_label": { "type": "comment", "text": "note", "pos": [265, 485], "presentation": [158, 5] },
+    "pitch_display": { "type": "number", "pos": [250, 500], "presentation": [155, 25, 50, 22] },
     "note_gate": { "type": "newobj", "text": "gate 1", "pos": [250, 535] },
 
     "vel_label": { "type": "comment", "text": "velocity", "pos": [355, 555], "presentation": [15, 225] },
