@@ -12,8 +12,8 @@
     "rect": [
       100.0,
       100.0,
-      900.0,
-      650.0
+      950.0,
+      750.0
     ],
     "gridsize": [
       15.0,
@@ -428,21 +428,93 @@
         "box": {
           "id": "obj-21",
           "maxclass": "newobj",
-          "numinlets": 3,
-          "numoutlets": 0,
-          "outlettype": [],
+          "numinlets": 2,
+          "numoutlets": 1,
+          "outlettype": [
+            ""
+          ],
           "patching_rect": [
             1750.0,
             50.0,
-            69.0,
+            97.0,
             22.0
           ],
-          "text": "noteout"
+          "text": "pack 60 100"
         }
       },
       {
         "box": {
           "id": "obj-22",
+          "maxclass": "newobj",
+          "numinlets": 7,
+          "numoutlets": 1,
+          "outlettype": [
+            "int"
+          ],
+          "patching_rect": [
+            1920.0,
+            50.0,
+            90.0,
+            22.0
+          ],
+          "text": "midiformat"
+        }
+      },
+      {
+        "box": {
+          "id": "obj-23",
+          "maxclass": "newobj",
+          "numinlets": 1,
+          "numoutlets": 2,
+          "outlettype": [
+            "signal",
+            "signal"
+          ],
+          "patching_rect": [
+            2090.0,
+            50.0,
+            139.0,
+            22.0
+          ],
+          "text": "abl.device.drift~"
+        }
+      },
+      {
+        "box": {
+          "id": "obj-24",
+          "maxclass": "gain~",
+          "numinlets": 2,
+          "numoutlets": 2,
+          "outlettype": [
+            "signal",
+            ""
+          ],
+          "patching_rect": [
+            2260.0,
+            50.0,
+            22.0,
+            140.0
+          ]
+        }
+      },
+      {
+        "box": {
+          "id": "obj-25",
+          "maxclass": "ezdac~",
+          "numinlets": 2,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            2430.0,
+            50.0,
+            45.0,
+            45.0
+          ]
+        }
+      },
+      {
+        "box": {
+          "id": "obj-26",
           "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
@@ -450,10 +522,10 @@
           "patching_rect": [
             50.0,
             105.0,
-            405.0,
+            454.0,
             22.0
           ],
-          "text": "Route MIDI output to Drift in Ableton or via IAC Driver"
+          "text": "Drift synth built in \u2014 just turn on audio and click the toggle"
         }
       },
       {
@@ -467,10 +539,10 @@
             50.0,
             442.0,
             500.0,
-            4000.0
+            4896.0
           ],
-          "text": "--- CLAUDE2MAX SPEC ---\n{\n  \"name\": \"Drift Sequencer\",\n  \"width\": 900,\n  \"height\": 650,\n  \"objects\": {\n    \"loadbang\": {\n      \"type\": \"newobj\",\n      \"text\": \"loadbang\"\n    },\n    \"init_tempo\": {\n      \"type\": \"message\",\n      \"text\": \"200\"\n    },\n    \"init_vel\": {\n      \"type\": \"message\",\n      \"text\": \"100\"\n    },\n    \"init_dur\": {\n      \"type\": \"message\",\n      \"text\": \"150\"\n    },\n    \"tempo_label\": {\n      \"type\": \"comment\",\n      \"text\": \"tempo (ms)\"\n    },\n    \"tempo\": {\n      \"type\": \"number\",\n      \"attrs\": {\n        \"minimum\": 50,\n        \"maximum\": 2000\n      }\n    },\n    \"onoff\": {\n      \"type\": \"toggle\"\n    },\n    \"metro\": {\n      \"type\": \"newobj\",\n      \"text\": \"metro 200\"\n    },\n    \"steps\": {\n      \"type\": \"newobj\",\n      \"text\": \"counter 0 7\"\n    },\n    \"step_plus1\": {\n      \"type\": \"newobj\",\n      \"text\": \"+ 1\"\n    },\n    \"fetch\": {\n      \"type\": \"newobj\",\n      \"text\": \"prepend fetch\"\n    },\n    \"pitch_label\": {\n      \"type\": \"comment\",\n      \"text\": \"pitch (8 steps)\"\n    },\n    \"slider\": {\n      \"type\": \"multislider\",\n      \"attrs\": {\n        \"size\": 8,\n        \"setminmax\": [\n          36.0,\n          84.0\n        ],\n        \"setstyle\": 1,\n        \"candicane2\": [\n          0.14,\n          0.69,\n          0.78,\n          1.0\n        ],\n        \"slidercolor\": [\n          0.14,\n          0.69,\n          0.78,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.15,\n          0.15,\n          0.15,\n          1.0\n        ],\n        \"orientation\": 1\n      },\n      \"size\": [\n        200,\n        120\n      ]\n    },\n    \"to_int\": {\n      \"type\": \"newobj\",\n      \"text\": \"int\"\n    },\n    \"pitch_display\": {\n      \"type\": \"number\"\n    },\n    \"vel_label\": {\n      \"type\": \"comment\",\n      \"text\": \"velocity\"\n    },\n    \"velocity\": {\n      \"type\": \"number\",\n      \"attrs\": {\n        \"minimum\": 1,\n        \"maximum\": 127\n      }\n    },\n    \"dur_label\": {\n      \"type\": \"comment\",\n      \"text\": \"duration (ms)\"\n    },\n    \"duration\": {\n      \"type\": \"number\",\n      \"attrs\": {\n        \"minimum\": 10,\n        \"maximum\": 2000\n      }\n    },\n    \"makenote\": {\n      \"type\": \"newobj\",\n      \"text\": \"makenote 100 150\"\n    },\n    \"noteout\": {\n      \"type\": \"newobj\",\n      \"text\": \"noteout\"\n    },\n    \"info\": {\n      \"type\": \"comment\",\n      \"text\": \"Route MIDI output to Drift in Ableton or via IAC Driver\"\n    }\n  },\n  \"connections\": [\n    [\n      \"loadbang\",\n      0,\n      \"init_tempo\",\n      0\n    ],\n    [\n      \"loadbang\",\n      0,\n      \"init_vel\",\n      0\n    ],\n    [\n      \"loadbang\",\n      0,\n      \"init_dur\",\n      0\n    ],\n    [\n      \"init_tempo\",\n      0,\n      \"tempo\",\n      0\n    ],\n    [\n      \"init_vel\",\n      0,\n      \"velocity\",\n      0\n    ],\n    [\n      \"init_dur\",\n      0,\n      \"duration\",\n      0\n    ],\n    [\n      \"onoff\",\n      0,\n      \"metro\",\n      0\n    ],\n    [\n      \"tempo\",\n      0,\n      \"metro\",\n      1\n    ],\n    [\n      \"metro\",\n      0,\n      \"steps\",\n      0\n    ],\n    [\n      \"steps\",\n      0,\n      \"step_plus1\",\n      0\n    ],\n    [\n      \"step_plus1\",\n      0,\n      \"fetch\",\n      0\n    ],\n    [\n      \"fetch\",\n      0,\n      \"slider\",\n      0\n    ],\n    [\n      \"slider\",\n      0,\n      \"to_int\",\n      0\n    ],\n    [\n      \"to_int\",\n      0,\n      \"pitch_display\",\n      0\n    ],\n    [\n      \"to_int\",\n      0,\n      \"makenote\",\n      0\n    ],\n    [\n      \"velocity\",\n      0,\n      \"makenote\",\n      1\n    ],\n    [\n      \"duration\",\n      0,\n      \"makenote\",\n      2\n    ],\n    [\n      \"makenote\",\n      0,\n      \"noteout\",\n      0\n    ],\n    [\n      \"makenote\",\n      1,\n      \"noteout\",\n      1\n    ]\n  ]\n}\n--- END SPEC ---",
-          "linecount": 250,
+          "text": "--- CLAUDE2MAX SPEC ---\n{\n  \"name\": \"Drift Sequencer\",\n  \"width\": 950,\n  \"height\": 750,\n  \"objects\": {\n    \"loadbang\": {\n      \"type\": \"newobj\",\n      \"text\": \"loadbang\"\n    },\n    \"init_tempo\": {\n      \"type\": \"message\",\n      \"text\": \"200\"\n    },\n    \"init_vel\": {\n      \"type\": \"message\",\n      \"text\": \"100\"\n    },\n    \"init_dur\": {\n      \"type\": \"message\",\n      \"text\": \"150\"\n    },\n    \"tempo_label\": {\n      \"type\": \"comment\",\n      \"text\": \"tempo (ms)\"\n    },\n    \"tempo\": {\n      \"type\": \"number\",\n      \"attrs\": {\n        \"minimum\": 50,\n        \"maximum\": 2000\n      }\n    },\n    \"onoff\": {\n      \"type\": \"toggle\"\n    },\n    \"metro\": {\n      \"type\": \"newobj\",\n      \"text\": \"metro 200\"\n    },\n    \"steps\": {\n      \"type\": \"newobj\",\n      \"text\": \"counter 0 7\"\n    },\n    \"step_plus1\": {\n      \"type\": \"newobj\",\n      \"text\": \"+ 1\"\n    },\n    \"fetch\": {\n      \"type\": \"newobj\",\n      \"text\": \"prepend fetch\"\n    },\n    \"pitch_label\": {\n      \"type\": \"comment\",\n      \"text\": \"pitch (8 steps)\"\n    },\n    \"slider\": {\n      \"type\": \"multislider\",\n      \"attrs\": {\n        \"size\": 8,\n        \"setminmax\": [\n          36.0,\n          84.0\n        ],\n        \"setstyle\": 1,\n        \"candicane2\": [\n          0.14,\n          0.69,\n          0.78,\n          1.0\n        ],\n        \"slidercolor\": [\n          0.14,\n          0.69,\n          0.78,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.15,\n          0.15,\n          0.15,\n          1.0\n        ],\n        \"orientation\": 1\n      },\n      \"size\": [\n        200,\n        120\n      ]\n    },\n    \"to_int\": {\n      \"type\": \"newobj\",\n      \"text\": \"int\"\n    },\n    \"pitch_display\": {\n      \"type\": \"number\"\n    },\n    \"vel_label\": {\n      \"type\": \"comment\",\n      \"text\": \"velocity\"\n    },\n    \"velocity\": {\n      \"type\": \"number\",\n      \"attrs\": {\n        \"minimum\": 1,\n        \"maximum\": 127\n      }\n    },\n    \"dur_label\": {\n      \"type\": \"comment\",\n      \"text\": \"duration (ms)\"\n    },\n    \"duration\": {\n      \"type\": \"number\",\n      \"attrs\": {\n        \"minimum\": 10,\n        \"maximum\": 2000\n      }\n    },\n    \"makenote\": {\n      \"type\": \"newobj\",\n      \"text\": \"makenote 100 150\"\n    },\n    \"pack_note\": {\n      \"type\": \"newobj\",\n      \"text\": \"pack 60 100\"\n    },\n    \"midiformat\": {\n      \"type\": \"newobj\",\n      \"text\": \"midiformat\"\n    },\n    \"drift\": {\n      \"type\": \"newobj\",\n      \"text\": \"abl.device.drift~\",\n      \"inlets\": 1,\n      \"outlets\": 2,\n      \"outlettype\": [\n        \"signal\",\n        \"signal\"\n      ]\n    },\n    \"gain\": {\n      \"type\": \"gain~\"\n    },\n    \"dac\": {\n      \"type\": \"ezdac~\"\n    },\n    \"info\": {\n      \"type\": \"comment\",\n      \"text\": \"Drift synth built in \\u2014 just turn on audio and click the toggle\"\n    }\n  },\n  \"connections\": [\n    [\n      \"loadbang\",\n      0,\n      \"init_tempo\",\n      0\n    ],\n    [\n      \"loadbang\",\n      0,\n      \"init_vel\",\n      0\n    ],\n    [\n      \"loadbang\",\n      0,\n      \"init_dur\",\n      0\n    ],\n    [\n      \"init_tempo\",\n      0,\n      \"tempo\",\n      0\n    ],\n    [\n      \"init_vel\",\n      0,\n      \"velocity\",\n      0\n    ],\n    [\n      \"init_dur\",\n      0,\n      \"duration\",\n      0\n    ],\n    [\n      \"onoff\",\n      0,\n      \"metro\",\n      0\n    ],\n    [\n      \"tempo\",\n      0,\n      \"metro\",\n      1\n    ],\n    [\n      \"metro\",\n      0,\n      \"steps\",\n      0\n    ],\n    [\n      \"steps\",\n      0,\n      \"step_plus1\",\n      0\n    ],\n    [\n      \"step_plus1\",\n      0,\n      \"fetch\",\n      0\n    ],\n    [\n      \"fetch\",\n      0,\n      \"slider\",\n      0\n    ],\n    [\n      \"slider\",\n      0,\n      \"to_int\",\n      0\n    ],\n    [\n      \"to_int\",\n      0,\n      \"pitch_display\",\n      0\n    ],\n    [\n      \"to_int\",\n      0,\n      \"makenote\",\n      0\n    ],\n    [\n      \"velocity\",\n      0,\n      \"makenote\",\n      1\n    ],\n    [\n      \"duration\",\n      0,\n      \"makenote\",\n      2\n    ],\n    [\n      \"makenote\",\n      0,\n      \"pack_note\",\n      0\n    ],\n    [\n      \"makenote\",\n      1,\n      \"pack_note\",\n      1\n    ],\n    [\n      \"pack_note\",\n      0,\n      \"midiformat\",\n      0\n    ],\n    [\n      \"midiformat\",\n      0,\n      \"drift\",\n      0\n    ],\n    [\n      \"drift\",\n      0,\n      \"gain\",\n      0\n    ],\n    [\n      \"drift\",\n      1,\n      \"gain\",\n      0\n    ],\n    [\n      \"gain\",\n      0,\n      \"dac\",\n      0\n    ],\n    [\n      \"gain\",\n      0,\n      \"dac\",\n      1\n    ]\n  ]\n}\n--- END SPEC ---",
+          "linecount": 306,
           "fontsize": 9.0,
           "textcolor": [
             0.5,
@@ -708,6 +780,78 @@
           "source": [
             "obj-20",
             1
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "destination": [
+            "obj-22",
+            0
+          ],
+          "source": [
+            "obj-21",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "destination": [
+            "obj-23",
+            0
+          ],
+          "source": [
+            "obj-22",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "destination": [
+            "obj-24",
+            0
+          ],
+          "source": [
+            "obj-23",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "destination": [
+            "obj-24",
+            0
+          ],
+          "source": [
+            "obj-23",
+            1
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "destination": [
+            "obj-25",
+            0
+          ],
+          "source": [
+            "obj-24",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "destination": [
+            "obj-25",
+            1
+          ],
+          "source": [
+            "obj-24",
+            0
           ]
         }
       }

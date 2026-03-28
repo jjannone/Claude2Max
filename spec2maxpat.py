@@ -59,6 +59,13 @@ MAXCLASS_DEFAULTS = {
     "gswitch2": {"numinlets": 2, "numoutlets": 2, "outlettype": ["", ""]},
     "multislider": {"numinlets": 1, "numoutlets": 2, "outlettype": ["", ""]},
     "jit.pwindow": {"numinlets": 1, "numoutlets": 2, "outlettype": ["jit_matrix", ""]},
+    "gain~":    {"numinlets": 2, "numoutlets": 2, "outlettype": ["signal", ""]},
+    "ezdac~":   {"numinlets": 2, "numoutlets": 0, "outlettype": []},
+    "ezadc~":   {"numinlets": 1, "numoutlets": 2, "outlettype": ["signal", "signal"]},
+    "meter~":   {"numinlets": 1, "numoutlets": 1, "outlettype": ["float"]},
+    "scope~":   {"numinlets": 2, "numoutlets": 0, "outlettype": []},
+    "number~":  {"numinlets": 2, "numoutlets": 2, "outlettype": ["signal", "float"]},
+    "live.gain~": {"numinlets": 2, "numoutlets": 5, "outlettype": ["signal", "signal", "", "float", "list"]},
 }
 
 # Common newobj inlet/outlet overrides based on object name

@@ -1,7 +1,7 @@
 {
   "name": "Drift Sequencer",
-  "width": 900,
-  "height": 650,
+  "width": 950,
+  "height": 750,
   "objects": {
     "loadbang": { "type": "newobj", "text": "loadbang" },
     "init_tempo": { "type": "message", "text": "200" },
@@ -41,9 +41,20 @@
     "duration": { "type": "number", "attrs": { "minimum": 10, "maximum": 2000 } },
 
     "makenote": { "type": "newobj", "text": "makenote 100 150" },
-    "noteout": { "type": "newobj", "text": "noteout" },
+    "pack_note": { "type": "newobj", "text": "pack 60 100" },
+    "midiformat": { "type": "newobj", "text": "midiformat" },
+    "drift": {
+      "type": "newobj",
+      "text": "abl.device.drift~",
+      "inlets": 1,
+      "outlets": 2,
+      "outlettype": ["signal", "signal"]
+    },
 
-    "info": { "type": "comment", "text": "Route MIDI output to Drift in Ableton or via IAC Driver" }
+    "gain": { "type": "gain~" },
+    "dac": { "type": "ezdac~" },
+
+    "info": { "type": "comment", "text": "Drift synth built in — just turn on audio and click the toggle" }
   },
   "connections": [
     ["loadbang", 0, "init_tempo", 0],
@@ -68,7 +79,14 @@
     ["velocity", 0, "makenote", 1],
     ["duration", 0, "makenote", 2],
 
-    ["makenote", 0, "noteout", 0],
-    ["makenote", 1, "noteout", 1]
+    ["makenote", 0, "pack_note", 0],
+    ["makenote", 1, "pack_note", 1],
+    ["pack_note", 0, "midiformat", 0],
+    ["midiformat", 0, "drift", 0],
+
+    ["drift", 0, "gain", 0],
+    ["drift", 1, "gain", 0],
+    ["gain", 0, "dac", 0],
+    ["gain", 0, "dac", 1]
   ]
 }
