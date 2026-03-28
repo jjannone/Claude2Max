@@ -64,6 +64,7 @@ The object ID (e.g. `"my_metro"`) is only used within the spec for wiring connec
 | `outlets` | no | Override number of outlets |
 | `outlettype` | no | Override outlet types array |
 | `attrs` | no | Dict of extra Max attributes to set on the box |
+| `presentation` | no | Position in presentation view: `[x, y]` or `[x, y, w, h]`. Objects with this field appear in the presentation. |
 | `patcher` | no | Nested spec for subpatchers (see below) |
 
 ### Object Types
