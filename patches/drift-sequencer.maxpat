@@ -12,8 +12,8 @@
     "rect": [
       100.0,
       100.0,
-      950.0,
-      750.0
+      620.0,
+      820.0
     ],
     "gridsize": [
       15.0,
@@ -48,8 +48,8 @@
             "bang"
           ],
           "patching_rect": [
-            50.0,
-            160.0,
+            170.0,
+            45.0,
             76.0,
             22.0
           ],
@@ -66,8 +66,8 @@
             ""
           ],
           "patching_rect": [
-            220.0,
-            105.0,
+            115.0,
+            75.0,
             41.0,
             22.0
           ],
@@ -84,8 +84,8 @@
             ""
           ],
           "patching_rect": [
-            220.0,
-            160.0,
+            310.0,
+            75.0,
             41.0,
             22.0
           ],
@@ -102,8 +102,8 @@
             ""
           ],
           "patching_rect": [
-            220.0,
-            50.0,
+            410.0,
+            75.0,
             41.0,
             22.0
           ],
@@ -118,8 +118,8 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            50.0,
-            325.0,
+            55.0,
+            105.0,
             90.0,
             22.0
           ],
@@ -137,7 +137,7 @@
             "bang"
           ],
           "patching_rect": [
-            390.0,
+            115.0,
             105.0,
             50.0,
             22.0
@@ -156,8 +156,8 @@
             "int"
           ],
           "patching_rect": [
-            50.0,
-            215.0,
+            30.0,
+            135.0,
             24.0,
             24.0
           ]
@@ -173,8 +173,8 @@
             "bang"
           ],
           "patching_rect": [
-            560.0,
-            50.0,
+            30.0,
+            165.0,
             83.0,
             22.0
           ],
@@ -194,8 +194,8 @@
             "int"
           ],
           "patching_rect": [
-            730.0,
-            50.0,
+            30.0,
+            200.0,
             97.0,
             22.0
           ],
@@ -212,8 +212,8 @@
             "int"
           ],
           "patching_rect": [
-            900.0,
-            50.0,
+            30.0,
+            235.0,
             41.0,
             22.0
           ],
@@ -230,8 +230,8 @@
             ""
           ],
           "patching_rect": [
-            1070.0,
-            50.0,
+            30.0,
+            270.0,
             111.0,
             22.0
           ],
@@ -246,7 +246,7 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            50.0,
+            240.0,
             270.0,
             125.0,
             22.0
@@ -265,8 +265,8 @@
             ""
           ],
           "patching_rect": [
-            1240.0,
-            50.0,
+            30.0,
+            300.0,
             120.0,
             80.0
           ],
@@ -307,8 +307,8 @@
             "int"
           ],
           "patching_rect": [
-            1410.0,
-            50.0,
+            240.0,
+            340.0,
             41.0,
             22.0
           ],
@@ -326,8 +326,8 @@
             "bang"
           ],
           "patching_rect": [
-            1580.0,
-            105.0,
+            240.0,
+            370.0,
             50.0,
             22.0
           ]
@@ -341,8 +341,8 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            50.0,
-            380.0,
+            355.0,
+            390.0,
             76.0,
             22.0
           ],
@@ -360,8 +360,8 @@
             "bang"
           ],
           "patching_rect": [
-            390.0,
-            160.0,
+            310.0,
+            410.0,
             50.0,
             22.0
           ],
@@ -377,8 +377,8 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            50.0,
-            50.0,
+            445.0,
+            390.0,
             111.0,
             22.0
           ],
@@ -396,8 +396,8 @@
             "bang"
           ],
           "patching_rect": [
-            390.0,
-            50.0,
+            410.0,
+            410.0,
             50.0,
             22.0
           ],
@@ -416,8 +416,8 @@
             "float"
           ],
           "patching_rect": [
-            1580.0,
-            50.0,
+            240.0,
+            445.0,
             132.0,
             22.0
           ],
@@ -434,8 +434,8 @@
             ""
           ],
           "patching_rect": [
-            1750.0,
-            50.0,
+            240.0,
+            480.0,
             97.0,
             22.0
           ],
@@ -452,8 +452,8 @@
             "int"
           ],
           "patching_rect": [
-            1920.0,
-            50.0,
+            240.0,
+            515.0,
             90.0,
             22.0
           ],
@@ -471,8 +471,8 @@
             "signal"
           ],
           "patching_rect": [
-            2090.0,
-            50.0,
+            240.0,
+            555.0,
             139.0,
             22.0
           ],
@@ -490,8 +490,8 @@
             ""
           ],
           "patching_rect": [
-            2260.0,
-            50.0,
+            240.0,
+            595.0,
             22.0,
             140.0
           ]
@@ -505,8 +505,8 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            2430.0,
-            50.0,
+            240.0,
+            745.0,
             45.0,
             45.0
           ]
@@ -520,12 +520,12 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            50.0,
-            105.0,
-            454.0,
+            30.0,
+            780.0,
+            300.0,
             22.0
           ],
-          "text": "Drift synth built in \u2014 just turn on audio and click the toggle"
+          "text": "Turn on audio, set pitches, click toggle"
         }
       },
       {
@@ -537,12 +537,12 @@
           "outlettype": [],
           "patching_rect": [
             50.0,
-            442.0,
+            842.0,
             500.0,
-            4896.0
+            6560.0
           ],
-          "text": "--- CLAUDE2MAX SPEC ---\n{\n  \"name\": \"Drift Sequencer\",\n  \"width\": 950,\n  \"height\": 750,\n  \"objects\": {\n    \"loadbang\": {\n      \"type\": \"newobj\",\n      \"text\": \"loadbang\"\n    },\n    \"init_tempo\": {\n      \"type\": \"message\",\n      \"text\": \"200\"\n    },\n    \"init_vel\": {\n      \"type\": \"message\",\n      \"text\": \"100\"\n    },\n    \"init_dur\": {\n      \"type\": \"message\",\n      \"text\": \"150\"\n    },\n    \"tempo_label\": {\n      \"type\": \"comment\",\n      \"text\": \"tempo (ms)\"\n    },\n    \"tempo\": {\n      \"type\": \"number\",\n      \"attrs\": {\n        \"minimum\": 50,\n        \"maximum\": 2000\n      }\n    },\n    \"onoff\": {\n      \"type\": \"toggle\"\n    },\n    \"metro\": {\n      \"type\": \"newobj\",\n      \"text\": \"metro 200\"\n    },\n    \"steps\": {\n      \"type\": \"newobj\",\n      \"text\": \"counter 0 7\"\n    },\n    \"step_plus1\": {\n      \"type\": \"newobj\",\n      \"text\": \"+ 1\"\n    },\n    \"fetch\": {\n      \"type\": \"newobj\",\n      \"text\": \"prepend fetch\"\n    },\n    \"pitch_label\": {\n      \"type\": \"comment\",\n      \"text\": \"pitch (8 steps)\"\n    },\n    \"slider\": {\n      \"type\": \"multislider\",\n      \"attrs\": {\n        \"size\": 8,\n        \"setminmax\": [\n          36.0,\n          84.0\n        ],\n        \"setstyle\": 1,\n        \"candicane2\": [\n          0.14,\n          0.69,\n          0.78,\n          1.0\n        ],\n        \"slidercolor\": [\n          0.14,\n          0.69,\n          0.78,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.15,\n          0.15,\n          0.15,\n          1.0\n        ],\n        \"orientation\": 1\n      },\n      \"size\": [\n        200,\n        120\n      ]\n    },\n    \"to_int\": {\n      \"type\": \"newobj\",\n      \"text\": \"int\"\n    },\n    \"pitch_display\": {\n      \"type\": \"number\"\n    },\n    \"vel_label\": {\n      \"type\": \"comment\",\n      \"text\": \"velocity\"\n    },\n    \"velocity\": {\n      \"type\": \"number\",\n      \"attrs\": {\n        \"minimum\": 1,\n        \"maximum\": 127\n      }\n    },\n    \"dur_label\": {\n      \"type\": \"comment\",\n      \"text\": \"duration (ms)\"\n    },\n    \"duration\": {\n      \"type\": \"number\",\n      \"attrs\": {\n        \"minimum\": 10,\n        \"maximum\": 2000\n      }\n    },\n    \"makenote\": {\n      \"type\": \"newobj\",\n      \"text\": \"makenote 100 150\"\n    },\n    \"pack_note\": {\n      \"type\": \"newobj\",\n      \"text\": \"pack 60 100\"\n    },\n    \"midiformat\": {\n      \"type\": \"newobj\",\n      \"text\": \"midiformat\"\n    },\n    \"drift\": {\n      \"type\": \"newobj\",\n      \"text\": \"abl.device.drift~\",\n      \"inlets\": 1,\n      \"outlets\": 2,\n      \"outlettype\": [\n        \"signal\",\n        \"signal\"\n      ]\n    },\n    \"gain\": {\n      \"type\": \"gain~\"\n    },\n    \"dac\": {\n      \"type\": \"ezdac~\"\n    },\n    \"info\": {\n      \"type\": \"comment\",\n      \"text\": \"Drift synth built in \\u2014 just turn on audio and click the toggle\"\n    }\n  },\n  \"connections\": [\n    [\n      \"loadbang\",\n      0,\n      \"init_tempo\",\n      0\n    ],\n    [\n      \"loadbang\",\n      0,\n      \"init_vel\",\n      0\n    ],\n    [\n      \"loadbang\",\n      0,\n      \"init_dur\",\n      0\n    ],\n    [\n      \"init_tempo\",\n      0,\n      \"tempo\",\n      0\n    ],\n    [\n      \"init_vel\",\n      0,\n      \"velocity\",\n      0\n    ],\n    [\n      \"init_dur\",\n      0,\n      \"duration\",\n      0\n    ],\n    [\n      \"onoff\",\n      0,\n      \"metro\",\n      0\n    ],\n    [\n      \"tempo\",\n      0,\n      \"metro\",\n      1\n    ],\n    [\n      \"metro\",\n      0,\n      \"steps\",\n      0\n    ],\n    [\n      \"steps\",\n      0,\n      \"step_plus1\",\n      0\n    ],\n    [\n      \"step_plus1\",\n      0,\n      \"fetch\",\n      0\n    ],\n    [\n      \"fetch\",\n      0,\n      \"slider\",\n      0\n    ],\n    [\n      \"slider\",\n      0,\n      \"to_int\",\n      0\n    ],\n    [\n      \"to_int\",\n      0,\n      \"pitch_display\",\n      0\n    ],\n    [\n      \"to_int\",\n      0,\n      \"makenote\",\n      0\n    ],\n    [\n      \"velocity\",\n      0,\n      \"makenote\",\n      1\n    ],\n    [\n      \"duration\",\n      0,\n      \"makenote\",\n      2\n    ],\n    [\n      \"makenote\",\n      0,\n      \"pack_note\",\n      0\n    ],\n    [\n      \"makenote\",\n      1,\n      \"pack_note\",\n      1\n    ],\n    [\n      \"pack_note\",\n      0,\n      \"midiformat\",\n      0\n    ],\n    [\n      \"midiformat\",\n      0,\n      \"drift\",\n      0\n    ],\n    [\n      \"drift\",\n      0,\n      \"gain\",\n      0\n    ],\n    [\n      \"drift\",\n      1,\n      \"gain\",\n      0\n    ],\n    [\n      \"gain\",\n      0,\n      \"dac\",\n      0\n    ],\n    [\n      \"gain\",\n      0,\n      \"dac\",\n      1\n    ]\n  ]\n}\n--- END SPEC ---",
-          "linecount": 306,
+          "text": "--- CLAUDE2MAX SPEC ---\n{\n  \"name\": \"Drift Sequencer\",\n  \"width\": 620,\n  \"height\": 820,\n  \"objects\": {\n    \"loadbang\": {\n      \"type\": \"newobj\",\n      \"text\": \"loadbang\",\n      \"pos\": [\n        170,\n        45\n      ]\n    },\n    \"init_tempo\": {\n      \"type\": \"message\",\n      \"text\": \"200\",\n      \"pos\": [\n        115,\n        75\n      ]\n    },\n    \"init_vel\": {\n      \"type\": \"message\",\n      \"text\": \"100\",\n      \"pos\": [\n        310,\n        75\n      ]\n    },\n    \"init_dur\": {\n      \"type\": \"message\",\n      \"text\": \"150\",\n      \"pos\": [\n        410,\n        75\n      ]\n    },\n    \"tempo_label\": {\n      \"type\": \"comment\",\n      \"text\": \"tempo (ms)\",\n      \"pos\": [\n        55,\n        105\n      ]\n    },\n    \"tempo\": {\n      \"type\": \"number\",\n      \"pos\": [\n        115,\n        105\n      ],\n      \"attrs\": {\n        \"minimum\": 50,\n        \"maximum\": 2000\n      }\n    },\n    \"onoff\": {\n      \"type\": \"toggle\",\n      \"pos\": [\n        30,\n        135\n      ]\n    },\n    \"metro\": {\n      \"type\": \"newobj\",\n      \"text\": \"metro 200\",\n      \"pos\": [\n        30,\n        165\n      ]\n    },\n    \"steps\": {\n      \"type\": \"newobj\",\n      \"text\": \"counter 0 7\",\n      \"pos\": [\n        30,\n        200\n      ]\n    },\n    \"step_plus1\": {\n      \"type\": \"newobj\",\n      \"text\": \"+ 1\",\n      \"pos\": [\n        30,\n        235\n      ]\n    },\n    \"fetch\": {\n      \"type\": \"newobj\",\n      \"text\": \"prepend fetch\",\n      \"pos\": [\n        30,\n        270\n      ]\n    },\n    \"pitch_label\": {\n      \"type\": \"comment\",\n      \"text\": \"pitch (8 steps)\",\n      \"pos\": [\n        240,\n        270\n      ]\n    },\n    \"slider\": {\n      \"type\": \"multislider\",\n      \"pos\": [\n        30,\n        300\n      ],\n      \"size\": [\n        200,\n        120\n      ],\n      \"attrs\": {\n        \"size\": 8,\n        \"setminmax\": [\n          36.0,\n          84.0\n        ],\n        \"setstyle\": 1,\n        \"candicane2\": [\n          0.14,\n          0.69,\n          0.78,\n          1.0\n        ],\n        \"slidercolor\": [\n          0.14,\n          0.69,\n          0.78,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.15,\n          0.15,\n          0.15,\n          1.0\n        ],\n        \"orientation\": 1\n      }\n    },\n    \"to_int\": {\n      \"type\": \"newobj\",\n      \"text\": \"int\",\n      \"pos\": [\n        240,\n        340\n      ]\n    },\n    \"pitch_display\": {\n      \"type\": \"number\",\n      \"pos\": [\n        240,\n        370\n      ]\n    },\n    \"vel_label\": {\n      \"type\": \"comment\",\n      \"text\": \"velocity\",\n      \"pos\": [\n        355,\n        390\n      ]\n    },\n    \"velocity\": {\n      \"type\": \"number\",\n      \"pos\": [\n        310,\n        410\n      ],\n      \"attrs\": {\n        \"minimum\": 1,\n        \"maximum\": 127\n      }\n    },\n    \"dur_label\": {\n      \"type\": \"comment\",\n      \"text\": \"duration (ms)\",\n      \"pos\": [\n        445,\n        390\n      ]\n    },\n    \"duration\": {\n      \"type\": \"number\",\n      \"pos\": [\n        410,\n        410\n      ],\n      \"attrs\": {\n        \"minimum\": 10,\n        \"maximum\": 2000\n      }\n    },\n    \"makenote\": {\n      \"type\": \"newobj\",\n      \"text\": \"makenote 100 150\",\n      \"pos\": [\n        240,\n        445\n      ]\n    },\n    \"pack_note\": {\n      \"type\": \"newobj\",\n      \"text\": \"pack 60 100\",\n      \"pos\": [\n        240,\n        480\n      ]\n    },\n    \"midiformat\": {\n      \"type\": \"newobj\",\n      \"text\": \"midiformat\",\n      \"pos\": [\n        240,\n        515\n      ]\n    },\n    \"drift\": {\n      \"type\": \"newobj\",\n      \"text\": \"abl.device.drift~\",\n      \"pos\": [\n        240,\n        555\n      ],\n      \"inlets\": 1,\n      \"outlets\": 2,\n      \"outlettype\": [\n        \"signal\",\n        \"signal\"\n      ]\n    },\n    \"gain\": {\n      \"type\": \"gain~\",\n      \"pos\": [\n        240,\n        595\n      ]\n    },\n    \"dac\": {\n      \"type\": \"ezdac~\",\n      \"pos\": [\n        240,\n        745\n      ]\n    },\n    \"info\": {\n      \"type\": \"comment\",\n      \"text\": \"Turn on audio, set pitches, click toggle\",\n      \"pos\": [\n        30,\n        780\n      ]\n    }\n  },\n  \"connections\": [\n    [\n      \"loadbang\",\n      0,\n      \"init_tempo\",\n      0\n    ],\n    [\n      \"loadbang\",\n      0,\n      \"init_vel\",\n      0\n    ],\n    [\n      \"loadbang\",\n      0,\n      \"init_dur\",\n      0\n    ],\n    [\n      \"init_tempo\",\n      0,\n      \"tempo\",\n      0\n    ],\n    [\n      \"init_vel\",\n      0,\n      \"velocity\",\n      0\n    ],\n    [\n      \"init_dur\",\n      0,\n      \"duration\",\n      0\n    ],\n    [\n      \"onoff\",\n      0,\n      \"metro\",\n      0\n    ],\n    [\n      \"tempo\",\n      0,\n      \"metro\",\n      1\n    ],\n    [\n      \"metro\",\n      0,\n      \"steps\",\n      0\n    ],\n    [\n      \"steps\",\n      0,\n      \"step_plus1\",\n      0\n    ],\n    [\n      \"step_plus1\",\n      0,\n      \"fetch\",\n      0\n    ],\n    [\n      \"fetch\",\n      0,\n      \"slider\",\n      0\n    ],\n    [\n      \"slider\",\n      1,\n      \"to_int\",\n      0\n    ],\n    [\n      \"to_int\",\n      0,\n      \"pitch_display\",\n      0\n    ],\n    [\n      \"to_int\",\n      0,\n      \"makenote\",\n      0\n    ],\n    [\n      \"velocity\",\n      0,\n      \"makenote\",\n      1\n    ],\n    [\n      \"duration\",\n      0,\n      \"makenote\",\n      2\n    ],\n    [\n      \"makenote\",\n      0,\n      \"pack_note\",\n      0\n    ],\n    [\n      \"makenote\",\n      1,\n      \"pack_note\",\n      1\n    ],\n    [\n      \"pack_note\",\n      0,\n      \"midiformat\",\n      0\n    ],\n    [\n      \"midiformat\",\n      0,\n      \"drift\",\n      0\n    ],\n    [\n      \"drift\",\n      0,\n      \"gain\",\n      0\n    ],\n    [\n      \"drift\",\n      1,\n      \"gain\",\n      0\n    ],\n    [\n      \"gain\",\n      0,\n      \"dac\",\n      0\n    ],\n    [\n      \"gain\",\n      0,\n      \"dac\",\n      1\n    ]\n  ]\n}\n--- END SPEC ---",
+          "linecount": 410,
           "fontsize": 9.0,
           "textcolor": [
             0.5,
@@ -707,7 +707,7 @@
           ],
           "source": [
             "obj-13",
-            0
+            1
           ]
         }
       },

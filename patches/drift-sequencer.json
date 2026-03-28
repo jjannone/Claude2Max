@@ -1,25 +1,27 @@
 {
   "name": "Drift Sequencer",
-  "width": 950,
-  "height": 750,
+  "width": 620,
+  "height": 820,
   "objects": {
-    "loadbang": { "type": "newobj", "text": "loadbang" },
-    "init_tempo": { "type": "message", "text": "200" },
-    "init_vel": { "type": "message", "text": "100" },
-    "init_dur": { "type": "message", "text": "150" },
+    "loadbang": { "type": "newobj", "text": "loadbang", "pos": [170, 45] },
+    "init_tempo": { "type": "message", "text": "200", "pos": [115, 75] },
+    "init_vel": { "type": "message", "text": "100", "pos": [310, 75] },
+    "init_dur": { "type": "message", "text": "150", "pos": [410, 75] },
 
-    "tempo_label": { "type": "comment", "text": "tempo (ms)" },
-    "tempo": { "type": "number", "attrs": { "minimum": 50, "maximum": 2000 } },
-    "onoff": { "type": "toggle" },
-    "metro": { "type": "newobj", "text": "metro 200" },
+    "tempo_label": { "type": "comment", "text": "tempo (ms)", "pos": [55, 105] },
+    "tempo": { "type": "number", "pos": [115, 105], "attrs": { "minimum": 50, "maximum": 2000 } },
+    "onoff": { "type": "toggle", "pos": [30, 135] },
+    "metro": { "type": "newobj", "text": "metro 200", "pos": [30, 165] },
 
-    "steps": { "type": "newobj", "text": "counter 0 7" },
-    "step_plus1": { "type": "newobj", "text": "+ 1" },
-    "fetch": { "type": "newobj", "text": "prepend fetch" },
+    "steps": { "type": "newobj", "text": "counter 0 7", "pos": [30, 200] },
+    "step_plus1": { "type": "newobj", "text": "+ 1", "pos": [30, 235] },
+    "fetch": { "type": "newobj", "text": "prepend fetch", "pos": [30, 270] },
 
-    "pitch_label": { "type": "comment", "text": "pitch (8 steps)" },
+    "pitch_label": { "type": "comment", "text": "pitch (8 steps)", "pos": [240, 270] },
     "slider": {
       "type": "multislider",
+      "pos": [30, 300],
+      "size": [200, 120],
       "attrs": {
         "size": 8,
         "setminmax": [36.0, 84.0],
@@ -28,33 +30,33 @@
         "slidercolor": [0.14, 0.69, 0.78, 1.0],
         "bgcolor": [0.15, 0.15, 0.15, 1.0],
         "orientation": 1
-      },
-      "size": [200, 120]
+      }
     },
 
-    "to_int": { "type": "newobj", "text": "int" },
-    "pitch_display": { "type": "number" },
+    "to_int": { "type": "newobj", "text": "int", "pos": [240, 340] },
+    "pitch_display": { "type": "number", "pos": [240, 370] },
 
-    "vel_label": { "type": "comment", "text": "velocity" },
-    "velocity": { "type": "number", "attrs": { "minimum": 1, "maximum": 127 } },
-    "dur_label": { "type": "comment", "text": "duration (ms)" },
-    "duration": { "type": "number", "attrs": { "minimum": 10, "maximum": 2000 } },
+    "vel_label": { "type": "comment", "text": "velocity", "pos": [355, 390] },
+    "velocity": { "type": "number", "pos": [310, 410], "attrs": { "minimum": 1, "maximum": 127 } },
+    "dur_label": { "type": "comment", "text": "duration (ms)", "pos": [445, 390] },
+    "duration": { "type": "number", "pos": [410, 410], "attrs": { "minimum": 10, "maximum": 2000 } },
 
-    "makenote": { "type": "newobj", "text": "makenote 100 150" },
-    "pack_note": { "type": "newobj", "text": "pack 60 100" },
-    "midiformat": { "type": "newobj", "text": "midiformat" },
+    "makenote": { "type": "newobj", "text": "makenote 100 150", "pos": [240, 445] },
+    "pack_note": { "type": "newobj", "text": "pack 60 100", "pos": [240, 480] },
+    "midiformat": { "type": "newobj", "text": "midiformat", "pos": [240, 515] },
     "drift": {
       "type": "newobj",
       "text": "abl.device.drift~",
+      "pos": [240, 555],
       "inlets": 1,
       "outlets": 2,
       "outlettype": ["signal", "signal"]
     },
 
-    "gain": { "type": "gain~" },
-    "dac": { "type": "ezdac~" },
+    "gain": { "type": "gain~", "pos": [240, 595] },
+    "dac": { "type": "ezdac~", "pos": [240, 745] },
 
-    "info": { "type": "comment", "text": "Drift synth built in — just turn on audio and click the toggle" }
+    "info": { "type": "comment", "text": "Turn on audio, set pitches, click toggle", "pos": [30, 780] }
   },
   "connections": [
     ["loadbang", 0, "init_tempo", 0],
@@ -72,7 +74,7 @@
     ["step_plus1", 0, "fetch", 0],
     ["fetch", 0, "slider", 0],
 
-    ["slider", 0, "to_int", 0],
+    ["slider", 1, "to_int", 0],
     ["to_int", 0, "pitch_display", 0],
     ["to_int", 0, "makenote", 0],
 
