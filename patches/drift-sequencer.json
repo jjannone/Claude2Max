@@ -1,15 +1,15 @@
 {
   "name": "Drift Sequencer",
-  "width": 620,
-  "height": 820,
+  "width": 580,
+  "height": 830,
   "objects": {
-    "loadbang": { "type": "newobj", "text": "loadbang", "pos": [170, 45] },
-    "init_tempo": { "type": "message", "text": "200", "pos": [115, 75] },
-    "init_vel": { "type": "message", "text": "100", "pos": [310, 75] },
-    "init_dur": { "type": "message", "text": "150", "pos": [410, 75] },
+    "loadbang": { "type": "newobj", "text": "loadbang", "pos": [250, 30] },
+    "init_tempo": { "type": "message", "text": "200", "pos": [65, 55] },
+    "init_vel": { "type": "message", "text": "100", "pos": [340, 55] },
+    "init_dur": { "type": "message", "text": "150", "pos": [430, 55] },
 
-    "tempo_label": { "type": "comment", "text": "tempo (ms)", "pos": [55, 105] },
-    "tempo": { "type": "number", "pos": [115, 105], "attrs": { "minimum": 50, "maximum": 2000 } },
+    "tempo_label": { "type": "comment", "text": "tempo (ms)", "pos": [65, 82] },
+    "tempo": { "type": "number", "pos": [65, 100], "attrs": { "minimum": 50, "maximum": 2000 } },
     "onoff": { "type": "toggle", "pos": [30, 135] },
     "metro": { "type": "newobj", "text": "metro 200", "pos": [30, 165] },
 
@@ -17,10 +17,10 @@
     "step_plus1": { "type": "newobj", "text": "+ 1", "pos": [30, 235] },
     "fetch": { "type": "newobj", "text": "prepend fetch", "pos": [30, 270] },
 
-    "pitch_label": { "type": "comment", "text": "pitch (8 steps)", "pos": [240, 270] },
+    "pitch_label": { "type": "comment", "text": "pitch (8 steps)", "pos": [30, 295] },
     "slider": {
       "type": "multislider",
-      "pos": [30, 300],
+      "pos": [30, 315],
       "size": [200, 120],
       "attrs": {
         "size": 8,
@@ -33,30 +33,29 @@
       }
     },
 
-    "to_int": { "type": "newobj", "text": "int", "pos": [240, 340] },
-    "pitch_display": { "type": "number", "pos": [240, 370] },
+    "pitch_display": { "type": "number", "pos": [250, 390] },
 
-    "vel_label": { "type": "comment", "text": "velocity", "pos": [355, 390] },
-    "velocity": { "type": "number", "pos": [310, 410], "attrs": { "minimum": 1, "maximum": 127 } },
-    "dur_label": { "type": "comment", "text": "duration (ms)", "pos": [445, 390] },
-    "duration": { "type": "number", "pos": [410, 410], "attrs": { "minimum": 10, "maximum": 2000 } },
+    "vel_label": { "type": "comment", "text": "velocity", "pos": [340, 400] },
+    "velocity": { "type": "number", "pos": [340, 418], "attrs": { "minimum": 1, "maximum": 127 } },
+    "dur_label": { "type": "comment", "text": "duration (ms)", "pos": [430, 400] },
+    "duration": { "type": "number", "pos": [430, 418], "attrs": { "minimum": 10, "maximum": 2000 } },
 
-    "makenote": { "type": "newobj", "text": "makenote 100 150", "pos": [240, 445] },
-    "pack_note": { "type": "newobj", "text": "pack 60 100", "pos": [240, 480] },
-    "midiformat": { "type": "newobj", "text": "midiformat", "pos": [240, 515] },
+    "makenote": { "type": "newobj", "text": "makenote 100 150", "pos": [250, 455] },
+    "pack_note": { "type": "newobj", "text": "pack 60 100", "pos": [250, 490] },
+    "midiformat": { "type": "newobj", "text": "midiformat", "pos": [250, 525] },
     "drift": {
       "type": "newobj",
       "text": "abl.device.drift~",
-      "pos": [240, 555],
+      "pos": [250, 560],
       "inlets": 1,
       "outlets": 2,
       "outlettype": ["signal", "signal"]
     },
 
-    "gain": { "type": "gain~", "pos": [240, 595] },
-    "dac": { "type": "ezdac~", "pos": [240, 745] },
+    "gain": { "type": "gain~", "pos": [250, 595] },
+    "dac": { "type": "ezdac~", "pos": [250, 745] },
 
-    "info": { "type": "comment", "text": "Turn on audio, set pitches, click toggle", "pos": [30, 780] }
+    "info": { "type": "comment", "text": "Turn on audio, set pitches, click toggle", "pos": [30, 795] }
   },
   "connections": [
     ["loadbang", 0, "init_tempo", 0],
@@ -74,9 +73,8 @@
     ["step_plus1", 0, "fetch", 0],
     ["fetch", 0, "slider", 0],
 
-    ["slider", 1, "to_int", 0],
-    ["to_int", 0, "pitch_display", 0],
-    ["to_int", 0, "makenote", 0],
+    ["slider", 1, "pitch_display", 0],
+    ["pitch_display", 0, "makenote", 0],
 
     ["velocity", 0, "makenote", 1],
     ["duration", 0, "makenote", 2],
