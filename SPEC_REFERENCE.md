@@ -249,6 +249,18 @@ Lay out the main signal chain vertically, top to bottom. Place the primary input
 
 When a secondary control (velocity, duration, etc.) feeds into a later inlet of an object in the main chain, place it above and to the right of that object so the cable drops down naturally into the correct inlet. Label it with a comment using the same right-shift rule.
 
+### Initialization
+
+Use `loadmess` to set sensible defaults for controls on patch load. For multiple init values, use `loadmess` → `unpack` to distribute to separate controls. A single int sent to a `multislider` sets all sliders to that value.
+
+### Stereo signal chains
+
+When a source produces stereo output (two signal outlets), preserve both channels through the entire chain to `dac~` or `ezdac~`. Connect L and R separately through gain stages — don't merge to mono. `live.gain~` handles stereo natively (2 signal inlets, 2 signal outlets).
+
+### Window sizing
+
+Set `width` and `height` large enough to contain all objects without scrolling, including any info comments at the bottom of the patch. Leave margin below the lowest object.
+
 ## Presentation View
 
 Use the `presentation` field on objects to create a clean, user-facing layout separate from the patching view. Presentation mode hides all wiring and non-presented objects, showing only the controls the user needs.
