@@ -417,11 +417,11 @@ def build_box(user_id, obj_spec, index, x, y):
     numoutlets = obj_spec.get("outlets", io_info["numoutlets"])
     outlettype = obj_spec.get("outlettype", io_info["outlettype"])
 
-    # Sizing
-    if maxclass in UI_SIZES:
-        w, h = UI_SIZES[maxclass]
-    elif obj_spec.get("size"):
+    # Sizing — spec override takes priority over defaults
+    if obj_spec.get("size"):
         w, h = obj_spec["size"]
+    elif maxclass in UI_SIZES:
+        w, h = UI_SIZES[maxclass]
     else:
         w = estimate_text_width(text)
         h = 22

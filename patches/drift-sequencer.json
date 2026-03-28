@@ -43,6 +43,7 @@
         "size": 8,
         "setminmax": [0.0, 1.0],
         "setstyle": 1,
+        "settype": 0,
         "candicane2": [0.9, 0.5, 0.2, 1.0],
         "slidercolor": [0.9, 0.5, 0.2, 1.0],
         "bgcolor": [0.15, 0.15, 0.15, 1.0],
@@ -51,30 +52,29 @@
     },
 
     "pitch_display": { "type": "number", "pos": [250, 440] },
-    "rest_int": { "type": "newobj", "text": "int", "pos": [250, 480] },
-    "note_gate": { "type": "newobj", "text": "gate 1", "pos": [250, 515] },
+    "note_gate": { "type": "newobj", "text": "gate 1", "pos": [250, 480] },
 
-    "vel_label": { "type": "comment", "text": "velocity", "pos": [355, 535] },
-    "velocity": { "type": "number", "pos": [340, 553], "attrs": { "minimum": 1, "maximum": 127 } },
-    "dur_label": { "type": "comment", "text": "duration (ms)", "pos": [445, 535] },
-    "duration": { "type": "number", "pos": [430, 553], "attrs": { "minimum": 10, "maximum": 2000 } },
+    "vel_label": { "type": "comment", "text": "velocity", "pos": [355, 500] },
+    "velocity": { "type": "number", "pos": [340, 518], "attrs": { "minimum": 1, "maximum": 127 } },
+    "dur_label": { "type": "comment", "text": "duration (ms)", "pos": [445, 500] },
+    "duration": { "type": "number", "pos": [430, 518], "attrs": { "minimum": 10, "maximum": 2000 } },
 
-    "makenote": { "type": "newobj", "text": "makenote 100 150", "pos": [250, 590] },
-    "pack_note": { "type": "newobj", "text": "pack 60 100", "pos": [250, 620] },
-    "midiformat": { "type": "newobj", "text": "midiformat", "pos": [250, 650] },
+    "makenote": { "type": "newobj", "text": "makenote 100 150", "pos": [250, 555] },
+    "pack_note": { "type": "newobj", "text": "pack 60 100", "pos": [250, 585] },
+    "midiformat": { "type": "newobj", "text": "midiformat", "pos": [250, 615] },
     "drift": {
       "type": "newobj",
       "text": "abl.device.drift~",
-      "pos": [250, 680],
+      "pos": [250, 645],
       "inlets": 1,
       "outlets": 2,
       "outlettype": ["signal", "signal"]
     },
 
-    "gain": { "type": "gain~", "pos": [250, 710], "size": [22, 80] },
-    "dac": { "type": "ezdac~", "pos": [250, 800] },
+    "gain": { "type": "gain~", "pos": [250, 680], "size": [22, 80] },
+    "dac": { "type": "ezdac~", "pos": [250, 775] },
 
-    "info": { "type": "comment", "text": "Turn on audio, set pitches and rests, click toggle", "pos": [30, 850] }
+    "info": { "type": "comment", "text": "Turn on audio, set pitches and rests, click toggle", "pos": [30, 825] }
   },
   "connections": [
     ["loadmess", 0, "unpack_init", 0],
@@ -96,9 +96,7 @@
     ["fetch_rest", 0, "rest_slider", 0],
 
     ["slider", 1, "pitch_display", 0],
-    ["rest_slider", 1, "rest_int", 0],
-
-    ["rest_int", 0, "note_gate", 0],
+    ["rest_slider", 1, "note_gate", 0],
     ["pitch_display", 0, "note_gate", 1],
     ["note_gate", 0, "makenote", 0],
 
