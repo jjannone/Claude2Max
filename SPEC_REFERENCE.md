@@ -223,15 +223,30 @@ Use `attrs` to set any additional Max box attributes:
 }
 ```
 
-## Auto-Layout
+## Layout Guidelines
 
-Objects are automatically arranged left-to-right by signal flow using topological sorting. Objects with no inputs appear on the left, and each subsequent layer of dependent objects is placed to the right.
+**Always use explicit `pos` for every object.** The auto-layout engine arranges left-to-right, but hand-placed patches are far more readable. Follow these rules when placing objects:
 
-To override placement for specific objects, use the `pos` field:
+### Top-to-bottom flow
 
-```json
-{ "type": "comment", "text": "Controls", "pos": [20, 20] }
-```
+Lay out the main signal chain vertically, top to bottom. Place the primary input/control at the top and the final output (dac~, noteout, etc.) at the bottom. The entire patch should fit within one patcher window without scrolling — size the window accordingly.
+
+### Spacing
+
+- Use ~35px vertical spacing between objects in a chain (enough room for a cable).
+- Where a comment label will appear between two objects, leave ~55px vertical gap to fit the label plus cable clearance.
+- Use ~90px horizontal spacing between parallel columns or side-by-side controls.
+
+### Comment placement
+
+- Place comment labels **above** the object they describe.
+- **Right-shift** the comment ~15px from the object's x position so it does not sit on top of a vertical patch cable entering the object's inlet.
+- When inserting a comment between two connected objects, add enough vertical space so the comment does not overlap the cable or either object. A comment is ~14px tall; budget at least 20px above and below it.
+- Keep comments short. Use them to label controls (e.g. "tempo (ms)"), not to narrate the patch.
+
+### Side controls
+
+When a secondary control (velocity, duration, etc.) feeds into a later inlet of an object in the main chain, place it above and to the right of that object so the cable drops down naturally into the correct inlet. Label it with a comment using the same right-shift rule.
 
 ## Complete Examples
 
