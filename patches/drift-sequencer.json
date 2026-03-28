@@ -1,13 +1,13 @@
 {
   "name": "Drift Sequencer",
-  "width": 700,
+  "width": 650,
   "height": 830,
   "objects": {
     "loadmess": { "type": "newobj", "text": "loadmess 200 100 150", "pos": [250, 30] },
     "unpack_init": { "type": "newobj", "text": "unpack 0 0 0", "pos": [250, 60] },
 
+    "tempo_label": { "type": "comment", "text": "tempo (ms)", "pos": [80, 85] },
     "tempo": { "type": "number", "pos": [65, 100], "attrs": { "minimum": 50, "maximum": 2000 } },
-    "tempo_label": { "type": "comment", "text": "<-- tempo (ms)", "pos": [120, 102] },
     "onoff": { "type": "toggle", "pos": [30, 135] },
     "metro": { "type": "newobj", "text": "metro 200", "pos": [30, 165] },
 
@@ -15,6 +15,7 @@
     "step_plus1": { "type": "newobj", "text": "+ 1", "pos": [30, 235] },
     "fetch": { "type": "newobj", "text": "prepend fetch", "pos": [30, 270] },
 
+    "pitch_label": { "type": "comment", "text": "pitch (8 steps, MIDI 36-84)", "pos": [45, 290] },
     "slider": {
       "type": "multislider",
       "pos": [30, 305],
@@ -29,14 +30,12 @@
         "orientation": 1
       }
     },
-    "pitch_label": { "type": "comment", "text": "pitch (8 steps, MIDI 36-84)", "pos": [30, 430] },
 
     "pitch_display": { "type": "number", "pos": [250, 450] },
-    "pitch_display_label": { "type": "comment", "text": "<-- current note", "pos": [305, 452] },
+    "vel_label": { "type": "comment", "text": "velocity", "pos": [355, 475] },
     "velocity": { "type": "number", "pos": [340, 490], "attrs": { "minimum": 1, "maximum": 127 } },
-    "vel_label": { "type": "comment", "text": "<-- velocity", "pos": [395, 492] },
+    "dur_label": { "type": "comment", "text": "duration (ms)", "pos": [445, 475] },
     "duration": { "type": "number", "pos": [430, 490], "attrs": { "minimum": 10, "maximum": 2000 } },
-    "dur_label": { "type": "comment", "text": "<-- duration (ms)", "pos": [485, 492] },
 
     "makenote": { "type": "newobj", "text": "makenote 100 150", "pos": [250, 530] },
     "pack_note": { "type": "newobj", "text": "pack 60 100", "pos": [250, 565] },
@@ -53,7 +52,7 @@
     "gain": { "type": "gain~", "pos": [250, 670] },
     "dac": { "type": "ezdac~", "pos": [250, 760] },
 
-    "info": { "type": "comment", "text": "Turn on audio, set pitches, click toggle", "pos": [310, 770] }
+    "info": { "type": "comment", "text": "Turn on audio, set pitches, click toggle", "pos": [30, 800] }
   },
   "connections": [
     ["loadmess", 0, "unpack_init", 0],
