@@ -56,6 +56,16 @@ python3 spec2maxpat.py extract -i my-patch.maxpat -o my-patch.json
 
 See [SPEC_REFERENCE.md](SPEC_REFERENCE.md) for the full format documentation.
 
+## Setup
+
+After cloning, run this once to enable spec-only diffs for `.maxpat` files:
+
+```
+git config diff.claude2max.textconv "python3 spec2maxpat.py extract -i"
+```
+
+This makes `git diff` show changes to the embedded spec rather than the raw `.maxpat` JSON.
+
 ## Requirements
 
 Python 3.6+ (no external dependencies).
