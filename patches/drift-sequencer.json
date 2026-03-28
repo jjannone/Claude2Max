@@ -1,13 +1,13 @@
 {
   "name": "Drift Sequencer",
-  "width": 600,
+  "width": 700,
   "height": 830,
   "objects": {
     "loadmess": { "type": "newobj", "text": "loadmess 200 100 150", "pos": [250, 30] },
     "unpack_init": { "type": "newobj", "text": "unpack 0 0 0", "pos": [250, 60] },
 
     "tempo": { "type": "number", "pos": [65, 100], "attrs": { "minimum": 50, "maximum": 2000 } },
-    "tempo_label": { "type": "comment", "text": "tempo (ms)", "pos": [120, 102] },
+    "tempo_label": { "type": "comment", "text": "<-- tempo (ms)", "pos": [120, 102] },
     "onoff": { "type": "toggle", "pos": [30, 135] },
     "metro": { "type": "newobj", "text": "metro 200", "pos": [30, 165] },
 
@@ -29,30 +29,31 @@
         "orientation": 1
       }
     },
-    "pitch_label": { "type": "comment", "text": "pitch (8 steps)", "pos": [240, 305] },
+    "pitch_label": { "type": "comment", "text": "pitch (8 steps, MIDI 36-84)", "pos": [30, 430] },
 
     "pitch_display": { "type": "number", "pos": [250, 450] },
-    "velocity": { "type": "number", "pos": [340, 450], "attrs": { "minimum": 1, "maximum": 127 } },
-    "vel_label": { "type": "comment", "text": "velocity", "pos": [395, 452] },
-    "duration": { "type": "number", "pos": [430, 450], "attrs": { "minimum": 10, "maximum": 2000 } },
-    "dur_label": { "type": "comment", "text": "duration (ms)", "pos": [485, 452] },
+    "pitch_display_label": { "type": "comment", "text": "<-- current note", "pos": [305, 452] },
+    "velocity": { "type": "number", "pos": [340, 490], "attrs": { "minimum": 1, "maximum": 127 } },
+    "vel_label": { "type": "comment", "text": "<-- velocity", "pos": [395, 492] },
+    "duration": { "type": "number", "pos": [430, 490], "attrs": { "minimum": 10, "maximum": 2000 } },
+    "dur_label": { "type": "comment", "text": "<-- duration (ms)", "pos": [485, 492] },
 
-    "makenote": { "type": "newobj", "text": "makenote 100 150", "pos": [250, 490] },
-    "pack_note": { "type": "newobj", "text": "pack 60 100", "pos": [250, 525] },
-    "midiformat": { "type": "newobj", "text": "midiformat", "pos": [250, 560] },
+    "makenote": { "type": "newobj", "text": "makenote 100 150", "pos": [250, 530] },
+    "pack_note": { "type": "newobj", "text": "pack 60 100", "pos": [250, 565] },
+    "midiformat": { "type": "newobj", "text": "midiformat", "pos": [250, 600] },
     "drift": {
       "type": "newobj",
       "text": "abl.device.drift~",
-      "pos": [250, 595],
+      "pos": [250, 635],
       "inlets": 1,
       "outlets": 2,
       "outlettype": ["signal", "signal"]
     },
 
-    "gain": { "type": "gain~", "pos": [250, 635] },
-    "dac": { "type": "ezdac~", "pos": [250, 785] },
+    "gain": { "type": "gain~", "pos": [250, 670] },
+    "dac": { "type": "ezdac~", "pos": [250, 760] },
 
-    "info": { "type": "comment", "text": "Turn on audio, set pitches, click toggle", "pos": [30, 800] }
+    "info": { "type": "comment", "text": "Turn on audio, set pitches, click toggle", "pos": [310, 770] }
   },
   "connections": [
     ["loadmess", 0, "unpack_init", 0],
