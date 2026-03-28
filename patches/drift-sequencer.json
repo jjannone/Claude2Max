@@ -1,0 +1,74 @@
+{
+  "name": "Drift Sequencer",
+  "width": 900,
+  "height": 650,
+  "objects": {
+    "loadbang": { "type": "newobj", "text": "loadbang" },
+    "init_tempo": { "type": "message", "text": "200" },
+    "init_vel": { "type": "message", "text": "100" },
+    "init_dur": { "type": "message", "text": "150" },
+
+    "tempo_label": { "type": "comment", "text": "tempo (ms)" },
+    "tempo": { "type": "number", "attrs": { "minimum": 50, "maximum": 2000 } },
+    "onoff": { "type": "toggle" },
+    "metro": { "type": "newobj", "text": "metro 200" },
+
+    "steps": { "type": "newobj", "text": "counter 0 7" },
+    "step_plus1": { "type": "newobj", "text": "+ 1" },
+    "fetch": { "type": "newobj", "text": "prepend fetch" },
+
+    "pitch_label": { "type": "comment", "text": "pitch (8 steps)" },
+    "slider": {
+      "type": "multislider",
+      "attrs": {
+        "size": 8,
+        "setminmax": [36.0, 84.0],
+        "setstyle": 1,
+        "candicane2": [0.14, 0.69, 0.78, 1.0],
+        "slidercolor": [0.14, 0.69, 0.78, 1.0],
+        "bgcolor": [0.15, 0.15, 0.15, 1.0],
+        "orientation": 1
+      },
+      "size": [200, 120]
+    },
+
+    "to_int": { "type": "newobj", "text": "int" },
+    "pitch_display": { "type": "number" },
+
+    "vel_label": { "type": "comment", "text": "velocity" },
+    "velocity": { "type": "number", "attrs": { "minimum": 1, "maximum": 127 } },
+    "dur_label": { "type": "comment", "text": "duration (ms)" },
+    "duration": { "type": "number", "attrs": { "minimum": 10, "maximum": 2000 } },
+
+    "makenote": { "type": "newobj", "text": "makenote 100 150" },
+    "noteout": { "type": "newobj", "text": "noteout" },
+
+    "info": { "type": "comment", "text": "Route MIDI output to Drift in Ableton or via IAC Driver" }
+  },
+  "connections": [
+    ["loadbang", 0, "init_tempo", 0],
+    ["loadbang", 0, "init_vel", 0],
+    ["loadbang", 0, "init_dur", 0],
+    ["init_tempo", 0, "tempo", 0],
+    ["init_vel", 0, "velocity", 0],
+    ["init_dur", 0, "duration", 0],
+
+    ["onoff", 0, "metro", 0],
+    ["tempo", 0, "metro", 1],
+
+    ["metro", 0, "steps", 0],
+    ["steps", 0, "step_plus1", 0],
+    ["step_plus1", 0, "fetch", 0],
+    ["fetch", 0, "slider", 0],
+
+    ["slider", 0, "to_int", 0],
+    ["to_int", 0, "pitch_display", 0],
+    ["to_int", 0, "makenote", 0],
+
+    ["velocity", 0, "makenote", 1],
+    ["duration", 0, "makenote", 2],
+
+    ["makenote", 0, "noteout", 0],
+    ["makenote", 1, "noteout", 1]
+  ]
+}
