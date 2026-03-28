@@ -489,23 +489,20 @@ def build_box(user_id, obj_spec, index, x, y):
 # ---------------------------------------------------------------------------
 
 def build_spec_embed(spec, x, y):
-    """Build a comment box containing the embedded spec for round-tripping."""
+    """Build a hidden codebox containing the embedded spec for round-tripping."""
     spec_text = json.dumps(spec, indent=2)
     embed_text = f"{SPEC_MARKER_BEGIN}\n{spec_text}\n{SPEC_MARKER_END}"
-    linecount = embed_text.count("\n") + 1
 
     return {
         "box": {
             "id": "obj-spec-embed",
-            "maxclass": "comment",
+            "maxclass": "codebox",
             "numinlets": 1,
-            "numoutlets": 0,
-            "outlettype": [],
-            "patching_rect": [float(x), float(y), 500.0, float(max(linecount * 16, 40))],
+            "numoutlets": 1,
+            "outlettype": [""],
+            "patching_rect": [float(x), float(y), 500.0, 300.0],
             "text": embed_text,
-            "linecount": linecount,
             "fontsize": 9.0,
-            "textcolor": [0.5, 0.5, 0.5, 1.0],
             "hidden": 1,
         }
     }
