@@ -33,15 +33,19 @@ Save specs to `patches/` as `.json` files. Generated `.maxpat` files go alongsid
 - **Presentation** — use `presentation` field for user-facing layouts. Every presented control needs a comment label.
 - **Objects not in the converter's lookup tables** — use `inlets`, `outlets`, and `outlettype` overrides in the spec. This is common for third-party externals.
 
+## Max Patching Knowledge
+
+- Use `loadmess` to set sensible defaults for controls on patch load. For multiple init values, use `loadmess` → `unpack` to distribute to separate controls.
+- When a source produces stereo output, preserve both channels through the entire chain to `dac~`/`ezdac~`. Don't merge to mono. `live.gain~` handles stereo natively (2 signal inlets, 2 signal outlets).
+- Set `width` and `height` large enough to contain all objects without scrolling, including info comments. Leave margin below the lowest object.
+
 ## Common Pitfalls
 
-- `multislider` `fetch N` outputs from **outlet 1** (right), not outlet 0
+- `multislider` `fetch N` outputs from **outlet 1** (right), not outlet 0. A single int sent to a `multislider` sets all sliders to that value.
 - `gate N`: inlet 0 = open/close control, inlet 1 = data input
 - `trigger` / `t` fires outlets **right-to-left** — rightmost outlet fires first
 - `makenote` needs pitch on inlet 0, velocity on inlet 1, duration on inlet 2
 - For MIDI synths in Max: `makenote` → `pack` → `midiformat` → synth object
 - `ezdac~` and `gain~` are their own maxclass types, not `newobj`
-- `text.codebox` stores content in the `code` field, not `text`
 - Spec `size` field overrides converter defaults — use it for non-standard dimensions
-- `live.gain~` with `"orientation": 1` for horizontal layout; handles stereo natively
-- A single int sent to a `multislider` sets all sliders to that value
+- `live.gain~` with `"orientation": 1` for horizontal layout
