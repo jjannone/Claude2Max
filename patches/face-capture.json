@@ -1,0 +1,159 @@
+{
+  "name": "Face Capture",
+  "width": 900,
+  "height": 950,
+
+  "objects": {
+    "loadmess_init": { "type": "newobj", "text": "loadmess 100 100 300", "pos": [250, 30] },
+    "unpack_init": { "type": "newobj", "text": "unpack 0 0 0", "pos": [250, 60] },
+
+    "cam_label": { "type": "comment", "text": "camera", "pos": [440, 45], "presentation": [15, 5] },
+    "cam_menu": { "type": "umenu", "pos": [425, 60], "size": [200, 22], "presentation": [10, 22, 200, 22] },
+    "getdevlist": { "type": "newobj", "text": "prepend vdevice", "pos": [425, 90] },
+    "loadmess_open": { "type": "newobj", "text": "loadmess open", "pos": [30, 80] },
+
+    "grab": {
+      "type": "newobj",
+      "text": "jit.grab 320 240",
+      "pos": [30, 110],
+      "inlets": 1,
+      "outlets": 2,
+      "outlettype": ["jit_matrix", ""]
+    },
+
+    "cap_metro_label": { "type": "comment", "text": "capture rate (ms)", "pos": [45, 140], "presentation": [15, 55] },
+    "cap_rate": { "type": "number", "pos": [30, 157], "attrs": { "minimum": 33, "maximum": 1000 }, "presentation": [10, 72, 60, 22] },
+    "cap_toggle_label": { "type": "comment", "text": "capture", "pos": [145, 140], "presentation": [90, 55] },
+    "cap_toggle": { "type": "toggle", "pos": [130, 157], "presentation": [90, 72] },
+    "cap_metro": { "type": "newobj", "text": "metro 100", "pos": [30, 190] },
+
+    "bang_grab": { "type": "newobj", "text": "t b", "pos": [30, 220] },
+
+    "preview": { "type": "jit.pwindow", "pos": [30, 265], "size": [320, 240], "presentation": [10, 105, 320, 240] },
+
+    "comment_detect": { "type": "comment", "text": "--- face detection ---", "pos": [415, 265] },
+    "luma": { "type": "newobj", "text": "jit.rgb2luma", "pos": [400, 285], "inlets": 1, "outlets": 2, "outlettype": ["jit_matrix", ""] },
+    "faces": {
+      "type": "newobj",
+      "text": "cv.jit.faces",
+      "pos": [400, 320],
+      "inlets": 1,
+      "outlets": 2,
+      "outlettype": ["jit_matrix", ""]
+    },
+    "get_nfaces": { "type": "newobj", "text": "getattr nfaces", "pos": [400, 355], "inlets": 1, "outlets": 2, "outlettype": ["", ""] },
+    "face_thresh": { "type": "newobj", "text": "> 0", "pos": [400, 385] },
+
+    "face_indicator_label": { "type": "comment", "text": "face detected", "pos": [535, 370], "presentation": [345, 105] },
+    "face_indicator": { "type": "toggle", "pos": [520, 385], "presentation": [345, 122] },
+
+    "comment_capture": { "type": "comment", "text": "--- frame storage ---", "pos": [415, 420] },
+    "gate_capture": { "type": "newobj", "text": "gate 1", "pos": [400, 440] },
+    "trig_store": { "type": "newobj", "text": "t b b", "pos": [400, 470] },
+
+    "write_counter": { "type": "newobj", "text": "counter", "pos": [400, 505] },
+    "prepend_idx": { "type": "newobj", "text": "prepend index", "pos": [400, 535] },
+
+    "max_frames_label": { "type": "comment", "text": "max frames", "pos": [645, 485], "presentation": [345, 155] },
+    "max_frames": { "type": "number", "pos": [630, 502], "attrs": { "minimum": 1, "maximum": 9999 }, "presentation": [345, 172, 55, 22] },
+
+    "frame_count_label": { "type": "comment", "text": "frames stored", "pos": [645, 525], "presentation": [345, 200] },
+    "frame_count": { "type": "number", "pos": [630, 542], "presentation": [345, 217, 55, 22] },
+
+    "matrixset": {
+      "type": "newobj",
+      "text": "jit.matrixset @matrixcount 300 @thru 0",
+      "pos": [400, 575],
+      "inlets": 1,
+      "outlets": 2,
+      "outlettype": ["jit_matrix", ""]
+    },
+
+    "comment_playback": { "type": "comment", "text": "--- playback ---", "pos": [415, 615] },
+    "play_toggle_label": { "type": "comment", "text": "play", "pos": [415, 635], "presentation": [345, 250] },
+    "play_toggle": { "type": "toggle", "pos": [400, 650], "presentation": [345, 267] },
+    "play_rate_label": { "type": "comment", "text": "play rate (ms)", "pos": [475, 635], "presentation": [385, 250] },
+    "play_rate": { "type": "number", "pos": [460, 650], "attrs": { "minimum": 10, "maximum": 2000 }, "presentation": [380, 267, 60, 22] },
+    "play_metro": { "type": "newobj", "text": "metro 100", "pos": [400, 685] },
+
+    "read_counter": { "type": "newobj", "text": "counter", "pos": [400, 720] },
+    "prepend_out": { "type": "newobj", "text": "prepend outputmatrix", "pos": [400, 750] },
+
+    "layer": {
+      "type": "newobj",
+      "text": "jit.gl.layer ctx",
+      "pos": [400, 815],
+      "inlets": 1,
+      "outlets": 2,
+      "outlettype": ["jit_matrix", ""]
+    },
+    "render": {
+      "type": "newobj",
+      "text": "jit.gl.render ctx @erase_color 0. 0. 0. 1.",
+      "pos": [550, 850],
+      "inlets": 1,
+      "outlets": 2,
+      "outlettype": ["bang", ""]
+    },
+    "render_trig": { "type": "newobj", "text": "t b b", "pos": [400, 850] },
+    "window": {
+      "type": "newobj",
+      "text": "jit.window ctx @size 640 480 @title \"Face Capture Playback\"",
+      "pos": [400, 885],
+      "inlets": 1,
+      "outlets": 2,
+      "outlettype": ["bang", ""]
+    },
+
+    "info": { "type": "comment", "text": "Select camera, click capture. Detected faces trigger frame storage. Click play to sequence captured frames.", "pos": [30, 915], "presentation": [10, 355, 430, 22] }
+  },
+
+  "connections": [
+    ["loadmess_init", 0, "unpack_init", 0],
+    ["unpack_init", 0, "cap_rate", 0],
+    ["unpack_init", 1, "play_rate", 0],
+    ["unpack_init", 2, "max_frames", 0],
+
+    ["loadmess_open", 0, "grab", 0],
+    ["cam_menu", 0, "getdevlist", 0],
+    ["getdevlist", 0, "grab", 0],
+    ["grab", 1, "cam_menu", 0],
+
+    ["cap_toggle", 0, "cap_metro", 0],
+    ["cap_rate", 0, "cap_metro", 1],
+    ["cap_metro", 0, "bang_grab", 0],
+    ["bang_grab", 0, "grab", 0],
+
+    ["grab", 0, "preview", 0],
+    ["grab", 0, "luma", 0],
+
+    ["luma", 0, "faces", 0],
+    ["faces", 0, "get_nfaces", 0],
+    ["get_nfaces", 0, "face_thresh", 0],
+
+    ["face_thresh", 0, "face_indicator", 0],
+    ["face_thresh", 0, "gate_capture", 0],
+    ["bang_grab", 0, "gate_capture", 1],
+
+    ["gate_capture", 0, "trig_store", 0],
+    ["trig_store", 1, "write_counter", 0],
+    ["write_counter", 0, "prepend_idx", 0],
+    ["write_counter", 0, "frame_count", 0],
+    ["prepend_idx", 0, "matrixset", 0],
+    ["trig_store", 0, "matrixset", 0],
+
+    ["max_frames", 0, "write_counter", 3],
+
+    ["play_toggle", 0, "play_metro", 0],
+    ["play_rate", 0, "play_metro", 1],
+    ["play_metro", 0, "read_counter", 0],
+    ["frame_count", 0, "read_counter", 3],
+    ["read_counter", 0, "prepend_out", 0],
+    ["prepend_out", 0, "matrixset", 0],
+
+    ["matrixset", 0, "layer", 0],
+    ["layer", 0, "render_trig", 0],
+    ["render_trig", 1, "render", 0],
+    ["render_trig", 0, "window", 0]
+  ]
+}
