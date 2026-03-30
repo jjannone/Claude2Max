@@ -32,7 +32,7 @@ Save specs to `patches/` as `.json` files. Generated `.maxpat` files go alongsid
 - **Layout** — use explicit `pos` for every object. Follow the layout guidelines in SPEC_REFERENCE.md.
 - **Presentation** — use `presentation` field for user-facing layouts. Every presented control needs a comment label.
 - **Objects not in the converter's lookup tables** — use `inlets`, `outlets`, and `outlettype` overrides in the spec. This is common for third-party externals.
-- **Always embed the spec** — every .maxpat produced via the converter must include a hidden `text.codebox` (`id: "obj-spec-embed"`, `"hidden": 1`) placed below all other objects, containing the full spec JSON wrapped in `--- CLAUDE2MAX SPEC ---` / `--- END SPEC ---` delimiters. (Not required when hand-editing raw maxpat JSON.)
+- **Always embed the spec** — every .maxpat produced using the Claude2Max workflow must include a hidden `text.codebox` (`id: "obj-spec-embed"`, `"hidden": 1`) placed below all other objects, containing the full spec JSON wrapped in `--- CLAUDE2MAX SPEC ---` / `--- END SPEC ---` delimiters. This applies whether the output is from the converter or assembled manually — if you used Claude2Max thinking (read SPEC_REFERENCE, wrote or modified a spec), embed it.
 
 ## Max Patching Knowledge
 
