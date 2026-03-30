@@ -39,6 +39,15 @@ Save specs to `patches/` as `.json` files. Generated `.maxpat` files go alongsid
 - When a source produces stereo output, preserve both channels through the entire chain to `dac~`/`ezdac~`. Don't merge to mono. `live.gain~` handles stereo natively (2 signal inlets, 2 signal outlets).
 - Set `width` and `height` large enough to contain all objects without scrolling, including info comments. Leave margin below the lowest object.
 
+## Work History
+
+At the end of any session where meaningful work was done, append an entry to this section:
+`- YYYY-MM-DD: <1-2 sentence summary>`
+
+Do this automatically — no need for the user to ask.
+
+---
+
 ## Common Pitfalls
 
 - `multislider` `fetch N` outputs from **outlet 1** (right), not outlet 0. A single int sent to a `multislider` sets all sliders to that value.
