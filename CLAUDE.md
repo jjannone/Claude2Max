@@ -41,12 +41,7 @@ Save specs to `patches/` as `.json` files. Generated `.maxpat` files go alongsid
 
 ## Work History
 
-At the end of any session where meaningful work was done, append an entry to this section:
-`- YYYY-MM-DD: <1-2 sentence summary>`
-
-Do this automatically — no need for the user to ask.
-
----
+At the end of any session where meaningful work was done, append an entry to `WORK_HISTORY.md`. Do this automatically — no need for the user to ask. Format: `- YYYY-MM-DD: <1-2 sentence summary>`
 
 ## Common Pitfalls
 
