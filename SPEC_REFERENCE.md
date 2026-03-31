@@ -128,6 +128,27 @@ These automatically get `parameter_enable` set:
 | `"comment"` | Non-functional comment label |
 | `"textedit"` | Editable text field |
 
+#### JavaScript Objects
+
+`v8` and `js` objects execute external JavaScript files with the Max JS API. They are **not** in the converter's lookup table — always override `inlets`, `outlets`, and `outlettype` in the spec.
+
+```json
+{
+  "type": "newobj",
+  "text": "v8 mylogic.js",
+  "inlets": 1,
+  "outlets": 4,
+  "outlettype": ["", "", "bang", "int"]
+}
+```
+
+- The `.js` file lives in the same directory as the `.maxpat`.
+- Incoming messages are dispatched to JS functions by selector: `bang` → `function bang()`, `setmode 2` → `function setmode(val)`, etc.
+- Set inlet/outlet counts in JS with `inlets = N; outlets = N;` globals.
+- Output with `outlet(n, value)`. Send a bang with `outlet(n, "bang")`.
+- Use `v8` rather than `js` for new work (Chrome V8 is faster and more standards-compliant).
+- **Good candidates for v8**: date/time logic, string parsing, stateful comparisons, anything that would require a chain of `sprintf`, `fromsymbol`, `pack/unpack`, `match`, or `change` objects.
+
 #### Jitter Display
 
 | Type | Description |

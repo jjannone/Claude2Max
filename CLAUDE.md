@@ -43,11 +43,46 @@ When a patch is pasted in from an external source and you modify it:
 - **Objects not in the converter's lookup tables** — use `inlets`, `outlets`, and `outlettype` overrides in the spec. This is common for third-party externals.
 - **Always embed the spec** — every .maxpat produced using the Claude2Max workflow must include a hidden `text.codebox` (`id: "obj-spec-embed"`, `"hidden": 1`) placed below all other objects, containing the full spec JSON wrapped in `--- CLAUDE2MAX SPEC ---` / `--- END SPEC ---` delimiters. This applies whether the output is from the converter or assembled manually — if you used Claude2Max thinking (read SPEC_REFERENCE, wrote or modified a spec), embed it.
 
+## v8 / JavaScript Objects
+
+`v8` (Chrome V8 engine) and `js` (SpiderMonkey) objects share the same Max JS API. Prefer `v8` for new patches.
+
+**Spec usage** — `v8` is not in the converter's lookup table; always specify inlet/outlet counts:
+
+```json
+{
+  "type": "newobj",
+  "text": "v8 onesound.js",
+  "inlets": 1, "outlets": 6,
+  "outlettype": ["", "", "", "bang", "bang", "int"]
+}
+```
+
+**External JS files** — place `.js` files in the same directory as the `.maxpat`. Max resolves them relative to the patch file.
+
+**Message routing** — Max dispatches incoming messages by selector (first word) to JS functions of the same name. Arguments follow as function parameters:
+
+| Max message | JS function called |
+|-------------|--------------------|
+| `bang`       | `function bang()` |
+| `setmode 1`  | `function setmode(val)` where `val=1` |
+| `parsetarget 13:00:00` | `function parsetarget(str)` where `str="13:00:00"` |
+
+- Set `inlets` and `outlets` globals at the top: `inlets = 1; outlets = 6;`
+- Output with `outlet(n, value)`. To send a bang: `outlet(n, "bang")`.
+- Use `post("message\n")` for Max console output.
+- Extra message arguments beyond the function's parameters are silently ignored.
+
+**When to use v8** — replace chains of `date`, `sprintf`, `match`, `change`, `fromsymbol`, `pack/unpack` logic with a single v8 object when the logic involves string parsing, date/time arithmetic, or stateful comparisons. v8 is not a DSP object — do not put signal processing inside JS.
+
 ## Max Patching Knowledge
 
 - Use `loadmess` to set sensible defaults for controls on patch load. For multiple init values, use `loadmess` → `unpack` to distribute to separate controls.
 - When a source produces stereo output, preserve both channels through the entire chain to `dac~`/`ezdac~`. Don't merge to mono. `live.gain~` handles stereo natively (2 signal inlets, 2 signal outlets).
 - Set `width` and `height` large enough to contain all objects without scrolling, including info comments. Leave margin below the lowest object.
+- `dialog` object (text-input prompt): `inlets=2, outlets=3`. Outlet 0 outputs the entered text as a symbol. Use `route symbol` after it to filter for the symbol type; then `prepend parsetarget` (or similar) to route to a v8 handler.
+- `playlist~`: `inlets=1, outlets=5` (sig L, sig R, bang EOF, int index, int state). Send `append` to open the file chooser; send integer `1` to play the first item.
+- `umenu` items in `.maxpat` format are stored as a flat token array with `","` as item separators: `["item", "one", ",", "item", "two"]`. Set via `attrs: {"items": [...]}` in the spec.
 
 ## Work History
 
