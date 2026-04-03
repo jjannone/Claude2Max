@@ -77,6 +77,7 @@ var STEPS             = [
 ];
 var ALL_HIGHLIGHT_IDS = ["obj-1", "obj-2", "obj-3", "obj-4", "obj-5", "obj-7", "obj-9", "obj-10", "obj-11", "obj-13", "obj-14", "obj-16", "obj-17", "obj-18"];
 var ANNOTATION_IDS    = ["tut-ann-0", "tut-ann-1", "tut-ann-2", "tut-ann-3", "tut-ann-4", "tut-ann-5", "tut-ann-6", "tut-ann-7", "tut-ann-8"];
+var ORIG_BGCOLORS     = {"obj-1": [0, 0, 0, 0], "obj-2": [0, 0, 0, 0], "obj-3": [0, 0, 0, 0], "obj-4": [0, 0, 0, 0], "obj-5": [0, 0, 0, 0], "obj-7": [0, 0, 0, 0], "obj-9": [0, 0, 0, 0], "obj-10": [0, 0, 0, 0], "obj-11": [0, 0, 0, 0], "obj-13": [0, 0, 0, 0], "obj-14": [0, 0, 0, 0], "obj-16": [0, 0, 0, 0], "obj-17": [0, 0, 0, 0], "obj-18": [0, 0, 0, 0]};
 
 // Highlight: translucent blue fill
 var HL = [0.15, 0.55, 0.95, 0.4];
@@ -108,10 +109,11 @@ function gotoStep(step) {
 
     var p = this.patcher;
 
-    // Reset all object bgcolors to transparent
+    // Restore all objects to their original bgcolor
     for (var i = 0; i < ALL_HIGHLIGHT_IDS.length; i++) {
-        var obj = p.getnamed(ALL_HIGHLIGHT_IDS[i]);
-        if (obj) obj.bgcolor = [0, 0, 0, 0];
+        var id  = ALL_HIGHLIGHT_IDS[i];
+        var obj = p.getnamed(id);
+        if (obj) obj.bgcolor = ORIG_BGCOLORS[id] || [0, 0, 0, 0];
     }
 
     // Hide all annotation comments
