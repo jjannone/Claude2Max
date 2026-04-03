@@ -13,35 +13,35 @@ var STEPS         = [
   },
   {
     "name": "jit.world +2",
-    "description": "jit.world: Provides a hidden OpenGL rendering context for Jitter | toggle: Sends 1 (on) or 0 (off) when clicked \u2014 starts/stops loops | loadmess: Sends a stored message when the patch loads (initializes defaults)"
+    "description": "jit.world \u2014 Provides a hidden OpenGL rendering context for Jitter. toggle \u2014 Sends 1 (on) or 0 (off) when clicked \u2014 starts/stops loops. loadmess \u2014 Sends a stored message when the patch loads (initializes defaults)."
   },
   {
     "name": "jit.grab + flonum",
-    "description": "jit.grab: Captures frames from a live camera or video source | flonum (scale image and pwindow)"
+    "description": "jit.grab \u2014 Captures frames from a live camera or video source. flonum: scale image and pwindow."
   },
   {
     "name": "jit.fpsgui + jit.matrixinfo",
-    "description": "jit.fpsgui: Shows the current processing frame rate | jit.matrixinfo (analyze the image)"
+    "description": "jit.fpsgui \u2014 Shows the current processing frame rate. jit.matrixinfo: analyze the image."
   },
   {
     "name": "route",
-    "description": "route (report the dim)"
+    "description": "route: report the dim."
   },
   {
     "name": "vexpr",
-    "description": "vexpr: Evaluates a math expression on lists/vectors element-by-element"
+    "description": "vexpr \u2014 Evaluates a math expression on lists/vectors element-by-element."
   },
   {
     "name": "message",
-    "description": "message (set size of pwindow & dim of matrix) | message (set size of pwindow & dim of matrix)"
+    "description": "message: set size of pwindow & dim of matrix. message."
   },
   {
     "name": "jit.matrix",
-    "description": "jit.matrix: Stores and processes a matrix of data (adapt 0 = fixed size)"
+    "description": "jit.matrix \u2014 Stores and processes a matrix of data (adapt 0 = fixed size)."
   },
   {
     "name": "jit.fpsgui + jit.pwindow",
-    "description": "jit.fpsgui: Shows the current processing frame rate | jit.pwindow: Displays a Jitter matrix as a video preview window"
+    "description": "jit.fpsgui \u2014 Shows the current processing frame rate. jit.pwindow \u2014 Displays a Jitter matrix as a video preview window."
   }
 ];
 var ANNOTATION_IDS = ["tut-ann-0", "tut-ann-1", "tut-ann-2", "tut-ann-3", "tut-ann-4", "tut-ann-5", "tut-ann-6", "tut-ann-7", "tut-ann-8"];

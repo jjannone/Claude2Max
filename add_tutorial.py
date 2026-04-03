@@ -244,18 +244,27 @@ def generate_steps(boxes, lines):
 
     for wk in sorted(wave_groups.keys()):
         group = wave_groups[wk]
-        descs = []
+
+        # Build description: inline patch comments take priority (patch author wrote them);
+        # fall back to OBJ_DESCRIPTIONS; deduplicate repeated inline comments.
+        parts = []
+        seen_inline = set()
         for oid in group:
-            box   = by_id[oid]
-            otype = obj_type(box)
+            box     = by_id[oid]
+            otype   = obj_type(box)
             inline  = find_nearby_comment(box, boxes)
             from_db = OBJ_DESCRIPTIONS.get(otype)
-            if inline:
-                descs.append(f"{otype} ({inline})")
+            if inline and inline not in seen_inline:
+                seen_inline.add(inline)
+                parts.append(f"{otype}: {inline}")
             elif from_db:
-                descs.append(f"{otype}: {from_db}")
+                parts.append(f"{otype} — {from_db}")
             else:
-                descs.append(otype)
+                parts.append(otype)
+
+        description = ". ".join(parts)
+        if description and not description.endswith("."):
+            description += "."
 
         types = list(dict.fromkeys(obj_type(by_id[oid]) for oid in group))
         if len(types) == 1:
@@ -267,7 +276,7 @@ def generate_steps(boxes, lines):
 
         steps.append({
             "name": name,
-            "description": " | ".join(descs),
+            "description": description,
             "highlight_ids": group,
         })
 
@@ -376,55 +385,14 @@ def group_bounds(group_ids, by_id):
     )
 
 
-def compute_ann_pos(group_ids, by_id, patch_width):
-    """
-    Return ([x, y, w, h], bubble_pointer_side) for an annotation comment.
-
-    Preference: to the RIGHT of the highlighted group (bubble pointer on left
-    side of comment = pointing left toward the objects).
-    Fallback: ABOVE the group (bubble pointer on bottom).
-
-    Overview step (empty group): spans full top of patch, no bubble.
-    """
-    ann_w = 340.0
-    ann_h = 52.0
-
-    if not group_ids:
-        return [15.0, 5.0, float(patch_width) - 30.0, ann_h], None
-
-    bounds = group_bounds(group_ids, by_id)
-    if not bounds:
-        return [15.0, 5.0, ann_w, ann_h], None
-    min_x, min_y, max_x, max_y = bounds
-    mid_y = (min_y + max_y) / 2.0
-
-    # Try RIGHT
-    right_x = max_x + 15.0
-    if right_x + ann_w <= float(patch_width) - 10.0:
-        ann_y = max(5.0, mid_y - ann_h / 2.0)
-        return [right_x, ann_y, ann_w, ann_h], "left"   # pointer on left edge
-
-    # Fallback: ABOVE
-    ann_x = max(15.0, min_x)
-    ann_y = max(5.0, min_y - ann_h - 8.0)
-    actual_w = min(ann_w, float(patch_width) - ann_x - 10.0)
-    return [ann_x, ann_y, actual_w, ann_h], "bottom"    # pointer on bottom edge
-
-
-# Bubble pointer position index (Max bubblepointerpos attribute, clockwise from top-left)
-# 0=TL 1=TC 2=TR 3=RC 4=BR 5=BC 6=BL 7=LC
-_BUBBLE_POS = {"left": 7, "bottom": 5, None: None}
-
-
 def compute_panel_rect(group_ids, by_id, padding=10):
     """Return [x, y, w, h] panel rect bounding the group + padding, or None."""
     bounds = group_bounds(group_ids, by_id)
     if not bounds:
         return None
     min_x, min_y, max_x, max_y = bounds
-    x = min_x - padding
-    y = min_y - padding
-    return [x, y, max_x - min_x + 2 * padding, max_y - min_y + 2 * padding]
+    return [min_x - padding, min_y - padding,
+            max_x - min_x + 2 * padding, max_y - min_y + 2 * padding]
 
 
 def strip_tutorial(maxpat):
@@ -533,25 +501,57 @@ def add_tutorial_to_patch(maxpat, steps, annotation_ids, panel_ids, js_filename)
             "hidden": 1,
         }})
 
-    # Annotation comments: one per step, hidden, bubble arrow pointing at group
+    # --- Extend patch width to fit a right-column annotation strip ---
+    SKIP_FOR_BOUNDS = {"comment", "text.codebox"}
+    rightmost_x = 0.0
+    for w in patcher["boxes"]:
+        b = w["box"]
+        if (b.get("maxclass") in SKIP_FOR_BOUNDS
+                or b["id"].startswith("tut-")
+                or b["id"] == "obj-spec-embed"):
+            continue
+        r = b.get("patching_rect", [0, 0, 0, 0])
+        rightmost_x = max(rightmost_x, r[0] + r[2])
+
+    ann_col_x   = rightmost_x + 25.0
+    ann_w       = 220.0
+    new_patch_w = max(float(patch_w), ann_col_x + ann_w + 20.0)
+    rect[2]     = new_patch_w
+    patcher["rect"] = rect
+
+    # Annotation comments: one per step, hidden, stacked in right column.
+    # Vertically centered on the group's bounding box; overview pinned near top.
+    # No bubble attribute — bgcolor only works without it in Max comments.
+    ann_boxes = []
     for i, (step, ann_id) in enumerate(zip(steps, annotation_ids)):
-        text = f"Step {i} \u2014 {step['name']}: {step['description']}"
-        (ax, ay, aw, ah), ptr_side = compute_ann_pos(step["highlight_ids"], by_id, patch_w)
-        box = {
+        if step["highlight_ids"]:
+            bounds = group_bounds(step["highlight_ids"], by_id)
+            group_center_y = (bounds[1] + bounds[3]) / 2.0 if bounds else 40.0
+        else:
+            group_center_y = 40.0   # overview
+
+        # Estimate comment height: ~18 px/line, ~26 chars/line at 220 px + 11 pt
+        full_text = f"{step['name']}\n{step['description']}"
+        est_lines = max(3, sum(
+            max(1, (len(line) + 25) // 26)
+            for line in full_text.splitlines()
+        ))
+        ann_h = float(est_lines * 18 + 10)
+        ay    = max(5.0, group_center_y - ann_h / 2.0)
+
+        ann_boxes.append({"box": {
             "id": ann_id, "varname": ann_id, "maxclass": "comment",
             "numinlets": 1, "numoutlets": 0, "outlettype": [],
-            "patching_rect": [ax, ay, aw, ah],
-            "text": text,
+            "patching_rect": [ann_col_x, ay, ann_w, ann_h],
+            "text": full_text,
             "hidden": 1,
             "bgcolor": [1.0, 0.98, 0.72, 1.0],
             "textcolor": [0.0, 0.0, 0.0, 1.0],
             "fontsize": 11.0,
-        }
-        ptr_pos = _BUBBLE_POS.get(ptr_side)
-        if ptr_pos is not None:
-            box["bubble"] = 1
-            box["bubblepointerpos"] = ptr_pos
-        new_boxes.append({"box": box})
+        }})
+
+    # Annotations appended last so they paint on top of everything else
+    new_boxes.extend(ann_boxes)
 
     new_lines = [
         {"patchline": {"source": ["tut-umenu",    0], "destination": ["tut-v8", 0]}},
