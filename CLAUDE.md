@@ -188,6 +188,17 @@ python3 add_tutorial.py --ai -i patches/patch.maxpat
 2. Review any changes to overrides that affect objects already in `NEWOBJ_IO` — hand-verified entries in `spec2maxpat.py` always take precedence, but they may need updating too
 3. Propose importing any new correctness notes to `SPEC_REFERENCE.md`
 
+## Keeping Docs in Sync
+
+Whenever you learn something new about Max behavior, fix a bug, or add/change a feature, **immediately** propagate that knowledge to all relevant files before committing:
+
+- `SPEC_REFERENCE.md` — object behavior, .maxpat format details, layout rules
+- `TUTORIAL_GUIDELINES.md` — tutorial generation lessons and conventions
+- `CLAUDE.md` — workflow, quick-reference facts, pitfalls
+- `WORK_HISTORY.md` — session summary
+
+**Before every commit/push**, check: did this session produce insights that belong in the reference docs? If so, update them in the same commit. Do not wait for the user to ask — this is automatic.
+
 ## Work History
 
 At the end of any session where meaningful work was done, append an entry to `WORK_HISTORY.md`. Do this automatically — no need for the user to ask. Format: `- YYYY-MM-DD: <1-2 sentence summary>`
