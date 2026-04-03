@@ -19,14 +19,16 @@ Read these guidelines before running or modifying `add_tutorial.py`.
 - **Merge related objects** — if two steps contain connected objects that are spatially close (Euclidean distance <180px) and the combined group is small (<=4 objects) with a reasonable bounding box (<=400px wide, <=250px tall), merge them into one step.
 - **Every object must be covered** — every non-comment, non-tutorial object and message box must appear in exactly one step. Print a warning if any are missing.
 
-## Virtual Layout Model
+## Annotation Placement
 
-When placing annotations, build a mental model of the patch layout:
-- Know where every object is (x, y, width, height)
-- Know the rightmost extent of patch objects
-- Place annotations in a right-side column beyond the rightmost object
-- Vertically center each annotation on its group's bounding box
-- Extend the patch window width to accommodate the annotation column
+Annotations are placed flexibly adjacent to their highlighted group — not in a fixed column. The `--steps-json` and `--ai` modes accept a `placement` hint per step (`"right"`, `"left"`, `"above"`, `"below"`). Default is `"right"`.
+
+- **Right** (default): annotation to the right of the panel, arrow on left (`bubbleside=1`)
+- **Left**: annotation to the left of the panel, arrow on right (`bubbleside=3`)
+- **Above**: annotation above the panel, arrow on bottom (`bubbleside=2`)
+- **Below**: annotation below the panel, arrow on top (`bubbleside=0`)
+- If the chosen side pushes the annotation off-screen, it falls back to right or below
+- Extend the patch window width to accommodate any annotations that extend beyond the original bounds
 
 ## General Principles
 
@@ -45,3 +47,7 @@ When placing annotations, build a mental model of the patch layout:
 - **Max comment `bgcolor` vs `bubble_bgcolor`** — plain `bgcolor` on a comment does not work when `bubble` is enabled. Use `bubble_bgcolor` instead.
 - **`ignoreclick` is not `locked_bgcolor`** — the user specifically wants `locked_bgcolor` (the Max attribute for locking background objects), not `ignoreclick`.
 - **Test on multiple patches** — always run on at least 2-3 patches of different complexity to catch edge cases (empty groups, single-object steps, very wide patches).
+- **Max z-order is FIRST = on top** — earlier items in the `boxes` array render in front. This is the opposite of many GUI frameworks. Annotations must be FIRST in the array, panels LAST. Previous attempts that put annotations last resulted in them being hidden behind other objects.
+- **@bubbleside values: 0=top, 1=left, 2=bottom, 3=right** — these refer to which side of the comment the arrow appears on. The arrow points outward from that side toward the described group. Previous code incorrectly assumed 0=left; confirmed by user testing that 0=top.
+- **Don't force annotations into a fixed column** — flexible placement (right/left/above/below of each group) looks better than stacking all annotations in a right-side column. The user explicitly prefers annotations positioned next to their groups, not rigidly aligned.
+- **AI-generated descriptions are much better than static dictionaries** — the `OBJ_DESCRIPTIONS` dict produces mechanical "object — does X. object — does Y." text. AI (via `--ai` or Claude Code `--steps-json`) produces contextual descriptions that explain *why* objects are connected and what the group achieves in the patch's data flow. Always prefer AI descriptions for student-facing tutorials.

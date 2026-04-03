@@ -213,6 +213,27 @@ Some objects must be used in pairs or have strong conventional partners.
 | `snapshot~` | `number` | `snapshot~` converts signal to control for display in a number box. |
 | `metro` | `counter` | Classic clock + counter pattern for sequencing. |
 
+### Z-order in .maxpat files
+
+In Max, the order of objects in the `boxes` array determines their visual stacking: **earlier items render on top** (in front), later items render behind. This matters for:
+
+- **Annotation comments** — place first in the array so they appear above all patch objects
+- **Background panels** — place last in the array so they render behind everything
+- This is the opposite of some GUI frameworks where later items are "on top"
+
+### Bubble comments (@bubbleside)
+
+Max `comment` objects support speech-bubble arrows via `"bubble": 1`. The `@bubbleside` attribute controls which side of the comment the arrow appears on:
+
+| `bubbleside` | Arrow side | Use when annotation is... |
+|-------------|------------|--------------------------|
+| 0 | top | below the group |
+| 1 | left | to the right of the group |
+| 2 | bottom | above the group |
+| 3 | right | to the left of the group |
+
+Use `"bubble_bgcolor"` (not plain `"bgcolor"`) to set the bubble background color.
+
 ### PD → Max object mapping (avoid PD names in Max patches)
 
 | PD object | Max equivalent |
