@@ -392,9 +392,18 @@ def strip_tutorial(maxpat):
 def add_tutorial_to_patch(maxpat, steps, annotation_ids, js_filename, content_bottom_y):
     """Append tutorial UI objects and wiring to the patcher (in-place).
 
-    Uses this.patcher.getnamed() in the v8 JS, so no thispatcher is needed.
+    Uses this.patcher.getnamed() in the v8 JS — requires varname to be set
+    on every box the JS needs to access (getnamed looks up by varname, not id).
     """
     patcher = maxpat["patcher"]
+
+    # Stamp varname = id on every existing box so getnamed() can find them.
+    # varname is the "scripting name" Max uses for patcher.getnamed() lookups.
+    SKIP_VARNAME = {"obj-spec-embed"}
+    for w in patcher["boxes"]:
+        b = w["box"]
+        if b["id"] not in SKIP_VARNAME and "varname" not in b:
+            b["varname"] = b["id"]
 
     ui_y   = content_bottom_y + 35   # umenu / nav row
     ctrl_y = ui_y + 32               # v8 row
@@ -457,11 +466,11 @@ def add_tutorial_to_patch(maxpat, steps, annotation_ids, js_filename, content_bo
         }},
     ]
 
-    # One hidden annotation comment per step
+    # One hidden annotation comment per step (varname required for getnamed)
     for i, (step, ann_id) in enumerate(zip(steps, annotation_ids)):
         text = f"Step {i} \u2014 {step['name']}: {step['description']}"
         new_boxes.append({"box": {
-            "id": ann_id, "maxclass": "comment",
+            "id": ann_id, "varname": ann_id, "maxclass": "comment",
             "numinlets": 1, "numoutlets": 0, "outlettype": [],
             "patching_rect": [15.0, float(ann_y), 880.0, 44.0],
             "text": text,

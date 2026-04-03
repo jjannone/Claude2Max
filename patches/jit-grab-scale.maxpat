@@ -35,7 +35,8 @@
           ],
           "text": "jit-grab-scale",
           "fontsize": 16.0,
-          "fontface": 1
+          "fontface": 1,
+          "varname": "obj-title"
         }
       },
       {
@@ -55,7 +56,8 @@
             198.0,
             43.0
           ],
-          "text": "jit.world @fsaa 1 @enable 1 @visible 0"
+          "text": "jit.world @fsaa 1 @enable 1 @visible 0",
+          "varname": "obj-1"
         }
       },
       {
@@ -72,7 +74,8 @@
             46.0,
             24.0,
             24.0
-          ]
+          ],
+          "varname": "obj-2"
         }
       },
       {
@@ -91,7 +94,8 @@
             100.0,
             26.0
           ],
-          "text": "jit.grab"
+          "text": "jit.grab",
+          "varname": "obj-3"
         }
       },
       {
@@ -111,7 +115,8 @@
           ],
           "fontname": "Monaco",
           "fontsize": 14.0,
-          "mode": 3
+          "mode": 3,
+          "varname": "obj-4"
         }
       },
       {
@@ -129,7 +134,8 @@
             126.0,
             26.0
           ],
-          "text": "jit.matrixinfo"
+          "text": "jit.matrixinfo",
+          "varname": "obj-5"
         }
       },
       {
@@ -145,7 +151,8 @@
             139.0,
             22.0
           ],
-          "text": "analyze the image"
+          "text": "analyze the image",
+          "varname": "obj-6"
         }
       },
       {
@@ -164,7 +171,8 @@
             126.0,
             26.0
           ],
-          "text": "route dim"
+          "text": "route dim",
+          "varname": "obj-7"
         }
       },
       {
@@ -180,7 +188,8 @@
             118.0,
             22.0
           ],
-          "text": "report the dim"
+          "text": "report the dim",
+          "varname": "obj-8"
         }
       },
       {
@@ -198,7 +207,8 @@
             269.0,
             26.0
           ],
-          "text": "vexpr $f1 / $f2 @scalarmode 1"
+          "text": "vexpr $f1 / $f2 @scalarmode 1",
+          "varname": "obj-9"
         }
       },
       {
@@ -216,7 +226,8 @@
             90.0,
             22.0
           ],
-          "text": "loadmess 5"
+          "text": "loadmess 5",
+          "varname": "obj-10"
         }
       },
       {
@@ -234,7 +245,8 @@
             211.0,
             75.0,
             26.0
-          ]
+          ],
+          "varname": "obj-11"
         }
       },
       {
@@ -250,7 +262,8 @@
             151.0,
             41.0
           ],
-          "text": "scale image and pwindow"
+          "text": "scale image and pwindow",
+          "varname": "obj-12"
         }
       },
       {
@@ -268,7 +281,8 @@
             93.0,
             26.0
           ],
-          "text": "dim $1 $2"
+          "text": "dim $1 $2",
+          "varname": "obj-13"
         }
       },
       {
@@ -286,7 +300,8 @@
             93.0,
             26.0
           ],
-          "text": "size $1 $2"
+          "text": "size $1 $2",
+          "varname": "obj-14"
         }
       },
       {
@@ -302,7 +317,8 @@
             195.0,
             41.0
           ],
-          "text": "set size of pwindow & dim of matrix"
+          "text": "set size of pwindow & dim of matrix",
+          "varname": "obj-15"
         }
       },
       {
@@ -321,7 +337,8 @@
             168.0,
             26.0
           ],
-          "text": "jit.matrix @adapt 0"
+          "text": "jit.matrix @adapt 0",
+          "varname": "obj-16"
         }
       },
       {
@@ -341,7 +358,8 @@
           ],
           "fontname": "Monaco",
           "fontsize": 14.0,
-          "mode": 3
+          "mode": 3,
+          "varname": "obj-17"
         }
       },
       {
@@ -359,7 +377,8 @@
             354.0,
             313.0,
             313.0
-          ]
+          ],
+          "varname": "obj-18"
         }
       },
       {
@@ -497,6 +516,7 @@
       {
         "box": {
           "id": "tut-ann-0",
+          "varname": "tut-ann-0",
           "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
@@ -521,6 +541,7 @@
       {
         "box": {
           "id": "tut-ann-1",
+          "varname": "tut-ann-1",
           "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
@@ -545,6 +566,7 @@
       {
         "box": {
           "id": "tut-ann-2",
+          "varname": "tut-ann-2",
           "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
@@ -569,6 +591,7 @@
       {
         "box": {
           "id": "tut-ann-3",
+          "varname": "tut-ann-3",
           "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
@@ -593,6 +616,7 @@
       {
         "box": {
           "id": "tut-ann-4",
+          "varname": "tut-ann-4",
           "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
@@ -617,6 +641,7 @@
       {
         "box": {
           "id": "tut-ann-5",
+          "varname": "tut-ann-5",
           "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
@@ -641,6 +666,7 @@
       {
         "box": {
           "id": "tut-ann-6",
+          "varname": "tut-ann-6",
           "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
@@ -665,6 +691,7 @@
       {
         "box": {
           "id": "tut-ann-7",
+          "varname": "tut-ann-7",
           "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
@@ -689,6 +716,7 @@
       {
         "box": {
           "id": "tut-ann-8",
+          "varname": "tut-ann-8",
           "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
@@ -725,7 +753,7 @@
             500.0,
             300.0
           ],
-          "code": "--- CLAUDE2MAX SPEC ---\n{\n  \"name\": \"jit-grab-scale\",\n  \"width\": 950,\n  \"height\": 821,\n  \"objects\": {\n    \"jit_world\": {\n      \"type\": \"newobj\",\n      \"pos\": [\n        38,\n        37\n      ],\n      \"text\": \"jit.world @fsaa 1 @enable 1 @visible 0\",\n      \"size\": [\n        198,\n        43\n      ]\n    },\n    \"toggle\": {\n      \"type\": \"toggle\",\n      \"pos\": [\n        321,\n        46\n      ]\n    },\n    \"jit_grab\": {\n      \"type\": \"newobj\",\n      \"pos\": [\n        321,\n        89\n      ],\n      \"text\": \"jit.grab\",\n      \"size\": [\n        100,\n        26\n      ]\n    },\n    \"jit_fpsgui\": {\n      \"type\": \"jit.fpsgui\",\n      \"pos\": [\n        108,\n        165\n      ],\n      \"size\": [\n        118,\n        40\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 14.0,\n        \"mode\": 3\n      }\n    },\n    \"jit_matrixinfo\": {\n      \"type\": \"newobj\",\n      \"pos\": [\n        374,\n        136\n      ],\n      \"text\": \"jit.matrixinfo\",\n      \"size\": [\n        126,\n        26\n      ]\n    },\n    \"analyze\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        514,\n        136\n      ],\n      \"text\": \"analyze the image\"\n    },\n    \"route\": {\n      \"type\": \"newobj\",\n      \"pos\": [\n        374,\n        172\n      ],\n      \"text\": \"route dim\",\n      \"size\": [\n        126,\n        26\n      ]\n    },\n    \"report\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        514,\n        173\n      ],\n      \"text\": \"report the dim\"\n    },\n    \"vexpr\": {\n      \"type\": \"newobj\",\n      \"pos\": [\n        374,\n        211\n      ],\n      \"text\": \"vexpr $f1 / $f2 @scalarmode 1\",\n      \"size\": [\n        269,\n        26\n      ]\n    },\n    \"loadmess\": {\n      \"type\": \"newobj\",\n      \"pos\": [\n        699,\n        140\n      ],\n      \"text\": \"loadmess 5\"\n    },\n    \"flonum\": {\n      \"type\": \"flonum\",\n      \"pos\": [\n        661,\n        211\n      ],\n      \"size\": [\n        75,\n        26\n      ]\n    },\n    \"scale\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        746,\n        212\n      ],\n      \"text\": \"scale image and pwindow\",\n      \"size\": [\n        151,\n        41\n      ]\n    },\n    \"dim\": {\n      \"type\": \"message\",\n      \"pos\": [\n        265,\n        250\n      ],\n      \"text\": \"dim $1 $2\",\n      \"size\": [\n        93,\n        26\n      ]\n    },\n    \"size\": {\n      \"type\": \"message\",\n      \"pos\": [\n        374,\n        250\n      ],\n      \"text\": \"size $1 $2\",\n      \"size\": [\n        93,\n        26\n      ]\n    },\n    \"set\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        475,\n        251\n      ],\n      \"text\": \"set size of pwindow & dim of matrix\",\n      \"size\": [\n        195,\n        41\n      ]\n    },\n    \"jit_matrix\": {\n      \"type\": \"newobj\",\n      \"pos\": [\n        141,\n        301\n      ],\n      \"text\": \"jit.matrix @adapt 0\",\n      \"size\": [\n        168,\n        26\n      ]\n    },\n    \"jit_fpsgui_2\": {\n      \"type\": \"jit.fpsgui\",\n      \"pos\": [\n        141,\n        354\n      ],\n      \"size\": [\n        80,\n        40\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 14.0,\n        \"mode\": 3\n      }\n    },\n    \"jit_pwindow\": {\n      \"type\": \"jit.pwindow\",\n      \"pos\": [\n        374,\n        354\n      ],\n      \"size\": [\n        313,\n        313\n      ]\n    },\n    \"Tutorial\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        702\n      ],\n      \"text\": \"Tutorial:\",\n      \"attrs\": {\n        \"fontface\": 1\n      }\n    },\n    \"umenu\": {\n      \"type\": \"umenu\",\n      \"pos\": [\n        95,\n        702\n      ],\n      \"size\": [\n        320,\n        22\n      ]\n    },\n    \"prev\": {\n      \"type\": \"message\",\n      \"pos\": [\n        425,\n        702\n      ],\n      \"text\": \"prev\"\n    },\n    \"next\": {\n      \"type\": \"message\",\n      \"pos\": [\n        465,\n        702\n      ],\n      \"text\": \"next\"\n    },\n    \"loadbang\": {\n      \"type\": \"newobj\",\n      \"pos\": [\n        505,\n        702\n      ],\n      \"text\": \"loadbang\"\n    },\n    \"v8\": {\n      \"type\": \"newobj\",\n      \"pos\": [\n        15,\n        734\n      ],\n      \"text\": \"v8 jit-grab-scale-tutorial.js\"\n    },\n    \"Step\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 0 \\u2014 Overview: This patch has 14 processing objects across 8 data-flow stages. Use the umenu or the next button to step through each stage.\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    },\n    \"Step_2\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 1 \\u2014 jit.world +2: jit.world: Provides a hidden OpenGL rendering context for Jitter | toggle: Sends 1 (on) or 0 (off) when clicked \\u2014 starts/stops loops | loadmess: Sends a stored message when the patch loads (initializes defaults)\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    },\n    \"Step_3\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 2 \\u2014 jit.grab + flonum: jit.grab: Captures frames from a live camera or video source | flonum (scale image and pwindow)\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    },\n    \"Step_4\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 3 \\u2014 jit.fpsgui + jit.matrixinfo: jit.fpsgui: Shows the current processing frame rate | jit.matrixinfo (analyze the image)\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    },\n    \"Step_5\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 4 \\u2014 route: route (report the dim)\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    },\n    \"Step_6\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 5 \\u2014 vexpr: vexpr: Evaluates a math expression on lists/vectors element-by-element\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    },\n    \"Step_7\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 6 \\u2014 message: message (set size of pwindow & dim of matrix) | message (set size of pwindow & dim of matrix)\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    },\n    \"Step_8\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 7 \\u2014 jit.matrix: jit.matrix: Stores and processes a matrix of data (adapt 0 = fixed size)\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    },\n    \"Step_9\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 8 \\u2014 jit.fpsgui + jit.pwindow: jit.fpsgui: Shows the current processing frame rate | jit.pwindow: Displays a Jitter matrix as a video preview window\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    }\n  },\n  \"connections\": [\n    [\n      \"toggle\",\n      0,\n      \"jit_grab\",\n      0\n    ],\n    [\n      \"jit_grab\",\n      0,\n      \"jit_matrixinfo\",\n      0\n    ],\n    [\n      \"jit_grab\",\n      0,\n      \"jit_fpsgui\",\n      0\n    ],\n    [\n      \"jit_grab\",\n      0,\n      \"jit_matrix\",\n      0\n    ],\n    [\n      \"jit_matrixinfo\",\n      0,\n      \"route\",\n      0\n    ],\n    [\n      \"route\",\n      0,\n      \"vexpr\",\n      0\n    ],\n    [\n      \"loadmess\",\n      0,\n      \"flonum\",\n      0\n    ],\n    [\n      \"flonum\",\n      0,\n      \"vexpr\",\n      1\n    ],\n    [\n      \"vexpr\",\n      0,\n      \"dim\",\n      0\n    ],\n    [\n      \"vexpr\",\n      0,\n      \"size\",\n      0\n    ],\n    [\n      \"dim\",\n      0,\n      \"jit_matrix\",\n      0\n    ],\n    [\n      \"jit_matrix\",\n      0,\n      \"jit_pwindow\",\n      0\n    ],\n    [\n      \"jit_matrix\",\n      0,\n      \"jit_fpsgui_2\",\n      0\n    ],\n    [\n      \"size\",\n      0,\n      \"jit_pwindow\",\n      0\n    ],\n    [\n      \"umenu\",\n      0,\n      \"v8\",\n      0\n    ],\n    [\n      \"prev\",\n      0,\n      \"v8\",\n      0\n    ],\n    [\n      \"next\",\n      0,\n      \"v8\",\n      0\n    ],\n    [\n      \"loadbang\",\n      0,\n      \"v8\",\n      0\n    ]\n  ]\n}\n--- END SPEC ---",
+          "code": "--- CLAUDE2MAX SPEC ---\n{\n  \"name\": \"jit-grab-scale\",\n  \"width\": 950,\n  \"height\": 821,\n  \"objects\": {\n    \"jit_world\": {\n      \"type\": \"newobj\",\n      \"pos\": [\n        38,\n        37\n      ],\n      \"text\": \"jit.world @fsaa 1 @enable 1 @visible 0\",\n      \"size\": [\n        198,\n        43\n      ]\n    },\n    \"toggle\": {\n      \"type\": \"toggle\",\n      \"pos\": [\n        321,\n        46\n      ]\n    },\n    \"jit_grab\": {\n      \"type\": \"newobj\",\n      \"pos\": [\n        321,\n        89\n      ],\n      \"text\": \"jit.grab\",\n      \"size\": [\n        100,\n        26\n      ]\n    },\n    \"jit_fpsgui\": {\n      \"type\": \"jit.fpsgui\",\n      \"pos\": [\n        108,\n        165\n      ],\n      \"size\": [\n        118,\n        40\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 14.0,\n        \"mode\": 3\n      }\n    },\n    \"jit_matrixinfo\": {\n      \"type\": \"newobj\",\n      \"pos\": [\n        374,\n        136\n      ],\n      \"text\": \"jit.matrixinfo\",\n      \"size\": [\n        126,\n        26\n      ]\n    },\n    \"analyze\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        514,\n        136\n      ],\n      \"text\": \"analyze the image\"\n    },\n    \"route\": {\n      \"type\": \"newobj\",\n      \"pos\": [\n        374,\n        172\n      ],\n      \"text\": \"route dim\",\n      \"size\": [\n        126,\n        26\n      ]\n    },\n    \"report\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        514,\n        173\n      ],\n      \"text\": \"report the dim\"\n    },\n    \"vexpr\": {\n      \"type\": \"newobj\",\n      \"pos\": [\n        374,\n        211\n      ],\n      \"text\": \"vexpr $f1 / $f2 @scalarmode 1\",\n      \"size\": [\n        269,\n        26\n      ]\n    },\n    \"loadmess\": {\n      \"type\": \"newobj\",\n      \"pos\": [\n        699,\n        140\n      ],\n      \"text\": \"loadmess 5\"\n    },\n    \"flonum\": {\n      \"type\": \"flonum\",\n      \"pos\": [\n        661,\n        211\n      ],\n      \"size\": [\n        75,\n        26\n      ]\n    },\n    \"scale\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        746,\n        212\n      ],\n      \"text\": \"scale image and pwindow\",\n      \"size\": [\n        151,\n        41\n      ]\n    },\n    \"dim\": {\n      \"type\": \"message\",\n      \"pos\": [\n        265,\n        250\n      ],\n      \"text\": \"dim $1 $2\",\n      \"size\": [\n        93,\n        26\n      ]\n    },\n    \"size\": {\n      \"type\": \"message\",\n      \"pos\": [\n        374,\n        250\n      ],\n      \"text\": \"size $1 $2\",\n      \"size\": [\n        93,\n        26\n      ]\n    },\n    \"set\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        475,\n        251\n      ],\n      \"text\": \"set size of pwindow & dim of matrix\",\n      \"size\": [\n        195,\n        41\n      ]\n    },\n    \"jit_matrix\": {\n      \"type\": \"newobj\",\n      \"pos\": [\n        141,\n        301\n      ],\n      \"text\": \"jit.matrix @adapt 0\",\n      \"size\": [\n        168,\n        26\n      ]\n    },\n    \"jit_fpsgui_2\": {\n      \"type\": \"jit.fpsgui\",\n      \"pos\": [\n        141,\n        354\n      ],\n      \"size\": [\n        80,\n        40\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 14.0,\n        \"mode\": 3\n      }\n    },\n    \"jit_pwindow\": {\n      \"type\": \"jit.pwindow\",\n      \"pos\": [\n        374,\n        354\n      ],\n      \"size\": [\n        313,\n        313\n      ]\n    },\n    \"Tutorial\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        702\n      ],\n      \"text\": \"Tutorial:\",\n      \"attrs\": {\n        \"fontface\": 1\n      }\n    },\n    \"umenu\": {\n      \"type\": \"umenu\",\n      \"pos\": [\n        95,\n        702\n      ],\n      \"size\": [\n        320,\n        22\n      ]\n    },\n    \"prev\": {\n      \"type\": \"message\",\n      \"pos\": [\n        425,\n        702\n      ],\n      \"text\": \"prev\"\n    },\n    \"next\": {\n      \"type\": \"message\",\n      \"pos\": [\n        465,\n        702\n      ],\n      \"text\": \"next\"\n    },\n    \"loadbang\": {\n      \"type\": \"newobj\",\n      \"pos\": [\n        505,\n        702\n      ],\n      \"text\": \"loadbang\"\n    },\n    \"v8\": {\n      \"type\": \"newobj\",\n      \"pos\": [\n        15,\n        734\n      ],\n      \"text\": \"v8 jit-grab-scale-tutorial.js\"\n    },\n    \"Step\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 8 \\u2014 jit.fpsgui + jit.pwindow: jit.fpsgui: Shows the current processing frame rate | jit.pwindow: Displays a Jitter matrix as a video preview window\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    },\n    \"Step_2\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 8 \\u2014 jit.fpsgui + jit.pwindow: jit.fpsgui: Shows the current processing frame rate | jit.pwindow: Displays a Jitter matrix as a video preview window\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    },\n    \"Step_3\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 8 \\u2014 jit.fpsgui + jit.pwindow: jit.fpsgui: Shows the current processing frame rate | jit.pwindow: Displays a Jitter matrix as a video preview window\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    },\n    \"Step_4\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 8 \\u2014 jit.fpsgui + jit.pwindow: jit.fpsgui: Shows the current processing frame rate | jit.pwindow: Displays a Jitter matrix as a video preview window\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    },\n    \"Step_5\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 8 \\u2014 jit.fpsgui + jit.pwindow: jit.fpsgui: Shows the current processing frame rate | jit.pwindow: Displays a Jitter matrix as a video preview window\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    },\n    \"Step_6\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 8 \\u2014 jit.fpsgui + jit.pwindow: jit.fpsgui: Shows the current processing frame rate | jit.pwindow: Displays a Jitter matrix as a video preview window\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    },\n    \"Step_7\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 8 \\u2014 jit.fpsgui + jit.pwindow: jit.fpsgui: Shows the current processing frame rate | jit.pwindow: Displays a Jitter matrix as a video preview window\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    },\n    \"Step_8\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 8 \\u2014 jit.fpsgui + jit.pwindow: jit.fpsgui: Shows the current processing frame rate | jit.pwindow: Displays a Jitter matrix as a video preview window\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    },\n    \"Step_9\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 8 \\u2014 jit.fpsgui + jit.pwindow: jit.fpsgui: Shows the current processing frame rate | jit.pwindow: Displays a Jitter matrix as a video preview window\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    },\n    \"Step_10\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 0 \\u2014 Overview: This patch has 14 processing objects across 8 data-flow stages. Use the umenu or the next button to step through each stage.\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    },\n    \"Step_11\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 1 \\u2014 jit.world +2: jit.world: Provides a hidden OpenGL rendering context for Jitter | toggle: Sends 1 (on) or 0 (off) when clicked \\u2014 starts/stops loops | loadmess: Sends a stored message when the patch loads (initializes defaults)\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    },\n    \"Step_12\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 2 \\u2014 jit.grab + flonum: jit.grab: Captures frames from a live camera or video source | flonum (scale image and pwindow)\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    },\n    \"Step_13\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 3 \\u2014 jit.fpsgui + jit.matrixinfo: jit.fpsgui: Shows the current processing frame rate | jit.matrixinfo (analyze the image)\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    },\n    \"Step_14\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 4 \\u2014 route: route (report the dim)\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    },\n    \"Step_15\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 5 \\u2014 vexpr: vexpr: Evaluates a math expression on lists/vectors element-by-element\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    },\n    \"Step_16\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 6 \\u2014 message: message (set size of pwindow & dim of matrix) | message (set size of pwindow & dim of matrix)\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    },\n    \"Step_17\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        15,\n        766\n      ],\n      \"text\": \"Step 7 \\u2014 jit.matrix: jit.matrix: Stores and processes a matrix of data (adapt 0 = fixed size)\",\n      \"size\": [\n        880,\n        44\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.94,\n          0.97,\n          0.75,\n          1.0\n        ],\n        \"fontsize\": 11.0\n      }\n    }\n  },\n  \"connections\": [\n    [\n      \"toggle\",\n      0,\n      \"jit_grab\",\n      0\n    ],\n    [\n      \"jit_grab\",\n      0,\n      \"jit_matrixinfo\",\n      0\n    ],\n    [\n      \"jit_grab\",\n      0,\n      \"jit_fpsgui\",\n      0\n    ],\n    [\n      \"jit_grab\",\n      0,\n      \"jit_matrix\",\n      0\n    ],\n    [\n      \"jit_matrixinfo\",\n      0,\n      \"route\",\n      0\n    ],\n    [\n      \"route\",\n      0,\n      \"vexpr\",\n      0\n    ],\n    [\n      \"loadmess\",\n      0,\n      \"flonum\",\n      0\n    ],\n    [\n      \"flonum\",\n      0,\n      \"vexpr\",\n      1\n    ],\n    [\n      \"vexpr\",\n      0,\n      \"dim\",\n      0\n    ],\n    [\n      \"vexpr\",\n      0,\n      \"size\",\n      0\n    ],\n    [\n      \"dim\",\n      0,\n      \"jit_matrix\",\n      0\n    ],\n    [\n      \"jit_matrix\",\n      0,\n      \"jit_pwindow\",\n      0\n    ],\n    [\n      \"jit_matrix\",\n      0,\n      \"jit_fpsgui_2\",\n      0\n    ],\n    [\n      \"size\",\n      0,\n      \"jit_pwindow\",\n      0\n    ],\n    [\n      \"umenu\",\n      0,\n      \"v8\",\n      0\n    ],\n    [\n      \"prev\",\n      0,\n      \"v8\",\n      0\n    ],\n    [\n      \"next\",\n      0,\n      \"v8\",\n      0\n    ],\n    [\n      \"loadbang\",\n      0,\n      \"v8\",\n      0\n    ]\n  ]\n}\n--- END SPEC ---",
           "fontsize": 9.0,
           "hidden": 1
         }
