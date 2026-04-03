@@ -6,81 +6,46 @@
 inlets  = 1;
 outlets = 0;
 
-var STEPS             = [
+var STEPS         = [
   {
     "name": "Overview",
-    "description": "This patch has 14 processing objects across 8 data-flow stages. Use the umenu or the next button to step through each stage.",
-    "highlight_ids": []
+    "description": "This patch has 14 processing objects across 8 data-flow stages. Use the umenu or the next button to step through each stage."
   },
   {
     "name": "jit.world +2",
-    "description": "jit.world: Provides a hidden OpenGL rendering context for Jitter | toggle: Sends 1 (on) or 0 (off) when clicked \u2014 starts/stops loops | loadmess: Sends a stored message when the patch loads (initializes defaults)",
-    "highlight_ids": [
-      "obj-1",
-      "obj-2",
-      "obj-10"
-    ]
+    "description": "jit.world: Provides a hidden OpenGL rendering context for Jitter | toggle: Sends 1 (on) or 0 (off) when clicked \u2014 starts/stops loops | loadmess: Sends a stored message when the patch loads (initializes defaults)"
   },
   {
     "name": "jit.grab + flonum",
-    "description": "jit.grab: Captures frames from a live camera or video source | flonum (scale image and pwindow)",
-    "highlight_ids": [
-      "obj-3",
-      "obj-11"
-    ]
+    "description": "jit.grab: Captures frames from a live camera or video source | flonum (scale image and pwindow)"
   },
   {
     "name": "jit.fpsgui + jit.matrixinfo",
-    "description": "jit.fpsgui: Shows the current processing frame rate | jit.matrixinfo (analyze the image)",
-    "highlight_ids": [
-      "obj-4",
-      "obj-5"
-    ]
+    "description": "jit.fpsgui: Shows the current processing frame rate | jit.matrixinfo (analyze the image)"
   },
   {
     "name": "route",
-    "description": "route (report the dim)",
-    "highlight_ids": [
-      "obj-7"
-    ]
+    "description": "route (report the dim)"
   },
   {
     "name": "vexpr",
-    "description": "vexpr: Evaluates a math expression on lists/vectors element-by-element",
-    "highlight_ids": [
-      "obj-9"
-    ]
+    "description": "vexpr: Evaluates a math expression on lists/vectors element-by-element"
   },
   {
     "name": "message",
-    "description": "message (set size of pwindow & dim of matrix) | message (set size of pwindow & dim of matrix)",
-    "highlight_ids": [
-      "obj-13",
-      "obj-14"
-    ]
+    "description": "message (set size of pwindow & dim of matrix) | message (set size of pwindow & dim of matrix)"
   },
   {
     "name": "jit.matrix",
-    "description": "jit.matrix: Stores and processes a matrix of data (adapt 0 = fixed size)",
-    "highlight_ids": [
-      "obj-16"
-    ]
+    "description": "jit.matrix: Stores and processes a matrix of data (adapt 0 = fixed size)"
   },
   {
     "name": "jit.fpsgui + jit.pwindow",
-    "description": "jit.fpsgui: Shows the current processing frame rate | jit.pwindow: Displays a Jitter matrix as a video preview window",
-    "highlight_ids": [
-      "obj-17",
-      "obj-18"
-    ]
+    "description": "jit.fpsgui: Shows the current processing frame rate | jit.pwindow: Displays a Jitter matrix as a video preview window"
   }
 ];
-var ALL_HIGHLIGHT_IDS = ["obj-1", "obj-2", "obj-3", "obj-4", "obj-5", "obj-7", "obj-9", "obj-10", "obj-11", "obj-13", "obj-14", "obj-16", "obj-17", "obj-18"];
-var ANNOTATION_IDS    = ["tut-ann-0", "tut-ann-1", "tut-ann-2", "tut-ann-3", "tut-ann-4", "tut-ann-5", "tut-ann-6", "tut-ann-7", "tut-ann-8"];
-var ORIG_BGCOLORS     = {"obj-1": [0, 0, 0, 0], "obj-2": [0, 0, 0, 0], "obj-3": [0, 0, 0, 0], "obj-4": [0, 0, 0, 0], "obj-5": [0, 0, 0, 0], "obj-7": [0, 0, 0, 0], "obj-9": [0, 0, 0, 0], "obj-10": [0, 0, 0, 0], "obj-11": [0, 0, 0, 0], "obj-13": [0, 0, 0, 0], "obj-14": [0, 0, 0, 0], "obj-16": [0, 0, 0, 0], "obj-17": [0, 0, 0, 0], "obj-18": [0, 0, 0, 0]};
-
-// Highlight: translucent blue fill
-var HL = [0.15, 0.55, 0.95, 0.4];
+var ANNOTATION_IDS = ["tut-ann-0", "tut-ann-1", "tut-ann-2", "tut-ann-3", "tut-ann-4", "tut-ann-5", "tut-ann-6", "tut-ann-7", "tut-ann-8"];
+var PANEL_IDS      = ["tut-panel-0", "tut-panel-1", "tut-panel-2", "tut-panel-3", "tut-panel-4", "tut-panel-5", "tut-panel-6", "tut-panel-7", "tut-panel-8"];
 
 var currentStep = -1;
 
@@ -109,31 +74,24 @@ function gotoStep(step) {
 
     var p = this.patcher;
 
-    // Restore all objects to their original bgcolor
-    for (var i = 0; i < ALL_HIGHLIGHT_IDS.length; i++) {
-        var id  = ALL_HIGHLIGHT_IDS[i];
-        var obj = p.getnamed(id);
-        if (obj) obj.bgcolor = ORIG_BGCOLORS[id] || [0, 0, 0, 0];
+    // Hide all panels and annotation comments
+    for (var i = 0; i < PANEL_IDS.length; i++) {
+        var obj = p.getnamed(PANEL_IDS[i]);
+        if (obj) obj.hidden = 1;
     }
-
-    // Hide all annotation comments
     for (var i = 0; i < ANNOTATION_IDS.length; i++) {
         var obj = p.getnamed(ANNOTATION_IDS[i]);
         if (obj) obj.hidden = 1;
     }
 
     currentStep = step;
-    var s = STEPS[step];
 
-    // Highlight objects for this stage
-    for (var i = 0; i < s.highlight_ids.length; i++) {
-        var obj = p.getnamed(s.highlight_ids[i]);
-        if (obj) obj.bgcolor = HL;
-    }
+    // Show this step's panel and annotation
+    var panel = p.getnamed(PANEL_IDS[step]);
+    if (panel) panel.hidden = 0;
 
-    // Show this step's annotation comment
     var ann = p.getnamed(ANNOTATION_IDS[step]);
     if (ann) ann.hidden = 0;
 
-    post("Tutorial step " + step + ": " + s.name + "\n");
+    post("Tutorial step " + step + ": " + STEPS[step].name + "\n");
 }
