@@ -193,13 +193,132 @@ def find_nearby_comment(box, all_boxes, dx_max=220, dy_range=(-5, 35)):
     return best_text
 
 
+def spatial_clusters(ids, by_id, max_gap=100.0, max_x_gap=250.0):
+    """Split a list of object ids into spatially close clusters.
+
+    Uses simple agglomerative clustering: each object joins the nearest
+    existing cluster if within max_gap vertically AND max_x_gap horizontally
+    (measured center-to-center of cluster bounding box).  Otherwise starts
+    a new cluster.  Objects are processed top-to-bottom.
+    """
+    if not ids:
+        return []
+    sorted_ids = sorted(ids, key=lambda oid: by_id[oid]["patching_rect"][1])
+
+    clusters = [[sorted_ids[0]]]
+    def cluster_center(cl):
+        xs = [by_id[o]["patching_rect"][0] + by_id[o]["patching_rect"][2] / 2.0 for o in cl]
+        ys = [by_id[o]["patching_rect"][1] + by_id[o]["patching_rect"][3] / 2.0 for o in cl]
+        return sum(xs) / len(xs), sum(ys) / len(ys)
+
+    for oid in sorted_ids[1:]:
+        ox = by_id[oid]["patching_rect"][0] + by_id[oid]["patching_rect"][2] / 2.0
+        oy = by_id[oid]["patching_rect"][1] + by_id[oid]["patching_rect"][3] / 2.0
+        best_cl = None
+        best_dist = float("inf")
+        for ci, cl in enumerate(clusters):
+            cx, cy = cluster_center(cl)
+            dy = abs(oy - cy)
+            dx = abs(ox - cx)
+            if dy <= max_gap and dx <= max_x_gap:
+                dist = (dx**2 + dy**2) ** 0.5
+                if dist < best_dist:
+                    best_dist = dist
+                    best_cl = ci
+        if best_cl is not None:
+            clusters[best_cl].append(oid)
+        else:
+            clusters.append([oid])
+    return clusters
+
+
+def should_merge(step_a, step_b, by_id, out_edges, max_dist=180.0):
+    """Return True if two small, connected, spatially close steps should merge."""
+    combined = len(step_a) + len(step_b)
+    if combined > 4:
+        return False
+    # Also check that merged bounding box doesn't get too large
+    all_ids = step_a + step_b
+    bounds = group_bounds(all_ids, {oid: by_id[oid] for oid in all_ids if oid in by_id})
+    if bounds:
+        span_x = bounds[2] - bounds[0]
+        span_y = bounds[3] - bounds[1]
+        if span_x > 400.0 or span_y > 250.0:
+            return False
+    # Must have at least one direct connection between them
+    b_set = set(step_b)
+    a_set = set(step_a)
+    connected = False
+    for oid in step_a:
+        for nid in out_edges.get(oid, []):
+            if nid in b_set:
+                connected = True
+                break
+        if connected:
+            break
+    if not connected:
+        # Also check reverse direction (b → a)
+        for oid in step_b:
+            for nid in out_edges.get(oid, []):
+                if nid in a_set:
+                    connected = True
+                    break
+            if connected:
+                break
+    if not connected:
+        return False
+    # Check spatial proximity: Euclidean distance between closest pair
+    def box_center(oid):
+        r = by_id[oid]["patching_rect"]
+        return r[0] + r[2] / 2.0, r[1] + r[3] / 2.0
+    min_dist = min(
+        ((box_center(a)[0] - box_center(b)[0])**2 +
+         (box_center(a)[1] - box_center(b)[1])**2) ** 0.5
+        for a in step_a for b in step_b
+    )
+    return min_dist <= max_dist
+
+
+def build_step_description(group, by_id, boxes):
+    """Build name and description for a group of object ids."""
+    parts = []
+    seen_inline = set()
+    for oid in group:
+        box     = by_id[oid]
+        otype   = obj_type(box)
+        inline  = find_nearby_comment(box, boxes)
+        from_db = OBJ_DESCRIPTIONS.get(otype)
+        if inline and inline not in seen_inline:
+            seen_inline.add(inline)
+            parts.append(f"{otype}: {inline}")
+        elif from_db:
+            parts.append(f"{otype} — {from_db}")
+        else:
+            parts.append(otype)
+
+    description = ". ".join(parts)
+    if description and not description.endswith("."):
+        description += "."
+
+    types = list(dict.fromkeys(obj_type(by_id[oid]) for oid in group))
+    if len(types) == 1:
+        name = types[0]
+    elif len(types) == 2:
+        name = " + ".join(types)
+    else:
+        name = f"{types[0]} +{len(types) - 1}"
+
+    return name, description
+
+
 def generate_steps(boxes, lines):
     """
     Return list of {name, description, highlight_ids} dicts.
 
-    Groups non-comment objects by their longest-path depth from any source
-    (a "wave" in the data-flow graph), then generates one step per wave
-    plus an Overview step at index 0.
+    Groups non-comment objects by longest-path wave depth, then:
+      1. Splits waves whose objects are spatially distant into separate steps
+      2. Merges small consecutive steps that are connected and spatially close
+    Produces an Overview step at index 0.
     """
     out_edges, in_edges = build_graph(boxes, lines)
 
@@ -232,48 +351,52 @@ def generate_steps(boxes, lines):
     for oid in sig:
         wave_groups[wave[oid]].append(oid)
 
+    # Phase 1: split spatially distant objects within each wave
+    raw_steps = []
+    for wk in sorted(wave_groups.keys()):
+        clusters = spatial_clusters(wave_groups[wk], by_id)
+        raw_steps.extend(clusters)
+
+    # Phase 2: merge small, connected, spatially close steps (any pair, not just consecutive)
+    # Run multiple passes until stable
+    merged = list(raw_steps)
+    changed = True
+    while changed:
+        changed = False
+        i = 0
+        while i < len(merged):
+            j = i + 1
+            while j < len(merged):
+                if should_merge(merged[i], merged[j], by_id, sig_out):
+                    merged[i] = merged[i] + merged[j]
+                    merged.pop(j)
+                    changed = True
+                else:
+                    j += 1
+            i += 1
+
+    # Coverage check
+    covered = set()
+    for step in merged:
+        covered.update(step)
+    missing = sig_set - covered
+    if missing:
+        print(f"WARNING: {len(missing)} objects not in any step: {missing}",
+              file=sys.stderr)
+
+    # Build final steps with overview
     steps = [{
         "name": "Overview",
         "description": (
             f"This patch has {len(sig)} processing objects across "
-            f"{len(wave_groups)} data-flow stages. "
-            "Use the umenu or the next button to step through each stage."
+            f"{len(merged)} stages. "
+            "Use the menu or prev/next to step through each stage."
         ),
         "highlight_ids": [],
     }]
 
-    for wk in sorted(wave_groups.keys()):
-        group = wave_groups[wk]
-
-        # Build description: inline patch comments take priority (patch author wrote them);
-        # fall back to OBJ_DESCRIPTIONS; deduplicate repeated inline comments.
-        parts = []
-        seen_inline = set()
-        for oid in group:
-            box     = by_id[oid]
-            otype   = obj_type(box)
-            inline  = find_nearby_comment(box, boxes)
-            from_db = OBJ_DESCRIPTIONS.get(otype)
-            if inline and inline not in seen_inline:
-                seen_inline.add(inline)
-                parts.append(f"{otype}: {inline}")
-            elif from_db:
-                parts.append(f"{otype} — {from_db}")
-            else:
-                parts.append(otype)
-
-        description = ". ".join(parts)
-        if description and not description.endswith("."):
-            description += "."
-
-        types = list(dict.fromkeys(obj_type(by_id[oid]) for oid in group))
-        if len(types) == 1:
-            name = types[0]
-        elif len(types) == 2:
-            name = " + ".join(types)
-        else:
-            name = f"{types[0]} +{len(types) - 1}"
-
+    for group in merged:
+        name, description = build_step_description(group, by_id, boxes)
         steps.append({
             "name": name,
             "description": description,
@@ -385,7 +508,7 @@ def group_bounds(group_ids, by_id):
     )
 
 
-def compute_panel_rect(group_ids, by_id, padding=10):
+def compute_panel_rect(group_ids, by_id, padding=12):
     """Return [x, y, w, h] panel rect bounding the group + padding, or None."""
     bounds = group_bounds(group_ids, by_id)
     if not bounds:
@@ -393,6 +516,22 @@ def compute_panel_rect(group_ids, by_id, padding=10):
     min_x, min_y, max_x, max_y = bounds
     return [min_x - padding, min_y - padding,
             max_x - min_x + 2 * padding, max_y - min_y + 2 * padding]
+
+
+def compute_bubbleside(ann_x, ann_y, group_cx, group_cy):
+    """Return bubbleside int: arrow points FROM annotation TOWARD group.
+
+    0=left (arrow on left, group is to the left)
+    1=top (arrow on top, group is above)
+    2=right (arrow on right, group is to the right)
+    3=bottom (arrow on bottom, group is below)
+    """
+    dx = group_cx - ann_x
+    dy = group_cy - ann_y
+    if abs(dx) >= abs(dy):
+        return 0 if dx < 0 else 2
+    else:
+        return 1 if dy < 0 else 3
 
 
 def strip_tutorial(maxpat):
@@ -483,7 +622,7 @@ def add_tutorial_to_patch(maxpat, steps, annotation_ids, panel_ids, js_filename)
         }},
     ]
 
-    # Panels: one per step, hidden, drawn behind everything (background=1)
+    # Panels: one per step, hidden, background layer, locked
     panel_boxes = []
     for i, (step, panel_id) in enumerate(zip(steps, panel_ids)):
         prect = compute_panel_rect(step["highlight_ids"], by_id)
@@ -498,6 +637,7 @@ def add_tutorial_to_patch(maxpat, steps, annotation_ids, panel_ids, js_filename)
             "border": 2,
             "rounded": 8,
             "background": 1,
+            "locked_bgcolor": 1,
             "hidden": 1,
         }})
 
@@ -513,31 +653,38 @@ def add_tutorial_to_patch(maxpat, steps, annotation_ids, panel_ids, js_filename)
         r = b.get("patching_rect", [0, 0, 0, 0])
         rightmost_x = max(rightmost_x, r[0] + r[2])
 
-    ann_col_x   = rightmost_x + 25.0
+    ann_col_x   = rightmost_x + 30.0
     ann_w       = 220.0
-    new_patch_w = max(float(patch_w), ann_col_x + ann_w + 20.0)
+    new_patch_w = max(float(patch_w), ann_col_x + ann_w + 30.0)
     rect[2]     = new_patch_w
     patcher["rect"] = rect
 
-    # Annotation comments: one per step, hidden, stacked in right column.
+    # Annotation comments: one per step, hidden, right column, bubble arrow.
     # Vertically centered on the group's bounding box; overview pinned near top.
-    # No bubble attribute — bgcolor only works without it in Max comments.
     ann_boxes = []
     for i, (step, ann_id) in enumerate(zip(steps, annotation_ids)):
         if step["highlight_ids"]:
             bounds = group_bounds(step["highlight_ids"], by_id)
-            group_center_y = (bounds[1] + bounds[3]) / 2.0 if bounds else 40.0
+            if bounds:
+                group_cx = (bounds[0] + bounds[2]) / 2.0
+                group_cy = (bounds[1] + bounds[3]) / 2.0
+            else:
+                group_cx, group_cy = 200.0, 40.0
         else:
-            group_center_y = 40.0   # overview
+            group_cx, group_cy = 200.0, 40.0   # overview
 
-        # Estimate comment height: ~18 px/line, ~26 chars/line at 220 px + 11 pt
+        # Estimate comment height: ~18 px/line, ~30 chars/line at 220 px + 11 pt
         full_text = f"{step['name']}\n{step['description']}"
-        est_lines = max(3, sum(
-            max(1, (len(line) + 25) // 26)
+        est_lines = max(2, sum(
+            max(1, (len(line) + 29) // 30)
             for line in full_text.splitlines()
         ))
-        ann_h = float(est_lines * 18 + 10)
-        ay    = max(5.0, group_center_y - ann_h / 2.0)
+        ann_h = float(est_lines * 18 + 14)
+        ay    = max(5.0, group_cy - ann_h / 2.0)
+
+        # Bubble arrow points from annotation toward the group (group is to the left)
+        bubbleside = compute_bubbleside(ann_col_x, ay + ann_h / 2.0,
+                                        group_cx, group_cy)
 
         ann_boxes.append({"box": {
             "id": ann_id, "varname": ann_id, "maxclass": "comment",
@@ -545,12 +692,14 @@ def add_tutorial_to_patch(maxpat, steps, annotation_ids, panel_ids, js_filename)
             "patching_rect": [ann_col_x, ay, ann_w, ann_h],
             "text": full_text,
             "hidden": 1,
-            "bgcolor": [1.0, 0.98, 0.72, 1.0],
+            "bubble": 1,
+            "bubbleside": bubbleside,
+            "bubble_bgcolor": [1.0, 0.98, 0.72, 1.0],
             "textcolor": [0.0, 0.0, 0.0, 1.0],
             "fontsize": 11.0,
         }})
 
-    # Annotations appended last so they paint on top of everything else
+    # Annotations appended LAST so they paint on top of all other objects
     new_boxes.extend(ann_boxes)
 
     new_lines = [
@@ -581,6 +730,10 @@ def main():
     out_path = os.path.abspath(args.output) if args.output else in_path
 
     maxpat  = load_maxpat(in_path)
+
+    # Strip any existing tutorial objects FIRST so they don't affect step generation
+    strip_tutorial(maxpat)
+
     patcher = maxpat["patcher"]
     boxes   = patcher["boxes"]
     lines   = patcher.get("lines", [])
@@ -595,9 +748,6 @@ def main():
     js_path   = os.path.join(out_dir, js_name)
 
     write_tutorial_js(steps, js_path, annotation_ids, panel_ids)
-
-    # Strip any existing tutorial objects before re-adding
-    strip_tutorial(maxpat)
 
     add_tutorial_to_patch(maxpat, steps, annotation_ids, panel_ids, js_name)
 

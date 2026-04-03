@@ -12,7 +12,7 @@
     "rect": [
       100.0,
       100.0,
-      900.0,
+      1144.0,
       1000.0
     ],
     "gridsize": [
@@ -20,6 +20,468 @@
       15.0
     ],
     "boxes": [
+      {
+        "box": {
+          "id": "tut-panel-0",
+          "varname": "tut-panel-0",
+          "maxclass": "panel",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ],
+          "bordercolor": [
+            0.1,
+            0.4,
+            0.85,
+            0.75
+          ],
+          "border": 2,
+          "rounded": 8,
+          "background": 1,
+          "locked_bgcolor": 1,
+          "hidden": 1
+        }
+      },
+      {
+        "box": {
+          "id": "tut-panel-1",
+          "varname": "tut-panel-1",
+          "maxclass": "panel",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            238.0,
+            18.0,
+            359.0,
+            106.0
+          ],
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ],
+          "bordercolor": [
+            0.1,
+            0.4,
+            0.85,
+            0.75
+          ],
+          "border": 2,
+          "rounded": 8,
+          "background": 1,
+          "locked_bgcolor": 1,
+          "hidden": 1
+        }
+      },
+      {
+        "box": {
+          "id": "tut-panel-2",
+          "varname": "tut-panel-2",
+          "maxclass": "panel",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            18.0,
+            68.0,
+            310.0,
+            176.0
+          ],
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ],
+          "bordercolor": [
+            0.1,
+            0.4,
+            0.85,
+            0.75
+          ],
+          "border": 2,
+          "rounded": 8,
+          "background": 1,
+          "locked_bgcolor": 1,
+          "hidden": 1
+        }
+      },
+      {
+        "box": {
+          "id": "tut-panel-3",
+          "varname": "tut-panel-3",
+          "maxclass": "panel",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            18.0,
+            245.0,
+            148.0,
+            109.0
+          ],
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ],
+          "bordercolor": [
+            0.1,
+            0.4,
+            0.85,
+            0.75
+          ],
+          "border": 2,
+          "rounded": 8,
+          "background": 1,
+          "locked_bgcolor": 1,
+          "hidden": 1
+        }
+      },
+      {
+        "box": {
+          "id": "tut-panel-4",
+          "varname": "tut-panel-4",
+          "maxclass": "panel",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            388.0,
+            738.0,
+            134.0,
+            116.0
+          ],
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ],
+          "bordercolor": [
+            0.1,
+            0.4,
+            0.85,
+            0.75
+          ],
+          "border": 2,
+          "rounded": 8,
+          "background": 1,
+          "locked_bgcolor": 1,
+          "hidden": 1
+        }
+      },
+      {
+        "box": {
+          "id": "tut-panel-5",
+          "varname": "tut-panel-5",
+          "maxclass": "panel",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            163.0,
+            133.0,
+            149.0,
+            76.0
+          ],
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ],
+          "bordercolor": [
+            0.1,
+            0.4,
+            0.85,
+            0.75
+          ],
+          "border": 2,
+          "rounded": 8,
+          "background": 1,
+          "locked_bgcolor": 1,
+          "hidden": 1
+        }
+      },
+      {
+        "box": {
+          "id": "tut-panel-6",
+          "varname": "tut-panel-6",
+          "maxclass": "panel",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            618.0,
+            590.0,
+            74.0,
+            46.0
+          ],
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ],
+          "bordercolor": [
+            0.1,
+            0.4,
+            0.85,
+            0.75
+          ],
+          "border": 2,
+          "rounded": 8,
+          "background": 1,
+          "locked_bgcolor": 1,
+          "hidden": 1
+        }
+      },
+      {
+        "box": {
+          "id": "tut-panel-7",
+          "varname": "tut-panel-7",
+          "maxclass": "panel",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            413.0,
+            48.0,
+            224.0,
+            46.0
+          ],
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ],
+          "bordercolor": [
+            0.1,
+            0.4,
+            0.85,
+            0.75
+          ],
+          "border": 2,
+          "rounded": 8,
+          "background": 1,
+          "locked_bgcolor": 1,
+          "hidden": 1
+        }
+      },
+      {
+        "box": {
+          "id": "tut-panel-8",
+          "varname": "tut-panel-8",
+          "maxclass": "panel",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            18.0,
+            353.0,
+            344.0,
+            264.0
+          ],
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ],
+          "bordercolor": [
+            0.1,
+            0.4,
+            0.85,
+            0.75
+          ],
+          "border": 2,
+          "rounded": 8,
+          "background": 1,
+          "locked_bgcolor": 1,
+          "hidden": 1
+        }
+      },
+      {
+        "box": {
+          "id": "tut-panel-9",
+          "varname": "tut-panel-9",
+          "maxclass": "panel",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            388.0,
+            373.0,
+            128.0,
+            116.0
+          ],
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ],
+          "bordercolor": [
+            0.1,
+            0.4,
+            0.85,
+            0.75
+          ],
+          "border": 2,
+          "rounded": 8,
+          "background": 1,
+          "locked_bgcolor": 1,
+          "hidden": 1
+        }
+      },
+      {
+        "box": {
+          "id": "tut-panel-10",
+          "varname": "tut-panel-10",
+          "maxclass": "panel",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            388.0,
+            473.0,
+            168.0,
+            166.0
+          ],
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ],
+          "bordercolor": [
+            0.1,
+            0.4,
+            0.85,
+            0.75
+          ],
+          "border": 2,
+          "rounded": 8,
+          "background": 1,
+          "locked_bgcolor": 1,
+          "hidden": 1
+        }
+      },
+      {
+        "box": {
+          "id": "tut-panel-11",
+          "varname": "tut-panel-11",
+          "maxclass": "panel",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            388.0,
+            623.0,
+            310.0,
+            86.0
+          ],
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ],
+          "bordercolor": [
+            0.1,
+            0.4,
+            0.85,
+            0.75
+          ],
+          "border": 2,
+          "rounded": 8,
+          "background": 1,
+          "locked_bgcolor": 1,
+          "hidden": 1
+        }
+      },
+      {
+        "box": {
+          "id": "tut-panel-12",
+          "varname": "tut-panel-12",
+          "maxclass": "panel",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            388.0,
+            838.0,
+            184.0,
+            121.0
+          ],
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ],
+          "bordercolor": [
+            0.1,
+            0.4,
+            0.85,
+            0.75
+          ],
+          "border": 2,
+          "rounded": 8,
+          "background": 1,
+          "locked_bgcolor": 1,
+          "hidden": 1
+        }
+      },
+      {
+        "box": {
+          "id": "tut-panel-13",
+          "varname": "tut-panel-13",
+          "maxclass": "panel",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            388.0,
+            913.0,
+            488.0,
+            81.0
+          ],
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ],
+          "bordercolor": [
+            0.1,
+            0.4,
+            0.85,
+            0.75
+          ],
+          "border": 2,
+          "rounded": 8,
+          "background": 1,
+          "locked_bgcolor": 1,
+          "hidden": 1
+        }
+      },
       {
         "box": {
           "id": "obj-title",
@@ -35,7 +497,8 @@
           ],
           "text": "Face Capture",
           "fontsize": 16.0,
-          "fontface": 1
+          "fontface": 1,
+          "varname": "obj-title"
         }
       },
       {
@@ -53,7 +516,8 @@
             216.0,
             22.0
           ],
-          "text": "loadmess 100 100 300 640 360"
+          "text": "loadmess 100 100 300 640 360",
+          "varname": "obj-1"
         }
       },
       {
@@ -75,7 +539,8 @@
             132.0,
             22.0
           ],
-          "text": "unpack 0 0 0 0 0"
+          "text": "unpack 0 0 0 0 0",
+          "varname": "obj-2"
         }
       },
       {
@@ -98,7 +563,8 @@
             5.0,
             62.0,
             22.0
-          ]
+          ],
+          "varname": "obj-3"
         }
       },
       {
@@ -122,7 +588,8 @@
             22.0,
             200.0,
             22.0
-          ]
+          ],
+          "varname": "obj-4"
         }
       },
       {
@@ -140,7 +607,8 @@
             160.0,
             22.0
           ],
-          "text": "loadmess getvdevlist"
+          "text": "loadmess getvdevlist",
+          "varname": "obj-5"
         }
       },
       {
@@ -158,7 +626,8 @@
             125.0,
             22.0
           ],
-          "text": "prepend vdevice"
+          "text": "prepend vdevice",
+          "varname": "obj-6"
         }
       },
       {
@@ -176,7 +645,8 @@
             111.0,
             22.0
           ],
-          "text": "loadmess open"
+          "text": "loadmess open",
+          "varname": "obj-7"
         }
       },
       {
@@ -195,7 +665,8 @@
             76.0,
             22.0
           ],
-          "text": "jit.grab"
+          "text": "jit.grab",
+          "varname": "obj-8"
         }
       },
       {
@@ -211,7 +682,8 @@
             153.0,
             22.0
           ],
-          "text": "--- output size ---"
+          "text": "--- output size ---",
+          "varname": "obj-9"
         }
       },
       {
@@ -234,7 +706,8 @@
             55.0,
             55.0,
             22.0
-          ]
+          ],
+          "varname": "obj-10"
         }
       },
       {
@@ -261,7 +734,8 @@
             22.0
           ],
           "minimum": 32,
-          "maximum": 3840
+          "maximum": 3840,
+          "varname": "obj-11"
         }
       },
       {
@@ -284,7 +758,8 @@
             55.0,
             62.0,
             22.0
-          ]
+          ],
+          "varname": "obj-12"
         }
       },
       {
@@ -311,7 +786,8 @@
             22.0
           ],
           "minimum": 32,
-          "maximum": 2160
+          "maximum": 2160,
+          "varname": "obj-13"
         }
       },
       {
@@ -329,7 +805,8 @@
             125.0,
             22.0
           ],
-          "text": "pak dim 640 360"
+          "text": "pak dim 640 360",
+          "varname": "obj-14"
         }
       },
       {
@@ -348,7 +825,8 @@
             286.0,
             22.0
           ],
-          "text": "jit.matrix 4 char 640 360 @usedstdim 1"
+          "text": "jit.matrix 4 char 640 360 @usedstdim 1",
+          "varname": "obj-15"
         }
       },
       {
@@ -371,7 +849,8 @@
             55.0,
             139.0,
             22.0
-          ]
+          ],
+          "varname": "obj-16"
         }
       },
       {
@@ -398,7 +877,8 @@
             22.0
           ],
           "minimum": 33,
-          "maximum": 1000
+          "maximum": 1000,
+          "varname": "obj-17"
         }
       },
       {
@@ -421,7 +901,8 @@
             55.0,
             69.0,
             22.0
-          ]
+          ],
+          "varname": "obj-18"
         }
       },
       {
@@ -445,7 +926,8 @@
             72.0,
             24.0,
             24.0
-          ]
+          ],
+          "varname": "obj-19"
         }
       },
       {
@@ -463,7 +945,8 @@
             83.0,
             22.0
           ],
-          "text": "metro 100"
+          "text": "metro 100",
+          "varname": "obj-20"
         }
       },
       {
@@ -481,7 +964,8 @@
             41.0,
             22.0
           ],
-          "text": "t b"
+          "text": "t b",
+          "varname": "obj-21"
         }
       },
       {
@@ -506,7 +990,8 @@
             105.0,
             320.0,
             240.0
-          ]
+          ],
+          "varname": "obj-22"
         }
       },
       {
@@ -522,7 +1007,8 @@
             174.0,
             22.0
           ],
-          "text": "--- face detection ---"
+          "text": "--- face detection ---",
+          "varname": "obj-23"
         }
       },
       {
@@ -541,7 +1027,8 @@
             104.0,
             22.0
           ],
-          "text": "jit.rgb2luma"
+          "text": "jit.rgb2luma",
+          "varname": "obj-24"
         }
       },
       {
@@ -560,7 +1047,8 @@
             104.0,
             22.0
           ],
-          "text": "cv.jit.faces"
+          "text": "cv.jit.faces",
+          "varname": "obj-25"
         }
       },
       {
@@ -578,7 +1066,8 @@
             41.0,
             22.0
           ],
-          "text": "> 0"
+          "text": "> 0",
+          "varname": "obj-26"
         }
       },
       {
@@ -601,7 +1090,8 @@
             105.0,
             111.0,
             22.0
-          ]
+          ],
+          "varname": "obj-27"
         }
       },
       {
@@ -625,7 +1115,8 @@
             122.0,
             24.0,
             24.0
-          ]
+          ],
+          "varname": "obj-28"
         }
       },
       {
@@ -641,7 +1132,8 @@
             167.0,
             22.0
           ],
-          "text": "--- frame storage ---"
+          "text": "--- frame storage ---",
+          "varname": "obj-29"
         }
       },
       {
@@ -659,7 +1151,8 @@
             62.0,
             22.0
           ],
-          "text": "gate 1"
+          "text": "gate 1",
+          "varname": "obj-30"
         }
       },
       {
@@ -678,7 +1171,8 @@
             55.0,
             22.0
           ],
-          "text": "t b b"
+          "text": "t b b",
+          "varname": "obj-31"
         }
       },
       {
@@ -699,7 +1193,8 @@
             69.0,
             22.0
           ],
-          "text": "counter"
+          "text": "counter",
+          "varname": "obj-32"
         }
       },
       {
@@ -717,7 +1212,8 @@
             111.0,
             22.0
           ],
-          "text": "prepend index"
+          "text": "prepend index",
+          "varname": "obj-33"
         }
       },
       {
@@ -740,7 +1236,8 @@
             155.0,
             90.0,
             22.0
-          ]
+          ],
+          "varname": "obj-34"
         }
       },
       {
@@ -767,7 +1264,8 @@
             22.0
           ],
           "minimum": 1,
-          "maximum": 9999
+          "maximum": 9999,
+          "varname": "obj-35"
         }
       },
       {
@@ -790,7 +1288,8 @@
             200.0,
             111.0,
             22.0
-          ]
+          ],
+          "varname": "obj-36"
         }
       },
       {
@@ -815,7 +1314,8 @@
             217.0,
             55.0,
             22.0
-          ]
+          ],
+          "varname": "obj-37"
         }
       },
       {
@@ -834,7 +1334,8 @@
             286.0,
             22.0
           ],
-          "text": "jit.matrixset @matrixcount 300 @thru 0"
+          "text": "jit.matrixset @matrixcount 300 @thru 0",
+          "varname": "obj-38"
         }
       },
       {
@@ -850,7 +1351,8 @@
             132.0,
             22.0
           ],
-          "text": "--- playback ---"
+          "text": "--- playback ---",
+          "varname": "obj-39"
         }
       },
       {
@@ -873,7 +1375,8 @@
             250.0,
             48.0,
             22.0
-          ]
+          ],
+          "varname": "obj-40"
         }
       },
       {
@@ -897,7 +1400,8 @@
             267.0,
             24.0,
             24.0
-          ]
+          ],
+          "varname": "obj-41"
         }
       },
       {
@@ -920,7 +1424,8 @@
             250.0,
             118.0,
             22.0
-          ]
+          ],
+          "varname": "obj-42"
         }
       },
       {
@@ -947,7 +1452,8 @@
             22.0
           ],
           "minimum": 10,
-          "maximum": 2000
+          "maximum": 2000,
+          "varname": "obj-43"
         }
       },
       {
@@ -965,7 +1471,8 @@
             83.0,
             22.0
           ],
-          "text": "metro 100"
+          "text": "metro 100",
+          "varname": "obj-44"
         }
       },
       {
@@ -986,7 +1493,8 @@
             69.0,
             22.0
           ],
-          "text": "counter"
+          "text": "counter",
+          "varname": "obj-45"
         }
       },
       {
@@ -1004,7 +1512,8 @@
             160.0,
             22.0
           ],
-          "text": "prepend outputmatrix"
+          "text": "prepend outputmatrix",
+          "varname": "obj-46"
         }
       },
       {
@@ -1023,7 +1532,8 @@
             132.0,
             22.0
           ],
-          "text": "jit.gl.layer ctx"
+          "text": "jit.gl.layer ctx",
+          "varname": "obj-47"
         }
       },
       {
@@ -1042,7 +1552,8 @@
             314.0,
             22.0
           ],
-          "text": "jit.gl.render ctx @erase_color 0. 0. 0. 1."
+          "text": "jit.gl.render ctx @erase_color 0. 0. 0. 1.",
+          "varname": "obj-48"
         }
       },
       {
@@ -1061,7 +1572,8 @@
             55.0,
             22.0
           ],
-          "text": "t b b"
+          "text": "t b b",
+          "varname": "obj-49"
         }
       },
       {
@@ -1080,7 +1592,8 @@
             433.0,
             22.0
           ],
-          "text": "jit.window ctx @size 640 480 @title \"Face Capture Playback\""
+          "text": "jit.window ctx @size 640 480 @title \"Face Capture Playback\"",
+          "varname": "obj-50"
         }
       },
       {
@@ -1103,7 +1616,8 @@
             355.0,
             430.0,
             22.0
-          ]
+          ],
+          "varname": "obj-51"
         }
       },
       {
@@ -1124,6 +1638,615 @@
           "code": "--- CLAUDE2MAX SPEC ---\n{\n  \"name\": \"Face Capture\",\n  \"width\": 900,\n  \"height\": 1000,\n  \"objects\": {\n    \"loadmess_init\": {\n      \"type\": \"newobj\",\n      \"text\": \"loadmess 100 100 300 640 360\",\n      \"pos\": [\n        250,\n        30\n      ]\n    },\n    \"unpack_init\": {\n      \"type\": \"newobj\",\n      \"text\": \"unpack 0 0 0 0 0\",\n      \"pos\": [\n        250,\n        60\n      ]\n    },\n    \"cam_label\": {\n      \"type\": \"comment\",\n      \"text\": \"camera\",\n      \"pos\": [\n        440,\n        45\n      ],\n      \"presentation\": [\n        15,\n        5\n      ]\n    },\n    \"cam_menu\": {\n      \"type\": \"umenu\",\n      \"pos\": [\n        425,\n        60\n      ],\n      \"size\": [\n        200,\n        22\n      ],\n      \"presentation\": [\n        10,\n        22,\n        200,\n        22\n      ]\n    },\n    \"getdevlist_msg\": {\n      \"type\": \"newobj\",\n      \"text\": \"loadmess getvdevlist\",\n      \"pos\": [\n        425,\n        30\n      ]\n    },\n    \"getdevlist\": {\n      \"type\": \"newobj\",\n      \"text\": \"prepend vdevice\",\n      \"pos\": [\n        425,\n        90\n      ]\n    },\n    \"loadmess_open\": {\n      \"type\": \"newobj\",\n      \"text\": \"loadmess open\",\n      \"pos\": [\n        30,\n        80\n      ]\n    },\n    \"grab\": {\n      \"type\": \"newobj\",\n      \"text\": \"jit.grab\",\n      \"pos\": [\n        30,\n        110\n      ],\n      \"inlets\": 1,\n      \"outlets\": 2,\n      \"outlettype\": [\n        \"jit_matrix\",\n        \"\"\n      ]\n    },\n    \"comment_resize\": {\n      \"type\": \"comment\",\n      \"text\": \"--- output size ---\",\n      \"pos\": [\n        190,\n        110\n      ]\n    },\n    \"out_w_label\": {\n      \"type\": \"comment\",\n      \"text\": \"width\",\n      \"pos\": [\n        190,\n        128\n      ],\n      \"presentation\": [\n        225,\n        55\n      ]\n    },\n    \"out_w\": {\n      \"type\": \"number\",\n      \"pos\": [\n        175,\n        145\n      ],\n      \"attrs\": {\n        \"minimum\": 32,\n        \"maximum\": 3840\n      },\n      \"presentation\": [\n        220,\n        72,\n        55,\n        22\n      ]\n    },\n    \"out_h_label\": {\n      \"type\": \"comment\",\n      \"text\": \"height\",\n      \"pos\": [\n        260,\n        128\n      ],\n      \"presentation\": [\n        290,\n        55\n      ]\n    },\n    \"out_h\": {\n      \"type\": \"number\",\n      \"pos\": [\n        245,\n        145\n      ],\n      \"attrs\": {\n        \"minimum\": 32,\n        \"maximum\": 2160\n      },\n      \"presentation\": [\n        285,\n        72,\n        55,\n        22\n      ]\n    },\n    \"pak_dim\": {\n      \"type\": \"newobj\",\n      \"text\": \"pak dim 640 360\",\n      \"pos\": [\n        175,\n        175\n      ]\n    },\n    \"resize\": {\n      \"type\": \"newobj\",\n      \"text\": \"jit.matrix 4 char 640 360 @usedstdim 1\",\n      \"pos\": [\n        30,\n        210\n      ],\n      \"inlets\": 1,\n      \"outlets\": 2,\n      \"outlettype\": [\n        \"jit_matrix\",\n        \"\"\n      ]\n    },\n    \"cap_metro_label\": {\n      \"type\": \"comment\",\n      \"text\": \"capture rate (ms)\",\n      \"pos\": [\n        45,\n        240\n      ],\n      \"presentation\": [\n        15,\n        55\n      ]\n    },\n    \"cap_rate\": {\n      \"type\": \"number\",\n      \"pos\": [\n        30,\n        257\n      ],\n      \"attrs\": {\n        \"minimum\": 33,\n        \"maximum\": 1000\n      },\n      \"presentation\": [\n        10,\n        72,\n        60,\n        22\n      ]\n    },\n    \"cap_toggle_label\": {\n      \"type\": \"comment\",\n      \"text\": \"capture\",\n      \"pos\": [\n        145,\n        240\n      ],\n      \"presentation\": [\n        90,\n        55\n      ]\n    },\n    \"cap_toggle\": {\n      \"type\": \"toggle\",\n      \"pos\": [\n        130,\n        257\n      ],\n      \"presentation\": [\n        90,\n        72\n      ]\n    },\n    \"cap_metro\": {\n      \"type\": \"newobj\",\n      \"text\": \"metro 100\",\n      \"pos\": [\n        30,\n        290\n      ]\n    },\n    \"bang_grab\": {\n      \"type\": \"newobj\",\n      \"text\": \"t b\",\n      \"pos\": [\n        30,\n        320\n      ]\n    },\n    \"preview\": {\n      \"type\": \"jit.pwindow\",\n      \"pos\": [\n        30,\n        365\n      ],\n      \"size\": [\n        320,\n        240\n      ],\n      \"presentation\": [\n        10,\n        105,\n        320,\n        240\n      ]\n    },\n    \"comment_detect\": {\n      \"type\": \"comment\",\n      \"text\": \"--- face detection ---\",\n      \"pos\": [\n        415,\n        365\n      ]\n    },\n    \"luma\": {\n      \"type\": \"newobj\",\n      \"text\": \"jit.rgb2luma\",\n      \"pos\": [\n        400,\n        385\n      ],\n      \"inlets\": 1,\n      \"outlets\": 2,\n      \"outlettype\": [\n        \"jit_matrix\",\n        \"\"\n      ]\n    },\n    \"faces\": {\n      \"type\": \"newobj\",\n      \"text\": \"cv.jit.faces\",\n      \"pos\": [\n        400,\n        420\n      ],\n      \"inlets\": 1,\n      \"outlets\": 2,\n      \"outlettype\": [\n        \"jit_matrix\",\n        \"\"\n      ]\n    },\n    \"face_thresh\": {\n      \"type\": \"newobj\",\n      \"text\": \"> 0\",\n      \"pos\": [\n        400,\n        455\n      ]\n    },\n    \"face_indicator_label\": {\n      \"type\": \"comment\",\n      \"text\": \"face detected\",\n      \"pos\": [\n        535,\n        470\n      ],\n      \"presentation\": [\n        345,\n        105\n      ]\n    },\n    \"face_indicator\": {\n      \"type\": \"toggle\",\n      \"pos\": [\n        520,\n        485\n      ],\n      \"presentation\": [\n        345,\n        122\n      ]\n    },\n    \"comment_capture\": {\n      \"type\": \"comment\",\n      \"text\": \"--- frame storage ---\",\n      \"pos\": [\n        415,\n        520\n      ]\n    },\n    \"gate_capture\": {\n      \"type\": \"newobj\",\n      \"text\": \"gate 1\",\n      \"pos\": [\n        400,\n        540\n      ]\n    },\n    \"trig_store\": {\n      \"type\": \"newobj\",\n      \"text\": \"t b b\",\n      \"pos\": [\n        400,\n        570\n      ]\n    },\n    \"write_counter\": {\n      \"type\": \"newobj\",\n      \"text\": \"counter\",\n      \"pos\": [\n        400,\n        605\n      ]\n    },\n    \"prepend_idx\": {\n      \"type\": \"newobj\",\n      \"text\": \"prepend index\",\n      \"pos\": [\n        400,\n        635\n      ]\n    },\n    \"max_frames_label\": {\n      \"type\": \"comment\",\n      \"text\": \"max frames\",\n      \"pos\": [\n        645,\n        585\n      ],\n      \"presentation\": [\n        345,\n        155\n      ]\n    },\n    \"max_frames\": {\n      \"type\": \"number\",\n      \"pos\": [\n        630,\n        602\n      ],\n      \"attrs\": {\n        \"minimum\": 1,\n        \"maximum\": 9999\n      },\n      \"presentation\": [\n        345,\n        172,\n        55,\n        22\n      ]\n    },\n    \"frame_count_label\": {\n      \"type\": \"comment\",\n      \"text\": \"frames stored\",\n      \"pos\": [\n        645,\n        625\n      ],\n      \"presentation\": [\n        345,\n        200\n      ]\n    },\n    \"frame_count\": {\n      \"type\": \"number\",\n      \"pos\": [\n        630,\n        642\n      ],\n      \"presentation\": [\n        345,\n        217,\n        55,\n        22\n      ]\n    },\n    \"matrixset\": {\n      \"type\": \"newobj\",\n      \"text\": \"jit.matrixset @matrixcount 300 @thru 0\",\n      \"pos\": [\n        400,\n        675\n      ],\n      \"inlets\": 1,\n      \"outlets\": 2,\n      \"outlettype\": [\n        \"jit_matrix\",\n        \"\"\n      ]\n    },\n    \"comment_playback\": {\n      \"type\": \"comment\",\n      \"text\": \"--- playback ---\",\n      \"pos\": [\n        415,\n        715\n      ]\n    },\n    \"play_toggle_label\": {\n      \"type\": \"comment\",\n      \"text\": \"play\",\n      \"pos\": [\n        415,\n        735\n      ],\n      \"presentation\": [\n        345,\n        250\n      ]\n    },\n    \"play_toggle\": {\n      \"type\": \"toggle\",\n      \"pos\": [\n        400,\n        750\n      ],\n      \"presentation\": [\n        345,\n        267\n      ]\n    },\n    \"play_rate_label\": {\n      \"type\": \"comment\",\n      \"text\": \"play rate (ms)\",\n      \"pos\": [\n        475,\n        735\n      ],\n      \"presentation\": [\n        385,\n        250\n      ]\n    },\n    \"play_rate\": {\n      \"type\": \"number\",\n      \"pos\": [\n        460,\n        750\n      ],\n      \"attrs\": {\n        \"minimum\": 10,\n        \"maximum\": 2000\n      },\n      \"presentation\": [\n        380,\n        267,\n        60,\n        22\n      ]\n    },\n    \"play_metro\": {\n      \"type\": \"newobj\",\n      \"text\": \"metro 100\",\n      \"pos\": [\n        400,\n        785\n      ]\n    },\n    \"read_counter\": {\n      \"type\": \"newobj\",\n      \"text\": \"counter\",\n      \"pos\": [\n        400,\n        820\n      ]\n    },\n    \"prepend_out\": {\n      \"type\": \"newobj\",\n      \"text\": \"prepend outputmatrix\",\n      \"pos\": [\n        400,\n        850\n      ]\n    },\n    \"layer\": {\n      \"type\": \"newobj\",\n      \"text\": \"jit.gl.layer ctx\",\n      \"pos\": [\n        400,\n        890\n      ],\n      \"inlets\": 1,\n      \"outlets\": 2,\n      \"outlettype\": [\n        \"jit_matrix\",\n        \"\"\n      ]\n    },\n    \"render\": {\n      \"type\": \"newobj\",\n      \"text\": \"jit.gl.render ctx @erase_color 0. 0. 0. 1.\",\n      \"pos\": [\n        550,\n        925\n      ],\n      \"inlets\": 1,\n      \"outlets\": 2,\n      \"outlettype\": [\n        \"bang\",\n        \"\"\n      ]\n    },\n    \"render_trig\": {\n      \"type\": \"newobj\",\n      \"text\": \"t b b\",\n      \"pos\": [\n        400,\n        925\n      ]\n    },\n    \"window\": {\n      \"type\": \"newobj\",\n      \"text\": \"jit.window ctx @size 640 480 @title \\\"Face Capture Playback\\\"\",\n      \"pos\": [\n        400,\n        960\n      ],\n      \"inlets\": 1,\n      \"outlets\": 2,\n      \"outlettype\": [\n        \"bang\",\n        \"\"\n      ]\n    },\n    \"info\": {\n      \"type\": \"comment\",\n      \"text\": \"Select camera, click capture. Detected faces trigger frame storage. Click play to sequence captured frames.\",\n      \"pos\": [\n        30,\n        970\n      ],\n      \"presentation\": [\n        10,\n        355,\n        430,\n        22\n      ]\n    }\n  },\n  \"connections\": [\n    [\n      \"loadmess_init\",\n      0,\n      \"unpack_init\",\n      0\n    ],\n    [\n      \"unpack_init\",\n      0,\n      \"cap_rate\",\n      0\n    ],\n    [\n      \"unpack_init\",\n      1,\n      \"play_rate\",\n      0\n    ],\n    [\n      \"unpack_init\",\n      2,\n      \"max_frames\",\n      0\n    ],\n    [\n      \"unpack_init\",\n      3,\n      \"out_w\",\n      0\n    ],\n    [\n      \"unpack_init\",\n      4,\n      \"out_h\",\n      0\n    ],\n    [\n      \"getdevlist_msg\",\n      0,\n      \"grab\",\n      0\n    ],\n    [\n      \"loadmess_open\",\n      0,\n      \"grab\",\n      0\n    ],\n    [\n      \"cam_menu\",\n      0,\n      \"getdevlist\",\n      0\n    ],\n    [\n      \"getdevlist\",\n      0,\n      \"grab\",\n      0\n    ],\n    [\n      \"grab\",\n      1,\n      \"cam_menu\",\n      0\n    ],\n    [\n      \"out_w\",\n      0,\n      \"pak_dim\",\n      1\n    ],\n    [\n      \"out_h\",\n      0,\n      \"pak_dim\",\n      2\n    ],\n    [\n      \"pak_dim\",\n      0,\n      \"resize\",\n      0\n    ],\n    [\n      \"cap_toggle\",\n      0,\n      \"cap_metro\",\n      0\n    ],\n    [\n      \"cap_rate\",\n      0,\n      \"cap_metro\",\n      1\n    ],\n    [\n      \"cap_metro\",\n      0,\n      \"bang_grab\",\n      0\n    ],\n    [\n      \"bang_grab\",\n      0,\n      \"grab\",\n      0\n    ],\n    [\n      \"grab\",\n      0,\n      \"resize\",\n      0\n    ],\n    [\n      \"resize\",\n      0,\n      \"preview\",\n      0\n    ],\n    [\n      \"resize\",\n      0,\n      \"luma\",\n      0\n    ],\n    [\n      \"luma\",\n      0,\n      \"faces\",\n      0\n    ],\n    [\n      \"faces\",\n      1,\n      \"face_thresh\",\n      0\n    ],\n    [\n      \"face_thresh\",\n      0,\n      \"face_indicator\",\n      0\n    ],\n    [\n      \"face_thresh\",\n      0,\n      \"gate_capture\",\n      0\n    ],\n    [\n      \"bang_grab\",\n      0,\n      \"gate_capture\",\n      1\n    ],\n    [\n      \"gate_capture\",\n      0,\n      \"trig_store\",\n      0\n    ],\n    [\n      \"trig_store\",\n      1,\n      \"write_counter\",\n      0\n    ],\n    [\n      \"write_counter\",\n      0,\n      \"prepend_idx\",\n      0\n    ],\n    [\n      \"write_counter\",\n      0,\n      \"frame_count\",\n      0\n    ],\n    [\n      \"prepend_idx\",\n      0,\n      \"matrixset\",\n      0\n    ],\n    [\n      \"trig_store\",\n      0,\n      \"matrixset\",\n      0\n    ],\n    [\n      \"max_frames\",\n      0,\n      \"write_counter\",\n      3\n    ],\n    [\n      \"play_toggle\",\n      0,\n      \"play_metro\",\n      0\n    ],\n    [\n      \"play_rate\",\n      0,\n      \"play_metro\",\n      1\n    ],\n    [\n      \"play_metro\",\n      0,\n      \"read_counter\",\n      0\n    ],\n    [\n      \"frame_count\",\n      0,\n      \"read_counter\",\n      3\n    ],\n    [\n      \"read_counter\",\n      0,\n      \"prepend_out\",\n      0\n    ],\n    [\n      \"prepend_out\",\n      0,\n      \"matrixset\",\n      0\n    ],\n    [\n      \"matrixset\",\n      0,\n      \"layer\",\n      0\n    ],\n    [\n      \"layer\",\n      0,\n      \"render_trig\",\n      0\n    ],\n    [\n      \"render_trig\",\n      1,\n      \"render\",\n      0\n    ],\n    [\n      \"render_trig\",\n      0,\n      \"window\",\n      0\n    ]\n  ]\n}\n--- END SPEC ---",
           "fontsize": 9.0,
           "hidden": 1
+        }
+      },
+      {
+        "box": {
+          "id": "tut-label",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            510.0,
+            5.0,
+            65.0,
+            22.0
+          ],
+          "text": "Tutorial:",
+          "fontface": 1
+        }
+      },
+      {
+        "box": {
+          "id": "tut-umenu",
+          "maxclass": "umenu",
+          "numinlets": 1,
+          "numoutlets": 3,
+          "outlettype": [
+            "int",
+            "",
+            ""
+          ],
+          "patching_rect": [
+            578.0,
+            5.0,
+            200.0,
+            22.0
+          ],
+          "items": [
+            "Overview",
+            ",",
+            "loadmess",
+            "+2",
+            ",",
+            "loadmess",
+            "+2",
+            ",",
+            "toggle",
+            "+3",
+            ",",
+            "toggle",
+            "+3",
+            ",",
+            "number",
+            "+",
+            "pak",
+            ",",
+            "number",
+            ",",
+            "umenu",
+            ",",
+            "jit.pwindow",
+            ",",
+            "jit.rgb2luma",
+            "+2",
+            ",",
+            "toggle",
+            "+3",
+            ",",
+            "prepend",
+            "+2",
+            ",",
+            "prepend",
+            "+2",
+            ",",
+            "jit.gl.render",
+            "+",
+            "jit.window"
+          ]
+        }
+      },
+      {
+        "box": {
+          "id": "tut-prev",
+          "maxclass": "message",
+          "numinlets": 2,
+          "numoutlets": 1,
+          "outlettype": [
+            ""
+          ],
+          "patching_rect": [
+            784.0,
+            5.0,
+            30.0,
+            22.0
+          ],
+          "text": "prev"
+        }
+      },
+      {
+        "box": {
+          "id": "tut-next",
+          "maxclass": "message",
+          "numinlets": 2,
+          "numoutlets": 1,
+          "outlettype": [
+            ""
+          ],
+          "patching_rect": [
+            820.0,
+            5.0,
+            30.0,
+            22.0
+          ],
+          "text": "next"
+        }
+      },
+      {
+        "box": {
+          "id": "tut-loadbang",
+          "maxclass": "newobj",
+          "numinlets": 1,
+          "numoutlets": 1,
+          "outlettype": [
+            "bang"
+          ],
+          "patching_rect": [
+            856.0,
+            5.0,
+            44.0,
+            22.0
+          ],
+          "text": "loadbang"
+        }
+      },
+      {
+        "box": {
+          "id": "tut-v8",
+          "maxclass": "newobj",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            510.0,
+            32.0,
+            240.0,
+            22.0
+          ],
+          "text": "v8 face-capture-tutorial.js"
+        }
+      },
+      {
+        "box": {
+          "id": "tut-ann-0",
+          "varname": "tut-ann-0",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            894.0,
+            5.0,
+            220.0,
+            104.0
+          ],
+          "text": "Overview\nThis patch has 36 processing objects across 13 stages. Use the menu or prev/next to step through each stage.",
+          "hidden": 1,
+          "bubble": 1,
+          "bubbleside": 0,
+          "bubble_bgcolor": [
+            1.0,
+            0.98,
+            0.72,
+            1.0
+          ],
+          "textcolor": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "fontsize": 11.0
+        }
+      },
+      {
+        "box": {
+          "id": "tut-ann-1",
+          "varname": "tut-ann-1",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            894.0,
+            5.0,
+            220.0,
+            176.0
+          ],
+          "text": "loadmess +2\nloadmess: camera. loadmess \u2014 Sends a stored message when the patch loads (initializes defaults). unpack \u2014 Unpacks a list into individual outlet values. prepend \u2014 Prepends a fixed message selector before incoming data.",
+          "hidden": 1,
+          "bubble": 1,
+          "bubbleside": 0,
+          "bubble_bgcolor": [
+            1.0,
+            0.98,
+            0.72,
+            1.0
+          ],
+          "textcolor": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "fontsize": 11.0
+        }
+      },
+      {
+        "box": {
+          "id": "tut-ann-2",
+          "varname": "tut-ann-2",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            894.0,
+            95.0,
+            220.0,
+            122.0
+          ],
+          "text": "loadmess +2\nloadmess: --- output size ---. jit.grab \u2014 Captures frames from a live camera or video source. jit.matrix: capture rate (ms).",
+          "hidden": 1,
+          "bubble": 1,
+          "bubbleside": 0,
+          "bubble_bgcolor": [
+            1.0,
+            0.98,
+            0.72,
+            1.0
+          ],
+          "textcolor": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "fontsize": 11.0
+        }
+      },
+      {
+        "box": {
+          "id": "tut-ann-3",
+          "varname": "tut-ann-3",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            894.0,
+            211.5,
+            220.0,
+            176.0
+          ],
+          "text": "toggle +3\ntoggle \u2014 Sends 1 (on) or 0 (off) when clicked \u2014 starts/stops loops. metro \u2014 Generates repeated bangs at a set interval (ms). t \u2014 Fires a series of typed outputs in right-to-left order. number \u2014 Displays and edits an integer number.",
+          "hidden": 1,
+          "bubble": 1,
+          "bubbleside": 0,
+          "bubble_bgcolor": [
+            1.0,
+            0.98,
+            0.72,
+            1.0
+          ],
+          "textcolor": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "fontsize": 11.0
+        }
+      },
+      {
+        "box": {
+          "id": "tut-ann-4",
+          "varname": "tut-ann-4",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            894.0,
+            708.0,
+            220.0,
+            176.0
+          ],
+          "text": "toggle +3\ntoggle \u2014 Sends 1 (on) or 0 (off) when clicked \u2014 starts/stops loops. metro \u2014 Generates repeated bangs at a set interval (ms). counter \u2014 Counts bangs up/down between min and max. number \u2014 Displays and edits an integer number.",
+          "hidden": 1,
+          "bubble": 1,
+          "bubbleside": 0,
+          "bubble_bgcolor": [
+            1.0,
+            0.98,
+            0.72,
+            1.0
+          ],
+          "textcolor": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "fontsize": 11.0
+        }
+      },
+      {
+        "box": {
+          "id": "tut-ann-5",
+          "varname": "tut-ann-5",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            894.0,
+            119.0,
+            220.0,
+            104.0
+          ],
+          "text": "number + pak\nnumber \u2014 Displays and edits an integer number. number \u2014 Displays and edits an integer number. pak.",
+          "hidden": 1,
+          "bubble": 1,
+          "bubbleside": 0,
+          "bubble_bgcolor": [
+            1.0,
+            0.98,
+            0.72,
+            1.0
+          ],
+          "textcolor": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "fontsize": 11.0
+        }
+      },
+      {
+        "box": {
+          "id": "tut-ann-6",
+          "varname": "tut-ann-6",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            894.0,
+            588.0,
+            220.0,
+            50.0
+          ],
+          "text": "number\nnumber: frames stored.",
+          "hidden": 1,
+          "bubble": 1,
+          "bubbleside": 0,
+          "bubble_bgcolor": [
+            1.0,
+            0.98,
+            0.72,
+            1.0
+          ],
+          "textcolor": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "fontsize": 11.0
+        }
+      },
+      {
+        "box": {
+          "id": "tut-ann-7",
+          "varname": "tut-ann-7",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            894.0,
+            28.0,
+            220.0,
+            86.0
+          ],
+          "text": "umenu\numenu \u2014 A drop-down menu \u2014 outputs index when item is selected.",
+          "hidden": 1,
+          "bubble": 1,
+          "bubbleside": 0,
+          "bubble_bgcolor": [
+            1.0,
+            0.98,
+            0.72,
+            1.0
+          ],
+          "textcolor": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "fontsize": 11.0
+        }
+      },
+      {
+        "box": {
+          "id": "tut-ann-8",
+          "varname": "tut-ann-8",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            894.0,
+            442.0,
+            220.0,
+            86.0
+          ],
+          "text": "jit.pwindow\njit.pwindow \u2014 Displays a Jitter matrix as a video preview window.",
+          "hidden": 1,
+          "bubble": 1,
+          "bubbleside": 0,
+          "bubble_bgcolor": [
+            1.0,
+            0.98,
+            0.72,
+            1.0
+          ],
+          "textcolor": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "fontsize": 11.0
+        }
+      },
+      {
+        "box": {
+          "id": "tut-ann-9",
+          "varname": "tut-ann-9",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            894.0,
+            397.0,
+            220.0,
+            68.0
+          ],
+          "text": "jit.rgb2luma +2\njit.rgb2luma. cv.jit.faces. >: face detected.",
+          "hidden": 1,
+          "bubble": 1,
+          "bubbleside": 0,
+          "bubble_bgcolor": [
+            1.0,
+            0.98,
+            0.72,
+            1.0
+          ],
+          "textcolor": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "fontsize": 11.0
+        }
+      },
+      {
+        "box": {
+          "id": "tut-ann-10",
+          "varname": "tut-ann-10",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            894.0,
+            459.0,
+            220.0,
+            194.0
+          ],
+          "text": "toggle +3\ntoggle \u2014 Sends 1 (on) or 0 (off) when clicked \u2014 starts/stops loops. gate \u2014 Routes input to one of N outlets based on a control value. t \u2014 Fires a series of typed outputs in right-to-left order. counter \u2014 Counts bangs up/down between min and max.",
+          "hidden": 1,
+          "bubble": 1,
+          "bubbleside": 0,
+          "bubble_bgcolor": [
+            1.0,
+            0.98,
+            0.72,
+            1.0
+          ],
+          "textcolor": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "fontsize": 11.0
+        }
+      },
+      {
+        "box": {
+          "id": "tut-ann-11",
+          "varname": "tut-ann-11",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            894.0,
+            605.0,
+            220.0,
+            122.0
+          ],
+          "text": "prepend +2\nprepend \u2014 Prepends a fixed message selector before incoming data. number \u2014 Displays and edits an integer number. jit.matrixset.",
+          "hidden": 1,
+          "bubble": 1,
+          "bubbleside": 0,
+          "bubble_bgcolor": [
+            1.0,
+            0.98,
+            0.72,
+            1.0
+          ],
+          "textcolor": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "fontsize": 11.0
+        }
+      },
+      {
+        "box": {
+          "id": "tut-ann-12",
+          "varname": "tut-ann-12",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            894.0,
+            837.5,
+            220.0,
+            122.0
+          ],
+          "text": "prepend +2\nprepend \u2014 Prepends a fixed message selector before incoming data. jit.gl.layer. t \u2014 Fires a series of typed outputs in right-to-left order.",
+          "hidden": 1,
+          "bubble": 1,
+          "bubbleside": 0,
+          "bubble_bgcolor": [
+            1.0,
+            0.98,
+            0.72,
+            1.0
+          ],
+          "textcolor": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "fontsize": 11.0
+        }
+      },
+      {
+        "box": {
+          "id": "tut-ann-13",
+          "varname": "tut-ann-13",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            894.0,
+            910.5,
+            220.0,
+            86.0
+          ],
+          "text": "jit.gl.render + jit.window\njit.gl.render \u2014 Renders OpenGL geometry to a texture. jit.window.",
+          "hidden": 1,
+          "bubble": 1,
+          "bubbleside": 0,
+          "bubble_bgcolor": [
+            1.0,
+            0.98,
+            0.72,
+            1.0
+          ],
+          "textcolor": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "fontsize": 11.0
         }
       }
     ],
@@ -1640,6 +2763,54 @@
           ],
           "source": [
             "obj-49",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "tut-umenu",
+            0
+          ],
+          "destination": [
+            "tut-v8",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "tut-prev",
+            0
+          ],
+          "destination": [
+            "tut-v8",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "tut-next",
+            0
+          ],
+          "destination": [
+            "tut-v8",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "tut-loadbang",
+            0
+          ],
+          "destination": [
+            "tut-v8",
             0
           ]
         }

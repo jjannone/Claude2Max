@@ -9,43 +9,31 @@ outlets = 0;
 var STEPS         = [
   {
     "name": "Overview",
-    "description": "This patch has 14 processing objects across 8 data-flow stages. Use the umenu or the next button to step through each stage."
+    "description": "This patch has 14 processing objects across 5 stages. Use the menu or prev/next to step through each stage."
   },
   {
-    "name": "jit.world +2",
-    "description": "jit.world \u2014 Provides a hidden OpenGL rendering context for Jitter. toggle \u2014 Sends 1 (on) or 0 (off) when clicked \u2014 starts/stops loops. loadmess \u2014 Sends a stored message when the patch loads (initializes defaults)."
+    "name": "jit.world +3",
+    "description": "jit.world \u2014 Provides a hidden OpenGL rendering context for Jitter. toggle \u2014 Sends 1 (on) or 0 (off) when clicked \u2014 starts/stops loops. jit.grab \u2014 Captures frames from a live camera or video source. jit.fpsgui \u2014 Shows the current processing frame rate."
   },
   {
-    "name": "jit.grab + flonum",
-    "description": "jit.grab \u2014 Captures frames from a live camera or video source. flonum: scale image and pwindow."
+    "name": "loadmess + flonum",
+    "description": "loadmess \u2014 Sends a stored message when the patch loads (initializes defaults). flonum: scale image and pwindow."
   },
   {
-    "name": "jit.fpsgui + jit.matrixinfo",
-    "description": "jit.fpsgui \u2014 Shows the current processing frame rate. jit.matrixinfo: analyze the image."
+    "name": "jit.matrixinfo +2",
+    "description": "jit.matrixinfo: analyze the image. route: report the dim. vexpr \u2014 Evaluates a math expression on lists/vectors element-by-element."
   },
   {
-    "name": "route",
-    "description": "route: report the dim."
+    "name": "message +2",
+    "description": "message: set size of pwindow & dim of matrix. message. jit.matrix \u2014 Stores and processes a matrix of data (adapt 0 = fixed size). jit.fpsgui \u2014 Shows the current processing frame rate."
   },
   {
-    "name": "vexpr",
-    "description": "vexpr \u2014 Evaluates a math expression on lists/vectors element-by-element."
-  },
-  {
-    "name": "message",
-    "description": "message: set size of pwindow & dim of matrix. message."
-  },
-  {
-    "name": "jit.matrix",
-    "description": "jit.matrix \u2014 Stores and processes a matrix of data (adapt 0 = fixed size)."
-  },
-  {
-    "name": "jit.fpsgui + jit.pwindow",
-    "description": "jit.fpsgui \u2014 Shows the current processing frame rate. jit.pwindow \u2014 Displays a Jitter matrix as a video preview window."
+    "name": "jit.pwindow",
+    "description": "jit.pwindow \u2014 Displays a Jitter matrix as a video preview window."
   }
 ];
-var ANNOTATION_IDS = ["tut-ann-0", "tut-ann-1", "tut-ann-2", "tut-ann-3", "tut-ann-4", "tut-ann-5", "tut-ann-6", "tut-ann-7", "tut-ann-8"];
-var PANEL_IDS      = ["tut-panel-0", "tut-panel-1", "tut-panel-2", "tut-panel-3", "tut-panel-4", "tut-panel-5", "tut-panel-6", "tut-panel-7", "tut-panel-8"];
+var ANNOTATION_IDS = ["tut-ann-0", "tut-ann-1", "tut-ann-2", "tut-ann-3", "tut-ann-4", "tut-ann-5"];
+var PANEL_IDS      = ["tut-panel-0", "tut-panel-1", "tut-panel-2", "tut-panel-3", "tut-panel-4", "tut-panel-5"];
 
 var currentStep = -1;
 

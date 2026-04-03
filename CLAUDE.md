@@ -111,18 +111,18 @@ When a patch is pasted in from an external source and you modify it:
 
 ## Tutorial System
 
-`add_tutorial.py` adds an interactive step-by-step tutorial to any `.maxpat`:
+`add_tutorial.py` adds an interactive step-by-step tutorial to any `.maxpat`. **Read `TUTORIAL_GUIDELINES.md` before running or modifying the tutorial system.**
 
 ```bash
 python3 add_tutorial.py -i patches/patch.maxpat [-o patches/patch-with-tutorial.maxpat]
 ```
 
-- Analyzes the patch data-flow graph and groups objects into functional stages (longest-path wave depth)
-- Adds a `umenu` + `prev`/`next` message buttons + `loadbang` at the bottom of the patch
+- Analyzes the patch data-flow graph, splits spatially distant objects, merges related connected objects
+- Adds a `umenu` + `prev`/`next` message buttons + `loadbang` at the top-right of the patch
 - Generates a companion `<patch-name>-tutorial.js` alongside the `.maxpat` — place this next to the .maxpat when opening in Max
-- Each step highlights its objects with a translucent blue `bgcolor` (via `thispatcher` scripting) and shows a hidden annotation comment describing that stage
+- Each step highlights its objects with a background panel (locked, background layer) and shows a bubble-arrow annotation comment
 - `loadbang` auto-initializes to step 0 when the patch opens
-- The `v8` controller uses `script sendbox <id> bgcolor R G B A`, `script show <id>`, and `script hide <id>` messages to `thispatcher`
+- The `v8` controller uses `patcher.getnamed()` to show/hide panels and annotations per step
 
 **When to use**: After creating a teaching patch or a complex patch the user wants to understand stage by stage.
 
