@@ -17,7 +17,11 @@ prompt = data.get("prompt", "")
 
 
 def find_maxpat(text):
-    """Return the first dict in text that looks like a .maxpat, or None."""
+    """
+    Return the first dict in text that looks like a .maxpat, or None.
+    Accepts both the full .maxpat format {"patcher": {"boxes": ...}}
+    and bare patcher-contents format {"boxes": ..., "lines": ...}.
+    """
     decoder = json.JSONDecoder()
     i = 0
     while i < len(text):
@@ -26,11 +30,15 @@ def find_maxpat(text):
             break
         try:
             obj, _ = decoder.raw_decode(text, i)
-            if (isinstance(obj, dict)
-                    and "patcher" in obj
-                    and isinstance(obj["patcher"], dict)
-                    and "boxes" in obj["patcher"]):
-                return obj
+            if isinstance(obj, dict):
+                # Full .maxpat format
+                if ("patcher" in obj
+                        and isinstance(obj["patcher"], dict)
+                        and "boxes" in obj["patcher"]):
+                    return obj
+                # Bare patcher-contents format (missing outer wrapper)
+                if "boxes" in obj and "lines" in obj:
+                    return {"patcher": obj}
         except json.JSONDecodeError:
             pass
         i += 1
