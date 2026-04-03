@@ -100,6 +100,21 @@ When a patch is pasted in from an external source and you modify it:
 
 **When to use v8** — replace chains of `date`, `sprintf`, `match`, `change`, `fromsymbol`, `pack/unpack` logic with a single v8 object when the logic involves string parsing, date/time arithmetic, or stateful comparisons. v8 is not a DSP object — do not put signal processing inside JS.
 
+## Naming Convention
+
+All arbitrary names that Claude creates must be in **ALL CAPS**. This applies to:
+- Patcher names (subpatchers, abstractions)
+- `send` / `receive` names
+- `pv` (patcher variable) and `v` (global variable) names
+- `buffer~` names
+- `coll` names
+- JavaScript variable names in `v8` / `js` files
+- Any other user-defined symbol or identifier
+
+Examples: `send TEMPO`, `receive PITCH`, `pv CURRENT_STATE`, `buffer~ LOOPBUF`, `var STEP_COUNT = 0;`
+
+This does NOT apply to Max built-in names, object names, or message selectors — only names we invent.
+
 ## Max Patching Knowledge
 
 - Use `loadmess` to set sensible defaults for controls on patch load. For multiple init values, use `loadmess` → `unpack` to distribute to separate controls.
