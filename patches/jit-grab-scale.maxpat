@@ -503,10 +503,8 @@
           "id": "tut-v8",
           "maxclass": "newobj",
           "numinlets": 1,
-          "numoutlets": 1,
-          "outlettype": [
-            ""
-          ],
+          "numoutlets": 0,
+          "outlettype": [],
           "patching_rect": [
             15.0,
             734.0,
@@ -518,34 +516,15 @@
       },
       {
         "box": {
-          "id": "tut-thispatcher",
-          "maxclass": "newobj",
-          "numinlets": 1,
-          "numoutlets": 2,
-          "outlettype": [
-            "",
-            ""
-          ],
-          "patching_rect": [
-            15.0,
-            766.0,
-            90.0,
-            22.0
-          ],
-          "text": "thispatcher"
-        }
-      },
-      {
-        "box": {
           "id": "tut-ann-0",
           "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            120.0,
+            15.0,
             766.0,
-            780.0,
+            880.0,
             44.0
           ],
           "text": "Step 0 \u2014 Overview: This patch has 14 processing objects across 8 data-flow stages. Use the umenu or the next button to step through each stage.",
@@ -567,9 +546,9 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            120.0,
+            15.0,
             766.0,
-            780.0,
+            880.0,
             44.0
           ],
           "text": "Step 1 \u2014 jit.world +2: jit.world: Provides a hidden OpenGL rendering context for Jitter | toggle: Sends 1 (on) or 0 (off) when clicked \u2014 starts/stops loops | loadmess: Sends a stored message when the patch loads (initializes defaults)",
@@ -591,9 +570,9 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            120.0,
+            15.0,
             766.0,
-            780.0,
+            880.0,
             44.0
           ],
           "text": "Step 2 \u2014 jit.grab + flonum: jit.grab: Captures frames from a live camera or video source | flonum (scale image and pwindow)",
@@ -615,9 +594,9 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            120.0,
+            15.0,
             766.0,
-            780.0,
+            880.0,
             44.0
           ],
           "text": "Step 3 \u2014 jit.fpsgui + jit.matrixinfo: jit.fpsgui: Shows the current processing frame rate | jit.matrixinfo (analyze the image)",
@@ -639,9 +618,9 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            120.0,
+            15.0,
             766.0,
-            780.0,
+            880.0,
             44.0
           ],
           "text": "Step 4 \u2014 route: route (report the dim)",
@@ -663,9 +642,9 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            120.0,
+            15.0,
             766.0,
-            780.0,
+            880.0,
             44.0
           ],
           "text": "Step 5 \u2014 vexpr: vexpr: Evaluates a math expression on lists/vectors element-by-element",
@@ -687,9 +666,9 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            120.0,
+            15.0,
             766.0,
-            780.0,
+            880.0,
             44.0
           ],
           "text": "Step 6 \u2014 message: message (set size of pwindow & dim of matrix) | message (set size of pwindow & dim of matrix)",
@@ -711,9 +690,9 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            120.0,
+            15.0,
             766.0,
-            780.0,
+            880.0,
             44.0
           ],
           "text": "Step 7 \u2014 jit.matrix: jit.matrix: Stores and processes a matrix of data (adapt 0 = fixed size)",
@@ -735,9 +714,9 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            120.0,
+            15.0,
             766.0,
-            780.0,
+            880.0,
             44.0
           ],
           "text": "Step 8 \u2014 jit.fpsgui + jit.pwindow: jit.fpsgui: Shows the current processing frame rate | jit.pwindow: Displays a Jitter matrix as a video preview window",
@@ -965,18 +944,6 @@
           ],
           "destination": [
             "tut-v8",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tut-v8",
-            0
-          ],
-          "destination": [
-            "tut-thispatcher",
             0
           ]
         }
