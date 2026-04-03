@@ -13,7 +13,7 @@
       100.0,
       100.0,
       950.0,
-      720.0
+      821.0
     ],
     "gridsize": [
       15.0,
@@ -381,6 +381,375 @@
           "fontsize": 9.0,
           "hidden": 1
         }
+      },
+      {
+        "box": {
+          "id": "tut-label",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            15.0,
+            702.0,
+            75.0,
+            22.0
+          ],
+          "text": "Tutorial:",
+          "fontface": 1
+        }
+      },
+      {
+        "box": {
+          "id": "tut-umenu",
+          "maxclass": "umenu",
+          "numinlets": 1,
+          "numoutlets": 3,
+          "outlettype": [
+            "int",
+            "",
+            ""
+          ],
+          "patching_rect": [
+            95.0,
+            702.0,
+            320.0,
+            22.0
+          ],
+          "items": [
+            "Overview",
+            ",",
+            "jit.world",
+            "+2",
+            ",",
+            "jit.grab",
+            "+",
+            "flonum",
+            ",",
+            "jit.fpsgui",
+            "+",
+            "jit.matrixinfo",
+            ",",
+            "route",
+            ",",
+            "vexpr",
+            ",",
+            "message",
+            ",",
+            "jit.matrix",
+            ",",
+            "jit.fpsgui",
+            "+",
+            "jit.pwindow"
+          ]
+        }
+      },
+      {
+        "box": {
+          "id": "tut-prev",
+          "maxclass": "message",
+          "numinlets": 2,
+          "numoutlets": 1,
+          "outlettype": [
+            ""
+          ],
+          "patching_rect": [
+            425.0,
+            702.0,
+            30.0,
+            22.0
+          ],
+          "text": "prev"
+        }
+      },
+      {
+        "box": {
+          "id": "tut-next",
+          "maxclass": "message",
+          "numinlets": 2,
+          "numoutlets": 1,
+          "outlettype": [
+            ""
+          ],
+          "patching_rect": [
+            465.0,
+            702.0,
+            30.0,
+            22.0
+          ],
+          "text": "next"
+        }
+      },
+      {
+        "box": {
+          "id": "tut-loadbang",
+          "maxclass": "newobj",
+          "numinlets": 1,
+          "numoutlets": 1,
+          "outlettype": [
+            "bang"
+          ],
+          "patching_rect": [
+            505.0,
+            702.0,
+            70.0,
+            22.0
+          ],
+          "text": "loadbang"
+        }
+      },
+      {
+        "box": {
+          "id": "tut-v8",
+          "maxclass": "newobj",
+          "numinlets": 1,
+          "numoutlets": 1,
+          "outlettype": [
+            ""
+          ],
+          "patching_rect": [
+            15.0,
+            734.0,
+            200.0,
+            22.0
+          ],
+          "text": "v8 jit-grab-scale-tutorial.js"
+        }
+      },
+      {
+        "box": {
+          "id": "tut-thispatcher",
+          "maxclass": "newobj",
+          "numinlets": 1,
+          "numoutlets": 2,
+          "outlettype": [
+            "",
+            ""
+          ],
+          "patching_rect": [
+            15.0,
+            766.0,
+            90.0,
+            22.0
+          ],
+          "text": "thispatcher"
+        }
+      },
+      {
+        "box": {
+          "id": "tut-ann-0",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            120.0,
+            766.0,
+            780.0,
+            44.0
+          ],
+          "text": "Step 0 \u2014 Overview: This patch has 14 processing objects across 8 data-flow stages. Use the umenu or the next button to step through each stage.",
+          "hidden": 1,
+          "bgcolor": [
+            0.94,
+            0.97,
+            0.75,
+            1.0
+          ],
+          "fontsize": 11.0
+        }
+      },
+      {
+        "box": {
+          "id": "tut-ann-1",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            120.0,
+            766.0,
+            780.0,
+            44.0
+          ],
+          "text": "Step 1 \u2014 jit.world +2: jit.world: Provides a hidden OpenGL rendering context for Jitter | toggle: Sends 1 (on) or 0 (off) when clicked \u2014 starts/stops loops | loadmess: Sends a stored message when the patch loads (initializes defaults)",
+          "hidden": 1,
+          "bgcolor": [
+            0.94,
+            0.97,
+            0.75,
+            1.0
+          ],
+          "fontsize": 11.0
+        }
+      },
+      {
+        "box": {
+          "id": "tut-ann-2",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            120.0,
+            766.0,
+            780.0,
+            44.0
+          ],
+          "text": "Step 2 \u2014 jit.grab + flonum: jit.grab: Captures frames from a live camera or video source | flonum (scale image and pwindow)",
+          "hidden": 1,
+          "bgcolor": [
+            0.94,
+            0.97,
+            0.75,
+            1.0
+          ],
+          "fontsize": 11.0
+        }
+      },
+      {
+        "box": {
+          "id": "tut-ann-3",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            120.0,
+            766.0,
+            780.0,
+            44.0
+          ],
+          "text": "Step 3 \u2014 jit.fpsgui + jit.matrixinfo: jit.fpsgui: Shows the current processing frame rate | jit.matrixinfo (analyze the image)",
+          "hidden": 1,
+          "bgcolor": [
+            0.94,
+            0.97,
+            0.75,
+            1.0
+          ],
+          "fontsize": 11.0
+        }
+      },
+      {
+        "box": {
+          "id": "tut-ann-4",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            120.0,
+            766.0,
+            780.0,
+            44.0
+          ],
+          "text": "Step 4 \u2014 route: route (report the dim)",
+          "hidden": 1,
+          "bgcolor": [
+            0.94,
+            0.97,
+            0.75,
+            1.0
+          ],
+          "fontsize": 11.0
+        }
+      },
+      {
+        "box": {
+          "id": "tut-ann-5",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            120.0,
+            766.0,
+            780.0,
+            44.0
+          ],
+          "text": "Step 5 \u2014 vexpr: vexpr: Evaluates a math expression on lists/vectors element-by-element",
+          "hidden": 1,
+          "bgcolor": [
+            0.94,
+            0.97,
+            0.75,
+            1.0
+          ],
+          "fontsize": 11.0
+        }
+      },
+      {
+        "box": {
+          "id": "tut-ann-6",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            120.0,
+            766.0,
+            780.0,
+            44.0
+          ],
+          "text": "Step 6 \u2014 message: message (set size of pwindow & dim of matrix) | message (set size of pwindow & dim of matrix)",
+          "hidden": 1,
+          "bgcolor": [
+            0.94,
+            0.97,
+            0.75,
+            1.0
+          ],
+          "fontsize": 11.0
+        }
+      },
+      {
+        "box": {
+          "id": "tut-ann-7",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            120.0,
+            766.0,
+            780.0,
+            44.0
+          ],
+          "text": "Step 7 \u2014 jit.matrix: jit.matrix: Stores and processes a matrix of data (adapt 0 = fixed size)",
+          "hidden": 1,
+          "bgcolor": [
+            0.94,
+            0.97,
+            0.75,
+            1.0
+          ],
+          "fontsize": 11.0
+        }
+      },
+      {
+        "box": {
+          "id": "tut-ann-8",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            120.0,
+            766.0,
+            780.0,
+            44.0
+          ],
+          "text": "Step 8 \u2014 jit.fpsgui + jit.pwindow: jit.fpsgui: Shows the current processing frame rate | jit.pwindow: Displays a Jitter matrix as a video preview window",
+          "hidden": 1,
+          "bgcolor": [
+            0.94,
+            0.97,
+            0.75,
+            1.0
+          ],
+          "fontsize": 11.0
+        }
       }
     ],
     "lines": [
@@ -548,6 +917,66 @@
           ],
           "source": [
             "obj-14",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "tut-umenu",
+            0
+          ],
+          "destination": [
+            "tut-v8",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "tut-prev",
+            0
+          ],
+          "destination": [
+            "tut-v8",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "tut-next",
+            0
+          ],
+          "destination": [
+            "tut-v8",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "tut-loadbang",
+            0
+          ],
+          "destination": [
+            "tut-v8",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "tut-v8",
+            0
+          ],
+          "destination": [
+            "tut-thispatcher",
             0
           ]
         }

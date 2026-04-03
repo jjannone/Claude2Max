@@ -109,6 +109,23 @@ When a patch is pasted in from an external source and you modify it:
 - `playlist~`: `inlets=1, outlets=3` (sig audio, sig position, int state). Send `append` to open the file chooser; send integer `1` to play the first item.
 - `umenu` items in `.maxpat` format are stored as a flat token array with `","` as item separators: `["item", "one", ",", "item", "two"]`. Set via `attrs: {"items": [...]}` in the spec.
 
+## Tutorial System
+
+`add_tutorial.py` adds an interactive step-by-step tutorial to any `.maxpat`:
+
+```bash
+python3 add_tutorial.py -i patches/patch.maxpat [-o patches/patch-with-tutorial.maxpat]
+```
+
+- Analyzes the patch data-flow graph and groups objects into functional stages (longest-path wave depth)
+- Adds a `umenu` + `prev`/`next` message buttons + `loadbang` at the bottom of the patch
+- Generates a companion `<patch-name>-tutorial.js` alongside the `.maxpat` — place this next to the .maxpat when opening in Max
+- Each step highlights its objects with a translucent blue `bgcolor` (via `thispatcher` scripting) and shows a hidden annotation comment describing that stage
+- `loadbang` auto-initializes to step 0 when the patch opens
+- The `v8` controller uses `script sendbox <id> bgcolor R G B A`, `script show <id>`, and `script hide <id>` messages to `thispatcher`
+
+**When to use**: After creating a teaching patch or a complex patch the user wants to understand stage by stage.
+
 ## Upstream Maintenance
 
 `max_objects.json` is sourced from [taylorbrook/MAX-MSP_CC_Framework](https://github.com/taylorbrook/MAX-MSP_CC_Framework). Periodically check that repo for updates to `.claude/max-objects/` (new objects, corrected I/O counts, additional overrides). When meaningful changes are found:
