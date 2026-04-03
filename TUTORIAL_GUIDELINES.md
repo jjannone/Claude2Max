@@ -4,14 +4,14 @@ Read these guidelines before running or modifying `add_tutorial.py`.
 
 ## Annotation Comments
 
-- **Always on top** — annotation comments must be appended last in the boxes array so they paint above all other objects. They must never be obscured by patch objects.
-- **Bubble arrows** — use `"bubble": 1` with `"bubble_bgcolor"` for the background color (not plain `"bgcolor"`). Set `"bubbleside"` so the arrow points FROM the annotation TOWARD the highlighted group (0=left, 1=top, 2=right, 3=bottom).
-- **Arrow direction matters** — compute the correct side based on the relative position of the annotation vs the group center.
+- **Always on top** — annotation comments must be placed FIRST in the boxes array. In Max, earlier items in the array render on top (in front). They must never be obscured by patch objects.
+- **Bubble arrows** — use `"bubble": 1` with `"bubble_bgcolor"` for the background color (not plain `"bgcolor"`). Max `@bubbleside` values: **0=top, 1=left, 2=bottom, 3=right**. The arrow appears on that side of the comment, pointing outward toward the group.
+- **Arrow direction matters** — if the annotation is to the RIGHT of the group, use `bubbleside=1` (arrow on left, pointing left toward group). If ABOVE, use `bubbleside=2` (arrow on bottom, pointing down). If to the LEFT, use `bubbleside=3` (arrow on right). If BELOW, use `bubbleside=0` (arrow on top).
 
 ## Panels (Highlight Rectangles)
 
 - Panels go on the **background layer** (`"background": 1`) and must have **locked background** (`"locked_bgcolor": 1`) so they don't interfere with users editing the patch.
-- Panels are inserted at the front of the boxes list (painted first, behind everything).
+- Panels are inserted at the END of the boxes list (painted behind everything in Max).
 
 ## Step Grouping Rules
 

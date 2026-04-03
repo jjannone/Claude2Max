@@ -18,6 +18,7 @@ import sys
 import argparse
 import re
 from collections import defaultdict, deque
+from textwrap import dedent
 
 SPEC_MARKER_BEGIN = "--- CLAUDE2MAX SPEC ---"
 SPEC_MARKER_END = "--- END SPEC ---"
@@ -311,6 +312,140 @@ def build_step_description(group, by_id, boxes):
     return name, description
 
 
+# ---------------------------------------------------------------------------
+# AI-enhanced descriptions (Claude API)
+# ---------------------------------------------------------------------------
+
+def build_patch_summary(steps, by_id, boxes, lines):
+    """Build a compact text summary of the patch for the AI prompt."""
+    parts = []
+
+    # List all significant objects
+    parts.append("## Objects")
+    for w in boxes:
+        b = w["box"]
+        if (b.get("maxclass") in ("comment", "text.codebox")
+                or b["id"].startswith("tut-") or b["id"] == "obj-spec-embed"):
+            continue
+        mc = b.get("maxclass", "")
+        text = b.get("text", "")
+        r = b.get("patching_rect", [0, 0, 0, 0])
+        label = text if mc == "newobj" else (f"[{mc}] {text}" if text else f"[{mc}]")
+        parts.append(f"  {b['id']}: {label}  (pos {r[0]:.0f},{r[1]:.0f})")
+
+    # List connections
+    parts.append("\n## Connections (source:outlet -> dest:inlet)")
+    for w in lines:
+        pl = w["patchline"]
+        src, dst = pl["source"], pl["destination"]
+        if src[0].startswith("tut-") or dst[0].startswith("tut-"):
+            continue
+        parts.append(f"  {src[0]}:{src[1]} -> {dst[0]}:{dst[1]}")
+
+    # List nearby comments (patch author's own labels)
+    parts.append("\n## Inline comments (author labels near objects)")
+    for w in boxes:
+        b = w["box"]
+        if b.get("maxclass") != "comment" or b["id"].startswith("tut-"):
+            continue
+        r = b.get("patching_rect", [0, 0, 0, 0])
+        parts.append(f"  \"{b.get('text', '')}\"  (pos {r[0]:.0f},{r[1]:.0f})")
+
+    # List step groupings
+    parts.append("\n## Tutorial step groupings (step 0 = overview)")
+    for i, step in enumerate(steps):
+        ids = step["highlight_ids"]
+        obj_labels = []
+        for oid in ids:
+            if oid in by_id:
+                b = by_id[oid]
+                mc = b.get("maxclass", "")
+                text = b.get("text", "")
+                obj_labels.append(text if mc == "newobj" else f"[{mc}] {text}".strip())
+        parts.append(f"  Step {i}: {', '.join(obj_labels) if obj_labels else '(overview)'}")
+
+    return "\n".join(parts)
+
+
+AI_PROMPT = dedent("""\
+You are writing tutorial annotations for a Max/MSP patch. The audience is students
+who are new to Max. Each step highlights a group of connected objects.
+
+Given the patch summary below, return a JSON array with one object per step (including
+step 0 = overview). Each object has:
+- "name": short label for the umenu (max 4 words, no punctuation)
+- "description": 1-3 sentences explaining what this group DOES in the context of the
+  whole patch. Don't just list object names — explain the purpose, the data flow, and
+  why it matters. Use plain language a student would understand.
+- "placement": where to put the annotation relative to the highlighted objects.
+  One of "right", "left", "above", "below". Pick the side with the most open space
+  based on the object positions. Default to "right" unless objects are far right.
+
+PATCH SUMMARY:
+{summary}
+
+Return ONLY valid JSON — no markdown fences, no commentary.
+""")
+
+
+def ai_enhance_steps(steps, by_id, boxes, lines):
+    """Call Claude API to generate better step names, descriptions, and placement hints.
+
+    Returns the steps list with updated name/description fields and a new
+    'ai_placement' field, or the original steps if the API call fails.
+    """
+    try:
+        import anthropic
+    except ImportError:
+        print("WARNING: anthropic package not installed, using static descriptions",
+              file=sys.stderr)
+        return steps
+
+    api_key = os.environ.get("ANTHROPIC_API_KEY")
+    if not api_key:
+        print("WARNING: ANTHROPIC_API_KEY not set, using static descriptions",
+              file=sys.stderr)
+        return steps
+
+    summary = build_patch_summary(steps, by_id, boxes, lines)
+    prompt = AI_PROMPT.format(summary=summary)
+
+    try:
+        client = anthropic.Anthropic(api_key=api_key)
+        response = client.messages.create(
+            model="claude-haiku-4-5-20251001",
+            max_tokens=2048,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        text = response.content[0].text.strip()
+        # Strip markdown fences if present
+        if text.startswith("```"):
+            text = re.sub(r"^```\w*\n?", "", text)
+            text = re.sub(r"\n?```$", "", text)
+        ai_steps = json.loads(text)
+    except Exception as e:
+        print(f"WARNING: AI enhancement failed ({e}), using static descriptions",
+              file=sys.stderr)
+        return steps
+
+    if not isinstance(ai_steps, list) or len(ai_steps) != len(steps):
+        print(f"WARNING: AI returned {len(ai_steps) if isinstance(ai_steps, list) else 'non-list'} "
+              f"steps, expected {len(steps)}. Using static descriptions.", file=sys.stderr)
+        return steps
+
+    PLACEMENT_MAP = {"right": 0, "above": 1, "left": 2, "below": 3}
+    for i, ai in enumerate(ai_steps):
+        if isinstance(ai, dict):
+            if "name" in ai:
+                steps[i]["name"] = ai["name"]
+            if "description" in ai:
+                steps[i]["description"] = ai["description"]
+            placement = ai.get("placement", "right")
+            steps[i]["ai_placement"] = PLACEMENT_MAP.get(placement, 0)
+
+    return steps
+
+
 def generate_steps(boxes, lines):
     """
     Return list of {name, description, highlight_ids} dicts.
@@ -519,19 +654,17 @@ def compute_panel_rect(group_ids, by_id, padding=12):
 
 
 def compute_bubbleside(ann_x, ann_y, group_cx, group_cy):
-    """Return bubbleside int: arrow points FROM annotation TOWARD group.
+    """Return bubbleside int: arrow on the side of the comment nearest the group.
 
-    0=left (arrow on left, group is to the left)
-    1=top (arrow on top, group is above)
-    2=right (arrow on right, group is to the right)
-    3=bottom (arrow on bottom, group is below)
+    Max @bubbleside values: 0=top, 1=left, 2=bottom, 3=right.
+    The arrow appears on that side, pointing outward toward the group.
     """
     dx = group_cx - ann_x
     dy = group_cy - ann_y
     if abs(dx) >= abs(dy):
-        return 0 if dx < 0 else 2
+        return 1 if dx < 0 else 3   # group left → arrow left(1); group right → arrow right(3)
     else:
-        return 1 if dy < 0 else 3
+        return 0 if dy < 0 else 2   # group above → arrow top(0); group below → arrow bottom(2)
 
 
 def strip_tutorial(maxpat):
@@ -642,11 +775,19 @@ def add_tutorial_to_patch(maxpat, steps, annotation_ids, panel_ids, js_filename)
         }})
 
     # --- Compute annotation placement ---
-    # Place each annotation just to the right of its panel, with the bubble
-    # arrow pointing left toward the group.  Overview goes in a clear area
-    # below the nav bar.
+    # Place each annotation adjacent to its panel, with the bubble arrow
+    # pointing toward the highlighted group.  Overview goes below the nav bar.
+    #
+    # Max @bubbleside values: 0=top, 1=left, 2=bottom, 3=right
+    # The arrow appears on that side of the comment, pointing outward.
+    # So for a comment to the RIGHT of a group, arrow on LEFT → bubbleside=1.
+    BUBBLE_TOP    = 0
+    BUBBLE_LEFT   = 1
+    BUBBLE_BOTTOM = 2
+    BUBBLE_RIGHT  = 3
+
     ann_w    = 220.0
-    ann_gap  = 15.0   # gap between panel right edge and annotation left edge
+    ann_gap  = 15.0   # gap between panel edge and annotation
 
     # Estimate comment height helper
     def est_comment_height(text, width=ann_w, fontsize=11.0):
@@ -675,37 +816,56 @@ def add_tutorial_to_patch(maxpat, steps, annotation_ids, panel_ids, js_filename)
         ann_h = est_comment_height(full_text)
 
         if not step["highlight_ids"]:
-            # Overview: place below nav bar in a clear area
+            # Overview: place below nav bar
             ax = nav_x
             ay = nav_y + 55.0
-            bubbleside = 1   # arrow on top (no specific group to point at)
+            bubbleside = BUBBLE_TOP
         else:
             bounds = group_bounds(step["highlight_ids"], by_id)
             if bounds:
-                panel_right = bounds[2] + 12  # panel padding
+                panel_left  = bounds[0] - 12
+                panel_right = bounds[2] + 12
                 panel_top   = bounds[1] - 12
                 panel_bot   = bounds[3] + 12
+                group_cx    = (bounds[0] + bounds[2]) / 2.0
                 group_cy    = (bounds[1] + bounds[3]) / 2.0
 
-                # Place annotation to the right of the panel
-                ax = panel_right + ann_gap
-                ay = max(5.0, group_cy - ann_h / 2.0)
+                # AI placement hint (from --steps-json or --ai)
+                # 0=right, 1=above, 2=left, 3=below
+                ai_side = step.get("ai_placement")
 
-                # If annotation would go off the right edge, place it below instead
-                if ax + ann_w > float(patch_w) + 200:
-                    ax = bounds[0] - 12
+                if ai_side == 1:  # above
+                    ax = max(5.0, group_cx - ann_w / 2.0)
+                    ay = panel_top - ann_gap - ann_h
+                    bubbleside = BUBBLE_BOTTOM  # arrow on bottom, pointing down to group
+                elif ai_side == 2:  # left
+                    ax = panel_left - ann_gap - ann_w
+                    ay = max(5.0, group_cy - ann_h / 2.0)
+                    bubbleside = BUBBLE_RIGHT  # arrow on right, pointing right to group
+                elif ai_side == 3:  # below
+                    ax = max(5.0, group_cx - ann_w / 2.0)
                     ay = panel_bot + ann_gap
-                    bubbleside = 1  # arrow on top, group is above
-                else:
-                    bubbleside = 0  # arrow on left, group is to the left
+                    bubbleside = BUBBLE_TOP  # arrow on top, pointing up to group
+                else:  # right (default, ai_side == 0 or None)
+                    ax = panel_right + ann_gap
+                    ay = max(5.0, group_cy - ann_h / 2.0)
+                    bubbleside = BUBBLE_LEFT  # arrow on left, pointing left to group
+
+                # Safety: push back on-screen if annotation went off-edge
+                if ax < 5.0:
+                    ax = panel_right + ann_gap
+                    bubbleside = BUBBLE_LEFT
+                if ay < 5.0:
+                    ay = panel_bot + ann_gap
+                    bubbleside = BUBBLE_TOP
             else:
                 ax = rightmost_x + 30.0
                 ay = 40.0
-                bubbleside = 0
+                bubbleside = BUBBLE_LEFT
 
         ann_boxes.append({"box": {
             "id": ann_id, "varname": ann_id, "maxclass": "comment",
-            "numinlets": 1, "numoutlets": 0, "outlettype": [],
+            "numinlets": 1, "numoutlets": 0,
             "patching_rect": [ax, ay, ann_w, ann_h],
             "text": full_text,
             "hidden": 1,
@@ -730,8 +890,9 @@ def add_tutorial_to_patch(maxpat, steps, annotation_ids, panel_ids, js_filename)
         {"patchline": {"source": ["tut-loadbang", 0], "destination": ["tut-v8", 0]}},
     ]
 
-    # Z-order: panels FIRST (behind), then original boxes + nav, then annotations LAST (on top)
-    patcher["boxes"] = panel_boxes + patcher["boxes"] + new_boxes + ann_boxes
+    # Z-order in Max: FIRST in array = on top (painted in front).
+    # Annotations first (on top), then original boxes + nav, then panels last (behind).
+    patcher["boxes"] = ann_boxes + patcher["boxes"] + new_boxes + panel_boxes
     patcher["lines"].extend(new_lines)
 
 
@@ -745,6 +906,12 @@ def main():
     )
     ap.add_argument("-i", "--input",  required=True, help="Input .maxpat")
     ap.add_argument("-o", "--output", help="Output .maxpat (default: overwrite input)")
+    ap.add_argument("--ai", action="store_true",
+                    help="Use Claude API (requires ANTHROPIC_API_KEY) to generate descriptions")
+    ap.add_argument("--analyze", action="store_true",
+                    help="Output step groupings as JSON to stdout (no patch modification)")
+    ap.add_argument("--steps-json",
+                    help="JSON file with enhanced step descriptions (from Claude Code or --analyze)")
     args = ap.parse_args()
 
     in_path  = os.path.abspath(args.input)
@@ -759,7 +926,60 @@ def main():
     boxes   = patcher["boxes"]
     lines   = patcher.get("lines", [])
 
-    steps          = generate_steps(boxes, lines)
+    steps  = generate_steps(boxes, lines)
+    by_id  = {w["box"]["id"]: w["box"] for w in boxes}
+
+    # --analyze: output step data + patch summary for Claude Code to enhance
+    if args.analyze:
+        analysis = {
+            "patch_summary": build_patch_summary(steps, by_id, boxes, lines),
+            "steps": [
+                {
+                    "step": i,
+                    "name": s["name"],
+                    "description": s["description"],
+                    "highlight_ids": s["highlight_ids"],
+                    "objects": [
+                        {
+                            "id": oid,
+                            "type": obj_type(by_id[oid]),
+                            "text": by_id[oid].get("text", ""),
+                            "pos": by_id[oid].get("patching_rect", [])[:2],
+                        }
+                        for oid in s["highlight_ids"] if oid in by_id
+                    ],
+                }
+                for i, s in enumerate(steps)
+            ],
+        }
+        json.dump(analysis, sys.stdout, indent=2)
+        print(file=sys.stdout)
+        return
+
+    # --steps-json: load enhanced descriptions from file
+    if args.steps_json:
+        steps_path = os.path.abspath(args.steps_json)
+        with open(steps_path) as f:
+            enhanced = json.load(f)
+        if isinstance(enhanced, list) and len(enhanced) == len(steps):
+            PLACEMENT_MAP = {"right": 0, "above": 1, "left": 2, "below": 3}
+            for i, ai in enumerate(enhanced):
+                if isinstance(ai, dict):
+                    if "name" in ai:
+                        steps[i]["name"] = ai["name"]
+                    if "description" in ai:
+                        steps[i]["description"] = ai["description"]
+                    placement = ai.get("placement", "right")
+                    steps[i]["ai_placement"] = PLACEMENT_MAP.get(placement, 0)
+            print(f"Loaded {len(enhanced)} enhanced step descriptions", file=sys.stderr)
+        else:
+            print(f"WARNING: steps JSON has {len(enhanced) if isinstance(enhanced, list) else 'invalid'} "
+                  f"entries, expected {len(steps)}. Using static descriptions.", file=sys.stderr)
+
+    # --ai: call Claude API for descriptions
+    elif args.ai:
+        steps = ai_enhance_steps(steps, by_id, boxes, lines)
+
     annotation_ids = [f"tut-ann-{i}"   for i in range(len(steps))]
     panel_ids      = [f"tut-panel-{i}" for i in range(len(steps))]
 

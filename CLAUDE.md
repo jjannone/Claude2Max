@@ -130,9 +130,46 @@ This does NOT apply to Max built-in names, object names, or message selectors �
 
 `add_tutorial.py` adds an interactive step-by-step tutorial to any `.maxpat`. **Read `TUTORIAL_GUIDELINES.md` before running or modifying the tutorial system.**
 
+### Basic usage (static descriptions)
+
 ```bash
 python3 add_tutorial.py -i patches/patch.maxpat [-o patches/patch-with-tutorial.maxpat]
 ```
+
+### AI-enhanced descriptions (recommended)
+
+Two ways to get AI-written, pedagogical step descriptions:
+
+**From Claude Code (no API key needed):**
+
+```bash
+# 1. Analyze — outputs step groupings as JSON
+python3 add_tutorial.py --analyze -i patches/patch.maxpat > steps.json
+
+# 2. You (Claude Code) read steps.json, write better names/descriptions/placement,
+#    save as enhanced-steps.json (same array format, with name/description/placement keys)
+
+# 3. Generate with enhanced descriptions
+python3 add_tutorial.py -i patches/patch.maxpat --steps-json enhanced-steps.json
+```
+
+The `--steps-json` file is a JSON array with one object per step:
+```json
+[
+  {"name": "Overview", "description": "...", "placement": "right"},
+  {"name": "Camera Capture", "description": "...", "placement": "right"}
+]
+```
+`placement` is `"right"`, `"left"`, `"above"`, or `"below"` — controls where the annotation bubble appears relative to the highlighted objects. Falls back to `"right"` if the chosen side doesn't fit.
+
+**With an API key (fully automated):**
+
+```bash
+export ANTHROPIC_API_KEY=sk-...
+python3 add_tutorial.py --ai -i patches/patch.maxpat
+```
+
+### Features
 
 - Analyzes the patch data-flow graph, splits spatially distant objects, merges related connected objects
 - Adds a `umenu` + `prev`/`next` message buttons + `loadbang` at the top-right of the patch

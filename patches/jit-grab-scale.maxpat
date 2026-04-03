@@ -12,7 +12,7 @@
     "rect": [
       100.0,
       100.0,
-      1069.0,
+      1079.0,
       821.0
     ],
     "gridsize": [
@@ -22,200 +22,194 @@
     "boxes": [
       {
         "box": {
-          "id": "tut-panel-0",
-          "varname": "tut-panel-0",
-          "maxclass": "panel",
+          "id": "tut-ann-0",
+          "varname": "tut-ann-0",
+          "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
-          "outlettype": [],
           "patching_rect": [
+            689.0,
+            60.0,
+            220.0,
+            86.0
+          ],
+          "text": "Overview\nThis patch has 14 processing objects across 5 stages. Use the menu or prev/next to step through each stage.",
+          "hidden": 1,
+          "bubble": 1,
+          "bubbleside": 0,
+          "bubble_bgcolor": [
+            1.0,
+            0.98,
+            0.72,
+            1.0
+          ],
+          "textcolor": [
             0.0,
             0.0,
             0.0,
-            0.0
+            1.0
           ],
-          "bgcolor": [
-            0.15,
-            0.55,
-            0.95,
-            0.15
-          ],
-          "bordercolor": [
-            0.1,
-            0.4,
-            0.85,
-            0.75
-          ],
-          "border": 2,
-          "rounded": 8,
-          "background": 1,
-          "locked_bgcolor": 1,
-          "hidden": 1
+          "fontsize": 11.0
         }
       },
       {
         "box": {
-          "id": "tut-panel-1",
-          "varname": "tut-panel-1",
-          "maxclass": "panel",
+          "id": "tut-ann-1",
+          "varname": "tut-ann-1",
+          "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
-          "outlettype": [],
           "patching_rect": [
-            26.0,
-            25.0,
-            407.0,
-            192.0
+            448.0,
+            42.0,
+            220.0,
+            158.0
           ],
-          "bgcolor": [
-            0.15,
-            0.55,
-            0.95,
-            0.15
+          "text": "jit.world +3\njit.world \u2014 Provides a hidden OpenGL rendering context for Jitter. toggle \u2014 Sends 1 (on) or 0 (off) when clicked \u2014 starts/stops loops. jit.grab \u2014 Captures frames from a live camera or video source. jit.fpsgui \u2014 Shows the current processing frame rate.",
+          "hidden": 1,
+          "bubble": 1,
+          "bubbleside": 1,
+          "bubble_bgcolor": [
+            1.0,
+            0.98,
+            0.72,
+            1.0
           ],
-          "bordercolor": [
-            0.1,
-            0.4,
-            0.85,
-            0.75
+          "textcolor": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
           ],
-          "border": 2,
-          "rounded": 8,
-          "background": 1,
-          "locked_bgcolor": 1,
-          "hidden": 1
+          "fontsize": 11.0
         }
       },
       {
         "box": {
-          "id": "tut-panel-2",
-          "varname": "tut-panel-2",
-          "maxclass": "panel",
+          "id": "tut-ann-2",
+          "varname": "tut-ann-2",
+          "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
-          "outlettype": [],
           "patching_rect": [
-            649.0,
-            128.0,
-            152.0,
-            121.0
+            816.0,
+            136.5,
+            220.0,
+            104.0
           ],
-          "bgcolor": [
-            0.15,
-            0.55,
-            0.95,
-            0.15
+          "text": "loadmess + flonum\nloadmess \u2014 Sends a stored message when the patch loads (initializes defaults). flonum: scale image and pwindow.",
+          "hidden": 1,
+          "bubble": 1,
+          "bubbleside": 1,
+          "bubble_bgcolor": [
+            1.0,
+            0.98,
+            0.72,
+            1.0
           ],
-          "bordercolor": [
-            0.1,
-            0.4,
-            0.85,
-            0.75
+          "textcolor": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
           ],
-          "border": 2,
-          "rounded": 8,
-          "background": 1,
-          "locked_bgcolor": 1,
-          "hidden": 1
+          "fontsize": 11.0
         }
       },
       {
         "box": {
-          "id": "tut-panel-3",
-          "varname": "tut-panel-3",
-          "maxclass": "panel",
+          "id": "tut-ann-3",
+          "varname": "tut-ann-3",
+          "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
-          "outlettype": [],
           "patching_rect": [
-            362.0,
-            124.0,
-            293.0,
-            125.0
+            670.0,
+            134.5,
+            220.0,
+            104.0
           ],
-          "bgcolor": [
-            0.15,
-            0.55,
-            0.95,
-            0.15
+          "text": "jit.matrixinfo +2\njit.matrixinfo: analyze the image. route: report the dim. vexpr \u2014 Evaluates a math expression on lists/vectors element-by-element.",
+          "hidden": 1,
+          "bubble": 1,
+          "bubbleside": 1,
+          "bubble_bgcolor": [
+            1.0,
+            0.98,
+            0.72,
+            1.0
           ],
-          "bordercolor": [
-            0.1,
-            0.4,
-            0.85,
-            0.75
+          "textcolor": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
           ],
-          "border": 2,
-          "rounded": 8,
-          "background": 1,
-          "locked_bgcolor": 1,
-          "hidden": 1
+          "fontsize": 11.0
         }
       },
       {
         "box": {
-          "id": "tut-panel-4",
-          "varname": "tut-panel-4",
-          "maxclass": "panel",
+          "id": "tut-ann-4",
+          "varname": "tut-ann-4",
+          "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
-          "outlettype": [],
           "patching_rect": [
-            129.0,
-            238.0,
-            350.0,
-            168.0
+            494.0,
+            252.0,
+            220.0,
+            140.0
           ],
-          "bgcolor": [
-            0.15,
-            0.55,
-            0.95,
-            0.15
+          "text": "message +2\nmessage: set size of pwindow & dim of matrix. message. jit.matrix \u2014 Stores and processes a matrix of data (adapt 0 = fixed size). jit.fpsgui \u2014 Shows the current processing frame rate.",
+          "hidden": 1,
+          "bubble": 1,
+          "bubbleside": 1,
+          "bubble_bgcolor": [
+            1.0,
+            0.98,
+            0.72,
+            1.0
           ],
-          "bordercolor": [
-            0.1,
-            0.4,
-            0.85,
-            0.75
+          "textcolor": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
           ],
-          "border": 2,
-          "rounded": 8,
-          "background": 1,
-          "locked_bgcolor": 1,
-          "hidden": 1
+          "fontsize": 11.0
         }
       },
       {
         "box": {
-          "id": "tut-panel-5",
-          "varname": "tut-panel-5",
-          "maxclass": "panel",
+          "id": "tut-ann-5",
+          "varname": "tut-ann-5",
+          "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
-          "outlettype": [],
           "patching_rect": [
-            362.0,
-            342.0,
-            337.0,
-            337.0
+            714.0,
+            476.5,
+            220.0,
+            68.0
           ],
-          "bgcolor": [
-            0.15,
-            0.55,
-            0.95,
-            0.15
+          "text": "jit.pwindow\njit.pwindow \u2014 Displays a Jitter matrix as a video preview window.",
+          "hidden": 1,
+          "bubble": 1,
+          "bubbleside": 1,
+          "bubble_bgcolor": [
+            1.0,
+            0.98,
+            0.72,
+            1.0
           ],
-          "bordercolor": [
-            0.1,
-            0.4,
-            0.85,
-            0.75
+          "textcolor": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
           ],
-          "border": 2,
-          "rounded": 8,
-          "background": 1,
-          "locked_bgcolor": 1,
-          "hidden": 1
+          "fontsize": 11.0
         }
       },
       {
@@ -607,7 +601,7 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            679.0,
+            689.0,
             5.0,
             65.0,
             22.0
@@ -628,7 +622,7 @@
             ""
           ],
           "patching_rect": [
-            747.0,
+            757.0,
             5.0,
             200.0,
             22.0
@@ -663,7 +657,7 @@
             ""
           ],
           "patching_rect": [
-            953.0,
+            963.0,
             5.0,
             30.0,
             22.0
@@ -681,7 +675,7 @@
             ""
           ],
           "patching_rect": [
-            989.0,
+            999.0,
             5.0,
             30.0,
             22.0
@@ -699,7 +693,7 @@
             "bang"
           ],
           "patching_rect": [
-            1025.0,
+            1035.0,
             5.0,
             44.0,
             22.0
@@ -715,7 +709,7 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            679.0,
+            689.0,
             32.0,
             240.0,
             22.0
@@ -725,200 +719,200 @@
       },
       {
         "box": {
-          "id": "tut-ann-0",
-          "varname": "tut-ann-0",
-          "maxclass": "comment",
+          "id": "tut-panel-0",
+          "varname": "tut-panel-0",
+          "maxclass": "panel",
           "numinlets": 1,
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            679.0,
-            60.0,
-            220.0,
-            86.0
-          ],
-          "text": "Overview\nThis patch has 14 processing objects across 5 stages. Use the menu or prev/next to step through each stage.",
-          "hidden": 1,
-          "bubble": 1,
-          "bubbleside": 1,
-          "bubble_bgcolor": [
-            1.0,
-            0.98,
-            0.72,
-            1.0
-          ],
-          "textcolor": [
             0.0,
             0.0,
             0.0,
-            1.0
+            0.0
           ],
-          "fontsize": 11.0
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ],
+          "bordercolor": [
+            0.1,
+            0.4,
+            0.85,
+            0.75
+          ],
+          "border": 2,
+          "rounded": 8,
+          "background": 1,
+          "locked_bgcolor": 1,
+          "hidden": 1
         }
       },
       {
         "box": {
-          "id": "tut-ann-1",
-          "varname": "tut-ann-1",
-          "maxclass": "comment",
+          "id": "tut-panel-1",
+          "varname": "tut-panel-1",
+          "maxclass": "panel",
           "numinlets": 1,
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            448.0,
-            42.0,
-            220.0,
-            158.0
+            26.0,
+            25.0,
+            407.0,
+            192.0
           ],
-          "text": "jit.world +3\njit.world \u2014 Provides a hidden OpenGL rendering context for Jitter. toggle \u2014 Sends 1 (on) or 0 (off) when clicked \u2014 starts/stops loops. jit.grab \u2014 Captures frames from a live camera or video source. jit.fpsgui \u2014 Shows the current processing frame rate.",
-          "hidden": 1,
-          "bubble": 1,
-          "bubbleside": 0,
-          "bubble_bgcolor": [
-            1.0,
-            0.98,
-            0.72,
-            1.0
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
           ],
-          "textcolor": [
-            0.0,
-            0.0,
-            0.0,
-            1.0
+          "bordercolor": [
+            0.1,
+            0.4,
+            0.85,
+            0.75
           ],
-          "fontsize": 11.0
+          "border": 2,
+          "rounded": 8,
+          "background": 1,
+          "locked_bgcolor": 1,
+          "hidden": 1
         }
       },
       {
         "box": {
-          "id": "tut-ann-2",
-          "varname": "tut-ann-2",
-          "maxclass": "comment",
+          "id": "tut-panel-2",
+          "varname": "tut-panel-2",
+          "maxclass": "panel",
           "numinlets": 1,
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            816.0,
-            136.5,
-            220.0,
-            104.0
+            649.0,
+            128.0,
+            152.0,
+            121.0
           ],
-          "text": "loadmess + flonum\nloadmess \u2014 Sends a stored message when the patch loads (initializes defaults). flonum: scale image and pwindow.",
-          "hidden": 1,
-          "bubble": 1,
-          "bubbleside": 0,
-          "bubble_bgcolor": [
-            1.0,
-            0.98,
-            0.72,
-            1.0
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
           ],
-          "textcolor": [
-            0.0,
-            0.0,
-            0.0,
-            1.0
+          "bordercolor": [
+            0.1,
+            0.4,
+            0.85,
+            0.75
           ],
-          "fontsize": 11.0
+          "border": 2,
+          "rounded": 8,
+          "background": 1,
+          "locked_bgcolor": 1,
+          "hidden": 1
         }
       },
       {
         "box": {
-          "id": "tut-ann-3",
-          "varname": "tut-ann-3",
-          "maxclass": "comment",
+          "id": "tut-panel-3",
+          "varname": "tut-panel-3",
+          "maxclass": "panel",
           "numinlets": 1,
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            670.0,
-            134.5,
-            220.0,
-            104.0
+            362.0,
+            124.0,
+            293.0,
+            125.0
           ],
-          "text": "jit.matrixinfo +2\njit.matrixinfo: analyze the image. route: report the dim. vexpr \u2014 Evaluates a math expression on lists/vectors element-by-element.",
-          "hidden": 1,
-          "bubble": 1,
-          "bubbleside": 0,
-          "bubble_bgcolor": [
-            1.0,
-            0.98,
-            0.72,
-            1.0
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
           ],
-          "textcolor": [
-            0.0,
-            0.0,
-            0.0,
-            1.0
+          "bordercolor": [
+            0.1,
+            0.4,
+            0.85,
+            0.75
           ],
-          "fontsize": 11.0
+          "border": 2,
+          "rounded": 8,
+          "background": 1,
+          "locked_bgcolor": 1,
+          "hidden": 1
         }
       },
       {
         "box": {
-          "id": "tut-ann-4",
-          "varname": "tut-ann-4",
-          "maxclass": "comment",
+          "id": "tut-panel-4",
+          "varname": "tut-panel-4",
+          "maxclass": "panel",
           "numinlets": 1,
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            494.0,
-            252.0,
-            220.0,
-            140.0
+            129.0,
+            238.0,
+            350.0,
+            168.0
           ],
-          "text": "message +2\nmessage: set size of pwindow & dim of matrix. message. jit.matrix \u2014 Stores and processes a matrix of data (adapt 0 = fixed size). jit.fpsgui \u2014 Shows the current processing frame rate.",
-          "hidden": 1,
-          "bubble": 1,
-          "bubbleside": 0,
-          "bubble_bgcolor": [
-            1.0,
-            0.98,
-            0.72,
-            1.0
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
           ],
-          "textcolor": [
-            0.0,
-            0.0,
-            0.0,
-            1.0
+          "bordercolor": [
+            0.1,
+            0.4,
+            0.85,
+            0.75
           ],
-          "fontsize": 11.0
+          "border": 2,
+          "rounded": 8,
+          "background": 1,
+          "locked_bgcolor": 1,
+          "hidden": 1
         }
       },
       {
         "box": {
-          "id": "tut-ann-5",
-          "varname": "tut-ann-5",
-          "maxclass": "comment",
+          "id": "tut-panel-5",
+          "varname": "tut-panel-5",
+          "maxclass": "panel",
           "numinlets": 1,
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            714.0,
-            476.5,
-            220.0,
-            68.0
+            362.0,
+            342.0,
+            337.0,
+            337.0
           ],
-          "text": "jit.pwindow\njit.pwindow \u2014 Displays a Jitter matrix as a video preview window.",
-          "hidden": 1,
-          "bubble": 1,
-          "bubbleside": 0,
-          "bubble_bgcolor": [
-            1.0,
-            0.98,
-            0.72,
-            1.0
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
           ],
-          "textcolor": [
-            0.0,
-            0.0,
-            0.0,
-            1.0
+          "bordercolor": [
+            0.1,
+            0.4,
+            0.85,
+            0.75
           ],
-          "fontsize": 11.0
+          "border": 2,
+          "rounded": 8,
+          "background": 1,
+          "locked_bgcolor": 1,
+          "hidden": 1
         }
       }
     ],
