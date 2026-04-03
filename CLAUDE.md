@@ -7,9 +7,14 @@ This repo is a tool for generating Max/MSP patches from Claude-authored JSON spe
 ### New patch (from scratch)
 1. User describes a Max patch they want
 2. You write a JSON spec following the format in `SPEC_REFERENCE.md`
-3. You convert it with: `python3 spec2maxpat.py convert -i spec.json -o patch.maxpat`
-4. You verify round-trip with: `python3 spec2maxpat.py extract -i patch.maxpat`
-5. User opens in Max, gives feedback, you iterate
+3. You convert it with: `python3 spec2maxpat.py convert -i spec.json -o patches/patch.maxpat`
+4. User opens in Max, gives feedback, you iterate
+
+The spec is embedded in the `.maxpat` — no separate `.json` file needed. Extract it anytime:
+
+```bash
+python3 spec2maxpat.py extract -i patches/patch.maxpat
+```
 
 ### Existing patch (externally sourced or manually edited)
 
@@ -28,7 +33,7 @@ After `sync`, the embedded spec is authoritative. Read it, edit it, then convert
 python3 spec2maxpat.py convert -i updated-spec.json -o patch.maxpat
 ```
 
-Save specs to `patches/` as `.json` files. Generated `.maxpat` files go alongside them.
+The `.maxpat` is the single source of truth. All patches live in `patches/`.
 
 ## Key Files
 
