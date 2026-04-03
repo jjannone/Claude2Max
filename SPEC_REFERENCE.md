@@ -155,6 +155,85 @@ These automatically get `parameter_enable` set:
 |------|-------------|
 | `"jit.pwindow"` | Jitter display window |
 
+## Object Correctness Notes
+
+These objects have non-obvious I/O behavior that commonly causes wiring bugs. Verified against Max help patches.
+
+### Outlets that are NOT signals (control-rate)
+
+| Object | Outlet | Type | Notes |
+|--------|--------|------|-------|
+| `buffer~` | 0, 1 | control | Outlet 0 = mouse position in ms, outlet 1 = bang on file-read complete. Neither is a signal. |
+| `gain~` | 1 | control | Outlet 0 = signal passthrough; outlet 1 = control value (float). Do not wire outlet 1 to a signal inlet. |
+| `avg~` | 0 | float | Outputs the average value of a block as a control float — NOT a signal. Cannot wire directly to signal inlets. |
+| `adsr~` | 2, 3 | control | Outlets 0–1 are signal (envelope, trigger); outlets 2–3 are control (mute, dump). |
+| `snapshot~` | 0 | float | Always control-rate. Use it to bridge signal → control. |
+
+### Hot inlets (both inlets trigger output)
+
+Most Max objects only trigger output from inlet 0 (hot). These objects have two hot inlets:
+- `coll` — both inlets are hot
+- `zl` and all `zl.*` variants — both inlets are hot
+
+### Outlet counts that are commonly wrong
+
+| Object | Correct outlets | Common mistake |
+|--------|----------------|----------------|
+| `playlist~` | 3 (audio, position, state) | Assumed 5 |
+| `adsr~` | 4 (envelope~, trigger~, mute, dump) | Assumed 1–2 |
+| `live.gain~` | 5 (sig L, sig R, param value, raw 0–1, dB list) | Assumed 2 |
+| `dict` | 5 (dict, value, keys list, names list, status) | Assumed 2–3 |
+| `number` | 2 (value, bang-on-change) | Assumed 1 |
+| `flonum` | 2 (value, bang-on-change) | Assumed 1 |
+
+### Signal type compatibility
+
+Signal outlets (`"signal"`) can only connect to signal-accepting inlets. If you wire a signal outlet to a control inlet, Max will silently ignore or error. Use `snapshot~` to convert signal → control, and `sig~` to convert control → signal.
+
+## Object Relationships
+
+Some objects must be used in pairs or have strong conventional partners.
+
+### Required pairs
+
+| Object | Must pair with | Notes |
+|--------|---------------|-------|
+| `tapin~` | `tapout~` | Delay line — `tapin~` writes, `tapout~` reads. Both need the same delay time argument. |
+| `poly~` | `thispoly~` | `thispoly~` lives inside the poly~ subpatcher to manage voice stealing and muting. |
+| `pfft~` | `fftin~` / `fftout~` | `fftin~`/`fftout~` live inside the pfft~ subpatcher. |
+
+### Common pairs
+
+| Object | Common partner | Why |
+|--------|---------------|-----|
+| `buffer~` | `groove~`, `play~`, `wave~`, `record~`, `index~` | All read from or write to a named buffer. |
+| `phasor~` | `wave~` | `phasor~` drives the position input of `wave~`. |
+| `adsr~` | `function` | `function` draws the envelope shape; `adsr~` plays it as a signal. |
+| `line~` | `*~` | `line~` generates a ramp; multiply with audio for amplitude envelopes. |
+| `snapshot~` | `number` | `snapshot~` converts signal to control for display in a number box. |
+| `metro` | `counter` | Classic clock + counter pattern for sequencing. |
+
+### PD → Max object mapping (avoid PD names in Max patches)
+
+| PD object | Max equivalent |
+|-----------|---------------|
+| `osc~` | `cycle~` |
+| `lop~` | `onepole~` |
+| `hip~` | `onepole~` (highpass mode) |
+| `bp~` | `reson~` |
+| `vcf~` | `reson~` or `biquad~` |
+| `tabread~` | `index~`, `play~`, or `wave~` |
+| `tabwrite~` | `poke~` or `record~` |
+| `catch~` | `receive~` |
+| `throw~` | `send~` |
+| `readsf~` | `sfplay~` |
+| `writesf~` | `sfrecord~` |
+| `tabread` | `table` or `coll` |
+| `soundfiler` | `buffer~` |
+| `vline~` | `line~` |
+| `netsend` | `udpsend` |
+| `netreceive` | `udpreceive` |
+
 ## Connections
 
 Connections are an array of 4-element arrays:

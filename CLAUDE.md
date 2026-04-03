@@ -4,18 +4,38 @@ This repo is a tool for generating Max/MSP patches from Claude-authored JSON spe
 
 ## Workflow
 
+### New patch (from scratch)
 1. User describes a Max patch they want
 2. You write a JSON spec following the format in `SPEC_REFERENCE.md`
 3. You convert it with: `python3 spec2maxpat.py convert -i spec.json -o patch.maxpat`
 4. You verify round-trip with: `python3 spec2maxpat.py extract -i patch.maxpat`
 5. User opens in Max, gives feedback, you iterate
 
+### Existing patch (externally sourced or manually edited)
+
+**Before doing any work on a patch**, sync it to ensure the embedded spec is current:
+
+```bash
+python3 spec2maxpat.py sync -i patch.maxpat
+```
+
+- **No embedded spec** — reverse-engineers one from boxes and patchlines, embeds it, prints it to stdout.
+- **Has embedded spec** — reconciles it with the current box positions, text, and wiring (picks up any manual edits made in Max), updates the embed, prints the updated spec to stdout.
+
+After `sync`, the embedded spec is authoritative. Read it, edit it, then convert:
+
+```bash
+python3 spec2maxpat.py convert -i updated-spec.json -o patch.maxpat
+```
+
 Save specs to `patches/` as `.json` files. Generated `.maxpat` files go alongside them.
 
 ## Key Files
 
 - `SPEC_REFERENCE.md` — **Read this first.** Complete spec format reference with all object types, connection format, layout guidelines, presentation view, and worked examples.
-- `spec2maxpat.py` — The converter. Handles inlet/outlet profiles for 130+ Max objects, auto-layout, subpatchers, and spec embedding.
+- `spec2maxpat.py` — The converter. Handles inlet/outlet profiles for 1,694 Max objects (via `max_objects.json`), auto-layout, subpatchers, and spec embedding.
+- `max_objects.json` — Object database with inlet/outlet/outlettype for 1,694 objects. Generated from taylorbrook/MAX-MSP_CC_Framework. Regenerate with `python3 build_objects_db.py`.
+- `build_objects_db.py` — Fetches the upstream object database and regenerates `max_objects.json`.
 
 ## What the Converter Handles for You
 
@@ -81,8 +101,16 @@ When a patch is pasted in from an external source and you modify it:
 - When a source produces stereo output, preserve both channels through the entire chain to `dac~`/`ezdac~`. Don't merge to mono. `live.gain~` handles stereo natively (2 signal inlets, 2 signal outlets).
 - Set `width` and `height` large enough to contain all objects without scrolling, including info comments. Leave margin below the lowest object.
 - `dialog` object (text-input prompt): `inlets=2, outlets=3`. Outlet 0 outputs the entered text as a symbol. Use `route symbol` after it to filter for the symbol type; then `prepend parsetarget` (or similar) to route to a v8 handler.
-- `playlist~`: `inlets=1, outlets=5` (sig L, sig R, bang EOF, int index, int state). Send `append` to open the file chooser; send integer `1` to play the first item.
+- `playlist~`: `inlets=1, outlets=3` (sig audio, sig position, int state). Send `append` to open the file chooser; send integer `1` to play the first item.
 - `umenu` items in `.maxpat` format are stored as a flat token array with `","` as item separators: `["item", "one", ",", "item", "two"]`. Set via `attrs: {"items": [...]}` in the spec.
+
+## Upstream Maintenance
+
+`max_objects.json` is sourced from [taylorbrook/MAX-MSP_CC_Framework](https://github.com/taylorbrook/MAX-MSP_CC_Framework). Periodically check that repo for updates to `.claude/max-objects/` (new objects, corrected I/O counts, additional overrides). When meaningful changes are found:
+
+1. Run `python3 build_objects_db.py` to regenerate `max_objects.json`
+2. Review any changes to overrides that affect objects already in `NEWOBJ_IO` — hand-verified entries in `spec2maxpat.py` always take precedence, but they may need updating too
+3. Propose importing any new correctness notes to `SPEC_REFERENCE.md`
 
 ## Work History
 
