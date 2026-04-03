@@ -4,18 +4,38 @@ This repo is a tool for generating Max/MSP patches from Claude-authored JSON spe
 
 ## Workflow
 
+### New patch (from scratch)
 1. User describes a Max patch they want
 2. You write a JSON spec following the format in `SPEC_REFERENCE.md`
 3. You convert it with: `python3 spec2maxpat.py convert -i spec.json -o patch.maxpat`
 4. You verify round-trip with: `python3 spec2maxpat.py extract -i patch.maxpat`
 5. User opens in Max, gives feedback, you iterate
 
+### Existing patch (externally sourced or manually edited)
+
+**Before doing any work on a patch**, sync it to ensure the embedded spec is current:
+
+```bash
+python3 spec2maxpat.py sync -i patch.maxpat
+```
+
+- **No embedded spec** — reverse-engineers one from boxes and patchlines, embeds it, prints it to stdout.
+- **Has embedded spec** — reconciles it with the current box positions, text, and wiring (picks up any manual edits made in Max), updates the embed, prints the updated spec to stdout.
+
+After `sync`, the embedded spec is authoritative. Read it, edit it, then convert:
+
+```bash
+python3 spec2maxpat.py convert -i updated-spec.json -o patch.maxpat
+```
+
 Save specs to `patches/` as `.json` files. Generated `.maxpat` files go alongside them.
 
 ## Key Files
 
 - `SPEC_REFERENCE.md` — **Read this first.** Complete spec format reference with all object types, connection format, layout guidelines, presentation view, and worked examples.
-- `spec2maxpat.py` — The converter. Handles inlet/outlet profiles for 130+ Max objects, auto-layout, subpatchers, and spec embedding.
+- `spec2maxpat.py` — The converter. Handles inlet/outlet profiles for 1,694 Max objects (via `max_objects.json`), auto-layout, subpatchers, and spec embedding.
+- `max_objects.json` — Object database with inlet/outlet/outlettype for 1,694 objects. Generated from taylorbrook/MAX-MSP_CC_Framework. Regenerate with `python3 build_objects_db.py`.
+- `build_objects_db.py` — Fetches the upstream object database and regenerates `max_objects.json`.
 
 ## What the Converter Handles for You
 
@@ -25,6 +45,15 @@ Save specs to `patches/` as `.json` files. Generated `.maxpat` files go alongsid
 - Spec embedding as hidden `text.codebox` for round-tripping
 - Auto-layout (but always use explicit `pos` — auto-layout is a fallback)
 
+## Modifying Externally-Sourced Patches
+
+When a patch is pasted in from an external source and you modify it:
+
+- **Highlight changed objects** — amber background (`"bgcolor": [1.0, 0.82, 0.45, 1.0]`) + black text (`"textcolor": [0.0, 0.0, 0.0, 1.0]`) on changed message boxes; orange border (`"color": [1.0, 0.55, 0.0, 1.0]`) on changed newobj boxes
+- **Color affected patchcords** — apply the same orange (`"color": [1.0, 0.55, 0.0, 1.0]`) to any patchlines that were added or rerouted
+- **Annotate changes** — add comment objects labeling what changed (e.g. `"← was: 11clicks"`). Place comments at the right margin (x ≥ 565) or inline only where clearly clear of patchcords. No bgcolor on comments.
+- **Embed the spec** — include a hidden `text.codebox` (`id: "obj-spec-embed"`, `"hidden": 1`) below all other objects with the full spec JSON wrapped in `--- CLAUDE2MAX SPEC ---` / `--- END SPEC ---` delimiters
+
 ## What You Must Handle
 
 - **Object text** — write it exactly as you'd type it in Max (e.g. `"metro 500"`, `"cycle~ 440"`, `"jit.noise 4 char 320 240"`)
@@ -32,12 +61,60 @@ Save specs to `patches/` as `.json` files. Generated `.maxpat` files go alongsid
 - **Layout** — use explicit `pos` for every object. Follow the layout guidelines in SPEC_REFERENCE.md.
 - **Presentation** — use `presentation` field for user-facing layouts. Every presented control needs a comment label.
 - **Objects not in the converter's lookup tables** — use `inlets`, `outlets`, and `outlettype` overrides in the spec. This is common for third-party externals.
+- **Always embed the spec** — every .maxpat produced using the Claude2Max workflow must include a hidden `text.codebox` (`id: "obj-spec-embed"`, `"hidden": 1`) placed below all other objects, containing the full spec JSON wrapped in `--- CLAUDE2MAX SPEC ---` / `--- END SPEC ---` delimiters. This applies whether the output is from the converter or assembled manually — if you used Claude2Max thinking (read SPEC_REFERENCE, wrote or modified a spec), embed it.
+
+## v8 / JavaScript Objects
+
+`v8` (Chrome V8 engine) and `js` (SpiderMonkey) objects share the same Max JS API. Prefer `v8` for new patches.
+
+**Spec usage** — `v8` is not in the converter's lookup table; always specify inlet/outlet counts:
+
+```json
+{
+  "type": "newobj",
+  "text": "v8 onesound.js",
+  "inlets": 1, "outlets": 6,
+  "outlettype": ["", "", "", "bang", "bang", "int"]
+}
+```
+
+**External JS files** — place `.js` files in the same directory as the `.maxpat`. Max resolves them relative to the patch file.
+
+**Message routing** — Max dispatches incoming messages by selector (first word) to JS functions of the same name. Arguments follow as function parameters:
+
+| Max message | JS function called |
+|-------------|--------------------|
+| `bang`       | `function bang()` |
+| `setmode 1`  | `function setmode(val)` where `val=1` |
+| `parsetarget 13:00:00` | `function parsetarget(str)` where `str="13:00:00"` |
+
+- Set `inlets` and `outlets` globals at the top: `inlets = 1; outlets = 6;`
+- Output with `outlet(n, value)`. To send a bang: `outlet(n, "bang")`.
+- Use `post("message\n")` for Max console output.
+- Extra message arguments beyond the function's parameters are silently ignored.
+
+**When to use v8** — replace chains of `date`, `sprintf`, `match`, `change`, `fromsymbol`, `pack/unpack` logic with a single v8 object when the logic involves string parsing, date/time arithmetic, or stateful comparisons. v8 is not a DSP object — do not put signal processing inside JS.
 
 ## Max Patching Knowledge
 
 - Use `loadmess` to set sensible defaults for controls on patch load. For multiple init values, use `loadmess` → `unpack` to distribute to separate controls.
 - When a source produces stereo output, preserve both channels through the entire chain to `dac~`/`ezdac~`. Don't merge to mono. `live.gain~` handles stereo natively (2 signal inlets, 2 signal outlets).
 - Set `width` and `height` large enough to contain all objects without scrolling, including info comments. Leave margin below the lowest object.
+- `dialog` object (text-input prompt): `inlets=2, outlets=3`. Outlet 0 outputs the entered text as a symbol. Use `route symbol` after it to filter for the symbol type; then `prepend parsetarget` (or similar) to route to a v8 handler.
+- `playlist~`: `inlets=1, outlets=3` (sig audio, sig position, int state). Send `append` to open the file chooser; send integer `1` to play the first item.
+- `umenu` items in `.maxpat` format are stored as a flat token array with `","` as item separators: `["item", "one", ",", "item", "two"]`. Set via `attrs: {"items": [...]}` in the spec.
+
+## Upstream Maintenance
+
+`max_objects.json` is sourced from [taylorbrook/MAX-MSP_CC_Framework](https://github.com/taylorbrook/MAX-MSP_CC_Framework). Periodically check that repo for updates to `.claude/max-objects/` (new objects, corrected I/O counts, additional overrides). When meaningful changes are found:
+
+1. Run `python3 build_objects_db.py` to regenerate `max_objects.json`
+2. Review any changes to overrides that affect objects already in `NEWOBJ_IO` — hand-verified entries in `spec2maxpat.py` always take precedence, but they may need updating too
+3. Propose importing any new correctness notes to `SPEC_REFERENCE.md`
+
+## Work History
+
+At the end of any session where meaningful work was done, append an entry to `WORK_HISTORY.md`. Do this automatically — no need for the user to ask. Format: `- YYYY-MM-DD: <1-2 sentence summary>`
 
 ## Common Pitfalls
 
