@@ -732,15 +732,15 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            819.0,
-            5.0,
+            679.0,
+            60.0,
             220.0,
-            104.0
+            86.0
           ],
           "text": "Overview\nThis patch has 14 processing objects across 5 stages. Use the menu or prev/next to step through each stage.",
           "hidden": 1,
           "bubble": 1,
-          "bubbleside": 0,
+          "bubbleside": 1,
           "bubble_bgcolor": [
             1.0,
             0.98,
@@ -765,10 +765,10 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            819.0,
-            24.0,
+            448.0,
+            42.0,
             220.0,
-            194.0
+            158.0
           ],
           "text": "jit.world +3\njit.world \u2014 Provides a hidden OpenGL rendering context for Jitter. toggle \u2014 Sends 1 (on) or 0 (off) when clicked \u2014 starts/stops loops. jit.grab \u2014 Captures frames from a live camera or video source. jit.fpsgui \u2014 Shows the current processing frame rate.",
           "hidden": 1,
@@ -798,7 +798,7 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            819.0,
+            816.0,
             136.5,
             220.0,
             104.0
@@ -831,10 +831,10 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            819.0,
-            125.5,
+            670.0,
+            134.5,
             220.0,
-            122.0
+            104.0
           ],
           "text": "jit.matrixinfo +2\njit.matrixinfo: analyze the image. route: report the dim. vexpr \u2014 Evaluates a math expression on lists/vectors element-by-element.",
           "hidden": 1,
@@ -864,10 +864,10 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            819.0,
-            243.0,
+            494.0,
+            252.0,
             220.0,
-            158.0
+            140.0
           ],
           "text": "message +2\nmessage: set size of pwindow & dim of matrix. message. jit.matrix \u2014 Stores and processes a matrix of data (adapt 0 = fixed size). jit.fpsgui \u2014 Shows the current processing frame rate.",
           "hidden": 1,
@@ -897,10 +897,10 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            819.0,
-            467.5,
+            714.0,
+            476.5,
             220.0,
-            86.0
+            68.0
           ],
           "text": "jit.pwindow\njit.pwindow \u2014 Displays a Jitter matrix as a video preview window.",
           "hidden": 1,

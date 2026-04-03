@@ -641,7 +641,23 @@ def add_tutorial_to_patch(maxpat, steps, annotation_ids, panel_ids, js_filename)
             "hidden": 1,
         }})
 
-    # --- Extend patch width to fit a right-column annotation strip ---
+    # --- Compute annotation placement ---
+    # Place each annotation just to the right of its panel, with the bubble
+    # arrow pointing left toward the group.  Overview goes in a clear area
+    # below the nav bar.
+    ann_w    = 220.0
+    ann_gap  = 15.0   # gap between panel right edge and annotation left edge
+
+    # Estimate comment height helper
+    def est_comment_height(text, width=ann_w, fontsize=11.0):
+        chars_per_line = max(1, int(width / (fontsize * 0.55)))
+        lines = max(2, sum(
+            max(1, (len(line) + chars_per_line - 1) // chars_per_line)
+            for line in text.splitlines()
+        ))
+        return float(lines * 18 + 14)
+
+    # Find the rightmost extent of all patch objects (not comments/tutorial/embed)
     SKIP_FOR_BOUNDS = {"comment", "text.codebox"}
     rightmost_x = 0.0
     for w in patcher["boxes"]:
@@ -653,43 +669,44 @@ def add_tutorial_to_patch(maxpat, steps, annotation_ids, panel_ids, js_filename)
         r = b.get("patching_rect", [0, 0, 0, 0])
         rightmost_x = max(rightmost_x, r[0] + r[2])
 
-    ann_col_x   = rightmost_x + 30.0
-    ann_w       = 220.0
-    new_patch_w = max(float(patch_w), ann_col_x + ann_w + 30.0)
-    rect[2]     = new_patch_w
-    patcher["rect"] = rect
-
-    # Annotation comments: one per step, hidden, right column, bubble arrow.
-    # Vertically centered on the group's bounding box; overview pinned near top.
     ann_boxes = []
-    for i, (step, ann_id) in enumerate(zip(steps, annotation_ids)):
-        if step["highlight_ids"]:
+    for i, (step, ann_id, panel_id) in enumerate(zip(steps, annotation_ids, panel_ids)):
+        full_text = f"{step['name']}\n{step['description']}"
+        ann_h = est_comment_height(full_text)
+
+        if not step["highlight_ids"]:
+            # Overview: place below nav bar in a clear area
+            ax = nav_x
+            ay = nav_y + 55.0
+            bubbleside = 1   # arrow on top (no specific group to point at)
+        else:
             bounds = group_bounds(step["highlight_ids"], by_id)
             if bounds:
-                group_cx = (bounds[0] + bounds[2]) / 2.0
-                group_cy = (bounds[1] + bounds[3]) / 2.0
+                panel_right = bounds[2] + 12  # panel padding
+                panel_top   = bounds[1] - 12
+                panel_bot   = bounds[3] + 12
+                group_cy    = (bounds[1] + bounds[3]) / 2.0
+
+                # Place annotation to the right of the panel
+                ax = panel_right + ann_gap
+                ay = max(5.0, group_cy - ann_h / 2.0)
+
+                # If annotation would go off the right edge, place it below instead
+                if ax + ann_w > float(patch_w) + 200:
+                    ax = bounds[0] - 12
+                    ay = panel_bot + ann_gap
+                    bubbleside = 1  # arrow on top, group is above
+                else:
+                    bubbleside = 0  # arrow on left, group is to the left
             else:
-                group_cx, group_cy = 200.0, 40.0
-        else:
-            group_cx, group_cy = 200.0, 40.0   # overview
-
-        # Estimate comment height: ~18 px/line, ~30 chars/line at 220 px + 11 pt
-        full_text = f"{step['name']}\n{step['description']}"
-        est_lines = max(2, sum(
-            max(1, (len(line) + 29) // 30)
-            for line in full_text.splitlines()
-        ))
-        ann_h = float(est_lines * 18 + 14)
-        ay    = max(5.0, group_cy - ann_h / 2.0)
-
-        # Bubble arrow points from annotation toward the group (group is to the left)
-        bubbleside = compute_bubbleside(ann_col_x, ay + ann_h / 2.0,
-                                        group_cx, group_cy)
+                ax = rightmost_x + 30.0
+                ay = 40.0
+                bubbleside = 0
 
         ann_boxes.append({"box": {
             "id": ann_id, "varname": ann_id, "maxclass": "comment",
             "numinlets": 1, "numoutlets": 0, "outlettype": [],
-            "patching_rect": [ann_col_x, ay, ann_w, ann_h],
+            "patching_rect": [ax, ay, ann_w, ann_h],
             "text": full_text,
             "hidden": 1,
             "bubble": 1,
@@ -699,8 +716,12 @@ def add_tutorial_to_patch(maxpat, steps, annotation_ids, panel_ids, js_filename)
             "fontsize": 11.0,
         }})
 
-    # Annotations appended LAST so they paint on top of all other objects
-    new_boxes.extend(ann_boxes)
+    # Ensure patch is wide enough for annotations
+    max_ann_right = max((b["box"]["patching_rect"][0] + b["box"]["patching_rect"][2]
+                         for b in ann_boxes), default=0.0)
+    new_patch_w = max(float(patch_w), max_ann_right + 30.0)
+    rect[2] = new_patch_w
+    patcher["rect"] = rect
 
     new_lines = [
         {"patchline": {"source": ["tut-umenu",    0], "destination": ["tut-v8", 0]}},
@@ -709,8 +730,8 @@ def add_tutorial_to_patch(maxpat, steps, annotation_ids, panel_ids, js_filename)
         {"patchline": {"source": ["tut-loadbang", 0], "destination": ["tut-v8", 0]}},
     ]
 
-    # Panels go at the front of the boxes list so they're painted first (behind everything)
-    patcher["boxes"] = panel_boxes + patcher["boxes"] + new_boxes
+    # Z-order: panels FIRST (behind), then original boxes + nav, then annotations LAST (on top)
+    patcher["boxes"] = panel_boxes + patcher["boxes"] + new_boxes + ann_boxes
     patcher["lines"].extend(new_lines)
 
 

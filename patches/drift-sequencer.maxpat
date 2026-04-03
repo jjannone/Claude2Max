@@ -1168,7 +1168,7 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            260.0,
+            370.0,
             5.0,
             65.0,
             22.0
@@ -1189,7 +1189,7 @@
             ""
           ],
           "patching_rect": [
-            328.0,
+            438.0,
             5.0,
             200.0,
             22.0
@@ -1233,7 +1233,7 @@
             ""
           ],
           "patching_rect": [
-            534.0,
+            644.0,
             5.0,
             30.0,
             22.0
@@ -1251,7 +1251,7 @@
             ""
           ],
           "patching_rect": [
-            570.0,
+            680.0,
             5.0,
             30.0,
             22.0
@@ -1269,7 +1269,7 @@
             "bang"
           ],
           "patching_rect": [
-            606.0,
+            716.0,
             5.0,
             44.0,
             22.0
@@ -1285,7 +1285,7 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            260.0,
+            370.0,
             32.0,
             240.0,
             22.0
@@ -1302,15 +1302,15 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            510.0,
-            5.0,
+            370.0,
+            60.0,
             220.0,
-            104.0
+            86.0
           ],
           "text": "Overview\nThis patch has 23 processing objects across 9 stages. Use the menu or prev/next to step through each stage.",
           "hidden": 1,
           "bubble": 1,
-          "bubbleside": 0,
+          "bubbleside": 1,
           "bubble_bgcolor": [
             1.0,
             0.98,
@@ -1335,10 +1335,10 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            510.0,
+            437.0,
             5.0,
             220.0,
-            122.0
+            104.0
           ],
           "text": "loadmess + unpack\nloadmess \u2014 Sends a stored message when the patch loads (initializes defaults). unpack \u2014 Unpacks a list into individual outlet values.",
           "hidden": 1,
@@ -1368,10 +1368,10 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            510.0,
-            108.5,
+            154.0,
+            117.5,
             220.0,
-            140.0
+            122.0
           ],
           "text": "toggle +3\ntoggle \u2014 Sends 1 (on) or 0 (off) when clicked \u2014 starts/stops loops. metro \u2014 Generates repeated bangs at a set interval (ms). counter \u2014 Counts bangs up/down between min and max. +.",
           "hidden": 1,
@@ -1401,10 +1401,10 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            510.0,
-            469.0,
+            409.0,
+            478.0,
             220.0,
-            122.0
+            104.0
           ],
           "text": "loadmess +3\nloadmess: rests (0=rest, 1=note). multislider. gate: velocity. makenote \u2014 Generates a MIDI note-on followed by a note-off.",
           "hidden": 1,
@@ -1434,7 +1434,7 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            510.0,
+            142.0,
             69.0,
             220.0,
             68.0
@@ -1467,10 +1467,10 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            510.0,
-            532.0,
+            507.0,
+            541.0,
             220.0,
-            104.0
+            86.0
           ],
           "text": "number\nnumber \u2014 Displays and edits an integer number. number \u2014 Displays and edits an integer number.",
           "hidden": 1,
@@ -1500,10 +1500,10 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            510.0,
-            260.0,
+            288.0,
+            269.0,
             220.0,
-            140.0
+            122.0
           ],
           "text": "t +2\nt \u2014 Fires a series of typed outputs in right-to-left order. prepend: pitch (MIDI 36-84). prepend \u2014 Prepends a fixed message selector before incoming data. multislider.",
           "hidden": 1,
@@ -1533,7 +1533,7 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            510.0,
+            327.0,
             477.0,
             220.0,
             68.0
@@ -1566,10 +1566,10 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            510.0,
-            631.5,
+            477.0,
+            640.5,
             220.0,
-            158.0
+            140.0
           ],
           "text": "pack +3\npack \u2014 Packs individual values into a single output list. midiformat \u2014 Assembles raw MIDI bytes from component values. abl.device.drift~. live.gain~ \u2014 A stereo volume fader (Max for Live).",
           "hidden": 1,
@@ -1599,7 +1599,7 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            510.0,
+            322.0,
             788.5,
             220.0,
             68.0

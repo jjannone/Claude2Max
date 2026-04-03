@@ -1648,7 +1648,7 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            510.0,
+            754.0,
             5.0,
             65.0,
             22.0
@@ -1669,7 +1669,7 @@
             ""
           ],
           "patching_rect": [
-            578.0,
+            822.0,
             5.0,
             200.0,
             22.0
@@ -1727,7 +1727,7 @@
             ""
           ],
           "patching_rect": [
-            784.0,
+            1028.0,
             5.0,
             30.0,
             22.0
@@ -1745,7 +1745,7 @@
             ""
           ],
           "patching_rect": [
-            820.0,
+            1064.0,
             5.0,
             30.0,
             22.0
@@ -1763,7 +1763,7 @@
             "bang"
           ],
           "patching_rect": [
-            856.0,
+            1100.0,
             5.0,
             44.0,
             22.0
@@ -1779,7 +1779,7 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            510.0,
+            754.0,
             32.0,
             240.0,
             22.0
@@ -1796,15 +1796,15 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            894.0,
-            5.0,
+            754.0,
+            60.0,
             220.0,
-            104.0
+            86.0
           ],
           "text": "Overview\nThis patch has 36 processing objects across 13 stages. Use the menu or prev/next to step through each stage.",
           "hidden": 1,
           "bubble": 1,
-          "bubbleside": 0,
+          "bubbleside": 1,
           "bubble_bgcolor": [
             1.0,
             0.98,
@@ -1829,10 +1829,10 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            894.0,
+            612.0,
             5.0,
             220.0,
-            176.0
+            158.0
           ],
           "text": "loadmess +2\nloadmess: camera. loadmess \u2014 Sends a stored message when the patch loads (initializes defaults). unpack \u2014 Unpacks a list into individual outlet values. prepend \u2014 Prepends a fixed message selector before incoming data.",
           "hidden": 1,
@@ -1862,10 +1862,10 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            894.0,
-            95.0,
+            343.0,
+            104.0,
             220.0,
-            122.0
+            104.0
           ],
           "text": "loadmess +2\nloadmess: --- output size ---. jit.grab \u2014 Captures frames from a live camera or video source. jit.matrix: capture rate (ms).",
           "hidden": 1,
@@ -1895,10 +1895,10 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            894.0,
-            211.5,
+            181.0,
+            220.5,
             220.0,
-            176.0
+            158.0
           ],
           "text": "toggle +3\ntoggle \u2014 Sends 1 (on) or 0 (off) when clicked \u2014 starts/stops loops. metro \u2014 Generates repeated bangs at a set interval (ms). t \u2014 Fires a series of typed outputs in right-to-left order. number \u2014 Displays and edits an integer number.",
           "hidden": 1,
@@ -1928,10 +1928,10 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            894.0,
-            708.0,
+            537.0,
+            717.0,
             220.0,
-            176.0
+            158.0
           ],
           "text": "toggle +3\ntoggle \u2014 Sends 1 (on) or 0 (off) when clicked \u2014 starts/stops loops. metro \u2014 Generates repeated bangs at a set interval (ms). counter \u2014 Counts bangs up/down between min and max. number \u2014 Displays and edits an integer number.",
           "hidden": 1,
@@ -1961,10 +1961,10 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            894.0,
-            119.0,
+            327.0,
+            128.0,
             220.0,
-            104.0
+            86.0
           ],
           "text": "number + pak\nnumber \u2014 Displays and edits an integer number. number \u2014 Displays and edits an integer number. pak.",
           "hidden": 1,
@@ -1994,7 +1994,7 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            894.0,
+            707.0,
             588.0,
             220.0,
             50.0
@@ -2027,10 +2027,10 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            894.0,
-            28.0,
+            652.0,
+            37.0,
             220.0,
-            86.0
+            68.0
           ],
           "text": "umenu\numenu \u2014 A drop-down menu \u2014 outputs index when item is selected.",
           "hidden": 1,
@@ -2060,10 +2060,10 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            894.0,
-            442.0,
+            377.0,
+            451.0,
             220.0,
-            86.0
+            68.0
           ],
           "text": "jit.pwindow\njit.pwindow \u2014 Displays a Jitter matrix as a video preview window.",
           "hidden": 1,
@@ -2093,7 +2093,7 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            894.0,
+            531.0,
             397.0,
             220.0,
             68.0
@@ -2126,10 +2126,10 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            894.0,
-            459.0,
+            571.0,
+            477.0,
             220.0,
-            194.0
+            158.0
           ],
           "text": "toggle +3\ntoggle \u2014 Sends 1 (on) or 0 (off) when clicked \u2014 starts/stops loops. gate \u2014 Routes input to one of N outlets based on a control value. t \u2014 Fires a series of typed outputs in right-to-left order. counter \u2014 Counts bangs up/down between min and max.",
           "hidden": 1,
@@ -2159,10 +2159,10 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            894.0,
-            605.0,
+            713.0,
+            614.0,
             220.0,
-            122.0
+            104.0
           ],
           "text": "prepend +2\nprepend \u2014 Prepends a fixed message selector before incoming data. number \u2014 Displays and edits an integer number. jit.matrixset.",
           "hidden": 1,
@@ -2192,10 +2192,10 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            894.0,
-            837.5,
+            587.0,
+            846.5,
             220.0,
-            122.0
+            104.0
           ],
           "text": "prepend +2\nprepend \u2014 Prepends a fixed message selector before incoming data. jit.gl.layer. t \u2014 Fires a series of typed outputs in right-to-left order.",
           "hidden": 1,
@@ -2225,10 +2225,10 @@
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
-            894.0,
-            910.5,
+            891.0,
+            919.5,
             220.0,
-            86.0
+            68.0
           ],
           "text": "jit.gl.render + jit.window\njit.gl.render \u2014 Renders OpenGL geometry to a texture. jit.window.",
           "hidden": 1,
