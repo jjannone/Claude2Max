@@ -4,12 +4,36 @@ This repo is a tool for generating Max/MSP patches from Claude-authored JSON spe
 
 **Audience**: This tool is designed for students with little coding or CLI experience. CLAUDE.md serves as the primary knowledge base — when their instance of Claude reads it, it should learn everything needed to work with Max/MSP, the spec format, and the converter without requiring prior expertise. Include helpful general information here even if it seems basic — students benefit from it and Claude instances need it to assist them effectively.
 
+## Before Beginning Any Work
+
+Read and review the entire Claude2Max repo before starting — `CLAUDE.md`, `SPEC_REFERENCE.md`, `TUTORIAL_GUIDELINES.md`, and `spec2maxpat.py` — so your understanding of the current spec format, converter behavior, and conventions is fully up to date. Do not rely on prior session knowledge alone; the repo is the authoritative source.
+
 ## Workflow
+
+### Working on an existing patch — sync first, always
+
+**Before any work on an existing .maxpat**, run sync to capture manual edits the user made in Max:
+
+```bash
+python3 spec2maxpat.py sync -i patches/patch.maxpat
+```
+
+Update your working spec from the sync output, then make changes, then convert. No exceptions — not even for small fixes. `convert` regenerates the .maxpat from scratch and will silently destroy moved objects, added/deleted objects, hidden objects, and hidden cords.
+
+### Spec files are temporary — do not leave them in the project
+
+The spec is embedded inside every `.maxpat`. Standalone `.json` spec files are only needed as a scratch file during `convert`. Write them to `/tmp/` (or any temp location) rather than the project folder, then delete after converting. The `.maxpat` is the single source of truth; extract the spec from it whenever you need to read or edit it.
+
+```bash
+python3 spec2maxpat.py extract -i patch.maxpat > /tmp/spec.json
+# edit /tmp/spec.json
+python3 spec2maxpat.py convert -i /tmp/spec.json -o patch.maxpat
+```
 
 ### New patch (from scratch)
 1. User describes a Max patch they want
 2. You write a JSON spec following the format in `SPEC_REFERENCE.md`
-3. You convert it with: `python3 spec2maxpat.py convert -i spec.json -o patches/patch.maxpat`
+3. You convert it with: `python3 spec2maxpat.py convert -i /tmp/spec.json -o patches/patch.maxpat`
 4. User opens in Max, gives feedback, you iterate
 
 The spec is embedded in the `.maxpat` — no separate `.json` file needed. Extract it anytime:
@@ -66,7 +90,14 @@ When a patch is pasted in from an external source and you modify it:
 - **Object text** — write it exactly as you'd type it in Max (e.g. `"metro 500"`, `"cycle~ 440"`, `"jit.noise 4 char 320 240"`)
 - **Connections** — get outlet/inlet indices right. Max objects have specific inlet/outlet meanings; know them.
 - **Layout** — use explicit `pos` for every object. Follow the layout guidelines in SPEC_REFERENCE.md.
-- **Presentation** — use `presentation` field for user-facing layouts. Every presented control needs a comment label.
+- **Presentation** — use `presentation` field for user-facing layouts. Every presented control needs a comment label. **Always design presentation views as functional, logical, and aesthetic UIs** — not just a copy of the patching layout. Apply these principles:
+  - **Hierarchy of importance**: the most critical information (e.g. countdown, next cue) should be largest and most prominent. Controls the user rarely touches should be small and out of the way.
+  - **Logical grouping**: cluster related controls (e.g. setup vs. performance, input vs. output). Use spatial separation — columns or rows — to make groups obvious without needing extra labels.
+  - **Consistent alignment**: align labels flush to their controls (label left of or above the object). Use consistent margins (15px outer, 10–15px between groups).
+  - **Label placement**: put labels to the right of buttons/toggles or above number boxes. Keep labels short.
+  - **Set `openinpresentation: 1`** on the patcher (post-process the .maxpat JSON) so the patch opens in presentation mode by default.
+  - **`presentation_rect` must be post-processed** — the converter sets the `presentation` flag but does not write `presentation_rect` to the .maxpat. After converting, iterate all boxes by their `id`, match them to spec objects by text/class, and write `presentation_rect` as **`[x, y, w, h]`** — same format as `patching_rect`, not two corners. (Note: `getrect` *responses* use two corners `x1 y1 x2 y2`, but JSON storage attributes always use `x y w h`.)
+  - **Exclude infrastructure**: metros, routers, loadbangs, print objects, and wiring intermediaries should not appear in presentation view.
 - **Objects not in the converter's lookup tables** — use `inlets`, `outlets`, and `outlettype` overrides in the spec. This is common for third-party externals.
 - **Always embed the spec** — every .maxpat produced using the Claude2Max workflow must include a hidden `text.codebox` (`id: "obj-spec-embed"`, `"hidden": 1`) placed below all other objects, containing the full spec JSON wrapped in `--- CLAUDE2MAX SPEC ---` / `--- END SPEC ---` delimiters. This applies whether the output is from the converter or assembled manually — if you used Claude2Max thinking (read SPEC_REFERENCE, wrote or modified a spec), embed it.
 
@@ -86,6 +117,20 @@ When a patch is pasted in from an external source and you modify it:
 ```
 
 **External JS files** — place `.js` files in the same directory as the `.maxpat`. Max resolves them relative to the patch file.
+
+**jsui objects** — use `"type": "jsui"` with `attrs: {"filename": "script.js"}`, not `type: "newobj", text: "jsui script.js"`. The `filename` attribute is how Max natively associates a JS file with a jsui; omitting it leaves the object unlinked and non-functional. Always include it:
+
+```json
+{
+  "type": "jsui",
+  "pos": [10, 28], "size": [560, 340],
+  "inlets": 1, "outlets": 2,
+  "outlettype": ["", ""],
+  "attrs": { "filename": "script.js" }
+}
+```
+
+Use just the filename (not an absolute path) so the patch is portable — Max finds the file in the patch's own directory.
 
 **Message routing** — Max dispatches incoming messages by selector (first word) to JS functions of the same name. Arguments follow as function parameters:
 
@@ -117,6 +162,28 @@ Examples: `send TEMPO`, `receive PITCH`, `pv CURRENT_STATE`, `buffer~ LOOPBUF`, 
 
 This does NOT apply to Max built-in names, object names, or message selectors — only names we invent.
 
+## Reasoning About Max — From Specific to General
+
+When learning something specific about Max, immediately ask: **what category does this belong to, and does the property apply to all members of that category?**
+
+Max has two distinct contexts that look similar but behave differently:
+
+| Context | Format | Examples |
+|---|---|---|
+| **Stored attribute** (.maxpat JSON) | `[x, y, w, h]` | `patching_rect`, `presentation_rect`, `presentation` |
+| **Runtime message / response** | `[x1, y1, x2, y2]` (two corners) | `getrect` response, `window_rect` notification |
+
+The mistake to avoid: learning something about a runtime message and applying it to a stored attribute (or vice versa). These are different categories and the property does not transfer between them.
+
+**General rule**: whenever you encounter a new Max attribute or message involving geometry, first determine which category it belongs to, then apply the property for that category — not the other one.
+
+In the rare case where a specific instance violates a category rule, **document the exception explicitly** — name the object/attribute, state the rule it breaks, and note any known reason. An undocumented exception will be re-learned as a surprise every time.
+
+This pattern of reasoning applies broadly in Max patching:
+- Outlet indices are **0-based from the left** — true for all objects universally; no need to verify per object.
+- `trigger` fires **right-to-left** — true for all `trigger` objects; if you know it for one, you know it for all.
+- jit.gl objects share a **named render context** — if two objects share a context name, they render in the same world; apply this transitively when reasoning about visibility and draw order.
+
 ## Max Patching Knowledge
 
 - Use `loadmess` to set sensible defaults for controls on patch load. For multiple init values, use `loadmess` → `unpack` to distribute to separate controls.
@@ -125,6 +192,7 @@ This does NOT apply to Max built-in names, object names, or message selectors �
 - `dialog` object (text-input prompt): `inlets=2, outlets=3`. Outlet 0 outputs the entered text as a symbol. Use `route symbol` after it to filter for the symbol type; then `prepend parsetarget` (or similar) to route to a v8 handler.
 - `playlist~`: `inlets=1, outlets=3` (sig audio, sig position, int state). Send `append` to open the file chooser; send integer `1` to play the first item.
 - `umenu` items in `.maxpat` format are stored as a flat token array with `","` as item separators: `["item", "one", ",", "item", "two"]`. Set via `attrs: {"items": [...]}` in the spec.
+- `jit.world` window size: send `getrect` to inlet 0; response `rect x1 y1 x2 y2` (two corners, not x/y/w/h) comes out the **rightmost outlet** (not outlet 0). Spec the object with 3 outlets (`outlettype: ["", "bang", ""]`); connect outlet 2 to a `route rect` to filter the response. Compute width = x2−x1, height = y2−y1.
 
 ## Tutorial System
 
@@ -207,6 +275,84 @@ At the end of any session where meaningful work was done, append an entry to `WO
 
 - **Z-order**: In the `boxes` array, earlier items render on top (in front). To put an object visually on top of others, place it first in the array. Background objects go last.
 - **@bubbleside** (comment bubble arrows): `0=top, 1=left, 2=bottom, 3=right`. The arrow appears on that side of the comment, pointing outward. Use `"bubble_bgcolor"` (not `"bgcolor"`) for bubble background color.
+
+## UI Layout — Label and Control Spacing
+
+Label overflow into adjacent controls is the most common layout mistake. Follow these rules on every spec.
+
+### Label width estimation
+
+At Max's default font size, estimate **~7.5 px per character + 8 px padding** (round up generously):
+
+| Label text length | Estimated width |
+|------------------|----------------|
+| 4–5 chars ("CLEAR", "SIZE") | ~48 px |
+| 6–7 chars ("EXPORT", "LABELS") | ~60 px |
+| 8–9 chars ("GENERATE", "FONTSIZE") | ~74 px |
+| 10–13 chars ("COLOR SCHEME", "FONT SIZE") | ~100 px |
+
+### Horizontal spacing rule for a row of labeled controls
+
+```
+next_x = prev_x + max(prev_label_width, prev_control_width) + 20
+```
+
+Always compute this left-to-right before placing any object. Never eyeball it.
+
+### Message box width
+
+Max auto-sizes message boxes to fit their text. Use `size` to fix widths explicitly when placing them in a row:
+
+- "bang" → 40 px
+- "clear", "export" → 50 px
+- "exportpanel", "importpanel" → 82 px
+- Default minimum: 50 px
+
+### Routing object widths (prepend, loadmess, pack, etc.)
+
+These sit below visible controls and overlap silently if columns are too close.
+
+Estimated widths (text chars × 7.5 + 14 px, +15% safety margin):
+
+| Object text | Estimated width |
+|-------------|----------------|
+| `prepend colorscheme` | 155 px |
+| `prepend showlabels` | 150 px |
+| `prepend fontsize` | 130 px |
+| `prepend bang` | 85 px |
+| `loadmess 1` | 80 px |
+| `loadmess 11` | 85 px |
+| `print name` | 80–95 px |
+
+**Rule:** when routing objects for adjacent columns sit at the same `y`, confirm:
+```
+col[n+1].x  ≥  col[n].x + routing_object_width[n] + 15
+```
+
+### UI element sizing
+
+Size UI objects (jsui, jit.pwindow, textedit, etc.) to fit their functional purpose — not to fill all available horizontal space. Leave at least 20–30 px of margin on each side. Oversized elements look unpolished and waste screen real estate.
+
+For jsui in particular: size it for the expected content, not for the patch width. A 560 × 340 jsui in a 740 px patch leaves room for the window chrome and reads better than a 720 × 340 one that nearly touches both edges.
+
+### Title comments
+
+Do **not** add a `comment` object whose text simply restates the patch name. The patch name already appears in Max's title bar. Only add a title comment when the patch name alone doesn't convey what the patch does, or when the patch will be embedded as a subpatcher (where the title bar isn't visible).
+
+### Standard column offsets for a 3-column parameter row
+
+For a row of three labeled controls (e.g., scheme menu + toggle + number box) in a 740 px patch:
+
+- Column A: `x = 10`  (umenu / wide control + `prepend colorscheme` ending ≈ x=165)
+- Column B: `x = 180` (toggle / narrow control + `prepend showlabels` ending ≈ x=330)
+- Column C: `x = 355` (number box + `prepend fontsize` ending ≈ x=485)
+- Utility objects (print, etc.): `x = 495`
+
+Adjust proportionally for narrower patches.
+
+### Loadmess init chains
+
+Prefer the shortest chain: `loadmess` → UI control (toggle, number box) → the control fires and propagates through its prepend → jsui. Do **not** also wire `loadmess` directly to the prepend — that double-fires the init message.
 
 ## Common Pitfalls
 

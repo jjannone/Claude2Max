@@ -155,6 +155,12 @@ These automatically get `parameter_enable` set:
 |------|-------------|
 | `"jit.pwindow"` | Jitter display window |
 
+## jit.cellblock Notes
+
+- **Selection mode must be "Inline Edit"** for users to type in cells. Set `"selmode": 5` in attrs. (`editmode` is the wrong attribute name — Max uses `selmode` for this.) Without this, clicking a cell selects it but does not open it for typing.
+- Cell output format is a plain list: `row col value` (no selector). In v8/js, handle with `function list()`, not `function cell()`.
+- Output fires on each cell edit, not on bang. Wire directly to the v8 inlet.
+
 ## Object Correctness Notes
 
 These objects have non-obvious I/O behavior that commonly causes wiring bugs. Verified against Max help patches.
