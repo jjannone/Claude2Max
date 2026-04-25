@@ -193,6 +193,7 @@ This pattern of reasoning applies broadly in Max patching:
 - `playlist~`: `inlets=1, outlets=3` (sig audio, sig position, int state). Send `append` to open the file chooser; send integer `1` to play the first item.
 - `umenu` items in `.maxpat` format are stored as a flat token array with `","` as item separators: `["item", "one", ",", "item", "two"]`. Set via `attrs: {"items": [...]}` in the spec.
 - `jit.world` window size: send `getrect` to inlet 0; response `rect x1 y1 x2 y2` (two corners, not x/y/w/h) comes out the **rightmost outlet** (not outlet 0). Spec the object with 3 outlets (`outlettype: ["", "bang", ""]`); connect outlet 2 to a `route rect` to filter the response. Compute width = x2−x1, height = y2−y1.
+- `jit.cellblock` selection mode: the user configures `@selmode` (e.g. `selmode: 5` for inline edit) manually in Max. **Never reset or change `selmode` in a spec or post-process unless the user explicitly requests it.** Always preserve the current value; if adding a new cellblock, set `selmode` only as needed for its purpose (0 = no selection for display-only viewers).
 
 ## Tutorial System
 
