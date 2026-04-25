@@ -194,6 +194,7 @@ This pattern of reasoning applies broadly in Max patching:
 - `umenu` items in `.maxpat` format are stored as a flat token array with `","` as item separators: `["item", "one", ",", "item", "two"]`. Set via `attrs: {"items": [...]}` in the spec.
 - `jit.world` window size: send `getrect` to inlet 0; response `rect x1 y1 x2 y2` (two corners, not x/y/w/h) comes out the **rightmost outlet** (not outlet 0). Spec the object with 3 outlets (`outlettype: ["", "bang", ""]`); connect outlet 2 to a `route rect` to filter the response. Compute width = x2−x1, height = y2−y1.
 - `jit.cellblock` selection mode: the user configures `@selmode` (e.g. `selmode: 5` for inline edit) manually in Max. **Never reset or change `selmode` in a spec or post-process unless the user explicitly requests it.** Always preserve the current value; if adding a new cellblock, set `selmode` only as needed for its purpose (0 = no selection for display-only viewers).
+- **`jit.cellblock` `set` message — column-first, not row-first**: the syntax is `set COL ROW value` where COL is the horizontal index (0=leftmost column) and ROW is the vertical index (0=topmost row). This is the **opposite** of the typical matrix convention (row, col). Example: `set 0 3 "Alice"` places "Alice" in column 0, row 3. When sending from JS: `outlet(n, "set", colIndex, rowIndex, value)`.
 - **Grid layout preference — many rows, few columns**: when displaying tabular data in `jit.cellblock` or any grid, orient the data so that individual items (sections, events, entries) are **rows** and categories/attributes (music, dance; name, value; etc.) are **columns**. This makes the grid tall and narrow rather than wide and flat, which reads more naturally and scales better as item count grows. Apply this as the default orientation for any new grid display.
 
 ## Tutorial System
@@ -358,6 +359,7 @@ Prefer the shortest chain: `loadmess` → UI control (toggle, number box) → th
 
 ## Common Pitfalls
 
+- `jit.gl.text` centering: use `anchor_x 0.5` to center text horizontally at its position point (0.0=left-anchored, 0.5=center, 1.0=right-anchored). **`justify` is NOT a valid `jit.gl.text` attribute** — it is silently ignored. Do not use it.
 - `multislider` `fetch N` outputs from **outlet 1** (right), not outlet 0. A single int sent to a `multislider` sets all sliders to that value.
 - `gate N`: inlet 0 = open/close control, inlet 1 = data input
 - `trigger` / `t` fires outlets **right-to-left** — rightmost outlet fires first
