@@ -302,7 +302,11 @@ Whenever you learn something new about Max behavior, fix a bug, or add/change a 
 
 ## Work History
 
-**At the start of every session**, read `WORK_HISTORY.md` to get up to date with recent changes before doing any work. This catches anything done in prior sessions that isn't in your context.
+**At the start of every session**:
+1. Read `WORK_HISTORY.md` to get up to date with recent changes.
+2. Read `TASK_QUEUE.md` and report any pending tasks to the user before beginning other work. Say something like: "There are N pending tasks in the queue — [list them briefly]. Want to work on any of these, or something else?"
+
+When a queued task is completed, mark it `- [x]` and move it to the Done section with a completion date.
 
 At the end of any session where meaningful work was done, append an entry to `WORK_HISTORY.md`. Do this automatically — no need for the user to ask. Format: `- YYYY-MM-DD: <1-2 sentence summary>`
 
