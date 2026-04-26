@@ -35,7 +35,10 @@ Format: `- [ ]` = pending, `- [x]` = complete (move to Done section).
   - **Functional units** — logically related clusters of objects are visually grouped and clearly separated from other clusters
   - **Encapsulation** — where a functional unit is self-contained, consider wrapping it in a subpatcher (`p`) to reduce clutter and reinforce the logical boundary. The spec already supports subpatchers; the layout engine should identify candidates and apply encapsulation where it improves clarity. See inlet/outlet labeling rule below.
 
-  **Inlet/outlet labeling rule** (applies to all subpatchers, abstractions, and poly~ abstractions — not just those created by the layout engine): every `inlet` and `outlet` object must have a comment label immediately adjacent describing its purpose and expected type. Additionally, within the subpatcher, each inlet and outlet must have a `comment` object directly connected or placed next to it explaining what it receives/sends. This applies at creation time — never create an encapsulated unit without labels. Example: `inlet` labeled "0: bang — trigger generate" and a comment inside reading "← trigger: starts permutation generation".
+  **Inlet/outlet labeling rule** (applies to all subpatchers, abstractions, and poly~ abstractions — not just those created by the layout engine):
+  1. **Outside**: set `@comment` on the `p`/`poly~` object itself (via `attrs: {"comment": "..."}` in the spec) describing all inlets and outlets — index, type, purpose. E.g. `"in 0: bang — trigger generate  |  out 0: list — permutation"`.
+  2. **Inside**: place an actual `comment` box immediately adjacent to each `inlet` and `outlet` object. E.g. `"← bang: trigger generate"` next to the inlet, `"→ list: permutation result"` next to the outlet.
+  Never create an encapsulated unit without both levels of labeling. Applies at creation time.
 
   **Phase 3 — Screenshot verification**: after conversion, use computer-use MCP to:
   - Screenshot patching view — review for structural clarity, readable data flow, well-grouped functional units, encapsulation opportunities missed by the engine
