@@ -302,9 +302,22 @@ Whenever you learn something new about Max behavior, fix a bug, or add/change a 
 
 ## Work History
 
-**At the start of every session**:
+**At the start of every conversation, and after any gap of more than one hour within a conversation:**
 1. Read `WORK_HISTORY.md` to get up to date with recent changes.
 2. Read `TASK_QUEUE.md` and report any pending tasks to the user before beginning other work. Say something like: "There are N pending tasks in the queue — [list them briefly]. Want to work on any of these, or something else?"
+
+To detect a long gap within a conversation, run this on every incoming message:
+```bash
+LAST=/tmp/claude2max_session_check
+NOW=$(date +%s)
+if [ ! -f "$LAST" ] || [ $(( NOW - $(cat "$LAST") )) -gt 3600 ]; then
+    echo "CHECK_NEEDED"
+    echo $NOW > "$LAST"
+else
+    echo "OK"
+fi
+```
+If the output is `CHECK_NEEDED`, run the session-start checks above. If `OK`, proceed normally. This resets on reboot, which is fine — a reboot implies a fresh start.
 
 When a queued task is completed, mark it `- [x]` and move it to the Done section with a completion date.
 
