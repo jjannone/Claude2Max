@@ -167,7 +167,7 @@ These automatically get `parameter_enable` set:
 
 ## jit.gl.text Notes
 
-- **Horizontal centering**: use `anchor_x 0.5` (0.0 = left-anchored, 0.5 = center, 1.0 = right-anchored). **`justify` is NOT a valid attribute** — it is silently ignored. Do not use it.
+- **Horizontal alignment**: use `align left`, `align center`, or `align right`. **Neither `justify` nor `anchor_x` are valid attributes** — both are silently ignored. Verified from jit.gl.text3d snippet in Max installation.
 
 ## Object Correctness Notes
 
