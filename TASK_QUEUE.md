@@ -7,14 +7,36 @@ Format: `- [ ]` = pending, `- [x]` = complete (move to Done section).
 
 ## Pending
 
-- [ ] **Extended `RefpageCache` metadata** — extend `RefpageCache` in `spec2maxpat.py` to cache the following from each maxref.xml, in addition to I/O counts:
-  - **Attributes** — name, type, default, valid values/enums, get/set permissions. Makes attribute verification programmatic rather than manual.
-  - **Messages** — what messages each object accepts, with argument names and types. Enables validation that message boxes and connections are sending what an object can receive.
-  - **Arguments** — typed creation-time arguments (e.g. `metro 500`). Enables validation of object text in specs.
-  - **Output descriptions** — what each outlet actually outputs (from `<misc name="Output">`). Enables connection type checking.
-  - **See-also** — related objects. Useful for suggesting alternatives when an object isn't found.
+- [ ] **Extended `RefpageCache` metadata** — extend `RefpageCache` in `spec2maxpat.py` to cache the following from each maxref.xml, in addition to I/O counts. All data is already in the XML; this task is purely parsing and structuring it. Each field is cached per object on first lookup, so no performance cost unless the data is requested.
 
-- [ ] **Presentation layout engine + screenshot verification** — build a layout engine that computes presentation_rects automatically from logical positions and sizes, so layout is mathematically correct before conversion. Follow up with a screenshot (patching view + presentation view) to catch visual issues the math can't detect. Requires computer-use MCP enabled.
+  - **Attributes** — from `<attributelist><attribute>`. Cache: name, type (int/float/symbol/list), size, default value, enum values if present, get/set permissions. Enables programmatic verification before using any attribute — no more manual grep. The `align` / `justify` / `anchor_x` errors from this session would have been caught automatically.
+
+  - **Messages** — from `<methodlist><method>`. Cache: message name, argument names and types, which inlet they apply to (from `<attribute name="inlet">`). Enables validation that message boxes send messages an object actually accepts, and with correct argument types.
+
+  - **Arguments** — from `<objarglist><objarg>`. Cache: name, type, optional flag, units. Enables validation of object text in specs — e.g. confirming that `metro 500` is valid (one optional number argument) vs. `metro foo` (wrong type).
+
+  - **Output descriptions** — from `<misc name="Output"><entry>`. Cache: outlet name/type as described in prose. Supplements the outlet type from `<outletlist>` with richer semantic info — e.g. "bang sent when file load completes" for `buffer~` outlet 1.
+
+  - **See-also** — from `<seealsolist><seealso>`. Cache: list of related object names. Useful for suggesting alternatives when a requested object isn't found or when a better fit exists.
+
+  **Implementation note**: `_parse()` in `RefpageCache` already reads the full XML root. Extend it to extract all five fields in the same pass — one XML parse covers everything. Return structure: `{"numinlets": ..., "numoutlets": ..., "outlettype": [...], "attributes": {...}, "messages": {...}, "arguments": [...], "outputs": [...], "seealso": [...]}`.
+
+- [ ] **Presentation layout engine + screenshot verification** — two-phase approach:
+
+  **Phase 1 — Layout engine**: add a `presentation_layout()` function to `spec2maxpat.py` that computes `presentation_rect` for every presented object automatically from the spec, so manual rect calculation is no longer needed. The engine should:
+  - Accept logical layout hints in the spec: column/row grouping, margins, object sizes
+  - Compute x/y positions using consistent margins (15px outer, 10–15px between groups) and the label-width estimation rules already in CLAUDE.md
+  - Handle the two-panel pattern common in ensemble-style patches (setup panel left, performance panel right)
+  - Output `presentation_rect` values directly into the generated .maxpat JSON, replacing the current manual post-processing step
+
+  **Phase 2 — Screenshot verification**: after conversion, use computer-use MCP to:
+  - Take a screenshot of the patch in patching view
+  - Switch to presentation mode (Cmd-Shift-E or View menu), take a screenshot
+  - Review both for: overlapping objects, text clipped by box boundaries, misaligned labels, crowded groups
+  - Fix any issues found and re-screenshot to confirm
+  - Requires computer-use MCP enabled in Claude Desktop; if unavailable, note what to check manually
+
+  **Prerequisite**: computer-use MCP must be enabled and screen recording granted to Claude. Layout engine (Phase 1) works without it; screenshot verification (Phase 2) requires it.
 
 ## Done
 
