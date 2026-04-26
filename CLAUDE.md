@@ -285,11 +285,15 @@ python3 add_tutorial.py --ai -i patches/patch.maxpat
 
 ## Upstream Maintenance
 
-`max_objects.json` is sourced from [taylorbrook/MAX-MSP_CC_Framework](https://github.com/taylorbrook/MAX-MSP_CC_Framework). Periodically check that repo for updates to `.claude/max-objects/` (new objects, corrected I/O counts, additional overrides). When meaningful changes are found:
+`max_objects.json` is built from the official Cycling '74 maxref.xml files bundled with Max.app — no internet connection required. Regenerate it after installing a new version of Max:
 
-1. Run `python3 build_objects_db.py` to regenerate `max_objects.json`
-2. Review any changes to overrides that affect objects already in `NEWOBJ_IO` — hand-verified entries in `spec2maxpat.py` always take precedence, but they may need updating too
-3. Propose importing any new correctness notes to `SPEC_REFERENCE.md`
+```bash
+python3 build_objects_db.py
+# or, if Max is not at /Applications/Max.app:
+python3 build_objects_db.py --max-path /path/to/Max.app
+```
+
+This parses all refpages from `Max.app/Contents/Resources/C74/docs/refpages/` and all C74 packages (Gen, RNBO, Jitter Tools, etc.), producing ~1800 objects. Hand-verified entries in `NEWOBJ_IO` inside `spec2maxpat.py` always take precedence over the generated data — those are corrections for cases where even the official docs are wrong (e.g. `gain~` outlet 1 type, `playlist~` outlet count).
 
 ## Keeping Docs in Sync
 
