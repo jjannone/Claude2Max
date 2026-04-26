@@ -4,6 +4,14 @@ This repo is a tool for generating Max/MSP patches from Claude-authored JSON spe
 
 **Audience**: This tool is designed for students with little coding or CLI experience. CLAUDE.md serves as the primary knowledge base — when their instance of Claude reads it, it should learn everything needed to work with Max/MSP, the spec format, and the converter without requiring prior expertise. Include helpful general information here even if it seems basic — students benefit from it and Claude instances need it to assist them effectively.
 
+## Do Not Degrade Functionality When Switching Modalities
+
+When moving information from one display context to another (Max console → cellblock, message box → UI element, etc.), **carry over all essential elements** of the working format — indexing, orientation, field order, readable structure. Do not drop features just because the new modality doesn't force you to include them.
+
+If a working format has a 1-based index, the new display must also have a 1-based index. If the working format puts each item on its own line with both fields visible, the new display must be oriented the same way. Dropping these without being asked is a silent regression — the user only discovers it when they see the result and has to ask you to restore what was already working.
+
+**Rule**: before implementing a new display for existing data, identify every piece of information in the current display and confirm it is present in the new one.
+
 ## Before Beginning Any Work
 
 Read and review the entire Claude2Max repo before starting — `CLAUDE.md`, `SPEC_REFERENCE.md`, `TUTORIAL_GUIDELINES.md`, and `spec2maxpat.py` — so your understanding of the current spec format, converter behavior, and conventions is fully up to date. Do not rely on prior session knowledge alone; the repo is the authoritative source.
