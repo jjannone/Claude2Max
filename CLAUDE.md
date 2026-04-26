@@ -174,7 +174,9 @@ This does NOT apply to Max built-in names, object names, or message selectors �
 
 ## Always Verify Against Max Documentation — Never Guess
 
-Max is not consistent enough to reason about by analogy. Attribute names, types, value ranges, and defaults vary unpredictably between objects. **Before using any attribute or message you have not personally verified**, look it up in the Max installation's reference files. Do not guess, do not infer from similar objects, do not assume a value works because it sounds right.
+Max is not consistent in its terminology, implementation, or formatting. Attribute names, types, value ranges, and defaults vary unpredictably between objects and even between related objects in the same family. What works for `jit.gl.text3d` may not work for `jit.gl.text`. An attribute that takes a symbol in one object takes an int in another. A value that seems obvious (`align center`) may be silently ignored because the type is wrong (`align 1`). There is no reliable pattern to reason from — the only safe source is the documentation for that exact object.
+
+**Before using any attribute or message you have not personally verified**, look it up in the Max installation's reference files. Do not guess, do not infer from similar objects, do not assume a value works because it sounds right. The cost of guessing is paid by the user — every wrong attempt means another test cycle. A 30-second grep is always the better trade.
 
 For every attribute you intend to use, answer all of the following from the documentation before writing code:
 
