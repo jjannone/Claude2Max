@@ -33,7 +33,9 @@ Format: `- [ ]` = pending, `- [x]` = complete (move to Done section).
   - **Structural logic** — data flow reads top-to-bottom, left-to-right; signal path is visually distinct from control path
   - **Readability** — related objects grouped spatially; consistent spacing; no crossing patchcords where avoidable
   - **Functional units** — logically related clusters of objects are visually grouped and clearly separated from other clusters
-  - **Encapsulation** — where a functional unit is self-contained, consider wrapping it in a subpatcher (`p`) to reduce clutter and reinforce the logical boundary. The spec already supports subpatchers; the layout engine should identify candidates and apply encapsulation where it improves clarity.
+  - **Encapsulation** — where a functional unit is self-contained, consider wrapping it in a subpatcher (`p`) to reduce clutter and reinforce the logical boundary. The spec already supports subpatchers; the layout engine should identify candidates and apply encapsulation where it improves clarity. See inlet/outlet labeling rule below.
+
+  **Inlet/outlet labeling rule** (applies to all subpatchers, abstractions, and poly~ abstractions — not just those created by the layout engine): every `inlet` and `outlet` object must have a comment label immediately adjacent describing its purpose and expected type. Additionally, within the subpatcher, each inlet and outlet must have a `comment` object directly connected or placed next to it explaining what it receives/sends. This applies at creation time — never create an encapsulated unit without labels. Example: `inlet` labeled "0: bang — trigger generate" and a comment inside reading "← trigger: starts permutation generation".
 
   **Phase 3 — Screenshot verification**: after conversion, use computer-use MCP to:
   - Screenshot patching view — review for structural clarity, readable data flow, well-grouped functional units, encapsulation opportunities missed by the engine
