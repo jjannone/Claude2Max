@@ -134,9 +134,8 @@
   },
   "2d.wave~": {
     "numinlets": 4,
-    "numoutlets": 2,
+    "numoutlets": 1,
     "outlettype": [
-      "signal",
       "signal"
     ]
   },
@@ -229,52 +228,47 @@
     "numoutlets": 0,
     "outlettype": []
   },
+  "Jitter Geometry Features": {
+    "numinlets": 0,
+    "numoutlets": 0,
+    "outlettype": []
+  },
   "Jitter Matrix Operators": {
     "numinlets": 0,
     "numoutlets": 0,
     "outlettype": []
   },
-  "M4L.api.ObserveTransport": {
-    "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
-  },
-  "M4L.api.ToggleTransport": {
-    "numinlets": 1,
+  "MC Wrapper Features": {
+    "numinlets": 0,
     "numoutlets": 0,
     "outlettype": []
   },
   "PI_OVER_2": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "PI_OVER_2~": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "PI_OVER_4": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "PI_OVER_4~": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "Parameter Properties": {
+    "numinlets": 0,
+    "numoutlets": 0,
+    "outlettype": []
+  },
+  "Snapshot Messages": {
     "numinlets": 0,
     "numoutlets": 0,
     "outlettype": []
@@ -283,8 +277,8 @@
     "numinlets": 7,
     "numoutlets": 2,
     "outlettype": [
-      "signal",
-      "signal"
+      "",
+      ""
     ]
   },
   "abl.device.channeleq~": {
@@ -374,7 +368,7 @@
     "outlettype": [
       "signal",
       "signal",
-      "dict"
+      ""
     ]
   },
   "abl.device.spectralresonator~": {
@@ -649,8 +643,8 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "signal",
-      "signal"
+      "",
+      ""
     ]
   },
   "abl.dsp.pitchshifter~": {
@@ -845,28 +839,24 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "absdiff": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "absdiff~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "absolutepath": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "symbol"
+      ""
     ]
   },
   "abs~": {
@@ -877,31 +867,29 @@
     ]
   },
   "accum": {
-    "numinlets": 2,
+    "numinlets": 3,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "accum~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "acos": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "acosh": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "acosh~": {
@@ -920,33 +908,26 @@
   },
   "active": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "adc~": {
     "numinlets": 1,
-    "numoutlets": 3,
+    "numoutlets": 2,
     "outlettype": [
-      "signal",
       "signal",
       "signal"
     ]
   },
   "add": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "add~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "adoutput~": {
     "numinlets": 1,
@@ -958,19 +939,18 @@
   },
   "adsr~": {
     "numinlets": 5,
-    "numoutlets": 2,
+    "numoutlets": 4,
     "outlettype": [
       "signal",
-      "bang"
-    ]
-  },
-  "adstatus": {
-    "numinlets": 2,
-    "numoutlets": 2,
-    "outlettype": [
+      "signal",
       "",
       ""
     ]
+  },
+  "adstatus": {
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "allpass~": {
     "numinlets": 3,
@@ -985,8 +965,8 @@
     "outlettype": [
       "signal",
       "signal",
-      "",
-      ""
+      "signal",
+      "signal"
     ]
   },
   "anal": {
@@ -997,24 +977,20 @@
     ]
   },
   "and": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "and~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "append": {
-    "numinlets": 2,
+    "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "list"
+      ""
     ]
   },
   "array": {
@@ -1022,14 +998,6 @@
     "numoutlets": 3,
     "outlettype": [
       "",
-      "",
-      ""
-    ]
-  },
-  "array.at": {
-    "numinlets": 2,
-    "numoutlets": 2,
-    "outlettype": [
       "",
       ""
     ]
@@ -1096,14 +1064,14 @@
     ]
   },
   "array.flatten": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
       ""
     ]
   },
   "array.foreach": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 3,
     "outlettype": [
       "",
@@ -1112,7 +1080,7 @@
     ]
   },
   "array.frombuffer": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
       "",
@@ -1156,7 +1124,7 @@
     ]
   },
   "array.iter": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
       ""
@@ -1186,35 +1154,35 @@
     ]
   },
   "array.max": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
       ""
     ]
   },
   "array.mean": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
       ""
     ]
   },
   "array.median": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
       ""
     ]
   },
   "array.min": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
       ""
     ]
   },
   "array.mode": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
       ""
@@ -1279,7 +1247,7 @@
     ]
   },
   "array.reverse": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
       ""
@@ -1357,7 +1325,7 @@
     ]
   },
   "array.stddev": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
       ""
@@ -1386,7 +1354,7 @@
     ]
   },
   "array.tobuffer": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
       ""
@@ -1443,7 +1411,7 @@
     ]
   },
   "array.wrap": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
       ""
@@ -1453,14 +1421,14 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "asinh": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "asinh~": {
@@ -1481,14 +1449,14 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "atan2": {
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "atan2~": {
@@ -1502,7 +1470,7 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "atanh~": {
@@ -1523,7 +1491,7 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "atodb~": {
@@ -1537,7 +1505,7 @@
     "numinlets": 3,
     "numoutlets": 1,
     "outlettype": [
-      "list"
+      ""
     ]
   },
   "attrui": {
@@ -1558,42 +1526,32 @@
     ]
   },
   "average": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "average_absolute": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "average_absolute~": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "average_rms": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "average_rms~": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "average~": {
-    "numinlets": 3,
+    "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
       "signal"
@@ -1603,91 +1561,71 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "bag": {
     "numinlets": 2,
-    "numoutlets": 2,
+    "numoutlets": 1,
     "outlettype": [
-      "number",
-      "number"
+      ""
     ]
   },
   "bangbang": {
     "numinlets": 1,
-    "numoutlets": 3,
+    "numoutlets": 2,
     "outlettype": [
-      "",
       "",
       ""
     ]
   },
   "beatstohz": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "beatstohz~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "beatstoms": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "beatstoms~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "beatstosamps": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "beatstosamps~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "beatstoticks": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "beatstoticks~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "beattime": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "begin~": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
       "signal"
@@ -1697,16 +1635,14 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "number",
-      "number"
+      "",
+      ""
     ]
   },
   "bendout": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 2,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "bgcolor": {
     "numinlets": 4,
@@ -1764,24 +1700,20 @@
   },
   "blackman": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "blackman~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "bline": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "number",
-      "bang"
+      "",
+      ""
     ]
   },
   "bondo": {
@@ -1794,24 +1726,18 @@
   },
   "bool": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "boolnum": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "boolnum~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "borax": {
     "numinlets": 3,
@@ -1829,29 +1755,24 @@
     ]
   },
   "boxtotri": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "boxtotri~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "bpatcher": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "bucket": {
     "numinlets": 1,
-    "numoutlets": 2,
+    "numoutlets": 1,
     "outlettype": [
-      "",
       ""
     ]
   },
@@ -1864,12 +1785,9 @@
     ]
   },
   "buffer": {
-    "numinlets": 0,
-    "numoutlets": 2,
-    "outlettype": [
-      "",
-      ""
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "bufferop~": {
     "numinlets": 1,
@@ -1892,17 +1810,15 @@
     ]
   },
   "butterworth~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "button": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "bang"
+      ""
     ]
   },
   "capture": {
@@ -1922,8 +1838,8 @@
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "number",
-      "number"
+      "",
+      ""
     ]
   },
   "cartopol~": {
@@ -1943,38 +1859,28 @@
   },
   "cbrt": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "cbrt~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "ceil": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "ceil~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "cell": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "change": {
     "numinlets": 1,
@@ -1994,10 +1900,8 @@
   },
   "channels": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "chooser": {
     "numinlets": 1,
@@ -2015,9 +1919,9 @@
     "numinlets": 3,
     "numoutlets": 3,
     "outlettype": [
-      "signal",
-      "signal",
-      "signal"
+      "",
+      "",
+      ""
     ]
   },
   "circle": {
@@ -2026,18 +1930,14 @@
     "outlettype": []
   },
   "clamp": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "clamp~": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "click~": {
     "numinlets": 1,
@@ -2050,7 +1950,7 @@
     "numinlets": 3,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      ""
     ]
   },
   "clip~": {
@@ -2075,17 +1975,17 @@
     ]
   },
   "codebox": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "codebox~": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "coll": {
-    "numinlets": 2,
+    "numinlets": 1,
     "numoutlets": 4,
     "outlettype": [
       "",
@@ -2133,25 +2033,19 @@
     "outlettype": []
   },
   "concat": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "cond": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "cond~": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "cone": {
     "numinlets": 1,
@@ -2162,8 +2056,8 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "symbol",
-      "int"
+      "",
+      ""
     ]
   },
   "console": {
@@ -2172,84 +2066,70 @@
     "outlettype": [
       "",
       "",
-      "int"
+      ""
     ]
   },
   "constant": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "cos": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "cosT8": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "cosT8safe": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "cosT8safe~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "cosT8~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "cosh": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "cosh~": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      ""
     ]
   },
   "cosineinterp": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "cosineinterp~": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "cosx~": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      ""
     ]
   },
   "cos~": {
@@ -2263,20 +2143,16 @@
     "numinlets": 5,
     "numoutlets": 4,
     "outlettype": [
-      "number",
-      "bang, number",
-      "bang, number",
-      "number"
+      "",
+      "",
+      "",
+      ""
     ]
   },
   "counter~": {
-    "numinlets": 3,
-    "numoutlets": 3,
-    "outlettype": [
-      "signal",
-      "signal",
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "count~": {
     "numinlets": 2,
@@ -2298,7 +2174,7 @@
     "outlettype": []
   },
   "cross": {
-    "numinlets": 2,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
@@ -2307,7 +2183,7 @@
     "numoutlets": 2,
     "outlettype": [
       "",
-      "dict"
+      ""
     ]
   },
   "cross~": {
@@ -2319,69 +2195,55 @@
     ]
   },
   "ctlin": {
-    "numinlets": 3,
+    "numinlets": 1,
     "numoutlets": 3,
     "outlettype": [
-      "number",
-      "number",
-      "number"
+      "",
+      "",
+      ""
     ]
   },
   "ctlout": {
-    "numinlets": 4,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 3,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "cubicinterp": {
-    "numinlets": 5,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "cubicinterp~": {
-    "numinlets": 5,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "currentsampletime": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "currentsampletime~": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "currenttime": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "currenttime~": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "curve~": {
     "numinlets": 3,
     "numoutlets": 2,
     "outlettype": [
       "signal",
-      ""
+      "signal"
     ]
   },
   "cverb~": {
@@ -2392,17 +2254,16 @@
     ]
   },
   "cycle": {
-    "numinlets": 2,
+    "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      ""
     ]
   },
   "cycle~": {
     "numinlets": 2,
-    "numoutlets": 2,
+    "numoutlets": 1,
     "outlettype": [
-      "signal",
       "signal"
     ]
   },
@@ -2418,12 +2279,8 @@
   },
   "data": {
     "numinlets": 1,
-    "numoutlets": 3,
-    "outlettype": [
-      "number",
-      "number",
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "date": {
     "numinlets": 1,
@@ -2438,7 +2295,7 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "dbtoa~": {
@@ -2450,24 +2307,20 @@
   },
   "dcblock": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "dcblock~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "ddg.mono": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "int",
-      "int"
+      "",
+      ""
     ]
   },
   "decide": {
@@ -2478,19 +2331,14 @@
     ]
   },
   "declick~": {
-    "numinlets": 4,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "decode": {
     "numinlets": 3,
-    "numoutlets": 4,
+    "numoutlets": 1,
     "outlettype": [
-      "",
-      "",
-      "",
       ""
     ]
   },
@@ -2517,44 +2365,29 @@
   },
   "degrees": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "degrees~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "degtorad": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "degtorad~": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
-  },
-  "del": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "delay": {
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "bang"
+      ""
     ]
   },
   "delay~": {
@@ -2566,10 +2399,8 @@
   },
   "delta": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "deltaclip~": {
     "numinlets": 3,
@@ -2603,7 +2434,7 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "dialog": {
@@ -2724,42 +2555,34 @@
     ]
   },
   "dict.view": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "dim": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "div": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "div~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "dot": {
-    "numinlets": 2,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "downsamp": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "downsamp~": {
     "numinlets": 2,
@@ -2780,11 +2603,11 @@
     "numinlets": 3,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "dsp": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
@@ -2807,97 +2630,71 @@
   },
   "e": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "ease": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "ease.listinterp": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "list"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "ease.xfade~": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "ease~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "edge~": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "bang",
-      "bang"
+      "",
+      ""
     ]
   },
   "elapsed": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "elapsed~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "env2~": {
-    "numinlets": 4,
-    "numoutlets": 3,
-    "outlettype": [
-      "signal",
-      "bang",
-      "bang"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "eq": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "eqp": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "eqp~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "eq~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "error": {
     "numinlets": 1,
@@ -2908,55 +2705,45 @@
   },
   "exp": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
-  },
-  "exp2": {
-    "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
-  },
-  "exp2~": {
-    "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
-  },
-  "expm1": {
-    "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
-  },
-  "expm1~": {
-    "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
-  },
-  "expr": {
-    "numinlets": 0,
     "numoutlets": 0,
     "outlettype": []
   },
+  "exp2": {
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
+  },
+  "exp2~": {
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
+  },
+  "expm1": {
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
+  },
+  "expm1~": {
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
+  },
+  "expr": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
   "expr~": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "exp~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "ezadc~": {
     "numinlets": 1,
@@ -2972,121 +2759,89 @@
     "outlettype": []
   },
   "e~": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "f": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fabs": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fabs~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "faceforward": {
-    "numinlets": 3,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "fastcos": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fastcos~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fastcubicinterp": {
-    "numinlets": 5,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fastcubicinterp~": {
-    "numinlets": 5,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fastexp": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fastexp~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fastpow": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fastpow~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fastsin": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fastsin~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fasttan": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fasttan~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fbinshift~": {
     "numinlets": 3,
@@ -3098,19 +2853,13 @@
   },
   "feedback~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fffb~": {
     "numinlets": 1,
-    "numoutlets": 8,
+    "numoutlets": 4,
     "outlettype": [
-      "signal",
-      "signal",
-      "signal",
-      "signal",
       "signal",
       "signal",
       "signal",
@@ -3118,34 +2867,28 @@
     ]
   },
   "fftfullspect": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "ffthop": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fftinfo": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fftinfo~": {
     "numinlets": 1,
     "numoutlets": 4,
     "outlettype": [
-      "int",
-      "int",
-      "int",
-      "int"
+      "",
+      "",
+      "",
+      ""
     ]
   },
   "fftin~": {
@@ -3158,11 +2901,9 @@
     ]
   },
   "fftoffset": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fftout~": {
     "numinlets": 2,
@@ -3170,20 +2911,14 @@
     "outlettype": []
   },
   "fftsize": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fftstream~": {
-    "numinlets": 2,
-    "numoutlets": 3,
-    "outlettype": [
-      "signal",
-      "signal",
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fft~": {
     "numinlets": 2,
@@ -3225,15 +2960,9 @@
     ]
   },
   "filtercoeff": {
-    "numinlets": 3,
-    "numoutlets": 5,
-    "outlettype": [
-      "number",
-      "number",
-      "number",
-      "number",
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "filtercoeff~": {
     "numinlets": 3,
@@ -3269,48 +2998,40 @@
     "numinlets": 8,
     "numoutlets": 7,
     "outlettype": [
-      "list",
-      "float",
-      "float",
-      "float",
-      "float",
-      "list",
-      "int"
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
     ]
   },
   "fixdenorm": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fixdenorm~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fixnan": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fixnan~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "float": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      ""
     ]
   },
   "flonum": {
@@ -3323,17 +3044,13 @@
   },
   "floor": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "floor~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "flush": {
     "numinlets": 2,
@@ -3344,11 +3061,9 @@
     ]
   },
   "fold": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "folder": {
     "numinlets": 1,
@@ -3359,11 +3074,9 @@
     ]
   },
   "fold~": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "follow": {
     "numinlets": 1,
@@ -3389,22 +3102,18 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "matrix"
+      ""
     ]
   },
   "fract": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fract~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "frameaccum~": {
     "numinlets": 1,
@@ -3438,7 +3147,7 @@
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "list"
+      ""
     ]
   },
   "frame~": {
@@ -3465,17 +3174,13 @@
   },
   "fromnormalized": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fromnormalized~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "fromsymbol": {
     "numinlets": 1,
@@ -3492,9 +3197,11 @@
     ]
   },
   "ftom~": {
-    "numinlets": 2,
-    "numoutlets": 0,
-    "outlettype": []
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      "signal"
+    ]
   },
   "funbuff": {
     "numinlets": 2,
@@ -3516,7 +3223,7 @@
     ]
   },
   "funnel": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
@@ -3524,46 +3231,44 @@
     "numinlets": 1,
     "numoutlets": 3,
     "outlettype": [
-      "number",
-      "number",
-      "bang, list"
+      "",
+      "",
+      ""
     ]
   },
   "gain~": {
-    "numinlets": 2,
+    "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
       "signal",
-      ""
+      "signal"
     ]
   },
   "gamepad": {
     "numinlets": 1,
     "numoutlets": 3,
     "outlettype": [
-      "list",
-      "list",
-      "message"
+      "",
+      "",
+      ""
     ]
   },
   "gate": {
     "numinlets": 2,
-    "numoutlets": 0,
-    "outlettype": []
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
   },
   "gatetotrig": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "gatetotrig~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "gate~": {
     "numinlets": 2,
@@ -3573,10 +3278,10 @@
     ]
   },
   "gen": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      ""
     ]
   },
   "gen.codebox": {
@@ -3590,13 +3295,15 @@
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      ""
     ]
   },
   "gen~": {
-    "numinlets": 1,
-    "numoutlets": 0,
-    "outlettype": []
+    "numinlets": 2,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
   },
   "gestalt": {
     "numinlets": 1,
@@ -3640,14 +3347,16 @@
     ]
   },
   "granulator~": {
-    "numinlets": 5,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "gridmeter~": {
     "numinlets": 1,
-    "numoutlets": 0,
-    "outlettype": []
+    "numoutlets": 1,
+    "outlettype": [
+      "multichannelsignal"
+    ]
   },
   "groove~": {
     "numinlets": 3,
@@ -3665,118 +3374,90 @@
     ]
   },
   "gt": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "gte": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "gtep": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "gtep~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "gte~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "gtp": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "gtp~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "gt~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "halfpi": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "halfpi~": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "hamming": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "hamming~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "hann": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "hann~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "hi": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "list",
-      "message"
+      "",
+      ""
     ]
   },
   "hid": {
     "numinlets": 1,
     "numoutlets": 3,
     "outlettype": [
-      "list",
-      "message",
-      "message"
+      "",
+      "",
+      ""
     ]
   },
   "hilbert~": {
@@ -3802,10 +3483,8 @@
   },
   "history": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "hover": {
     "numinlets": 1,
@@ -3819,96 +3498,68 @@
   },
   "hsl2rgb": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "hypot": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "hypot~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "hztobeats": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "hztobeats~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "hztoms": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "hztoms~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "hztosamps": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "hztosamps~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "hztoticks": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "hztoticks~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "if": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "ifftstream~": {
-    "numinlets": 2,
-    "numoutlets": 3,
-    "outlettype": [
-      "signal",
-      "signal",
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "ifft~": {
     "numinlets": 2,
@@ -3929,7 +3580,7 @@
     ]
   },
   "in": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
       ""
@@ -3944,8 +3595,9 @@
   },
   "index~": {
     "numinlets": 2,
-    "numoutlets": 1,
+    "numoutlets": 2,
     "outlettype": [
+      "signal",
       "signal"
     ]
   },
@@ -3953,15 +3605,15 @@
     "numinlets": 1,
     "numoutlets": 10,
     "outlettype": [
-      "float",
-      "list",
-      "float",
-      "float",
-      "float",
-      "float",
-      "float",
       "",
-      "int",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
       ""
     ]
   },
@@ -3973,11 +3625,9 @@
     ]
   },
   "inport": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "bang, number, list"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "int": {
     "numinlets": 2,
@@ -3997,35 +3647,27 @@
     "outlettype": []
   },
   "intnum": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "intnum~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "invpi": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "invpi~": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "in~": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
       "signal"
@@ -4040,31 +3682,23 @@
   },
   "isdenorm": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "isdenorm~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "isnan": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "isnan~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "itable": {
     "numinlets": 2,
@@ -4075,10 +3709,10 @@
     ]
   },
   "iter": {
-    "numinlets": 2,
+    "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "list"
+      ""
     ]
   },
   "itoa": {
@@ -4089,11 +3723,21 @@
     ]
   },
   "jbox": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
-  "jit.*": {
+  "jit.3m": {
+    "numinlets": 1,
+    "numoutlets": 4,
+    "outlettype": [
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "jit.alphablend": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
@@ -4101,38 +3745,20 @@
       ""
     ]
   },
-  "jit.3m": {
-    "numinlets": 1,
-    "numoutlets": 4,
-    "outlettype": [
-      "list",
-      "list",
-      "list",
-      "list"
-    ]
-  },
-  "jit.alphablend": {
-    "numinlets": 2,
-    "numoutlets": 2,
-    "outlettype": [
-      "matrix",
-      "matrix"
-    ]
-  },
   "jit.altern": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.ameba": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.anim.drive": {
@@ -4163,24 +3789,24 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.argb2grgb": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.argb2uyvy": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.avc": {
@@ -4194,8 +3820,8 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.axis2quat": {
@@ -4210,27 +3836,11 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.ayuv2luma": {
-    "numinlets": 1,
-    "numoutlets": 2,
-    "outlettype": [
-      "matrix",
-      "matrix"
-    ]
-  },
-  "jit.ayuv2uyvy": {
-    "numinlets": 1,
-    "numoutlets": 2,
-    "outlettype": [
-      "matrix",
-      "matrix"
-    ]
-  },
-  "jit.bang": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
@@ -4238,135 +3848,148 @@
       ""
     ]
   },
+  "jit.ayuv2uyvy": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.bang": {
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
+  },
   "jit.bfg": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.brass": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.brcosa": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.bsort": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.buffer~": {
     "numinlets": 1,
     "numoutlets": 3,
     "outlettype": [
-      "matrix",
-      "matrix",
-      "matrix"
+      "",
+      "",
+      ""
     ]
   },
   "jit.catch~": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.cellblock": {
     "numinlets": 2,
     "numoutlets": 4,
     "outlettype": [
-      "list",
-      "list",
-      "list",
-      "list"
+      "",
+      "",
+      "",
+      ""
     ]
   },
   "jit.change": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.charmap": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.chromakey": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.clip": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.coerce": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.colorspace": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.concat": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.convolve": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.conway": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.cycle": {
@@ -4381,33 +4004,33 @@
     "numinlets": 1,
     "numoutlets": 3,
     "outlettype": [
-      "matrix",
-      "matrix",
-      "matrix"
+      "",
+      "",
+      ""
     ]
   },
   "jit.desktop": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.dimmap": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.dimop": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.displays": {
@@ -4418,7 +4041,7 @@
     ]
   },
   "jit.dx.grab": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
       "",
@@ -4426,7 +4049,7 @@
     ]
   },
   "jit.dx.videoout": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
       "",
@@ -4437,8 +4060,8 @@
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.euler2quat": {
@@ -4453,24 +4076,24 @@
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.fastblur": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.fft": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.fill": {
@@ -4485,25 +4108,25 @@
     "numinlets": 1,
     "numoutlets": 3,
     "outlettype": [
-      "list",
-      "list",
-      "list"
+      "",
+      "",
+      ""
     ]
   },
   "jit.fluoride": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.fprint": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.fpsgui": {
@@ -4516,21 +4139,642 @@
   },
   "jit.framecount": {
     "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
+  },
+  "jit.freeframe": {
+    "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
       "",
       ""
     ]
   },
-  "jit.freeframe": {
+  "jit.fx.alphaglue": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
+    ]
+  },
+  "jit.fx.altern": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.ameba": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.an.max": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.an.mean": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.an.min": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.bitcrush": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.blur": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.brass": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.brcosa": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.bsort": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.camera": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.cf.bilateral": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.cf.directional": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.cf.gaussian": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.cf.kuwahara": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.cf.radial": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.cf.sharpen": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.cf.tiltshift": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.co.accum": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.additive": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.alphablend": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.average": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.brightlight": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.burn": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.chromakey": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.darken": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.difference": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.dodge": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.exclude": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.freeze": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.glow": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.hardlight": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.heat": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.inverse": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.lighten": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.lumakey": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.multiply": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.negate": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.normal": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.overlay": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.reflect": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.screen": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.softlight": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.stamp": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.co.subtractive": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.concat": {
+    "numinlets": 2,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.conway": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.crt": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.delay": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.dimmap": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.eclipse": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.ge.flowfield": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.ge.lineinterp": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.ge.pattern": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.ge.randlines": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.grain": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.hue": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.lin2srgb": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.multiplex": {
+    "numinlets": 2,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.pixelsorting": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.repos": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.rgb2luma": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
     ]
   },
   "jit.fx.rota": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.slide": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.sobel": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.srgb2lin": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.subtexture": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.threshold": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.tp.delay": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.tp.filter": {
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.tp.warp": {
+    "numinlets": 2,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.tr.dissolve": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.tr.gridwipe": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.tr.huefade": {
+    "numinlets": 2,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.tr.rotfade": {
+    "numinlets": 2,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.tr.shrinkwipe": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.tr.slide": {
+    "numinlets": 2,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.tr.vignettes": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.tr.xfade": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.tr.zoomfade": {
+    "numinlets": 2,
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
+  },
+  "jit.fx.vhs": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.fx.wake": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
@@ -4557,8 +4801,208 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
+    ]
+  },
+  "jit.geom.close": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.geom.crop": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.geom.decimate": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.geom.dimples": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.geom.displace": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.geom.distribute": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.geom.join": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.geom.multiple": {
+    "numinlets": 4,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.geom.normalize": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.geom.normgen": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.geom.prop": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.geom.remesh": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.geom.shape": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.geom.smooth": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.geom.subdivide": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.geom.texgen": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.geom.thru": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.geom.todict": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.geom.togeom": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.geom.tomatrix": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.geom.tomesh": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.geom.twist": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.geom.waves": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.geom.xform": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.geometry": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
     ]
   },
   "jit.gl.asyncread": {
@@ -4570,6 +5014,14 @@
     ]
   },
   "jit.gl.bfg": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.gl.buffer": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
@@ -4601,20 +5053,28 @@
       ""
     ]
   },
+  "jit.gl.environment": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
   "jit.gl.graph": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "disabled",
-      "disabled"
+      "",
+      ""
     ]
   },
   "jit.gl.gridshape": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "disabled",
-      "disabled"
+      "",
+      ""
     ]
   },
   "jit.gl.handle": {
@@ -4626,14 +5086,6 @@
     ]
   },
   "jit.gl.isosurf": {
-    "numinlets": 1,
-    "numoutlets": 2,
-    "outlettype": [
-      "disabled",
-      "disabled"
-    ]
-  },
-  "jit.gl.layer": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
@@ -4672,15 +5124,14 @@
       ""
     ]
   },
-  "jit.gl.model": {
+  "jit.gl.meshwarp": {
     "numinlets": 1,
-    "numoutlets": 2,
+    "numoutlets": 1,
     "outlettype": [
-      "disabled",
-      "disabled"
+      ""
     ]
   },
-  "jit.gl.movie": {
+  "jit.gl.model": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
@@ -4709,8 +5160,8 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "disabled",
-      "disabled"
+      "",
+      ""
     ]
   },
   "jit.gl.pass": {
@@ -4754,7 +5205,7 @@
     ]
   },
   "jit.gl.pix": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
       "",
@@ -4773,15 +5224,6 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "disabled",
-      "disabled"
-    ]
-  },
-  "jit.gl.polymovie": {
-    "numinlets": 1,
-    "numoutlets": 3,
-    "outlettype": [
-      "",
       "",
       ""
     ]
@@ -4830,11 +5272,29 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "disabled",
-      "disabled"
+      "",
+      ""
     ]
   },
+  "jit.gl.textmult": {
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
+  },
   "jit.gl.texture": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.gl.textureset": {
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
+  },
+  "jit.gl.tf": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
@@ -4846,28 +5306,28 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "disabled",
-      "disabled"
+      "",
+      ""
     ]
   },
   "jit.gl.volume": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "disabled",
-      "disabled"
+      "",
+      ""
     ]
   },
   "jit.glop": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.glue": {
-    "numinlets": 4,
+    "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
       "",
@@ -4878,19 +5338,11 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix / texture",
-      "matrix / texture"
+      "",
+      ""
     ]
   },
   "jit.gradient": {
-    "numinlets": 1,
-    "numoutlets": 2,
-    "outlettype": [
-      "matrix",
-      "matrix"
-    ]
-  },
-  "jit.graph": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
@@ -4898,20 +5350,30 @@
       ""
     ]
   },
+  "jit.gradient.ui": {
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
+  },
+  "jit.graph": {
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
+  },
   "jit.grgb2argb": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.hatch": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.hello": {
@@ -4925,109 +5387,109 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.hsl2rgb": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.hue": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.iter": {
     "numinlets": 1,
     "numoutlets": 3,
     "outlettype": [
-      "list",
-      "list",
-      "list"
+      "",
+      "",
+      ""
     ]
   },
   "jit.keyscreen": {
     "numinlets": 3,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.la.determinant": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "float/list",
-      "float/list"
+      "",
+      ""
     ]
   },
   "jit.la.diagproduct": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "float/list",
-      "float/list"
+      "",
+      ""
     ]
   },
   "jit.la.inverse": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.la.mult": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.la.trace": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "float/list",
-      "float/list"
+      "",
+      ""
     ]
   },
   "jit.la.uppertri": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.lcd": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.linden": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.line": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
@@ -5035,98 +5497,87 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.luma2uyvy": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.lumakey": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.map": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.matrix": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.matrixinfo": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "matrix"
+      ""
     ]
   },
   "jit.matrixset": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.mgraphics": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.mo.field": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "jit.mo.fieldmask": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "jit.mo.func": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "jit.mo.join": {
-    "numinlets": 3,
-    "numoutlets": 2,
-    "outlettype": [
-      "",
-      ""
-    ]
-  },
-  "jit.mo.sin": {
     "numinlets": 1,
-    "numoutlets": 2,
-    "outlettype": [
-      "",
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "jit.mo.time": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
@@ -5142,26 +5593,26 @@
     "numinlets": 2,
     "numoutlets": 4,
     "outlettype": [
-      "signal",
-      "signal",
-      "matrix",
-      "matrix"
+      "",
+      "",
+      "",
+      ""
     ]
   },
   "jit.multiplex": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.mxform2d": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.net.recv": {
@@ -5184,16 +5635,16 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.normalize": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.obref": {
@@ -5205,48 +5656,48 @@
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.openexr": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.p.bounds": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.p.shiva": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.p.vishnu": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.pack": {
     "numinlets": 4,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.path": {
@@ -5264,7 +5715,7 @@
     "numoutlets": 2,
     "outlettype": [
       "signal",
-      ""
+      "signal"
     ]
   },
   "jit.phys.6dof": {
@@ -5320,7 +5771,7 @@
     ]
   },
   "jit.phys.multiple": {
-    "numinlets": 3,
+    "numinlets": 2,
     "numoutlets": 3,
     "outlettype": [
       "",
@@ -5373,41 +5824,38 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.playlist": {
     "numinlets": 1,
     "numoutlets": 3,
     "outlettype": [
-      "matrix/texture",
-      "matrix/texture",
-      "dict"
+      "",
+      "",
+      ""
     ]
   },
   "jit.plot": {
     "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
+  },
+  "jit.plume": {
+    "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
       "",
       ""
     ]
   },
-  "jit.plume": {
-    "numinlets": 2,
-    "numoutlets": 2,
-    "outlettype": [
-      "matrix",
-      "matrix"
-    ]
-  },
   "jit.plur": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.poke~": {
@@ -5417,12 +5865,17 @@
       ""
     ]
   },
+  "jit.polymovie": {
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
+  },
   "jit.print": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.proxy": {
@@ -5469,12 +5922,12 @@
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.qt.movie": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
       "",
@@ -5485,16 +5938,16 @@
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.qt.videoout": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.quat": {
@@ -5534,23 +5987,23 @@
     "numoutlets": 2,
     "outlettype": [
       "signal",
-      ""
+      "signal"
     ]
   },
   "jit.repos": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.resamp": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.reverse": {
@@ -5565,91 +6018,86 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.rgb2luma": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.robcross": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.rota": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.roy": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.rubix": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.scalebias": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.scanoffset": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.scanslide": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.scanwrap": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.scissors": {
     "numinlets": 1,
-    "numoutlets": 7,
+    "numoutlets": 2,
     "outlettype": [
-      "",
-      "",
-      "",
-      "",
-      "",
       "",
       ""
     ]
@@ -5666,152 +6114,120 @@
     "numinlets": 3,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.slide": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.sobel": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.spill": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "list",
-      "list"
+      "",
+      ""
     ]
   },
   "jit.split": {
     "numinlets": 1,
     "numoutlets": 3,
     "outlettype": [
-      "matrix",
-      "matrix",
-      "matrix"
+      "",
+      "",
+      ""
     ]
   },
   "jit.sprinkle": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.str.fromsymbol": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.str.op": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.str.regexp": {
     "numinlets": 1,
     "numoutlets": 5,
     "outlettype": [
-      "matrix",
-      "matrix",
-      "matrix",
-      "matrix",
-      "matrix"
+      "",
+      "",
+      "",
+      "",
+      ""
     ]
   },
   "jit.str.tosymbol": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "symbol",
-      "symbol"
+      "",
+      ""
     ]
   },
   "jit.streak": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.submatrix": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.textfile": {
     "numinlets": 1,
     "numoutlets": 3,
     "outlettype": [
-      "matrix",
-      "matrix",
-      "matrix"
+      "",
+      "",
+      ""
     ]
   },
   "jit.thin": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.tiffany": {
-    "numinlets": 1,
-    "numoutlets": 2,
-    "outlettype": [
-      "matrix",
-      "matrix"
-    ]
-  },
-  "jit.time": {
-    "numinlets": 1,
-    "numoutlets": 2,
-    "outlettype": [
-      "",
-      ""
-    ]
-  },
-  "jit.time.perlin": {
-    "numinlets": 1,
-    "numoutlets": 2,
-    "outlettype": [
-      "",
-      ""
-    ]
-  },
-  "jit.time.saw": {
-    "numinlets": 1,
-    "numoutlets": 2,
-    "outlettype": [
-      "",
-      ""
-    ]
-  },
-  "jit.time.sin": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
@@ -5823,83 +6239,131 @@
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.transpose": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.turtle": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
+    ]
+  },
+  "jit.ui.button": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.ui.canvas": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.ui.group": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.ui.number": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.ui.slider": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "jit.ui.toggle": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
     ]
   },
   "jit.uldl": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.unpack": {
     "numinlets": 1,
     "numoutlets": 5,
     "outlettype": [
-      "matrix",
-      "matrix",
-      "matrix",
-      "matrix",
-      "matrix"
+      "",
+      "",
+      "",
+      "",
+      ""
     ]
   },
   "jit.uyvy2argb": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.uyvy2ayuv": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.uyvy2luma": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.vcr": {
     "numinlets": 3,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.wake": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit.window": {
@@ -5923,20 +6387,20 @@
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "matrix",
-      "matrix"
+      "",
+      ""
     ]
   },
   "jit_kernel": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "join": {
-    "numinlets": 0,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "list"
+      ""
     ]
   },
   "js": {
@@ -5948,12 +6412,8 @@
   },
   "jstrigger": {
     "numinlets": 1,
-    "numoutlets": 3,
-    "outlettype": [
-      "",
-      "",
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "jsui": {
     "numinlets": 1,
@@ -5978,8 +6438,13 @@
       "signal"
     ]
   },
+  "kbm.data": {
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
+  },
   "key": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 4,
     "outlettype": [
       "",
@@ -5989,7 +6454,7 @@
     ]
   },
   "keyup": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 4,
     "outlettype": [
       "",
@@ -5999,11 +6464,9 @@
     ]
   },
   "kink": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "kink~": {
     "numinlets": 2,
@@ -6021,18 +6484,14 @@
     ]
   },
   "latch": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "latch~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "lcd": {
     "numinlets": 1,
@@ -6064,10 +6523,9 @@
     ]
   },
   "limi~": {
-    "numinlets": 2,
-    "numoutlets": 2,
+    "numinlets": 1,
+    "numoutlets": 1,
     "outlettype": [
-      "signal",
       "signal"
     ]
   },
@@ -6075,281 +6533,192 @@
     "numinlets": 3,
     "numoutlets": 2,
     "outlettype": [
-      "number",
-      "bang"
+      "",
+      ""
     ]
   },
   "linearinterp": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "linearinterp~": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "linedrive": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "line~": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
       "signal",
-      ""
+      "signal"
     ]
   },
   "list.change": {
-    "numinlets": 2,
-    "numoutlets": 2,
-    "outlettype": [
-      "list",
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.compare": {
-    "numinlets": 2,
-    "numoutlets": 2,
-    "outlettype": [
-      "number",
-      "list"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.delace": {
     "numinlets": 1,
-    "numoutlets": 2,
-    "outlettype": [
-      "list",
-      "list"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.ease": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "list"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.ecils": {
-    "numinlets": 2,
-    "numoutlets": 2,
-    "outlettype": [
-      "list",
-      "list"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.filter": {
-    "numinlets": 2,
-    "numoutlets": 2,
-    "outlettype": [
-      "list",
-      "list"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.group": {
-    "numinlets": 2,
-    "numoutlets": 2,
-    "outlettype": [
-      "",
-      ""
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.indexmap": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "list"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.join": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "list"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.lace": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "list"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.len": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.lookup": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "list"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.median": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.mth": {
-    "numinlets": 2,
-    "numoutlets": 2,
-    "outlettype": [
-      "number",
-      "list"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.nth": {
-    "numinlets": 2,
-    "numoutlets": 2,
-    "outlettype": [
-      "number",
-      "list"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.queue": {
     "numinlets": 1,
-    "numoutlets": 2,
-    "outlettype": [
-      "number",
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.reg": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "list"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.rev": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "list"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.rot": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "list"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.scramble": {
-    "numinlets": 2,
-    "numoutlets": 2,
-    "outlettype": [
-      "list",
-      "list"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.sect": {
-    "numinlets": 2,
-    "numoutlets": 2,
-    "outlettype": [
-      "list",
-      "bang"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.slice": {
-    "numinlets": 2,
-    "numoutlets": 2,
-    "outlettype": [
-      "list",
-      "list"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.sort": {
-    "numinlets": 2,
-    "numoutlets": 2,
-    "outlettype": [
-      "list",
-      "list"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.stack": {
     "numinlets": 1,
-    "numoutlets": 2,
-    "outlettype": [
-      "number",
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.store": {
-    "numinlets": 3,
-    "numoutlets": 4,
-    "outlettype": [
-      "list",
-      "bang",
-      "number",
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.stream": {
-    "numinlets": 2,
-    "numoutlets": 2,
-    "outlettype": [
-      "list",
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.sub": {
-    "numinlets": 2,
-    "numoutlets": 2,
-    "outlettype": [
-      "number",
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.sum": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.swap": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "list"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.thin": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "list"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.union": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "list"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "list.unique": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "list"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "listbox": {
     "numinlets": 1,
@@ -6363,16 +6732,16 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "list"
+      ""
     ]
   },
   "live.adsrui": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "live.adsr~": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
@@ -6414,8 +6783,8 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "number",
-      "number"
+      "",
+      ""
     ]
   },
   "live.drop": {
@@ -6432,20 +6801,20 @@
     "outlettype": [
       "signal",
       "signal",
-      "number",
-      "number",
-      "float/list"
+      "",
+      "",
+      ""
     ]
   },
   "live.grid": {
     "numinlets": 2,
     "numoutlets": 6,
     "outlettype": [
-      "list",
-      "list",
-      "list",
-      "list",
-      "list",
+      "",
+      "",
+      "",
+      "",
+      "",
       ""
     ]
   },
@@ -6478,8 +6847,8 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "float",
-      "int"
+      "",
+      ""
     ]
   },
   "live.miditool.in": {
@@ -6507,40 +6876,31 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "number",
-      "number"
-    ]
-  },
-  "live.object": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
-  },
-  "live.observer": {
-    "numinlets": 2,
-    "numoutlets": 2,
-    "outlettype": [
       "",
       ""
     ]
   },
-  "live.param~": {
+  "live.object": {
     "numinlets": 0,
+    "numoutlets": 0,
+    "outlettype": []
+  },
+  "live.observer": {
+    "numinlets": 0,
+    "numoutlets": 0,
+    "outlettype": []
+  },
+  "live.param~": {
+    "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
       "signal"
     ]
   },
   "live.path": {
-    "numinlets": 1,
-    "numoutlets": 3,
-    "outlettype": [
-      "",
-      "",
-      ""
-    ]
+    "numinlets": 0,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "live.push": {
     "numinlets": 1,
@@ -6548,11 +6908,9 @@
     "outlettype": []
   },
   "live.remote~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numinlets": 0,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "live.routing": {
     "numinlets": 1,
@@ -6566,7 +6924,7 @@
     ]
   },
   "live.scope~": {
-    "numinlets": 2,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
@@ -6574,19 +6932,19 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "number",
-      "number"
+      "",
+      ""
     ]
   },
   "live.step": {
     "numinlets": 1,
     "numoutlets": 5,
     "outlettype": [
-      "list",
-      "list",
-      "list",
-      "list",
-      "int"
+      "",
+      "",
+      "",
+      "",
+      ""
     ]
   },
   "live.tab": {
@@ -6619,168 +6977,129 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "int"
+      ""
     ]
   },
   "ln": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "ln10": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "ln10~": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "ln2": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "ln2~": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "loadbang": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "bang"
+      ""
     ]
   },
   "loadmess": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "list"
+      ""
     ]
   },
   "log": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "log10": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "log10e": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "log10e~": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "log10~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "log1p": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "log1p~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "log2": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "log2e": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "log2e~": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "log2f": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "log2f~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "log2~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "log~": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
       "signal"
     ]
   },
   "lookup": {
-    "numinlets": 7,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "lookup~": {
-    "numinlets": 2,
-    "numoutlets": 2,
+    "numinlets": 3,
+    "numoutlets": 1,
     "outlettype": [
-      "signal",
       "signal"
     ]
   },
@@ -6795,69 +7114,53 @@
     "numinlets": 1,
     "numoutlets": 6,
     "outlettype": [
-      "float",
-      "float",
-      "float",
-      "float",
-      "float",
-      "float"
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
     ]
   },
   "lt": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "lte": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "ltep": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "ltep~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "lte~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "ltp": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "ltp~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "lt~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "makenote": {
     "numinlets": 3,
@@ -6883,9 +7186,9 @@
     "numinlets": 3,
     "numoutlets": 3,
     "outlettype": [
-      "dict",
-      "dict",
-      "dict"
+      "",
+      "",
+      ""
     ]
   },
   "matrixctrl": {
@@ -6898,24 +7201,24 @@
   },
   "matrix~": {
     "numinlets": 2,
-    "numoutlets": 1,
+    "numoutlets": 3,
     "outlettype": [
-      "signal"
+      "signal",
+      "signal",
+      ""
     ]
   },
   "max": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "maximum": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "number",
-      "number"
+      "",
+      ""
     ]
   },
   "maximum~": {
@@ -6926,7 +7229,7 @@
     ]
   },
   "maxurl": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
       "",
@@ -7063,16 +7366,15 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      "multichannelsignal"
     ]
   },
   "mc.adsr~": {
     "numinlets": 5,
-    "numoutlets": 5,
+    "numoutlets": 4,
     "outlettype": [
-      "",
-      "",
-      "",
+      "signal",
+      "signal",
       "",
       ""
     ]
@@ -7086,20 +7388,19 @@
   },
   "mc.amxd~": {
     "numinlets": 3,
-    "numoutlets": 5,
+    "numoutlets": 4,
     "outlettype": [
       "signal",
       "signal",
-      "",
-      "",
-      ""
+      "signal",
+      "signal"
     ]
   },
   "mc.apply~": {
     "numinlets": 3,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      "multichannelsignal"
     ]
   },
   "mc.asinh~": {
@@ -7162,17 +7463,13 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "float"
+      ""
     ]
   },
   "mc.bands~": {
-    "numinlets": 5,
-    "numoutlets": 3,
-    "outlettype": [
-      "signal",
-      "",
-      ""
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "mc.biquad~": {
     "numinlets": 6,
@@ -7230,11 +7527,6 @@
       "signal"
     ]
   },
-  "mc.capture~": {
-    "numinlets": 1,
-    "numoutlets": 0,
-    "outlettype": []
-  },
   "mc.cartopol~": {
     "numinlets": 2,
     "numoutlets": 2,
@@ -7268,7 +7560,7 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "int",
+      "",
       "signal"
     ]
   },
@@ -7276,10 +7568,10 @@
     "numinlets": 1,
     "numoutlets": 4,
     "outlettype": [
-      "signal",
-      "signal",
-      "list",
-      "int"
+      "multichannelsignal",
+      "multichannelsignal",
+      "",
+      ""
     ]
   },
   "mc.click~": {
@@ -7300,7 +7592,7 @@
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      "multichannelsignal"
     ]
   },
   "mc.comb~": {
@@ -7314,14 +7606,14 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      ""
     ]
   },
   "mc.cosx~": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      ""
     ]
   },
   "mc.cos~": {
@@ -7384,8 +7676,8 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "signal",
-      "signal"
+      "multichannelsignal",
+      "multichannelsignal"
     ]
   },
   "mc.delay~": {
@@ -7420,14 +7712,13 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      "multichannelsignal"
     ]
   },
   "mc.edge~": {
     "numinlets": 1,
-    "numoutlets": 3,
+    "numoutlets": 2,
     "outlettype": [
-      "",
       "",
       ""
     ]
@@ -7436,16 +7727,16 @@
     "numinlets": 1,
     "numoutlets": 3,
     "outlettype": [
-      "signal",
-      "float",
-      "list"
+      "multichannelsignal",
+      "",
+      ""
     ]
   },
   "mc.ezadc~": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      "multichannelsignal"
     ]
   },
   "mc.ezdac~": {
@@ -7455,12 +7746,8 @@
   },
   "mc.fffb~": {
     "numinlets": 1,
-    "numoutlets": 8,
+    "numoutlets": 4,
     "outlettype": [
-      "signal",
-      "signal",
-      "signal",
-      "signal",
       "signal",
       "signal",
       "signal",
@@ -7545,9 +7832,9 @@
     "numinlets": 1,
     "numoutlets": 3,
     "outlettype": [
-      "float",
-      "float",
-      "bang"
+      "",
+      "",
+      ""
     ]
   },
   "mc.gain~": {
@@ -7566,10 +7853,9 @@
     ]
   },
   "mc.gen": {
-    "numinlets": 1,
-    "numoutlets": 2,
+    "numinlets": 2,
+    "numoutlets": 1,
     "outlettype": [
-      "",
       ""
     ]
   },
@@ -7577,14 +7863,14 @@
     "numinlets": 4,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      "multichannelsignal"
     ]
   },
   "mc.gen~": {
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      ""
     ]
   },
   "mc.getattr": {
@@ -7600,16 +7886,15 @@
     "numinlets": 1,
     "numoutlets": 3,
     "outlettype": [
-      "signal",
-      "float",
-      "list"
+      "multichannelsignal",
+      "",
+      ""
     ]
   },
   "mc.groove~": {
     "numinlets": 3,
-    "numoutlets": 3,
+    "numoutlets": 2,
     "outlettype": [
-      "signal",
       "signal",
       "signal"
     ]
@@ -7643,14 +7928,14 @@
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      "multichannelsignal"
     ]
   },
   "mc.in~": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      "multichannelsignal"
     ]
   },
   "mc.jit.peek~": {
@@ -7685,28 +7970,27 @@
   },
   "mc.line~": {
     "numinlets": 2,
-    "numoutlets": 3,
+    "numoutlets": 2,
     "outlettype": [
       "signal",
-      "",
-      ""
+      "signal"
     ]
   },
   "mc.list~": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      "multichannelsignal"
     ]
   },
   "mc.live.gain~": {
     "numinlets": 1,
     "numoutlets": 4,
     "outlettype": [
-      "signal",
-      "number",
-      "number",
-      "float/list"
+      "multichannelsignal",
+      "",
+      "",
+      ""
     ]
   },
   "mc.log~": {
@@ -7734,12 +8018,12 @@
     "numinlets": 1,
     "numoutlets": 6,
     "outlettype": [
-      "float",
-      "float",
-      "float",
-      "float",
-      "float",
-      "float"
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
     ]
   },
   "mc.makelist": {
@@ -7755,7 +8039,7 @@
     "outlettype": [
       "signal",
       "signal",
-      "list"
+      ""
     ]
   },
   "mc.maximum~": {
@@ -7770,7 +8054,7 @@
     "numoutlets": 2,
     "outlettype": [
       "signal",
-      "midievent"
+      ""
     ]
   },
   "mc.miditarget": {
@@ -7793,15 +8077,15 @@
     "outlettype": [
       "signal",
       "signal",
-      "double",
-      "double"
+      "",
+      ""
     ]
   },
   "mc.mixdown~": {
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      "multichannelsignal"
     ]
   },
   "mc.mstosamps~": {
@@ -7809,7 +8093,7 @@
     "numoutlets": 2,
     "outlettype": [
       "signal",
-      "double"
+      ""
     ]
   },
   "mc.mtof~": {
@@ -7849,9 +8133,9 @@
     "numinlets": 2,
     "numoutlets": 3,
     "outlettype": [
-      "signal",
-      "float",
-      "float"
+      "multichannelsignal",
+      "",
+      ""
     ]
   },
   "mc.omx.4band~": {
@@ -7860,8 +8144,8 @@
     "outlettype": [
       "signal",
       "signal",
-      "list",
-      "list"
+      "",
+      ""
     ]
   },
   "mc.omx.5band~": {
@@ -7870,8 +8154,8 @@
     "outlettype": [
       "signal",
       "signal",
-      "list",
-      "list"
+      "",
+      ""
     ]
   },
   "mc.omx.comp~": {
@@ -7880,8 +8164,8 @@
     "outlettype": [
       "signal",
       "signal",
-      "list",
-      "list"
+      "",
+      ""
     ]
   },
   "mc.omx.peaklim~": {
@@ -7890,8 +8174,8 @@
     "outlettype": [
       "signal",
       "signal",
-      "list",
-      "list"
+      "",
+      ""
     ]
   },
   "mc.onepole~": {
@@ -7917,30 +8201,29 @@
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      ""
     ]
   },
   "mc.pack~": {
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      "multichannelsignal"
     ]
   },
   "mc.pattern~": {
     "numinlets": 1,
     "numoutlets": 3,
     "outlettype": [
-      "signal",
-      "signal",
-      "dict"
+      "multichannelsignal",
+      "multichannelsignal",
+      ""
     ]
   },
   "mc.peakamp~": {
     "numinlets": 2,
-    "numoutlets": 2,
+    "numoutlets": 1,
     "outlettype": [
-      "",
       ""
     ]
   },
@@ -7948,7 +8231,7 @@
     "numinlets": 3,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      ""
     ]
   },
   "mc.pfft~": {
@@ -7974,7 +8257,7 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      ""
     ]
   },
   "mc.phasor~": {
@@ -8003,35 +8286,32 @@
     "numinlets": 1,
     "numoutlets": 4,
     "outlettype": [
+      "multichannelsignal",
       "signal",
       "signal",
-      "signal",
-      "dict"
+      ""
     ]
   },
   "mc.play~": {
     "numinlets": 1,
-    "numoutlets": 3,
-    "outlettype": [
-      "signal",
-      "",
-      ""
-    ]
-  },
-  "mc.poltocar~": {
-    "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
       "signal",
       "signal"
     ]
   },
+  "mc.poltocar~": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
   "mc.poly~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "mc.pong~": {
     "numinlets": 3,
@@ -8073,20 +8353,13 @@
     "numinlets": 1,
     "numoutlets": 3,
     "outlettype": [
-      "signal",
-      "list",
-      "setvalue"
+      "multichannelsignal",
+      "",
+      ""
     ]
   },
   "mc.rate~": {
     "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
-  },
-  "mc.receive~": {
-    "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
       "signal"
@@ -8110,7 +8383,7 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      "multichannelsignal"
     ]
   },
   "mc.reson~": {
@@ -8128,7 +8401,7 @@
       "signal",
       "signal",
       "signal",
-      "list"
+      ""
     ]
   },
   "mc.round~": {
@@ -8142,15 +8415,15 @@
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "int",
-      "int"
+      "",
+      ""
     ]
   },
   "mc.r~": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      "multichannelsignal"
     ]
   },
   "mc.sah~": {
@@ -8165,7 +8438,7 @@
     "numoutlets": 2,
     "outlettype": [
       "signal",
-      "double"
+      ""
     ]
   },
   "mc.sash~": {
@@ -8190,23 +8463,18 @@
     ]
   },
   "mc.selector~": {
-    "numinlets": 3,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      ""
+      "signal"
     ]
-  },
-  "mc.send~": {
-    "numinlets": 1,
-    "numoutlets": 0,
-    "outlettype": []
   },
   "mc.separate~": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "signal",
-      "signal"
+      "multichannelsignal",
+      "multichannelsignal"
     ]
   },
   "mc.seq~": {
@@ -8214,16 +8482,16 @@
     "numoutlets": 3,
     "outlettype": [
       "",
-      "list",
-      "symbol"
+      "",
+      ""
     ]
   },
   "mc.sfizz~": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "signal",
-      "signal"
+      "",
+      ""
     ]
   },
   "mc.sfplay~": {
@@ -8231,7 +8499,7 @@
     "numoutlets": 2,
     "outlettype": [
       "signal",
-      ""
+      "signal"
     ]
   },
   "mc.sfrecord~": {
@@ -8259,14 +8527,14 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      ""
     ]
   },
   "mc.sinx~": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      ""
     ]
   },
   "mc.slide~": {
@@ -8278,9 +8546,8 @@
   },
   "mc.snapshot~": {
     "numinlets": 2,
-    "numoutlets": 2,
+    "numoutlets": 1,
     "outlettype": [
-      "",
       ""
     ]
   },
@@ -8295,14 +8562,13 @@
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      "multichannelsignal"
     ]
   },
   "mc.spike~": {
     "numinlets": 2,
-    "numoutlets": 2,
+    "numoutlets": 1,
     "outlettype": [
-      "",
       ""
     ]
   },
@@ -8341,7 +8607,7 @@
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      "multichannelsignal"
     ]
   },
   "mc.stutter~": {
@@ -8357,14 +8623,7 @@
     "outlettype": [
       "signal",
       "signal",
-      "int"
-    ]
-  },
-  "mc.sum~": {
-    "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
+      ""
     ]
   },
   "mc.svf~": {
@@ -8383,16 +8642,16 @@
     "outlettype": [
       "signal",
       "signal",
-      "int"
+      ""
     ]
   },
   "mc.sync~": {
     "numinlets": 1,
     "numoutlets": 3,
     "outlettype": [
-      "signal",
-      "signal",
-      "signal"
+      "",
+      "",
+      ""
     ]
   },
   "mc.s~": {
@@ -8411,14 +8670,14 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      ""
     ]
   },
   "mc.tanx~": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      ""
     ]
   },
   "mc.tapin~": {
@@ -8429,11 +8688,9 @@
     ]
   },
   "mc.tapout~": {
-    "numinlets": 3,
-    "numoutlets": 3,
+    "numinlets": 1,
+    "numoutlets": 1,
     "outlettype": [
-      "signal",
-      "signal",
       "signal"
     ]
   },
@@ -8442,11 +8699,11 @@
     "numoutlets": 2,
     "outlettype": [
       "",
-      "int, voice"
+      ""
     ]
   },
   "mc.targetlist": {
-    "numinlets": 4,
+    "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
       "",
@@ -8469,19 +8726,18 @@
   },
   "mc.train~": {
     "numinlets": 3,
-    "numoutlets": 3,
+    "numoutlets": 2,
     "outlettype": [
       "signal",
-      "",
-      ""
+      "signal"
     ]
   },
   "mc.transpose~": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "signal",
-      "signal"
+      "multichannelsignal",
+      "multichannelsignal"
     ]
   },
   "mc.trapezoid~": {
@@ -8551,17 +8807,16 @@
   },
   "mc.vst~": {
     "numinlets": 2,
-    "numoutlets": 9,
+    "numoutlets": 8,
     "outlettype": [
       "signal",
       "signal",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
+      "signal",
+      "signal",
+      "signal",
+      "signal",
+      "signal",
+      "signal"
     ]
   },
   "mc.wave~": {
@@ -8576,7 +8831,7 @@
     "numoutlets": 2,
     "outlettype": [
       "signal",
-      "int"
+      ""
     ]
   },
   "mc.where~": {
@@ -8606,68 +8861,57 @@
     ]
   },
   "mc_channel": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "mc_channelcount": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
-  },
-  "mcp.record~": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "mcs.2d.wave~": {
     "numinlets": 4,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      "multichannelsignal"
     ]
   },
   "mcs.amxd~": {
     "numinlets": 2,
     "numoutlets": 3,
     "outlettype": [
-      "signal",
-      "",
-      ""
+      "multichannelsignal",
+      "multichannelsignal",
+      "multichannelsignal"
     ]
   },
   "mcs.fffb~": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      "multichannelsignal"
     ]
   },
   "mcs.gate~": {
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      "multichannelsignal"
     ]
   },
   "mcs.gen~": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      ""
     ]
   },
   "mcs.groove~": {
     "numinlets": 3,
     "numoutlets": 2,
     "outlettype": [
-      "signal",
+      "multichannelsignal",
       "signal"
     ]
   },
@@ -8675,52 +8919,31 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
-    ]
-  },
-  "mcs.loudness~": {
-    "numinlets": 1,
-    "numoutlets": 6,
-    "outlettype": [
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
+      "multichannelsignal"
     ]
   },
   "mcs.matrix~": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "signal",
-      "list"
+      "multichannelsignal",
+      ""
     ]
   },
   "mcs.play~": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "signal",
-      ""
+      "multichannelsignal",
+      "multichannelsignal"
     ]
   },
   "mcs.poly~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "mcs.selector~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
-  },
-  "mcs.sfizz~": {
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
@@ -8731,49 +8954,48 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      "multichannelsignal"
     ]
   },
   "mcs.tapout~": {
-    "numinlets": 3,
+    "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      ""
+      "signal"
     ]
   },
   "mcs.vst~": {
     "numinlets": 1,
     "numoutlets": 7,
     "outlettype": [
-      "signal",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
+      "multichannelsignal",
+      "multichannelsignal",
+      "multichannelsignal",
+      "multichannelsignal",
+      "multichannelsignal",
+      "multichannelsignal",
+      "multichannelsignal"
     ]
   },
   "mcs.wave~": {
     "numinlets": 3,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      "multichannelsignal"
     ]
   },
   "mean": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "float",
-      "int"
+      "",
+      ""
     ]
   },
   "menubar": {
     "numinlets": 1,
-    "numoutlets": 5,
+    "numoutlets": 4,
     "outlettype": [
-      "",
       "",
       "",
       "",
@@ -8784,7 +9006,7 @@
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "list"
+      ""
     ]
   },
   "messageview": {
@@ -8805,7 +9027,7 @@
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "bang"
+      ""
     ]
   },
   "midiflush": {
@@ -8816,7 +9038,7 @@
     ]
   },
   "midiformat": {
-    "numinlets": 7,
+    "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
       "",
@@ -8827,7 +9049,7 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "midiinfo": {
@@ -8838,21 +9060,22 @@
     ]
   },
   "midiout": {
-    "numinlets": 2,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "midiparse": {
     "numinlets": 1,
-    "numoutlets": 7,
+    "numoutlets": 8,
     "outlettype": [
-      "list",
-      "list",
-      "list",
-      "number",
-      "number",
-      "number",
-      "number"
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
     ]
   },
   "midiselect": {
@@ -8870,18 +9093,16 @@
     ]
   },
   "min": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "minimum": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "number",
-      "number"
+      "",
+      ""
     ]
   },
   "minimum~": {
@@ -8897,8 +9118,8 @@
     "outlettype": [
       "signal",
       "signal",
-      "double",
-      "double"
+      "",
+      ""
     ]
   },
   "mira.frame": {
@@ -8907,35 +9128,29 @@
     "outlettype": []
   },
   "mira.motion": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "mira.multitouch": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "mix": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "mix~": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "mod": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "modifiers": {
     "numinlets": 1,
@@ -8949,11 +9164,9 @@
     ]
   },
   "mod~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "mousefilter": {
     "numinlets": 1,
@@ -8964,8 +9177,13 @@
   },
   "mousestate": {
     "numinlets": 1,
-    "numoutlets": 5,
+    "numoutlets": 10,
     "outlettype": [
+      "",
+      "",
+      "",
+      "",
+      "",
       "",
       "",
       "",
@@ -9016,59 +9234,46 @@
   },
   "mstobeats": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "mstobeats~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "mstohz": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "mstohz~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "mstosamps": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "mstosamps~": {
     "numinlets": 1,
-    "numoutlets": 1,
+    "numoutlets": 2,
     "outlettype": [
-      "signal"
+      "signal",
+      ""
     ]
   },
   "mstoticks": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "mstoticks~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "mtof": {
     "numinlets": 1,
@@ -9078,9 +9283,11 @@
     ]
   },
   "mtof~": {
-    "numinlets": 2,
-    "numoutlets": 0,
-    "outlettype": []
+    "numinlets": 1,
+    "numoutlets": 1,
+    "outlettype": [
+      "signal"
+    ]
   },
   "mtr": {
     "numinlets": 2,
@@ -9091,35 +9298,24 @@
     ]
   },
   "mul": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "mulequals": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "mulequals~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "multibuffer~": {
     "numinlets": 1,
-    "numoutlets": 4,
-    "outlettype": [
-      "number",
-      "number",
-      "number",
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "multirange": {
     "numinlets": 1,
@@ -9135,16 +9331,14 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "list",
-      "number"
+      "",
+      ""
     ]
   },
   "mul~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "mute~": {
     "numinlets": 1,
@@ -9154,78 +9348,77 @@
     ]
   },
   "mxj": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "mxj~": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "nearest": {
-    "numinlets": 7,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "nearestpix": {
-    "numinlets": 2,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "nearest~": {
-    "numinlets": 2,
-    "numoutlets": 2,
-    "outlettype": [
-      "signal",
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "neg": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "neg~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "neq": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "neqp": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "neqp~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "neq~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "next": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "node.codebox": {
+    "numinlets": 1,
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
+  },
+  "node.script": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
@@ -9237,31 +9430,27 @@
     "numinlets": 1,
     "numoutlets": 3,
     "outlettype": [
-      "list",
-      "list",
-      "list"
+      "",
+      "",
+      ""
     ]
   },
   "noise": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "noise~": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      "signal"
     ]
   },
   "norm": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "normalize": {
     "numinlets": 1,
@@ -9277,10 +9466,8 @@
   },
   "not": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "notein": {
     "numinlets": 1,
@@ -9292,18 +9479,14 @@
     ]
   },
   "noteout": {
-    "numinlets": 5,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 3,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "not~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "nrpnin": {
     "numinlets": 1,
@@ -9332,9 +9515,10 @@
   },
   "number": {
     "numinlets": 1,
-    "numoutlets": 1,
+    "numoutlets": 2,
     "outlettype": [
-      "number"
+      "",
+      ""
     ]
   },
   "number~": {
@@ -9342,7 +9526,7 @@
     "numoutlets": 2,
     "outlettype": [
       "signal",
-      "number"
+      ""
     ]
   },
   "numkey": {
@@ -9366,8 +9550,8 @@
     "outlettype": [
       "signal",
       "signal",
-      "list",
-      "list"
+      "",
+      ""
     ]
   },
   "omx.5band~": {
@@ -9376,8 +9560,8 @@
     "outlettype": [
       "signal",
       "signal",
-      "list",
-      "list"
+      "",
+      ""
     ]
   },
   "omx.comp~": {
@@ -9386,8 +9570,8 @@
     "outlettype": [
       "signal",
       "signal",
-      "list",
-      "list"
+      "",
+      ""
     ]
   },
   "omx.peaklim~": {
@@ -9396,29 +9580,27 @@
     "outlettype": [
       "signal",
       "signal",
-      "list",
-      "list"
+      "",
+      ""
     ]
   },
   "onebang": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "bang",
-      "bang"
+      "",
+      ""
     ]
   },
   "onecopy": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "onepole_lin~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "onepole~": {
     "numinlets": 2,
@@ -9429,17 +9611,13 @@
   },
   "onoff": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "onoff~": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "opendialog": {
     "numinlets": 1,
@@ -9450,18 +9628,14 @@
     ]
   },
   "or": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "or~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "osc.codebox": {
     "numinlets": 1,
@@ -9506,25 +9680,25 @@
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      ""
     ]
   },
   "pack": {
-    "numinlets": 0,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "list"
+      ""
     ]
   },
   "pak": {
-    "numinlets": 0,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "list"
+      ""
     ]
   },
   "pan": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
@@ -9534,14 +9708,15 @@
     "outlettype": []
   },
   "pan~": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "param": {
-    "numinlets": 0,
-    "numoutlets": 1,
+    "numinlets": 1,
+    "numoutlets": 2,
     "outlettype": [
+      "",
       ""
     ]
   },
@@ -9562,17 +9737,13 @@
   },
   "param~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "pass": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "pass~": {
     "numinlets": 1,
@@ -9590,17 +9761,15 @@
   },
   "patcher": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "patcherargs": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "list",
-      "list"
+      "",
+      ""
     ]
   },
   "pattr": {
@@ -9652,51 +9821,47 @@
     "numinlets": 2,
     "numoutlets": 3,
     "outlettype": [
-      "number",
-      "number",
-      "number"
+      "",
+      "",
+      ""
     ]
   },
   "peakamp~": {
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "peek": {
-    "numinlets": 2,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "peek~": {
-    "numinlets": 2,
+    "numinlets": 3,
     "numoutlets": 1,
     "outlettype": [
       ""
     ]
   },
   "pfft~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "pgmin": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "number",
-      "number"
+      "",
+      ""
     ]
   },
   "pgmout": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 2,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "phasegroove~": {
     "numinlets": 1,
@@ -9714,24 +9879,20 @@
   },
   "phasewrap": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "phasewrap~": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      ""
     ]
   },
   "phasor": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "phasor~": {
     "numinlets": 2,
@@ -9742,24 +9903,18 @@
   },
   "phi": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "phi~": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "pi": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "pictctrl": {
     "numinlets": 1,
@@ -9778,13 +9933,11 @@
   },
   "pink": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "pink~": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
       "signal"
@@ -9798,20 +9951,17 @@
     ]
   },
   "pitchshift~": {
-    "numinlets": 3,
-    "numoutlets": 3,
+    "numinlets": 2,
+    "numoutlets": 2,
     "outlettype": [
-      "",
-      "",
-      ""
+      "signal",
+      "signal"
     ]
   },
   "pi~": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "plane": {
     "numinlets": 1,
@@ -9828,8 +9978,10 @@
   },
   "playlist~": {
     "numinlets": 1,
-    "numoutlets": 3,
+    "numoutlets": 5,
     "outlettype": [
+      "signal",
+      "signal",
       "signal",
       "signal",
       ""
@@ -9840,7 +9992,7 @@
     "numoutlets": 2,
     "outlettype": [
       "signal",
-      ""
+      "signal"
     ]
   },
   "plot~": {
@@ -9871,7 +10023,7 @@
     "numoutlets": 2,
     "outlettype": [
       "signal",
-      "list"
+      ""
     ]
   },
   "plugreceive~": {
@@ -9890,48 +10042,48 @@
     "numinlets": 1,
     "numoutlets": 9,
     "outlettype": [
-      "int",
-      "int",
-      "int",
-      "double",
-      "list",
-      "double",
-      "double",
-      "int",
-      "long"
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
     ]
   },
   "plusequals": {
-    "numinlets": 2,
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
+  },
+  "poke": {
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
+  },
+  "poke~": {
+    "numinlets": 3,
     "numoutlets": 1,
     "outlettype": [
       "signal"
     ]
   },
-  "poke": {
-    "numinlets": 4,
-    "numoutlets": 0,
-    "outlettype": []
-  },
-  "poke~": {
-    "numinlets": 4,
-    "numoutlets": 0,
-    "outlettype": []
-  },
   "poltocar": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "number",
-      "number"
+      "",
+      ""
     ]
   },
   "poltocar~": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "signal",
-      "signal"
+      "",
+      ""
     ]
   },
   "poly": {
@@ -9956,13 +10108,13 @@
     "numinlets": 1,
     "numoutlets": 3,
     "outlettype": [
-      "number",
-      "number",
-      "number"
+      "",
+      "",
+      ""
     ]
   },
   "polymidiin": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
       ""
@@ -9970,30 +10122,24 @@
   },
   "polynotefilter": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "list"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "polyout": {
-    "numinlets": 4,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 3,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "poly~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "pong": {
     "numinlets": 3,
     "numoutlets": 1,
     "outlettype": [
-      ""
+      "signal"
     ]
   },
   "pong~": {
@@ -10007,7 +10153,7 @@
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "pow~": {
@@ -10018,10 +10164,10 @@
     ]
   },
   "prepend": {
-    "numinlets": 2,
+    "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "list"
+      ""
     ]
   },
   "preset": {
@@ -10036,12 +10182,9 @@
     ]
   },
   "presetbang": {
-    "numinlets": 0,
-    "numoutlets": 2,
-    "outlettype": [
-      "bang",
-      "bang"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "print": {
     "numinlets": 1,
@@ -10057,7 +10200,7 @@
     ]
   },
   "project": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
@@ -10104,28 +10247,24 @@
     ]
   },
   "qmul": {
-    "numinlets": 2,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "qrot": {
-    "numinlets": 2,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "quantize": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "quantize~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "quickthresh": {
     "numinlets": 4,
@@ -10134,26 +10273,15 @@
       ""
     ]
   },
-  "r": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
-  },
   "radians": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "radians~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "radiogroup": {
     "numinlets": 1,
@@ -10164,24 +10292,18 @@
   },
   "radtodeg": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "radtodeg~": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "rampsmooth": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "rampsmooth~": {
     "numinlets": 3,
@@ -10195,14 +10317,14 @@
     "numoutlets": 2,
     "outlettype": [
       "signal",
-      ""
+      "signal"
     ]
   },
   "random": {
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "rand~": {
@@ -10213,11 +10335,9 @@
     ]
   },
   "rate": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "rate~": {
     "numinlets": 2,
@@ -10227,42 +10347,36 @@
     ]
   },
   "rdiv": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "rdiv~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "read": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "receive": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
       ""
     ]
   },
   "receive~": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
       "signal"
     ]
   },
   "record~": {
-    "numinlets": 4,
+    "numinlets": 3,
     "numoutlets": 1,
     "outlettype": [
       "signal"
@@ -10270,19 +10384,18 @@
   },
   "rect~": {
     "numinlets": 3,
-    "numoutlets": 2,
+    "numoutlets": 1,
     "outlettype": [
-      "signal",
       "signal"
     ]
   },
   "reflect": {
-    "numinlets": 2,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "refract": {
-    "numinlets": 3,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
@@ -10314,7 +10427,7 @@
     ]
   },
   "reson~": {
-    "numinlets": 3,
+    "numinlets": 4,
     "numoutlets": 1,
     "outlettype": [
       "signal"
@@ -10322,8 +10435,10 @@
   },
   "retune~": {
     "numinlets": 3,
-    "numoutlets": 3,
+    "numoutlets": 5,
     "outlettype": [
+      "signal",
+      "signal",
       "signal",
       "signal",
       ""
@@ -10331,32 +10446,26 @@
   },
   "rgb2hsl": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "rmod": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "rmod~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "rnbo.remote": {
     "numinlets": 1,
     "numoutlets": 3,
     "outlettype": [
-      "message",
-      "int",
-      "message"
+      "",
+      "",
+      ""
     ]
   },
   "rnbo~": {
@@ -10367,7 +10476,7 @@
     ]
   },
   "rotor": {
-    "numinlets": 2,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
@@ -10375,7 +10484,7 @@
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "round~": {
@@ -10386,22 +10495,25 @@
     ]
   },
   "route": {
-    "numinlets": 1,
-    "numoutlets": 0,
-    "outlettype": []
-  },
-  "routepass": {
-    "numinlets": 1,
-    "numoutlets": 0,
-    "outlettype": []
-  },
-  "router": {
-    "numinlets": 4,
-    "numoutlets": 5,
+    "numinlets": 2,
+    "numoutlets": 2,
     "outlettype": [
       "",
+      ""
+    ]
+  },
+  "routepass": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
       "",
-      "",
+      ""
+    ]
+  },
+  "router": {
+    "numinlets": 2,
+    "numoutlets": 2,
+    "outlettype": [
       "",
       ""
     ]
@@ -10432,18 +10544,14 @@
     ]
   },
   "rsub": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "rsub~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "rtin": {
     "numinlets": 1,
@@ -10453,113 +10561,89 @@
     ]
   },
   "sah": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
-  },
-  "sah~": {
-    "numinlets": 3,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
-  "sample": {
-    "numinlets": 7,
+  "sah~": {
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
       "signal"
     ]
+  },
+  "sample": {
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "samplecount~": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "samplepix": {
-    "numinlets": 2,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "samplerate": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "samplerate~": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "sample~": {
-    "numinlets": 2,
-    "numoutlets": 2,
-    "outlettype": [
-      "signal",
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "sampstobeats": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "sampstobeats~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "sampstohz": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "sampstohz~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "sampstoms": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "sampstoms~": {
     "numinlets": 1,
-    "numoutlets": 1,
+    "numoutlets": 2,
     "outlettype": [
-      "signal"
+      "signal",
+      ""
     ]
   },
   "sampstoticks": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "sampstoticks~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "sash~": {
     "numinlets": 3,
@@ -10586,32 +10670,25 @@
   },
   "saw~": {
     "numinlets": 2,
-    "numoutlets": 2,
+    "numoutlets": 1,
     "outlettype": [
-      "signal",
       "signal"
     ]
   },
   "scala.kbm": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "list"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "scala.list": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "list"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "scala.scl": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "list"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "scale": {
     "numinlets": 6,
@@ -10634,6 +10711,11 @@
       ""
     ]
   },
+  "scl.data": {
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
+  },
   "scope~": {
     "numinlets": 2,
     "numoutlets": 0,
@@ -10643,8 +10725,8 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "list",
-      "list"
+      "",
+      ""
     ]
   },
   "select": {
@@ -10657,13 +10739,11 @@
   },
   "selector": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "selector~": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
       "signal"
@@ -10693,8 +10773,8 @@
     "numoutlets": 3,
     "outlettype": [
       "",
-      "list",
-      "symbol"
+      "",
+      ""
     ]
   },
   "serial": {
@@ -10707,10 +10787,8 @@
   },
   "set": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "setclock": {
     "numinlets": 2,
@@ -10721,10 +10799,8 @@
   },
   "setparam": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "sfinfo~": {
     "numinlets": 1,
@@ -10740,16 +10816,10 @@
   },
   "sfizz~": {
     "numinlets": 2,
-    "numoutlets": 8,
+    "numoutlets": 2,
     "outlettype": [
-      "signal",
-      "signal",
-      "signal",
-      "signal",
-      "signal",
-      "signal",
-      "signal",
-      "signal"
+      "",
+      ""
     ]
   },
   "sflist~": {
@@ -10764,14 +10834,14 @@
     "numoutlets": 2,
     "outlettype": [
       "signal",
-      ""
+      "signal"
     ]
   },
   "sfrecord~": {
-    "numinlets": 2,
+    "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      ""
+      "signal"
     ]
   },
   "shape~": {
@@ -10783,31 +10853,25 @@
   },
   "sign": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "sign~": {
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
+  },
+  "sig~": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
       "signal"
     ]
   },
-  "sig~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
-  },
   "silencedetector~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "bang"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "sin": {
     "numinlets": 1,
@@ -10820,42 +10884,40 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "sinh~": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      ""
     ]
   },
   "sinx~": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      ""
     ]
   },
   "sin~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "slide": {
     "numinlets": 3,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "slider": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "slide~": {
@@ -10866,28 +10928,24 @@
     ]
   },
   "smoothstep": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "smoothstep~": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "snapshot~": {
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "snorm": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
@@ -10900,14 +10958,16 @@
   },
   "spectroscope~": {
     "numinlets": 2,
-    "numoutlets": 0,
-    "outlettype": []
+    "numoutlets": 1,
+    "outlettype": [
+      ""
+    ]
   },
   "speedlim": {
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "number, list, bang"
+      ""
     ]
   },
   "spell": {
@@ -10926,55 +10986,45 @@
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "double"
+      ""
     ]
   },
   "splat": {
-    "numinlets": 4,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "splat~": {
-    "numinlets": 4,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "spline6interp": {
-    "numinlets": 7,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "spline6interp~": {
-    "numinlets": 7,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "splineinterp": {
-    "numinlets": 5,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "splineinterp~": {
-    "numinlets": 5,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "split": {
     "numinlets": 3,
     "numoutlets": 2,
     "outlettype": [
-      "number",
-      "number"
+      "",
+      ""
     ]
   },
   "spray": {
@@ -10996,36 +11046,28 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "sqrt1_2": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "sqrt1_2~": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "sqrt2": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "sqrt2~": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "sqrt~": {
     "numinlets": 1,
@@ -11044,15 +11086,13 @@
     "numoutlets": 2,
     "outlettype": [
       "signal",
-      ""
+      "signal"
     ]
   },
   "step": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "stepcounter": {
     "numinlets": 1,
@@ -11091,17 +11131,15 @@
     ]
   },
   "step~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "stretch~": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "signal",
+      "",
       ""
     ]
   },
@@ -11122,7 +11160,7 @@
     ]
   },
   "string.bytes": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
       ""
@@ -11165,7 +11203,7 @@
     ]
   },
   "string.frombytes": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
       ""
@@ -11179,7 +11217,7 @@
     ]
   },
   "string.fromutf8": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
       ""
@@ -11208,7 +11246,7 @@
     ]
   },
   "string.length": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
       ""
@@ -11254,7 +11292,7 @@
     ]
   },
   "string.reverse": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
       ""
@@ -11325,7 +11363,7 @@
     ]
   },
   "string.tosymbol": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
       ""
@@ -11339,14 +11377,14 @@
     ]
   },
   "string.trim": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
       ""
     ]
   },
   "string.trimend": {
-    "numinlets": 1,
+    "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
       ""
@@ -11377,8 +11415,8 @@
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "number",
-      "number"
+      "",
+      ""
     ]
   },
   "strippath": {
@@ -11397,11 +11435,9 @@
     ]
   },
   "sub": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "subdiv~": {
     "numinlets": 1,
@@ -11409,7 +11445,7 @@
     "outlettype": [
       "signal",
       "signal",
-      "number"
+      ""
     ]
   },
   "substitute": {
@@ -11421,11 +11457,9 @@
     ]
   },
   "sub~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "suckah": {
     "numinlets": 1,
@@ -11460,18 +11494,16 @@
     ]
   },
   "swanramp~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "swap": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "number",
-      "number"
+      "",
+      ""
     ]
   },
   "swatch": {
@@ -11484,25 +11516,24 @@
   },
   "swing~": {
     "numinlets": 1,
-    "numoutlets": 2,
+    "numoutlets": 3,
     "outlettype": [
       "signal",
-      "signal"
+      "signal",
+      ""
     ]
   },
   "switch": {
-    "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "bang, number, list"
-    ]
-  },
-  "swiz": {
-    "numinlets": 1,
+    "numinlets": 3,
     "numoutlets": 1,
     "outlettype": [
       ""
     ]
+  },
+  "swiz": {
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "sxformat": {
     "numinlets": 1,
@@ -11515,53 +11546,42 @@
     "numinlets": 1,
     "numoutlets": 3,
     "outlettype": [
-      "signal",
+      "",
       "",
       ""
     ]
   },
   "sysexin": {
     "numinlets": 1,
-    "numoutlets": 2,
+    "numoutlets": 1,
     "outlettype": [
-      "number",
-      "list"
+      ""
     ]
   },
   "sysexout": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "t60": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "t60time": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "t60time~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "t60~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "tab": {
     "numinlets": 1,
@@ -11596,36 +11616,34 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "tanh": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "tanh~": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      ""
     ]
   },
   "tanx~": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "signal"
+      ""
     ]
   },
   "tan~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "tapin~": {
     "numinlets": 1,
@@ -11658,10 +11676,10 @@
     ]
   },
   "tempo": {
-    "numinlets": 1,
+    "numinlets": 4,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "text": {
@@ -11713,8 +11731,8 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "list",
-      "list"
+      "",
+      ""
     ]
   },
   "thisobject": {
@@ -11722,7 +11740,7 @@
     "numoutlets": 2,
     "outlettype": [
       "",
-      "dict"
+      ""
     ]
   },
   "thispatcher": {
@@ -11735,8 +11753,9 @@
   },
   "thispoly~": {
     "numinlets": 1,
-    "numoutlets": 2,
+    "numoutlets": 3,
     "outlettype": [
+      "",
       "",
       ""
     ]
@@ -11745,17 +11764,17 @@
     "numinlets": 1,
     "numoutlets": 4,
     "outlettype": [
-      "bang",
-      "bang",
-      "bang",
-      "bang"
+      "",
+      "",
+      "",
+      ""
     ]
   },
   "thresh": {
     "numinlets": 2,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "thresh~": {
@@ -11767,59 +11786,43 @@
   },
   "tickstobeats": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "tickstobeats~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "tickstohz": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "tickstohz~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "tickstoms": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "tickstoms~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "tickstosamps": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "tickstosamps~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "timepoint": {
     "numinlets": 1,
@@ -11830,18 +11833,16 @@
   },
   "timer": {
     "numinlets": 2,
-    "numoutlets": 1,
+    "numoutlets": 2,
     "outlettype": [
-      "number"
+      "",
+      ""
     ]
   },
   "timesignature": {
     "numinlets": 1,
-    "numoutlets": 2,
-    "outlettype": [
-      "number",
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "togedge": {
     "numinlets": 1,
@@ -11855,25 +11856,21 @@
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "tonormalized": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "tonormalized~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "torus": {
-    "numinlets": 2,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
@@ -11888,59 +11885,54 @@
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "number",
-      "number"
+      "",
+      ""
     ]
   },
   "touchout": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 2,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "train": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "train~": {
     "numinlets": 3,
     "numoutlets": 2,
     "outlettype": [
       "signal",
-      ""
+      "signal"
     ]
   },
   "translate": {
     "numinlets": 1,
     "numoutlets": 1,
     "outlettype": [
-      "number"
+      ""
     ]
   },
   "transport": {
     "numinlets": 2,
-    "numoutlets": 8,
+    "numoutlets": 9,
     "outlettype": [
-      "number",
-      "number",
-      "number",
-      "number",
-      "number",
-      "list",
-      "number",
-      "number"
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
     ]
   },
   "trapezoid": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "trapezoid~": {
     "numinlets": 3,
@@ -11950,11 +11942,9 @@
     ]
   },
   "triangle": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "triangle~": {
     "numinlets": 2,
@@ -11965,14 +11955,16 @@
   },
   "trigger": {
     "numinlets": 1,
-    "numoutlets": 0,
-    "outlettype": []
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
   },
   "tri~": {
     "numinlets": 3,
-    "numoutlets": 2,
+    "numoutlets": 1,
     "outlettype": [
-      "signal",
       "signal"
     ]
   },
@@ -11980,17 +11972,15 @@
     "numinlets": 2,
     "numoutlets": 3,
     "outlettype": [
-      "number",
-      "number",
-      "number"
+      "",
+      "",
+      ""
     ]
   },
   "trunc": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "trunc~": {
     "numinlets": 1,
@@ -12008,28 +11998,24 @@
   },
   "twopi": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "twopi~": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "typeroute~": {
     "numinlets": 1,
     "numoutlets": 6,
     "outlettype": [
       "signal",
-      "bang",
-      "int",
-      "float",
-      "symbol",
-      "list"
+      "",
+      "",
+      "",
+      "",
+      ""
     ]
   },
   "ubutton": {
@@ -12070,13 +12056,20 @@
   },
   "unjoin": {
     "numinlets": 1,
-    "numoutlets": 0,
-    "outlettype": []
+    "numoutlets": 3,
+    "outlettype": [
+      "",
+      "",
+      ""
+    ]
   },
   "unpack": {
     "numinlets": 1,
-    "numoutlets": 0,
-    "outlettype": []
+    "numoutlets": 2,
+    "outlettype": [
+      "",
+      ""
+    ]
   },
   "updown~": {
     "numinlets": 1,
@@ -12089,8 +12082,8 @@
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "number",
-      "bang"
+      "",
+      ""
     ]
   },
   "uzi": {
@@ -12099,13 +12092,6 @@
     "outlettype": [
       "",
       "",
-      ""
-    ]
-  },
-  "v": {
-    "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
       ""
     ]
   },
@@ -12148,25 +12134,19 @@
     ]
   },
   "vec": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "vectorsize": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "vectorsize~": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "vectral~": {
     "numinlets": 3,
@@ -12183,81 +12163,77 @@
     ]
   },
   "voice": {
-    "numinlets": 2,
-    "numoutlets": 4,
-    "outlettype": [
-      "number",
-      "number",
-      "number",
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "voicecount": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "vstscan": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
-      "list",
-      "list"
-    ]
-  },
-  "vst~": {
-    "numinlets": 2,
-    "numoutlets": 4,
-    "outlettype": [
-      "signal",
-      "signal",
       "",
       ""
     ]
   },
-  "wave": {
-    "numinlets": 7,
-    "numoutlets": 1,
+  "vst~": {
+    "numinlets": 2,
+    "numoutlets": 8,
     "outlettype": [
+      "signal",
+      "signal",
+      "signal",
+      "signal",
+      "signal",
+      "signal",
+      "signal",
       "signal"
     ]
   },
-  "waveform~": {
-    "numinlets": 0,
+  "wave": {
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
-  "wave~": {
-    "numinlets": 4,
-    "numoutlets": 3,
+  "waveform~": {
+    "numinlets": 5,
+    "numoutlets": 6,
     "outlettype": [
-      "signal",
-      "signal",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "wave~": {
+    "numinlets": 3,
+    "numoutlets": 1,
+    "outlettype": [
       "signal"
     ]
   },
   "welch": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "welch~": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "what~": {
     "numinlets": 1,
     "numoutlets": 2,
     "outlettype": [
       "signal",
-      "signal"
+      ""
     ]
   },
   "when": {
@@ -12277,33 +12253,24 @@
     ]
   },
   "windowed-fft~": {
-    "numinlets": 2,
-    "numoutlets": 2,
-    "outlettype": [
-      "signal",
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "wrap": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      ""
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "wrap~": {
-    "numinlets": 3,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "write": {
-    "numinlets": 0,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "xbendin": {
     "numinlets": 1,
@@ -12337,12 +12304,12 @@
     ]
   },
   "xfade": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
   "xfade~": {
-    "numinlets": 0,
+    "numinlets": 1,
     "numoutlets": 0,
     "outlettype": []
   },
@@ -12371,44 +12338,35 @@
     ]
   },
   "xor": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "xor~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "zerox": {
     "numinlets": 1,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numoutlets": 0,
+    "outlettype": []
   },
   "zerox_count": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "number"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "zerox_count~": {
-    "numinlets": 2,
-    "numoutlets": 1,
-    "outlettype": [
-      "signal"
-    ]
+    "numinlets": 1,
+    "numoutlets": 0,
+    "outlettype": []
   },
   "zerox~": {
     "numinlets": 1,
-    "numoutlets": 1,
+    "numoutlets": 2,
     "outlettype": [
+      "signal",
       "signal"
     ]
   },
@@ -12418,16 +12376,16 @@
     "outlettype": [
       "signal",
       "signal",
-      "",
-      ""
+      "signal",
+      "signal"
     ]
   },
   "zl": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "inactive",
-      "inactive"
+      "",
+      ""
     ]
   },
   "zl.change": {
@@ -12435,15 +12393,15 @@
     "numoutlets": 2,
     "outlettype": [
       "",
-      "int"
+      ""
     ]
   },
   "zl.compare": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "int",
-      "int/list"
+      "",
+      ""
     ]
   },
   "zl.delace": {
@@ -12458,8 +12416,8 @@
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "list",
-      "list"
+      "",
+      ""
     ]
   },
   "zl.filter": {
@@ -12467,15 +12425,15 @@
     "numoutlets": 2,
     "outlettype": [
       "",
-      "list"
+      ""
     ]
   },
   "zl.group": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "list",
-      "inactive"
+      "",
+      ""
     ]
   },
   "zl.indexmap": {
@@ -12483,23 +12441,23 @@
     "numoutlets": 2,
     "outlettype": [
       "",
-      "inactive"
+      ""
     ]
   },
   "zl.iter": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "list",
-      "inactive"
+      "",
+      ""
     ]
   },
   "zl.join": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "list",
-      "inactive"
+      "",
+      ""
     ]
   },
   "zl.lace": {
@@ -12507,15 +12465,15 @@
     "numoutlets": 2,
     "outlettype": [
       "",
-      "inactive"
+      ""
     ]
   },
   "zl.len": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "int",
-      "inactive"
+      "",
+      ""
     ]
   },
   "zl.lookup": {
@@ -12523,15 +12481,15 @@
     "numoutlets": 2,
     "outlettype": [
       "",
-      "inactive"
+      ""
     ]
   },
   "zl.median": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "number",
-      "inactive"
+      "",
+      ""
     ]
   },
   "zl.mth": {
@@ -12539,7 +12497,7 @@
     "numoutlets": 2,
     "outlettype": [
       "",
-      "list"
+      ""
     ]
   },
   "zl.nth": {
@@ -12547,7 +12505,7 @@
     "numoutlets": 2,
     "outlettype": [
       "",
-      "list"
+      ""
     ]
   },
   "zl.queue": {
@@ -12555,31 +12513,31 @@
     "numoutlets": 2,
     "outlettype": [
       "",
-      "int"
+      ""
     ]
   },
   "zl.reg": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "list",
-      "inactive"
+      "",
+      ""
     ]
   },
   "zl.rev": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "list",
-      "inactive"
+      "",
+      ""
     ]
   },
   "zl.rot": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "list",
-      "inactive"
+      "",
+      ""
     ]
   },
   "zl.scramble": {
@@ -12587,23 +12545,23 @@
     "numoutlets": 2,
     "outlettype": [
       "",
-      "list"
+      ""
     ]
   },
   "zl.sect": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "list",
-      "bang"
+      "",
+      ""
     ]
   },
   "zl.slice": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "list",
-      "list"
+      "",
+      ""
     ]
   },
   "zl.sort": {
@@ -12611,7 +12569,7 @@
     "numoutlets": 2,
     "outlettype": [
       "",
-      "list"
+      ""
     ]
   },
   "zl.stack": {
@@ -12619,7 +12577,7 @@
     "numoutlets": 2,
     "outlettype": [
       "",
-      "int"
+      ""
     ]
   },
   "zl.stream": {
@@ -12627,23 +12585,23 @@
     "numoutlets": 2,
     "outlettype": [
       "",
-      "int"
+      ""
     ]
   },
   "zl.sub": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "int",
-      "int"
+      "",
+      ""
     ]
   },
   "zl.sum": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "number",
-      "inactive"
+      "",
+      ""
     ]
   },
   "zl.swap": {
@@ -12651,7 +12609,7 @@
     "numoutlets": 2,
     "outlettype": [
       "",
-      "list"
+      ""
     ]
   },
   "zl.thin": {
@@ -12659,15 +12617,15 @@
     "numoutlets": 2,
     "outlettype": [
       "",
-      "inactive"
+      ""
     ]
   },
   "zl.union": {
     "numinlets": 2,
     "numoutlets": 2,
     "outlettype": [
-      "list",
-      "inactive"
+      "",
+      ""
     ]
   },
   "zl.unique": {
@@ -12675,7 +12633,7 @@
     "numoutlets": 2,
     "outlettype": [
       "",
-      "inactive"
+      ""
     ]
   },
   "zmap": {
@@ -12689,10 +12647,10 @@
     "numinlets": 5,
     "numoutlets": 4,
     "outlettype": [
-      "list",
-      "float",
-      "float",
-      "float"
+      "",
+      "",
+      "",
+      ""
     ]
   },
   "|": {

@@ -1,147 +1,170 @@
 #!/usr/bin/env python3
 """
-build_objects_db.py — Build max_objects.json from taylorbrook/MAX-MSP_CC_Framework data.
+build_objects_db.py — Build max_objects.json from Cycling '74 maxref.xml files.
 
-Fetches the upstream object database, converts to Claude2Max NEWOBJ_IO format,
-applies expert overrides, and writes max_objects.json alongside this script.
+Parses the official Max reference XML files bundled with Max.app. No internet
+connection required. Output always matches the installed version of Max.
 
 Usage:
-    python3 build_objects_db.py
+    python3 build_objects_db.py [--max-path /path/to/Max.app]
 
 Output:
     max_objects.json  — dict of { "obj-name": { numinlets, numoutlets, outlettype } }
 
-The generated file is loaded by spec2maxpat.py at startup to supplement its
-built-in NEWOBJ_IO table (built-in entries take precedence).
-
-Source: https://github.com/taylorbrook/MAX-MSP_CC_Framework
+Source: /Applications/Max.app/Contents/Resources/C74/docs/refpages/
+        /Applications/Max.app/Contents/Resources/C74/packages/*/docs/
 """
 
 import json
 import sys
-import urllib.request
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
-BASE_URL = "https://raw.githubusercontent.com/taylorbrook/MAX-MSP_CC_Framework/main/.claude/max-objects"
+DEFAULT_MAX_PATH = "/Applications/Max.app"
+C74_ROOT        = "Contents/Resources/C74"
 
-DOMAIN_FILES = [
-    "max/objects.json",
-    "msp/objects.json",
-    "jitter/objects.json",
-    "mc/objects.json",
-    "gen/objects.json",
-    "m4l/objects.json",
-    "rnbo/objects.json",
-    "packages/objects.json",
-]
+# Standard refpage domains (within docs/refpages/)
+STD_DOMAINS = ["max-ref", "msp-ref", "jit-ref", "m4l-ref"]
 
-OVERRIDES_FILE = "overrides.json"
+# Package names whose refpages are included (all official C74 packages)
+PACKAGE_NAMES = ["Gen", "RNBO", "Jitter Tools", "Jitter Geometry",
+                 "jit.mo", "ableton-dsp", "maxforlive-elements", "mira",
+                 "Node for Max", "VIDDLL"]
 
 
-def fetch(url):
-    print(f"  Fetching {url} ...", end=" ", flush=True)
+def outlet_type_str(type_attr):
+    """Map a maxref.xml outlet type string to Claude2Max outlettype format."""
+    t = (type_attr or "").strip()
+    tl = t.lower()
+    if tl == "signal":
+        return "signal"
+    if tl in ("multi-channel signal", "multichannelsignal"):
+        return "multichannelsignal"
+    # All control-rate types (OUTLET_TYPE, matrix, float, int, bang, list,
+    # anything, disabled, inactive, dict, symbol, message, etc.) → ""
+    return ""
+
+
+def parse_refpage(xml_path):
+    """
+    Parse one maxref.xml file.
+    Returns (object_name, {numinlets, numoutlets, outlettype}) or None on failure.
+    """
     try:
-        with urllib.request.urlopen(url, timeout=30) as resp:
-            data = json.loads(resp.read().decode("utf-8"))
-        print("OK")
-        return data
-    except Exception as e:
-        print(f"FAILED ({e})")
+        tree = ET.parse(xml_path)
+        root = tree.getroot()
+    except ET.ParseError:
         return None
 
+    name = root.get("name")
+    if not name:
+        return None
 
-def outlet_type_str(outlet):
-    """Convert a taylorbrook outlet dict to a Claude2Max outlettype string."""
-    if outlet.get("signal"):
-        return "signal"
-    t = outlet.get("type", "")
-    # Normalize control/anything/empty to ""
-    if t in ("", "control", "anything"):
-        return ""
-    # Pass through typed outlets as-is
-    return t
+    # Inlets
+    inletlist = root.find("inletlist")
+    if inletlist is not None:
+        numinlets = len(inletlist.findall("inlet"))
+    else:
+        numinlets = 1  # Max default when undocumented
 
+    # Outlets — sort by id to guarantee correct order
+    outletlist = root.find("outletlist")
+    if outletlist is not None:
+        outlets = sorted(outletlist.findall("outlet"),
+                         key=lambda o: int(o.get("id", 0)))
+        numoutlets = len(outlets)
+        outlettype = [outlet_type_str(o.get("type", "")) for o in outlets]
+    else:
+        numoutlets = 0
+        outlettype = []
 
-def convert_object(obj_data):
-    """Convert a taylorbrook object entry to Claude2Max NEWOBJ_IO format."""
-    inlets = obj_data.get("inlets") or []
-    outlets = obj_data.get("outlets") or []
-    return {
-        "numinlets": len(inlets),
-        "numoutlets": len(outlets),
-        "outlettype": [outlet_type_str(o) for o in outlets],
+    return name, {
+        "numinlets":  numinlets,
+        "numoutlets": numoutlets,
+        "outlettype": outlettype,
     }
 
 
-def apply_override(base, override_data):
-    """Apply an overrides.json entry (same inlets/outlets structure) to a base entry."""
-    inlets = override_data.get("inlets")
-    outlets = override_data.get("outlets")
-    if inlets is not None:
-        base["numinlets"] = len(inlets)
-    if outlets is not None:
-        base["numoutlets"] = len(outlets)
-        base["outlettype"] = [outlet_type_str(o) for o in outlets]
-    return base
+def collect_xml_files(max_path):
+    """
+    Yield all maxref.xml paths from the standard refpages and C74 packages.
+    Returns list of (domain_label, Path) tuples.
+    """
+    c74 = Path(max_path) / C74_ROOT
+    sources = []
+
+    # Standard domains
+    refpages = c74 / "docs" / "refpages"
+    for domain in STD_DOMAINS:
+        d = refpages / domain
+        if d.exists():
+            for f in sorted(d.glob("*.maxref.xml")):
+                sources.append((domain, f))
+
+    # Package docs
+    packages = c74 / "packages"
+    if packages.exists():
+        for pkg in sorted(packages.iterdir()):
+            if not pkg.is_dir():
+                continue
+            for docs_dir in [pkg / "docs" / "refpages",
+                             pkg / "docs" / "refpages1",
+                             pkg / "docs"]:
+                if docs_dir.exists():
+                    for f in sorted(docs_dir.rglob("*.maxref.xml")):
+                        sources.append((f"packages/{pkg.name}", f))
+                    break  # only use first matching docs dir per package
+
+    return sources
 
 
-def build():
+def build(max_path=DEFAULT_MAX_PATH):
+    c74 = Path(max_path) / C74_ROOT
+    if not c74.exists():
+        print(f"Error: Max not found at {max_path}")
+        print("Use --max-path /path/to/Max.app to specify the location.")
+        sys.exit(1)
+
     output_path = Path(__file__).parent / "max_objects.json"
 
-    print("Building max_objects.json from taylorbrook/MAX-MSP_CC_Framework\n")
+    print(f"Building max_objects.json from {max_path}\n")
 
-    # Collect all objects from domain files
     db = {}
-    for domain_file in DOMAIN_FILES:
-        url = f"{BASE_URL}/{domain_file}"
-        data = fetch(url)
-        if not data:
+    counts = {}
+
+    for label, xml_path in collect_xml_files(max_path):
+        result = parse_refpage(xml_path)
+        if result is None:
             continue
-        count = 0
-        for name, obj_data in data.items():
-            if name.startswith("_"):  # skip sentinel keys
-                continue
-            if not isinstance(obj_data, dict):
-                continue
-            db[name] = convert_object(obj_data)
-            count += 1
-        domain = domain_file.split("/")[0]
-        print(f"    → {count} objects from {domain}")
+        name, data = result
+        if name not in db:               # first occurrence wins (std domains first)
+            db[name] = data
+            counts[label] = counts.get(label, 0) + 1
 
-    print(f"\n  Total before overrides: {len(db)} objects")
+    # Print per-domain summary
+    for label in (STD_DOMAINS + [f"packages/{p}" for p in PACKAGE_NAMES]):
+        n = counts.get(label, 0)
+        if n:
+            print(f"  {label}: {n}")
+    other = {k: v for k, v in counts.items()
+             if k not in STD_DOMAINS and k not in [f"packages/{p}" for p in PACKAGE_NAMES]}
+    for label, n in sorted(other.items()):
+        if n:
+            print(f"  {label}: {n}")
 
-    # Apply overrides
-    overrides_url = f"{BASE_URL}/{OVERRIDES_FILE}"
-    overrides_data = fetch(overrides_url)
-    if overrides_data:
-        objects_overrides = overrides_data.get("objects", {})
-        applied = 0
-        for name, override in objects_overrides.items():
-            if name.startswith("_"):
-                continue
-            if not isinstance(override, dict):
-                continue
-            if name in db:
-                db[name] = apply_override(db[name], override)
-            else:
-                # Override for an object not in the base data — add it
-                converted = convert_object(override)
-                if converted["numinlets"] > 0 or converted["numoutlets"] > 0:
-                    db[name] = converted
-                    applied += 1
-                    continue
-            applied += 1
-        print(f"    → {applied} overrides applied")
+    print(f"\n  Total: {len(db)} objects")
 
-    print(f"\n  Total objects: {len(db)}")
-
-    # Write output
     with open(output_path, "w") as f:
         json.dump(db, f, indent=2, sort_keys=True)
 
-    print(f"\n  Written to {output_path}")
+    print(f"  Written to {output_path}")
     print("Done.")
 
 
 if __name__ == "__main__":
-    build()
+    max_path = DEFAULT_MAX_PATH
+    if "--max-path" in sys.argv:
+        idx = sys.argv.index("--max-path")
+        if idx + 1 < len(sys.argv):
+            max_path = sys.argv[idx + 1]
+    build(max_path)
