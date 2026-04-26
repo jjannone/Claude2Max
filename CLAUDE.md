@@ -75,8 +75,7 @@ The `.maxpat` is the single source of truth. All patches live in `patches/`.
 
 - `SPEC_REFERENCE.md` — **Read this first.** Complete spec format reference with all object types, connection format, layout guidelines, presentation view, and worked examples.
 - `spec2maxpat.py` — The converter. Handles inlet/outlet profiles for 1,694 Max objects (via `max_objects.json`), auto-layout, subpatchers, and spec embedding.
-- `max_objects.json` — Object database with inlet/outlet/outlettype for 1,694 objects. Generated from taylorbrook/MAX-MSP_CC_Framework. Regenerate with `python3 build_objects_db.py`.
-- `build_objects_db.py` — Fetches the upstream object database and regenerates `max_objects.json`.
+- `max_objects.json` / `build_objects_db.py` — **Deleted.** I/O data now comes directly from the C74 maxref.xml files via `RefpageCache` in `spec2maxpat.py`.
 
 ## What the Converter Handles for You
 
@@ -285,15 +284,9 @@ python3 add_tutorial.py --ai -i patches/patch.maxpat
 
 ## Upstream Maintenance
 
-`max_objects.json` is built from the official Cycling '74 maxref.xml files bundled with Max.app — no internet connection required. Regenerate it after installing a new version of Max:
+No external dependencies or build steps. `spec2maxpat.py` looks up I/O counts directly from the Cycling '74 maxref.xml files bundled with Max.app, on demand and per object, caching results for the session. No JSON database, no `build_objects_db.py`. Works automatically as long as Max is installed at a standard path (`/Applications/Max.app`, `/Applications/Max 9.app`, or `/Applications/Max 8.app`). Degrades gracefully if Max is not found — falls back to spec-provided I/O counts.
 
-```bash
-python3 build_objects_db.py
-# or, if Max is not at /Applications/Max.app:
-python3 build_objects_db.py --max-path /path/to/Max.app
-```
-
-This parses all refpages from `Max.app/Contents/Resources/C74/docs/refpages/` and all C74 packages (Gen, RNBO, Jitter Tools, etc.), producing ~1800 objects. Hand-verified entries in `NEWOBJ_IO` inside `spec2maxpat.py` always take precedence over the generated data — those are corrections for cases where even the official docs are wrong (e.g. `gain~` outlet 1 type, `playlist~` outlet count).
+Hand-verified entries in `NEWOBJ_IO` inside `spec2maxpat.py` always take precedence — those correct cases where even the official docs are wrong (e.g. `gain~` outlet 1 type).
 
 ## Keeping Docs in Sync
 
