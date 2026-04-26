@@ -158,8 +158,16 @@ These automatically get `parameter_enable` set:
 ## jit.cellblock Notes
 
 - **Selection mode must be "Inline Edit"** for users to type in cells. Set `"selmode": 5` in attrs. (`editmode` is the wrong attribute name — Max uses `selmode` for this.) Without this, clicking a cell selects it but does not open it for typing.
+- **Never reset `selmode`** — the user configures it manually in Max. Always preserve the current value. If adding a new display-only cellblock, use `selmode: 0` (no selection).
 - Cell output format is a plain list: `row col value` (no selector). In v8/js, handle with `function list()`, not `function cell()`.
 - Output fires on each cell edit, not on bang. Wire directly to the v8 inlet.
+- **`set` message is column-first**: syntax is `set COL ROW value` where COL is the horizontal index (0 = leftmost) and ROW is the vertical index (0 = topmost). This is the **opposite** of the typical matrix (row, col) convention. From JS: `outlet(n, "set", colIndex, rowIndex, value)`.
+- **Dynamic sizing**: send `rows N` and `cols N` before `clear` and `set` calls to resize the grid at runtime. Example: `outlet(n, "rows", count + 1); outlet(n, "cols", 3);` (the +1 is for a header row).
+- **Grid orientation — many rows, few columns**: individual items (sections, entries) should be rows; categories/attributes (music, dance; name, value) should be columns. This makes grids tall and narrow rather than wide and flat.
+
+## jit.gl.text Notes
+
+- **Horizontal centering**: use `anchor_x 0.5` (0.0 = left-anchored, 0.5 = center, 1.0 = right-anchored). **`justify` is NOT a valid attribute** — it is silently ignored. Do not use it.
 
 ## Object Correctness Notes
 
