@@ -21,22 +21,27 @@ Format: `- [ ]` = pending, `- [x]` = complete (move to Done section).
 
   **Implementation note**: `_parse()` in `RefpageCache` already reads the full XML root. Extend it to extract all five fields in the same pass — one XML parse covers everything. Return structure: `{"numinlets": ..., "numoutlets": ..., "outlettype": [...], "attributes": {...}, "messages": {...}, "arguments": [...], "outputs": [...], "seealso": [...]}`.
 
-- [ ] **Presentation layout engine + screenshot verification** — two-phase approach:
+- [ ] **Layout engine + screenshot verification (patching and presentation views)** — three-phase approach covering both views, each with its own emphasis:
 
-  **Phase 1 — Layout engine**: add a `presentation_layout()` function to `spec2maxpat.py` that computes `presentation_rect` for every presented object automatically from the spec, so manual rect calculation is no longer needed. The engine should:
+  **Phase 1 — Layout engine (presentation view)**: add a `presentation_layout()` function to `spec2maxpat.py` that computes `presentation_rect` for every presented object automatically from the spec, replacing manual post-processing. The engine should:
   - Accept logical layout hints in the spec: column/row grouping, margins, object sizes
   - Compute x/y positions using consistent margins (15px outer, 10–15px between groups) and the label-width estimation rules already in CLAUDE.md
-  - Handle the two-panel pattern common in ensemble-style patches (setup panel left, performance panel right)
-  - Output `presentation_rect` values directly into the generated .maxpat JSON, replacing the current manual post-processing step
+  - Handle common patterns such as the two-panel layout (setup left, performance right)
+  - Output `presentation_rect` values directly into the generated .maxpat JSON
 
-  **Phase 2 — Screenshot verification**: after conversion, use computer-use MCP to:
-  - Take a screenshot of the patch in patching view
-  - Switch to presentation mode (Cmd-Shift-E or View menu), take a screenshot
-  - Review both for: overlapping objects, text clipped by box boundaries, misaligned labels, crowded groups
-  - Fix any issues found and re-screenshot to confirm
+  **Phase 2 — Layout engine (patching view)**: apply layout logic to the patching view as well, with different goals. Patching view emphasis is on:
+  - **Structural logic** — data flow reads top-to-bottom, left-to-right; signal path is visually distinct from control path
+  - **Readability** — related objects grouped spatially; consistent spacing; no crossing patchcords where avoidable
+  - **Functional units** — logically related clusters of objects are visually grouped and clearly separated from other clusters
+  - **Encapsulation** — where a functional unit is self-contained, consider wrapping it in a subpatcher (`p`) to reduce clutter and reinforce the logical boundary. The spec already supports subpatchers; the layout engine should identify candidates and apply encapsulation where it improves clarity.
+
+  **Phase 3 — Screenshot verification**: after conversion, use computer-use MCP to:
+  - Screenshot patching view — review for structural clarity, readable data flow, well-grouped functional units, encapsulation opportunities missed by the engine
+  - Screenshot presentation view (Cmd-Shift-E) — review for overlapping objects, clipped text, misaligned labels, crowded groups
+  - Fix issues found and re-screenshot to confirm
   - Requires computer-use MCP enabled in Claude Desktop; if unavailable, note what to check manually
 
-  **Prerequisite**: computer-use MCP must be enabled and screen recording granted to Claude. Layout engine (Phase 1) works without it; screenshot verification (Phase 2) requires it.
+  **Prerequisite**: computer-use MCP must be enabled and screen recording granted to Claude. Phases 1 and 2 (layout engines) work without it; Phase 3 (screenshots) requires it.
 
 ## Done
 
