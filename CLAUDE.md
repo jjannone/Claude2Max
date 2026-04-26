@@ -270,7 +270,11 @@ Whenever you learn something new about Max behavior, fix a bug, or add/change a 
 
 ## Work History
 
+**At the start of every session**, read `WORK_HISTORY.md` to get up to date with recent changes before doing any work. This catches anything done in prior sessions that isn't in your context.
+
 At the end of any session where meaningful work was done, append an entry to `WORK_HISTORY.md`. Do this automatically — no need for the user to ask. Format: `- YYYY-MM-DD: <1-2 sentence summary>`
+
+**Do not rely solely on the stop hook.** Sessions that hit the context limit are cut off without firing the hook. Instead, update `WORK_HISTORY.md` proactively — after any significant milestone within a session, not only at the very end.
 
 ## Max .maxpat Internals
 
