@@ -172,6 +172,28 @@ Examples: `send TEMPO`, `receive PITCH`, `pv CURRENT_STATE`, `buffer~ LOOPBUF`, 
 
 This does NOT apply to Max built-in names, object names, or message selectors — only names we invent.
 
+## Always Verify Against Max Documentation — Never Guess
+
+Max is not consistent enough to reason about by analogy. Attribute names, types, value ranges, and defaults vary unpredictably between objects. **Before using any attribute or message you have not personally verified**, look it up in the Max installation's reference files. Do not guess, do not infer from similar objects, do not assume a value works because it sounds right.
+
+For every attribute you intend to use, answer all of the following from the documentation before writing code:
+
+- **Does this attribute exist on this exact object?** (not a similar object, not a related family)
+- **What is its type?** (`int`, `float`, `symbol`, `list` — this determines how to send it)
+- **What are the valid values?** (enum integers? float range? specific symbols?)
+- **What is the default?** (so you know what "no change" looks like)
+- **Is it settable via message, or only at object creation via `@attr`?**
+- **Are there any known silent-failure modes?** (wrong type → ignored with no error)
+
+**Where to look** — all of these are in the Max installation at `/Applications/Max.app/Contents/Resources/C74/docs/refpages/`:
+- `jit-ref/jit.gl.text.maxref.xml` — Jitter GL objects
+- `max-ref/<object>.maxref.xml` — core Max objects
+- `msp-ref/<object>.maxref.xml` — MSP signal objects
+- Help patches: `/Applications/Max.app/Contents/Resources/C74/help/`
+- Snippets: `/Applications/Max.app/Contents/Resources/C74/snippets/`
+
+Use `grep` to search these files directly. A 30-second grep is always faster than three rounds of wrong guesses.
+
 ## Reasoning About Max — From Specific to General
 
 When learning something specific about Max, immediately ask: **what category does this belong to, and does the property apply to all members of that category?**
