@@ -5,6 +5,8 @@ spec2maxpat.py — Convert a Claude2Max spec (JSON) to a .maxpat file.
 Usage:
     python spec2maxpat.py convert -i spec.json -o patch.maxpat
     python spec2maxpat.py extract -i patch.maxpat -o spec.json
+    python spec2maxpat.py sync   -i patch.maxpat
+    python spec2maxpat.py mct    -i patch.maxpat   # → Max Compressed Text for clipboard
     cat spec.json | python spec2maxpat.py convert > patch.maxpat
 
 Spec format:
@@ -53,7 +55,7 @@ MAXCLASS_DEFAULTS = {
     "slider":   {"numinlets": 1, "numoutlets": 1, "outlettype": [""]},
     "dial":     {"numinlets": 1, "numoutlets": 1, "outlettype": ["float"]},
     "inlet":    {"numinlets": 0, "numoutlets": 1, "outlettype": [""]},
-    "outlet":   {"numinlets": 1, "numoutlets": 0, "outlettype": []},
+    "outlet":   {"numinlets": 1, "numoutlets": 0, "outlettype": [""]},
     "textedit": {"numinlets": 1, "numoutlets": 4, "outlettype": ["", "int", "", ""]},
     "live.dial": {"numinlets": 1, "numoutlets": 2, "outlettype": ["", "float"]},
     "live.slider": {"numinlets": 1, "numoutlets": 2, "outlettype": ["", "float"]},
@@ -297,6 +299,8 @@ class RefpageCache:
             root = ET.parse(xml_path).getroot()
         except ET.ParseError:
             return None
+
+        # ── I/O counts (existing) ────────────────────────────────────────────
         inletlist  = root.find("inletlist")
         numinlets  = len(inletlist.findall("inlet")) if inletlist is not None else 1
         outletlist = root.find("outletlist")
@@ -308,11 +312,111 @@ class RefpageCache:
         else:
             numoutlets = 0
             outlettype = []
-        return {"numinlets": numinlets, "numoutlets": numoutlets,
-                "outlettype": outlettype}
+
+        # ── Digest ───────────────────────────────────────────────────────────
+        digest_el = root.find("digest")
+        digest = digest_el.text.strip() if digest_el is not None and digest_el.text else ""
+
+        # ── Attributes ───────────────────────────────────────────────────────
+        attributes = {}
+        for attr in root.findall("attributelist/attribute"):
+            aname = attr.get("name", "")
+            if not aname:
+                continue
+            entry = {
+                "type":    attr.get("type", ""),
+                "size":    int(attr.get("size", 1)),
+                "default": attr.get("default", ""),
+                "get":     attr.get("get", "1") == "1",
+                "set":     attr.get("set", "1") == "1",
+            }
+            # Default and enum values live inside a nested attributelist
+            inner = attr.find("attributelist")
+            if inner is not None:
+                dflt = inner.find("attribute[@name='default']")
+                if dflt is not None and dflt.get("value"):
+                    entry["default"] = dflt.get("value")
+                # Enum labels come from the "label" sibling of enumvals
+                lbl = inner.find("attribute[@name='label']")
+                if lbl is not None and lbl.get("value"):
+                    entry["label"] = lbl.get("value")
+            attributes[aname] = entry
+
+        # ── Messages ─────────────────────────────────────────────────────────
+        messages = {}
+        for method in root.findall("methodlist/method"):
+            mname = method.get("name", "")
+            if not mname:
+                continue
+            args = []
+            for arg in method.findall("arglist/arg"):
+                args.append({
+                    "name":     arg.get("name", ""),
+                    "type":     arg.get("type", ""),
+                    "optional": arg.get("optional", "0") == "1",
+                })
+            inlet_attr = method.find("attributelist/attribute[@name='inlet']")
+            inlet = inlet_attr.get("value") if inlet_attr is not None else None
+            messages[mname] = {"args": args, "inlet": inlet}
+
+        # ── Object arguments ─────────────────────────────────────────────────
+        arguments = []
+        for objarg in root.findall("objarglist/objarg"):
+            arguments.append({
+                "name":     objarg.get("name", ""),
+                "type":     objarg.get("type", ""),
+                "optional": objarg.get("optional", "0") == "1",
+                "units":    objarg.get("units", ""),
+            })
+
+        # ── Output descriptions ───────────────────────────────────────────────
+        outputs = []
+        for misc in root.findall("misc"):
+            if misc.get("name") == "Output":
+                for entry in misc.findall("entry"):
+                    desc_el = entry.find("description")
+                    desc = ""
+                    if desc_el is not None and desc_el.text:
+                        desc = " ".join(desc_el.text.split())  # normalise whitespace
+                    outputs.append({"name": entry.get("name", ""), "description": desc})
+
+        # ── See-also ─────────────────────────────────────────────────────────
+        seealso = [sa.get("name") for sa in root.findall("seealsolist/seealso")
+                   if sa.get("name")]
+
+        return {
+            "numinlets":  numinlets,
+            "numoutlets": numoutlets,
+            "outlettype": outlettype,
+            "digest":     digest,
+            "attributes": attributes,
+            "messages":   messages,
+            "arguments":  arguments,
+            "outputs":    outputs,
+            "seealso":    seealso,
+        }
+
+    def describe(self, name):
+        """Return a human-readable summary of an object for quick verification."""
+        r = self.lookup(name)
+        if r is None:
+            return f"{name}: NOT FOUND in refpages"
+        lines = [
+            f"{name}: {r['digest']}",
+            f"  inlets={r['numinlets']}  outlets={r['numoutlets']}  types={r['outlettype']}",
+        ]
+        if r["arguments"]:
+            args = ", ".join(f"{a['name']}({'opt' if a['optional'] else 'req'}, {a['type']})"
+                             for a in r["arguments"])
+            lines.append(f"  args: {args}")
+        if r["attributes"]:
+            lines.append(f"  attrs: {', '.join(r['attributes'].keys())}")
+        if r["seealso"]:
+            lines.append(f"  see also: {', '.join(r['seealso'])}")
+        return "\n".join(lines)
 
     def lookup(self, name):
-        """Return I/O dict for name, or None if not found."""
+        """Return full metadata dict for name, or None if not found."""
         if name not in self._cache:
             xml_path = self._find_xml(name)
             self._cache[name] = self._parse(xml_path) if xml_path else None
@@ -322,6 +426,8 @@ REFPAGE_CACHE = RefpageCache()
 
 # Fixed sizes for UI objects
 UI_SIZES = {
+    "inlet":    (30, 30),
+    "outlet":   (30, 30),
     "toggle":   (24, 24),
     "button":   (24, 24),
     "slider":   (20, 140),
@@ -462,67 +568,157 @@ def estimate_text_width(text):
 
 
 # ---------------------------------------------------------------------------
-# Auto-layout
+# Layout engine — patching view
 # ---------------------------------------------------------------------------
 
 def auto_layout(objects, connections):
-    """Assign (x, y) positions using topological layering."""
-    # Build adjacency and in-degree
-    successors = collections.defaultdict(list)
-    in_degree = collections.defaultdict(int)
+    """
+    Assign (x, y) positions using topological layering.
+
+    Phase 2 improvements over the original:
+    - Objects that share a common downstream destination are grouped at the
+      same y (side-by-side), so cables drop cleanly into separate inlets.
+    - Within a layer, objects are sorted by their first downstream destination
+      to keep logically related inputs spatially adjacent.
+    """
+    # Build adjacency
+    successors   = collections.defaultdict(list)
+    predecessors = collections.defaultdict(list)
+    in_degree    = collections.defaultdict(int)
     for obj_id in objects:
         in_degree.setdefault(obj_id, 0)
-
     for conn in connections:
         src, _, dst, _ = conn
         successors[src].append(dst)
+        predecessors[dst].append(src)
         in_degree[dst] = in_degree.get(dst, 0) + 1
 
-    # BFS layering (longest-path)
+    # BFS longest-path layering
     layers = {}
-    queue = collections.deque()
+    queue  = collections.deque()
     for obj_id in objects:
         if in_degree.get(obj_id, 0) == 0:
             queue.append(obj_id)
             layers[obj_id] = 0
-
+    in_deg_copy = dict(in_degree)
     while queue:
         node = queue.popleft()
         for succ in successors[node]:
             new_layer = layers[node] + 1
             if succ not in layers or layers[succ] < new_layer:
                 layers[succ] = new_layer
-            in_degree[succ] -= 1
-            if in_degree[succ] == 0:
+            in_deg_copy[succ] -= 1
+            if in_deg_copy[succ] == 0:
                 queue.append(succ)
-
-    # Handle cycles (assign to layer 0)
     for obj_id in objects:
         if obj_id not in layers:
             layers[obj_id] = 0
 
-    # Group by layer, sort within each layer for determinism
+    # Group by layer
     layer_groups = collections.defaultdict(list)
     for obj_id, layer in layers.items():
         layer_groups[layer].append(obj_id)
-    for layer in layer_groups:
-        layer_groups[layer].sort()
 
-    # Assign coordinates
+    # Within each layer, sort so objects feeding the same destination are
+    # adjacent.  Primary key: first successor's name (groups shared inputs).
+    # Secondary key: object id (determinism).
+    def sort_key(obj_id):
+        succs = successors.get(obj_id, [])
+        return (succs[0] if succs else "\xff", obj_id)
+
+    for layer in layer_groups:
+        layer_groups[layer].sort(key=sort_key)
+
+    # Assign coordinates.  Objects that share exactly the same set of
+    # successors are placed at the same y so they appear side-by-side.
     positions = {}
     for layer_idx in sorted(layer_groups.keys()):
         members = layer_groups[layer_idx]
-        for row, obj_id in enumerate(members):
-            obj_spec = objects[obj_id]
-            # Respect explicit positions
+        row     = 0
+        prev_succ_key = None
+        for obj_id in members:
+            obj_spec  = objects[obj_id]
             if "pos" in obj_spec:
                 positions[obj_id] = tuple(obj_spec["pos"])
-            else:
-                x = X_MARGIN + layer_idx * X_SPACING
-                y = Y_MARGIN + row * Y_SPACING
-                positions[obj_id] = (x, y)
+                continue
+            succ_key = tuple(sorted(successors.get(obj_id, [])))
+            # Advance row only when the successor group changes
+            if prev_succ_key is not None and succ_key != prev_succ_key:
+                row += 1
+            prev_succ_key = succ_key
+            x = X_MARGIN + layer_idx * X_SPACING
+            y = Y_MARGIN + row * Y_SPACING
+            positions[obj_id] = (x, y)
 
     return positions
+
+
+# ---------------------------------------------------------------------------
+# Layout engine — presentation view
+# ---------------------------------------------------------------------------
+
+# Grid constants (can be overridden via top-level "layout" key in spec)
+PRES_MARGIN_X  = 15    # outer left margin
+PRES_MARGIN_Y  = 35    # top margin (below title)
+PRES_ROW_H     = 27    # vertical step between rows
+PRES_COL_GAP   = 260   # horizontal distance between column starts
+
+
+def presentation_layout(objects, layout_cfg=None):
+    """
+    Compute presentation_rect for objects with layout hints.
+
+    An object's "presentation" field may be:
+      [x, y]           — explicit position; w/h from object size
+      [x, y, w, h]     — fully explicit
+      {"col": N, "row": N}              — grid placement
+      {"col": N, "row": N, "x_off": X} — grid with in-column x offset
+
+    Global grid config comes from the spec's top-level "layout.presentation"
+    dict (all keys optional):
+      margin_x, margin_y, row_height, col_gap
+
+    Returns {user_id: [x, y, w, h]} for all objects with presentation hints.
+    """
+    cfg       = (layout_cfg or {}).get("presentation", {})
+    margin_x  = cfg.get("margin_x",   PRES_MARGIN_X)
+    margin_y  = cfg.get("margin_y",   PRES_MARGIN_Y)
+    row_h     = cfg.get("row_height", PRES_ROW_H)
+    col_gap   = cfg.get("col_gap",    PRES_COL_GAP)
+
+    result = {}
+    for user_id, obj_spec in objects.items():
+        pres = obj_spec.get("presentation")
+        if not pres:
+            continue
+
+        # Object size
+        maxclass = obj_spec.get("type", "newobj")
+        text     = obj_spec.get("text", "")
+        if obj_spec.get("size"):
+            w, h = obj_spec["size"]
+        elif maxclass in UI_SIZES:
+            w, h = UI_SIZES[maxclass]
+        else:
+            w = estimate_text_width(text)
+            h = 22
+
+        if isinstance(pres, list):
+            if len(pres) == 2:
+                result[user_id] = [float(pres[0]), float(pres[1]), float(w), float(h)]
+            elif len(pres) >= 4:
+                result[user_id] = [float(v) for v in pres[:4]]
+        elif isinstance(pres, dict):
+            col   = pres.get("col", 0)
+            row   = pres.get("row", 0)
+            x_off = pres.get("x_off", 0)
+            x     = margin_x + col * col_gap + x_off
+            y     = margin_y + row * row_h
+            ow    = pres.get("w", w)   # per-object size override
+            oh    = pres.get("h", h)
+            result[user_id] = [float(x), float(y), float(ow), float(oh)]
+
+    return result
 
 
 # ---------------------------------------------------------------------------
@@ -939,8 +1135,12 @@ def convert_patcher(spec):
         if dst not in objects:
             raise ValueError(f"Connection destination '{dst}' not found in objects")
 
-    # Layout
+    # Layout — patching view
     positions = auto_layout(objects, connections)
+
+    # Layout — presentation view (grid-based hints → presentation_rect)
+    layout_cfg  = spec.get("layout", {})
+    pres_rects  = presentation_layout(objects, layout_cfg)
 
     # Build boxes
     boxes = []
@@ -948,6 +1148,10 @@ def convert_patcher(spec):
     for index, (user_id, obj_spec) in enumerate(objects.items(), start=1):
         x, y = positions.get(user_id, (X_MARGIN, Y_MARGIN))
         box = build_box(user_id, obj_spec, index, x, y)
+        # Apply computed presentation_rect for grid-placed objects
+        if user_id in pres_rects and isinstance(obj_spec.get("presentation"), dict):
+            box["box"]["presentation"]      = 1
+            box["box"]["presentation_rect"] = pres_rects[user_id]
         boxes.append(box)
         id_map[user_id] = f"obj-{index}"
 
@@ -1027,6 +1231,94 @@ def convert_spec(spec):
 
 
 # ---------------------------------------------------------------------------
+# Max Compressed Text (MCT) — encode/decode the begin_max5_patcher format
+# ---------------------------------------------------------------------------
+#
+# MCT is the compressed clipboard format Max uses for "Copy Compressed".
+# Format: {byte_count}.{JUCE_base64(zlib_compress(json))} wrapped in
+#   ----------begin_max5_patcher----------
+#   -----------end_max5_patcher-----------
+# lines, 60 chars per line.
+#
+# Encoding algorithm: JUCE MemoryBlock::toBase64Encoding reads bits LSB-first
+# within each byte, producing 6-bit chunks in this order for bytes b0,b1,b2:
+#   chunk0 = b0[5:0]
+#   chunk1 = b0[7:6] | b1[3:0]<<2
+#   chunk2 = b1[7:4] | b2[1:0]<<4
+#   chunk3 = b2[7:2]
+# Alphabet: ".ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+"
+# (period = 0, A–Z = 1–26, a–z = 27–52, 0–9 = 53–62, + = 63)
+#
+# Sources: cycling74.com/forums/format-of-compressed-json,
+#          github.com/juce-framework/JUCE (juce_MemoryBlock.cpp)
+
+_JUCE_ALPHA = ".ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+"
+_JUCE_TABLE = {c: i for i, c in enumerate(_JUCE_ALPHA)}
+
+
+def mct_encode(json_str):
+    """Encode a .maxpat JSON string to Max Compressed Text (MCT) format."""
+    import zlib as _zlib
+    data = json_str.encode("utf-8") if isinstance(json_str, str) else json_str
+    compressed = _zlib.compress(data, level=9)
+    chars = []
+    for i in range(0, len(compressed), 3):
+        chunk = compressed[i:i+3]
+        n = len(chunk)
+        b = [chunk[j] if j < n else 0 for j in range(3)]
+        chars.append(_JUCE_ALPHA[b[0] & 0x3F])
+        chars.append(_JUCE_ALPHA[(b[0] >> 6) | ((b[1] & 0xF) << 2)])
+        if n >= 2:
+            chars.append(_JUCE_ALPHA[(b[1] >> 4) | ((b[2] & 0x3) << 4)])
+        if n >= 3:
+            chars.append(_JUCE_ALPHA[b[2] >> 2])
+    encoded = "".join(chars)
+    header = f"{len(compressed)}."
+    line_len = 60
+    first_chunk = line_len - len(header)
+    lines = [header + encoded[:first_chunk]]
+    pos = first_chunk
+    while pos < len(encoded):
+        lines.append(encoded[pos:pos + line_len])
+        pos += line_len
+    body = "\n".join(lines)
+    return f"----------begin_max5_patcher----------\n{body}\n-----------end_max5_patcher-----------"
+
+
+def mct_decode(mct_str):
+    """Decode a Max Compressed Text block to a JSON string."""
+    import zlib as _zlib
+    lines = mct_str.strip().splitlines()
+    body = "".join(l for l in lines if not l.startswith("---"))
+    i = 0
+    while i < len(body) and body[i].isdigit():
+        i += 1
+    encoded = "".join(c for c in body[i+1:] if c in _JUCE_TABLE)
+    result = []
+    pos = 0
+    while pos < len(encoded):
+        rem = len(encoded) - pos
+        if rem >= 4:
+            v = [_JUCE_TABLE[encoded[pos+j]] for j in range(4)]
+            result.append((v[0] & 0x3F) | ((v[1] & 0x3) << 6))
+            result.append((v[1] >> 2) | ((v[2] & 0xF) << 4))
+            result.append((v[2] >> 4) | ((v[3] & 0x3F) << 2))
+            pos += 4
+        elif rem == 3:
+            v = [_JUCE_TABLE[encoded[pos+j]] for j in range(3)]
+            result.append((v[0] & 0x3F) | ((v[1] & 0x3) << 6))
+            result.append((v[1] >> 2) | ((v[2] & 0xF) << 4))
+            pos += 3
+        elif rem == 2:
+            v = [_JUCE_TABLE[encoded[pos+j]] for j in range(2)]
+            result.append((v[0] & 0x3F) | ((v[1] & 0x3) << 6))
+            pos += 2
+        else:
+            break
+    return _zlib.decompress(bytes(result)).decode("utf-8")
+
+
+# ---------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------
 
@@ -1053,6 +1345,13 @@ def main():
     )
     p_sync.add_argument("-i", "--input", required=True, help="Input .maxpat file")
     p_sync.add_argument("-o", "--output", help="Output .maxpat file (default: overwrite input)")
+
+    # mct
+    p_mct = subparsers.add_parser(
+        "mct",
+        help="Encode a .maxpat to Max Compressed Text (begin_max5_patcher) format for pasting into Max"
+    )
+    p_mct.add_argument("-i", "--input", required=True, help="Input .maxpat file")
 
     args = parser.parse_args()
 
@@ -1095,6 +1394,11 @@ def main():
                 f.write("\n")
         else:
             print(output)
+
+    elif args.command == "mct":
+        with open(args.input, "r") as f:
+            content = f.read()
+        print(mct_encode(content))
 
     elif args.command == "sync":
         with open(args.input, "r") as f:

@@ -1,6 +1,8 @@
 # Claude2Max Spec Reference
 
-JSON format for describing Max/MSP patches. See `CLAUDE.md` for workflow and conversion commands.
+JSON format for describing Max/MSP patches.
+
+> **Read `CLAUDE.md` before using this file.** It contains required session-start checks, object verification steps, and workflow rules that apply before writing any spec.
 
 ## Spec Structure
 
@@ -366,6 +368,12 @@ Lay out the main signal chain vertically, top to bottom. Place the primary input
 - When inserting a comment between two connected objects, add enough vertical space so the comment does not overlap the cable or either object. A comment is ~14px tall; budget at least 20px above and below it.
 - Keep comments short. Use them to label controls (e.g. "tempo (ms)"), not to narrate the patch.
 
+### Side-by-side inputs
+
+When two or more objects feed **different inlets** of the same destination, place them at the **same y-coordinate** (side by side), not stacked vertically. Stacking makes cables ambiguous — it's unclear which source reaches which inlet. Horizontal alignment makes the data flow readable at a glance.
+
+Example: if `num_value` feeds inlet 0 and `num_factor` feeds inlet 1 of `p scaler`, both should be at the same y, spaced ~135px apart to match the inlet spacing of the destination.
+
 ### Side controls
 
 When a secondary control (velocity, duration, etc.) feeds into a later inlet of an object in the main chain, place it above and to the right of that object so the cable drops down naturally into the correct inlet. Label it with a comment using the same right-shift rule.
@@ -445,6 +453,23 @@ Any patch with more than a handful of user-facing controls benefits from a prese
   ]
 }
 ```
+
+### Inlet and Outlet Object Sizes
+
+The default size for `inlet` and `outlet` objects in Max is **30×30 px**. Do not specify a `size` for them in the spec — the converter uses 30×30 automatically. Setting a different size will produce the wrong shape.
+
+### Arithmetic: Float Output Requires a Float Argument
+
+Max arithmetic objects (`+`, `-`, `*`, `/`) output **int** by default. To get float output, pass a float argument:
+
+```
+* 1.0     → float multiply (use when either input may be float)
++ 0.0     → float add
+- 0.0     → float subtract
+/ 1.0     → float divide
+```
+
+The `*.`, `+.` etc. variants are also valid float-mode objects, but prefer the float-argument form (`* 1.0`) for clarity in control-rate patches. The `~` variants (`*~`, `+~`) are audio-rate only.
 
 ### Counter with Subpatcher
 
