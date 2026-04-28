@@ -7,7 +7,22 @@ Format: `- [ ]` = pending, `- [x]` = complete (move to Done section).
 
 ## Pending
 
-- [ ] **Extended `RefpageCache` metadata** — extend `RefpageCache` in `spec2maxpat.py` to cache the following from each maxref.xml, in addition to I/O counts. All data is already in the XML; this task is purely parsing and structuring it. Each field is cached per object on first lookup, so no performance cost unless the data is requested.
+- [ ] **Package Objects Library** — Enumerate all installed Max packages, study their objects, and produce a reusable reference so Claude instances know when non-standard objects are worth reaching for.
+
+  **What to build**:
+  1. **Survey installed packages** — scan standard package locations (`~/Documents/Max 8/Packages`, `~/Documents/Max 9/Packages`, `/Applications/Max.app/Contents/Resources/C74/packages`) and list all packages with their included objects (from each package's `docs/refpages/` or `externals/` folder).
+  2. **Study and annotate** — for each package's objects, extract digest/description, I/O counts, key attributes, and typical use cases from the refpage XML (same approach `RefpageCache` uses). Flag objects that solve problems commonly handled by longer native Max chains (e.g. a single `cv.jit.*` object vs. rolling your own computer vision).
+  3. **Decide whether useful** — if the survey yields enough worthwhile objects (judgment call: is knowing about them likely to change patching decisions?), proceed to step 4. If packages are sparse or low-value, document that conclusion and stop.
+  4. **Create `package_objects.json`** in the repo — structured as `{"package_name": {"object_name": {"digest": "...", "numinlets": N, "numoutlets": N, "use_when": "...", "tags": [...]}}}`. Include a `use_when` field (brief plain-English note on when to prefer this object over native Max alternatives).
+  5. **Update `CLAUDE.md` or `SPEC_REFERENCE.md`** with a short section on consulting the library before reaching for long native chains.
+
+  **Prerequisites**: Max installed at a standard path; packages already installed by the user.
+
+  **Implementation notes**: reuse `RefpageCache._find_xml()` logic to locate refpages. The `use_when` field is the high-value output — written by Claude after reading the digest, not auto-generated. Skip objects that are pure alternatives with no advantage over built-ins.
+
+- [ ] **Review youthful-austin branch** — open all files on the `claude/youthful-austin` worktree, compare each to `main`, and decide what is still useful/relevant to merge. Files to review: `CLAUDE.md`, `SPEC_REFERENCE.md`, `.claude/settings.json`, `spec2maxpat.py`, `patches/drift-sequencer.json`, `patches/drift-sequencer.maxpat`, `patches/face-capture.json`, `patches/face-capture.maxpat`, `TASK_QUEUE.md`, `TUTORIAL_GUIDELINES.md`, `WORK_HISTORY.md`, `add_tutorial.py`, `hooks/sync_maxpat.py`, `hooks/sync_pasted_maxpat.py`, and tutorial `.js` files. Merge what's good, discard or defer the rest, then clean up the worktree.
+
+- [x] **Extended `RefpageCache` metadata** — extend `RefpageCache` in `spec2maxpat.py` to cache the following from each maxref.xml, in addition to I/O counts. All data is already in the XML; this task is purely parsing and structuring it. Each field is cached per object on first lookup, so no performance cost unless the data is requested.
 
   - **Attributes** — from `<attributelist><attribute>`. Cache: name, type (int/float/symbol/list), size, default value, enum values if present, get/set permissions. Enables programmatic verification before using any attribute — no more manual grep. The `align` / `justify` / `anchor_x` errors from this session would have been caught automatically.
 
@@ -21,7 +36,7 @@ Format: `- [ ]` = pending, `- [x]` = complete (move to Done section).
 
   **Implementation note**: `_parse()` in `RefpageCache` already reads the full XML root. Extend it to extract all five fields in the same pass — one XML parse covers everything. Return structure: `{"numinlets": ..., "numoutlets": ..., "outlettype": [...], "attributes": {...}, "messages": {...}, "arguments": [...], "outputs": [...], "seealso": [...]}`.
 
-- [ ] **Layout engine + screenshot verification (patching and presentation views)** — three-phase approach covering both views, each with its own emphasis:
+- [ ] **Layout engine Phase 3 — screenshot verification** (Phases 1 & 2 complete 2026-04-26) — three-phase approach covering both views, each with its own emphasis:
 
   **Phase 1 — Layout engine (presentation view)**: add a `presentation_layout()` function to `spec2maxpat.py` that computes `presentation_rect` for every presented object automatically from the spec, replacing manual post-processing. The engine should:
   - Accept logical layout hints in the spec: column/row grouping, margins, object sizes
@@ -48,6 +63,29 @@ Format: `- [ ]` = pending, `- [x]` = complete (move to Done section).
 
   **Prerequisite**: computer-use MCP must be enabled and screen recording granted to Claude. Phases 1 and 2 (layout engines) work without it; Phase 3 (screenshots) requires it.
 
+- [x] **Permutation Summary Generator** — add a `perm-summary.js` v8 object to `ensemble-sequencer-v4.maxpat` that analyzes the full permutation list and outputs a plain-English text summary highlighting statistically unusual patterns. Display in a `textedit` box in the patch.
+
+  **Inputs**: receives the complete permutation list from the brain on demand (bang triggers summary output). Data format to match whatever ensemble-v4.js already produces for the permutation list.
+
+  **Analysis dimensions** — generate a sentence only when a pattern is actually present; suppress boilerplate for normal distributions. Rank observations by how surprising they are and surface only the most notable (target 3–6 sentences total):
+
+  - **Role frequency per performer** — count music vs dance appearances across all permutations; compute the norm (median); flag anyone significantly above or below (e.g. "Jaco only dances once")
+  - **Co-occurrence** — for every pair, count shared permutations; flag pairs that never or rarely appear together (e.g. "John never plays music with Maya") and pairs that always appear together
+  - **Solos** — flag permutations where the music or dance group has only one member; note which performers have solos and in which role (e.g. "Everyone has a music solo except Ellie")
+  - **Dominance** — flag anyone who appears in every permutation in the same role
+  - **Consecutive role streaks** — a performer who does the same role many times in a row across the sequence (e.g. "Maya plays music 5 times before dancing")
+  - **Inverse pairs** — pairs that are always in opposite groups, never sharing a role (e.g. "John and Ellie are never both musicians")
+  - **Group size variation** — whether music or dance groups are consistently larger, or one side is frequently just one or two people
+  - **Role transitions** — how often each performer switches roles between consecutive permutations vs stays in the same role (high switchers vs stable performers)
+  - **Sub-group recurrence** — trios or larger clusters that appear together frequently, suggesting a recurring unit (e.g. "John, Maya, and Ellie are musicians together in 6 of 12 permutations")
+  - **Coverage gaps** — a performer who never gets a pairing or grouping that everyone else gets (generalizes the solo/no-solo case)
+
+  **Implementation**: new file `perm-summary.js` in the ensemble repo. Receives permutation data via a message, stores it, outputs summary text on bang. Functions as a standard Max v8 object. No external dependencies. Brute-force analysis is fine — at 6–10 performers and 12–30 permutations, all dimensions are O(n × p²) or better and run instantly.
+
+  **Files to read first**: `ensemble-v4.js` (permutation data structure and outlet routing), `ensemble-sequencer-v4.maxpat` (current layout, where to add the new object and textedit).
+
 ## Done
 
-<!-- Completed tasks moved here with [x] and a completion date -->
+- [x] **Extended `RefpageCache` metadata** — completed 2026-04-26. Extended `_parse()` in `spec2maxpat.py` to extract digest, attributes (type/size/default/get/set/label), messages (args/inlet), object arguments, output descriptions, and see-also in a single XML parse pass. Added `describe(name)` convenience method for quick verification. Return structure now includes all seven fields alongside the original I/O counts.
+
+- [x] **Permutation Summary Generator** — completed 2026-04-26. Created `perm-summary.js` with 10 analysis dimensions (role frequency, solos, co-occurrence, dominance, consecutive streaks, inverse pairs, group size variation, role transitions, sub-group recurrence, coverage gaps). Observations ranked by surprisingness; top 6 output as plain-English text to a `textedit` box. Added outlet 7 to `ensemble-v5.js` (`sendSummaryData()` called after generate). Integrated into `ensemble-sequencer-v5.maxpat` with textedit in presentation view (left panel, below transport controls).
