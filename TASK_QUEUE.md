@@ -7,6 +7,24 @@ Format: `- [ ]` = pending, `- [x]` = complete (move to Done section).
 
 ## Pending
 
+- [ ] **Forum Knowledge Crawl** — Systematically crawl the Cycling '74 forums in chunks, extracting Max principles, techniques, and approaches from experienced community members. Build a growing reference of non-obvious patching knowledge that supplements the official docs.
+
+  **Approach (chunked across sessions)**:
+  - Each session picks a focused area: one subforum, one topic thread cluster, or one search query (e.g. "jit.matrix best practices", "audio synthesis techniques", "v8 patterns"). Track progress in a `FORUM_CRAWL_LOG.md` so each session knows where to resume.
+  - Prioritize threads with: high reply counts, sample patches (MCT blocks), "tips & tricks" / "how do you..." framing, or posts from long-tenured members.
+  - Extract: non-obvious object behaviors, preferred patterns for common tasks, performance pitfalls, community-preferred alternatives to naive Max approaches, and any sample patches worth studying.
+
+  **Output**:
+  - `forum_insights.md` — running notes, organized by topic (audio, video/Jitter, JS/v8, MIDI, UI, performance). Each entry: the insight, source thread title, and why it matters.
+  - Where an insight is specific to an object, also add it to the relevant section of `SPEC_REFERENCE.md`.
+  - If enough package-object insights accumulate, fold them into `package_objects.json` (see Package Objects Library task).
+
+  **What to skip**: basic "how do I" posts with obvious answers, unanswered threads, posts that just link to docs.
+
+  **Forum starting point**: `https://cycling74.com/forums`
+
+  **Session format**: start each chunk by reading `FORUM_CRAWL_LOG.md` to see what's been covered, do one focused crawl pass, append new entries to `forum_insights.md`, update the log with what was covered and what to do next.
+
 - [ ] **Package Objects Library** — Enumerate all installed Max packages, study their objects, and produce a reusable reference so Claude instances know when non-standard objects are worth reaching for.
 
   **What to build**:
