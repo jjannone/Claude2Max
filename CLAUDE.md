@@ -55,7 +55,17 @@ Trigger cases:
 3. **Analyzing installed packages** — evaluating objects, writing `use_when` judgments for `package_objects.json`
 4. **Reading complex Cycling '74 forum threads** — synthesizing community knowledge, distinguishing good advice from outdated workarounds
 5. **Planning a new complex patch** — architecture decisions, subpatcher decomposition, signal flow design before any spec is written
-6. **Designing a presentation mode UI** — layout hierarchy, panel grouping, visual weight, control placement. Opus 4.7 is the same model that powers Claude Design (claude.ai/design); switching brings that same visual reasoning to Max presentation views. For complex UIs the user can also sketch at claude.ai/design first and bring the layout back into Claude Code.
+6. **Designing a presentation mode UI** — layout hierarchy, panel grouping, visual weight, control placement. Stop and offer the user two options:
+
+   > "Before we design the presentation UI, choose an approach:
+   > - **Option A** — run `/model claude-opus-4-7` and we'll design it here (Opus = same model as Claude Design)
+   > - **Option B** — take the design to [claude.ai/design](https://claude.ai/design), which has separate usage included with your account, then bring the layout back and I'll translate it into spec coordinates
+   >
+   > Which would you prefer?"
+
+   Wait for the user's choice before proceeding. If they choose Option B, ask them to describe or paste the layout when they return and you'll handle the spec translation on Sonnet.
+
+   **Periodic check**: Claude Design is evolving rapidly. At the start of any session involving presentation UI work, do a quick web search for recent Claude Design news — new capabilities, API availability, Claude Code integration, or workflow changes. If anything materially affects how it can be used here, update this rule before proceeding.
 
 ### Prompt to switch back to Sonnet
 
