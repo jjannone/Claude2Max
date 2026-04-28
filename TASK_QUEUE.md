@@ -3,11 +3,13 @@
 Pending tasks for future sessions. Claude reads this at session start and
 reports any incomplete items to the user before beginning other work.
 
-Format: `- [ ]` = pending, `- [x]` = complete (move to Done section).
+Format: `[pending]` = not started, `[complete]` = done (move to Done section), `[in progress]` = currently being worked on.
+
+**When starting a task**, change its marker to `[in progress]` and add a brief note of what has been done so far (e.g. `*In progress: crawled audio subforum, resuming at MIDI threads*`). This ensures that if the session is cut off, the next Claude instance knows where to pick up. Clear the `[in progress]` marker and note when the task is finished or paused.
 
 ## Pending
 
-- [ ] **Forum Knowledge Crawl** — Systematically crawl the Cycling '74 forums in chunks, extracting Max principles, techniques, and approaches from experienced community members. Build a growing reference of non-obvious patching knowledge that supplements the official docs.
+- [pending] **Forum Knowledge Crawl** — Systematically crawl the Cycling '74 forums in chunks, extracting Max principles, techniques, and approaches from experienced community members. Build a growing reference of non-obvious patching knowledge that supplements the official docs.
 
   **Approach (chunked across sessions)**:
   - Each session picks a focused area: one subforum, one topic thread cluster, or one search query (e.g. "jit.matrix best practices", "audio synthesis techniques", "v8 patterns"). Track progress in a `FORUM_CRAWL_LOG.md` so each session knows where to resume.
@@ -25,7 +27,7 @@ Format: `- [ ]` = pending, `- [x]` = complete (move to Done section).
 
   **Session format**: start each chunk by reading `FORUM_CRAWL_LOG.md` to see what's been covered, do one focused crawl pass, append new entries to `forum_insights.md`, update the log with what was covered and what to do next.
 
-- [ ] **Package Objects Library** — Enumerate all installed Max packages, study their objects, and produce a reusable reference so Claude instances know when non-standard objects are worth reaching for.
+- [pending] **Package Objects Library** — Enumerate all installed Max packages, study their objects, and produce a reusable reference so Claude instances know when non-standard objects are worth reaching for.
 
   **What to build**:
   1. **Survey installed packages** — scan standard package locations (`~/Documents/Max 8/Packages`, `~/Documents/Max 9/Packages`, `/Applications/Max.app/Contents/Resources/C74/packages`) and list all packages with their included objects (from each package's `docs/refpages/` or `externals/` folder).
@@ -38,9 +40,9 @@ Format: `- [ ]` = pending, `- [x]` = complete (move to Done section).
 
   **Implementation notes**: reuse `RefpageCache._find_xml()` logic to locate refpages. The `use_when` field is the high-value output — written by Claude after reading the digest, not auto-generated. Skip objects that are pure alternatives with no advantage over built-ins.
 
-- [ ] **Review youthful-austin branch** — open all files on the `claude/youthful-austin` worktree, compare each to `main`, and decide what is still useful/relevant to merge. Files to review: `CLAUDE.md`, `SPEC_REFERENCE.md`, `.claude/settings.json`, `spec2maxpat.py`, `patches/drift-sequencer.json`, `patches/drift-sequencer.maxpat`, `patches/face-capture.json`, `patches/face-capture.maxpat`, `TASK_QUEUE.md`, `TUTORIAL_GUIDELINES.md`, `WORK_HISTORY.md`, `add_tutorial.py`, `hooks/sync_maxpat.py`, `hooks/sync_pasted_maxpat.py`, and tutorial `.js` files. Merge what's good, discard or defer the rest, then clean up the worktree.
+- [complete] **Review youthful-austin branch** — open all files on the `claude/youthful-austin` worktree, compare each to `main`, and decide what is still useful/relevant to merge. Files to review: `CLAUDE.md`, `SPEC_REFERENCE.md`, `.claude/settings.json`, `spec2maxpat.py`, `patches/drift-sequencer.json`, `patches/drift-sequencer.maxpat`, `patches/face-capture.json`, `patches/face-capture.maxpat`, `TASK_QUEUE.md`, `TUTORIAL_GUIDELINES.md`, `WORK_HISTORY.md`, `add_tutorial.py`, `hooks/sync_maxpat.py`, `hooks/sync_pasted_maxpat.py`, and tutorial `.js` files. Merge what's good, discard or defer the rest, then clean up the worktree.
 
-- [x] **Extended `RefpageCache` metadata** — extend `RefpageCache` in `spec2maxpat.py` to cache the following from each maxref.xml, in addition to I/O counts. All data is already in the XML; this task is purely parsing and structuring it. Each field is cached per object on first lookup, so no performance cost unless the data is requested.
+- [complete] **Extended `RefpageCache` metadata** — extend `RefpageCache` in `spec2maxpat.py` to cache the following from each maxref.xml, in addition to I/O counts. All data is already in the XML; this task is purely parsing and structuring it. Each field is cached per object on first lookup, so no performance cost unless the data is requested.
 
   - **Attributes** — from `<attributelist><attribute>`. Cache: name, type (int/float/symbol/list), size, default value, enum values if present, get/set permissions. Enables programmatic verification before using any attribute — no more manual grep. The `align` / `justify` / `anchor_x` errors from this session would have been caught automatically.
 
@@ -54,7 +56,9 @@ Format: `- [ ]` = pending, `- [x]` = complete (move to Done section).
 
   **Implementation note**: `_parse()` in `RefpageCache` already reads the full XML root. Extend it to extract all five fields in the same pass — one XML parse covers everything. Return structure: `{"numinlets": ..., "numoutlets": ..., "outlettype": [...], "attributes": {...}, "messages": {...}, "arguments": [...], "outputs": [...], "seealso": [...]}`.
 
-- [ ] **Layout engine Phase 3 — screenshot verification** (Phases 1 & 2 complete 2026-04-26) — three-phase approach covering both views, each with its own emphasis:
+- [in progress] **Layout engine Phase 3 — screenshot verification** (Phases 1 & 2 complete 2026-04-26) — three-phase approach covering both views, each with its own emphasis:
+
+  *In progress (2026-04-27): drift-sequencer reviewed and fixed (presentation layout, monospace font, ignoreclick on note display, content-driven multislider width). face-capture not yet reviewed — resume there.*
 
   **Phase 1 — Layout engine (presentation view)**: add a `presentation_layout()` function to `spec2maxpat.py` that computes `presentation_rect` for every presented object automatically from the spec, replacing manual post-processing. The engine should:
   - Accept logical layout hints in the spec: column/row grouping, margins, object sizes
@@ -81,7 +85,7 @@ Format: `- [ ]` = pending, `- [x]` = complete (move to Done section).
 
   **Prerequisite**: computer-use MCP must be enabled and screen recording granted to Claude. Phases 1 and 2 (layout engines) work without it; Phase 3 (screenshots) requires it.
 
-- [x] **Permutation Summary Generator** — add a `perm-summary.js` v8 object to `ensemble-sequencer-v4.maxpat` that analyzes the full permutation list and outputs a plain-English text summary highlighting statistically unusual patterns. Display in a `textedit` box in the patch.
+- [complete] **Permutation Summary Generator** — add a `perm-summary.js` v8 object to `ensemble-sequencer-v4.maxpat` that analyzes the full permutation list and outputs a plain-English text summary highlighting statistically unusual patterns. Display in a `textedit` box in the patch.
 
   **Inputs**: receives the complete permutation list from the brain on demand (bang triggers summary output). Data format to match whatever ensemble-v4.js already produces for the permutation list.
 
@@ -104,6 +108,6 @@ Format: `- [ ]` = pending, `- [x]` = complete (move to Done section).
 
 ## Done
 
-- [x] **Extended `RefpageCache` metadata** — completed 2026-04-26. Extended `_parse()` in `spec2maxpat.py` to extract digest, attributes (type/size/default/get/set/label), messages (args/inlet), object arguments, output descriptions, and see-also in a single XML parse pass. Added `describe(name)` convenience method for quick verification. Return structure now includes all seven fields alongside the original I/O counts.
+- [complete] **Extended `RefpageCache` metadata** — completed 2026-04-26. Extended `_parse()` in `spec2maxpat.py` to extract digest, attributes (type/size/default/get/set/label), messages (args/inlet), object arguments, output descriptions, and see-also in a single XML parse pass. Added `describe(name)` convenience method for quick verification. Return structure now includes all seven fields alongside the original I/O counts.
 
-- [x] **Permutation Summary Generator** — completed 2026-04-26. Created `perm-summary.js` with 10 analysis dimensions (role frequency, solos, co-occurrence, dominance, consecutive streaks, inverse pairs, group size variation, role transitions, sub-group recurrence, coverage gaps). Observations ranked by surprisingness; top 6 output as plain-English text to a `textedit` box. Added outlet 7 to `ensemble-v5.js` (`sendSummaryData()` called after generate). Integrated into `ensemble-sequencer-v5.maxpat` with textedit in presentation view (left panel, below transport controls).
+- [complete] **Permutation Summary Generator** — completed 2026-04-26. Created `perm-summary.js` with 10 analysis dimensions (role frequency, solos, co-occurrence, dominance, consecutive streaks, inverse pairs, group size variation, role transitions, sub-group recurrence, coverage gaps). Observations ranked by surprisingness; top 6 output as plain-English text to a `textedit` box. Added outlet 7 to `ensemble-v5.js` (`sendSummaryData()` called after generate). Integrated into `ensemble-sequencer-v5.maxpat` with textedit in presentation view (left panel, below transport controls).

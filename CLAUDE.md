@@ -4,6 +4,20 @@ This repo is a tool for generating Max/MSP patches from Claude-authored JSON spe
 
 **Audience**: This tool is designed for students with little coding or CLI experience. CLAUDE.md serves as the primary knowledge base — when their instance of Claude reads it, it should learn everything needed to work with Max/MSP, the spec format, and the converter without requiring prior expertise. Include helpful general information here even if it seems basic — students benefit from it and Claude instances need it to assist them effectively.
 
+## Rules from Corrected Errors
+
+After fixing any error, derive a general rule that would have prevented it. Present the proposed rule(s) to the user in plain language before writing them to CLAUDE.md or SPEC_REFERENCE.md. Only enshrine rules the user confirms. This keeps the knowledge base accurate and user-approved rather than accumulating unreviewed assumptions.
+
+**When writing rules, state the general principle — not the specific fix.** A rule that says "do X in situation Y" only helps when Y recurs exactly. A rule that identifies the underlying concern applies across a broader range of circumstances and more complex or differently structured patches. Ask: what is the real problem this rule is guarding against? Write the rule around that.
+
+**Lead with intent, follow with example.** State what you're trying to achieve in plain terms first, then illustrate with a concrete case introduced as "for instance." This keeps the principle readable and applicable broadly, while still giving actionable guidance. Rules that lead with a specific method risk being read as recipes rather than principles.
+
+## When Building a New Version from an Existing Patch
+
+- **Retain all default values.** Any `loadbang → init` chain, `loadmess`, or hardcoded default in the JS must survive unchanged into the new version. Defaults represent deliberate configuration — they are not incidental and must not be silently dropped.
+
+- **Preserve wiring integrity when modifying patches programmatically.** Patchlines reference boxes by `id`, so renaming a box that has connections silently breaks all wiring to and from it. Keep original IDs intact; only assign new IDs to newly added boxes.
+
 ## Never Regress Functionality When Changing Modality
 
 **General rule**: when any working feature — display, control, behavior, format — is moved, replaced, or reimplemented in a different modality, it must arrive at least as capable as it left. A change of modality is not a reason to lose functionality.
@@ -71,6 +85,62 @@ python3 spec2maxpat.py convert -i updated-spec.json -o patch.maxpat
 
 The `.maxpat` is the single source of truth. All patches live in `patches/`.
 
+## Max Compressed Text (MCT)
+
+**Produce MCT only when the user requests it, or when the user has already provided MCT in the conversation.** Never paste raw `.maxpat` JSON — users can't open it. MCT is the format Max uses for "Copy Compressed": the user copies the block and does **File > New From Clipboard** (or pastes directly into an open patcher) to reconstruct the patch.
+
+### What it looks like
+
+```
+----------begin_max5_patcher----------
+456.3ocwU1zbBBCDF9d+UjImQIAQT609CnG5wNcbhvJMNPBSHXsii+2aRv5G
+SiePsNkCJj7tl28Y2EW+.xbgmIWA03GQu5dzdsd2ceKvr8wK51njsJsfUaCF
+...
+-----------end_max5_patcher-----------
+```
+
+Format: `{compressed_byte_count}.{JUCE_base64(zlib_compress(json))}`, wrapped at 60 chars/line.
+
+### How to produce MCT (Claude Code)
+
+After converting a patch, run:
+
+```bash
+python3 spec2maxpat.py mct -i patches/patch.maxpat
+```
+
+Copy the full output block (including `begin_max5_patcher` / `end_max5_patcher` lines) into your response.
+
+### How to decode MCT you receive
+
+```bash
+python3 -c "
+from spec2maxpat import mct_decode
+import sys, json
+print(json.dumps(json.loads(mct_decode(sys.stdin.read())), indent=2))
+" << 'EOF'
+----------begin_max5_patcher----------
+...paste MCT here...
+-----------end_max5_patcher-----------
+EOF
+```
+
+### Encoding algorithm (for reference)
+
+JUCE's `MemoryBlock::toBase64Encoding` reads the compressed bytes **LSB-first** within each byte, packing 6-bit chunks in this order for bytes b0, b1, b2:
+
+| Chunk | Bits |
+|-------|------|
+| 0 | b0[5:0] |
+| 1 | b0[7:6] \| b1[3:0]<<2 |
+| 2 | b1[7:4] \| b2[1:0]<<4 |
+| 3 | b2[7:2] |
+
+Alphabet: `.ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+`
+(`.` = 0, A–Z = 1–26, a–z = 27–52, 0–9 = 53–62, `+` = 63)
+
+The `mct_encode` and `mct_decode` functions in `spec2maxpat.py` implement this exactly.
+
 ## Key Files
 
 - `SPEC_REFERENCE.md` — **Read this first.** Complete spec format reference with all object types, connection format, layout guidelines, presentation view, and worked examples.
@@ -105,12 +175,15 @@ When a patch is pasted in from an external source and you modify it:
   - **Consistent alignment**: align labels flush to their controls (label left of or above the object). Use consistent margins (15px outer, 10–15px between groups).
   - **Label placement**: put labels to the right of buttons/toggles or above number boxes. Keep labels short.
   - **Set `openinpresentation: 1`** on the patcher (post-process the .maxpat JSON) so the patch opens in presentation mode by default.
-  - **Use screenshots for layout verification** — after converting, take a screenshot of the patch open in Max (both patching view and presentation view) to verify positioning, alignment, and spacing visually before reporting the work as done. Fix anything that looks wrong before finishing. **Prerequisite**: this requires the computer-use MCP to be enabled in Claude Desktop settings and screen recording permission granted to Claude. If unavailable, ask the user to describe what looks off, or proceed without visual verification.
-  - **`presentation_rect` must be post-processed** — the converter sets the `presentation` flag but does not write `presentation_rect` to the .maxpat. After converting, iterate all boxes by their `id`, match them to spec objects by text/class, and write `presentation_rect` as **`[x, y, w, h]`** — same format as `patching_rect`, not two corners. (Note: `getrect` *responses* use two corners `x1 y1 x2 y2`, but JSON storage attributes always use `x y w h`.)
+  - **Use screenshots for layout verification** — after converting, take a screenshot of the patch open in Max (both patching view and presentation view) to verify positioning, alignment, and spacing visually before reporting the work as done. Fix anything that looks wrong before finishing. **Prerequisite**: this requires the computer-use MCP to be enabled in Claude Desktop settings and screen recording permission granted to Claude. If unavailable, ask the user to describe what looks off, or proceed without visual verification. **Before starting the visual review, read the presentation view sections of CLAUDE.md and SPEC_REFERENCE.md and treat them as an explicit checklist** — not as a reference to consult after the fact. Skipping this leads to inventing solutions that contradict documented rules.
+  - **Multislider width is content-driven, not window-driven** — set multislider width to `step_count × 40–50px` (40px/step is the usable minimum; 50px is comfortable for editing). For an 8-step sequencer: 8 × 50 = 400px. Never derive width from the patcher window size — the window adapts to content, not the other way around.
+  - **Ensure objects appear in their intended positions in presentation view.** The converter sets the `presentation` flag but does not write `presentation_rect` to the .maxpat, so after converting you must post-process the .maxpat to add `presentation_rect` to each presented box. Write it as **`[x, y, w, h]`** — same format as `patching_rect`, not two corners. (Note: `getrect` *responses* use two corners `x1 y1 x2 y2`, but JSON storage attributes always use `x y w h`.)
   - **Exclude infrastructure**: metros, routers, loadbangs, print objects, and wiring intermediaries should not appear in presentation view.
 - **Subpatcher, abstraction, and poly~ inlet/outlet labeling** — every `inlet` and `outlet` object in a subpatcher, abstraction, or poly~ abstraction must be labeled in two places:
   1. **Outside** (in the parent patcher): set the `@comment` attribute on the `p`/`poly~` object itself, describing each inlet and outlet — index, expected type, and purpose. E.g. `"in 0: bang — trigger generate  |  out 0: list — permutation"`. In the spec, use `attrs: {"comment": "..."}`.
-  2. **Inside** (within the subpatcher): place an actual `comment` box immediately adjacent to each `inlet` and `outlet` object describing what it receives or sends. E.g. next to inlet: `"← bang: trigger generate"`, next to outlet: `"→ list: permutation result"`.
+  2. **Inside** (within the subpatcher): both of the following, for every `inlet` and `outlet` object:
+     - Set `attrs: {"comment": "..."}` on the `inlet`/`outlet` spec entry — this writes the `comment` key directly to the box and appears as a tooltip/label in the Inspector.
+     - Place an actual `comment` box immediately adjacent, describing what the inlet receives or outlet sends. E.g. next to inlet: `"← bang: trigger generate"`, next to outlet: `"→ list: permutation result"`.
   Never create an encapsulated unit without both levels of labeling. This applies at creation time, not as an afterthought.
 - **Objects not in the converter's lookup tables** — use `inlets`, `outlets`, and `outlettype` overrides in the spec. This is common for third-party externals.
 - **Always embed the spec** — every .maxpat produced using the Claude2Max workflow must include a hidden `text.codebox` (`id: "obj-spec-embed"`, `"hidden": 1`) placed below all other objects, containing the full spec JSON wrapped in `--- CLAUDE2MAX SPEC ---` / `--- END SPEC ---` delimiters. This applies whether the output is from the converter or assembled manually — if you used Claude2Max thinking (read SPEC_REFERENCE, wrote or modified a spec), embed it.
@@ -163,26 +236,30 @@ Use just the filename (not an absolute path) so the patch is portable — Max fi
 
 ## Naming Convention
 
-All arbitrary names that Claude creates must be in **ALL CAPS**. This applies to:
-- Patcher names (subpatchers, abstractions)
-- `send` / `receive` names
-- `pv` (patcher variable) and `v` (global variable) names
-- `buffer~` names
-- `coll` names
-- JavaScript variable names in `v8` / `js` files
-- Any other user-defined symbol or identifier
-
-Examples: `send TEMPO`, `receive PITCH`, `pv CURRENT_STATE`, `buffer~ LOOPBUF`, `var STEP_COUNT = 0;`
-
-This does NOT apply to Max built-in names, object names, or message selectors — only names we invent.
+Make user-defined names visually distinct from Max built-ins so patches are readable at a glance: use **ALL CAPS** for all arbitrary names you create — for instance `send TEMPO`, `receive PITCH`, `pv CURRENT_STATE`, `buffer~ LOOPBUF`, `var STEP_COUNT = 0;`. This applies to patcher names, send/receive names, pv and v variables, buffer~ names, coll names, JS variables, and any other user-defined symbol or identifier. It does NOT apply to Max built-in names, object names, or message selectors.
 
 ## Always Verify Against Max Documentation — Never Guess
 
 Max is not consistent in its terminology, implementation, or formatting. Attribute names, types, value ranges, and defaults vary unpredictably between objects and even between related objects in the same family. What works for `jit.gl.text3d` may not work for `jit.gl.text`. An attribute that takes a symbol in one object takes an int in another. A value that seems obvious (`align center`) may be silently ignored because the type is wrong (`align 1`). There is no reliable pattern to reason from — the only safe source is the documentation for that exact object.
 
-**Before using any attribute or message on any Max object**, look it up in the Max installation's reference files — even if you think you know it. Familiarity is not verification. The cost of guessing is paid by the user — every wrong attempt means another test cycle. A 30-second grep is always the better trade.
+**Before using any Max object — including its attributes and messages** — look it up in the Max installation's reference files. This applies to the object itself, not just its attributes. Familiar-sounding names (`max`, `min`, `clip`) can refer to completely different things in Max than you expect. The only safe source is the documentation for that exact object name.
 
-For every attribute you intend to use, answer all of the following from the documentation before writing code:
+**Step 1 — Verify the object exists and does what you want.** Use `REFPAGE_CACHE.lookup(name)`:
+- If it returns `None`: the object does not exist. Stop. Find the correct object name.
+- If it returns inlet/outlet counts that don't match your expectation: wrong object. Check the digest.
+- Then read the `<digest>` from the refpage XML to confirm the object's purpose matches your intent. A name that sounds right may do something entirely different.
+
+```python
+from spec2maxpat import REFPAGE_CACHE
+import xml.etree.ElementTree as ET
+
+r = REFPAGE_CACHE.lookup('clip')          # check exists + I/O counts
+path = REFPAGE_CACHE._find_xml('clip')
+digest = ET.parse(path).getroot().find('digest')
+print(digest.text)                         # "Limit numbers to a range" — correct
+```
+
+**Step 2 — Verify attributes.** For every attribute you intend to use, answer all of the following from the documentation before writing code:
 
 - **Does this attribute exist on this exact object?** (not a similar object, not a related family)
 - **What is its type?** (`int`, `float`, `symbol`, `list` — this determines how to send it)
@@ -221,6 +298,34 @@ This pattern of reasoning applies broadly in Max patching:
 - Outlet indices are **0-based from the left** — true for all objects universally; no need to verify per object.
 - `trigger` fires **right-to-left** — true for all `trigger` objects; if you know it for one, you know it for all.
 - jit.gl objects share a **named render context** — if two objects share a context name, they render in the same world; apply this transitively when reasoning about visibility and draw order.
+
+## Max Patching Principles
+
+These are design-level principles derived from real patch evolution — patterns that recur across patches and should be applied proactively.
+
+### Animate visual transitions; never switch abruptly
+Replace binary toggles on visual parameters with ramped transitions. Use `line 0.` (for Jitter/GL parameters), `bline`, or `line~` (for audio) to smooth any abrupt change. A fade of even 500–1000 ms reads as intentional; a hard cut reads as a bug. For instance: "fade to black" is better implemented as `== 0` → `$1 1000` → `line 0.` → color message than as a direct toggle.
+
+### Decouple display labels from internal values
+Quick-select buttons should output human-readable labels (`live`, `2sec`, `4sec`) that get translated to internal numeric indices downstream (e.g. via `route` or a `coll` lookup). Never hardcode the internal value in the button label. This lets you rename or reorder options without rewiring.
+
+### Use `spray` + `bgcolor` messages for radio-button feedback
+To show which of a group of buttons is currently active, connect their shared trigger to a `spray N` object, then send `bgcolor` messages to each button: the active one gets the highlight color, the rest get the default. This is the idiomatic Max pattern for mutually exclusive button selection.
+
+### Set `@layer` explicitly on every jit.gl object
+When a `jit.world` contains multiple GL objects, always set `@layer` on each one. Do not rely on patcher order to determine draw order — GL render order is controlled by `@layer`, not box position. Background objects get `@layer 0`; foreground objects get `@layer 1` or higher.
+
+### Include a generative fallback for media inputs
+Any input that requires external media (camera, movie file, image) should have a generative fallback — `jit.noise`, a blank `jit.matrix`, or a `loadbang`-initialized default — so the patch produces visible, non-crashing output when no external source is connected. This is essential for testing and for graceful live performance recovery.
+
+### Prefer `jit.playlist` over `jit.movie` for performance contexts
+`jit.playlist` supports drag-and-drop loading, queuing, and loop control in a single object. Use it instead of `jit.movie` whenever the patch will be used in a live or semi-live context where the user needs to load media interactively.
+
+### Group objects by what they act on, not by what they do
+Objects that all operate on the same data belong in the same subpatcher, even if their individual operations are different. For instance: crop, zoom, rotation, and offset all transform the same matrix — they belong together in `p CROP`, not scattered across the top level. The organizing question is "what does this touch?" not "what kind of thing is this?" This makes signal flow readable, makes the transform chain easy to bypass or isolate, and keeps the top-level patch free of implementation detail.
+
+### Every new control needs a `loadmess` default
+Any number box, toggle, or flonum added to a patch must have a `loadmess` (or `loadbang` → `message`) that initializes it to a sensible value on patch load. A control without a default is a source of undefined state.
 
 ## Max Patching Knowledge
 
@@ -300,9 +405,55 @@ Whenever you learn something new about Max behavior, fix a bug, or add/change a 
 - `SPEC_REFERENCE.md` — object behavior, .maxpat format details, layout rules
 - `TUTORIAL_GUIDELINES.md` — tutorial generation lessons and conventions
 - `CLAUDE.md` — workflow, quick-reference facts, pitfalls
-- `WORK_HISTORY.md` — session summary
+- `WORK_HISTORY.md` — session summary (create it if absent)
 
 **Before every commit/push**, check: did this session produce insights that belong in the reference docs? If so, update them in the same commit. Do not wait for the user to ask — this is automatic.
+
+## New User Setup
+
+**At the start of every conversation**, after the long-gap check, run this:
+
+```bash
+USER_EMAIL=$(git config user.email)
+echo "$USER_EMAIL"
+```
+
+If `USER_EMAIL` is `jannone@mac.com`, skip this section entirely.
+
+Otherwise:
+
+```bash
+USER_NAME=$(git config user.name | tr ' ' '_' | tr '[:upper:]' '[:lower:]')
+BRANCH="insights/${USER_NAME}"
+git branch --list "$BRANCH"
+```
+
+If the branch does not exist (empty output):
+
+```bash
+git checkout -b "$BRANCH"
+```
+
+Then greet the new user:
+
+> "Welcome to Claude2Max. I've created a branch **`insights/<your-name>`** to track your session. As we work together, I'll log useful discoveries, workflow improvements, and corrections to `insights.md` on this branch. If anything seems worth sharing with other users, I'll let you know — it only takes a PR to contribute it back."
+
+Create `insights.md` if it doesn't exist:
+
+```markdown
+# Claude2Max Insights — <user name>
+
+Discoveries, corrections, and workflow improvements gathered during use.
+Candidates for upstream PRs are marked **[PR candidate]**.
+
+## Log
+
+```
+
+From that point forward in the session:
+- Append any confirmed new rule, correction, or non-obvious workflow insight to `insights.md` under the `## Log` section with today's date
+- Mark entries `**[PR candidate]**` when they seem broadly useful (not just specific to this user's patch)
+- At the end of the session, if there are any PR candidates, remind the user: "There are N entries in `insights.md` marked as PR candidates — consider opening a pull request to share them upstream."
 
 ## Work History
 
@@ -325,9 +476,20 @@ If the output is `CHECK_NEEDED`, run the session-start checks above. If `OK`, pr
 
 When a queued task is completed, mark it `- [x]` and move it to the Done section with a completion date.
 
+**Task queue notation** — always use plain English markers, never checkbox symbols:
+- `[pending]` — not yet started
+- `[in progress]` — currently being worked on (include a brief note of where things stand)
+- `[complete]` — finished (move to Done section)
+
 When adding a task to the queue, always write a full expanded description — enough for any Claude instance to pick it up cold without this conversation's context. Include: what to build, where (file/function), why it's needed, implementation notes, prerequisites, and how it fits into the larger system. Also present the expanded description to the user in chat so they can confirm it captures the intent correctly before it's committed.
 
 At the end of any session where meaningful work was done, append an entry to `WORK_HISTORY.md`. Do this automatically — no need for the user to ask. Format: `- YYYY-MM-DD: <1-2 sentence summary>`
+
+**If `WORK_HISTORY.md` does not exist, create it** with a minimal header before appending:
+
+```markdown
+# Work History
+```
 
 **Do not rely solely on the stop hook.** Sessions that hit the context limit are cut off without firing the hook. Instead, update `WORK_HISTORY.md` proactively — after any significant milestone within a session, not only at the very end.
 
@@ -336,13 +498,50 @@ At the end of any session where meaningful work was done, append an entry to `WO
 - **Z-order**: In the `boxes` array, earlier items render on top (in front). To put an object visually on top of others, place it first in the array. Background objects go last.
 - **@bubbleside** (comment bubble arrows): `0=top, 1=left, 2=bottom, 3=right`. The arrow appears on that side of the comment, pointing outward. Use `"bubble_bgcolor"` (not `"bgcolor"`) for bubble background color.
 
+## Presentation View Design Principles
+
+These principles are derived from the Second Nature v5 presentation layout and represent the preferred aesthetic and UX approach for Max presentation views.
+
+### Action prominence hierarchy
+The most-used controls must be the largest, most visually dominant elements. Size communicates priority. Secondary controls are smaller and subordinate. For example: if the main user action is selecting a delay time, those buttons should be 2–3× larger than everything else on screen. Never give all controls equal visual weight.
+
+### Panel-based grouping
+Use dark rounded panels (`panel` objects with rounded corners and a dark fill) to cluster related controls. The panel border is the group label — controls inside share a purpose. Do not mix unrelated controls inside one panel. Leave consistent padding (≈15 px) between panel edge and contents.
+
+### Section headers inside panels
+Place a small comment at the top-left of each panel naming the group (e.g. "set delay time", "image crop", "image position"). Keep it brief — one short phrase. This is the panel's title, not a label for any individual control.
+
+### Color as semantic signal
+Follow this palette consistently:
+- **Red** (`1. 0. 0. 1.`) — live/active state; critical or high-priority labels
+- **Amber/orange** (`1. 0.55 0. 1.`) — secondary important labels; changed objects
+- **Blue background** on number boxes — indicates a saved/persistent value
+- **Red button** — write/store action (irreversible or important)
+- **Green button** — read/recall action (safe)
+- **White/light** — standard labels and controls
+
+### Monospace font throughout
+Use a monospace font (e.g. `Courier` or `Monaco`) consistently across all comment labels and UI text in presentation view. It gives a technical-but-legible character and makes the layout feel intentional.
+
+### Label placement
+Labels go to the **right** of their control — never above, never below (unless vertical stacking is forced by space). Align label baselines with the control's vertical center.
+
+### Reset affordances co-located
+Place reset buttons **inside** the panel they affect, near the bottom of the group. Never put a global reset in a utility area separate from the controls it resets.
+
+### Preview embedded in the UI
+When the patch has a live preview (camera, video, generated image), embed it in the presentation view as a `jit.pwindow` within one of the panels. Do not rely on a separate floating window.
+
+### Store/recall isolated
+Group settings persistence controls (store, recall, notes about what is saved) in their own panel, visually separated from parameter controls. This prevents accidental triggering and makes the save workflow explicit.
+
 ## UI Layout — Label and Control Spacing
 
 Label overflow into adjacent controls is the most common layout mistake. Follow these rules on every spec.
 
 ### Label width estimation
 
-At Max's default font size, estimate **~7.5 px per character + 8 px padding** (round up generously):
+At Max's default font size, estimate **~7.5 px per character + 8 px padding** (round up generously). If using a monospace font such as Courier or Monaco, use **~8.5 px per character + 8 px padding** — monospace fonts are wider and labels will collide if you use the default estimate:
 
 | Label text length | Estimated width |
 |------------------|----------------|
@@ -399,6 +598,8 @@ For jsui in particular: size it for the expected content, not for the patch widt
 
 Do **not** add a `comment` object whose text simply restates the patch name. The patch name already appears in Max's title bar. Only add a title comment when the patch name alone doesn't convey what the patch does, or when the patch will be embedded as a subpatcher (where the title bar isn't visible).
 
+The converter automatically generates a title comment from the spec's `name` field — do **not** also add an explicit title object (e.g. `lbl_title`) in the spec's `objects` map. Doing so creates two title comments in the patch.
+
 ### Standard column offsets for a 3-column parameter row
 
 For a row of three labeled controls (e.g., scheme menu + toggle + number box) in a 740 px patch:
@@ -413,6 +614,14 @@ Adjust proportionally for narrower patches.
 ### Loadmess init chains
 
 Prefer the shortest chain: `loadmess` → UI control (toggle, number box) → the control fires and propagates through its prepend → jsui. Do **not** also wire `loadmess` directly to the prepend — that double-fires the init message.
+
+## Output-Only UI Objects
+
+When any UI object is used purely for display (not user input), make sure it cannot also accept input and remove interactive visual affordances; for instance with a number box set `@ignoreclick 1` to disable interaction and `@triangle 0` to remove the arrow. The specific attributes vary by object type.
+
+## Patching Layout — Avoiding Cord Tangles
+
+When an object fans out to both a processing destination and a display box, check whether placing them at the same y-position will cause cords to cross. If so, move the display box to a position where its incoming cord doesn't intersect the processing wiring — this is a case-by-case judgment based on the specific layout.
 
 ## Common Pitfalls
 

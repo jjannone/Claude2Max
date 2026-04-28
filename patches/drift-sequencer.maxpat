@@ -2,9 +2,9 @@
   "patcher": {
     "fileversion": 1,
     "appversion": {
-      "major": 8,
-      "minor": 6,
-      "revision": 5,
+      "major": 9,
+      "minor": 0,
+      "revision": 0,
       "architecture": "x64",
       "modernui": 1
     },
@@ -13,343 +13,13 @@
       100.0,
       100.0,
       760.0,
-      920.0
+      390.0
     ],
     "gridsize": [
       15.0,
       15.0
     ],
     "boxes": [
-      {
-        "box": {
-          "id": "tut-panel-0",
-          "varname": "tut-panel-0",
-          "maxclass": "panel",
-          "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            0.0,
-            0.0,
-            0.0,
-            0.0
-          ],
-          "bgcolor": [
-            0.15,
-            0.55,
-            0.95,
-            0.15
-          ],
-          "bordercolor": [
-            0.1,
-            0.4,
-            0.85,
-            0.75
-          ],
-          "border": 2,
-          "rounded": 8,
-          "background": 1,
-          "locked_bgcolor": 1,
-          "hidden": 1
-        }
-      },
-      {
-        "box": {
-          "id": "tut-panel-1",
-          "varname": "tut-panel-1",
-          "maxclass": "panel",
-          "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            238.0,
-            18.0,
-            184.0,
-            71.0
-          ],
-          "bgcolor": [
-            0.15,
-            0.55,
-            0.95,
-            0.15
-          ],
-          "bordercolor": [
-            0.1,
-            0.4,
-            0.85,
-            0.75
-          ],
-          "border": 2,
-          "rounded": 8,
-          "background": 1,
-          "locked_bgcolor": 1,
-          "hidden": 1
-        }
-      },
-      {
-        "box": {
-          "id": "tut-panel-2",
-          "varname": "tut-panel-2",
-          "maxclass": "panel",
-          "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            18.0,
-            113.0,
-            121.0,
-            131.0
-          ],
-          "bgcolor": [
-            0.15,
-            0.55,
-            0.95,
-            0.15
-          ],
-          "bordercolor": [
-            0.1,
-            0.4,
-            0.85,
-            0.75
-          ],
-          "border": 2,
-          "rounded": 8,
-          "background": 1,
-          "locked_bgcolor": 1,
-          "hidden": 1
-        }
-      },
-      {
-        "box": {
-          "id": "tut-panel-3",
-          "varname": "tut-panel-3",
-          "maxclass": "panel",
-          "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            18.0,
-            416.0,
-            376.0,
-            228.0
-          ],
-          "bgcolor": [
-            0.15,
-            0.55,
-            0.95,
-            0.15
-          ],
-          "bordercolor": [
-            0.1,
-            0.4,
-            0.85,
-            0.75
-          ],
-          "border": 2,
-          "rounded": 8,
-          "background": 1,
-          "locked_bgcolor": 1,
-          "hidden": 1
-        }
-      },
-      {
-        "box": {
-          "id": "tut-panel-4",
-          "varname": "tut-panel-4",
-          "maxclass": "panel",
-          "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            53.0,
-            80.0,
-            74.0,
-            46.0
-          ],
-          "bgcolor": [
-            0.15,
-            0.55,
-            0.95,
-            0.15
-          ],
-          "bordercolor": [
-            0.1,
-            0.4,
-            0.85,
-            0.75
-          ],
-          "border": 2,
-          "rounded": 8,
-          "background": 1,
-          "locked_bgcolor": 1,
-          "hidden": 1
-        }
-      },
-      {
-        "box": {
-          "id": "tut-panel-5",
-          "varname": "tut-panel-5",
-          "maxclass": "panel",
-          "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            328.0,
-            561.0,
-            164.0,
-            46.0
-          ],
-          "bgcolor": [
-            0.15,
-            0.55,
-            0.95,
-            0.15
-          ],
-          "bordercolor": [
-            0.1,
-            0.4,
-            0.85,
-            0.75
-          ],
-          "border": 2,
-          "rounded": 8,
-          "background": 1,
-          "locked_bgcolor": 1,
-          "hidden": 1
-        }
-      },
-      {
-        "box": {
-          "id": "tut-panel-6",
-          "varname": "tut-panel-6",
-          "maxclass": "panel",
-          "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            18.0,
-            228.0,
-            255.0,
-            204.0
-          ],
-          "bgcolor": [
-            0.15,
-            0.55,
-            0.95,
-            0.15
-          ],
-          "bordercolor": [
-            0.1,
-            0.4,
-            0.85,
-            0.75
-          ],
-          "border": 2,
-          "rounded": 8,
-          "background": 1,
-          "locked_bgcolor": 1,
-          "hidden": 1
-        }
-      },
-      {
-        "box": {
-          "id": "tut-panel-7",
-          "varname": "tut-panel-7",
-          "maxclass": "panel",
-          "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            238.0,
-            488.0,
-            74.0,
-            46.0
-          ],
-          "bgcolor": [
-            0.15,
-            0.55,
-            0.95,
-            0.15
-          ],
-          "bordercolor": [
-            0.1,
-            0.4,
-            0.85,
-            0.75
-          ],
-          "border": 2,
-          "rounded": 8,
-          "background": 1,
-          "locked_bgcolor": 1,
-          "hidden": 1
-        }
-      },
-      {
-        "box": {
-          "id": "tut-panel-8",
-          "varname": "tut-panel-8",
-          "maxclass": "panel",
-          "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            238.0,
-            628.0,
-            224.0,
-            165.0
-          ],
-          "bgcolor": [
-            0.15,
-            0.55,
-            0.95,
-            0.15
-          ],
-          "bordercolor": [
-            0.1,
-            0.4,
-            0.85,
-            0.75
-          ],
-          "border": 2,
-          "rounded": 8,
-          "background": 1,
-          "locked_bgcolor": 1,
-          "hidden": 1
-        }
-      },
-      {
-        "box": {
-          "id": "tut-panel-9",
-          "varname": "tut-panel-9",
-          "maxclass": "panel",
-          "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            238.0,
-            788.0,
-            69.0,
-            69.0
-          ],
-          "bgcolor": [
-            0.15,
-            0.55,
-            0.95,
-            0.15
-          ],
-          "bordercolor": [
-            0.1,
-            0.4,
-            0.85,
-            0.75
-          ],
-          "border": 2,
-          "rounded": 8,
-          "background": 1,
-          "locked_bgcolor": 1,
-          "hidden": 1
-        }
-      },
       {
         "box": {
           "id": "obj-title",
@@ -365,8 +35,7 @@
           ],
           "text": "Drift Sequencer",
           "fontsize": 16.0,
-          "fontface": 1,
-          "varname": "obj-title"
+          "fontface": 1
         }
       },
       {
@@ -384,8 +53,7 @@
             160.0,
             22.0
           ],
-          "text": "loadmess 200 100 150",
-          "varname": "obj-1"
+          "text": "loadmess 200 100 150"
         }
       },
       {
@@ -405,8 +73,7 @@
             104.0,
             22.0
           ],
-          "text": "unpack 0 0 0",
-          "varname": "obj-2"
+          "text": "unpack 0 0 0"
         }
       },
       {
@@ -425,12 +92,13 @@
           "text": "on/off",
           "presentation": 1,
           "presentation_rect": [
+            15.0,
             10.0,
-            5.0,
             62.0,
             22.0
           ],
-          "varname": "obj-3"
+          "fontname": "Courier",
+          "fontsize": 11
         }
       },
       {
@@ -450,12 +118,11 @@
           ],
           "presentation": 1,
           "presentation_rect": [
-            10.0,
+            15.0,
+            28.0,
             22.0,
-            24.0,
-            24.0
-          ],
-          "varname": "obj-4"
+            22.0
+          ]
         }
       },
       {
@@ -474,12 +141,13 @@
           "text": "tempo (ms)",
           "presentation": 1,
           "presentation_rect": [
-            68.0,
-            5.0,
+            80.0,
+            10.0,
             90.0,
             22.0
           ],
-          "varname": "obj-5"
+          "fontname": "Courier",
+          "fontsize": 11
         }
       },
       {
@@ -500,14 +168,13 @@
           ],
           "presentation": 1,
           "presentation_rect": [
-            65.0,
-            25.0,
-            60.0,
+            75.0,
+            28.0,
+            70.0,
             22.0
           ],
           "minimum": 50,
-          "maximum": 2000,
-          "varname": "obj-6"
+          "maximum": 2000
         }
       },
       {
@@ -525,8 +192,7 @@
             83.0,
             22.0
           ],
-          "text": "metro 200",
-          "varname": "obj-7"
+          "text": "metro 200"
         }
       },
       {
@@ -547,8 +213,7 @@
             97.0,
             22.0
           ],
-          "text": "counter 0 7",
-          "varname": "obj-8"
+          "text": "counter 0 7"
         }
       },
       {
@@ -566,8 +231,7 @@
             41.0,
             22.0
           ],
-          "text": "+ 1",
-          "varname": "obj-9"
+          "text": "+ 1"
         }
       },
       {
@@ -586,8 +250,7 @@
             55.0,
             22.0
           ],
-          "text": "t i i",
-          "varname": "obj-10"
+          "text": "t i i"
         }
       },
       {
@@ -605,8 +268,7 @@
             111.0,
             22.0
           ],
-          "text": "prepend fetch",
-          "varname": "obj-11"
+          "text": "prepend fetch"
         }
       },
       {
@@ -624,8 +286,7 @@
             111.0,
             22.0
           ],
-          "text": "prepend fetch",
-          "varname": "obj-12"
+          "text": "prepend fetch"
         }
       },
       {
@@ -645,11 +306,12 @@
           "presentation": 1,
           "presentation_rect": [
             15.0,
-            52.0,
+            60.0,
             146.0,
             22.0
           ],
-          "varname": "obj-13"
+          "fontname": "Courier",
+          "fontsize": 11
         }
       },
       {
@@ -665,14 +327,14 @@
           "patching_rect": [
             30.0,
             320.0,
-            200.0,
+            400.0,
             100.0
           ],
           "presentation": 1,
           "presentation_rect": [
-            10.0,
-            70.0,
-            260.0,
+            15.0,
+            78.0,
+            400.0,
             100.0
           ],
           "size": 8,
@@ -699,8 +361,7 @@
             0.15,
             1.0
           ],
-          "orientation": 1,
-          "varname": "obj-14"
+          "orientation": 1
         }
       },
       {
@@ -718,8 +379,7 @@
             90.0,
             22.0
           ],
-          "text": "loadmess 1",
-          "varname": "obj-15"
+          "text": "loadmess 1"
         }
       },
       {
@@ -739,11 +399,12 @@
           "presentation": 1,
           "presentation_rect": [
             15.0,
-            175.0,
+            188.0,
             174.0,
             22.0
           ],
-          "varname": "obj-16"
+          "fontname": "Courier",
+          "fontsize": 11
         }
       },
       {
@@ -759,14 +420,14 @@
           "patching_rect": [
             30.0,
             465.0,
-            200.0,
+            400.0,
             25.0
           ],
           "presentation": 1,
           "presentation_rect": [
-            10.0,
-            193.0,
-            260.0,
+            15.0,
+            205.0,
+            400.0,
             25.0
           ],
           "size": 8,
@@ -794,8 +455,7 @@
             0.15,
             1.0
           ],
-          "orientation": 1,
-          "varname": "obj-17"
+          "orientation": 1
         }
       },
       {
@@ -814,12 +474,13 @@
           "text": "note",
           "presentation": 1,
           "presentation_rect": [
-            158.0,
-            5.0,
+            175.0,
+            10.0,
             48.0,
             22.0
           ],
-          "varname": "obj-18"
+          "fontname": "Courier",
+          "fontsize": 11
         }
       },
       {
@@ -840,12 +501,13 @@
           ],
           "presentation": 1,
           "presentation_rect": [
-            155.0,
-            25.0,
-            50.0,
+            170.0,
+            28.0,
+            55.0,
             22.0
           ],
-          "varname": "obj-19"
+          "ignoreclick": 1,
+          "triangle": 0
         }
       },
       {
@@ -863,8 +525,7 @@
             62.0,
             22.0
           ],
-          "text": "gate 1",
-          "varname": "obj-20"
+          "text": "gate 1"
         }
       },
       {
@@ -884,11 +545,12 @@
           "presentation": 1,
           "presentation_rect": [
             15.0,
-            225.0,
+            242.0,
             76.0,
             22.0
           ],
-          "varname": "obj-21"
+          "fontname": "Courier",
+          "fontsize": 11
         }
       },
       {
@@ -909,14 +571,13 @@
           ],
           "presentation": 1,
           "presentation_rect": [
-            10.0,
-            243.0,
-            55.0,
+            15.0,
+            259.0,
+            60.0,
             22.0
           ],
           "minimum": 1,
-          "maximum": 127,
-          "varname": "obj-22"
+          "maximum": 127
         }
       },
       {
@@ -935,12 +596,13 @@
           "text": "duration (ms)",
           "presentation": 1,
           "presentation_rect": [
-            85.0,
-            225.0,
+            95.0,
+            242.0,
             111.0,
             22.0
           ],
-          "varname": "obj-23"
+          "fontname": "Courier",
+          "fontsize": 11
         }
       },
       {
@@ -961,14 +623,13 @@
           ],
           "presentation": 1,
           "presentation_rect": [
-            80.0,
-            243.0,
-            65.0,
+            90.0,
+            259.0,
+            75.0,
             22.0
           ],
           "minimum": 10,
-          "maximum": 2000,
-          "varname": "obj-24"
+          "maximum": 2000
         }
       },
       {
@@ -987,8 +648,7 @@
             132.0,
             22.0
           ],
-          "text": "makenote 100 150",
-          "varname": "obj-25"
+          "text": "makenote 100 150"
         }
       },
       {
@@ -1006,8 +666,7 @@
             97.0,
             22.0
           ],
-          "text": "pack 60 100",
-          "varname": "obj-26"
+          "text": "pack 60 100"
         }
       },
       {
@@ -1025,8 +684,7 @@
             90.0,
             22.0
           ],
-          "text": "midiformat",
-          "varname": "obj-27"
+          "text": "midiformat"
         }
       },
       {
@@ -1045,8 +703,7 @@
             139.0,
             22.0
           ],
-          "text": "abl.device.drift~",
-          "varname": "obj-28"
+          "text": "abl.device.drift~"
         }
       },
       {
@@ -1065,7 +722,7 @@
           "patching_rect": [
             250.0,
             745.0,
-            200.0,
+            350.0,
             36.0
           ],
           "parameter_enable": 1,
@@ -1080,17 +737,16 @@
           },
           "presentation": 1,
           "presentation_rect": [
-            10.0,
-            275.0,
-            220.0,
+            15.0,
+            295.0,
+            350.0,
             36.0
           ],
           "orientation": 1,
           "_parameter_initial": [
             0.0
           ],
-          "_parameter_initial_enable": 1,
-          "varname": "obj-29"
+          "_parameter_initial_enable": 1
         }
       },
       {
@@ -1108,12 +764,11 @@
           ],
           "presentation": 1,
           "presentation_rect": [
-            240.0,
-            275.0,
+            375.0,
+            302.0,
             45.0,
             45.0
-          ],
-          "varname": "obj-30"
+          ]
         }
       },
       {
@@ -1132,17 +787,248 @@
           "text": "Turn on audio, set pitches and rests, click toggle",
           "presentation": 1,
           "presentation_rect": [
-            10.0,
-            325.0,
+            15.0,
+            345.0,
             370.0,
             22.0
           ],
-          "varname": "obj-31"
+          "fontname": "Courier",
+          "fontsize": 11
         }
       },
       {
         "box": {
-          "id": "tut-label",
+          "id": "obj-32",
+          "maxclass": "panel",
+          "numinlets": 1,
+          "numoutlets": 1,
+          "outlettype": [
+            ""
+          ],
+          "patching_rect": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ]
+        }
+      },
+      {
+        "box": {
+          "id": "obj-33",
+          "maxclass": "panel",
+          "numinlets": 1,
+          "numoutlets": 1,
+          "outlettype": [
+            ""
+          ],
+          "patching_rect": [
+            238.0,
+            18.0,
+            184.0,
+            71.0
+          ],
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ]
+        }
+      },
+      {
+        "box": {
+          "id": "obj-34",
+          "maxclass": "panel",
+          "numinlets": 1,
+          "numoutlets": 1,
+          "outlettype": [
+            ""
+          ],
+          "patching_rect": [
+            18.0,
+            113.0,
+            121.0,
+            131.0
+          ],
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ]
+        }
+      },
+      {
+        "box": {
+          "id": "obj-35",
+          "maxclass": "panel",
+          "numinlets": 1,
+          "numoutlets": 1,
+          "outlettype": [
+            ""
+          ],
+          "patching_rect": [
+            18.0,
+            416.0,
+            376.0,
+            228.0
+          ],
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ]
+        }
+      },
+      {
+        "box": {
+          "id": "obj-36",
+          "maxclass": "panel",
+          "numinlets": 1,
+          "numoutlets": 1,
+          "outlettype": [
+            ""
+          ],
+          "patching_rect": [
+            53.0,
+            80.0,
+            74.0,
+            46.0
+          ],
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ]
+        }
+      },
+      {
+        "box": {
+          "id": "obj-37",
+          "maxclass": "panel",
+          "numinlets": 1,
+          "numoutlets": 1,
+          "outlettype": [
+            ""
+          ],
+          "patching_rect": [
+            328.0,
+            561.0,
+            164.0,
+            46.0
+          ],
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ]
+        }
+      },
+      {
+        "box": {
+          "id": "obj-38",
+          "maxclass": "panel",
+          "numinlets": 1,
+          "numoutlets": 1,
+          "outlettype": [
+            ""
+          ],
+          "patching_rect": [
+            18.0,
+            228.0,
+            255.0,
+            204.0
+          ],
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ]
+        }
+      },
+      {
+        "box": {
+          "id": "obj-39",
+          "maxclass": "panel",
+          "numinlets": 1,
+          "numoutlets": 1,
+          "outlettype": [
+            ""
+          ],
+          "patching_rect": [
+            238.0,
+            488.0,
+            74.0,
+            46.0
+          ],
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ]
+        }
+      },
+      {
+        "box": {
+          "id": "obj-40",
+          "maxclass": "panel",
+          "numinlets": 1,
+          "numoutlets": 1,
+          "outlettype": [
+            ""
+          ],
+          "patching_rect": [
+            238.0,
+            628.0,
+            224.0,
+            165.0
+          ],
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ]
+        }
+      },
+      {
+        "box": {
+          "id": "obj-41",
+          "maxclass": "panel",
+          "numinlets": 1,
+          "numoutlets": 1,
+          "outlettype": [
+            ""
+          ],
+          "patching_rect": [
+            238.0,
+            788.0,
+            69.0,
+            69.0
+          ],
+          "bgcolor": [
+            0.15,
+            0.55,
+            0.95,
+            0.15
+          ]
+        }
+      },
+      {
+        "box": {
+          "id": "obj-42",
           "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
@@ -1150,7 +1036,7 @@
           "patching_rect": [
             370.0,
             5.0,
-            65.0,
+            83.0,
             22.0
           ],
           "text": "Tutorial:",
@@ -1159,13 +1045,11 @@
       },
       {
         "box": {
-          "id": "tut-umenu",
+          "id": "obj-43",
           "maxclass": "umenu",
           "numinlets": 1,
-          "numoutlets": 3,
+          "numoutlets": 1,
           "outlettype": [
-            "int",
-            "",
             ""
           ],
           "patching_rect": [
@@ -1173,39 +1057,12 @@
             5.0,
             200.0,
             22.0
-          ],
-          "items": [
-            "Overview",
-            ",",
-            "loadmess",
-            "+",
-            "unpack",
-            ",",
-            "toggle",
-            "+3",
-            ",",
-            "loadmess",
-            "+3",
-            ",",
-            "number",
-            ",",
-            "number",
-            ",",
-            "t",
-            "+2",
-            ",",
-            "number",
-            ",",
-            "pack",
-            "+3",
-            ",",
-            "ezdac~"
           ]
         }
       },
       {
         "box": {
-          "id": "tut-prev",
+          "id": "obj-44",
           "maxclass": "message",
           "numinlets": 2,
           "numoutlets": 1,
@@ -1215,7 +1072,7 @@
           "patching_rect": [
             644.0,
             5.0,
-            30.0,
+            48.0,
             22.0
           ],
           "text": "prev"
@@ -1223,7 +1080,7 @@
       },
       {
         "box": {
-          "id": "tut-next",
+          "id": "obj-45",
           "maxclass": "message",
           "numinlets": 2,
           "numoutlets": 1,
@@ -1233,7 +1090,7 @@
           "patching_rect": [
             680.0,
             5.0,
-            30.0,
+            48.0,
             22.0
           ],
           "text": "next"
@@ -1241,7 +1098,7 @@
       },
       {
         "box": {
-          "id": "tut-loadbang",
+          "id": "obj-46",
           "maxclass": "newobj",
           "numinlets": 1,
           "numoutlets": 1,
@@ -1251,7 +1108,7 @@
           "patching_rect": [
             716.0,
             5.0,
-            44.0,
+            76.0,
             22.0
           ],
           "text": "loadbang"
@@ -1259,15 +1116,17 @@
       },
       {
         "box": {
-          "id": "tut-v8",
+          "id": "obj-47",
           "maxclass": "newobj",
           "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
+          "numoutlets": 1,
+          "outlettype": [
+            ""
+          ],
           "patching_rect": [
             370.0,
             32.0,
-            240.0,
+            230.0,
             22.0
           ],
           "text": "v8 drift-sequencer-tutorial.js"
@@ -1275,8 +1134,7 @@
       },
       {
         "box": {
-          "id": "tut-ann-0",
-          "varname": "tut-ann-0",
+          "id": "obj-48",
           "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
@@ -1288,28 +1146,19 @@
             86.0
           ],
           "text": "Overview\nThis patch has 23 processing objects across 9 stages. Use the menu or prev/next to step through each stage.",
-          "hidden": 1,
-          "bubble": 1,
-          "bubbleside": 1,
-          "bubble_bgcolor": [
-            1.0,
-            0.98,
-            0.72,
-            1.0
-          ],
+          "fontsize": 11.0,
           "textcolor": [
             0.0,
             0.0,
             0.0,
             1.0
           ],
-          "fontsize": 11.0
+          "linecount": 2
         }
       },
       {
         "box": {
-          "id": "tut-ann-1",
-          "varname": "tut-ann-1",
+          "id": "obj-49",
           "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
@@ -1321,61 +1170,43 @@
             104.0
           ],
           "text": "loadmess + unpack\nloadmess \u2014 Sends a stored message when the patch loads (initializes defaults). unpack \u2014 Unpacks a list into individual outlet values.",
-          "hidden": 1,
-          "bubble": 1,
-          "bubbleside": 1,
-          "bubble_bgcolor": [
-            1.0,
-            0.98,
-            0.72,
-            1.0
-          ],
+          "fontsize": 11.0,
           "textcolor": [
             0.0,
             0.0,
             0.0,
             1.0
           ],
-          "fontsize": 11.0
+          "linecount": 2
         }
       },
       {
         "box": {
-          "id": "tut-ann-2",
-          "varname": "tut-ann-2",
+          "id": "obj-50",
           "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
             154.0,
-            117.5,
+            117.0,
             220.0,
             122.0
           ],
           "text": "toggle +3\ntoggle \u2014 Sends 1 (on) or 0 (off) when clicked \u2014 starts/stops loops. metro \u2014 Generates repeated bangs at a set interval (ms). counter \u2014 Counts bangs up/down between min and max. +.",
-          "hidden": 1,
-          "bubble": 1,
-          "bubbleside": 1,
-          "bubble_bgcolor": [
-            1.0,
-            0.98,
-            0.72,
-            1.0
-          ],
+          "fontsize": 11.0,
           "textcolor": [
             0.0,
             0.0,
             0.0,
             1.0
           ],
-          "fontsize": 11.0
+          "linecount": 2
         }
       },
       {
         "box": {
-          "id": "tut-ann-3",
-          "varname": "tut-ann-3",
+          "id": "obj-51",
           "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
@@ -1387,28 +1218,19 @@
             104.0
           ],
           "text": "loadmess +3\nloadmess: rests (0=rest, 1=note). multislider. gate: velocity. makenote \u2014 Generates a MIDI note-on followed by a note-off.",
-          "hidden": 1,
-          "bubble": 1,
-          "bubbleside": 1,
-          "bubble_bgcolor": [
-            1.0,
-            0.98,
-            0.72,
-            1.0
-          ],
+          "fontsize": 11.0,
           "textcolor": [
             0.0,
             0.0,
             0.0,
             1.0
           ],
-          "fontsize": 11.0
+          "linecount": 2
         }
       },
       {
         "box": {
-          "id": "tut-ann-4",
-          "varname": "tut-ann-4",
+          "id": "obj-52",
           "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
@@ -1420,28 +1242,19 @@
             68.0
           ],
           "text": "number\nnumber \u2014 Displays and edits an integer number.",
-          "hidden": 1,
-          "bubble": 1,
-          "bubbleside": 1,
-          "bubble_bgcolor": [
-            1.0,
-            0.98,
-            0.72,
-            1.0
-          ],
+          "fontsize": 11.0,
           "textcolor": [
             0.0,
             0.0,
             0.0,
             1.0
           ],
-          "fontsize": 11.0
+          "linecount": 2
         }
       },
       {
         "box": {
-          "id": "tut-ann-5",
-          "varname": "tut-ann-5",
+          "id": "obj-53",
           "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
@@ -1453,28 +1266,19 @@
             86.0
           ],
           "text": "number\nnumber \u2014 Displays and edits an integer number. number \u2014 Displays and edits an integer number.",
-          "hidden": 1,
-          "bubble": 1,
-          "bubbleside": 1,
-          "bubble_bgcolor": [
-            1.0,
-            0.98,
-            0.72,
-            1.0
-          ],
+          "fontsize": 11.0,
           "textcolor": [
             0.0,
             0.0,
             0.0,
             1.0
           ],
-          "fontsize": 11.0
+          "linecount": 2
         }
       },
       {
         "box": {
-          "id": "tut-ann-6",
-          "varname": "tut-ann-6",
+          "id": "obj-54",
           "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
@@ -1486,28 +1290,19 @@
             122.0
           ],
           "text": "t +2\nt \u2014 Fires a series of typed outputs in right-to-left order. prepend: pitch (MIDI 36-84). prepend \u2014 Prepends a fixed message selector before incoming data. multislider.",
-          "hidden": 1,
-          "bubble": 1,
-          "bubbleside": 1,
-          "bubble_bgcolor": [
-            1.0,
-            0.98,
-            0.72,
-            1.0
-          ],
+          "fontsize": 11.0,
           "textcolor": [
             0.0,
             0.0,
             0.0,
             1.0
           ],
-          "fontsize": 11.0
+          "linecount": 2
         }
       },
       {
         "box": {
-          "id": "tut-ann-7",
-          "varname": "tut-ann-7",
+          "id": "obj-55",
           "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
@@ -1519,88 +1314,62 @@
             68.0
           ],
           "text": "number\nnumber \u2014 Displays and edits an integer number.",
-          "hidden": 1,
-          "bubble": 1,
-          "bubbleside": 1,
-          "bubble_bgcolor": [
-            1.0,
-            0.98,
-            0.72,
-            1.0
-          ],
+          "fontsize": 11.0,
           "textcolor": [
             0.0,
             0.0,
             0.0,
             1.0
           ],
-          "fontsize": 11.0
+          "linecount": 2
         }
       },
       {
         "box": {
-          "id": "tut-ann-8",
-          "varname": "tut-ann-8",
+          "id": "obj-56",
           "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
             477.0,
-            640.5,
+            640.0,
             220.0,
             140.0
           ],
           "text": "pack +3\npack \u2014 Packs individual values into a single output list. midiformat \u2014 Assembles raw MIDI bytes from component values. abl.device.drift~. live.gain~ \u2014 A stereo volume fader (Max for Live).",
-          "hidden": 1,
-          "bubble": 1,
-          "bubbleside": 1,
-          "bubble_bgcolor": [
-            1.0,
-            0.98,
-            0.72,
-            1.0
-          ],
+          "fontsize": 11.0,
           "textcolor": [
             0.0,
             0.0,
             0.0,
             1.0
           ],
-          "fontsize": 11.0
+          "linecount": 2
         }
       },
       {
         "box": {
-          "id": "tut-ann-9",
-          "varname": "tut-ann-9",
+          "id": "obj-57",
           "maxclass": "comment",
           "numinlets": 1,
           "numoutlets": 0,
           "outlettype": [],
           "patching_rect": [
             322.0,
-            788.5,
+            788.0,
             220.0,
             68.0
           ],
           "text": "ezdac~\nezdac~ \u2014 A stereo audio output with built-in gain slider.",
-          "hidden": 1,
-          "bubble": 1,
-          "bubbleside": 1,
-          "bubble_bgcolor": [
-            1.0,
-            0.98,
-            0.72,
-            1.0
-          ],
+          "fontsize": 11.0,
           "textcolor": [
             0.0,
             0.0,
             0.0,
             1.0
           ],
-          "fontsize": 11.0
+          "linecount": 2
         }
       },
       {
@@ -1618,7 +1387,7 @@
             500.0,
             300.0
           ],
-          "code": "--- CLAUDE2MAX SPEC ---\n{\n  \"name\": \"Drift Sequencer\",\n  \"width\": 760,\n  \"height\": 920,\n  \"objects\": {\n    \"loadmess\": {\n      \"type\": \"newobj\",\n      \"text\": \"loadmess 200 100 150\",\n      \"pos\": [\n        250,\n        30\n      ]\n    },\n    \"unpack_init\": {\n      \"type\": \"newobj\",\n      \"text\": \"unpack 0 0 0\",\n      \"pos\": [\n        250,\n        55\n      ]\n    },\n    \"onoff_label\": {\n      \"type\": \"comment\",\n      \"text\": \"on/off\",\n      \"pos\": [\n        45,\n        110\n      ],\n      \"presentation\": [\n        10,\n        5\n      ]\n    },\n    \"onoff\": {\n      \"type\": \"toggle\",\n      \"pos\": [\n        30,\n        125\n      ],\n      \"presentation\": [\n        10,\n        22\n      ]\n    },\n    \"tempo_label\": {\n      \"type\": \"comment\",\n      \"text\": \"tempo (ms)\",\n      \"pos\": [\n        80,\n        77\n      ],\n      \"presentation\": [\n        68,\n        5\n      ]\n    },\n    \"tempo\": {\n      \"type\": \"number\",\n      \"pos\": [\n        65,\n        92\n      ],\n      \"attrs\": {\n        \"minimum\": 50,\n        \"maximum\": 2000\n      },\n      \"presentation\": [\n        65,\n        25,\n        60,\n        22\n      ]\n    },\n    \"metro\": {\n      \"type\": \"newobj\",\n      \"text\": \"metro 200\",\n      \"pos\": [\n        30,\n        150\n      ]\n    },\n    \"steps\": {\n      \"type\": \"newobj\",\n      \"text\": \"counter 0 7\",\n      \"pos\": [\n        30,\n        180\n      ]\n    },\n    \"step_plus1\": {\n      \"type\": \"newobj\",\n      \"text\": \"+ 1\",\n      \"pos\": [\n        30,\n        210\n      ]\n    },\n    \"trig\": {\n      \"type\": \"newobj\",\n      \"text\": \"t i i\",\n      \"pos\": [\n        30,\n        240\n      ]\n    },\n    \"fetch_pitch\": {\n      \"type\": \"newobj\",\n      \"text\": \"prepend fetch\",\n      \"pos\": [\n        30,\n        270\n      ]\n    },\n    \"fetch_rest\": {\n      \"type\": \"newobj\",\n      \"text\": \"prepend fetch\",\n      \"pos\": [\n        150,\n        270\n      ]\n    },\n    \"pitch_label\": {\n      \"type\": \"comment\",\n      \"text\": \"pitch (MIDI 36-84)\",\n      \"pos\": [\n        45,\n        303\n      ],\n      \"presentation\": [\n        15,\n        52\n      ]\n    },\n    \"slider\": {\n      \"type\": \"multislider\",\n      \"pos\": [\n        30,\n        320\n      ],\n      \"size\": [\n        200,\n        100\n      ],\n      \"presentation\": [\n        10,\n        70,\n        260,\n        100\n      ],\n      \"attrs\": {\n        \"size\": 8,\n        \"setminmax\": [\n          36.0,\n          84.0\n        ],\n        \"setstyle\": 1,\n        \"candicane2\": [\n          0.14,\n          0.69,\n          0.78,\n          1.0\n        ],\n        \"slidercolor\": [\n          0.14,\n          0.69,\n          0.78,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.15,\n          0.15,\n          0.15,\n          1.0\n        ],\n        \"orientation\": 1\n      }\n    },\n    \"rest_init\": {\n      \"type\": \"newobj\",\n      \"text\": \"loadmess 1\",\n      \"pos\": [\n        30,\n        428\n      ]\n    },\n    \"rest_label\": {\n      \"type\": \"comment\",\n      \"text\": \"rests (0=rest, 1=note)\",\n      \"pos\": [\n        45,\n        448\n      ],\n      \"presentation\": [\n        15,\n        175\n      ]\n    },\n    \"rest_slider\": {\n      \"type\": \"multislider\",\n      \"pos\": [\n        30,\n        465\n      ],\n      \"size\": [\n        200,\n        25\n      ],\n      \"presentation\": [\n        10,\n        193,\n        260,\n        25\n      ],\n      \"attrs\": {\n        \"size\": 8,\n        \"setminmax\": [\n          0.0,\n          1.0\n        ],\n        \"setstyle\": 1,\n        \"settype\": 0,\n        \"candicane2\": [\n          0.9,\n          0.5,\n          0.2,\n          1.0\n        ],\n        \"slidercolor\": [\n          0.9,\n          0.5,\n          0.2,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.15,\n          0.15,\n          0.15,\n          1.0\n        ],\n        \"orientation\": 1\n      }\n    },\n    \"pitch_display_label\": {\n      \"type\": \"comment\",\n      \"text\": \"note\",\n      \"pos\": [\n        265,\n        485\n      ],\n      \"presentation\": [\n        158,\n        5\n      ]\n    },\n    \"pitch_display\": {\n      \"type\": \"number\",\n      \"pos\": [\n        250,\n        500\n      ],\n      \"presentation\": [\n        155,\n        25,\n        50,\n        22\n      ]\n    },\n    \"note_gate\": {\n      \"type\": \"newobj\",\n      \"text\": \"gate 1\",\n      \"pos\": [\n        250,\n        535\n      ]\n    },\n    \"vel_label\": {\n      \"type\": \"comment\",\n      \"text\": \"velocity\",\n      \"pos\": [\n        355,\n        555\n      ],\n      \"presentation\": [\n        15,\n        225\n      ]\n    },\n    \"velocity\": {\n      \"type\": \"number\",\n      \"pos\": [\n        340,\n        573\n      ],\n      \"attrs\": {\n        \"minimum\": 1,\n        \"maximum\": 127\n      },\n      \"presentation\": [\n        10,\n        243,\n        55,\n        22\n      ]\n    },\n    \"dur_label\": {\n      \"type\": \"comment\",\n      \"text\": \"duration (ms)\",\n      \"pos\": [\n        445,\n        555\n      ],\n      \"presentation\": [\n        85,\n        225\n      ]\n    },\n    \"duration\": {\n      \"type\": \"number\",\n      \"pos\": [\n        430,\n        573\n      ],\n      \"attrs\": {\n        \"minimum\": 10,\n        \"maximum\": 2000\n      },\n      \"presentation\": [\n        80,\n        243,\n        65,\n        22\n      ]\n    },\n    \"makenote\": {\n      \"type\": \"newobj\",\n      \"text\": \"makenote 100 150\",\n      \"pos\": [\n        250,\n        610\n      ]\n    },\n    \"pack_note\": {\n      \"type\": \"newobj\",\n      \"text\": \"pack 60 100\",\n      \"pos\": [\n        250,\n        640\n      ]\n    },\n    \"midiformat\": {\n      \"type\": \"newobj\",\n      \"text\": \"midiformat\",\n      \"pos\": [\n        250,\n        670\n      ]\n    },\n    \"drift\": {\n      \"type\": \"newobj\",\n      \"text\": \"abl.device.drift~\",\n      \"pos\": [\n        250,\n        700\n      ],\n      \"inlets\": 1,\n      \"outlets\": 2,\n      \"outlettype\": [\n        \"signal\",\n        \"signal\"\n      ]\n    },\n    \"gain\": {\n      \"type\": \"live.gain~\",\n      \"pos\": [\n        250,\n        745\n      ],\n      \"size\": [\n        200,\n        36\n      ],\n      \"presentation\": [\n        10,\n        275,\n        220,\n        36\n      ],\n      \"attrs\": {\n        \"orientation\": 1,\n        \"_parameter_initial\": [\n          0.0\n        ],\n        \"_parameter_initial_enable\": 1\n      }\n    },\n    \"dac\": {\n      \"type\": \"ezdac~\",\n      \"pos\": [\n        250,\n        800\n      ],\n      \"presentation\": [\n        240,\n        275\n      ]\n    },\n    \"info\": {\n      \"type\": \"comment\",\n      \"text\": \"Turn on audio, set pitches and rests, click toggle\",\n      \"pos\": [\n        30,\n        855\n      ],\n      \"presentation\": [\n        10,\n        325\n      ]\n    },\n    \"panel\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        0,\n        0\n      ],\n      \"size\": [\n        0,\n        0\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.15,\n          0.55,\n          0.95,\n          0.15\n        ]\n      }\n    },\n    \"panel_2\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        238,\n        18\n      ],\n      \"size\": [\n        184,\n        71\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.15,\n          0.55,\n          0.95,\n          0.15\n        ]\n      }\n    },\n    \"panel_3\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        18,\n        113\n      ],\n      \"size\": [\n        121,\n        131\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.15,\n          0.55,\n          0.95,\n          0.15\n        ]\n      }\n    },\n    \"panel_4\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        18,\n        416\n      ],\n      \"size\": [\n        376,\n        228\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.15,\n          0.55,\n          0.95,\n          0.15\n        ]\n      }\n    },\n    \"panel_5\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        53,\n        80\n      ],\n      \"size\": [\n        74,\n        46\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.15,\n          0.55,\n          0.95,\n          0.15\n        ]\n      }\n    },\n    \"panel_6\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        328,\n        561\n      ],\n      \"size\": [\n        164,\n        46\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.15,\n          0.55,\n          0.95,\n          0.15\n        ]\n      }\n    },\n    \"panel_7\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        18,\n        228\n      ],\n      \"size\": [\n        255,\n        204\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.15,\n          0.55,\n          0.95,\n          0.15\n        ]\n      }\n    },\n    \"panel_8\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        238,\n        488\n      ],\n      \"size\": [\n        74,\n        46\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.15,\n          0.55,\n          0.95,\n          0.15\n        ]\n      }\n    },\n    \"panel_9\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        238,\n        628\n      ],\n      \"size\": [\n        224,\n        165\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.15,\n          0.55,\n          0.95,\n          0.15\n        ]\n      }\n    },\n    \"panel_10\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        238,\n        788\n      ],\n      \"size\": [\n        69,\n        69\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.15,\n          0.55,\n          0.95,\n          0.15\n        ]\n      }\n    },\n    \"Tutorial\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        370,\n        5\n      ],\n      \"text\": \"Tutorial:\",\n      \"attrs\": {\n        \"fontface\": 1\n      }\n    },\n    \"umenu\": {\n      \"type\": \"umenu\",\n      \"pos\": [\n        438,\n        5\n      ],\n      \"size\": [\n        200,\n        22\n      ]\n    },\n    \"prev\": {\n      \"type\": \"message\",\n      \"pos\": [\n        644,\n        5\n      ],\n      \"text\": \"prev\"\n    },\n    \"next\": {\n      \"type\": \"message\",\n      \"pos\": [\n        680,\n        5\n      ],\n      \"text\": \"next\"\n    },\n    \"loadbang\": {\n      \"type\": \"newobj\",\n      \"pos\": [\n        716,\n        5\n      ],\n      \"text\": \"loadbang\"\n    },\n    \"v8\": {\n      \"type\": \"newobj\",\n      \"pos\": [\n        370,\n        32\n      ],\n      \"text\": \"v8 drift-sequencer-tutorial.js\"\n    },\n    \"Overview\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        370,\n        60\n      ],\n      \"text\": \"Overview\\nThis patch has 23 processing objects across 9 stages. Use the menu or prev/next to step through each stage.\",\n      \"size\": [\n        220,\n        86\n      ],\n      \"attrs\": {\n        \"fontsize\": 11.0,\n        \"textcolor\": [\n          0.0,\n          0.0,\n          0.0,\n          1.0\n        ]\n      }\n    },\n    \"loadmess_2\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        437,\n        5\n      ],\n      \"text\": \"loadmess + unpack\\nloadmess \\u2014 Sends a stored message when the patch loads (initializes defaults). unpack \\u2014 Unpacks a list into individual outlet values.\",\n      \"size\": [\n        220,\n        104\n      ],\n      \"attrs\": {\n        \"fontsize\": 11.0,\n        \"textcolor\": [\n          0.0,\n          0.0,\n          0.0,\n          1.0\n        ]\n      }\n    },\n    \"toggle\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        154,\n        117\n      ],\n      \"text\": \"toggle +3\\ntoggle \\u2014 Sends 1 (on) or 0 (off) when clicked \\u2014 starts/stops loops. metro \\u2014 Generates repeated bangs at a set interval (ms). counter \\u2014 Counts bangs up/down between min and max. +.\",\n      \"size\": [\n        220,\n        122\n      ],\n      \"attrs\": {\n        \"fontsize\": 11.0,\n        \"textcolor\": [\n          0.0,\n          0.0,\n          0.0,\n          1.0\n        ]\n      }\n    },\n    \"loadmess_3\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        409,\n        478\n      ],\n      \"text\": \"loadmess +3\\nloadmess: rests (0=rest, 1=note). multislider. gate: velocity. makenote \\u2014 Generates a MIDI note-on followed by a note-off.\",\n      \"size\": [\n        220,\n        104\n      ],\n      \"attrs\": {\n        \"fontsize\": 11.0,\n        \"textcolor\": [\n          0.0,\n          0.0,\n          0.0,\n          1.0\n        ]\n      }\n    },\n    \"number\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        142,\n        69\n      ],\n      \"text\": \"number\\nnumber \\u2014 Displays and edits an integer number.\",\n      \"size\": [\n        220,\n        68\n      ],\n      \"attrs\": {\n        \"fontsize\": 11.0,\n        \"textcolor\": [\n          0.0,\n          0.0,\n          0.0,\n          1.0\n        ]\n      }\n    },\n    \"number_2\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        507,\n        541\n      ],\n      \"text\": \"number\\nnumber \\u2014 Displays and edits an integer number. number \\u2014 Displays and edits an integer number.\",\n      \"size\": [\n        220,\n        86\n      ],\n      \"attrs\": {\n        \"fontsize\": 11.0,\n        \"textcolor\": [\n          0.0,\n          0.0,\n          0.0,\n          1.0\n        ]\n      }\n    },\n    \"t\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        288,\n        269\n      ],\n      \"text\": \"t +2\\nt \\u2014 Fires a series of typed outputs in right-to-left order. prepend: pitch (MIDI 36-84). prepend \\u2014 Prepends a fixed message selector before incoming data. multislider.\",\n      \"size\": [\n        220,\n        122\n      ],\n      \"attrs\": {\n        \"fontsize\": 11.0,\n        \"textcolor\": [\n          0.0,\n          0.0,\n          0.0,\n          1.0\n        ]\n      }\n    },\n    \"number_3\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        327,\n        477\n      ],\n      \"text\": \"number\\nnumber \\u2014 Displays and edits an integer number.\",\n      \"size\": [\n        220,\n        68\n      ],\n      \"attrs\": {\n        \"fontsize\": 11.0,\n        \"textcolor\": [\n          0.0,\n          0.0,\n          0.0,\n          1.0\n        ]\n      }\n    },\n    \"pack\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        477,\n        640\n      ],\n      \"text\": \"pack +3\\npack \\u2014 Packs individual values into a single output list. midiformat \\u2014 Assembles raw MIDI bytes from component values. abl.device.drift~. live.gain~ \\u2014 A stereo volume fader (Max for Live).\",\n      \"size\": [\n        220,\n        140\n      ],\n      \"attrs\": {\n        \"fontsize\": 11.0,\n        \"textcolor\": [\n          0.0,\n          0.0,\n          0.0,\n          1.0\n        ]\n      }\n    },\n    \"ezdac\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        322,\n        788\n      ],\n      \"text\": \"ezdac~\\nezdac~ \\u2014 A stereo audio output with built-in gain slider.\",\n      \"size\": [\n        220,\n        68\n      ],\n      \"attrs\": {\n        \"fontsize\": 11.0,\n        \"textcolor\": [\n          0.0,\n          0.0,\n          0.0,\n          1.0\n        ]\n      }\n    }\n  },\n  \"connections\": [\n    [\n      \"loadmess\",\n      0,\n      \"unpack_init\",\n      0\n    ],\n    [\n      \"unpack_init\",\n      0,\n      \"tempo\",\n      0\n    ],\n    [\n      \"unpack_init\",\n      1,\n      \"velocity\",\n      0\n    ],\n    [\n      \"unpack_init\",\n      2,\n      \"duration\",\n      0\n    ],\n    [\n      \"onoff\",\n      0,\n      \"metro\",\n      0\n    ],\n    [\n      \"tempo\",\n      0,\n      \"metro\",\n      1\n    ],\n    [\n      \"metro\",\n      0,\n      \"steps\",\n      0\n    ],\n    [\n      \"steps\",\n      0,\n      \"step_plus1\",\n      0\n    ],\n    [\n      \"step_plus1\",\n      0,\n      \"trig\",\n      0\n    ],\n    [\n      \"trig\",\n      1,\n      \"fetch_rest\",\n      0\n    ],\n    [\n      \"trig\",\n      0,\n      \"fetch_pitch\",\n      0\n    ],\n    [\n      \"fetch_pitch\",\n      0,\n      \"slider\",\n      0\n    ],\n    [\n      \"fetch_rest\",\n      0,\n      \"rest_slider\",\n      0\n    ],\n    [\n      \"rest_init\",\n      0,\n      \"rest_slider\",\n      0\n    ],\n    [\n      \"slider\",\n      1,\n      \"pitch_display\",\n      0\n    ],\n    [\n      \"rest_slider\",\n      1,\n      \"note_gate\",\n      0\n    ],\n    [\n      \"pitch_display\",\n      0,\n      \"note_gate\",\n      1\n    ],\n    [\n      \"note_gate\",\n      0,\n      \"makenote\",\n      0\n    ],\n    [\n      \"velocity\",\n      0,\n      \"makenote\",\n      1\n    ],\n    [\n      \"duration\",\n      0,\n      \"makenote\",\n      2\n    ],\n    [\n      \"makenote\",\n      0,\n      \"pack_note\",\n      0\n    ],\n    [\n      \"makenote\",\n      1,\n      \"pack_note\",\n      1\n    ],\n    [\n      \"pack_note\",\n      0,\n      \"midiformat\",\n      0\n    ],\n    [\n      \"midiformat\",\n      0,\n      \"drift\",\n      0\n    ],\n    [\n      \"drift\",\n      0,\n      \"gain\",\n      0\n    ],\n    [\n      \"drift\",\n      1,\n      \"gain\",\n      1\n    ],\n    [\n      \"gain\",\n      0,\n      \"dac\",\n      0\n    ],\n    [\n      \"gain\",\n      1,\n      \"dac\",\n      1\n    ],\n    [\n      \"umenu\",\n      0,\n      \"v8\",\n      0\n    ],\n    [\n      \"prev\",\n      0,\n      \"v8\",\n      0\n    ],\n    [\n      \"next\",\n      0,\n      \"v8\",\n      0\n    ],\n    [\n      \"loadbang\",\n      0,\n      \"v8\",\n      0\n    ]\n  ]\n}\n--- END SPEC ---",
+          "code": "--- CLAUDE2MAX SPEC ---\n{\n  \"name\": \"Drift Sequencer\",\n  \"width\": 760,\n  \"height\": 390,\n  \"objects\": {\n    \"loadmess\": {\n      \"type\": \"newobj\",\n      \"text\": \"loadmess 200 100 150\",\n      \"pos\": [\n        250,\n        30\n      ]\n    },\n    \"unpack_init\": {\n      \"type\": \"newobj\",\n      \"text\": \"unpack 0 0 0\",\n      \"pos\": [\n        250,\n        55\n      ]\n    },\n    \"onoff_label\": {\n      \"type\": \"comment\",\n      \"text\": \"on/off\",\n      \"pos\": [\n        45,\n        110\n      ],\n      \"presentation\": [\n        15,\n        10\n      ],\n      \"attrs\": {\n        \"fontname\": \"Courier\",\n        \"fontsize\": 11\n      }\n    },\n    \"onoff\": {\n      \"type\": \"toggle\",\n      \"pos\": [\n        30,\n        125\n      ],\n      \"presentation\": [\n        15,\n        28,\n        22,\n        22\n      ]\n    },\n    \"tempo_label\": {\n      \"type\": \"comment\",\n      \"text\": \"tempo (ms)\",\n      \"pos\": [\n        80,\n        77\n      ],\n      \"presentation\": [\n        80,\n        10\n      ],\n      \"attrs\": {\n        \"fontname\": \"Courier\",\n        \"fontsize\": 11\n      }\n    },\n    \"tempo\": {\n      \"type\": \"number\",\n      \"pos\": [\n        65,\n        92\n      ],\n      \"attrs\": {\n        \"minimum\": 50,\n        \"maximum\": 2000\n      },\n      \"presentation\": [\n        75,\n        28,\n        70,\n        22\n      ]\n    },\n    \"metro\": {\n      \"type\": \"newobj\",\n      \"text\": \"metro 200\",\n      \"pos\": [\n        30,\n        150\n      ]\n    },\n    \"steps\": {\n      \"type\": \"newobj\",\n      \"text\": \"counter 0 7\",\n      \"pos\": [\n        30,\n        180\n      ]\n    },\n    \"step_plus1\": {\n      \"type\": \"newobj\",\n      \"text\": \"+ 1\",\n      \"pos\": [\n        30,\n        210\n      ]\n    },\n    \"trig\": {\n      \"type\": \"newobj\",\n      \"text\": \"t i i\",\n      \"pos\": [\n        30,\n        240\n      ]\n    },\n    \"fetch_pitch\": {\n      \"type\": \"newobj\",\n      \"text\": \"prepend fetch\",\n      \"pos\": [\n        30,\n        270\n      ]\n    },\n    \"fetch_rest\": {\n      \"type\": \"newobj\",\n      \"text\": \"prepend fetch\",\n      \"pos\": [\n        150,\n        270\n      ]\n    },\n    \"pitch_label\": {\n      \"type\": \"comment\",\n      \"text\": \"pitch (MIDI 36-84)\",\n      \"pos\": [\n        45,\n        303\n      ],\n      \"presentation\": [\n        15,\n        60\n      ],\n      \"attrs\": {\n        \"fontname\": \"Courier\",\n        \"fontsize\": 11\n      }\n    },\n    \"slider\": {\n      \"type\": \"multislider\",\n      \"pos\": [\n        30,\n        320\n      ],\n      \"size\": [\n        400,\n        100\n      ],\n      \"presentation\": [\n        15,\n        78,\n        400,\n        100\n      ],\n      \"attrs\": {\n        \"size\": 8,\n        \"setminmax\": [\n          36.0,\n          84.0\n        ],\n        \"setstyle\": 1,\n        \"candicane2\": [\n          0.14,\n          0.69,\n          0.78,\n          1.0\n        ],\n        \"slidercolor\": [\n          0.14,\n          0.69,\n          0.78,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.15,\n          0.15,\n          0.15,\n          1.0\n        ],\n        \"orientation\": 1\n      }\n    },\n    \"rest_init\": {\n      \"type\": \"newobj\",\n      \"text\": \"loadmess 1\",\n      \"pos\": [\n        30,\n        428\n      ]\n    },\n    \"rest_label\": {\n      \"type\": \"comment\",\n      \"text\": \"rests (0=rest, 1=note)\",\n      \"pos\": [\n        45,\n        448\n      ],\n      \"presentation\": [\n        15,\n        188\n      ],\n      \"attrs\": {\n        \"fontname\": \"Courier\",\n        \"fontsize\": 11\n      }\n    },\n    \"rest_slider\": {\n      \"type\": \"multislider\",\n      \"pos\": [\n        30,\n        465\n      ],\n      \"size\": [\n        400,\n        25\n      ],\n      \"presentation\": [\n        15,\n        205,\n        400,\n        25\n      ],\n      \"attrs\": {\n        \"size\": 8,\n        \"setminmax\": [\n          0.0,\n          1.0\n        ],\n        \"setstyle\": 1,\n        \"settype\": 0,\n        \"candicane2\": [\n          0.9,\n          0.5,\n          0.2,\n          1.0\n        ],\n        \"slidercolor\": [\n          0.9,\n          0.5,\n          0.2,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.15,\n          0.15,\n          0.15,\n          1.0\n        ],\n        \"orientation\": 1\n      }\n    },\n    \"pitch_display_label\": {\n      \"type\": \"comment\",\n      \"text\": \"note\",\n      \"pos\": [\n        265,\n        485\n      ],\n      \"presentation\": [\n        175,\n        10\n      ],\n      \"attrs\": {\n        \"fontname\": \"Courier\",\n        \"fontsize\": 11\n      }\n    },\n    \"pitch_display\": {\n      \"type\": \"number\",\n      \"pos\": [\n        250,\n        500\n      ],\n      \"presentation\": [\n        170,\n        28,\n        55,\n        22\n      ],\n      \"attrs\": {\n        \"ignoreclick\": 1,\n        \"triangle\": 0\n      }\n    },\n    \"note_gate\": {\n      \"type\": \"newobj\",\n      \"text\": \"gate 1\",\n      \"pos\": [\n        250,\n        535\n      ]\n    },\n    \"vel_label\": {\n      \"type\": \"comment\",\n      \"text\": \"velocity\",\n      \"pos\": [\n        355,\n        555\n      ],\n      \"presentation\": [\n        15,\n        242\n      ],\n      \"attrs\": {\n        \"fontname\": \"Courier\",\n        \"fontsize\": 11\n      }\n    },\n    \"velocity\": {\n      \"type\": \"number\",\n      \"pos\": [\n        340,\n        573\n      ],\n      \"attrs\": {\n        \"minimum\": 1,\n        \"maximum\": 127\n      },\n      \"presentation\": [\n        15,\n        259,\n        60,\n        22\n      ]\n    },\n    \"dur_label\": {\n      \"type\": \"comment\",\n      \"text\": \"duration (ms)\",\n      \"pos\": [\n        445,\n        555\n      ],\n      \"presentation\": [\n        95,\n        242\n      ],\n      \"attrs\": {\n        \"fontname\": \"Courier\",\n        \"fontsize\": 11\n      }\n    },\n    \"duration\": {\n      \"type\": \"number\",\n      \"pos\": [\n        430,\n        573\n      ],\n      \"attrs\": {\n        \"minimum\": 10,\n        \"maximum\": 2000\n      },\n      \"presentation\": [\n        90,\n        259,\n        75,\n        22\n      ]\n    },\n    \"makenote\": {\n      \"type\": \"newobj\",\n      \"text\": \"makenote 100 150\",\n      \"pos\": [\n        250,\n        610\n      ]\n    },\n    \"pack_note\": {\n      \"type\": \"newobj\",\n      \"text\": \"pack 60 100\",\n      \"pos\": [\n        250,\n        640\n      ]\n    },\n    \"midiformat\": {\n      \"type\": \"newobj\",\n      \"text\": \"midiformat\",\n      \"pos\": [\n        250,\n        670\n      ]\n    },\n    \"drift\": {\n      \"type\": \"newobj\",\n      \"text\": \"abl.device.drift~\",\n      \"pos\": [\n        250,\n        700\n      ],\n      \"inlets\": 1,\n      \"outlets\": 2,\n      \"outlettype\": [\n        \"signal\",\n        \"signal\"\n      ]\n    },\n    \"gain\": {\n      \"type\": \"live.gain~\",\n      \"pos\": [\n        250,\n        745\n      ],\n      \"size\": [\n        350,\n        36\n      ],\n      \"presentation\": [\n        15,\n        295,\n        350,\n        36\n      ],\n      \"attrs\": {\n        \"orientation\": 1,\n        \"_parameter_initial\": [\n          0.0\n        ],\n        \"_parameter_initial_enable\": 1\n      }\n    },\n    \"dac\": {\n      \"type\": \"ezdac~\",\n      \"pos\": [\n        250,\n        800\n      ],\n      \"presentation\": [\n        375,\n        302\n      ]\n    },\n    \"info\": {\n      \"type\": \"comment\",\n      \"text\": \"Turn on audio, set pitches and rests, click toggle\",\n      \"pos\": [\n        30,\n        855\n      ],\n      \"presentation\": [\n        15,\n        345\n      ],\n      \"attrs\": {\n        \"fontname\": \"Courier\",\n        \"fontsize\": 11\n      }\n    },\n    \"panel\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        0,\n        0\n      ],\n      \"size\": [\n        0,\n        0\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.15,\n          0.55,\n          0.95,\n          0.15\n        ]\n      }\n    },\n    \"panel_2\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        238,\n        18\n      ],\n      \"size\": [\n        184,\n        71\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.15,\n          0.55,\n          0.95,\n          0.15\n        ]\n      }\n    },\n    \"panel_3\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        18,\n        113\n      ],\n      \"size\": [\n        121,\n        131\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.15,\n          0.55,\n          0.95,\n          0.15\n        ]\n      }\n    },\n    \"panel_4\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        18,\n        416\n      ],\n      \"size\": [\n        376,\n        228\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.15,\n          0.55,\n          0.95,\n          0.15\n        ]\n      }\n    },\n    \"panel_5\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        53,\n        80\n      ],\n      \"size\": [\n        74,\n        46\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.15,\n          0.55,\n          0.95,\n          0.15\n        ]\n      }\n    },\n    \"panel_6\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        328,\n        561\n      ],\n      \"size\": [\n        164,\n        46\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.15,\n          0.55,\n          0.95,\n          0.15\n        ]\n      }\n    },\n    \"panel_7\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        18,\n        228\n      ],\n      \"size\": [\n        255,\n        204\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.15,\n          0.55,\n          0.95,\n          0.15\n        ]\n      }\n    },\n    \"panel_8\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        238,\n        488\n      ],\n      \"size\": [\n        74,\n        46\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.15,\n          0.55,\n          0.95,\n          0.15\n        ]\n      }\n    },\n    \"panel_9\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        238,\n        628\n      ],\n      \"size\": [\n        224,\n        165\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.15,\n          0.55,\n          0.95,\n          0.15\n        ]\n      }\n    },\n    \"panel_10\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        238,\n        788\n      ],\n      \"size\": [\n        69,\n        69\n      ],\n      \"attrs\": {\n        \"bgcolor\": [\n          0.15,\n          0.55,\n          0.95,\n          0.15\n        ]\n      }\n    },\n    \"Tutorial\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        370,\n        5\n      ],\n      \"text\": \"Tutorial:\",\n      \"attrs\": {\n        \"fontface\": 1\n      }\n    },\n    \"umenu\": {\n      \"type\": \"umenu\",\n      \"pos\": [\n        438,\n        5\n      ],\n      \"size\": [\n        200,\n        22\n      ]\n    },\n    \"prev\": {\n      \"type\": \"message\",\n      \"pos\": [\n        644,\n        5\n      ],\n      \"text\": \"prev\"\n    },\n    \"next\": {\n      \"type\": \"message\",\n      \"pos\": [\n        680,\n        5\n      ],\n      \"text\": \"next\"\n    },\n    \"loadbang\": {\n      \"type\": \"newobj\",\n      \"pos\": [\n        716,\n        5\n      ],\n      \"text\": \"loadbang\"\n    },\n    \"v8\": {\n      \"type\": \"newobj\",\n      \"pos\": [\n        370,\n        32\n      ],\n      \"text\": \"v8 drift-sequencer-tutorial.js\"\n    },\n    \"Overview\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        370,\n        60\n      ],\n      \"text\": \"Overview\\nThis patch has 23 processing objects across 9 stages. Use the menu or prev/next to step through each stage.\",\n      \"size\": [\n        220,\n        86\n      ],\n      \"attrs\": {\n        \"fontsize\": 11.0,\n        \"textcolor\": [\n          0.0,\n          0.0,\n          0.0,\n          1.0\n        ]\n      }\n    },\n    \"loadmess_2\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        437,\n        5\n      ],\n      \"text\": \"loadmess + unpack\\nloadmess \\u2014 Sends a stored message when the patch loads (initializes defaults). unpack \\u2014 Unpacks a list into individual outlet values.\",\n      \"size\": [\n        220,\n        104\n      ],\n      \"attrs\": {\n        \"fontsize\": 11.0,\n        \"textcolor\": [\n          0.0,\n          0.0,\n          0.0,\n          1.0\n        ]\n      }\n    },\n    \"toggle\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        154,\n        117\n      ],\n      \"text\": \"toggle +3\\ntoggle \\u2014 Sends 1 (on) or 0 (off) when clicked \\u2014 starts/stops loops. metro \\u2014 Generates repeated bangs at a set interval (ms). counter \\u2014 Counts bangs up/down between min and max. +.\",\n      \"size\": [\n        220,\n        122\n      ],\n      \"attrs\": {\n        \"fontsize\": 11.0,\n        \"textcolor\": [\n          0.0,\n          0.0,\n          0.0,\n          1.0\n        ]\n      }\n    },\n    \"loadmess_3\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        409,\n        478\n      ],\n      \"text\": \"loadmess +3\\nloadmess: rests (0=rest, 1=note). multislider. gate: velocity. makenote \\u2014 Generates a MIDI note-on followed by a note-off.\",\n      \"size\": [\n        220,\n        104\n      ],\n      \"attrs\": {\n        \"fontsize\": 11.0,\n        \"textcolor\": [\n          0.0,\n          0.0,\n          0.0,\n          1.0\n        ]\n      }\n    },\n    \"number\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        142,\n        69\n      ],\n      \"text\": \"number\\nnumber \\u2014 Displays and edits an integer number.\",\n      \"size\": [\n        220,\n        68\n      ],\n      \"attrs\": {\n        \"fontsize\": 11.0,\n        \"textcolor\": [\n          0.0,\n          0.0,\n          0.0,\n          1.0\n        ]\n      }\n    },\n    \"number_2\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        507,\n        541\n      ],\n      \"text\": \"number\\nnumber \\u2014 Displays and edits an integer number. number \\u2014 Displays and edits an integer number.\",\n      \"size\": [\n        220,\n        86\n      ],\n      \"attrs\": {\n        \"fontsize\": 11.0,\n        \"textcolor\": [\n          0.0,\n          0.0,\n          0.0,\n          1.0\n        ]\n      }\n    },\n    \"t\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        288,\n        269\n      ],\n      \"text\": \"t +2\\nt \\u2014 Fires a series of typed outputs in right-to-left order. prepend: pitch (MIDI 36-84). prepend \\u2014 Prepends a fixed message selector before incoming data. multislider.\",\n      \"size\": [\n        220,\n        122\n      ],\n      \"attrs\": {\n        \"fontsize\": 11.0,\n        \"textcolor\": [\n          0.0,\n          0.0,\n          0.0,\n          1.0\n        ]\n      }\n    },\n    \"number_3\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        327,\n        477\n      ],\n      \"text\": \"number\\nnumber \\u2014 Displays and edits an integer number.\",\n      \"size\": [\n        220,\n        68\n      ],\n      \"attrs\": {\n        \"fontsize\": 11.0,\n        \"textcolor\": [\n          0.0,\n          0.0,\n          0.0,\n          1.0\n        ]\n      }\n    },\n    \"pack\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        477,\n        640\n      ],\n      \"text\": \"pack +3\\npack \\u2014 Packs individual values into a single output list. midiformat \\u2014 Assembles raw MIDI bytes from component values. abl.device.drift~. live.gain~ \\u2014 A stereo volume fader (Max for Live).\",\n      \"size\": [\n        220,\n        140\n      ],\n      \"attrs\": {\n        \"fontsize\": 11.0,\n        \"textcolor\": [\n          0.0,\n          0.0,\n          0.0,\n          1.0\n        ]\n      }\n    },\n    \"ezdac\": {\n      \"type\": \"comment\",\n      \"pos\": [\n        322,\n        788\n      ],\n      \"text\": \"ezdac~\\nezdac~ \\u2014 A stereo audio output with built-in gain slider.\",\n      \"size\": [\n        220,\n        68\n      ],\n      \"attrs\": {\n        \"fontsize\": 11.0,\n        \"textcolor\": [\n          0.0,\n          0.0,\n          0.0,\n          1.0\n        ]\n      }\n    }\n  },\n  \"connections\": [\n    [\n      \"loadmess\",\n      0,\n      \"unpack_init\",\n      0\n    ],\n    [\n      \"unpack_init\",\n      0,\n      \"tempo\",\n      0\n    ],\n    [\n      \"unpack_init\",\n      1,\n      \"velocity\",\n      0\n    ],\n    [\n      \"unpack_init\",\n      2,\n      \"duration\",\n      0\n    ],\n    [\n      \"onoff\",\n      0,\n      \"metro\",\n      0\n    ],\n    [\n      \"tempo\",\n      0,\n      \"metro\",\n      1\n    ],\n    [\n      \"metro\",\n      0,\n      \"steps\",\n      0\n    ],\n    [\n      \"steps\",\n      0,\n      \"step_plus1\",\n      0\n    ],\n    [\n      \"step_plus1\",\n      0,\n      \"trig\",\n      0\n    ],\n    [\n      \"trig\",\n      1,\n      \"fetch_rest\",\n      0\n    ],\n    [\n      \"trig\",\n      0,\n      \"fetch_pitch\",\n      0\n    ],\n    [\n      \"fetch_pitch\",\n      0,\n      \"slider\",\n      0\n    ],\n    [\n      \"fetch_rest\",\n      0,\n      \"rest_slider\",\n      0\n    ],\n    [\n      \"rest_init\",\n      0,\n      \"rest_slider\",\n      0\n    ],\n    [\n      \"slider\",\n      1,\n      \"pitch_display\",\n      0\n    ],\n    [\n      \"rest_slider\",\n      1,\n      \"note_gate\",\n      0\n    ],\n    [\n      \"pitch_display\",\n      0,\n      \"note_gate\",\n      1\n    ],\n    [\n      \"note_gate\",\n      0,\n      \"makenote\",\n      0\n    ],\n    [\n      \"velocity\",\n      0,\n      \"makenote\",\n      1\n    ],\n    [\n      \"duration\",\n      0,\n      \"makenote\",\n      2\n    ],\n    [\n      \"makenote\",\n      0,\n      \"pack_note\",\n      0\n    ],\n    [\n      \"makenote\",\n      1,\n      \"pack_note\",\n      1\n    ],\n    [\n      \"pack_note\",\n      0,\n      \"midiformat\",\n      0\n    ],\n    [\n      \"midiformat\",\n      0,\n      \"drift\",\n      0\n    ],\n    [\n      \"drift\",\n      0,\n      \"gain\",\n      0\n    ],\n    [\n      \"drift\",\n      1,\n      \"gain\",\n      1\n    ],\n    [\n      \"gain\",\n      0,\n      \"dac\",\n      0\n    ],\n    [\n      \"gain\",\n      1,\n      \"dac\",\n      1\n    ],\n    [\n      \"umenu\",\n      0,\n      \"v8\",\n      0\n    ],\n    [\n      \"prev\",\n      0,\n      \"v8\",\n      0\n    ],\n    [\n      \"next\",\n      0,\n      \"v8\",\n      0\n    ],\n    [\n      \"loadbang\",\n      0,\n      \"v8\",\n      0\n    ]\n  ]\n}\n--- END SPEC ---",
           "fontsize": 9.0,
           "hidden": 1
         }
@@ -1963,48 +1732,48 @@
       },
       {
         "patchline": {
-          "source": [
-            "tut-umenu",
+          "destination": [
+            "obj-47",
             0
           ],
-          "destination": [
-            "tut-v8",
+          "source": [
+            "obj-43",
             0
           ]
         }
       },
       {
         "patchline": {
-          "source": [
-            "tut-prev",
+          "destination": [
+            "obj-47",
             0
           ],
-          "destination": [
-            "tut-v8",
+          "source": [
+            "obj-44",
             0
           ]
         }
       },
       {
         "patchline": {
-          "source": [
-            "tut-next",
+          "destination": [
+            "obj-47",
             0
           ],
-          "destination": [
-            "tut-v8",
+          "source": [
+            "obj-45",
             0
           ]
         }
       },
       {
         "patchline": {
-          "source": [
-            "tut-loadbang",
+          "destination": [
+            "obj-47",
             0
           ],
-          "destination": [
-            "tut-v8",
+          "source": [
+            "obj-46",
             0
           ]
         }
