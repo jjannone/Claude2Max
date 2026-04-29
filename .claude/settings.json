@@ -10,6 +10,16 @@
             "statusMessage": "Syncing .maxpat spec..."
           }
         ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 hooks/pre_commit_review.py",
+            "statusMessage": "Reviewing CLAUDE.md checklist..."
+          }
+        ]
       }
     ],
     "UserPromptSubmit": [
