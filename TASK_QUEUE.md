@@ -7,7 +7,28 @@ Format: `[pending]` = not started, `[complete]` = done (move to Done section), `
 
 **When starting a task**, change its marker to `[in progress]` and add a brief note of what has been done so far (e.g. `*In progress: crawled audio subforum, resuming at MIDI threads*`). This ensures that if the session is cut off, the next Claude instance knows where to pick up. Clear the `[in progress]` marker and note when the task is finished or paused.
 
-## Pending
+---
+
+## Pending — Opus
+
+Tasks requiring deep analysis, architecture decisions, or sustained judgment. Prompt the user to run `/model claude-opus-4-7` before starting any of these.
+
+- [pending] **TouchOSC mk2 Integration** — Add a parallel converter (`spec2tosc.py`) to Claude2Max that generates a TouchOSC mk2 `.tosc` layout file from the same spec used to generate a Max patch. The goal is a single spec that produces both a Max presentation mode UI and a matching (or partial) TouchOSC control surface, with the Max patch auto-wired to receive OSC messages from the TouchOSC layout.
+
+  **What to build**:
+  1. **Research the `.tosc` binary format** — find and evaluate existing Python libraries (search for `touchosc-tools`, `tosc`, or similar). If a reliable library exists, use it. If not, implement a writer based on the community-documented binary spec. Document findings in a `TOSC_FORMAT.md` reference file.
+  2. **Spec extensions** — add TouchOSC-specific fields to the existing spec format so a single spec can drive both converters. New per-object fields: `osc_address`, `value_range` (min/max), `tosc_type` (fader, button, xy, label, encoder, etc.), `tosc_page`, `tosc_group`, `tosc_color`, `tosc_script` (Lua), `tosc_link` (control linking). A `tosc: false` flag excludes an object from the TouchOSC layout. Objects with no `tosc_*` fields but with `presentation` coordinates default to being included with sensible TouchOSC mappings.
+  3. **`spec2tosc.py` converter** — parallel to `spec2maxpat.py`, same CLI pattern (`convert`, `extract`, `sync`). Reads the embedded spec from a `.maxpat` (or a standalone `.json`), produces a `.tosc` file alongside the `.maxpat`. Full mk2 feature support: pages, groups, Lua scripting, control linking, color themes.
+  4. **Max receive side** — when generating the Max patch, auto-add `receive` and `route` objects for each OSC address defined in the spec, wiring them to the appropriate controls. This keeps the Max and TouchOSC sides in sync without manual wiring.
+  5. **Subset selection** — the spec can mark controls as Max-only, TouchOSC-only, or both. The default (no flag) is both. This lets complex patches expose a curated performance subset on TouchOSC while keeping full controls in the Max presentation view.
+  6. **SPEC_REFERENCE.md and CLAUDE.md updates** — document all new spec fields, the TouchOSC workflow, and the OSC address convention (e.g. `/patch-name/control-name`).
+
+  **Prerequisites**:
+  - TouchOSC mk2 installed and tested on a device
+  - Research the `.tosc` format before writing any code — do not guess at binary structure
+  - Existing `spec2maxpat.py` infrastructure (RefpageCache, spec embedding, CLI pattern) should be reused or shared where possible
+
+  **Fits into the larger system**: Claude2Max already generates Max patches from specs. This adds a second output target (TouchOSC) from the same source of truth. The long-term vision is: describe a patch once, get a Max patch + presentation UI + TouchOSC surface, all in sync.
 
 - [pending] **Forum Knowledge Crawl** — Systematically crawl the Cycling '74 forums in chunks, extracting Max principles, techniques, and approaches from experienced community members. Build a growing reference of non-obvious patching knowledge that supplements the official docs.
 
@@ -40,21 +61,11 @@ Format: `[pending]` = not started, `[complete]` = done (move to Done section), `
 
   **Implementation notes**: reuse `RefpageCache._find_xml()` logic to locate refpages. The `use_when` field is the high-value output — written by Claude after reading the digest, not auto-generated. Skip objects that are pure alternatives with no advantage over built-ins.
 
-- [complete] **Review youthful-austin branch** — open all files on the `claude/youthful-austin` worktree, compare each to `main`, and decide what is still useful/relevant to merge. Files to review: `CLAUDE.md`, `SPEC_REFERENCE.md`, `.claude/settings.json`, `spec2maxpat.py`, `patches/drift-sequencer.json`, `patches/drift-sequencer.maxpat`, `patches/face-capture.json`, `patches/face-capture.maxpat`, `TASK_QUEUE.md`, `TUTORIAL_GUIDELINES.md`, `WORK_HISTORY.md`, `add_tutorial.py`, `hooks/sync_maxpat.py`, `hooks/sync_pasted_maxpat.py`, and tutorial `.js` files. Merge what's good, discard or defer the rest, then clean up the worktree.
+---
 
-- [complete] **Extended `RefpageCache` metadata** — extend `RefpageCache` in `spec2maxpat.py` to cache the following from each maxref.xml, in addition to I/O counts. All data is already in the XML; this task is purely parsing and structuring it. Each field is cached per object on first lookup, so no performance cost unless the data is requested.
+## Pending — Sonnet
 
-  - **Attributes** — from `<attributelist><attribute>`. Cache: name, type (int/float/symbol/list), size, default value, enum values if present, get/set permissions. Enables programmatic verification before using any attribute — no more manual grep. The `align` / `justify` / `anchor_x` errors from this session would have been caught automatically.
-
-  - **Messages** — from `<methodlist><method>`. Cache: message name, argument names and types, which inlet they apply to (from `<attribute name="inlet">`). Enables validation that message boxes send messages an object actually accepts, and with correct argument types.
-
-  - **Arguments** — from `<objarglist><objarg>`. Cache: name, type, optional flag, units. Enables validation of object text in specs — e.g. confirming that `metro 500` is valid (one optional number argument) vs. `metro foo` (wrong type).
-
-  - **Output descriptions** — from `<misc name="Output"><entry>`. Cache: outlet name/type as described in prose. Supplements the outlet type from `<outletlist>` with richer semantic info — e.g. "bang sent when file load completes" for `buffer~` outlet 1.
-
-  - **See-also** — from `<seealsolist><seealso>`. Cache: list of related object names. Useful for suggesting alternatives when a requested object isn't found or when a better fit exists.
-
-  **Implementation note**: `_parse()` in `RefpageCache` already reads the full XML root. Extend it to extract all five fields in the same pass — one XML parse covers everything. Return structure: `{"numinlets": ..., "numoutlets": ..., "outlettype": [...], "attributes": {...}, "messages": {...}, "arguments": [...], "outputs": [...], "seealso": [...]}`.
+Tasks that are primarily implementation, file editing, or verification — no deep architectural judgment required.
 
 - [in progress] **Layout engine Phase 3 — screenshot verification** (Phases 1 & 2 complete 2026-04-26) — three-phase approach covering both views, each with its own emphasis:
 
@@ -85,28 +96,11 @@ Format: `[pending]` = not started, `[complete]` = done (move to Done section), `
 
   **Prerequisite**: computer-use MCP must be enabled and screen recording granted to Claude. Phases 1 and 2 (layout engines) work without it; Phase 3 (screenshots) requires it.
 
-- [complete] **Permutation Summary Generator** — add a `perm-summary.js` v8 object to `ensemble-sequencer-v4.maxpat` that analyzes the full permutation list and outputs a plain-English text summary highlighting statistically unusual patterns. Display in a `textedit` box in the patch.
-
-  **Inputs**: receives the complete permutation list from the brain on demand (bang triggers summary output). Data format to match whatever ensemble-v4.js already produces for the permutation list.
-
-  **Analysis dimensions** — generate a sentence only when a pattern is actually present; suppress boilerplate for normal distributions. Rank observations by how surprising they are and surface only the most notable (target 3–6 sentences total):
-
-  - **Role frequency per performer** — count music vs dance appearances across all permutations; compute the norm (median); flag anyone significantly above or below (e.g. "Jaco only dances once")
-  - **Co-occurrence** — for every pair, count shared permutations; flag pairs that never or rarely appear together (e.g. "John never plays music with Maya") and pairs that always appear together
-  - **Solos** — flag permutations where the music or dance group has only one member; note which performers have solos and in which role (e.g. "Everyone has a music solo except Ellie")
-  - **Dominance** — flag anyone who appears in every permutation in the same role
-  - **Consecutive role streaks** — a performer who does the same role many times in a row across the sequence (e.g. "Maya plays music 5 times before dancing")
-  - **Inverse pairs** — pairs that are always in opposite groups, never sharing a role (e.g. "John and Ellie are never both musicians")
-  - **Group size variation** — whether music or dance groups are consistently larger, or one side is frequently just one or two people
-  - **Role transitions** — how often each performer switches roles between consecutive permutations vs stays in the same role (high switchers vs stable performers)
-  - **Sub-group recurrence** — trios or larger clusters that appear together frequently, suggesting a recurring unit (e.g. "John, Maya, and Ellie are musicians together in 6 of 12 permutations")
-  - **Coverage gaps** — a performer who never gets a pairing or grouping that everyone else gets (generalizes the solo/no-solo case)
-
-  **Implementation**: new file `perm-summary.js` in the ensemble repo. Receives permutation data via a message, stores it, outputs summary text on bang. Functions as a standard Max v8 object. No external dependencies. Brute-force analysis is fine — at 6–10 performers and 12–30 permutations, all dimensions are O(n × p²) or better and run instantly.
-
-  **Files to read first**: `ensemble-v4.js` (permutation data structure and outlet routing), `ensemble-sequencer-v4.maxpat` (current layout, where to add the new object and textedit).
+---
 
 ## Done
+
+- [complete] **Review youthful-austin branch** — completed 2026-04-27. No unique commits on the branch; fully behind main. Cleaned up worktree.
 
 - [complete] **Extended `RefpageCache` metadata** — completed 2026-04-26. Extended `_parse()` in `spec2maxpat.py` to extract digest, attributes (type/size/default/get/set/label), messages (args/inlet), object arguments, output descriptions, and see-also in a single XML parse pass. Added `describe(name)` convenience method for quick verification. Return structure now includes all seven fields alongside the original I/O counts.
 
