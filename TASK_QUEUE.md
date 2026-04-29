@@ -30,6 +30,19 @@ Tasks requiring deep analysis, architecture decisions, or sustained judgment. Pr
 
   **Fits into the larger system**: Claude2Max already generates Max patches from specs. This adds a second output target (TouchOSC) from the same source of truth. The long-term vision is: describe a patch once, get a Max patch + presentation UI + TouchOSC surface, all in sync.
 
+- [pending] **Test claude2max-design skill** — validate the `UPSTREAM-SKILL.md` skill manifest in `c2m-themes/` before integrating it into the main Claude2Max workflow. The skill claims to generate well-branded presentation panels, jsui canvases, and tutorial overlays using the `tokens.css` + theme system.
+
+  **What to test**:
+  1. Install the skill by placing `UPSTREAM-SKILL.md` where Claude Code can find it (confirm the correct install path for user-invocable skills)
+  2. Invoke `/claude2max-design` and test against representative tasks: generate a presentation panel mock in LCARS theme, then in Swiss, then in a theme of choice
+  3. Verify output honors the token contract — no hard-coded hex values, correct `--c2m-*` variable usage, ALL-CAPS names, no emoji, tabular numerals
+  4. Test the two-option presentation UI workflow from CLAUDE.md rule 6: does invoking the skill produce a layout description that can be translated back into spec coordinates?
+  5. Evaluate the 5 new themes (swiss, bauhaus, memphis, soviet, lcars-bold) — do they visually match their reference aesthetics and obey their per-theme rules?
+
+  **Output**: if the skill works well, add a note to CLAUDE.md rule 6 and `MAX_PATCHING.md` directing Claude to invoke `/claude2max-design` for presentation UI design. If it needs fixes, document them in `c2m-themes/README.md`.
+
+  **Prerequisites**: skill must be installed and accessible via `/claude2max-design` before testing.
+
 - [pending] **Forum Knowledge Crawl** — Systematically crawl the Cycling '74 forums in chunks, extracting Max principles, techniques, and approaches from experienced community members. Build a growing reference of non-obvious patching knowledge that supplements the official docs.
 
   **Approach (chunked across sessions)**:
