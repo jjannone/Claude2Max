@@ -773,20 +773,6 @@ def build_box(user_id, obj_spec, index, x, y):
         if maxclass in ("live.text",):
             box["box"]["text"] = text
 
-    # Parameter enable for live.* objects
-    if maxclass.startswith("live."):
-        box["box"]["parameter_enable"] = 1
-        # live objects need saved_attribute_attributes
-        box["box"]["saved_attribute_attributes"] = {
-            "valueof": {
-                "parameter_longname": user_id,
-                "parameter_shortname": user_id,
-                "parameter_type": 0,
-                "parameter_mmax": 127.0,
-                "parameter_mmin": 0.0,
-            }
-        }
-
     # Presentation
     pres = obj_spec.get("presentation")
     if pres:
@@ -868,8 +854,22 @@ def extract_spec(maxpat):
 # Box IDs that are internal Claude2Max scaffolding, never spec objects
 _SKIP_BOX_IDS = {"obj-spec-embed", "obj-title"}
 
-# Box attrs to carry back into spec (styling only)
-_PRESERVE_ATTRS = {"bgcolor", "textcolor", "color", "fontsize", "fontface", "fontname"}
+# Box attrs to carry back into spec on sync.
+# Anything Max stores on a box that affects appearance, identity, or runtime
+# behavior must be listed here — otherwise sync drops it from the spec and the
+# next convert cycle erases it from the .maxpat. Tutorial breakage rules:
+#   - identity: varname (scripting name — referenced by JS via patcher.getnamed())
+#   - visibility: hidden (panels/annotations start hidden; JS unhides current step)
+#   - z-order: background (panels render BEHIND highlighted objects, not on top)
+#   - panel chrome: bordercolor / border / rounded / locked_bgcolor
+#   - styling: bgcolor / textcolor / color / fontsize / fontface / fontname
+#   - bubble comments: bubble / bubbleside / bubblepoint / bubbletextmargin
+_PRESERVE_ATTRS = {"bgcolor", "textcolor", "color", "fontsize", "fontface", "fontname",
+                   "varname", "hidden", "background", "bordercolor", "border",
+                   "rounded", "locked_bgcolor",
+                   "bubble", "bubbleside", "bubblepoint", "bubbletextmargin",
+                   "bubble_bgcolor",   # bubble comments use this, NOT plain bgcolor
+                   "items", "prefix"}   # umenu menu items + auto-prefix
 
 
 def _collect_boxes(maxpat):
@@ -1067,6 +1067,28 @@ def reconcile_spec(existing_spec, maxpat):
                 updated["text"] = box_text
             elif "text" in updated:
                 del updated["text"]
+        # Re-extract preserved attrs (varname, styling, hidden) from the live box
+        # so manual edits in Max are captured. Merge into existing spec attrs;
+        # box value wins on conflict because the live patch is the source of truth.
+        merged_attrs = dict(updated.get("attrs", {}))
+        for k in _PRESERVE_ATTRS:
+            if k not in box:
+                continue
+            val = box[k]
+            if k == "fontsize" and val == DEFAULT_FONT_SIZE:
+                merged_attrs.pop(k, None)
+                continue
+            if k == "fontface" and val == 0:
+                merged_attrs.pop(k, None)
+                continue
+            if k == "fontname" and val == DEFAULT_FONT_NAME:
+                merged_attrs.pop(k, None)
+                continue
+            merged_attrs[k] = val
+        if merged_attrs:
+            updated["attrs"] = merged_attrs
+        elif "attrs" in updated:
+            del updated["attrs"]
         updated_objects[sid] = updated
 
     # New boxes (no spec entry)

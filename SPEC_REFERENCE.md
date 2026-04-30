@@ -155,7 +155,22 @@ These automatically get `parameter_enable` set:
 
 | Type | Description |
 |------|-------------|
-| `"jit.pwindow"` | Jitter display window |
+| `"jit.pwindow"` | Jitter display window (embedded in patcher) |
+
+**Video/GL display — prefer `jit.world` over `jit.gl.render` + `jit.window`.** `jit.gl.render` + `jit.window` is semi-deprecated. For any patch that needs to display a matrix or GL output in a floating window:
+
+```json
+{
+  "type": "newobj",
+  "text": "jit.world @floating 1 @title \"My Window\"",
+  "pos": [400, 500],
+  "inlets": 1,
+  "outlets": 1,
+  "outlettype": ["bang"]
+}
+```
+
+Send a `jit_matrix` directly to `jit.world`'s inlet — no `jit.gl.layer`, `jit.gl.render`, or explicit render-trigger chain needed for simple matrix display. For GL compositing with `jit.gl.layer`, name the context: `jit.world ctx @floating 1` and `jit.gl.layer ctx`; they share the context automatically.
 
 ## jit.cellblock Notes
 
@@ -205,6 +220,60 @@ Most Max objects only trigger output from inlet 0 (hot). These objects have two 
 ### Signal type compatibility
 
 Signal outlets (`"signal"`) can only connect to signal-accepting inlets. If you wire a signal outlet to a control inlet, Max will silently ignore or error. Use `snapshot~` to convert signal → control, and `sig~` to convert control → signal.
+
+### Attribute groups: an enable switch without its bounds is a no-op
+
+Many Max attributes are toggles that only do anything in combination with companion attributes that supply the actual parameters. Setting the toggle alone is misleading clutter — at best a no-op, at worst it implies behavior the patch does not have.
+
+For instance, on `jit.matrix`:
+
+| Toggle | Required companions |
+|--------|--------------------|
+| `@usedstdim 1` | `@dstdimstart`, `@dstdimend` (output region) |
+| `@usesrcdim 1` | `@srcdimstart`, `@srcdimend` (input region) |
+
+`jit.matrix 4 char 640 360 @usedstdim 1` (no start/end) does nothing — the matrix already has the dimensions implied by its constructor args. Either set the full group or omit the toggle.
+
+The principle generalizes beyond Jitter: any attribute that gates a feature whose actual bounds live in companion attributes must be set as a group. Before adding any single attribute, check the refpage for siblings — `RefpageCache.describe(obj_name)` lists them.
+
+### Info outlets: query message in, route on the way out
+
+Many objects expose a query/response interface on their info outlet rather than continuously emitting raw values. The outlet emits prefixed messages like `nfaces N`, `dim 640 480`, `type char` — not bare integers. Wiring such an outlet directly into arithmetic or comparison (e.g. `> 0`) silently never fires, because the comparison receives a list whose first element is a symbol.
+
+The pattern is always two-step:
+1. **Query**: send a `get<param>` message (e.g. `getnfaces`, `getdim`) to the object's hot inlet to trigger the response.
+2. **Route**: place `route <selector>` on the info outlet to strip the prefix and expose the raw value(s).
+
+For instance, to get a face count from `cv.jit.faces` and threshold it:
+
+```
+[t b l] ── l → [cv.jit.faces] (right outlet) → [route nfaces] → [> 0]
+   │
+   b → [getnfaces] → [cv.jit.faces] (inlet 0)
+```
+
+The trigger sequences "matrix in first, then query" — `t b l` fires `l` (matrix to faces) before `b` (bang the getnfaces message). Common objects with this pattern: `cv.jit.faces` (`getnfaces`), `jit.matrix` (`getdim`, `gettype`, `getplanecount`), `buffer~` (`info`, `sizeinsamps`).
+
+### Audio parameter values: never infer behavior from the number alone — check the unit
+
+A parameter value is meaningless without its unit. The same number means different things on different objects: `0.0` is silence on a linear amplitude control (e.g. `*~ 0.`, a normalized 0–1 slider feeding a `*~`) but **unity gain** on a dB-scaled control (`live.gain~`, `live.dial @units dB`, `gain~` with default range). Numbers near `0` and `1` are especially ambiguous: `0` could be silence, unity, or center-pan; `1` could be unity or full-scale.
+
+Before describing what an audio parameter value does, verify the object's actual scale — read its refpage `@units` / `@range` / type description (or call `RefpageCache.describe(obj_name)` in `spec2maxpat.py`). Confirm the unit before stating behavior.
+
+### live.* objects on light-background themes: set @tricolor and @trioncolor
+
+`live.*` objects (e.g. `live.gain~`, `live.dial`) draw their drag arrow/triangle in two colors: `@tricolor` (unfocused) and `@trioncolor` (focused/selected). Both default to light values, making them invisible against a cream or white background.
+
+When placing a `live.*` object on a light-background theme (e.g. soviet, swiss, bauhaus), set both attributes to a dark ink value in the spec:
+
+```json
+"attrs": {
+  "tricolor":  [0.039, 0.039, 0.039, 1.0],
+  "trioncolor": [0.039, 0.039, 0.039, 1.0]
+}
+```
+
+Do **not** use `patcher.bglocked` as a workaround — it changes the patcher canvas color globally and does not reliably affect selection chrome on live objects.
 
 ## Object Relationships
 

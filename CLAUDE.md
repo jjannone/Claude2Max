@@ -4,7 +4,7 @@ This repo is a tool for generating Max/MSP patches from Claude-authored JSON spe
 
 **Audience**: This tool is designed for students with little coding or CLI experience. CLAUDE.md serves as the primary knowledge base — when their instance of Claude reads it, it should learn everything needed to work with Max/MSP, the spec format, and the converter without requiring prior expertise. Include helpful general information here even if it seems basic — students benefit from it and Claude instances need it to assist them effectively.
 
-## Rules from Corrected Errors
+## Rules from Corrected Errors {!pre-edit} {!pre-commit}
 
 After fixing any error, derive a general rule that would have prevented it. Present the proposed rule(s) to the user in plain language before writing them to CLAUDE.md or SPEC_REFERENCE.md. Only enshrine rules the user confirms. This keeps the knowledge base accurate and user-approved rather than accumulating unreviewed assumptions.
 
@@ -14,7 +14,7 @@ After fixing any error, derive a general rule that would have prevented it. Pres
 
 **Lead with intent, follow with example.** State what you're trying to achieve in plain terms first, then illustrate with a concrete case introduced as "for instance." This keeps the principle readable and applicable broadly, while still giving actionable guidance. Rules that lead with a specific method risk being read as recipes rather than principles.
 
-## Verify External State — Never Assert from Memory
+## Verify External State — Never Assert from Memory {!pre-edit}
 
 Before making any claim about the state of an external or shared system — GitHub repo visibility, remote branch status, CI results, whether a file exists on a remote, whether a service is available — verify it with the appropriate tool first. Memory, inference from local context, and reasonable assumptions are not sufficient. A wrong assertion is worse than a delayed one.
 
@@ -22,13 +22,41 @@ For example: don't say a repo is private because it looks like a personal projec
 
 This applies beyond GitHub to any external state that can change independently of the local working directory.
 
-## When Building a New Version from an Existing Patch
+## Reference Instances Illustrate Principles — They Don't Constitute Them {!pre-edit}
+
+When a rule, checklist, or repair procedure refers to "what correct looks like," enshrine the **structural contract** (the attributes, invariants, shape) — not a specific file as the source of truth. Specific files are illustrations introduced as "for instance," and they may be renamed, edited, or deleted without the rule needing to change. A rule pinned to a file becomes wrong the moment that file moves; a rule pinned to the contract stays correct as long as the contract holds.
+
+This is a corollary of "always generalize before enshrining." It applies anywhere a working example is being used as a reference: tutorial structure, patch conventions, file layout, JS module shape, anything. Before writing "match the way `<file>` does it," ask: what are the actual properties this file has that make it correct? Write those. Then mention the file as one place to see them, not as the rule itself.
+
+## Partial Answers Are Not Consent — Re-Ask the Unanswered Part {!pre-edit}
+
+When asking the user a multi-part clarifying question (e.g. "should I do A like X or Y? and should B be P or Q?"), and the user replies addressing only some of the parts, the silence on the others is **not** authorization to proceed with my best guess. The right behavior is to act on what was answered, then re-ask the unanswered parts — or hold all action until the full picture is clarified.
+
+Acting on my own interpretation of an un-answered branch produces work the user didn't authorize and that may need to be undone. The cost of one short follow-up question is much lower than the cost of restoring an unintended change.
+
+## Flag Natural Clearing Points — Proactively Suggest Clearing the Conversation
+
+Long conversations accumulate context that becomes load-bearing for less and less of the active work. When a natural completion point is reached, **proactively tell the user to clear the conversation** (`/clear` in Claude Code) so the next session starts fresh and cheap. Don't wait to be asked.
+
+A clearing point is "natural" only when ALL of the following hold:
+
+- A substantial task or arc is complete — no in-flight iteration, no "I'll fix that next" state
+- All decisions, rules, and learnings have been persisted to repo files (`CLAUDE.md`, `SPEC_REFERENCE.md`, `MAX_PATCHING.md`, `TUTORIAL_GUIDELINES.md`, `WORK_HISTORY.md`, etc.) — the next session can rebuild context purely from disk
+- The session's work has been logged to `WORK_HISTORY.md`
+- No pending verification is owed (e.g. "check that this works in Max and let me know")
+- The user is not mid-decision on something where the conversation's recent reasoning is the working memory
+
+Bad clearing points (do NOT suggest clearing here): mid-debug, mid-iteration, after a partial fix that hasn't been verified, when a queued external check is pending, or when the user is exploring options whose tradeoffs were just weighed in the conversation.
+
+When you do flag a clearing point: (a) confirm `WORK_HISTORY.md` has the session's summary; (b) ask the user to verify any pending changes in the actual application (Max patch, generated file, etc.) before clearing — easier to iterate while context is warm than after a cold restart; (c) note any chips/follow-ups you'd otherwise carry mentally, so they survive into the next session via files rather than memory.
+
+## When Building a New Version from an Existing Patch {!pre-edit}
 
 - **Retain all default values.** Any `loadbang → init` chain, `loadmess`, or hardcoded default in the JS must survive unchanged into the new version. Defaults represent deliberate configuration — they are not incidental and must not be silently dropped.
 
 - **Preserve wiring integrity when modifying patches programmatically.** Patchlines reference boxes by `id`, so renaming a box that has connections silently breaks all wiring to and from it. Keep original IDs intact; only assign new IDs to newly added boxes.
 
-## Never Regress Functionality When Changing Modality
+## Never Regress Functionality When Changing Modality {!pre-edit}
 
 **General rule**: when any working feature — display, control, behavior, format — is moved, replaced, or reimplemented in a different modality, it must arrive at least as capable as it left. A change of modality is not a reason to lose functionality.
 
@@ -81,7 +109,7 @@ Read and review the entire Claude2Max repo before starting — `CLAUDE.md`, `SPE
 
 ## Workflow
 
-### Working on an existing patch — sync first, always
+### Working on an existing patch — sync first, always {!pre-edit}
 
 **Before any work on an existing .maxpat**, run sync to capture manual edits the user made in Max:
 
@@ -91,7 +119,9 @@ python3 spec2maxpat.py sync -i patches/patch.maxpat
 
 Update your working spec from the sync output, then make changes, then convert. No exceptions — not even for small fixes. `convert` regenerates the .maxpat from scratch and will silently destroy moved objects, added/deleted objects, hidden objects, and hidden cords.
 
-### Spec files are temporary — do not leave them in the project
+**The sync-first rule applies to any source of edits — not just user GUI changes.** Any direct modification to a .maxpat — whether a user edit in Max's GUI or a programmatic post-processing script — is invisible to the embedded spec and will be silently overwritten on the next `convert`. After any direct .maxpat modification, run `sync` immediately to fold the change back into the embedded spec before doing anything else.
+
+### Spec files are temporary — do not leave them in the project {!pre-edit}
 
 The spec is embedded inside every `.maxpat`. Standalone `.json` spec files are only needed as a scratch file during `convert`. Write them to `/tmp/` (or any temp location) rather than the project folder, then delete after converting. The `.maxpat` is the single source of truth; extract the spec from it whenever you need to read or edit it.
 
@@ -193,14 +223,36 @@ The `mct_encode` and `mct_decode` functions in `spec2maxpat.py` implement this e
 - `SPEC_REFERENCE.md` — **Read this first.** Complete spec format reference with all object types, connection format, layout guidelines, presentation view, and worked examples.
 - `spec2maxpat.py` — The converter. Handles inlet/outlet profiles for 1,694 Max objects (via `max_objects.json`), auto-layout, subpatchers, and spec embedding.
 - `max_objects.json` / `build_objects_db.py` — **Deleted.** I/O data now comes directly from the C74 maxref.xml files via `RefpageCache` in `spec2maxpat.py`.
+- `package_objects.json` / `build_package_objects.py` — Curated reference of installed Max package objects with `use_when` judgments. See "Consult Installed Packages Before Long Native Chains" below.
+
+## Consult Installed Packages Before Long Native Chains
+
+When considering how to implement something, check whether an installed Max package already provides it as a single object before composing a chain of native objects. Package objects often handle edge cases, performance, and conventions that a hand-rolled native chain misses.
+
+`package_objects.json` is the curated reference: keyed by package name then object name, each entry has the digest, I/O counts, and a `use_when` field describing when the object beats the native equivalent. Read `use_when` first — that's the field that decides.
+
+Coverage is partial. Only curated packages are present, and within those only objects that meaningfully outperform native chains. Absence from the library means "not yet curated," not "no advantage." To extend coverage:
+
+```bash
+python3 build_package_objects.py --package "<package name>" --merge package_objects.json
+```
+
+Then fill the empty `use_when` fields in `package_objects.json` for the objects worth keeping. Skip pure alternatives with no advantage over built-ins.
 
 ## What the Converter Handles for You
 
 - Correct `numinlets`, `numoutlets`, `outlettype` for known objects
 - Variable-argument objects (trigger, pack, unpack, select, route, gate, etc.)
-- `parameter_enable` and `saved_attribute_attributes` for `live.*` objects
 - Spec embedding as hidden `text.codebox` for round-tripping
 - Auto-layout (but always use explicit `pos` — auto-layout is a fallback)
+
+## Converter Design Rule — Match Max's Defaults, Never Exceed Them {!pre-edit}
+
+The converter should only add attributes that Max doesn't set by default. The goal is to match what you'd get from a fresh object instantiation in Max, plus whatever the spec explicitly requests. Injecting "helpful" extras — even well-intentioned ones — overrides Max's defaults and can lock controls, suppress normal behavior, or produce states the user never asked for.
+
+For instance: `live.*` objects were getting `parameter_enable: 1` and `saved_attribute_attributes` unconditionally, but a freshly placed `live.gain~` in Max has neither. The injected attrs forced parameter automation state on load, locking the gain slider. The correct behavior: don't add them unless the spec asks for them.
+
+**When adding any auto-generated attr to the converter, verify first by creating the object fresh in Max and inspecting its JSON — only inject what's absent but required for correct wiring, never what's absent because Max intentionally leaves it unset.**
 
 ## Modifying Externally-Sourced Patches
 
@@ -343,7 +395,19 @@ No external dependencies or build steps. `spec2maxpat.py` looks up I/O counts di
 
 Hand-verified entries in `NEWOBJ_IO` inside `spec2maxpat.py` always take precedence — those correct cases where even the official docs are wrong (e.g. `gain~` outlet 1 type).
 
-## Keeping Docs in Sync
+## Admonition Tags — How At-Action-Point Reminders Work
+
+Some headings in this file (and in any `*.md` at the repo root) end with tags like `{!pre-edit}` or `{!pre-commit}`. These mark sections that should be re-surfaced at a specific moment of action.
+
+The mechanism: `hooks/inject_admonitions.py <event>` runs as a `PreToolUse` hook on `Edit`/`Write` (with event `pre-edit`) and on `Bash` (with event `pre-commit`). It scans every `*.md` at the repo root for headings tagged with the matching `{!<event>}` marker, extracts each tagged section (heading through the next heading at the same or higher level), and injects them as `additionalContext` into Claude's next turn. Gates: `pre-edit` skips `/tmp/` and `/var/folders/`; `pre-commit` only fires when the Bash command contains the literal string `git commit`.
+
+**Adding a new admonition** is a one-tag edit: append `{!pre-edit}` or `{!pre-commit}` (or both) to the heading of any rule that should be re-surfaced at that moment. No Python changes needed. The rule and its at-action-point reminder are guaranteed-identical text — they cannot drift.
+
+**For students cloning the repo:** if you see `{!pre-edit}` in a heading, that's a tag, not part of the rule's title. The rest of the heading reads normally.
+
+**Known false positive:** the `pre-commit` matcher fires on any Bash command whose text contains `git commit`, including heredocs, log entries, or commands that merely mention `git commit` in a string literal. Harmless (the hook is advisory) but noisy.
+
+## Keeping Docs in Sync {!pre-commit}
 
 Whenever you learn something new about Max behavior, fix a bug, or add/change a feature, **immediately** propagate that knowledge to all relevant files before committing:
 
@@ -401,7 +465,7 @@ From that point forward in the session:
 - Mark entries `**[PR candidate]**` when they seem broadly useful (not just specific to this user's patch)
 - At the end of the session, if there are any PR candidates, remind the user: "There are N entries in `insights.md` marked as PR candidates — consider opening a pull request to share them upstream."
 
-## Work History
+## Work History {!pre-commit}
 
 **At the start of every conversation, and after any gap of more than one hour within a conversation:**
 1. Read `WORK_HISTORY.md` to get up to date with recent changes.
