@@ -1,6 +1,10 @@
 # macOS
 .DS_Store
 
+# Python build artifacts
+__pycache__/
+*.pyc
+
 # Claude Code — local personal overrides (not for sharing)
 .claude/settings.local.json
 .claude/worktrees/

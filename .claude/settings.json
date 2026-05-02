@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 hooks/sync_maxpat.py",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/hooks/sync_maxpat.py\"",
             "statusMessage": "Syncing .maxpat spec..."
           }
         ]
@@ -16,8 +16,18 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 hooks/pre_commit_review.py",
-            "statusMessage": "Reviewing CLAUDE.md checklist..."
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/hooks/inject_admonitions.py\" pre-commit",
+            "statusMessage": "Surfacing pre-commit admonitions..."
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/hooks/inject_admonitions.py\" pre-edit",
+            "statusMessage": "Surfacing pre-edit admonitions..."
           }
         ]
       }
@@ -27,7 +37,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 hooks/sync_pasted_maxpat.py",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/hooks/sync_pasted_maxpat.py\"",
             "statusMessage": "Checking for pasted .maxpat..."
           }
         ]
