@@ -50,6 +50,8 @@ var STEPS         = [
 ];
 var ANNOTATION_IDS = ["tut-ann-0", "tut-ann-1", "tut-ann-2", "tut-ann-3", "tut-ann-4", "tut-ann-5", "tut-ann-6", "tut-ann-7", "tut-ann-8", "tut-ann-9"];
 var PANEL_IDS      = ["tut-panel-0", "tut-panel-1", "tut-panel-2", "tut-panel-3", "tut-panel-4", "tut-panel-5", "tut-panel-6", "tut-panel-7", "tut-panel-8", "tut-panel-9"];
+var STOW_RECT     = [10.0, 900.0, 70.0, 924.0];
+var ACTIVE_RECTS  = [[370.0, 60.0, 590.0, 146.0], [437.0, 5.0, 657.0, 109.0], [154.0, 117.0, 374.0, 239.0], [409.0, 478.0, 629.0, 582.0], [142.0, 69.0, 362.0, 137.0], [507.0, 541.0, 727.0, 627.0], [288.0, 269.0, 508.0, 391.0], [327.0, 477.0, 547.0, 545.0], [477.0, 640.0, 697.0, 780.0], [322.0, 788.0, 542.0, 856.0]];
 
 var currentStep = -1;
 
@@ -78,24 +80,30 @@ function gotoStep(step) {
 
     var p = this.patcher;
 
-    // Hide all panels and annotation comments
-    for (var i = 0; i < PANEL_IDS.length; i++) {
-        var obj = p.getnamed(PANEL_IDS[i]);
-        if (obj) obj.hidden = 1;
-    }
+    // Hide and stow ALL annotations and panels (so the previous step clears).
     for (var i = 0; i < ANNOTATION_IDS.length; i++) {
         var obj = p.getnamed(ANNOTATION_IDS[i]);
+        if (obj) {
+            obj.hidden = 1;
+            obj.rect = STOW_RECT;
+        }
+    }
+    for (var i = 0; i < PANEL_IDS.length; i++) {
+        var obj = p.getnamed(PANEL_IDS[i]);
         if (obj) obj.hidden = 1;
     }
 
     currentStep = step;
 
-    // Show this step's panel and annotation
+    // Show this step's panel; show + reposition this step's annotation.
     var panel = p.getnamed(PANEL_IDS[step]);
     if (panel) panel.hidden = 0;
 
     var ann = p.getnamed(ANNOTATION_IDS[step]);
-    if (ann) ann.hidden = 0;
+    if (ann) {
+        ann.rect    = ACTIVE_RECTS[step];
+        ann.hidden  = 0;
+    }
 
     post("Tutorial step " + step + ": " + STEPS[step].name + "\n");
 }
