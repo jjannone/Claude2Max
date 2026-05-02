@@ -1,0 +1,181 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+ * Theme: BAUHAUS · Bayer · Moholy-Nagy · Albers · Schmidt — Dessau 1923–1933
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * # ENERGY & INTENT
+ * Geometric primary-color rationalism. Form IS content. The interface
+ * conveys: "every shape and color carries meaning, derived from first
+ * principles." Bayer's universal lowercase sans. Bayer's primitive mapping:
+ * RED is the CIRCLE, BLUE is the SQUARE, YELLOW is the TRIANGLE — this is
+ * sacred and never violated. ONE primitive per section as visual anchor.
+ * Geometric grid with thin black hairlines. Cream paper ground. Where
+ * Swiss is grid + type, Bauhaus is grid + primitive shapes. Where Memphis
+ * is playful pattern-clash, Bauhaus is rigorous geometric reduction.
+ * Modernist optimism — every element earns its place by formal logic.
+ *
+ * # LAYOUT STRATEGY
+ * Geometric primitives as section anchors. Each section gets ONE LARGE
+ * primitive (red circle, blue square, OR yellow triangle, never two)
+ * positioned at the section's left or top as its visual identity. The
+ * primitive is THE section marker — text becomes secondary. Geometric
+ * grid of thin black hairlines provides understructure. Lowercase labels
+ * throughout (Bayer's universal type principle). Rationalist arrangement —
+ * elements positioned by formal logic, not aesthetic feel.
+ *
+ * # TYPOGRAPHY HIERARCHY
+ * - Display: Archivo Black, Helvetica Neue Black (geometric heavy weight).
+ * - Title: Archivo Black, lowercase, 28–36px, fg-primary (ink). Lowercase
+ *   universal type — never capital letters except for proper nouns.
+ * - Section header: Archivo lowercase, 16–20px, fg-primary, often paired
+ *   with the section's primitive shape inline.
+ * - Body labels: Archivo or Inter Regular, lowercase, 11–12px, fg-primary.
+ * - Readouts: JetBrains Mono, 11–12px, fg-primary.
+ * - LOWERCASE is the typographic signature (Bayer's universal alphabet).
+ *   Even acronyms lowercase — "bpm" not "BPM". Numerals always Arabic.
+ *
+ * # COLOR APPLICATION RULES
+ * - bg-base cream (#f5f1e8): the page. Modernist paper.
+ * - bg-deep / bg-sunken: subtle paper variants. Used very rarely.
+ * - accent-1 red (#e63946): RESERVED for the CIRCLE primitive. Never
+ *   use as a square or rectangular fill. Red = curved geometry.
+ * - accent-2 blue (#1d4ed8): RESERVED for the SQUARE primitive. Never
+ *   use red or yellow squares. Blue = rectangular geometry.
+ * - accent-3 yellow (#fbbf24): RESERVED for the TRIANGLE primitive.
+ *   Never use as text or circle/square fill. Yellow = angular geometry.
+ * - fg-primary (ink): all body text and hairlines.
+ * - The PRIMARY TRIAD has a BAYER MAPPING — red↔circle, blue↔square,
+ *   yellow↔triangle — never violate it. This is the theme's first principle.
+ *
+ * # PANELS & CONTAINERS
+ * - Sharp corners (rounded:0) for square/rectangular panels.
+ * - Pill (rounded:999) ONLY for actual circular elements.
+ * - Solid fills in the primary triad — when a panel is colored, it's
+ *   either red (circular shape), blue (rectangular shape), or yellow
+ *   (triangular composition).
+ * - Thin black hairline grid (border:1, stroke-base) as overall framing.
+ * - The grid is the foundation; primitives sit on it.
+ *
+ * # DIVIDERS
+ * - Thin black hairlines (1px ink at stroke-base alpha 0.10).
+ * - OR: a primitive at section break — small red circle, blue square,
+ *   or yellow triangle as a meaningful divider.
+ * - NEVER use a colored bar — that's Soviet/Swiss territory.
+ *
+ * # INTERACTIVE CONTROLS
+ * - Number boxes: bgcolor=bg-base, textcolor=fg-primary, tricolor=
+ *   accent-2 (blue — the rectangular trigger), tribordercolor=fg-primary,
+ *   bordercolor=fg-primary (1px ink).
+ * - Read-only displays: same; tricolor matched to bg, ignoreclick:1.
+ * - Toggle: bgcolor=bg-base, checkedcolor=accent-1 (red — the action,
+ *   the circle of activation), bordercolor=fg-primary.
+ * - Multislider: bgcolor=bg-base, slidercolor=accent-2 (blue) or
+ *   accent-1 (red), peakcolor=fg-primary. Geometric simplicity.
+ * - Buttons: rectangular outlined panels (sharp corners) OR circular
+ *   panels (pill rounded) depending on which primitive the action
+ *   represents. Geometric semantic mapping.
+ *
+ * # SPECIAL ZONES
+ * - Output zone: anchored by a YELLOW TRIANGLE — the transmission /
+ *   broadcast metaphor. Implement as `jsui` triangle outline.
+ * - Title section: anchored by a RED CIRCLE — the focal point.
+ * - Body sections: anchored by BLUE SQUARES — the structural blocks.
+ * - live.gain~: warmcolor=accent-2 (blue, for slider rectangle),
+ *   hotcolor=accent-1 (red, for activation), slidercolor=accent-2,
+ *   textcolor=fg-primary, bordercolor=fg-primary.
+ * - ezdac~: bgcolor=bg-base, color=accent-1 (red, on — the circular
+ *   speaker icon glows red), elementcolor=fg-primary (off, ink).
+ *
+ * # DECORATIVE ELEMENTS (signature)
+ * - ONE LARGE PRIMITIVE per section: red circle, blue square, OR yellow
+ *   triangle as visual anchor. The primitive is sized 40–80px and
+ *   positioned as the section identifier.
+ * - GEOMETRIC GRID of thin black hairlines (1px ink, low alpha) as
+ *   understructure — visible faintly across the canvas.
+ * - LOWERCASE labels everywhere.
+ * - Optional: small primitive icons (16–24px) inline with section
+ *   labels — a tiny circle next to "audio", a tiny square next to
+ *   "control", a tiny triangle next to "output."
+ * - Geometric symmetry where possible — alignment is by grid, not feel.
+ *
+ * # FONTS
+ * - Display: Archivo Black, Helvetica Neue Black (geometric weight).
+ * - UI: Archivo, Inter (geometric humanist).
+ * - Mono: JetBrains Mono.
+ * - In Max: fontname="Helvetica Neue Black" (closest to Archivo Black);
+ *   fontname="Helvetica Neue" for body; fontname="Menlo" for mono.
+ *
+ * # MAX-SPECIFIC NOTES
+ * - For the RED CIRCLE: a `panel` with bgcolor=accent-1, w=h (square
+ *   bounding box), rounded=999 (forces pill = full circle when w=h).
+ *   Or use `jsui` for a precise filled circle.
+ * - For the BLUE SQUARE: a `panel` with bgcolor=accent-2, rounded=0,
+ *   sharp corners, w=h.
+ * - For the YELLOW TRIANGLE: a `jsui` object drawing a filled triangle
+ *   (no native Max panel does triangles). Set ignoreclick=1 if decorative.
+ * - For the geometric grid: a `jsui` object covering the full presentation,
+ *   drawing thin black lines at 32–48px pitch, low alpha (~0.08).
+ * - For section labels: actual lowercase comment text — Max doesn't
+ *   transform case.
+ * - Lowercase rule: write all comment text in lowercase. "audio" not
+ *   "AUDIO" or "Audio."
+ *
+ * # DON'TS
+ * - NEVER violate the Bayer mapping — red ≠ square, blue ≠ circle,
+ *   yellow ≠ rectangle. Sacred.
+ * - No serif fonts.
+ * - No curves except for circles.
+ * - No upper case in lowercase contexts (which is everywhere).
+ * - No gradient, no glow, no shadow. None.
+ * - No more than one primitive per section — the discipline is one anchor.
+ * - No mixing primitives within one shape (e.g., a circle inside a
+ *   square confuses the mapping).
+ * - No decorative line-work besides the geometric grid.
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+[data-theme="bauhaus"], .theme-bauhaus {
+  --c2m-font-mono:    "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+  --c2m-font-display: "Archivo Black", "Helvetica Neue", system-ui, sans-serif;
+  --c2m-font-ui:      "Archivo", "Helvetica Neue", system-ui, sans-serif;
+
+  --c2m-bg-void:    #ebe5d3;
+  --c2m-bg-deep:    #f0ead8;
+  --c2m-bg-base:    #f5f1e8;
+  --c2m-bg-raised:  #faf6ed;
+  --c2m-bg-sunken:  #e3ddca;
+  --c2m-bg-tooltip: #0a0a0a;
+
+  --c2m-fg-primary:   #1a1a1a;
+  --c2m-fg-secondary: #555555;
+  --c2m-fg-muted:     #888888;
+  --c2m-fg-disabled:  #c0bfb6;
+  --c2m-fg-on-accent: #f5f1e8;
+
+  --c2m-stroke-faint:  rgba(26,26,26,0.10);
+  --c2m-stroke-base:   rgba(26,26,26,0.30);
+  --c2m-stroke-strong: rgba(26,26,26,1.00);
+
+  --c2m-accent-1:     #e63946;       /* red — circle */
+  --c2m-accent-2:     #1d4ed8;       /* blue — square */
+  --c2m-accent-3:     #fbbf24;       /* yellow — triangle */
+  --c2m-accent-1-tint: rgba(230,57,70,0.10);
+  --c2m-accent-2-tint: rgba(29,78,216,0.10);
+
+  --c2m-status-ok:   #1d4ed8;
+  --c2m-status-warn: #fbbf24;
+  --c2m-status-err:  #e63946;
+  --c2m-status-info: #1d4ed8;
+
+  --c2m-radius-sm:   0px;
+  --c2m-radius-md:   0px;
+  --c2m-radius-pill: 999px;     /* circles allowed; rectangles stay sharp */
+
+  --c2m-glow-1:   none;
+  --c2m-glow-2:   none;
+  --c2m-glow-err: none;
+
+  --c2m-frame-rail-show: 0;
+  --c2m-frame-scanline:  none;
+  --c2m-frame-grain:     none;
+  --c2m-frame-corner:    sharp;
+}

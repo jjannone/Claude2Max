@@ -305,8 +305,16 @@ class RefpageCache:
         numinlets  = len(inletlist.findall("inlet")) if inletlist is not None else 1
         outletlist = root.find("outletlist")
         if outletlist is not None:
-            outlets    = sorted(outletlist.findall("outlet"),
-                                key=lambda o: int(o.get("id", 0)))
+            # Outlet `id` should be an int but third-party refpages occasionally
+            # carry non-numeric markers (e.g. odot uses `id="1--"`). Tolerate by
+            # falling back to source order when an id can't be coerced.
+            def _outlet_key(o, _i=[0]):
+                _i[0] += 1
+                try:
+                    return int(o.get("id", _i[0]))
+                except ValueError:
+                    return _i[0]
+            outlets    = sorted(outletlist.findall("outlet"), key=_outlet_key)
             numoutlets = len(outlets)
             outlettype = [self._outlet_type(o.get("type", "")) for o in outlets]
         else:
@@ -323,9 +331,14 @@ class RefpageCache:
             aname = attr.get("name", "")
             if not aname:
                 continue
+            raw_size = attr.get("size", "1")
+            try:
+                size_val = int(raw_size)
+            except ValueError:
+                size_val = raw_size
             entry = {
                 "type":    attr.get("type", ""),
-                "size":    int(attr.get("size", 1)),
+                "size":    size_val,
                 "default": attr.get("default", ""),
                 "get":     attr.get("get", "1") == "1",
                 "set":     attr.get("set", "1") == "1",
@@ -423,6 +436,82 @@ class RefpageCache:
         return self._cache[name]
 
 REFPAGE_CACHE = RefpageCache()
+
+
+class PackageObjectsCache:
+    """
+    Lazy lookup of installed-package object I/O from package_objects.json.
+
+    Used by `guess_newobj_io` as a fallback after the built-in NEWOBJ_IO table
+    and the Cycling '74 RefpageCache both miss — covers third-party externals
+    and abstractions that aren't documented in C74 refpages but are documented
+    in the curated package library.
+
+    The library is treated as advisory: if the file is missing, malformed, or
+    the requested object isn't present, lookup() returns None and the caller
+    falls through to whatever spec-supplied overrides the user provided.
+    """
+
+    DEFAULT_PATH = Path(__file__).parent / "packages" / "package_objects.json"
+
+    def __init__(self, path=None):
+        self._path = Path(path) if path else self.DEFAULT_PATH
+        self._index = None  # {object_name: io_dict} — built on first lookup
+
+    def _build_index(self):
+        if not self._path.exists():
+            self._index = {}
+            return
+        try:
+            with self._path.open() as f:
+                data = json.load(f)
+        except (json.JSONDecodeError, OSError):
+            self._index = {}
+            return
+
+        # Flatten {pkg: {obj: rec}} -> {obj: io_record}.
+        # If the same object name appears in multiple packages (rare but
+        # possible), the first one wins — package iteration order is alphabetic
+        # via dict insertion order. A future refinement could prefer entries
+        # where `kind == "external"` over abstractions, but in practice
+        # collisions don't happen for objects worth fallback-resolving.
+        index = {}
+        for pkg, objs in data.items():
+            for name, rec in objs.items():
+                if name in index:
+                    continue
+                # Only entries with a real I/O signature are useful as fallback.
+                # Helpfile-derived records sometimes have numinlets=0 because
+                # the canonical instance couldn't be found — skip those.
+                if rec.get("numinlets", 0) == 0 and rec.get("numoutlets", 0) == 0:
+                    continue
+                index[name] = {
+                    "numinlets":  rec.get("numinlets", 1),
+                    "numoutlets": rec.get("numoutlets", 0),
+                    "outlettype": rec.get("outlettype", []),
+                    "_package":   pkg,
+                }
+        self._index = index
+
+    def lookup(self, name):
+        """Return I/O dict (numinlets/numoutlets/outlettype) or None."""
+        if self._index is None:
+            self._build_index()
+        rec = self._index.get(name)
+        if rec is None:
+            return None
+        # Strip metadata key before returning to caller
+        return {k: v for k, v in rec.items() if not k.startswith("_")}
+
+    def package_of(self, name):
+        """Return the package the object came from, or None."""
+        if self._index is None:
+            self._build_index()
+        rec = self._index.get(name)
+        return rec.get("_package") if rec else None
+
+
+PACKAGE_OBJECTS_CACHE = PackageObjectsCache()
 
 # Fixed sizes for UI objects
 UI_SIZES = {
@@ -556,6 +645,14 @@ def guess_newobj_io(text):
     refpage = REFPAGE_CACHE.lookup(obj_name)
     if refpage is not None:
         return dict(refpage)
+
+    # Final fallback: curated installed-package library. Covers third-party
+    # externals/abstractions that aren't in C74 refpages but have been
+    # documented in package_objects.json. Lets the user reference these
+    # objects in a spec without supplying inlets/outlets overrides.
+    pkg = PACKAGE_OBJECTS_CACHE.lookup(obj_name)
+    if pkg is not None:
+        return dict(pkg)
 
     return None
 

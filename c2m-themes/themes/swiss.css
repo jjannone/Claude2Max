@@ -1,0 +1,194 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+ * Theme: SWISS · International Typographic Style
+ *        Müller-Brockmann · Hofmann · Bill · Lohse · Ruder — 1955–1975
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * # ENERGY & INTENT
+ * Rigorous, calm, grid-disciplined. Type IS the layout — typography does
+ * the work that decoration does in other themes. The interface conveys:
+ * "this content has been thought about, edited down, and arranged
+ * mathematically." Massive section numerals as visual anchors. ONE red
+ * accent, used sparingly. Hairlines only — no curves, no glow, no shadow,
+ * no gradient. 12-column-grid energy. Cream paper, ink type. The OPPOSITE
+ * of Cyberpunk: where Cyberpunk shouts, Swiss listens. Where Memphis is
+ * playful, Swiss is rigorous. This is the design system for someone who
+ * believes information should arrive without ornament getting in the way.
+ *
+ * # LAYOUT STRATEGY
+ * STRICT LEFT-ALIGNED GRID. Every label.x and every value.x snaps to the
+ * same vertical guide. MASSIVE SECTION NUMERALS (≥ 56px display, indigo)
+ * serve as the primary section labels — the numeral IS the section
+ * identifier; smaller text beneath provides the descriptive name. BOLD
+ * RED HORIZONTAL RULE (4–6px tall, accent-1) sits UNDER each section
+ * title — this is the Swiss element, non-negotiable. Generous whitespace
+ * between sections. Whitespace is a structural element, not absence.
+ * Hairline strokes (1px ink, low alpha) for any other framing.
+ *
+ * # TYPOGRAPHY HIERARCHY
+ * - Display: Helvetica Neue Bold/Black, Inter Bold/Black, Arial Bold.
+ *   The heaviest weight available — Swiss type is volume.
+ * - Section numeral: Inter Bold or Helvetica Black, 56–72px, accent-3
+ *   indigo. THE anchor of each section. Numbered "01", "02", "03" in
+ *   massive type.
+ * - Title: Helvetica Neue Black, 32–44px, fg-primary (ink). Lowercase
+ *   acceptable; ALL CAPS acceptable. Never both in one layout.
+ * - Section header: Helvetica Neue Bold, 18–22px, fg-primary, paired
+ *   with the massive numeral.
+ * - Body labels: Helvetica/Inter Regular, 11–12px, fg-primary.
+ * - Readouts: JetBrains Mono, 11–12px, fg-primary. Tabular always.
+ * - The SCALE jump between numeral (huge) and body (small) IS the rhythm.
+ *   If a section has both at moderate size, the Swiss energy is gone.
+ *
+ * # COLOR APPLICATION RULES
+ * - bg-base cream (#f2efe8): the page. The dominant visible color.
+ * - bg-deep / bg-sunken: subtle paper tones. Swiss prefers no fills,
+ *   but if backgrounding is required, use these (very subtle).
+ * - accent-1 red (#d62828): THE one red. Used for:
+ *   * Section title rules (4–6px tall horizontal bar UNDER each title)
+ *   * Active-state highlights (slider tracks, on-toggle)
+ *   * Single-character emphasis (e.g., a red bullet at section start)
+ *   Used sparingly — when red appears, it commands the eye.
+ * - accent-2 ink (#1a1a1a): all text, hairlines, primary structure.
+ * - accent-3 indigo (#1d3a8a): SECTION NUMERALS only — never as body
+ *   decoration. Indigo is the "this is structure" signal.
+ * - fg-primary (ink): all body text.
+ * - WHITESPACE is a color — generous margins between sections.
+ *   Treat empty space as deliberate, not leftover.
+ *
+ * # PANELS & CONTAINERS
+ * - rounded: 0 (sharp). NEVER round.
+ * - Optional: thin ink hairline border (border:1, color=stroke-base
+ *   rgba(26,26,26,0.30)).
+ * - DEFAULT: NO FILLS — sections rely on whitespace and the red title
+ *   rule for separation. The bg-base cream shows through.
+ * - If a panel has a fill (rare), use bg-deep or bg-sunken (very subtle).
+ * - Layering: red rules at front (above any background), numerals in
+ *   front of any backgrounds, hairlines at back.
+ *
+ * # DIVIDERS
+ * - BOLD RED HORIZONTAL RULE (4–6px tall panel, accent-1, full container
+ *   width) UNDER each section title. THE Swiss element — non-negotiable.
+ * - No other dividers — let whitespace do the work.
+ * - DO NOT use hairline rules between every line of body text — Swiss
+ *   reserves the rule for structural emphasis.
+ *
+ * # INTERACTIVE CONTROLS
+ * - Number boxes: bgcolor=bg-base, textcolor=fg-primary, tricolor=accent-1
+ *   (red trigger), tribordercolor=fg-primary, bordercolor=fg-primary
+ *   (1px ink hairline border), fontname=monospace, fontsize=11.
+ * - Read-only displays: bgcolor=bg-deep, textcolor=fg-primary, tricolor
+ *   matched to bg, ignoreclick:1.
+ * - Toggle: bgcolor=bg-base, checkedcolor=accent-1 (red), bordercolor=
+ *   fg-primary.
+ * - Multislider: bgcolor=bg-base, slidercolor=accent-1 (red on cream),
+ *   peakcolor=fg-primary, bgfillcolor=bg-base. Hairline border.
+ * - Buttons: rectangular outlined panels with ink border + ink
+ *   bold-weight label. Active state: cream→ink fill swap.
+ * - Hairline borders, bold red triggers — the controls echo the
+ *   typographic rhythm.
+ *
+ * # SPECIAL ZONES
+ * - Output zone: visually identical to other sections (Swiss is uniform).
+ *   Or: subtle bg-deep fill — but the most-Swiss approach is uniformity.
+ * - live.gain~: warmcolor=accent-1, hotcolor=accent-1, slidercolor=
+ *   accent-1, textcolor=fg-primary, coldcolor=bg-deep, tricolor=accent-1,
+ *   bordercolor=fg-primary.
+ * - ezdac~: bgcolor=bg-base, color=accent-1 (on, red), elementcolor=
+ *   fg-primary (off, ink).
+ *
+ * # DECORATIVE ELEMENTS (signature)
+ * - MASSIVE SECTION NUMERALS (the anchor) — "01", "02", etc. in indigo
+ *   at 56–72px. Cannot be overstated.
+ * - BOLD RED RULE (4–6px tall) under every section title.
+ * - STRICT LEFT-EDGE ALIGNMENT — every label.x = same value.
+ * - Optional: 12-column thin guide lines via `jsui` (very low alpha ink),
+ *   useful only for designing the layout — hide when shipping.
+ * - MAXIMUM WHITESPACE between sections.
+ * - Optional: a single oversized character or glyph (Δ, *, §) as a
+ *   sectional marker, in indigo or accent-1.
+ *
+ * # FONTS
+ * - Display: Helvetica Neue Bold/Black, Inter Bold/Black, Arial Bold.
+ *   The heaviest weight available.
+ * - UI: Helvetica Neue, Inter.
+ * - Mono: JetBrains Mono, IBM Plex Mono.
+ * - In Max: fontname="Helvetica Neue Black" or "Helvetica Neue Bold" for
+ *   numerals/title; fontname="Helvetica Neue" or "Helvetica" for body;
+ *   fontname="Menlo" or "Courier" for mono.
+ *
+ * # MAX-SPECIFIC NOTES
+ * - For massive numerals: `comment` with text="01" (or section number),
+ *   fontname="Helvetica Neue Black", fontsize=56–72, textcolor=accent-3
+ *   indigo, positioned at x=11 (left margin), y=section-top.
+ * - For red section rule: `panel` with bgcolor=accent-1 (red), border=0,
+ *   rounded=0, h=4–6, w=full-container-width, positioned UNDER the
+ *   section title (y=title-bottom + 4).
+ * - For background: a single `panel` covering the full presentation in
+ *   bg-base cream. NO additional section panels.
+ * - All comments default to fontname="Helvetica Neue", fontsize=11,
+ *   textcolor=fg-primary unless explicitly numeral/title.
+ * - All controls get bordercolor=fg-primary at full opacity for the
+ *   1px-ink-line aesthetic.
+ *
+ * # DON'TS
+ * - NO curves. Everything is rectangles + sharp angles.
+ * - NO accent decoration beyond the red title rule + indigo numerals.
+ * - No mixed alignment — strict left throughout.
+ * - No gradients, no glow, no shadows. None.
+ * - No second red — accent-1 is the only red, used sparingly.
+ * - No timid title scale — section numerals MUST dominate. If you find
+ *   yourself making them smaller "for balance," you're wrong.
+ * - No serif fonts. No script fonts.
+ * - No more than ONE indigo per layout (the section numerals share one
+ *   indigo identity).
+ * - No center-alignment of body text. Always left.
+ * - No drop-shadow on text or panels.
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+[data-theme="swiss"], .theme-swiss {
+  --c2m-font-mono:    "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+  --c2m-font-display: "Inter", "Helvetica Neue", "Arial", system-ui, sans-serif;
+  --c2m-font-ui:      "Inter", "Helvetica Neue", system-ui, sans-serif;
+
+  --c2m-bg-void:    #e8e3d6;
+  --c2m-bg-deep:    #ede8da;
+  --c2m-bg-base:    #f2efe8;
+  --c2m-bg-raised:  #f7f4ee;
+  --c2m-bg-sunken:  #e0dccf;
+  --c2m-bg-tooltip: #1a1a1a;
+
+  --c2m-fg-primary:   #1a1a1a;
+  --c2m-fg-secondary: #555555;
+  --c2m-fg-muted:     #888888;
+  --c2m-fg-disabled:  #bdbdbd;
+  --c2m-fg-on-accent: #f2efe8;
+
+  --c2m-stroke-faint:  rgba(26,26,26,0.10);
+  --c2m-stroke-base:   rgba(26,26,26,0.30);
+  --c2m-stroke-strong: rgba(26,26,26,1.00);
+
+  --c2m-accent-1:     #d62828;       /* the one red */
+  --c2m-accent-2:     #1a1a1a;       /* black is the second accent */
+  --c2m-accent-3:     #1d3a8a;       /* indigo, used sparingly */
+  --c2m-accent-1-tint: rgba(214,40,40,0.10);
+  --c2m-accent-2-tint: rgba(26,26,26,0.06);
+
+  --c2m-status-ok:   #1a1a1a;
+  --c2m-status-warn: #d62828;
+  --c2m-status-err:  #d62828;
+  --c2m-status-info: #1d3a8a;
+
+  --c2m-radius-sm:   0px;
+  --c2m-radius-md:   0px;
+  --c2m-radius-pill: 0px;
+
+  --c2m-glow-1:   none;
+  --c2m-glow-2:   none;
+  --c2m-glow-err: none;
+
+  --c2m-frame-rail-show: 0;
+  --c2m-frame-scanline:  none;
+  --c2m-frame-grain:     none;
+  --c2m-frame-corner:    sharp;
+}

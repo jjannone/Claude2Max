@@ -1,0 +1,189 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+ * Theme: TERRITORY · Blade Runner 2049 — Territory Studio, 2017
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * # ENERGY & INTENT
+ * Dense data dashboard. Calm under pressure. Surveillance-grade information
+ * ecosystem for someone who reads a LOT of telemetry. Cyan primary because
+ * cyan reads as "technical/cold/impartial." Amber reserved for alerts —
+ * when amber appears, attention is required. Magenta for tertiary data —
+ * codes, classifications, secondary metrics. The three colors are NEVER
+ * mixed within a single readout — each readout speaks ONE color. Hairline
+ * borders. Ultra-fine typography. The interface conveys: "this person sees
+ * everything, all at once, and reads it without effort."
+ *
+ * # LAYOUT STRATEGY
+ * GRID-DENSE. Panels are bordered cells (1px hairline cyan border, almost
+ * no fill contrast). Section number tags ("01/04", "02/04") sit in the
+ * upper-left of each panel in tiny magenta type. Three-color data zones
+ * are SPATIALLY SEPARATED — primary readouts cluster in cyan-coded panels,
+ * alerts in amber-coded panels, tertiary in magenta. Sectioning happens
+ * via thin borders rather than fills. Generous data per panel — Territory
+ * is INFO-DENSE, not minimalist. If a panel has empty space, fill it with
+ * status, codes, or hide it.
+ *
+ * # TYPOGRAPHY HIERARCHY
+ * - Display: Rajdhani (condensed technical), Antonio fallback. Letter
+ *   spacing slightly increased for technical feel.
+ * - Title: Rajdhani SemiBold, ALL CAPS, 14–18px, fg-primary. Often paired
+ *   with a small subtitle "OPERATING SYS / 2049-A".
+ * - Section number tag: Rajdhani Bold, 8–10px, accent-3 magenta, ALL CAPS,
+ *   positioned upper-left of every panel. Format: "01 / 04".
+ * - Section label: Rajdhani Medium, 11–13px, ALL CAPS, fg-primary.
+ *   Often positioned beneath section number.
+ * - Body: JetBrains Mono, 10–11px, fg-primary. Tabular always.
+ * - Readouts: JetBrains Mono, 10–12px, color-coded by data class.
+ * - Type stays SMALL throughout — the density IS the design. Resist the
+ *   urge to make titles big.
+ *
+ * # COLOR APPLICATION RULES
+ * - bg-base (#060b12): dark blue-black canvas.
+ * - bg-raised (#0a121c): panel fill (very subtle lift; barely contrasts
+ *   with bg-base). The panel exists primarily as a bordered region.
+ * - bg-deep / bg-sunken: nested cells, even darker. Rare.
+ * - accent-1 cyan (#4dc8ff): PRIMARY data, status-active, all panel borders,
+ *   slider tracks, primary readouts. The system voice.
+ * - accent-2 amber (#ffb347): ALERTS only — warnings, transitions, "watch
+ *   this." When amber appears, it commands attention. Never decorative.
+ * - accent-3 magenta (#ff5cc8): TERTIARY data — section codes, classification
+ *   labels, secondary metrics. Decorative metadata. Never primary.
+ * - fg-primary (#d8ecff): main data text — slightly blue-tinted white.
+ * - fg-secondary (#6f8aa8): muted blue-grey — non-active data.
+ * - fg-muted (#3a4d63): backdrop labels, axis titles.
+ * - The CARDINAL RULE: cyan / amber / magenta NEVER mix within one readout.
+ *   Split across panels, always.
+ *
+ * # PANELS & CONTAINERS
+ * - rounded: 1–2 (essentially sharp; 1px softness for digital crispness).
+ * - 1px CYAN BORDER on every panel (the hairline grid feel) — border:1,
+ *   color=accent-1 at stroke-base alpha (0.14).
+ * - bg-raised fill, very close to bg-base. The PANEL IS THE BORDER.
+ * - Each panel labeled with section code "NN / TT" magenta upper-left.
+ * - Panels nest cleanly — sub-panels with same hairline treatment.
+ *
+ * # DIVIDERS
+ * - Thin cyan hairlines, 1px tall, accent-1 at low alpha (~0.14).
+ * - NOT solid bars — Territory is hairlines, not slabs.
+ * - Optional: dashed hairline with `jsui` for very subtle separators.
+ * - Section breaks happen primarily via panel borders rather than rules.
+ *
+ * # INTERACTIVE CONTROLS
+ * - Number boxes: bgcolor=bg-deep, textcolor=fg-primary, tricolor=cyan,
+ *   tribordercolor=stroke-base, fontname=monospace, fontsize=10–11.
+ * - Read-only displays: same shape; tricolor matched to bg, ignoreclick:1.
+ * - Toggle: bgcolor=bg-deep, checkedcolor=cyan, bordercolor=stroke-base.
+ * - Multislider: bgcolor=bg-deep, slidercolor=cyan, peakcolor=amber,
+ *   contrast=1, bgfillcolor=bg-deep. Compact track, never bloated.
+ * - All controls compact and tabular. Dense.
+ *
+ * # SPECIAL ZONES
+ * - Status indicators: small inline cyan dots/blocks (4–8px) next to
+ *   active readouts.
+ * - Alert zones: amber-bordered panel for any actively-alerting subsystem.
+ * - Tertiary data zones: magenta-bordered panel for codes/classifications.
+ * - live.gain~: warmcolor=cyan, hotcolor=amber (alert state),
+ *   overloadcolor=#ff4060 (status-err), slidercolor=cyan,
+ *   textcolor=fg-primary, coldcolor=bg-deep, tricolor=cyan.
+ * - ezdac~: bgcolor=bg-deep, color=cyan (on), elementcolor=fg-secondary
+ *   (off, dim).
+ *
+ * # DECORATIVE ELEMENTS (signature)
+ * - SECTION NUMBER TAGS in magenta on every panel ("01 / 04").
+ * - SCANLINE OVERLAY — subtler than Nostromo. rgba(0,0,0,0.18) every 4px,
+ *   implemented via `jsui` or stacked transparent panels. Reads as a soft
+ *   tint over the canvas.
+ * - HAIRLINE DATA-GRID — `jsui` 1px cyan grid lines at ~32px pitch, low
+ *   alpha (~0.06). Whole-canvas overlay or per-panel.
+ * - Small cyan dot indicators next to active rows.
+ * - Three-color split rule: each panel speaks ONE color (cyan OR amber OR
+ *   magenta) — never mix.
+ * - Numeric codes everywhere ("N-2049", "0xAF3") as decorative metadata.
+ * - Subtle cyan glow on active values (10px alpha 0.55) — implement via
+ *   duplicated cyan panel beneath at low alpha.
+ *
+ * # FONTS
+ * - Display: Rajdhani, Antonio, Eurostile (condensed technical).
+ * - UI: Rajdhani, Inter (technical small caps possible).
+ * - Mono: JetBrains Mono, IBM Plex Mono — always for data.
+ * - In Max: fontname="Helvetica Neue Condensed Bold" if Rajdhani not
+ *   available, fontname="Menlo" or "Courier" for mono.
+ *
+ * # MAX-SPECIFIC NOTES
+ * - For panel borders: use `panel` with border:1, bgcolor=bg-raised,
+ *   bordercolor=accent-1 at low alpha. Or set rounded:1 with explicit
+ *   stroke via @bordercolor attribute.
+ * - For section number tags: small `comment` at upper-left of each panel,
+ *   text="01 / 04", textcolor=accent-3 magenta, fontsize=8–10.
+ * - For scanline: `jsui` covering full presentation, ignoreclick=1, drawn
+ *   ABOVE panels via z-order.
+ * - For data grid: separate `jsui` for grid lines, low alpha cyan, beneath
+ *   panels.
+ * - All number-box and toggle bgcolors should match bg-deep — keep
+ *   chrome consistent.
+ *
+ * # DON'TS
+ * - No solid color blocks beyond hairline borders (Territory is OUTLINES,
+ *   not FILLS).
+ * - No mixed cyan/amber/magenta within a single readout — split across
+ *   panels.
+ * - No large typography. Data density requires small type.
+ * - No rounded corners > 2 (essentially sharp).
+ * - No empty panels — Territory is information-dense; if a panel has
+ *   whitespace, fill it with status or hide it.
+ * - No saturated fills — accent colors are for borders, text, and
+ *   highlights, not for backgrounds.
+ * - No bright glow — Territory's glow is whisper-quiet.
+ * - No serif fonts.
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+[data-theme="territory"], .theme-territory {
+  --c2m-font-mono:    "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+  --c2m-font-display: "Rajdhani", "Antonio", "Eurostile", system-ui, sans-serif;
+  --c2m-font-ui:      "Rajdhani", "Inter", system-ui, sans-serif;
+
+  --c2m-bg-void:    #000000;
+  --c2m-bg-deep:    #03060a;
+  --c2m-bg-base:    #060b12;
+  --c2m-bg-raised:  #0a121c;
+  --c2m-bg-sunken:  #03070d;
+  --c2m-bg-tooltip: #0d1826;
+
+  --c2m-fg-primary:   #d8ecff;
+  --c2m-fg-secondary: #6f8aa8;
+  --c2m-fg-muted:     #3a4d63;
+  --c2m-fg-disabled:  #1f2a38;
+  --c2m-fg-on-accent: #03070d;
+
+  --c2m-stroke-faint:  rgba(140,200,255,0.06);
+  --c2m-stroke-base:   rgba(140,200,255,0.14);
+  --c2m-stroke-strong: rgba(140,200,255,0.30);
+
+  --c2m-accent-1:     #4dc8ff;       /* primary cyan */
+  --c2m-accent-2:     #ffb347;       /* amber alert */
+  --c2m-accent-3:     #ff5cc8;       /* magenta data */
+  --c2m-accent-1-tint: rgba(77,200,255,0.06);
+  --c2m-accent-2-tint: rgba(255,179,71,0.06);
+
+  --c2m-status-ok:   #5fffa0;
+  --c2m-status-warn: #ffb347;
+  --c2m-status-err:  #ff4060;
+  --c2m-status-info: #4dc8ff;
+
+  --c2m-radius-sm:   1px;
+  --c2m-radius-md:   2px;
+  --c2m-radius-pill: 0px;
+
+  --c2m-glow-1:   0 0 10px rgba(77,200,255,0.55);
+  --c2m-glow-2:   0 0 10px rgba(255,179,71,0.5);
+  --c2m-glow-err: 0 0 12px rgba(255,64,96,0.55);
+
+  --c2m-frame-rail-show: 0;
+  --c2m-frame-scanline:  repeating-linear-gradient(
+                            to bottom,
+                            rgba(0,0,0,0) 0px,
+                            rgba(0,0,0,0) 3px,
+                            rgba(0,0,0,0.18) 4px);
+  --c2m-frame-grain:     none;
+  --c2m-frame-corner:    sharp;
+}

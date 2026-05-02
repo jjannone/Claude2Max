@@ -1,0 +1,224 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+ * Theme: SOVIET CONSTRUCTIVIST · Rodchenko · Lissitzky · Stenberg
+ *        VKhUTEMAS workshops, 1917–1934
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * # ENERGY & INTENT
+ * Industrial constructivist conviction. Rodchenko's posters: typography as
+ * volume, red as action, ink as structure, geometric primaries as power.
+ * The visual language of mass-mobilization design — every element load-
+ * bearing, every choice deliberate. The closest cousin to LCARS in
+ * conviction (both are operations consoles for vast organizations) but
+ * Soviet uses sharp rectangular stencil where LCARS uses pill curves.
+ * The interface conveys: "this system organizes collective effort and
+ * leaves no room for ornament." Where Memphis is playful and Bauhaus is
+ * rationalist-curious, Soviet is mobilizational-absolute. Nothing
+ * decorative survives in this theme: every element earns its space
+ * through structural function. If a graphic doesn't carry meaning, remove it.
+ *
+ * # LAYOUT STRATEGY
+ * SECTIONED FIGURE/GROUND. Each parameter group lives on its own bg-deep
+ * or bg-sunken panel — never let controls float on bg-base alone.
+ * Sections separated by RED HORIZONTAL DIVIDERS (4–10px tall accent-1
+ * panels), spanning the full container width. These dividers ARE the
+ * constructivist grid — they're not optional decoration. Title slab spans
+ * full width: fg-primary display font, ALL CAPS, MASSIVE (38–48px),
+ * stencil-poster volume. The OUTPUT ZONE inverts figure/ground — ink
+ * panel with cream-colored controls — to mark it as categorically
+ * different from parameter zones above. Strict left alignment within
+ * sections. Asymmetric breathing: tight packing inside section panels,
+ * dividers as the structural rhythm.
+ *
+ * # TYPOGRAPHY HIERARCHY
+ * - Display: Archivo Black, Helvetica Neue Black (heaviest available).
+ * - Title: display, ALL CAPS, 38–48px, fg-primary (ink). Volume IS the
+ *   message. Never timid. The masthead element.
+ * - Section header (TWO-TIER PAIR): large display "PITCH" + small
+ *   monospace "MIDI 36 — 84" beneath. The pair anchors each section —
+ *   header announces, subtitle contextualizes with units/range.
+ * - Body labels: lowercase ui font, 11–12px, fg-primary or fg-secondary.
+ * - Readouts: mono font, 11–12px, fg-on-accent (cream) on ink number boxes.
+ * - The SCALE jump between display title (38+px) and body (11–12px) IS
+ *   the rhythm. Mid-sized text is rare in Soviet — type is either
+ *   monumental or functional, never decorative-mid.
+ *
+ * # COLOR APPLICATION RULES
+ * - bg-base cream (#f1ead4): the page. Visible only as outer margins
+ *   and as text-color on inverted (ink) panels.
+ * - bg-deep, bg-sunken: section containers. Pick whichever provides the
+ *   most legibility for the control density inside the section.
+ * - accent-1 RED (#cc1f1a): RESERVED for —
+ *   * Section dividers (4–10px tall full-width bars)
+ *   * Masthead title slab (heaviest divider, ≥ 10px, immediately under
+ *     the title)
+ *   * Active-state indicators (slider tracks, on-toggle states)
+ *   * Number-box trigger color (tricolor)
+ *   Red SIGNALS action — never decoration. If you reach for red without
+ *   a structural reason, stop.
+ * - accent-2 INK (#0a0a0a): structure. Text, panel fills for the inverted
+ *   output zone, number-box bgcolor.
+ * - accent-3 RUST (#d4762a): secondary heat. Warning levels, soft
+ *   accents, non-critical status. Used very sparingly.
+ *
+ * # PANELS & CONTAINERS
+ * - Sharp corners (rounded:0). NEVER round. Stencil-rectangular only.
+ * - Solid fills only — no outlines, no glow, no shadows.
+ * - Each section gets EXACTLY ONE container panel. Stack with red
+ *   divider above for rhythm.
+ * - Inverted (INK) panel ONLY for the output zone — never for general
+ *   sections. Inversion is a structural signal: "this is signal output."
+ * - Layering: background panel at back, section panels in middle, red
+ *   dividers in middle (above section panels), controls and labels in
+ *   front.
+ *
+ * # DIVIDERS
+ * - RED HORIZONTAL PANELS — 4–10px tall, full container width, accent-1
+ *   fill, no border, no rounding.
+ * - The MASTHEAD bar (immediately under the title) is the heaviest:
+ *   ≥ 10px. This signals "primary structural break."
+ * - Inter-section dividers are 4px. Constant rhythm.
+ * - These are the constructivist grid — not optional, not decorative.
+ *
+ * # INTERACTIVE CONTROLS
+ * - Number boxes: bgcolor=ink (#0a0a0a), textcolor=cream (fg-on-accent),
+ *   tricolor=red (the trigger), tribordercolor=ink, fontname=monospace.
+ *   Read as instrument readouts, not default Max chrome.
+ * - Read-only displays: bgcolor=cream-sunken (bg-sunken), textcolor=ink,
+ *   tricolor matched to bg, ignoreclick:1. Read-only must look distinct
+ *   from interactive at a glance — different fill, no triangle.
+ * - Toggle: bgcolor=ink, checkedcolor=red, bordercolor=ink. The X is
+ *   the binary state.
+ * - Multislider: bgcolor=cream-deep, slidercolor=red, peakcolor=ink,
+ *   contrast=1, bgfillcolor=cream-deep.
+ * - Buttons: bgcolor=ink, textcolor=cream, bordercolor=ink, sharp
+ *   rectangles. Active state: red bgcolor.
+ *
+ * # SPECIAL ZONES
+ * - OUTPUT ZONE: ink panel (bgcolor=accent-2 ink), cream/red controls
+ *   inverted. Always at bottom of signal chain. Marks "signal exits here"
+ *   categorically.
+ * - live.gain~ (within output zone): tricolor=red, trioncolor=red,
+ *   slidercolor=red, hotcolor=red, warmcolor=red, coldcolor=cream
+ *   (bg-base), inactivecoldcolor=cream, inactivewarmcolor=cream,
+ *   textcolor=cream (fg-on-accent), tribordercolor=ink.
+ * - ezdac~ (within output zone): bgcolor=ink (blends with output panel),
+ *   color=red (on-state speaker icon — red signals "live"),
+ *   elementcolor=cream (off-state icon, readable on ink).
+ *
+ * # DECORATIVE ELEMENTS (signature)
+ * - HEAVY RED TITLE SLAB (≥ 10px tall, full-width, accent-1) directly
+ *   under the title — the masthead element.
+ * - DISPLAY-SCALE TITLE (≥ 38px Helvetica Neue Black or Archivo Black,
+ *   ALL CAPS, ink) — Rodchenko poster volume, never timid.
+ * - RED HORIZONTAL DIVIDERS (4px) between every major section — these
+ *   are the constructivist grid.
+ * - SECTIONAL FIGURE/GROUND — every control group sits on a section panel
+ *   of bg-deep or bg-sunken; never let controls float on the base cream.
+ * - INVERTED OUTPUT ZONE — ink panel for the audio output section to
+ *   invert figure/ground (parameter zones are dark-on-cream, output zone
+ *   is cream-on-ink).
+ * - TWO-TIER SECTION LABELS — large display-font header (e.g. "PITCH")
+ *   paired with a small monospace subtitle giving the actual range or
+ *   units (e.g. "MIDI 36 — 84"). The pair anchors each section.
+ * - INK NUMBER BOXES on interactive controls — bgcolor ink, textcolor
+ *   cream, tricolor red. They read as instrument readouts.
+ * - DIFFERENTIATED READ-ONLY DISPLAYS — sunken-cream bgcolor, ink text,
+ *   no triangle, ignoreclick=1. Read-only ≠ interactive at a glance.
+ * - STYLED TOGGLE — bgcolor ink, checkedcolor red. The X is the binary
+ *   state.
+ * - Optional decorative (omit unless they earn space):
+ *   * Diagonal red wedge markers (clip-path equivalent: thin triangular
+ *     `panel`s at section corners) as masthead-style accents
+ *   * Paper-grain `jsui` overlay (very low alpha noise, simulates
+ *     letterpress paper)
+ *
+ * # FONTS
+ * - Display: Archivo Black, Helvetica Neue Black (heaviest weight available).
+ * - UI: Archivo, Helvetica Neue.
+ * - Mono: JetBrains Mono, IBM Plex Mono.
+ * - In Max: fontname="Helvetica Neue Black" or "Helvetica Neue Bold" for
+ *   display; fontname="Helvetica Neue" for body; fontname="Menlo" or
+ *   "Courier" for mono. Archivo unavailable in standard Max.
+ *
+ * # MAX-SPECIFIC NOTES
+ * - For the title: `comment` with text="DRIFT SEQUENCER" (or whatever
+ *   patch name), fontname="Helvetica Neue Bold", fontsize=40, textcolor=
+ *   fg-primary ink, ALL CAPS literally typed, positioned at top with
+ *   generous height (h ≥ 58 to accommodate the type size).
+ * - For the masthead red bar: `panel` with bgcolor=accent-1 (red),
+ *   border=0, rounded=0, h=10, w=full-presentation-width.
+ * - For section panels: `panel`s with bgcolor=bg-deep or bg-sunken,
+ *   rounded=0, border=0, full-width, height matching the controls inside.
+ * - For inter-section red dividers: `panel`s with bgcolor=accent-1, h=4.
+ * - For number boxes: bgcolor=accent-2 (ink), textcolor=fg-on-accent
+ *   (cream), tricolor=accent-1 (red), tribordercolor=accent-2 (ink).
+ * - For toggle: bgcolor=accent-2 (ink), checkedcolor=accent-1 (red),
+ *   bordercolor=accent-2 (ink).
+ * - For live.gain~: ALL color attrs use refpage-confirmed names ONLY —
+ *   coldcolor, warmcolor, hotcolor, overloadcolor, slidercolor, textcolor,
+ *   tricolor, trioncolor, tribordercolor, focusbordercolor,
+ *   modulationcolor, inactivecoldcolor, inactivewarmcolor. No `bgcolor`,
+ *   no `peakcolor`, no `knobcolor` — those don't exist on live.gain~.
+ * - For ezdac~: ONLY bgcolor, color, elementcolor are valid attrs.
+ *
+ * # DON'TS
+ * - NO rounded corners (rounded:0 everywhere — universal).
+ * - NO glow effects (glow:none).
+ * - NO outlines on panels (border:0).
+ * - NO accent decoration — red is for signal, never embellishment.
+ * - NO timid title — if it doesn't dominate the top of the canvas, it's wrong.
+ * - NO mid-scale type — Soviet rhythm is monumental + functional, never
+ *   moderate.
+ * - NO secondary red — accent-1 is the only red.
+ * - NO inversion of arbitrary sections — only the output zone inverts.
+ * - NO serif fonts. No script fonts.
+ * - NO frosted/transparent panels — solid fills only.
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+[data-theme="soviet"], .theme-soviet {
+  --c2m-font-mono:    "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+  --c2m-font-display: "Archivo Black", "Helvetica Neue", system-ui, sans-serif;
+  --c2m-font-ui:      "Archivo", "Helvetica Neue", system-ui, sans-serif;
+
+  --c2m-bg-void:    #e3dac0;
+  --c2m-bg-deep:    #e8dfc4;
+  --c2m-bg-base:    #f1ead4;
+  --c2m-bg-raised:  #f5efdc;
+  --c2m-bg-sunken:  #d8d0b6;
+  --c2m-bg-tooltip: #0a0a0a;
+
+  --c2m-fg-primary:   #0a0a0a;
+  --c2m-fg-secondary: #4a463a;
+  --c2m-fg-muted:     #7a7466;
+  --c2m-fg-disabled:  #b5af9e;
+  --c2m-fg-on-accent: #f1ead4;
+
+  --c2m-stroke-faint:  rgba(10,10,10,0.15);
+  --c2m-stroke-base:   rgba(10,10,10,0.45);
+  --c2m-stroke-strong: rgba(10,10,10,1.00);
+
+  --c2m-accent-1:     #cc1f1a;       /* red — the wedge */
+  --c2m-accent-2:     #0a0a0a;       /* ink — the stencil */
+  --c2m-accent-3:     #d4762a;       /* rust — secondary heat */
+  --c2m-accent-1-tint: rgba(204,31,26,0.10);
+  --c2m-accent-2-tint: rgba(10,10,10,0.08);
+
+  --c2m-status-ok:   #0a0a0a;
+  --c2m-status-warn: #d4762a;
+  --c2m-status-err:  #cc1f1a;
+  --c2m-status-info: #0a0a0a;
+
+  --c2m-radius-sm:   0px;
+  --c2m-radius-md:   0px;
+  --c2m-radius-pill: 0px;
+
+  --c2m-glow-1:   none;
+  --c2m-glow-2:   none;
+  --c2m-glow-err: none;
+
+  --c2m-frame-rail-show: 0;
+  --c2m-frame-scanline:  none;
+  --c2m-frame-grain:     repeating-linear-gradient(0deg, rgba(0,0,0,0.015) 0 1px, transparent 1px 3px);
+  --c2m-frame-corner:    sharp;
+}

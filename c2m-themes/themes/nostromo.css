@@ -1,0 +1,190 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+ * Theme: NOSTROMO · Alien, 1979 — Ron Cobb / Michael Seymour
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * # ENERGY & INTENT
+ * Industrial-control-room CRT terminal. MOTHER. The readouts a working
+ * commercial-towing starship has — that no one cares about because they're
+ * standard issue. NOT designed; functional only. Anxious, claustrophobic,
+ * dim phosphor afterglow. The interface conveys: "this system has been
+ * running for years, and it will keep running until something breaks." The
+ * aesthetic is the OPPOSITE of LCARS: where LCARS is a confident operations
+ * console for an organization that values appearance, Nostromo is a forgotten
+ * terminal in a working ship's belly. Monochrome green. Red ONLY for danger.
+ *
+ * # LAYOUT STRATEGY
+ * FLAT readout. There are essentially no panels — the interface is a single
+ * dark surface with green text floating on it. If you must group, use very
+ * subtle bg-raised tint (almost invisible) or a 1px green hairline border.
+ * Information is densely tabular, columnar, and label-prefixed. Long mono
+ * lines: "PARAM ──── VALUE", aligned at character columns. Layout reads like
+ * a Unix mainframe printout from 1978. No visual hierarchy beyond ALL CAPS
+ * labels and grouped lines. Everything snaps to a monospace character grid.
+ *
+ * # TYPOGRAPHY HIERARCHY
+ * - ALL TYPE in monospace (VT323 ideal; Courier or JetBrains Mono fallback)
+ * - Title: VT323 / mono, ALL CAPS, 24–32px, fg-primary (phosphor green).
+ *   Often prefixed with brackets: "[ MOTHER ]" or "── PRIORITY ONE ──".
+ * - Section headers: ALL CAPS mono, 14–16px, fg-primary, often bracketed
+ *   ("[ AUDIO ]", "[ SEQ ]", "[ OUTPUT ]") or rule-flanked
+ *   ("───── AUDIO ─────").
+ * - Body labels: ALL CAPS mono, 11–12px, fg-secondary (dimmer green).
+ * - Readouts: same monospace, 11–12px, fg-primary.
+ * - The mono IS the visual identity — never break the character grid.
+ * - Use ASCII rules ("─", "═", "│") freely as visual structure.
+ *
+ * # COLOR APPLICATION RULES
+ * - bg-void / bg-deep: pure black (#000000) — the unlit CRT pixel.
+ * - bg-base: barely-green-tinted black (#020600) — the powered CRT.
+ * - bg-raised: slightly lifted (#050d03) — only when grouping is essential.
+ * - fg-primary phosphor green (#5cff7a): ALL primary text and data. The
+ *   color of the entire interface.
+ * - fg-secondary (#3acc56): slightly dimmer green for non-active readouts,
+ *   axis labels, units.
+ * - fg-muted (#1f7a30): very dim green for backdrop, decorative, "off" state.
+ * - accent-1 = fg-primary: green IS the accent. Treat as one color.
+ * - accent-2 (#b6ffae): lighter highlight green for emphasis (rare).
+ * - accent-3 amber (#ffaa33): RARE emergency/transition state.
+ * - status-err red (#ff3322): RESERVED STRICTLY for alerts/errors. When red
+ *   appears, the user must understand: something is wrong. Never decorative.
+ *
+ * # PANELS & CONTAINERS
+ * - rounded: 0 EVERYWHERE. CRTs don't render curves.
+ * - Default: NO PANELS. Let text float on bg-base.
+ * - When panels are required: bgcolor=bg-raised (very subtle lift) OR thin
+ *   green border (border:1, color=stroke-base — rgba(92,255,122,0.18)) and
+ *   no fill.
+ * - No glow on panels themselves — glow lives on TEXT only.
+ *
+ * # DIVIDERS
+ * - NEVER red bars (red = emergency only).
+ * - PREFER ASCII rules: "──────" or "══════" as comment text. This is the
+ *   most period-accurate divider.
+ * - OR: thin green hairline (1px panel, accent-1, low alpha or 1px border).
+ * - Section breaks happen via uppercase labels and ASCII rules, not via
+ *   solid color blocks.
+ *
+ * # INTERACTIVE CONTROLS
+ * - Number boxes: bgcolor=bg-deep, textcolor=fg-primary (green),
+ *   tricolor=fg-primary, fontname=monospace, fontsize=11.
+ * - Read-only displays: same as number boxes, ignoreclick:1, tricolor matched
+ *   to bgcolor (no triangle).
+ * - Toggle: bgcolor=bg-deep, checkedcolor=accent-1 (green); bordercolor=
+ *   stroke-base. Often labeled "[ ON ]" / "[ OFF ]" inline.
+ * - Multislider: bgcolor=bg-deep, slidercolor=fg-primary, peakcolor=accent-2,
+ *   contrast=1, bgfillcolor=bg-deep. The track is dark; the slider glows green.
+ * - Buttons: rectangular bg-deep panels with green ALL CAPS comment overlay.
+ * - All controls subvert default Max chrome to green-on-black mono.
+ *
+ * # SPECIAL ZONES
+ * - Output zone: visually IDENTICAL to other zones. No inversion. Nostromo
+ *   is uniform — every readout is on the same CRT.
+ * - live.gain~: warmcolor=fg-primary (green), hotcolor=accent-2 (lighter
+ *   green), overloadcolor=status-err (red — the only acceptable red),
+ *   slidercolor=fg-primary, textcolor=fg-primary, coldcolor=bg-deep,
+ *   tricolor=fg-primary.
+ * - ezdac~: bgcolor=bg-deep, color=accent-2 (on, lighter green),
+ *   elementcolor=fg-secondary (off, dim green).
+ * - Status indicators: small comments with bracketed text "[OK]" "[FAIL]".
+ *   FAIL is the only context where red is allowed.
+ *
+ * # DECORATIVE ELEMENTS (signature)
+ * - SCANLINE OVERLAY — repeating horizontal rgba(92,255,122,0.04) lines at
+ *   2–3px pitch, full-presentation, layered ABOVE all panels but BELOW
+ *   text. The CRT signal. Implemented in Max via `jsui` canvas drawing
+ *   horizontal lines, OR via stacked thin transparent panels.
+ * - ALL CAPS labels universally.
+ * - Bracket prefixes "[ STATUS ]" on section headers.
+ * - ASCII rules between sections ("─────", "═════", "·····").
+ * - Dot-pattern rows using "·" or "•" for non-critical separators.
+ * - Optional CRT FLICKER — `jsui` low-frequency alpha jitter on text
+ *   (every 2–4 seconds, brief 0.7-alpha blink).
+ * - Phosphor afterglow on text — implement via duplicated text comment at
+ *   higher alpha behind primary text, or via fontname stylization.
+ * - Numeric prefix codes ("8042-A", "0x3F") as decorative metadata.
+ *
+ * # FONTS
+ * - Display, UI, mono: ALL VT323, JetBrains Mono, IBM Plex Mono, or Courier.
+ *   ONE mono family throughout. No mix of sans + mono — break the CRT illusion.
+ * - In Max, use fontname="Courier" or "Menlo" if VT323 unavailable.
+ * - All weights regular — no bold (VT323 has no bold; CRT phosphor doesn't
+ *   thicken).
+ *
+ * # MAX-SPECIFIC NOTES
+ * - For scanlines in Max: a `jsui` object covering the entire presentation
+ *   area, drawing repeating horizontal lines via `sketch` API. Make it
+ *   ignoreclick=1 and presentation=1 with z-order placing it above panels.
+ * - For background: a `panel` covering the full presentation, bgcolor=
+ *   bg-base (or pure bg-void for max contrast).
+ * - For ASCII rule dividers: a `comment` with text "─────────────"
+ *   (long Unicode horizontal-rule character) or "==========".
+ * - All comments get fontname="Courier" (or "Menlo"), fontsize=11,
+ *   textcolor=fg-primary unless explicitly secondary.
+ * - Number boxes: set bgcolor=bg-deep, textcolor=fg-primary, tricolor=
+ *   fg-primary explicitly — Max's defaults will look wrong otherwise.
+ *
+ * # DON'TS
+ * - NO multi-color schemes. Green only (red rare, amber rarer).
+ * - NO rounded corners (rounded:0 universally).
+ * - NO sans-serif or proportional type. ALL mono.
+ * - NO mixed case where ALL CAPS works. Lowercase only for actual numeric
+ *   units ("ms", "Hz", "dB").
+ * - NO panel outlines drawn as decoration (the CRT doesn't draw boxes
+ *   around things).
+ * - NO smooth animations — if anything moves, it should jitter, scanline-
+ *   stutter, or blink.
+ * - NEVER use red except for genuine emergencies/errors.
+ * - NO bright ambient glow — Nostromo is dim phosphor, not neon.
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+[data-theme="nostromo"], .theme-nostromo {
+  --c2m-font-mono:    "VT323", "JetBrains Mono", ui-monospace, monospace;
+  --c2m-font-display: "VT323", "JetBrains Mono", ui-monospace, monospace;
+  --c2m-font-ui:      "VT323", "JetBrains Mono", ui-monospace, monospace;
+
+  --c2m-bg-void:    #000000;
+  --c2m-bg-deep:    #000000;
+  --c2m-bg-base:    #020600;
+  --c2m-bg-raised:  #050d03;
+  --c2m-bg-sunken:  #000200;
+  --c2m-bg-tooltip: #0a1606;
+
+  --c2m-fg-primary:   #5cff7a;       /* phosphor green */
+  --c2m-fg-secondary: #3acc56;
+  --c2m-fg-muted:     #1f7a30;
+  --c2m-fg-disabled:  #0d3a17;
+  --c2m-fg-on-accent: #000000;
+
+  --c2m-stroke-faint:  rgba(92,255,122,0.08);
+  --c2m-stroke-base:   rgba(92,255,122,0.18);
+  --c2m-stroke-strong: rgba(92,255,122,0.40);
+
+  --c2m-accent-1:     #5cff7a;       /* primary IS the green */
+  --c2m-accent-2:     #b6ffae;       /* lighter highlight */
+  --c2m-accent-3:     #ffaa33;       /* rare amber emergency */
+  --c2m-accent-1-tint: rgba(92,255,122,0.08);
+  --c2m-accent-2-tint: rgba(182,255,174,0.06);
+
+  --c2m-status-ok:   #5cff7a;
+  --c2m-status-warn: #ffaa33;
+  --c2m-status-err:  #ff3322;
+  --c2m-status-info: #5cff7a;
+
+  --c2m-radius-sm:   0px;            /* CRT — no rounding */
+  --c2m-radius-md:   0px;
+  --c2m-radius-pill: 0px;
+
+  --c2m-glow-1:   0 0 6px rgba(92,255,122,0.55), 0 0 14px rgba(92,255,122,0.25);
+  --c2m-glow-2:   0 0 8px rgba(182,255,174,0.5);
+  --c2m-glow-err: 0 0 10px rgba(255,51,34,0.7);
+
+  --c2m-frame-rail-show: 0;
+  --c2m-frame-scanline:  repeating-linear-gradient(
+                            to bottom,
+                            rgba(0,0,0,0) 0px,
+                            rgba(0,0,0,0) 2px,
+                            rgba(0,0,0,0.35) 3px);
+  --c2m-frame-grain:     none;
+  --c2m-frame-corner:    sharp;
+}

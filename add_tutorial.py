@@ -18,10 +18,100 @@ import sys
 import argparse
 import re
 from collections import defaultdict, deque
+from pathlib import Path
 from textwrap import dedent
 
 SPEC_MARKER_BEGIN = "--- CLAUDE2MAX SPEC ---"
 SPEC_MARKER_END = "--- END SPEC ---"
+
+
+# Symbolic Max operators have refpages under their alphabetic spelling.
+# Verified against /Applications/Max.app/Contents/Resources/C74/docs/refpages/
+# (max-ref + msp-ref). `/` has no refpage; left to fall through.
+REFPAGE_ALIAS = {
+    "+":  "plus",   "-":  "minus",   "*":  "times",   "%":  "modulo",
+    "==": "equals", "!=": "notequals",
+    "<":  "lessthan", ">":  "greaterthan",
+    "<=": "lessthaneq", ">=": "greaterthaneq",
+    "&&": "logand", "||": "logor",
+    "+~":  "plus~",   "-~":  "minus~",   "*~":  "times~",   "%~":  "modulo~",
+    "==~": "equals~", "!=~": "notequals~",
+    "<~":  "lessthan~", ">~":  "greaterthan~",
+    "<=~": "lessthaneq~", ">=~": "greaterthaneq~",
+    "+=~": "plusequals~",
+}
+
+# Lazy index of installed-package digests, loaded from packages/package_objects.json
+# the first time `package_lookup` is called.
+_PKG_INDEX = None
+
+def _load_package_index():
+    global _PKG_INDEX
+    if _PKG_INDEX is not None:
+        return _PKG_INDEX
+    path = Path(__file__).parent / "packages" / "package_objects.json"
+    if not path.exists():
+        _PKG_INDEX = {}
+        return _PKG_INDEX
+    try:
+        data = json.loads(path.read_text())
+    except (OSError, json.JSONDecodeError):
+        _PKG_INDEX = {}
+        return _PKG_INDEX
+    index = {}
+    for pkg, objs in data.items():
+        for name, rec in objs.items():
+            if name not in index:
+                index[name] = (pkg, rec)
+    _PKG_INDEX = index
+    return _PKG_INDEX
+
+
+def package_lookup(name):
+    """Return (package_name, record) for an installed-package object, or None."""
+    return _load_package_index().get(name)
+
+
+def describe_object(box):
+    """Return (display_text, one-line description, source-tag) for a box.
+
+    Source-tag values: "static" (curated OBJ_DESCRIPTIONS), "refpage" (Cycling
+    '74), "package:<name>" (installed-package library), or None.
+
+    Lookup cascade: curated dict → C74 refpage (with REFPAGE_ALIAS for symbolic
+    operators) → installed-package digest. Used by both the tutorial step
+    description builder and the c2m_explain skill.
+    """
+    if box.get("maxclass") == "newobj":
+        text = box.get("text", "newobj")
+        name = text.split()[0] if text else "newobj"
+    else:
+        text = box.get("text", "") or box.get("maxclass", "?")
+        name = box.get("maxclass", "")
+
+    desc = OBJ_DESCRIPTIONS.get(name)
+    if desc:
+        return text, desc, "static"
+
+    # Lazy import — spec2maxpat is heavy; avoid loading when not needed.
+    try:
+        from spec2maxpat import REFPAGE_CACHE
+    except ImportError:
+        REFPAGE_CACHE = None
+
+    if REFPAGE_CACHE is not None:
+        rp = REFPAGE_CACHE.lookup(name)
+        if (not rp or not rp.get("digest")) and name in REFPAGE_ALIAS:
+            rp = REFPAGE_CACHE.lookup(REFPAGE_ALIAS[name])
+        if rp and rp.get("digest"):
+            return text, rp["digest"], "refpage"
+
+    match = package_lookup(name)
+    if match:
+        pkg, rec = match
+        return text, rec.get("digest", ""), f"package:{pkg}"
+
+    return text, None, None
 
 OBJ_DESCRIPTIONS = {
     "jit.grab":        "Captures frames from a live camera or video source",
@@ -281,19 +371,27 @@ def should_merge(step_a, step_b, by_id, out_edges, max_dist=180.0):
 
 
 def build_step_description(group, by_id, boxes):
-    """Build name and description for a group of object ids."""
+    """Build name and description for a group of object ids.
+
+    Author-supplied inline comments win when present (they capture intent the
+    auto-cascade cannot). Otherwise, fall back to `describe_object`'s cascade
+    — curated dict → C74 refpage (with operator alias) → installed-package
+    digest — so step descriptions remain useful for objects outside the small
+    OBJ_DESCRIPTIONS dict.
+    """
     parts = []
     seen_inline = set()
     for oid in group:
         box     = by_id[oid]
         otype   = obj_type(box)
         inline  = find_nearby_comment(box, boxes)
-        from_db = OBJ_DESCRIPTIONS.get(otype)
         if inline and inline not in seen_inline:
             seen_inline.add(inline)
             parts.append(f"{otype}: {inline}")
-        elif from_db:
-            parts.append(f"{otype} — {from_db}")
+            continue
+        _text, desc, _src = describe_object(box)
+        if desc:
+            parts.append(f"{otype} — {desc}")
         else:
             parts.append(otype)
 

@@ -1,0 +1,182 @@
+/* Claude2Max Design System — tokens.css
+ *
+ * Theme-AGNOSTIC semantic tokens. Every token here is named for its ROLE,
+ * not its appearance. Themes (themes/*.css) override the values without
+ * adding or renaming tokens. Component code only ever reads from these
+ * names — never hard-coded hexes.
+ *
+ * Surfaces this system styles:
+ *   • `jsui` instruments (full-canvas custom drawings)
+ *   • `panel` chrome around native objects
+ *   • `comment` text (tutorial copy, section labels)
+ *   • Type + content rules
+ *
+ * What it does NOT style: live.dial, live.gain~, multislider, radiogroup,
+ * scope~, kslider, ezdac~, patchcords, the patcher canvas. Those are
+ * Max's job.
+ *
+ * Token role groups:
+ *   --c2m-bg-*       surface fills
+ *   --c2m-fg-*       text + glyph foregrounds
+ *   --c2m-stroke-*   borders / hairlines
+ *   --c2m-accent-*   primary + secondary + tertiary accents
+ *   --c2m-status-*   ok / warn / err / info
+ *   --c2m-font-*     type families (display, mono, ui)
+ *   --c2m-text-*     type sizes
+ *   --c2m-radius-*   corner radii
+ *   --c2m-space-*    spacing scale
+ *   --c2m-glow-*     accent glows
+ *   --c2m-ease-*     motion easing
+ *   --c2m-dur-*      motion durations
+ *   --c2m-frame-*    theme-specific frame metaphors (rail, scanline, halftone)
+ */
+
+/* ─── Web fonts (kitchen sink — themes pick what they use) ────────── */
+@font-face { font-family: "JetBrains Mono"; font-style: normal; font-weight: 100 800; font-display: swap;
+  src: url("https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxTOlOVE.woff2") format("woff2"); }
+@font-face { font-family: "Antonio"; font-style: normal; font-weight: 100 700; font-display: swap;
+  src: url("https://fonts.gstatic.com/s/antonio/v23/gNMbW2BrTpK8-inLtBJgMMfbm6uNVDvRxhtIY2DwSXlM.woff2") format("woff2"); }
+@font-face { font-family: "Space Grotesk"; font-style: normal; font-weight: 300 700; font-display: swap;
+  src: url("https://fonts.gstatic.com/s/spacegrotesk/v16/V8mDoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUxjLg.woff2") format("woff2"); }
+@font-face { font-family: "VT323"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("https://fonts.gstatic.com/s/vt323/v17/pxiKyp0ihIEF2isfFJU.woff2") format("woff2"); }
+@font-face { font-family: "Major Mono Display"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("https://fonts.gstatic.com/s/majormonodisplay/v16/RWmVoLyb5fEqtsfBX9PDZIGr2tFubRhLDGWkanc.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 100 900; font-display: swap;
+  src: url("https://fonts.gstatic.com/s/inter/v19/UcCO3FwrK3iLTeHuS_nVMrMxCp50ojCpLpx5Lp1.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Sans"; font-style: normal; font-weight: 400 700; font-display: swap;
+  src: url("https://fonts.gstatic.com/s/ibmplexsans/v19/zYXgKVElMYYaJe8bpLHnCwDKjbLeXJpbWMs.woff2") format("woff2"); }
+@font-face { font-family: "Rajdhani"; font-style: normal; font-weight: 300 700; font-display: swap;
+  src: url("https://fonts.gstatic.com/s/rajdhani/v15/LDIxapCSOBg7S-QT7q4AOeekWPrP.woff2") format("woff2"); }
+
+:root {
+  /* ───── Type scale (theme-invariant) ──────────────────────────── */
+  --c2m-text-2xs:  10px;
+  --c2m-text-xs:   12px;
+  --c2m-text-sm:   13px;
+  --c2m-text-base: 15px;
+  --c2m-text-md:   18px;
+  --c2m-text-lg:   24px;
+  --c2m-text-xl:   34px;
+  --c2m-text-2xl:  56px;
+  --c2m-text-3xl:  88px;
+
+  --c2m-tracking-tight:   -0.01em;
+  --c2m-tracking-normal:  0;
+  --c2m-tracking-loose:   0.06em;
+  --c2m-tracking-caps:    0.14em;
+
+  /* ───── Spacing scale (4px grid) ──────────────────────────────── */
+  --c2m-space-0:  0;
+  --c2m-space-1:  2px;
+  --c2m-space-2:  4px;
+  --c2m-space-3:  8px;
+  --c2m-space-4:  12px;
+  --c2m-space-5:  16px;
+  --c2m-space-6:  24px;
+  --c2m-space-7:  32px;
+  --c2m-space-8:  48px;
+  --c2m-space-9:  64px;
+
+  /* ───── Motion (theme-invariant) ──────────────────────────────── */
+  --c2m-ease-linear:   linear;
+  --c2m-ease-snap:     cubic-bezier(0.2, 0.8, 0.2, 1);
+  --c2m-ease-mech:     cubic-bezier(0.7, 0, 0.3, 1);
+  --c2m-dur-instant:   60ms;
+  --c2m-dur-fast:      120ms;
+  --c2m-dur-base:      200ms;
+  --c2m-dur-slow:      400ms;
+
+  /* ─────────────────────────────────────────────────────────────────
+   * The remaining tokens are SET BY THEMES. Defaults below are the
+   * LCARS preset — kept here so a stylesheet that imports tokens.css
+   * with no theme still renders. To switch themes, link the theme
+   * AFTER tokens.css (see preview/_card.css).
+   * ──────────────────────────────────────────────────────────────── */
+
+  /* type families */
+  --c2m-font-mono:    "JetBrains Mono", "IBM Plex Mono", "SF Mono", ui-monospace, Menlo, monospace;
+  --c2m-font-display: "Antonio", "Eurostile", "Bank Gothic", system-ui, sans-serif;
+  --c2m-font-ui:      "Space Grotesk", "Inter", system-ui, sans-serif;
+
+  /* surfaces */
+  --c2m-bg-void:    #000000;
+  --c2m-bg-deep:    #07090c;
+  --c2m-bg-base:    #0e1116;
+  --c2m-bg-raised:  #14181f;
+  --c2m-bg-sunken:  #0a0c10;
+  --c2m-bg-tooltip: #1b2028;
+
+  /* foregrounds */
+  --c2m-fg-primary:   #e8ecf2;
+  --c2m-fg-secondary: #9aa3b2;
+  --c2m-fg-muted:     #5b6473;
+  --c2m-fg-disabled:  #3a4250;
+  --c2m-fg-on-accent: #0a0c10;
+
+  /* strokes */
+  --c2m-stroke-faint:  rgba(255,255,255,0.06);
+  --c2m-stroke-base:   rgba(255,255,255,0.10);
+  --c2m-stroke-strong: rgba(255,255,255,0.20);
+
+  /* accents — primary / secondary / tertiary; themes name their flavor */
+  --c2m-accent-1:     #ffb347;     /* primary brand accent */
+  --c2m-accent-2:     #66ccff;     /* secondary */
+  --c2m-accent-3:     #cc99cc;     /* tertiary */
+  --c2m-accent-1-tint: rgba(255,179,71,0.08);
+  --c2m-accent-2-tint: rgba(102,204,255,0.06);
+
+  /* status */
+  --c2m-status-ok:    #66ff99;
+  --c2m-status-warn:  #ffb347;
+  --c2m-status-err:   #ff5566;
+  --c2m-status-info:  #66ccff;
+
+  /* radii */
+  --c2m-radius-0:    0px;
+  --c2m-radius-sm:   2px;
+  --c2m-radius-md:   4px;
+  --c2m-radius-pill: 999px;
+
+  /* glows */
+  --c2m-glow-1:   0 0 12px rgba(255,179,71,0.45);
+  --c2m-glow-2:   0 0 12px rgba(102,204,255,0.45);
+  --c2m-glow-err: 0 0 12px rgba(255,85,102,0.5);
+
+  /* frame metaphors — themes opt in as needed
+   *   --c2m-frame-rail-show: 1 (LCARS uses this) | 0 (off)
+   *   --c2m-frame-scanline:  background image for CRT scanlines, or `none`
+   *   --c2m-frame-grain:     halftone/noise overlay, or `none`
+   *   --c2m-frame-corner:    `sharp` | `pill` | `chamfer`
+   */
+  --c2m-frame-rail-show: 1;
+  --c2m-frame-scanline:  none;
+  --c2m-frame-grain:     none;
+  --c2m-frame-corner:    sharp;
+
+  /* semantic shorthands */
+  --c2m-h1: 600 var(--c2m-text-2xl)/1.0  var(--c2m-font-display);
+  --c2m-h2: 500 var(--c2m-text-xl)/1.05  var(--c2m-font-display);
+  --c2m-h3: 500 var(--c2m-text-lg)/1.1   var(--c2m-font-display);
+  --c2m-readout: 500 var(--c2m-text-xl)/1 var(--c2m-font-display);
+  --c2m-label:   500 var(--c2m-text-xs)/1 var(--c2m-font-mono);
+  --c2m-body:    400 var(--c2m-text-base)/1.5 var(--c2m-font-ui);
+  --c2m-code:    400 var(--c2m-text-sm)/1.5 var(--c2m-font-mono);
+}
+
+/* ───── Base resets when this is the only stylesheet ───────────── */
+.c2m-root {
+  background: var(--c2m-bg-base);
+  color: var(--c2m-fg-primary);
+  font: var(--c2m-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+.c2m-h1 { font: var(--c2m-h1); letter-spacing: var(--c2m-tracking-caps); text-transform: uppercase; color: var(--c2m-accent-1); margin: 0; }
+.c2m-h2 { font: var(--c2m-h2); letter-spacing: var(--c2m-tracking-caps); text-transform: uppercase; color: var(--c2m-fg-primary); margin: 0; }
+.c2m-h3 { font: var(--c2m-h3); letter-spacing: var(--c2m-tracking-loose); text-transform: uppercase; color: var(--c2m-fg-secondary); margin: 0; }
+
+.c2m-readout { font: var(--c2m-readout); color: var(--c2m-accent-1); letter-spacing: var(--c2m-tracking-tight); font-variant-numeric: tabular-nums; }
+.c2m-label   { font: var(--c2m-label);   color: var(--c2m-fg-secondary); letter-spacing: var(--c2m-tracking-caps); text-transform: uppercase; }
+.c2m-code    { font: var(--c2m-code);    color: var(--c2m-fg-primary); }
+.c2m-mono    { font-family: var(--c2m-font-mono); font-variant-numeric: tabular-nums; }

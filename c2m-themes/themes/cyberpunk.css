@@ -1,0 +1,186 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+ * Theme: CYBERPUNK · CD Projekt Red / Cyberpunk 2077 HUD
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * # ENERGY & INTENT
+ * Aggressive, glitchy, neon-violent dystopia. The interface conveys: "this
+ * tech is unauthorized, overclocked, and one cycle from crashing." Yellow
+ * is the PRIMARY color (text and borders) — not an accent. Red signals
+ * danger/active states with no apology. Cyan is the rare netrunner-tertiary.
+ * Sharp angles, slashes, brackets, bracket-prefixed labels. Loud and
+ * confident. The OPPOSITE of restraint — Cyberpunk wants to be SEEN. If
+ * you find yourself dialing it back for "professional polish," you're in
+ * the wrong theme. Brutalist HUD energy.
+ *
+ * # LAYOUT STRATEGY
+ * Block-divided with YELLOW HAIRLINE BORDERS on every panel — borders are
+ * an INTENTIONAL element, not avoided. Diagonal yellow slash strips at
+ * section corners for ornament. Red status callouts wherever active state
+ * exists. Sharp corners exclusively. Sectioning is loud — visible borders
+ * on everything, with bracket-flanked section labels. Asymmetric, glitchy
+ * — slight pixel-shift offsets between elements suggest a rendering glitch.
+ * Layout is grid-based but the grid itself is decorated.
+ *
+ * # TYPOGRAPHY HIERARCHY
+ * - Display: Rajdhani Bold, Antonio, Eurostile (condensed, blocky).
+ * - Title: Rajdhani Bold, ALL CAPS, 22–28px, accent-1 yellow. Often
+ *   bracketed: "[ TITLE ]" or slash-flanked: "// TITLE".
+ * - Section headers: Rajdhani Medium, ALL CAPS, 14–16px, accent-1 yellow.
+ *   Bracket-flanked or chevron-prefixed: ">>> AUDIO".
+ * - Body labels: Rajdhani Regular, 11–12px, fg-primary (also yellow).
+ * - Readouts: JetBrains Mono, 11–12px, fg-primary.
+ * - YELLOW is the body text color. White is rare. Black-on-yellow only
+ *   used inside accent buttons.
+ *
+ * # COLOR APPLICATION RULES
+ * - bg-base (#11100a): near-black with slight warm yellow tint — the
+ *   urban-night canvas.
+ * - bg-deep / bg-sunken: pure black or near-black — used for nested
+ *   "deep system" cells.
+ * - bg-raised (#1a1810): one tick lighter than base, for control containers.
+ * - accent-1 yellow (#fcee0a): EVERYTHING — text, panel borders, primary
+ *   status, body color, slider tracks. The brand color and the body color
+ *   are the same. This is unusual; lean into it.
+ * - accent-2 red (#ff003c): ACTIVE STATES, critical errors, "live circuit"
+ *   indicators. When something IS doing something, it's red.
+ * - accent-3 cyan (#00f0ff): tertiary "netrunner" tech accents. Rare. Used
+ *   for jacks/data ports/connections metaphor.
+ * - fg-primary IS the yellow (#fcee0a) — there's no separation here.
+ * - fg-secondary (#c9bd2a): dimmer yellow for less-active readouts.
+ * - fg-muted (#6a6418): backdrop labels, axis titles.
+ *
+ * # PANELS & CONTAINERS
+ * - rounded: 0 (sharp). NEVER round.
+ * - ALL panels have a 1px yellow hairline border (border:1, color=accent-1
+ *   at full opacity OR stroke-strong rgba(252,238,10,0.55) for subtler).
+ * - bg-raised fills (slight lift from base).
+ * - Diagonal yellow slash decorative element at section corners — implement
+ *   as a thin tall yellow `panel` near the top-left and bottom-right of
+ *   each section panel, slightly offset, to suggest a slash motif.
+ * - Layering: glitch shadow panels at back (red and cyan offset duplicates),
+ *   main panels in middle, slash decorations in front.
+ *
+ * # DIVIDERS
+ * - Yellow hairline (1px panel, accent-1 fill, full container width).
+ * - OR: yellow chevron pattern using thin diagonal panels at section breaks.
+ * - OR: red horizontal rule (4px panel, accent-2) for emergency-tier
+ *   dividers — read as "warning band."
+ * - Sectioning is LOUD — Cyberpunk doesn't whisper.
+ *
+ * # INTERACTIVE CONTROLS
+ * - Number boxes: bgcolor=bg-base, textcolor=accent-1 (yellow),
+ *   tricolor=accent-2 (red), tribordercolor=accent-1, fontname=monospace.
+ * - Read-only displays: same shape; tricolor matched to bg, ignoreclick:1.
+ * - Toggle: bgcolor=bg-base, checkedcolor=accent-1 (yellow);
+ *   bordercolor=accent-1 (yellow border on every toggle).
+ * - Multislider: bgcolor=bg-base, slidercolor=accent-1, peakcolor=accent-2,
+ *   bgfillcolor=bg-base. Sharp, with yellow-bordered panel beneath.
+ * - Buttons: rectangular bg-base panels with 1px yellow border + yellow
+ *   ALL CAPS comment overlay. Active state: red border, yellow text.
+ * - All controls use sharp blocky form with loud accent borders.
+ *
+ * # SPECIAL ZONES
+ * - Output zone: red border (accent-2) instead of yellow — output is "live
+ *   circuit," distinct from the rest of the interface.
+ * - Active alerts: red panels with yellow text. Bracketed labels:
+ *   "[ ALERT ]" "[ FAIL ]" "[ ARMED ]".
+ * - live.gain~: warmcolor=accent-1 (yellow), hotcolor=accent-2 (red),
+ *   overloadcolor=accent-2 (red), slidercolor=accent-1, textcolor=accent-1,
+ *   coldcolor=bg-deep, tricolor=accent-2 (red trigger).
+ * - ezdac~: bgcolor=bg-base, color=accent-2 red (on, "live circuit"),
+ *   elementcolor=accent-1 yellow (off, "armed").
+ *
+ * # DECORATIVE ELEMENTS (signature)
+ * - YELLOW HAIRLINE BORDERS on every panel — non-negotiable.
+ * - Yellow corner SLASHES at section corners (thin diagonal yellow panels).
+ * - Red active-state callouts — thin red panel on or near active controls.
+ * - CHROMATIC ABERRATION via dual-color glow (red +2px, cyan -2px shadow
+ *   on text). In Max, approximate by duplicating text comments with red
+ *   and cyan textcolor at slight offsets behind primary yellow text.
+ * - Bracket prefixes [ ] around labels.
+ * - Slash dividers "//" or chevron prefixes ">>>" on section headers.
+ * - GLITCH OFFSETS — small (1–3px) intentional misalignments between
+ *   adjacent elements. Looks broken; reads as deliberately glitchy.
+ * - Numeric codes "V-2077", "0xCYBR" as decorative metadata.
+ * - Optional: red diagonal "warning stripe" patterns on hazard zones.
+ *
+ * # FONTS
+ * - Display: Rajdhani Bold, Antonio, Eurostile (condensed blocky).
+ * - UI: Rajdhani, Inter.
+ * - Mono: JetBrains Mono.
+ * - In Max: fontname="Helvetica Neue Bold" or "Helvetica Neue Condensed
+ *   Bold" if Rajdhani unavailable. fontname="Menlo" or "Courier" for mono.
+ *
+ * # MAX-SPECIFIC NOTES
+ * - For panel borders: use `panel` with border:1, bordercolor=accent-1,
+ *   bgcolor=bg-raised. OR overlay a rectangular `panel` outline (no fill,
+ *   thin border-color stroke).
+ * - For corner slashes: thin tall `panel` (e.g., w=4, h=24) in accent-1
+ *   yellow at section corners, with no border. Two per section (top-left
+ *   and bottom-right) for the motif.
+ * - For chromatic-aberration title: stack three `comment` boxes with
+ *   identical text — one offset +2,0 in red (ff003c), one offset -2,0 in
+ *   cyan (00f0ff), main one centered in yellow (fcee0a). z-order: cyan
+ *   bottom, red middle, yellow top.
+ * - All comments default to fontname="Helvetica Neue Bold", fontsize=14,
+ *   textcolor=accent-1.
+ *
+ * # DON'TS
+ * - NO rounded corners.
+ * - NO "calm" feel — Cyberpunk is loud and unapologetic.
+ * - NO black-on-yellow text in body (only inside accent buttons).
+ * - NO white as primary color — yellow replaces it everywhere.
+ * - NO timid red — when red appears, it's full saturation (#ff003c).
+ * - NO hiding the borders — they're the design.
+ * - NO sans-serif body without yellow — yellow is the body color, period.
+ * - NO professional restraint — wrong theme; pick LCARS or Swiss instead.
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+[data-theme="cyberpunk"], .theme-cyberpunk {
+  --c2m-font-mono:    "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+  --c2m-font-display: "Rajdhani", "Antonio", "Eurostile", system-ui, sans-serif;
+  --c2m-font-ui:      "Rajdhani", "Inter", system-ui, sans-serif;
+
+  --c2m-bg-void:    #000000;
+  --c2m-bg-deep:    #0a0905;
+  --c2m-bg-base:    #11100a;
+  --c2m-bg-raised:  #1a1810;
+  --c2m-bg-sunken:  #07060a;       /* slight purple cool */
+  --c2m-bg-tooltip: #1f1d12;
+
+  --c2m-fg-primary:   #fcee0a;       /* signature yellow as PRIMARY text accent */
+  --c2m-fg-secondary: #c9bd2a;
+  --c2m-fg-muted:     #6a6418;
+  --c2m-fg-disabled:  #2c2a0a;
+  --c2m-fg-on-accent: #0a0905;
+
+  --c2m-stroke-faint:  rgba(252,238,10,0.10);
+  --c2m-stroke-base:   rgba(252,238,10,0.25);
+  --c2m-stroke-strong: rgba(252,238,10,0.55);
+
+  --c2m-accent-1:     #fcee0a;       /* yellow */
+  --c2m-accent-2:     #ff003c;       /* red */
+  --c2m-accent-3:     #00f0ff;       /* cyan netrunner */
+  --c2m-accent-1-tint: rgba(252,238,10,0.08);
+  --c2m-accent-2-tint: rgba(255,0,60,0.08);
+
+  --c2m-status-ok:   #00f0ff;
+  --c2m-status-warn: #fcee0a;
+  --c2m-status-err:  #ff003c;
+  --c2m-status-info: #fcee0a;
+
+  --c2m-radius-sm:   0px;
+  --c2m-radius-md:   0px;
+  --c2m-radius-pill: 0px;
+
+  /* dual-color glow → cheap chromatic aberration */
+  --c2m-glow-1:   2px 0 0 rgba(255,0,60,0.6), -2px 0 0 rgba(0,240,255,0.5);
+  --c2m-glow-2:   0 0 10px rgba(0,240,255,0.55);
+  --c2m-glow-err: 0 0 12px rgba(255,0,60,0.7);
+
+  --c2m-frame-rail-show: 0;
+  --c2m-frame-scanline:  none;
+  --c2m-frame-grain:     none;
+  --c2m-frame-corner:    sharp;
+}

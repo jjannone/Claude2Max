@@ -1,0 +1,196 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+ * Theme: MEMPHIS · Sottsass · Sowden · Du Pasquier · Sowden — Milan 1981–1987
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * # ENERGY & INTENT
+ * Playful, irreverent, post-modern pattern-clash. The interface conveys:
+ * "rules are for other design systems." Pastels with thick black strokes.
+ * HARD OFFSET SHADOWS — every panel gets a black duplicate offset +4px,+4px
+ * BENEATH. Mixed pill/sharp corners — alternate per panel deliberately.
+ * Confetti shapes (small triangles, circles, squiggles) scattered as
+ * background decoration. Joy. Joy is the brief. Where Bauhaus is rigorous
+ * geometric reduction, Memphis is rule-breaking geometric exuberance —
+ * deliberately violating Bauhaus's principles is part of Memphis's identity.
+ * If your interface starts looking too coordinated or too professional,
+ * push it further into clash and pattern.
+ *
+ * # LAYOUT STRATEGY
+ * Sectioned panels with HARD OFFSET SHADOWS — duplicate each panel as a
+ * black panel shifted +4px,+4px and placed BENEATH (z-order behind, sits
+ * at backmost layer). Mixed pill + sharp corners — alternate per panel
+ * (panel A pill, panel B sharp, panel C pill, etc.) so adjacency clashes.
+ * CONFETTI SHAPES — small (16–32px) pink/teal/yellow triangles, circles,
+ * and squiggles scattered as background decoration BETWEEN panels.
+ * Pastels + heavy black accents. Avoid uniformity at all costs.
+ *
+ * # TYPOGRAPHY HIERARCHY
+ * - Display: Inter Bold, Helvetica Neue Bold (geometric pastel signage).
+ * - Title: Inter Bold or Helvetica Neue Bold, 28–36px, fg-primary (ink)
+ *   on cream. Often paired with a confetti shape in the title area.
+ * - Section header: Inter Bold, 16–18px, fg-primary. Mix case freely —
+ *   "Audio" or "AUDIO" both acceptable depending on per-panel mood.
+ * - Body labels: Inter Regular, 11–12px, fg-primary.
+ * - Readouts: JetBrains Mono, 11–12px, fg-primary.
+ * - Bold geometric weight throughout. Memphis types loud, never delicate.
+ *
+ * # COLOR APPLICATION RULES
+ * - bg-base warm cream (#f6f0d6): the page. Slightly warmer than Swiss
+ *   cream — Memphis paper is sun-warmed.
+ * - bg-deep / bg-sunken: subtle paper variants. Rare.
+ * - accent-1 pink (#ff5fa8): playful primary. Used as panel fills,
+ *   active accents, decoration. The first reach for color.
+ * - accent-2 teal (#2cd5c4): cool counter-accent. Panel fills, contrast
+ *   blocks, controls.
+ * - accent-3 yellow (#ffd23f): warm decoration, occasional fills,
+ *   confetti triangles.
+ * - fg-primary ink (#1a1a1a): text, THICK STROKES, OFFSET SHADOWS. Ink
+ *   does heavy lifting in Memphis — every shadow is ink, every border is
+ *   ink, every text is ink.
+ * - The pastels are bold (not muted) — Memphis isn't shy. If you find
+ *   yourself dialing pinks toward dusty-pink or teals toward sage, you're
+ *   slipping into a different aesthetic.
+ *
+ * # PANELS & CONTAINERS
+ * - ALTERNATING corner styles per panel: one panel pill (rounded:999),
+ *   the next sharp (rounded:0), the next pill, etc. The clash is the design.
+ * - HARD OFFSET SHADOW on every panel — duplicate as ink panel +4,+4
+ *   BEHIND. This is the Memphis signature element, non-negotiable.
+ * - Solid pastel fills (pink, teal, yellow) as panel bg.
+ * - Thick black stroke (border:1, stroke-strong rgba(26,26,26,1.0)) on
+ *   bordered panels — when a border appears, it's HEAVY, not hairline.
+ * - Layering: shadows (ink, +4,+4) at back, panels in middle, confetti
+ *   in front of bg but behind controls.
+ *
+ * # DIVIDERS
+ * - Thick black bars (4–6px ink panels) — but optional and used sparingly.
+ * - OR: a confetti shape sequence as a pattern divider (e.g., a row of
+ *   small alternating circles and triangles).
+ * - Or: NOTHING — let the offset shadows and panel clash do the dividing.
+ *
+ * # INTERACTIVE CONTROLS
+ * - Number boxes: bgcolor=accent-1 pink OR bg-base, textcolor=fg-primary,
+ *   tricolor=accent-2 teal, tribordercolor=fg-primary, bordercolor=
+ *   fg-primary (THICK black border, not hairline), fontsize=12.
+ * - Read-only displays: bgcolor=bg-deep, textcolor=fg-primary, tricolor
+ *   matched to bg, ignoreclick:1, with thick black border.
+ * - Toggle: bgcolor=accent-3 yellow OR bg-base, checkedcolor=accent-1
+ *   pink, bordercolor=fg-primary (thick).
+ * - Multislider: bgcolor=bg-base, slidercolor=accent-1 pink, peakcolor=
+ *   fg-primary, bgfillcolor=bg-base. Thick black border around the
+ *   container.
+ * - Buttons: pastel-fill panels with thick black border. Either pill or
+ *   sharp depending on adjacency rhythm. Drop-shadow ink panel beneath.
+ * - Bright pastel fills with thick black borders — high contrast.
+ *
+ * # SPECIAL ZONES
+ * - Output zone: bg-tint variant or accent (e.g., teal panel for output).
+ *   The output panel can be the most "color-loud" of all, signaling
+ *   "the signal exits here."
+ * - live.gain~: warmcolor=accent-1 pink, hotcolor=accent-1, slidercolor=
+ *   accent-2 teal, textcolor=fg-primary, coldcolor=bg-deep, tricolor=
+ *   accent-1, bordercolor=fg-primary (thick).
+ * - ezdac~: bgcolor=accent-3 yellow, color=accent-1 pink (on),
+ *   elementcolor=fg-primary (off, ink). The yellow background stands
+ *   out from any other panel — that's intentional.
+ *
+ * # DECORATIVE ELEMENTS (signature)
+ * - HARD OFFSET SHADOW — duplicate each section panel as black ink
+ *   panel +4px,+4px behind. THE Memphis signature. Without this, it's
+ *   just a pastel theme.
+ * - CONFETTI SHAPES — small (16–32px) triangles, circles, squiggles
+ *   scattered in background between panels. Implement triangles via
+ *   `jsui`, circles via small pill `panel`s with rounded=999, squares
+ *   via small `panel`s with rounded=0. Mix all three.
+ * - MIXED CORNER ALTERNATION — pill on one panel, sharp on the next.
+ *   Read across the layout: the rhythm of corner styles is part of the
+ *   design.
+ * - THICK BLACK BORDERS on accent panels (1–2px, full ink color).
+ * - POLKA-DOT PATTERNS — small ink dots scattered in some background
+ *   areas as texture. Implement via `jsui` or many small dark panels.
+ * - TERRAZZO speckle — irregular small color flecks (pink/teal/yellow
+ *   on cream) as texture. Optional, optional, optional but very Memphis.
+ *
+ * # FONTS
+ * - Display: Inter Bold, Helvetica Neue Bold (geometric weight).
+ * - UI: Inter, Helvetica Neue.
+ * - Mono: JetBrains Mono.
+ * - In Max: fontname="Helvetica Neue Bold" for display, "Helvetica Neue"
+ *   for body, "Menlo" for mono.
+ *
+ * # MAX-SPECIFIC NOTES
+ * - For offset shadows: for EVERY content panel, add an ink-colored
+ *   `panel` of identical size at offset (+4px, +4px), bgcolor=fg-primary
+ *   (#1a1a1a), border=0, rounded=matching-content-panel-rounded. Place
+ *   it BEHIND the content panel (earlier in the spec — first in objects
+ *   array means first drawn = back layer).
+ * - For confetti circles: small `panel`s, w=h=16–24, rounded=999,
+ *   bgcolor=accent-1/2/3 (mix). Place at random positions in background
+ *   between content panels.
+ * - For confetti triangles: `jsui` triangles, ignoreclick=1, fill in
+ *   accent-1/2/3.
+ * - For thick borders: set border:1 on panels (Max's default border is
+ *   thin; for visually thick, use multiple stacked panels or set
+ *   bordercolor with high alpha).
+ * - For corner alternation: track which panel index you're on; even-
+ *   indexed panels rounded=999, odd-indexed rounded=0.
+ *
+ * # DON'TS
+ * - NO uniformity — Memphis IS pattern-clash; identical panels are wrong.
+ * - NO subtle shadows — offsets are HARD (+4 px) and fully BLACK.
+ * - NO desaturated pastels — pinks/teals/yellows must be bright (#ff5fa8
+ *   pink is the floor; don't go duller).
+ * - NO timid black — strokes are thick.
+ * - NO neutral panels — every element should have a color personality.
+ * - NO restraint. If it feels too coordinated, push the clash further.
+ * - NO professional polish — Memphis is intentionally amateur in spirit.
+ * - NO drop-shadow blur — the shadow is a HARD edge, +4,+4 ink, no blur.
+ * - NO Helvetica Light. Bold weight or heavier.
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+[data-theme="memphis"], .theme-memphis {
+  --c2m-font-mono:    "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+  --c2m-font-display: "Inter", "Helvetica Neue", system-ui, sans-serif;
+  --c2m-font-ui:      "Inter", "Helvetica Neue", system-ui, sans-serif;
+
+  --c2m-bg-void:    #efe9c8;
+  --c2m-bg-deep:    #f3edcf;
+  --c2m-bg-base:    #f6f0d6;
+  --c2m-bg-raised:  #fbf5db;
+  --c2m-bg-sunken:  #e7e0bf;
+  --c2m-bg-tooltip: #1a1a1a;
+
+  --c2m-fg-primary:   #1a1a1a;
+  --c2m-fg-secondary: #555555;
+  --c2m-fg-muted:     #888888;
+  --c2m-fg-disabled:  #c0bea8;
+  --c2m-fg-on-accent: #1a1a1a;
+
+  --c2m-stroke-faint:  rgba(26,26,26,0.18);
+  --c2m-stroke-base:   rgba(26,26,26,0.50);
+  --c2m-stroke-strong: rgba(26,26,26,1.00);
+
+  --c2m-accent-1:     #ff5fa8;       /* pink */
+  --c2m-accent-2:     #2cd5c4;       /* teal */
+  --c2m-accent-3:     #ffd23f;       /* yellow */
+  --c2m-accent-1-tint: rgba(255,95,168,0.14);
+  --c2m-accent-2-tint: rgba(44,213,196,0.14);
+
+  --c2m-status-ok:   #2cd5c4;
+  --c2m-status-warn: #ffd23f;
+  --c2m-status-err:  #e63946;
+  --c2m-status-info: #4361ee;
+
+  --c2m-radius-sm:   0px;
+  --c2m-radius-md:   0px;
+  --c2m-radius-pill: 999px;
+
+  --c2m-glow-1:   4px 4px 0 #1a1a1a;     /* hard offset shadow, not a glow */
+  --c2m-glow-2:   4px 4px 0 #1a1a1a;
+  --c2m-glow-err: 4px 4px 0 #e63946;
+
+  --c2m-frame-rail-show: 0;
+  --c2m-frame-scanline:  none;
+  --c2m-frame-grain:     none;
+  --c2m-frame-corner:    sharp;
+}

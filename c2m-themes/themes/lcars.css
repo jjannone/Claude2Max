@@ -1,0 +1,178 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+ * Theme: LCARS · Star Trek TNG / Voyager — Mike Okuda, 1987–2002
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * # ENERGY & INTENT
+ * Operations console for a vast confident organization. Warm amber dignity,
+ * not aggression. The interface conveys: someone is in charge, the systems
+ * are working, the data is meaningful. Asymmetric layout — the LEFT RAIL is
+ * the soul; without a vertical amber strip on the left, it's not LCARS.
+ * Pills (rounded ≥ 18) are non-negotiable — sharp corners look wrong and
+ * read as a different system. This is the "default" Claude2Max look.
+ *
+ * # LAYOUT STRATEGY
+ * Asymmetric, rail-anchored. The vertical amber rail (full-height panel,
+ * ~70px wide, accent-1 amber, very rounded) sits at x=0 and anchors a
+ * left-aligned grid. Top header bar (amber, ~36px tall, pill-rounded) spans
+ * the full width above the rail. Mauve secondary accent block sits inline
+ * with the header on the right. Section pill labels (small ALL-CAPS comments
+ * black-on-amber, centered) run down the rail at section boundaries. Content
+ * occupies the right ~80% of the canvas (x=80+), never crossing into the
+ * rail space. The rail is structural — it tells you where you are; do not
+ * use it as decoration.
+ *
+ * # TYPOGRAPHY HIERARCHY
+ * - Title (in header bar): Antonio / Eurostile / Bank Gothic, ALL CAPS,
+ *   18–22px, fg-on-accent (dark) on amber bar. Left-aligned to where the
+ *   rail ends.
+ * - Section labels (rail pills): Antonio, ALL CAPS, 9–11px, fg-on-accent on
+ *   amber. Short codes — "AUDIO", "NAV", "STATUS".
+ * - Body labels: Space Grotesk / Inter Regular, lowercase or sentence case,
+ *   11–12px, fg-secondary or fg-muted.
+ * - Readouts: JetBrains Mono, 12–14px, fg-primary on bg-raised — tabular
+ *   numerals always.
+ * - Status digits: Antonio condensed, fg-primary, scaled to fit cells.
+ *
+ * # COLOR APPLICATION RULES
+ * - bg-base (deep matte): the canvas; visible everywhere panels aren't.
+ * - bg-deep / bg-sunken: rare — only for the most-recessed cells.
+ * - bg-raised: the standard control container fill, lighter than base for
+ *   legibility against the dark canvas.
+ * - accent-1 amber (#ffb347): rail, header bar, primary action elements,
+ *   active-status highlights, slider tracks. The brand color — used
+ *   wherever "this is the system speaking."
+ * - accent-2 mauve (#cc99cc): secondary structural blocks (smaller pills
+ *   inline with amber). NOT for primary controls — supporting role only.
+ * - accent-3 orange (#ff9c45): tertiary heat — warnings, transition states,
+ *   "system in flux."
+ * - fg-on-accent (dark): text laid over amber elements (header, rail pills,
+ *   amber buttons). Always dark, never light.
+ * - fg-primary (warm light): text over dark backgrounds, readouts.
+ *
+ * # PANELS & CONTAINERS
+ * - rounded: 18–30 (pill style). Rail and header take the heaviest rounding
+ *   (≥30); inner control containers take 18–22. Status cells take 4 (md).
+ * - Solid fills, no outlines (LCARS doesn't draw boxes around things —
+ *   color contrast does the demarcation).
+ * - Subtle stroke (stroke-faint, rgba 0.06) only when contrast is too low.
+ * - Layering: rail at back (full-height), header at back (full-width minus
+ *   rail), content panels at front.
+ * - Each functional zone gets ONE container; never nest pill panels deeply.
+ *
+ * # DIVIDERS
+ * LCARS does NOT use horizontal divider bars. Sections are demarcated by:
+ * - Pill-shaped containers with intentional gaps between them
+ * - Rail labels announcing the section
+ * - Color shifts (amber for "primary," mauve for "secondary")
+ * Use of horizontal rules is wrong — read as Soviet, not LCARS.
+ *
+ * # INTERACTIVE CONTROLS
+ * - Number boxes: bgcolor=bg-raised, textcolor=fg-primary, tricolor=amber,
+ *   tribordercolor=stroke-base. Read as "active readout."
+ * - Read-only displays: same shape but tricolor matched to bg (no triangle
+ *   visible), ignoreclick:1.
+ * - Toggle: bgcolor=bg-raised, checkedcolor=amber, bordercolor=stroke-base.
+ * - Multislider: bgcolor=bg-raised, slidercolor=amber, peakcolor=mauve,
+ *   contrast=1, bgfillcolor matches bg-raised.
+ * - Buttons: pill-rounded panels (rounded:18+) with amber bg + dark text
+ *   (fg-on-accent). Comments overlaid as labels.
+ * - Number boxes always show triangle on left (the "amber tip" — distinctive).
+ *
+ * # SPECIAL ZONES
+ * - Status grid: small mauve and amber blocks in a row at the top, "01 / 04"
+ *   style codes — use comments with bgcolor for these.
+ * - Audio output: amber-bordered or amber-filled pill panel near bottom.
+ * - live.gain~: warmcolor=amber, hotcolor=amber-bright (lighter accent-1),
+ *   overloadcolor=red (status-err), slidercolor=amber, textcolor=fg-primary,
+ *   coldcolor=bg-raised, tricolor=amber.
+ * - ezdac~: bgcolor=bg-raised, color=amber (on-state icon),
+ *   elementcolor=mauve (off-state icon).
+ *
+ * # DECORATIVE ELEMENTS (signature)
+ * - Pill endcaps everywhere — the most distinctive LCARS signal.
+ * - Mauve secondary blocks (smaller pill panels, inline with amber).
+ * - Section number tags ("01", "02") in pill labels along the rail.
+ * - Subtle amber glow on active elements (low alpha, 8–12px) — implement
+ *   in Max via larger amber panel beneath active control with low alpha.
+ * - Status cells in a row: amber, mauve, amber, orange — the "system bar."
+ * - Numeric codes everywhere (47, 1701-D, etc.) as comment labels for
+ *   visual texture.
+ *
+ * # FONTS
+ * - Display: Antonio, Eurostile, Bank Gothic — condensed all-caps families.
+ * - UI: Space Grotesk, Inter — clean geometric humanist.
+ * - Mono: JetBrains Mono, IBM Plex Mono — for all readouts and codes.
+ * - Always use system fallback if Antonio not installed; Helvetica Neue
+ *   Condensed Bold is acceptable. Never serif.
+ *
+ * # MAX-SPECIFIC NOTES
+ * - For the rail in Max: a tall amber `panel` with rounded ≈ 30 at
+ *   x=0, y=0, w=70, h=full-presentation-height. It is the FIRST panel in
+ *   draw order so content sits in front.
+ * - For the header bar: amber `panel` with rounded ≈ 32 at x=70, y=0,
+ *   w=remaining-width, h=36. Title `comment` overlaid with fontname=
+ *   "Helvetica Neue Bold" (Antonio rare in Max), all caps.
+ * - Rail section pills: small `panel`s along rail (e.g., x=0, y=80, w=70,
+ *   h=22) with overlaid `comment` ALL CAPS at fontsize 9 with
+ *   textcolor=fg-on-accent (dark).
+ * - presentation_rect convention applies: [x, y, w, h] always.
+ * - Panel rounded values: rail/header=30, body panels=18, status cells=4.
+ *
+ * # DON'TS
+ * - No sharp corners. Even small rounded should be ≥4 (sm value).
+ * - No grid of horizontal rules — sections are pill-shaped, not lined.
+ * - No bright neon — amber is warm and dignified, not aggressive.
+ * - No symmetry — the layout is rail-left, content-right.
+ * - No tiny title — header bar dominates the top of the canvas.
+ * - No black-on-light or harsh contrast — the world is dark with warm amber.
+ * - No serif fonts. No script fonts. No decorative type.
+ * - No mauve-as-primary — mauve is supporting; amber is the system voice.
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+[data-theme="lcars"], .theme-lcars {
+  --c2m-font-mono:    "JetBrains Mono", "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --c2m-font-display: "Antonio", "Eurostile", "Bank Gothic", system-ui, sans-serif;
+  --c2m-font-ui:      "Space Grotesk", "Inter", system-ui, sans-serif;
+
+  --c2m-bg-void:    #000000;
+  --c2m-bg-deep:    #07090c;
+  --c2m-bg-base:    #0e1116;
+  --c2m-bg-raised:  #14181f;
+  --c2m-bg-sunken:  #0a0c10;
+  --c2m-bg-tooltip: #1b2028;
+
+  --c2m-fg-primary:   #e8ecf2;
+  --c2m-fg-secondary: #9aa3b2;
+  --c2m-fg-muted:     #5b6473;
+  --c2m-fg-disabled:  #3a4250;
+  --c2m-fg-on-accent: #0a0c10;
+
+  --c2m-stroke-faint:  rgba(255,255,255,0.06);
+  --c2m-stroke-base:   rgba(255,255,255,0.10);
+  --c2m-stroke-strong: rgba(255,255,255,0.20);
+
+  --c2m-accent-1:     #ffb347;       /* amber */
+  --c2m-accent-2:     #cc99cc;       /* mauve */
+  --c2m-accent-3:     #ff9c45;       /* orange */
+  --c2m-accent-1-tint: rgba(255,179,71,0.08);
+  --c2m-accent-2-tint: rgba(204,153,204,0.08);
+
+  --c2m-status-ok:   #66ff99;
+  --c2m-status-warn: #ffb347;
+  --c2m-status-err:  #ff5566;
+  --c2m-status-info: #66ccff;
+
+  --c2m-radius-sm:   2px;
+  --c2m-radius-md:   4px;
+  --c2m-radius-pill: 999px;
+
+  --c2m-glow-1:   0 0 12px rgba(255,179,71,0.45);
+  --c2m-glow-2:   0 0 10px rgba(204,153,204,0.4);
+  --c2m-glow-err: 0 0 12px rgba(255,85,102,0.5);
+
+  --c2m-frame-rail-show: 1;
+  --c2m-frame-scanline:  none;
+  --c2m-frame-grain:     none;
+  --c2m-frame-corner:    pill;
+}

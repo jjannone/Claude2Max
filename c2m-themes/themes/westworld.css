@@ -1,0 +1,194 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+ * Theme: WESTWORLD · Perception NYC, 2016
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * # ENERGY & INTENT
+ * Surveying instrument. Bone-white restraint. The OPPOSITE of every glowing
+ * sci-fi HUD — Westworld is the precision of an old optical theodolite or
+ * a draftsman's protractor. NO FILLS, NO GLOW. Only outline strokes (1px
+ * max), tick marks, geometric arcs, register marks. Annotation in muted-red
+ * small caps reads as instrument labels — etched, not displayed. The
+ * interface conveys: "this is a measurement device, not a display." Calm,
+ * precise, reverent. Where Cyberpunk is loud and Nostromo is anxious,
+ * Westworld is monastic.
+ *
+ * # LAYOUT STRATEGY
+ * OUTLINE ONLY. Panels are transparent or near-transparent rectangles
+ * with thin bone-white borders. CROSSHAIR / register marks (`+`, `·`, `○`)
+ * sit at panel corners as instrument-bench markers. Annotation labels in
+ * small caps muted-red float near each readout, like instrument labels
+ * etched onto brass. Geometric symmetry — Westworld doesn't do asymmetric
+ * rails. Generous whitespace. The interface is mostly the bg-base
+ * showing through; panels are barely there.
+ *
+ * # TYPOGRAPHY HIERARCHY
+ * - Display: IBM Plex Sans (humanist sans, draftsman's hand). Light weight
+ *   preferred — never bold for body. Bold reserved for primary title only.
+ * - Title: IBM Plex Sans Light, SMALL CAPS, 22–28px, fg-primary (bone).
+ *   Often paired with a Roman-numeral subtitle or arc-axis label.
+ * - Section header: IBM Plex Sans Medium, SMALL CAPS, 12–14px, fg-primary,
+ *   letter-spacing slightly increased (instrument-engraved feel).
+ * - Annotation labels: IBM Plex Sans Italic, SMALL CAPS, 9–10px, accent-3
+ *   (the rare red #c93a2a) OR fg-secondary muted bone. Reads as etched
+ *   instrument labels: "MEAS.", "ANGLE", "R-AXIS", "RANGE".
+ * - Body: JetBrains Mono, 10–11px, fg-primary.
+ * - SMALL CAPS used extensively — the typographic register of measurement
+ *   instruments, drafting tools, surveying gear.
+ *
+ * # COLOR APPLICATION RULES
+ * - bg-base (#060606): near-pure black — the slate of the instrument bench.
+ * - bg-deep / bg-sunken: slightly darker variants; rare.
+ * - fg-primary (#f4ede0): warm bone white — the only structural "color."
+ *   This is the instrument-engraved line color.
+ * - fg-secondary (#a89f8e): muted bone for secondary annotations.
+ * - fg-muted (#5e574a): even softer for backdrop labels, disabled state.
+ * - accent-1 = fg-primary: bone is the only structural accent. Treat as
+ *   one color for borders, lines, ticks.
+ * - accent-2 (#a89f8e): muted bone for secondary structural elements.
+ * - accent-3 (#c93a2a): the RARE red — narrative beats, key annotations,
+ *   "CRITICAL" callouts. When red appears, it MEANS something narratively
+ *   important. Never decorative.
+ *
+ * # PANELS & CONTAINERS
+ * - rounded: 0 for rectangles. Pill (rounded:999) ONLY for actual circular
+ *   elements (radial readouts, gauges, register rings).
+ * - NO FILL — bgcolor=bg-base or transparent.
+ * - 1px bone border (border:1, color=fg-primary at stroke-base alpha 0.16).
+ * - The panel IS the border, not the fill. Think of a rectangle drawn on
+ *   tracing paper — the line is the panel.
+ * - Geometric primitives — circles, arcs, polygons — implemented via
+ *   `jsui` outlines, never filled.
+ *
+ * # DIVIDERS
+ * - 1px bone hairline (fg-primary at low alpha).
+ * - OR: tick-mark sequence — small bone `comment`s "│" or "·" at intervals
+ *   along the divider line.
+ * - NEVER a solid bar — Westworld is hairlines and ticks only.
+ * - Section breaks via geometric markers, not color blocks.
+ *
+ * # INTERACTIVE CONTROLS
+ * - Number boxes: bgcolor=bg-base, textcolor=fg-primary (bone),
+ *   tricolor=fg-primary, tribordercolor=stroke-base, fontname=
+ *   monospace, fontsize=10–11. Bordered with 1px bone hairline (border:1,
+ *   bordercolor=stroke-base).
+ * - Read-only displays: same shape; tricolor matched to bg, ignoreclick:1.
+ * - Toggle: bgcolor=bg-base, checkedcolor=accent-3 (the rare red — its
+ *   narrative weight makes ON-state significant), bordercolor=fg-primary.
+ * - Multislider: bgcolor=bg-base, slidercolor=fg-primary, peakcolor=
+ *   accent-3 (rare), contrast=0, bgfillcolor=bg-base. Track is BARELY
+ *   visible — outline only.
+ * - Buttons: outlined rectangles, bone border, bone label inside.
+ *   Hover/active state: invert (bone fill, bg-base label).
+ * - Outline-only feel; nothing fills heavily.
+ *
+ * # SPECIAL ZONES
+ * - Output zone: visually identical to other zones (no inversion —
+ *   Westworld is uniform, symmetric). Difference comes from annotation
+ *   labels, not panel treatment.
+ * - live.gain~: warmcolor=fg-primary, hotcolor=accent-3 (rare red),
+ *   overloadcolor=accent-3, slidercolor=fg-primary, textcolor=fg-primary,
+ *   coldcolor=bg-base, tricolor=fg-primary, bordercolor=stroke-base.
+ * - ezdac~: bgcolor=bg-base, color=accent-3 (on, the narrative red),
+ *   elementcolor=fg-primary (off, bone). The off-state is the default;
+ *   on-state announces a narrative event.
+ *
+ * # DECORATIVE ELEMENTS (signature)
+ * - CROSSHAIR / REGISTER MARKS at panel corners as comment glyphs:
+ *   "+", "·", "○", "⌐", "┐". Place at the four corners of each panel.
+ *   Use bone-white textcolor, fontsize 10–12.
+ * - ANNOTATION LABELS in small caps muted-red near each readout, like
+ *   instrument labels: "MEAS.", "ANGLE", "R-AXIS", "RANGE", "Δ".
+ * - GEOMETRIC ARCS (`jsui` circle outlines, no fill) for radial readouts —
+ *   instrument scales. 1px bone stroke.
+ * - TICK MARKS (sequences of "│" comments) along slider scales.
+ * - SECTION NUMERALS in Roman numerals (I, II, III) in small caps. Adds
+ *   to the surveying-instrument register.
+ * - Optional: extremely subtle vignette via `jsui` (bg-base falling off
+ *   to slightly darker at corners).
+ * - Geometric symbols throughout — Δ, Σ, π, ∞, ° — for scale labels.
+ *
+ * # FONTS
+ * - Display: IBM Plex Sans Light/Medium, Inter Light. Humanist sans,
+ *   never geometric.
+ * - UI: IBM Plex Sans, Inter.
+ * - Mono: JetBrains Mono, IBM Plex Mono.
+ * - In Max: fontname="Helvetica Neue Light" or "Helvetica Neue" if Plex
+ *   not available. Apply small-caps via writing labels in actual SMALL
+ *   CAPITAL letters (Max can't auto-transform).
+ *
+ * # MAX-SPECIFIC NOTES
+ * - For panel borders: `panel` with border:1, bgcolor=bg-base (or set
+ *   alpha to 0 if transparent fill is desired), bordercolor=fg-primary
+ *   at stroke-base alpha. Or use `jsui` for true outline-only rectangles.
+ * - For crosshair marks: small `comment` boxes positioned at panel
+ *   corners with text="+" (or "·", "○"), fontsize=12, textcolor=fg-primary.
+ *   Each panel gets 4 (one per corner).
+ * - For annotation labels: `comment` with text in actual SMALL CAPS
+ *   ("MEAS." not "Meas."), fontname="Helvetica Neue Italic", fontsize=9,
+ *   textcolor=accent-3 (the rare red).
+ * - For geometric arcs: `jsui` drawing circle/arc outlines via `sketch`
+ *   API, 1px stroke at fg-primary, no fill.
+ * - For Roman numerals: literal "I", "II", "III" `comment` text — Max
+ *   can't transform numerals.
+ *
+ * # DON'TS
+ * - NO FILLS. Outlines only. Anywhere.
+ * - NO GLOW. Nothing emits.
+ * - No rounded corners except for actual circles.
+ * - No saturated color. Bone is the entire palette; red is the rare
+ *   narrative beat.
+ * - No bold weight for body text (Medium maximum; Light preferred).
+ * - No emoji-style symbols (use precise geometric glyphs only).
+ * - No colored backgrounds.
+ * - No section dividers as solid bars — hairlines or tick sequences only.
+ * - No sans-serif besides IBM Plex Sans / Inter / Helvetica Neue Light.
+ * - No "loud" anything. Westworld is monastic.
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+[data-theme="westworld"], .theme-westworld {
+  --c2m-font-mono:    "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+  --c2m-font-display: "IBM Plex Sans", "Inter", system-ui, sans-serif;
+  --c2m-font-ui:      "IBM Plex Sans", "Inter", system-ui, sans-serif;
+
+  --c2m-bg-void:    #000000;
+  --c2m-bg-deep:    #020202;
+  --c2m-bg-base:    #060606;
+  --c2m-bg-raised:  #0c0c0c;
+  --c2m-bg-sunken:  #030303;
+  --c2m-bg-tooltip: #121212;
+
+  --c2m-fg-primary:   #f4ede0;       /* warm bone white */
+  --c2m-fg-secondary: #a89f8e;
+  --c2m-fg-muted:     #5e574a;
+  --c2m-fg-disabled:  #2a261f;
+  --c2m-fg-on-accent: #060606;
+
+  --c2m-stroke-faint:  rgba(244,237,224,0.06);
+  --c2m-stroke-base:   rgba(244,237,224,0.16);
+  --c2m-stroke-strong: rgba(244,237,224,0.40);
+
+  --c2m-accent-1:     #f4ede0;       /* bone — sole accent */
+  --c2m-accent-2:     #a89f8e;
+  --c2m-accent-3:     #c93a2a;       /* the rare red — narrative */
+  --c2m-accent-1-tint: rgba(244,237,224,0.04);
+  --c2m-accent-2-tint: rgba(168,159,142,0.04);
+
+  --c2m-status-ok:   #f4ede0;
+  --c2m-status-warn: #d4a849;
+  --c2m-status-err:  #c93a2a;
+  --c2m-status-info: #a89f8e;
+
+  --c2m-radius-sm:   0px;
+  --c2m-radius-md:   0px;
+  --c2m-radius-pill: 999px;          /* circles only — perfect rings */
+
+  --c2m-glow-1:   none;              /* no glow — instrument, not display */
+  --c2m-glow-2:   none;
+  --c2m-glow-err: none;
+
+  --c2m-frame-rail-show: 0;
+  --c2m-frame-scanline:  none;
+  --c2m-frame-grain:     none;
+  --c2m-frame-corner:    sharp;
+}

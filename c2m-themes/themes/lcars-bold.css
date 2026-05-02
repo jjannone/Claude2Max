@@ -1,0 +1,166 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+ * Theme: LCARS-BOLD · alternate showpiece cut of LCARS
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * # ENERGY & INTENT
+ * Same Okuda DNA as themes/lcars.css but everything turned up. Splash-panel
+ * intensity. Demo mode. The version you reach for when the patch needs to
+ * read at 20 feet — a teaching room, a classroom projection, a portfolio
+ * thumbnail. Wider rail, taller header, bigger title, more saturation,
+ * more accent blocks. Use sparingly: it overpowers dense data and starts
+ * to fight working interfaces.
+ *
+ * # LAYOUT STRATEGY
+ * Same asymmetric rail+header structure as canonical LCARS, but PUSHED:
+ * - Rail width: ≥ 80px (vs LCARS 70px) — visually dominant left column
+ * - Header height: ≥ 56px (vs LCARS 36px) — title becomes a poster
+ * - Title size: ≥ 36px display (vs LCARS 18–22px) — readable across a room
+ * - Mauve accent blocks: more of them, larger — header right, rail mid,
+ *   between sections. Pattern of amber/mauve alternation reads as
+ *   "showpiece bar."
+ * - Status cells: larger (≥ 40px tall instead of 22) and brighter.
+ * - Content area: same right-anchored grid as LCARS but with more
+ *   breathing room between pill panels (gaps ≥ 12px vs 6px).
+ *
+ * # TYPOGRAPHY HIERARCHY
+ * - Title: Antonio / Eurostile / Bank Gothic, ALL CAPS, 36–48px,
+ *   fg-on-accent (dark) on amber header. The poster element.
+ * - Subtitle (under title in header): Antonio, ALL CAPS, 11–13px,
+ *   fg-on-accent. A short tagline or system code.
+ * - Section labels (rail pills): Antonio, ALL CAPS, 12–14px (vs LCARS 9–11px),
+ *   fg-on-accent on amber.
+ * - Body labels: Space Grotesk / Inter Medium, 12–13px, fg-secondary.
+ * - Readouts: JetBrains Mono, 14–16px (vs LCARS 12–14px), fg-primary.
+ *
+ * # COLOR APPLICATION RULES
+ * Same palette as LCARS, but applied with more saturation and density:
+ * - accent-1 amber (#ffb347): heavier presence — every section gets at
+ *   least one amber element. Active status uses brighter saturation.
+ * - accent-2 mauve (#cc99cc): repeated — header right block, mid-rail,
+ *   between sections. Mauve is co-equal with amber here.
+ * - accent-3 orange (#ff7733, slightly more saturated than canonical):
+ *   transitions, "live" indicators.
+ * - bg-base / bg-raised: same dark canvas. Contrast remains fg-primary
+ *   on dark — keep the world dark to make amber/mauve POP.
+ * - Avoid faint outlines — use saturated accent fills on action elements;
+ *   thin/faint accents will under-deliver in this theme.
+ *
+ * # PANELS & CONTAINERS
+ * - rounded: 22–34 (heavier pill than LCARS' 18–30). Rail: ≥ 34. Header: ≥ 28.
+ * - Solid fills, no outlines.
+ * - Glow on active panels: 0 0 16px rgba(255,179,71,0.65) — stronger than
+ *   canonical (canonical uses 0.45 alpha). In Max, approximate via larger
+ *   amber panel underneath at low alpha + offset.
+ * - Layering: rail at back, header at back, content panels at front,
+ *   glow panels at very back (under rail).
+ *
+ * # DIVIDERS
+ * Same as LCARS — no horizontal rules; sections demarcated by pills and
+ * gaps. The PILLS THEMSELVES are heavier and more colored, doing more
+ * structural work.
+ *
+ * # INTERACTIVE CONTROLS
+ * - Number boxes: bgcolor=bg-raised, textcolor=fg-primary,
+ *   tricolor=amber-bright, fontsize=14 (vs LCARS 12).
+ * - Toggle: bgcolor=bg-raised, checkedcolor=amber-saturated.
+ * - Multislider: bgcolor=bg-raised, slidercolor=amber, peakcolor=mauve,
+ *   contrast=1; thicker visual track.
+ * - Buttons: pill-rounded (rounded:22+), amber bg, dark text. Larger hit
+ *   targets — minimum 32px tall (vs LCARS 22).
+ *
+ * # SPECIAL ZONES
+ * - Audio output: amber pill panel with mauve accent strip — the
+ *   "showpiece signal output."
+ * - live.gain~: warmcolor=amber, hotcolor=amber-saturated, slidercolor=
+ *   amber, textcolor=fg-primary, bordercolor=stroke-strong.
+ * - ezdac~: bgcolor=bg-raised, color=amber-saturated, elementcolor=mauve.
+ *
+ * # DECORATIVE ELEMENTS (signature)
+ * - All canonical LCARS elements PLUS:
+ * - Multiple mauve blocks (≥ 2 per layout, vs LCARS' 1).
+ * - Larger numeric codes ("47", "1701-D") at 14–18px.
+ * - Status cell row that takes ≥ 40px of vertical height (vs LCARS' 22).
+ * - Mid-rail mauve block — break the rail amber with a mauve segment
+ *   for visual rhythm.
+ * - Subtitle under main title.
+ *
+ * # FONTS
+ * Same family as LCARS: Antonio / Eurostile / Bank Gothic for display,
+ * Space Grotesk / Inter for UI, JetBrains Mono for readouts. But used
+ * at LARGER sizes throughout.
+ *
+ * # MAX-SPECIFIC NOTES
+ * - Rail panel: x=0, y=0, w=80, h=full-height, rounded=34, bgcolor=amber.
+ * - Header panel: x=80, y=0, w=remaining, h=56, rounded=28, bgcolor=amber.
+ * - Title `comment` overlaid: fontsize=36+, fontname="Helvetica Neue Bold",
+ *   textcolor=fg-on-accent, ALL CAPS, positioned y≈14.
+ * - Subtitle `comment`: fontsize=11, positioned y≈42 in header.
+ * - Mid-rail mauve block: x=0, y=half-height, w=80, h=60, rounded=34,
+ *   bgcolor=mauve.
+ * - Glow simulation: duplicate amber panels offset +6,+6 at alpha 0.3,
+ *   placed BEHIND main panels.
+ *
+ * # WHEN TO USE LCARS-BOLD vs LCARS
+ * Use LCARS-BOLD for: tutorial patches, demo patches, classroom material,
+ * one-feature showpiece patches, splash panels, README screenshots.
+ * Use canonical LCARS for: working interfaces with dense controls,
+ * sequencers, mixers, anything where readability of small data matters
+ * more than poster impact.
+ *
+ * # DON'TS
+ * - All LCARS don'ts apply.
+ * - PLUS: don't use LCARS-BOLD for dense data — the amplification fights
+ *   small readouts.
+ * - Don't double-down on glow if controls are already saturated — pick
+ *   ONE intensity axis and stop.
+ * - Don't make the rail wider than ~100px or the header taller than
+ *   ~80px — beyond that it's no longer LCARS.
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
+[data-theme="lcars-bold"], .theme-lcars-bold {
+  --c2m-font-mono:    "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+  --c2m-font-display: "Antonio", "Eurostile", "Bank Gothic", system-ui, sans-serif;
+  --c2m-font-ui:      "Space Grotesk", "Inter", system-ui, sans-serif;
+
+  --c2m-bg-void:    #000000;
+  --c2m-bg-deep:    #050608;
+  --c2m-bg-base:    #0a0c10;
+  --c2m-bg-raised:  #11141a;
+  --c2m-bg-sunken:  #07090c;
+  --c2m-bg-tooltip: #1b2028;
+
+  --c2m-fg-primary:   #ffd9a8;
+  --c2m-fg-secondary: #cc99cc;
+  --c2m-fg-muted:     #6f7888;
+  --c2m-fg-disabled:  #3a4250;
+  --c2m-fg-on-accent: #000000;
+
+  --c2m-stroke-faint:  rgba(255,179,71,0.10);
+  --c2m-stroke-base:   rgba(255,179,71,0.25);
+  --c2m-stroke-strong: rgba(255,179,71,0.55);
+
+  --c2m-accent-1:     #ffb347;
+  --c2m-accent-2:     #cc99cc;
+  --c2m-accent-3:     #ff7733;
+  --c2m-accent-1-tint: rgba(255,179,71,0.14);
+  --c2m-accent-2-tint: rgba(204,153,204,0.14);
+
+  --c2m-status-ok:   #66ff99;
+  --c2m-status-warn: #ffb347;
+  --c2m-status-err:  #ff3322;
+  --c2m-status-info: #66ccff;
+
+  --c2m-radius-sm:   2px;
+  --c2m-radius-md:   4px;
+  --c2m-radius-pill: 999px;
+
+  --c2m-glow-1:   0 0 16px rgba(255,179,71,0.65);
+  --c2m-glow-2:   0 0 14px rgba(204,153,204,0.55);
+  --c2m-glow-err: 0 0 16px rgba(255,51,34,0.7);
+
+  --c2m-frame-rail-show: 1;
+  --c2m-frame-scanline:  none;
+  --c2m-frame-grain:     none;
+  --c2m-frame-corner:    pill;
+}
