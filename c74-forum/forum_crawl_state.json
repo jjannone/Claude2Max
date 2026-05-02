@@ -1,0 +1,1015 @@
+{
+  "/forums/4-x-looper": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/57cd464e8039313620c7b694/2026-03-29T11:54:25Z/be21b47c-4457-4b8c-bf38-a84d0baefad6.rnbopack",
+      "https://usercontent.cdn.cycling74.com/57cd464e8039313620c7b694/2026-03-29T11:01:46Z/48d83ce6-74c8-4b79-a4ec-36aebc81a078.rnbopack",
+      "https://usercontent.cdn.cycling74.com/57cd464e8039313620c7b694/2026-03-31T18:51:31Z/f95ed685-08b9-427b-8117-1b936527a84e.rnbopack"
+    ],
+    "category": "RNBO",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-03T14:39:49.140Z",
+    "replies_last_modified_at": "2026-04-03T14:39:49.136Z",
+    "scraped_at": "2026-05-01T17:43:04Z",
+    "title": "4 x Looper"
+  },
+  "/forums/accessing-patcher-arguments-with-javascript": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 7,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "accessing patcher arguments with javascript"
+  },
+  "/forums/accessing-per-voice-params-inside-polyphonic-rnbo-subpatcher": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "scraped",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-25T16:28:06.035Z",
+    "replies_last_modified_at": "2026-04-25T16:28:06.030Z",
+    "scraped_at": "2026-05-01T17:53:39Z",
+    "title": "Accessing per-voice params inside polyphonic RNBO subpatcher"
+  },
+  "/forums/async-4track-looper-for-move": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/56e5c29b2d4fd1451f652a38/2026-04-03T14:46:57Z/4b3a87cf-2911-41c4-b648-30e570d80dd0.rnbopack"
+    ],
+    "category": "RNBO",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-10T15:16:47.383Z",
+    "replies_last_modified_at": "2026-04-10T15:16:47.381Z",
+    "scraped_at": "2026-05-01T17:43:04Z",
+    "title": "Async 4Track Looper for Move"
+  },
+  "/forums/automatically-initialize-midi-controllers-with-mapped-parameter-values": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 1,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "automatically initialize midi controllers with mapped parameter values"
+  },
+  "/forums/av-toolbox": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 21,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "[sharing] AV Toolbox"
+  },
+  "/forums/bluetooth-headset-to-max-msp-causes-crash": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 2,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "Bluetooth Headset to Max Msp causes Crash"
+  },
+  "/forums/buffering-issues-while-trying-to-create-a-physarum-simulation": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/63c45890b66bb67b8dfc00b2/2026-02-19T10:59:58Z/e350549c-28ef-416b-bf23-edbb6a845f6f.zip"
+    ],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-02-20T10:06:40.509Z",
+    "replies_last_modified_at": "2026-02-20T10:06:40.504Z",
+    "scraped_at": "2026-05-01T17:42:47Z",
+    "title": "Buffering issues while trying to create a physarum simulation"
+  },
+  "/forums/calling-multiple-instances-of-one-movie": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "1a2beaee8854c01d799f237509bf54d7",
+      "98352151cb75b2caf9fb7d5f26015dcb",
+      "c7e92efbd4c2cea4eae9e747afc40b59",
+      "73e5067ea0faa080fb09e4df7df0260d",
+      "3f558c490986d529fce9b7d970db2434"
+    ],
+    "modified_at": "2026-03-24T17:19:49.448Z",
+    "replies_last_modified_at": "2026-03-24T17:19:49.443Z",
+    "scraped_at": "2026-05-01T17:42:45Z",
+    "title": "Calling multiple instances of one movie"
+  },
+  "/forums/change-jitcellblock-scrollbar-width": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "a00419073ad61db59cf4791ffa0d01ba"
+    ],
+    "modified_at": "2025-10-30T09:45:04.685Z",
+    "replies_last_modified_at": "2025-10-30T09:45:04.676Z",
+    "scraped_at": "2026-05-01T17:42:54Z",
+    "title": "Change jit.cellblock scrollbar width"
+  },
+  "/forums/connecting-nodejs-file-with-rnbo-inside-a-raspberrypi": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/615e63bf7c419c2f9f0a6824/2026-03-27T18:37:43Z/ee1871b2-ed05-4d86-811e-b639c134fb2c.maxpat"
+    ],
+    "category": "RNBO",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-30T15:39:42.276Z",
+    "replies_last_modified_at": "2026-03-30T15:39:42.274Z",
+    "scraped_at": "2026-05-01T17:43:05Z",
+    "title": "Connecting node.JS file with RNBO inside a raspberryPi"
+  },
+  "/forums/default-user-after-installing-lightdm-raspberry-pi-imager": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 2,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "Default user after installing lightdm (Raspberry Pi Imager)?"
+  },
+  "/forums/dynamic-metro-objects-for-multiple-video-players-in-js": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/5c3fbfb58160fc282690b298/2026-04-26T23:14:26Z/6ce6505f-cdea-4b99-9ecd-42d39a443dae.js",
+      "https://usercontent.cdn.cycling74.com/5c3fbfb58160fc282690b298/2026-04-26T23:14:39Z/dec2c66a-41e5-4d7a-a3a5-d017326c55fc.js",
+      "https://usercontent.cdn.cycling74.com/5c3fbfb58160fc282690b298/2026-04-29T20:02:19Z/12ed91f4-c252-4783-8c9e-efd9963a4a67.js",
+      "https://usercontent.cdn.cycling74.com/58ed04e7285705c15ccfa694/2026-04-30T09:08:06Z/d335e11f-5acc-4441-a0ce-390b5114afcf.zip"
+    ],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "f8e1d05fb8ce1e0628ead7a6d4893419",
+      "896d6fb43a7cbc65e23157c4f8193842",
+      "7f0d84e78192ae179456ecab7f581c1f"
+    ],
+    "modified_at": "2026-04-30T09:11:42.933Z",
+    "replies_last_modified_at": "2026-04-30T09:11:42.927Z",
+    "scraped_at": "2026-05-01T17:42:54Z",
+    "title": "Dynamic metro objects for multiple video players in JS"
+  },
+  "/forums/dynamically-naming-colls": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "d95e7ec4019301679a3cd82518f8c7d7"
+    ],
+    "modified_at": "2026-04-29T15:07:30.026Z",
+    "replies_last_modified_at": "2026-04-29T15:07:30.019Z",
+    "scraped_at": "2026-05-01T17:42:58Z",
+    "title": "Dynamically naming colls?"
+  },
+  "/forums/embed-javascript-in-m4l-object": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "scraped",
+    "mct_ids_seen": [],
+    "modified_at": "2025-09-05T23:31:48.245Z",
+    "replies_last_modified_at": "2025-09-05T23:31:48.241Z",
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "Embed javascript in M4L object?"
+  },
+  "/forums/emulating-jit-gl-handle-autorotate": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 7,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "Emulating  jit.gl.handle autorotate ?"
+  },
+  "/forums/getting-a-handle-on-layering-in-jitter": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/598672672ba646b40d14a522/2026-02-15T18:46:34Z/602d4074-b688-48d6-8fb8-39dfa7af735c.json"
+    ],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "c97d49823c43e3a35e396dddc75e6b9f",
+      "24d73436d7509ace172b66436725237e",
+      "7e27216893a4f250fc777c96220c1cd4",
+      "a66719f713c9fc6f05ef47f79c22412d",
+      "3262a97125d9acdcd259af36810cafcd"
+    ],
+    "modified_at": "2026-03-02T14:16:30.485Z",
+    "replies_last_modified_at": "2026-03-02T14:16:30.479Z",
+    "scraped_at": "2026-05-01T17:42:43Z",
+    "title": "getting a handle on layering in Jitter"
+  },
+  "/forums/guitar-hero-like-behaviour-in-jitter": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/5fad77ca899d560ac6c630dc/2026-04-17T18:00:24Z/348ea5f1-349e-4478-b35d-33f45d51901a.zip",
+      "https://usercontent.cdn.cycling74.com/54bcd56903c7ee7d71b2e6b9/2026-04-17T22:43:46Z/65df4c17-b701-44f5-bf25-b6c6d85dc900.zip"
+    ],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "3fa0e1e14b905f5f8a32797a042f959b"
+    ],
+    "modified_at": "2026-04-17T22:44:13.109Z",
+    "replies_last_modified_at": "2026-04-17T22:44:13.103Z",
+    "scraped_at": "2026-05-01T17:42:44Z",
+    "title": "Guitar-hero like behaviour in jitter"
+  },
+  "/forums/help-with-mute-function-for-step-sequencers": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "046e2629c4a9270259ba8bd213798b1d"
+    ],
+    "modified_at": "2026-04-25T15:06:19.461Z",
+    "replies_last_modified_at": "2026-04-25T15:06:19.458Z",
+    "scraped_at": "2026-05-01T17:42:59Z",
+    "title": "help with mute function for step sequencers"
+  },
+  "/forums/how-to-get-two-instances-of-the-same-javascript-object-in-separate-top-level-patchers-communicating": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/598672672ba646b40d14a522/2025-11-02T22:56:04Z/a791e325-92b0-4984-b0ba-0d43eb39a458.txt"
+    ],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "aefcff752c95d02e09b54ab913d4c684",
+      "c32b311a185f9dfbc4cf899dd93d85b0",
+      "74bcde06f2b903d9da8809b348460873",
+      "3160c4bb0a50f1707e8aad772568846b"
+    ],
+    "modified_at": "2025-11-05T16:52:45.430Z",
+    "replies_last_modified_at": "2025-11-05T16:52:45.426Z",
+    "scraped_at": "2026-05-01T17:42:53Z",
+    "title": "How to get two instances of \"the same\" javascript object in separate top level patchers communicating"
+  },
+  "/forums/how-to-mirror-an-image-with-jitglpix": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "744ef8bda9ae992f54acdf9ec165f8e7",
+      "eac2997e675cabd708d72c6ba4dd3e42"
+    ],
+    "modified_at": "2026-02-10T19:58:49.589Z",
+    "replies_last_modified_at": "2026-02-10T19:58:49.586Z",
+    "scraped_at": "2026-05-01T17:42:44Z",
+    "title": "how to mirror an image with jit.gl.pix ?"
+  },
+  "/forums/intercepting-objects-output-with-javascript-possible": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 4,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "Intercepting object's output with Javascript: possible?"
+  },
+  "/forums/is-there-a-mgraphics-getpixel-equivalent": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 3,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "Is there a MGraphics getpixel equivalent?"
+  },
+  "/forums/javascript-and-defineattribute-how-to-use-enumindex": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 8,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "Javascript and defineattribute: how to use enumindex?"
+  },
+  "/forums/javascript-sqlite-not-working-in-m4l-v907": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 3,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "Javascript SQLite not working in m4l v9.0.7"
+  },
+  "/forums/jit-gl-syphonclient-adapt-frame-rate-to-syphon-stream": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "scraped",
+    "mct_ids_seen": [],
+    "modified_at": "2026-01-09T17:31:08.265Z",
+    "replies_last_modified_at": "2026-01-09T17:31:08.262Z",
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "jit.gl.syphonclient: adapt frame-rate to syphon stream?"
+  },
+  "/forums/jitcatch-and-jitgraph-dim-jumps-to-a-very-high-number-even-if-i-send-it-a-correct-dim-message": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "20cabd928f350a0e7463deed67b8e8e4",
+      "37027bf4a358ca86ce2ba82db5c9cdf8",
+      "809868018e52d713e33caf8aed908fe5",
+      "29d8fe0d15f66f5704771acac52db9c8",
+      "b37feaf659dc2d29f5d6facb256c224e"
+    ],
+    "modified_at": "2026-04-12T19:58:21.788Z",
+    "replies_last_modified_at": "2026-04-12T19:58:21.783Z",
+    "scraped_at": "2026-05-01T17:42:45Z",
+    "title": "jit.catch and jit.graph dim jumps to a very high number (even if I send it a correct dim message)"
+  },
+  "/forums/jitfft-as-a-sound-filter": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 1,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "jit.fft as a sound filter"
+  },
+  "/forums/jitmo-for-max-7": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 2,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "Jit.mo for Max 7"
+  },
+  "/forums/jitter-fx-slab-router": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/532091d1782ba55b54131523/2026-02-11T01:31:30Z/22c98f95-16f0-45af-b59b-13efd18e4973.maxpat"
+    ],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-02-12T01:26:42.815Z",
+    "replies_last_modified_at": "2026-02-12T01:26:42.811Z",
+    "scraped_at": "2026-05-01T17:42:46Z",
+    "title": "Jitter FX / Slab router"
+  },
+  "/forums/js-arrays-when-posted-directly-to-max-window": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "8f7813629f18b8c518e18d7665e2823a",
+      "6e8543edfdcfdaf1f0734cfd543c1204"
+    ],
+    "modified_at": "2026-01-13T01:24:00.267Z",
+    "replies_last_modified_at": "2026-01-13T01:24:00.264Z",
+    "scraped_at": "2026-05-01T17:42:54Z",
+    "title": "JS arrays when posted directly to Max window"
+  },
+  "/forums/long-process-and-progress-indicator": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 4,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "long Javascript process and progress indicator"
+  },
+  "/forums/making-alpha-channel-work-in-jitglmultiple-while-lightenable-is-on": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/5d4279a0ca816a3b17fa9124/2026-03-31T15:33:40Z/125c2545-449b-4054-9693-7b58ac76e437.maxpat",
+      "https://usercontent.cdn.cycling74.com/532091d1782ba55b54131523/2026-03-31T16:01:29Z/235dfea8-bb36-4918-921a-6fbd7dac34e5.maxpat",
+      "https://usercontent.cdn.cycling74.com/532091d1782ba55b54131523/2026-03-31T16:41:15Z/47806d29-2ee8-4550-b709-b6b4bef6233f.jxs",
+      "https://usercontent.cdn.cycling74.com/5d4279a0ca816a3b17fa9124/2026-04-02T15:59:16Z/e0a0d99b-23ac-448a-82fc-db84b13f2432.maxpat",
+      "https://usercontent.cdn.cycling74.com/5d4279a0ca816a3b17fa9124/2026-04-02T16:53:05Z/30b39ba4-2b8f-47da-93c0-640785736c66.maxpat"
+    ],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-06T20:04:58.227Z",
+    "replies_last_modified_at": "2026-04-06T20:04:47.713Z",
+    "scraped_at": "2026-05-01T17:42:46Z",
+    "title": "Making Alpha channel work in jit.gl.multiple while light_enable is on"
+  },
+  "/forums/matrix-row-miss-match": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "0fb97b916de523abc67454266af78e4e",
+      "ca9fb1a6bec6f51e221576100d193ccc",
+      "3061ced7feb7f422c7686edaa4ef6f53"
+    ],
+    "modified_at": "2026-03-28T15:57:59.789Z",
+    "replies_last_modified_at": "2026-03-28T15:57:59.784Z",
+    "scraped_at": "2026-05-01T17:42:46Z",
+    "title": "Matrix row miss match"
+  },
+  "/forums/max-on-linux": {
+    "attach_urls_seen": [
+      "https://cycling74-web-assets.s3.amazonaws.com/bb-attachments/4845.platformhints.png",
+      "https://1cyjknyddcx62agyb002-c74projects.s3.amazonaws.com/files/2016/05/wellThatWasEasy.png",
+      "https://usercontent.cdn.cycling74.com/54b62f3069cad1da097f27cd/2019-02-14T02:47:03Z/j-midiin.maxpat",
+      "https://usercontent.cdn.cycling74.com/54b62f3069cad1da097f27cd/2019-02-14T02:47:11Z/j-midiout.maxpat"
+    ],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-19T16:12:55.876Z",
+    "replies_last_modified_at": "2026-04-19T16:12:55.798Z",
+    "scraped_at": "2026-05-01T17:43:01Z",
+    "title": "Max on Linux"
+  },
+  "/forums/max-typescript-starter-project-esbuild-support-modular-wip": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 4,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "Max + TypeScript Starter Project (esbuild support, modular, WIP)"
+  },
+  "/forums/maxorch-a-front-end-for-computer-assisted-orchestration-tool-orchidea": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "scraped",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-23T15:59:07.165Z",
+    "replies_last_modified_at": "2026-04-23T15:59:07.151Z",
+    "scraped_at": "2026-05-01T17:53:39Z",
+    "title": "MaxOrch - a front end for computer-assisted orchestration tool Orchidea"
+  },
+  "/forums/mc-waveform": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/547cda153cbd30117cb698a9/2020-01-22T21:06:20Z/mcwaveform.zip"
+    ],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2025-11-26T13:04:50.042Z",
+    "replies_last_modified_at": "2025-11-26T13:04:50.040Z",
+    "scraped_at": "2026-05-01T17:42:54Z",
+    "title": "mc.waveform"
+  },
+  "/forums/measuring-parentpatchers-scrolling-drift": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 5,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "Measuring parentpatcher's \"scrolling drift\"?"
+  },
+  "/forums/mgraphics-jsvggetsize-behavior-has-changed-why": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 3,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "MGraphics: jsvg_get_size behavior has changed WHY ?"
+  },
+  "/forums/migrating-to-max-9-how-to-find-all-js-max-objects": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 6,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "Migrating to Max 9 - how to find all js max objects"
+  },
+  "/forums/move-drawing-toy-sketchy-etcher": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/5f0cb45014036a023fe866d1/2026-03-25T17:27:58Z/683af30a-db48-4108-8632-c0cd10a0f3a1.rnbopack",
+      "https://usercontent.cdn.cycling74.com/5f0cb45014036a023fe866d1/2026-03-25T22:59:34Z/0e439c13-daff-4178-b2dd-7e1d0af05073.rnbopack"
+    ],
+    "category": "RNBO",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-25T23:00:07.281Z",
+    "replies_last_modified_at": "2026-03-25T23:00:07.274Z",
+    "scraped_at": "2026-05-01T17:43:04Z",
+    "title": "Move Drawing Toy (Sketchy Etcher)"
+  },
+  "/forums/multiple-3d-models": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 1,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "Multiple 3d models"
+  },
+  "/forums/multislider-bug-1": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "dc6c65954f4cb241a5abb4d4c964ef1e",
+      "ec6933f7e9f43997b6345a5e257b67b4",
+      "85c90a9a6634952cee4dcd7fb9fbb7c2"
+    ],
+    "modified_at": "2026-05-01T11:42:53.195Z",
+    "replies_last_modified_at": "2026-05-01T11:42:53.189Z",
+    "scraped_at": "2026-05-01T17:42:59Z",
+    "title": "multislider bug"
+  },
+  "/forums/music-video-sync-and-triggering-video-events": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "4f42e0b5ccf8c50d301cc54c8161634d"
+    ],
+    "modified_at": "2026-04-25T00:20:17.785Z",
+    "replies_last_modified_at": "2026-04-25T00:20:17.776Z",
+    "scraped_at": "2026-05-01T17:42:45Z",
+    "title": "Music video sync and triggering video events"
+  },
+  "/forums/need-help-creating-a-filter-interface-in-jsui-v8ui": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 3,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "Need help creating a filter interface in JSUI / V8UI"
+  },
+  "/forums/node-for-max-memory-issue": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "56c064424bca53367aa24c074dc034b9",
+      "261865946565c9c65cb17ace5cf5745b",
+      "fdf41f6a0cc72ec2625a916550368cdd"
+    ],
+    "modified_at": "2025-10-14T20:53:28.379Z",
+    "replies_last_modified_at": "2025-08-07T14:30:25.582Z",
+    "scraped_at": "2026-05-01T17:42:54Z",
+    "title": "Node for Max Memory Issue?"
+  },
+  "/forums/node-js-trouble-with-require-and-import": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 5,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "Node js trouble with require and import"
+  },
+  "/forums/objectclassinternal-bad-object": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 2,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "object_class_internal: bad object"
+  },
+  "/forums/optimizing-jitgltext-behaviour": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "4414fc28f555acd64492cbe81e93b30c",
+      "3c6b45cb17b85efe1ca4b1d4f8f28f5c",
+      "185fc75d7f19d499a62a86fe085fb721"
+    ],
+    "modified_at": "2026-04-18T17:13:04.763Z",
+    "replies_last_modified_at": "2026-04-18T17:13:04.757Z",
+    "scraped_at": "2026-05-01T17:42:46Z",
+    "title": "Optimizing jit.gl.text behaviour"
+  },
+  "/forums/order-independent-transparency-in-max-9-cant-get-it-to-work": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/5ae7eb40d6262479e4f0cd32/2026-04-28T01:02:33Z/c884f0c2-07b4-4bda-843b-2dde193d5757.maxpat",
+      "https://usercontent.cdn.cycling74.com/5ae7eb40d6262479e4f0cd32/2026-04-30T13:18:22Z/8c3180fd-ff54-4873-b656-e4f39c17a627.maxpat",
+      "https://usercontent.cdn.cycling74.com/5ae7eb40d6262479e4f0cd32/2026-04-30T13:24:02Z/e2bab39e-590f-44c5-b80b-0623bf424d36.maxpat"
+    ],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "84c1fe85c90d92bb0b89b7e7d011a180",
+      "5d9e2fc5f399b4249be4d4639b24621e",
+      "c0bb4000013e53f7527a0b99a794ae9c"
+    ],
+    "modified_at": "2026-04-30T23:01:21.528Z",
+    "replies_last_modified_at": "2026-04-30T23:01:21.527Z",
+    "scraped_at": "2026-05-01T17:42:44Z",
+    "title": "Order Independent Transparency in Max 9 - can't get it to work"
+  },
+  "/forums/parameterlistener-broken-in-v8": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 5,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "ParameterListener broken in v8?"
+  },
+  "/forums/passing-a-matrix-to-a-texture-in-js": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "8d1f61080cab4b5b35a437d43d3a390e"
+    ],
+    "modified_at": "2025-09-28T02:09:40.764Z",
+    "replies_last_modified_at": "2025-09-28T02:09:40.764Z",
+    "scraped_at": "2026-05-01T17:42:54Z",
+    "title": "passing a matrix to a texture in js"
+  },
+  "/forums/patcherargs-loading-order": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "27a3ebaf025043b1a4a7e6205b0b0eb3"
+    ],
+    "modified_at": "2026-04-21T19:37:48.912Z",
+    "replies_last_modified_at": "2026-04-21T19:37:48.909Z",
+    "scraped_at": "2026-05-01T17:42:59Z",
+    "title": "patcherargs loading order"
+  },
+  "/forums/png-as-texture-in-shader": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/58c19825137a734d614af536/2026-04-21T13:24:54Z/3c979850-2280-463f-8877-5bebbc479df3.maxpat",
+      "https://usercontent.cdn.cycling74.com/58c19825137a734d614af536/2026-04-21T13:25:55Z/0fb37c22-a123-44a0-b1be-21dcbc74273a.jxs",
+      "https://usercontent.cdn.cycling74.com/54a7d323c282fe440243d14a/2026-04-22T07:21:45Z/36528f21-6c69-45bb-af6c-5b06e0a08c61.zip"
+    ],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-22T13:42:00.328Z",
+    "replies_last_modified_at": "2026-04-22T13:42:00.322Z",
+    "scraped_at": "2026-05-01T17:42:47Z",
+    "title": "PNG as Texture in Shader"
+  },
+  "/forums/pworld-opacity": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "174a0bdf161e47e4c3dda4001173a4d3"
+    ],
+    "modified_at": "2026-01-09T18:31:53.772Z",
+    "replies_last_modified_at": "2026-01-09T18:31:53.771Z",
+    "scraped_at": "2026-05-01T17:42:46Z",
+    "title": "Pworld opacity?"
+  },
+  "/forums/quicktime-track-markers-from-fcp-jitter": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 7,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "Quicktime Track - Markers from FCP->Jitter"
+  },
+  "/forums/replacing-everything-black-of-a-texture-with-another-texture": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 3,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "Replacing everything black of a Texture with another Texture"
+  },
+  "/forums/rnbo-143-refuses-to-start": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 1,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "RNBO 1.4.3 refuses to start"
+  },
+  "/forums/rnbo-buffer-raspberry": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 4,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "RNBO - Buffer / Raspberry"
+  },
+  "/forums/rnbo-daisy-example-builds-and-flashes-correctly-but-produces-no-output": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 1,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "RNBO Daisy example builds and flashes correctly, but produces no output"
+  },
+  "/forums/rnbo-move-takeover-experimental-alpha-143-alpha0-released": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 1,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "RNBO Move Takeover Experimental Alpha 1.4.3-alpha.1 Released"
+  },
+  "/forums/rothko-like-images": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "ca5e618f28e7d0726695aa97a2ed26c4",
+      "8b0555ed98b25ecefbc5404b92f83a9d"
+    ],
+    "modified_at": "2026-02-28T14:04:57.325Z",
+    "replies_last_modified_at": "2026-02-28T14:04:57.318Z",
+    "scraped_at": "2026-05-01T17:42:45Z",
+    "title": "Rothko-like images"
+  },
+  "/forums/rtsp-stream-into-jittermax-8": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "c53f808bccb2428fd20ba7f1bf6969b9"
+    ],
+    "modified_at": "2026-03-04T04:43:49.319Z",
+    "replies_last_modified_at": "2026-03-04T04:43:49.318Z",
+    "scraped_at": "2026-05-01T17:42:44Z",
+    "title": "RTSP stream into Jitter/Max 8"
+  },
+  "/forums/shadows-jit-gl-multiple": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "79c20b6b92204037a24ce2d54407f60d",
+      "9e933582d3640a2a3fc2a8d0880e50ee",
+      "a687d50ef9a94ee89ce98e297cad3c22",
+      "942fccc5e7064b40461b071429d2e397",
+      "84dd275ea6c1d834b48539abb29fec22",
+      "f27e191a1282b7e1e95cf70ef49ed896",
+      "e6de94a00af3b98210d7817a9f4f0df0"
+    ],
+    "modified_at": "2026-03-02T15:22:11.244Z",
+    "replies_last_modified_at": "2026-03-02T15:22:11.236Z",
+    "scraped_at": "2026-05-01T17:42:44Z",
+    "title": "shadows jit.gl.multiple"
+  },
+  "/forums/share-jitvoidqrcode-encode-anything-to-a-qr-code-jitter-matrix": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 3,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "[share] jit.void.qrcode encode anything to a QR Code jitter matrix"
+  },
+  "/forums/sharing-my-take-on-an-enttec-dmx-usb-pro-external": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/56139938101a9ccc7f15d3fc/2025-07-03T10:00:21Z/Exemple-DMX.maxpat",
+      "https://usercontent.cdn.cycling74.com/57ebedc5fd747b8a71b4dee7/2026-03-25T17:28:13Z/d255df26-d685-473a-8e47-efc91b3401f8.pdf",
+      "https://usercontent.cdn.cycling74.com/57ebedc5fd747b8a71b4dee7/2026-03-26T16:34:37Z/04877f9a-cb0b-4495-a56d-7e92d2408705.maxpat"
+    ],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "9fde4f9101b4a4ac72779fcffa072ff5",
+      "b359c62f280febdc191f9735da442362",
+      "561b297131b18057db08b6dd9fd39f18"
+    ],
+    "modified_at": "2026-04-12T11:42:12.460Z",
+    "replies_last_modified_at": "2026-04-11T18:59:46.353Z",
+    "scraped_at": "2026-05-01T17:42:58Z",
+    "title": "[sharing] My take on an ENTTEC DMX USB Pro external"
+  },
+  "/forums/silenting-or-destroying-a-parameterlistener": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "scraped",
+    "mct_ids_seen": [],
+    "modified_at": "2025-07-08T17:09:43.349Z",
+    "replies_last_modified_at": "2025-07-08T09:27:46.077Z",
+    "scraped_at": "2026-05-01T17:53:38Z",
+    "title": "Silenting (or destroying) a ParameterListener ?"
+  },
+  "/forums/stable-8-hour-av-installation-stereo-audio-two-separate-video-outputs-beginner": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "22be9cd24298f35fa4314b35f6a4f696"
+    ],
+    "modified_at": "2026-03-20T11:45:54.934Z",
+    "replies_last_modified_at": "2026-03-20T11:45:54.932Z",
+    "scraped_at": "2026-05-01T17:42:46Z",
+    "title": "Urgent: Stable 8-hour AV installation \u2013 stereo audio + two separate video outputs (beginner)"
+  },
+  "/forums/suckah-object-not-working-bug": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "scraped",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-28T18:36:51.351Z",
+    "replies_last_modified_at": "2026-04-28T18:36:51.342Z",
+    "scraped_at": "2026-05-01T17:53:38Z",
+    "title": "Suckah object not working / bug"
+  },
+  "/forums/suddenly-inexplicable-errors-in-v8-since-last-update": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 4,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "suddenly inexplicable errors in v8 since last update"
+  },
+  "/forums/support-modern-esm-imports-in-node-for-max": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/53066381110402420789793d/2025-07-23T21:45:46Z/f9c988e7-8124-41c1-840e-a6f84dc44fb5.zip"
+    ],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2025-07-23T21:46:38.534Z",
+    "replies_last_modified_at": "2025-07-23T21:46:38.532Z",
+    "scraped_at": "2026-05-01T17:42:54Z",
+    "title": "Support modern ESM imports in Node for Max"
+  },
+  "/forums/tcpreset-a-new-companion-to-pattrstorage": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "77eb415a597700b01a8b808f9e1068ec",
+      "ef7e3093de805f645b16455cdf2ce592",
+      "ed2ae398386c83ab6fc986c27a68cc48"
+    ],
+    "modified_at": "2025-12-05T14:20:06.934Z",
+    "replies_last_modified_at": "2025-12-05T14:20:06.912Z",
+    "scraped_at": "2026-05-01T17:42:54Z",
+    "title": "tc.preset: a new companion to pattrstorage"
+  },
+  "/forums/trouble-updating-multiple-instanced-jitglbuffers-in-real-time": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/54f4cb843f7ca76f3e6d8cb3/2026-04-14T03:19:58Z/5f00d52a-8b3e-441c-a085-07765f85b725.maxpat",
+      "https://usercontent.cdn.cycling74.com/54f4cb843f7ca76f3e6d8cb3/2026-04-14T03:20:09Z/6dbd2a53-0385-40ea-9c94-b77017c47057.js",
+      "https://usercontent.cdn.cycling74.com/54f4cb843f7ca76f3e6d8cb3/2026-04-14T03:20:13Z/00ff0044-293c-409a-b09c-a4f39e4474df.js",
+      "https://usercontent.cdn.cycling74.com/54f4cb843f7ca76f3e6d8cb3/2026-04-14T03:20:19Z/9cd42e54-06d9-4c20-bf55-a9f11787c5aa.js",
+      "https://usercontent.cdn.cycling74.com/54f4cb843f7ca76f3e6d8cb3/2026-04-14T03:20:22Z/0453875b-7004-4f05-bdad-151dc03e760b.js",
+      "https://usercontent.cdn.cycling74.com/54f4cb843f7ca76f3e6d8cb3/2026-04-14T03:20:30Z/537fcdcf-6d19-476a-8448-0a22728edc0c.jxs"
+    ],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "f4b913f6173d79a2e94b57268b654b32"
+    ],
+    "modified_at": "2026-04-17T13:16:30.692Z",
+    "replies_last_modified_at": "2026-04-17T13:16:30.687Z",
+    "scraped_at": "2026-05-01T17:42:44Z",
+    "title": "Trouble updating multiple instanced jit.gl.buffers in real time"
+  },
+  "/forums/typescript-bundler-and-declareattribute": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "1ff5fbe6799ee2b87fa2f0a052c28c3d"
+    ],
+    "modified_at": "2025-07-07T10:37:40.721Z",
+    "replies_last_modified_at": "2025-07-07T10:37:40.711Z",
+    "scraped_at": "2026-05-01T17:42:54Z",
+    "title": "TypeScript + bundler & declareattribute"
+  },
+  "/forums/understanding-c74s-use-of-the-phrase-global-variable-in-javascript-documentation": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "2b05fbcfe9d842bb3f3675827dade3c1"
+    ],
+    "modified_at": "2025-10-03T17:27:32.271Z",
+    "replies_last_modified_at": "2025-10-03T17:27:32.261Z",
+    "scraped_at": "2026-05-01T17:42:54Z",
+    "title": "Understanding C74's use of the phrase \"global variable\" in javascript documentation"
+  },
+  "/forums/using-vizzie-kalider-texture-output-in-shader-code-issue": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "69c7b858757e8adc4e76a9580576ff6c",
+      "42a40cb4b4823a1ec45319dd8578ae4a"
+    ],
+    "modified_at": "2026-04-06T21:32:43.849Z",
+    "replies_last_modified_at": "2026-04-06T21:32:43.843Z",
+    "scraped_at": "2026-05-01T17:42:45Z",
+    "title": "Using Vizzie Kalider texture output in shader code issue?"
+  },
+  "/forums/v8-and-require-a-json-file": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/646cc7fd19a12021e414c57d/2025-07-02T14:07:38Z/v8-attributes.zip"
+    ],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2025-07-11T18:01:50.248Z",
+    "replies_last_modified_at": "2025-07-02T14:16:00.732Z",
+    "scraped_at": "2026-05-01T17:42:54Z",
+    "title": "v8 and require a json file"
+  },
+  "/forums/v8ui-strange-behaviour": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/5463c88d5ef8ac161eeba8a7/2025-06-17T09:38:21Z/ui_prova_01.js"
+    ],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "ac441c80a830c2d93adff047d4fd2946"
+    ],
+    "modified_at": "2025-07-08T11:16:02.412Z",
+    "replies_last_modified_at": "2025-06-17T10:05:54.576Z",
+    "scraped_at": "2026-05-01T17:42:54Z",
+    "title": "v8ui strange behaviour"
+  },
+  "/forums/vanilla-max-version-of-xrayjitsift": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/5542282a7e1960144c3fcaa1/2026-04-01T17:13:05Z/e5b12a41-d652-4202-aaf2-3c86efb1c575.js"
+    ],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "ef722fc17efac082e4e0742514f09997"
+    ],
+    "modified_at": "2026-04-01T17:13:11.720Z",
+    "replies_last_modified_at": "2026-04-01T17:13:11.716Z",
+    "scraped_at": "2026-05-01T17:42:43Z",
+    "title": "vanilla Max version of xray.jit.sift ?"
+  },
+  "/forums/where-does-rnbo-runner-panel-store-graphset-preset-files-on-raspberry-pi": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": null,
+    "replies_at_skip": 6,
+    "replies_last_modified_at": null,
+    "scraped_at": "2026-05-01T17:53:37Z",
+    "title": "Where does RNBO Runner Panel store graph/set preset files on Raspberry Pi?"
+  }
+}
