@@ -4,7 +4,7 @@ This repo is a tool for generating Max/MSP patches from Claude-authored JSON spe
 
 **Audience**: This tool is designed for students with little coding or CLI experience. CLAUDE.md serves as the primary knowledge base — when their instance of Claude reads it, it should learn everything needed to work with Max/MSP, the spec format, and the converter without requiring prior expertise. Include helpful general information here even if it seems basic — students benefit from it and Claude instances need it to assist them effectively.
 
-## Rules from Corrected Errors {!pre-edit} {!pre-commit}
+## Rules from Corrected Errors {!pre-commit}
 
 After fixing any error, derive a general rule that would have prevented it. Present the proposed rule(s) to the user in plain language before writing them to CLAUDE.md or SPEC_REFERENCE.md. Only enshrine rules the user confirms. This keeps the knowledge base accurate and user-approved rather than accumulating unreviewed assumptions.
 
@@ -14,7 +14,7 @@ After fixing any error, derive a general rule that would have prevented it. Pres
 
 **Lead with intent, follow with example.** State what you're trying to achieve in plain terms first, then illustrate with a concrete case introduced as "for instance." This keeps the principle readable and applicable broadly, while still giving actionable guidance. Rules that lead with a specific method risk being read as recipes rather than principles.
 
-## Verify External State — Never Assert from Memory {!pre-edit}
+## Verify External State — Never Assert from Memory
 
 Before making any claim about the state of an external or shared system — GitHub repo visibility, remote branch status, CI results, whether a file exists on a remote, whether a service is available — verify it with the appropriate tool first. Memory, inference from local context, and reasonable assumptions are not sufficient. A wrong assertion is worse than a delayed one.
 
@@ -22,41 +22,77 @@ For example: don't say a repo is private because it looks like a personal projec
 
 This applies beyond GitHub to any external state that can change independently of the local working directory.
 
-## Reference Instances Illustrate Principles — They Don't Constitute Them {!pre-edit}
+## Never Write API Names From Memory
+
+Never write a method name, property name, attribute name, function name, CSS property, shell flag, environment variable, or any other API identifier from memory. If the name didn't come from a documentation page, header file, refpage, autocomplete, or other authoritative source within the last few seconds, it is a guess — and a guess is forbidden. This applies across every language and every environment, not just Max.
+
+The reason this rule needs to be explicit: environments differ only in *how loudly they catch a guess*. Typed languages throw at compile time; untyped languages throw at runtime; Max attributes, CSS properties, and similar APIs **fail silently** — the wrong name is accepted and quietly ignored, doing nothing. **Silent failure is more dangerous than loud failure, not less**, because there is no error message to surface the mistake. The discipline must therefore be the same across all environments: do not write the name unless you have just confirmed it exists.
+
+The recognition signal: **if I find myself reaching for an attribute or method name because it "sounds right" for this kind of object, that is the exact moment verification is non-optional.** Family resemblance ("it's a UI control, surely it has `bgcolor`") is not evidence that the name exists on this specific object. Each object's vocabulary is its own.
+
+For instance: writing `bgcolor`, `peakcolor`, `knobcolor`, or `needlecolor` on `live.gain~` because those names exist on other UI objects is the same kind of mistake as writing `arr.contains()` in JavaScript because it sounds right (the actual method is `arr.includes()`). JS throws `TypeError`. Max silently accepts the unknown attribute and ignores it — the mistake survives a code review I would never let it survive in JS. The valid `live.gain~` color attrs are `coldcolor`, `warmcolor`, `hotcolor`, `overloadcolor`, `slidercolor`, `textcolor`, `tricolor`, `trioncolor`, `tribordercolor`, `focusbordercolor`, `modulationcolor`, `inactivecoldcolor`, `inactivewarmcolor` — confirmed by reading `/Applications/Max.app/Contents/Resources/C74/docs/refpages/m4l-ref/live.gain~.maxref.xml`.
+
+The verification mechanics for Max specifically — the refpage paths, the `grep` patterns, the `RefpageCache.lookup()` API — live in `MAX_PATCHING.md`. This rule states *why*; that file states *how*.
+
+**Verification is per-attribute, not per-object.** If I am writing N attributes for an object, I must verify N names against the refpage. Batching N attrs into one edit without per-name verification is the failure mode this rule is designed to prevent.
+
+## Parsers Must Tolerate the Schema's Full Value Space, Not Just the Sample You Tested Against
+
+When parsing third-party data (XML, JSON, configs, refpages), don't coerce a field's type based on the values you happened to see in your test sample. The first input you didn't test against is the one that breaks. Fields that look numeric in examples may legitimately carry string sentinels like `"variable"`, `"auto"`, `"none"`, or `"all"`. Either confirm the documented schema's full value space before coercing, or accept the textual form and only coerce at the point of use, with a fallback for non-numeric values.
+
+For instance: a Max refpage attribute's `size` is usually an integer, but `"variable"` is also valid. `int(attr.get("size", 1))` crashes the parser the first time it meets such a refpage; a `try int → fall back to the original string` pattern preserves both numeric and sentinel cases without losing information.
+
+## Reference Instances Illustrate Principles — They Don't Constitute Them
 
 When a rule, checklist, or repair procedure refers to "what correct looks like," enshrine the **structural contract** (the attributes, invariants, shape) — not a specific file as the source of truth. Specific files are illustrations introduced as "for instance," and they may be renamed, edited, or deleted without the rule needing to change. A rule pinned to a file becomes wrong the moment that file moves; a rule pinned to the contract stays correct as long as the contract holds.
 
 This is a corollary of "always generalize before enshrining." It applies anywhere a working example is being used as a reference: tutorial structure, patch conventions, file layout, JS module shape, anything. Before writing "match the way `<file>` does it," ask: what are the actual properties this file has that make it correct? Write those. Then mention the file as one place to see them, not as the rule itself.
 
-## Partial Answers Are Not Consent — Re-Ask the Unanswered Part {!pre-edit}
+## Partial Answers Are Not Consent — Re-Ask the Unanswered Part
 
 When asking the user a multi-part clarifying question (e.g. "should I do A like X or Y? and should B be P or Q?"), and the user replies addressing only some of the parts, the silence on the others is **not** authorization to proceed with my best guess. The right behavior is to act on what was answered, then re-ask the unanswered parts — or hold all action until the full picture is clarified.
 
 Acting on my own interpretation of an un-answered branch produces work the user didn't authorize and that may need to be undone. The cost of one short follow-up question is much lower than the cost of restoring an unintended change.
 
-## Flag Natural Clearing Points — Proactively Suggest Clearing the Conversation
+## Flag Natural Commit Moments — Proactively Suggest Commit, Sync, and New Session
 
-Long conversations accumulate context that becomes load-bearing for less and less of the active work. When a natural completion point is reached, **proactively tell the user to clear the conversation** (`/clear` in Claude Code) so the next session starts fresh and cheap. Don't wait to be asked.
+Long conversations accumulate uncommitted work and stale context — both compound. The default cadence is: commit early, sync often, restart frequently. When the work reaches a natural commit boundary — a self-contained chunk that could land as one logical commit — **proactively suggest committing, pushing to origin, and starting a new session**. Don't wait to be asked, and err on the side of suggesting more often rather than less.
 
-A clearing point is "natural" only when ALL of the following hold:
+A commit moment is "natural" when ALL of the following hold:
 
-- A substantial task or arc is complete — no in-flight iteration, no "I'll fix that next" state
-- All decisions, rules, and learnings have been persisted to repo files (`CLAUDE.md`, `SPEC_REFERENCE.md`, `MAX_PATCHING.md`, `TUTORIAL_GUIDELINES.md`, `WORK_HISTORY.md`, etc.) — the next session can rebuild context purely from disk
-- The session's work has been logged to `WORK_HISTORY.md`
-- No pending verification is owed (e.g. "check that this works in Max and let me know")
-- The user is not mid-decision on something where the conversation's recent reasoning is the working memory
+- A coherent unit of work is complete — a feature, a fix, a refactor, a doc pass, a knowledge-base chunk, a queued task. No in-flight iteration; no "I'll fix that next."
+- All decisions, rules, and learnings have been propagated to the relevant repo files (`CLAUDE.md`, `SPEC_REFERENCE.md`, `MAX_PATCHING.md`, `TUTORIAL_GUIDELINES.md`, `WORK_HISTORY.md`, etc.) — the next session can rebuild context purely from disk.
+- `WORK_HISTORY.md` has the work logged.
+- No pending verification is owed (e.g. "check that this works in Max and let me know").
+- The user is not mid-decision on something where the conversation's recent reasoning is the working memory.
 
-Bad clearing points (do NOT suggest clearing here): mid-debug, mid-iteration, after a partial fix that hasn't been verified, when a queued external check is pending, or when the user is exploring options whose tradeoffs were just weighed in the conversation.
+When such a moment arrives, surface it concretely. For instance: "This looks like a natural commit point — want me to commit `<short description>` and push to origin? After that, you can clear and pick up the next chunk cold." Include the proposed commit subject so the user can accept or redirect quickly.
 
-When you do flag a clearing point: (a) confirm `WORK_HISTORY.md` has the session's summary; (b) ask the user to verify any pending changes in the actual application (Max patch, generated file, etc.) before clearing — easier to iterate while context is warm than after a cold restart; (c) note any chips/follow-ups you'd otherwise carry mentally, so they survive into the next session via files rather than memory.
+Bad commit moments (do NOT suggest here): mid-debug, mid-iteration, after a partial fix that hasn't been verified, when external verification is pending, or when the user is exploring options whose tradeoffs are still actively in conversation.
 
-## When Building a New Version from an Existing Patch {!pre-edit}
+When the user does commit at one of these moments, the follow-up is: (a) confirm `WORK_HISTORY.md` has the session's summary; (b) verify any pending changes in the actual application before clearing — easier to iterate while context is warm than after a cold restart; (c) note any chips/follow-ups that should survive into the next session via files rather than memory.
+
+## Modify, Don't Rebuild — and Treat Observed-Good Patterns as Binding
+
+When the task is a new version of an existing patch, the default workflow is `extract → edit → convert`: pull the embedded spec, modify only what is changing, write back. Rebuilding the spec from scratch is the wrong default — it silently drops every working detail of the original that does not make it into the new build. Alignment offsets, init defaults, wiring patterns, sub-systems, naming conventions, and dozens of micro-decisions that took prior sessions to get right vanish without warning. Only build from scratch when the new version shares less than half its structure with the original.
+
+**The companion rule: observed-good patterns are binding.** Any pattern noticed as "what's working" in analysis or critique creates an obligation to preserve that pattern in any subsequent implementation. Praising-without-applying is worse than not noticing at all — it proves the information was available and ignored. Marking something as good is an implicit commitment to keep it.
+
+For instance: writing in design critique that "the comment-padding compensation gives clean visual alignment of labels with controls" creates a binding constraint on any redesign that follows. The compensation must survive into the new version. The robust fix is not "remember to re-apply it" — that is the failure mode this rule names. The robust fix is to start from the existing spec so the pattern survives by default, and only deviate where the change is intentional.
+
+**Two practical consequences:**
+
+1. **Default to spec extraction, not spec construction.** The phrase "build a new spec" should trigger the question "why not extract and edit?" before any code is written. Construction is reserved for genuinely new patches.
+
+2. **Critique creates checkpoints.** Anything noted as good during analysis is a checkpoint that must be revisited before declaring the implementation done. Did the new build preserve every observed-good pattern from the original? If no, either restore it or document why it was deliberately dropped.
+
+## When Building a New Version from an Existing Patch
 
 - **Retain all default values.** Any `loadbang → init` chain, `loadmess`, or hardcoded default in the JS must survive unchanged into the new version. Defaults represent deliberate configuration — they are not incidental and must not be silently dropped.
 
 - **Preserve wiring integrity when modifying patches programmatically.** Patchlines reference boxes by `id`, so renaming a box that has connections silently breaks all wiring to and from it. Keep original IDs intact; only assign new IDs to newly added boxes.
 
-## Never Regress Functionality When Changing Modality {!pre-edit}
+## Never Regress Functionality When Changing Modality
 
 **General rule**: when any working feature — display, control, behavior, format — is moved, replaced, or reimplemented in a different modality, it must arrive at least as capable as it left. A change of modality is not a reason to lose functionality.
 
@@ -80,7 +116,7 @@ Trigger cases:
 
 1. **Analyzing a dense or complex existing patch** — non-obvious signal flow, reverse-engineering intent, structural problems
 2. **Studying complex documentation** — Max refpages, third-party package docs, API references where subtle distinctions matter
-3. **Analyzing installed packages** — evaluating objects, writing `use_when` judgments for `package_objects.json`
+3. **Analyzing installed packages** — evaluating objects, writing `use_when` judgments for `packages/package_objects.json`
 4. **Reading complex Cycling '74 forum threads** — synthesizing community knowledge, distinguishing good advice from outdated workarounds
 5. **Planning a new complex patch** — architecture decisions, subpatcher decomposition, signal flow design before any spec is written
 6. **Designing a presentation mode UI** — layout hierarchy, panel grouping, visual weight, control placement. Stop and offer the user two options:
@@ -109,144 +145,81 @@ Read and review the entire Claude2Max repo before starting — `CLAUDE.md`, `SPE
 
 ## Workflow
 
-### Working on an existing patch — sync first, always {!pre-edit}
+### Working on an existing patch — sync first, always
 
-**Before any work on an existing .maxpat**, run sync to capture manual edits the user made in Max:
+**Before any work on an existing .maxpat**, run sync to capture manual edits the user made in Max. No exceptions — not even for small fixes. `convert` regenerates the .maxpat from scratch and will silently destroy moved objects, added/deleted objects, hidden objects, and hidden cords.
 
-```bash
-python3 spec2maxpat.py sync -i patches/patch.maxpat
-```
+**The sync-first rule applies to any source of edits — not just user GUI changes.** Any direct modification to a .maxpat — whether a user edit in Max's GUI or a programmatic post-processing script — is invisible to the embedded spec and will be silently overwritten on the next `convert`. Use `/c2m-sync` or run `python3 spec2maxpat.py sync -i <patch>` immediately after any direct .maxpat modification.
 
-Update your working spec from the sync output, then make changes, then convert. No exceptions — not even for small fixes. `convert` regenerates the .maxpat from scratch and will silently destroy moved objects, added/deleted objects, hidden objects, and hidden cords.
+### Spec files are temporary — do not leave them in the project
 
-**The sync-first rule applies to any source of edits — not just user GUI changes.** Any direct modification to a .maxpat — whether a user edit in Max's GUI or a programmatic post-processing script — is invisible to the embedded spec and will be silently overwritten on the next `convert`. After any direct .maxpat modification, run `sync` immediately to fold the change back into the embedded spec before doing anything else.
-
-### Spec files are temporary — do not leave them in the project {!pre-edit}
-
-The spec is embedded inside every `.maxpat`. Standalone `.json` spec files are only needed as a scratch file during `convert`. Write them to `/tmp/` (or any temp location) rather than the project folder, then delete after converting. The `.maxpat` is the single source of truth; extract the spec from it whenever you need to read or edit it.
-
-```bash
-python3 spec2maxpat.py extract -i patch.maxpat > /tmp/spec.json
-# edit /tmp/spec.json
-python3 spec2maxpat.py convert -i /tmp/spec.json -o patch.maxpat
-```
+The spec is embedded inside every `.maxpat`. Standalone `.json` spec files are only needed as a scratch file during `convert`. Write them to `/tmp/` rather than the project folder, then delete after converting. The `.maxpat` is the single source of truth.
 
 ### New patch (from scratch)
+
 1. User describes a Max patch they want
-2. You write a JSON spec following the format in `SPEC_REFERENCE.md`
-3. You convert it with: `python3 spec2maxpat.py convert -i /tmp/spec.json -o patches/patch.maxpat`
-4. User opens in Max, gives feedback, you iterate
-
-The spec is embedded in the `.maxpat` — no separate `.json` file needed. Extract it anytime:
-
-```bash
-python3 spec2maxpat.py extract -i patches/patch.maxpat
-```
+2. Write a JSON spec following `SPEC_REFERENCE.md`
+3. Convert: `python3 spec2maxpat.py convert -i /tmp/spec.json -o patches/patch.maxpat`
+4. User opens in Max, gives feedback, iterate
 
 ### Existing patch (externally sourced or manually edited)
 
-**Before doing any work on a patch**, sync it to ensure the embedded spec is current:
-
-```bash
-python3 spec2maxpat.py sync -i patch.maxpat
-```
-
-- **No embedded spec** — reverse-engineers one from boxes and patchlines, embeds it, prints it to stdout.
-- **Has embedded spec** — reconciles it with the current box positions, text, and wiring (picks up any manual edits made in Max), updates the embed, prints the updated spec to stdout.
-
-After `sync`, the embedded spec is authoritative. Read it, edit it, then convert:
-
-```bash
-python3 spec2maxpat.py convert -i updated-spec.json -o patch.maxpat
-```
-
-The `.maxpat` is the single source of truth. All patches live in `patches/`.
+Run `/c2m-sync` first. Extract, edit, convert. All patches live in `patches/`.
 
 ## Max Compressed Text (MCT)
 
-**Produce MCT only when the user requests it, or when the user has already provided MCT in the conversation.** Never paste raw `.maxpat` JSON — users can't open it. MCT is the format Max uses for "Copy Compressed": the user copies the block and does **File > New From Clipboard** (or pastes directly into an open patcher) to reconstruct the patch.
-
-### What it looks like
-
-```
-----------begin_max5_patcher----------
-456.3ocwU1zbBBCDF9d+UjImQIAQT609CnG5wNcbhvJMNPBSHXsii+2aRv5G
-SiePsNkCJj7tl28Y2EW+.xbgmIWA03GQu5dzdsd2ceKvr8wK51njsJsfUaCF
-...
------------end_max5_patcher-----------
-```
-
-Format: `{compressed_byte_count}.{JUCE_base64(zlib_compress(json))}`, wrapped at 60 chars/line.
-
-### How to produce MCT (Claude Code)
-
-After converting a patch, run:
+**Produce MCT only when the user requests it, or when the user has already provided MCT in the conversation.** Never paste raw `.maxpat` JSON — users can't open it. MCT is the format Max uses for "Copy Compressed": the user copies the block and does **File > New From Clipboard** to reconstruct the patch.
 
 ```bash
-python3 spec2maxpat.py mct -i patches/patch.maxpat
+python3 spec2maxpat.py mct -i patches/patch.maxpat   # produce MCT
 ```
 
-Copy the full output block (including `begin_max5_patcher` / `end_max5_patcher` lines) into your response.
-
-### How to decode MCT you receive
-
-```bash
-python3 -c "
-from spec2maxpat import mct_decode
-import sys, json
-print(json.dumps(json.loads(mct_decode(sys.stdin.read())), indent=2))
-" << 'EOF'
-----------begin_max5_patcher----------
-...paste MCT here...
------------end_max5_patcher-----------
-EOF
-```
-
-### Encoding algorithm (for reference)
-
-JUCE's `MemoryBlock::toBase64Encoding` reads the compressed bytes **LSB-first** within each byte, packing 6-bit chunks in this order for bytes b0, b1, b2:
-
-| Chunk | Bits |
-|-------|------|
-| 0 | b0[5:0] |
-| 1 | b0[7:6] \| b1[3:0]<<2 |
-| 2 | b1[7:4] \| b2[1:0]<<4 |
-| 3 | b2[7:2] |
-
-Alphabet: `.ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+`
-(`.` = 0, A–Z = 1–26, a–z = 27–52, 0–9 = 53–62, `+` = 63)
-
-The `mct_encode` and `mct_decode` functions in `spec2maxpat.py` implement this exactly.
+To decode MCT received in the conversation: `python3 -c "from spec2maxpat import mct_decode; import sys,json; print(json.dumps(json.loads(mct_decode(sys.stdin.read())),indent=2))"` piped from the MCT block. See `SPEC_REFERENCE.md` § "MCT Encoding Algorithm" for the encoding detail.
 
 ## Key Files
 
-- `SPEC_REFERENCE.md` — **Read this first.** Complete spec format reference with all object types, connection format, layout guidelines, presentation view, and worked examples.
-- `spec2maxpat.py` — The converter. Handles inlet/outlet profiles for 1,694 Max objects (via `max_objects.json`), auto-layout, subpatchers, and spec embedding.
-- `max_objects.json` / `build_objects_db.py` — **Deleted.** I/O data now comes directly from the C74 maxref.xml files via `RefpageCache` in `spec2maxpat.py`.
-- `package_objects.json` / `build_package_objects.py` — Curated reference of installed Max package objects with `use_when` judgments. See "Consult Installed Packages Before Long Native Chains" below.
+- `SPEC_REFERENCE.md` — **Read this first.** Complete spec format, object types, connection format, layout guidelines, v8/JS objects, MCT encoding, worked examples.
+- `MAX_PATCHING.md` — Patching principles, presentation guidelines, documentation verification rules, common pitfalls. Read before any patch work.
+- `spec2maxpat.py` — The converter. I/O data from C74 maxref.xml via `RefpageCache`; no external database.
+- `TUTORIAL_GUIDELINES.md` — Tutorial structural contract, panel/annotation attrs, comment-pile pattern, breakage diagnostic.
+- `packages/package_objects.json` — Curated reference of installed Max package objects with `use_when` judgments.
+- `packages/package_concepts.md` — Per-package paradigms (bach lllls, FrameLib frames, FluCoMa corpus workflow, etc.).
+- `packages/package_schema.py` — Canonical schema; `normalize()`/`validate()` for `package_objects.json`.
+- `packages/query_packages.py` — `list`, `search <term>`, `validate`. Read-only CLI for the package library.
+- `packages/CURATION.md` — How to extend package coverage: extractor CLIs, schema norms, `use_when` quality bar.
+- `c74-forum/forum_insights.md` / `cookbook/cookbook_insights.md` — Community knowledge, non-obvious patterns, real examples.
+
+## Knowledge Resources — Consult Before Designing
+
+When designing or debugging a patch, consult these curated sources — not just the official docs:
+
+- **`packages/package_objects.json`** — 2,795 package objects with `use_when`. Search: `python3 packages/query_packages.py search "<term>"`. Check before building any multi-object native chain.
+- **`packages/package_concepts.md`** — Paradigms for packages with custom types (bach lllls, FrameLib chains, FluCoMa workflow). Read when using a new package.
+- **`c74-forum/forum_insights.md`** — Non-obvious behaviors, preferred patterns, performance pitfalls from Cycling '74 forums.
+- **`cookbook/cookbook_insights.md`** — Insights from Max Cookbook examples (Dobrian/UCI).
+
+_Add new scraped resources here. Every knowledge folder: `<source>/CRAWL_LOG.md`, `<source>/crawl_state.json`, `<source>/<source>_insights.md`._
 
 ## Consult Installed Packages Before Long Native Chains
 
-When considering how to implement something, check whether an installed Max package already provides it as a single object before composing a chain of native objects. Package objects often handle edge cases, performance, and conventions that a hand-rolled native chain misses.
+Check `packages/package_objects.json` before composing any 3+ native-object chain. The `use_when` field is the load-bearing entry — it tells you when and how to drive the object. Use `/c2m-package-search` or `python3 packages/query_packages.py search "<term>"`.
 
-`package_objects.json` is the curated reference: keyed by package name then object name, each entry has the digest, I/O counts, and a `use_when` field describing when the object beats the native equivalent. Read `use_when` first — that's the field that decides.
+**Library schema:**
 
-Coverage is partial. Only curated packages are present, and within those only objects that meaningfully outperform native chains. Absence from the library means "not yet curated," not "no advantage." To extend coverage:
+| Key | Type | Notes |
+|-----|------|-------|
+| `digest` | str | One-line description. |
+| `numinlets` | int | 0 = unknown; consult refpage. |
+| `numoutlets` | int | 0 = unknown; consult refpage. |
+| `outlettype` | list[str] | Per-outlet type. |
+| `kind` | str | `external`, `abstraction`, `javascript`, or "". |
+| `source` | str | `refpage` or `helpfile`. |
+| `use_when` | str | The curated judgement — load-bearing field. |
+| `deprecated_by` | str | Optional. Present when refpage flagged the object. |
 
-```bash
-python3 build_package_objects.py --package "<package name>" --merge package_objects.json
-```
+**Converter fallback.** `spec2maxpat.py` consults `package_objects.json` as final I/O fallback — externals like `cv.jit.faces` work in a spec without overrides if curated. To extend coverage, see `packages/CURATION.md`.
 
-Then fill the empty `use_when` fields in `package_objects.json` for the objects worth keeping. Skip pure alternatives with no advantage over built-ins.
-
-## What the Converter Handles for You
-
-- Correct `numinlets`, `numoutlets`, `outlettype` for known objects
-- Variable-argument objects (trigger, pack, unpack, select, route, gate, etc.)
-- Spec embedding as hidden `text.codebox` for round-tripping
-- Auto-layout (but always use explicit `pos` — auto-layout is a fallback)
-
-## Converter Design Rule — Match Max's Defaults, Never Exceed Them {!pre-edit}
+## Converter Design Rule — Match Max's Defaults, Never Exceed Them
 
 The converter should only add attributes that Max doesn't set by default. The goal is to match what you'd get from a fresh object instantiation in Max, plus whatever the spec explicitly requests. Injecting "helpful" extras — even well-intentioned ones — overrides Max's defaults and can lock controls, suppress normal behavior, or produce states the user never asked for.
 
@@ -254,158 +227,37 @@ For instance: `live.*` objects were getting `parameter_enable: 1` and `saved_att
 
 **When adding any auto-generated attr to the converter, verify first by creating the object fresh in Max and inspecting its JSON — only inject what's absent but required for correct wiring, never what's absent because Max intentionally leaves it unset.**
 
-## Modifying Externally-Sourced Patches
-
-When a patch is pasted in from an external source and you modify it:
-
-- **Highlight changed objects** — amber background (`"bgcolor": [1.0, 0.82, 0.45, 1.0]`) + black text (`"textcolor": [0.0, 0.0, 0.0, 1.0]`) on changed message boxes; orange border (`"color": [1.0, 0.55, 0.0, 1.0]`) on changed newobj boxes
-- **Color affected patchcords** — apply the same orange (`"color": [1.0, 0.55, 0.0, 1.0]`) to any patchlines that were added or rerouted
-- **Annotate changes** — add comment objects labeling what changed (e.g. `"← was: 11clicks"`). Place comments at the right margin (x ≥ 565) or inline only where clearly clear of patchcords. No bgcolor on comments.
-- **Embed the spec** — include a hidden `text.codebox` (`id: "obj-spec-embed"`, `"hidden": 1`) below all other objects with the full spec JSON wrapped in `--- CLAUDE2MAX SPEC ---` / `--- END SPEC ---` delimiters
-
 ## What You Must Handle
 
-- **Object text** — write it exactly as you'd type it in Max (e.g. `"metro 500"`, `"cycle~ 440"`, `"jit.noise 4 char 320 240"`)
-- **Connections** — get outlet/inlet indices right. Max objects have specific inlet/outlet meanings; know them.
-- **Layout** — use explicit `pos` for every object. Follow the layout guidelines in SPEC_REFERENCE.md.
-- **Presentation** — use `presentation` field for user-facing layouts. Design presentation views as functional, logical, aesthetic UIs — not copies of the patching layout. Key requirements:
-  - Every presented control needs a comment label
-  - Set `openinpresentation: 1` on the patcher so it opens in presentation mode by default
-  - Exclude infrastructure (metros, routers, loadbangs, print objects) from presentation view
-  - After converting, post-process the .maxpat to add `presentation_rect` to each presented box
-  - Use screenshots (computer-use MCP) to verify layout before reporting done; if unavailable, note it
-  - **See `MAX_PATCHING.md` for all layout rules, spacing formulas, and presentation design principles**
-- **Subpatcher, abstraction, and poly~ inlet/outlet labeling** — every `inlet` and `outlet` object in a subpatcher, abstraction, or poly~ abstraction must be labeled in two places:
-  1. **Outside** (in the parent patcher): set the `@comment` attribute on the `p`/`poly~` object itself, describing each inlet and outlet — index, expected type, and purpose. E.g. `"in 0: bang — trigger generate  |  out 0: list — permutation"`. In the spec, use `attrs: {"comment": "..."}`.
-  2. **Inside** (within the subpatcher): both of the following, for every `inlet` and `outlet` object:
-     - Set `attrs: {"comment": "..."}` on the `inlet`/`outlet` spec entry — this writes the `comment` key directly to the box and appears as a tooltip/label in the Inspector.
-     - Place an actual `comment` box immediately adjacent, describing what the inlet receives or outlet sends. E.g. next to inlet: `"← bang: trigger generate"`, next to outlet: `"→ list: permutation result"`.
-  Never create an encapsulated unit without both levels of labeling. This applies at creation time, not as an afterthought.
-- **Objects not in the converter's lookup tables** — use `inlets`, `outlets`, and `outlettype` overrides in the spec. This is common for third-party externals.
-- **Always embed the spec** — every .maxpat produced using the Claude2Max workflow must include a hidden `text.codebox` (`id: "obj-spec-embed"`, `"hidden": 1`) placed below all other objects, containing the full spec JSON wrapped in `--- CLAUDE2MAX SPEC ---` / `--- END SPEC ---` delimiters. This applies whether the output is from the converter or assembled manually — if you used Claude2Max thinking (read SPEC_REFERENCE, wrote or modified a spec), embed it.
-
-## v8 / JavaScript Objects
-
-`v8` (Chrome V8 engine) and `js` (SpiderMonkey) objects share the same Max JS API. Prefer `v8` for new patches.
-
-**Spec usage** — `v8` is not in the converter's lookup table; always specify inlet/outlet counts:
-
-```json
-{
-  "type": "newobj",
-  "text": "v8 onesound.js",
-  "inlets": 1, "outlets": 6,
-  "outlettype": ["", "", "", "bang", "bang", "int"]
-}
-```
-
-**External JS files** — place `.js` files in the same directory as the `.maxpat`. Max resolves them relative to the patch file.
-
-**jsui objects** — use `"type": "jsui"` with `attrs: {"filename": "script.js"}`, not `type: "newobj", text: "jsui script.js"`. The `filename` attribute is how Max natively associates a JS file with a jsui; omitting it leaves the object unlinked and non-functional. Always include it:
-
-```json
-{
-  "type": "jsui",
-  "pos": [10, 28], "size": [560, 340],
-  "inlets": 1, "outlets": 2,
-  "outlettype": ["", ""],
-  "attrs": { "filename": "script.js" }
-}
-```
-
-Use just the filename (not an absolute path) so the patch is portable — Max finds the file in the patch's own directory.
-
-**Message routing** — Max dispatches incoming messages by selector (first word) to JS functions of the same name. Arguments follow as function parameters:
-
-| Max message | JS function called |
-|-------------|--------------------|
-| `bang`       | `function bang()` |
-| `setmode 1`  | `function setmode(val)` where `val=1` |
-| `parsetarget 13:00:00` | `function parsetarget(str)` where `str="13:00:00"` |
-
-- Set `inlets` and `outlets` globals at the top: `inlets = 1; outlets = 6;`
-- Output with `outlet(n, value)`. To send a bang: `outlet(n, "bang")`.
-- Use `post("message\n")` for Max console output.
-- Extra message arguments beyond the function's parameters are silently ignored.
-
-**When to use v8** — replace chains of `date`, `sprintf`, `match`, `change`, `fromsymbol`, `pack/unpack` logic with a single v8 object when the logic involves string parsing, date/time arithmetic, or stateful comparisons. v8 is not a DSP object — do not put signal processing inside JS.
+- **Object text, connections, layout** — write text exactly as you'd type it in Max. Get outlet/inlet indices right. Use explicit `pos`. See `SPEC_REFERENCE.md` and `MAX_PATCHING.md` for all rules.
+- **Presentation** — see `MAX_PATCHING.md` for all layout, spacing, and design rules. Key invariants: every presented control needs a comment label; set `openinpresentation: 1`; exclude infrastructure objects; use screenshots (computer-use MCP) to verify.
+- **Subpatcher, abstraction, and poly~ inlet/outlet labeling** — every `inlet` and `outlet` in a subpatcher/abstraction/poly~ must be labeled in two places: (1) **outside** — `attrs: {"comment": "in 0: bang — purpose | out 0: list — result"}` on the `p`/`poly~` object; (2) **inside** — `attrs: {"comment": "..."}` on each inlet/outlet spec entry AND an adjacent `comment` box. Never create an encapsulated unit without both levels.
+- **Objects not in converter's tables** — supply `inlets`, `outlets`, `outlettype` in the spec.
+- **Always embed the spec** — every .maxpat produced via Claude2Max must include a hidden `text.codebox` (`id: "obj-spec-embed"`, `"hidden": 1`) below all other objects, with the full spec JSON wrapped in `--- CLAUDE2MAX SPEC ---` / `--- END SPEC ---` delimiters. This applies whether the output is from the converter or assembled manually.
 
 ## Naming Convention
 
-Make user-defined names visually distinct from Max built-ins so patches are readable at a glance: use **ALL CAPS** for all arbitrary names you create — for instance `send TEMPO`, `receive PITCH`, `pv CURRENT_STATE`, `buffer~ LOOPBUF`, `var STEP_COUNT = 0;`. This applies to patcher names, send/receive names, pv and v variables, buffer~ names, coll names, JS variables, and any other user-defined symbol or identifier. It does NOT apply to Max built-in names, object names, or message selectors.
-
+Use **ALL CAPS** for all user-defined names: `send TEMPO`, `receive PITCH`, `pv CURRENT_STATE`, `buffer~ LOOPBUF`, `var STEP_COUNT = 0;`. Applies to patcher names, send/receive names, pv/v variables, buffer~ names, coll names, JS variables. Does NOT apply to Max built-in names, object names, or message selectors.
 
 ## Tutorial System
 
-`add_tutorial.py` adds an interactive step-by-step tutorial to any `.maxpat`. **Read `TUTORIAL_GUIDELINES.md` before running or modifying the tutorial system.**
+To add an interactive step-by-step tutorial to a patch, invoke `/c2m-tutorial`. The skill handles the full two-pass workflow (sync → analyze → enhance descriptions → generate). Read `TUTORIAL_GUIDELINES.md` for the structural contract, panel/annotation attrs, comment-pile pattern, and breakage diagnostic before modifying any tutorial code.
 
-### Basic usage (static descriptions)
+## Plugin / Slash Commands
 
-```bash
-python3 add_tutorial.py -i patches/patch.maxpat [-o patches/patch-with-tutorial.maxpat]
-```
+These skills ship with the repo in `.claude/skills/` — cloners get slash commands automatically:
 
-### AI-enhanced descriptions (recommended)
+| Command | Fires when | What it does |
+|---------|-----------|--------------|
+| `/c2m-sync` | Explicit sync request; "did my edits make it back?"; pasting in external .maxpat | Runs `sync -i <patch>` to capture manual edits before any convert |
+| `/c2m-tutorial` | Add tutorial; "walk through this patch"; make self-teaching | Two-pass: sync → analyze → enhance descriptions → generate |
+| `/c2m-package-search` | "Is there a package for X?"; before building 3+ native chain | Searches `package_objects.json`, recommends or falls back |
+| `/c2m-design` | Design presentation UI; panel layout; themed UI; jsui canvas | Reads c2m-themes, designs layout, translates to spec coordinates |
+| `/c2m-explain` | Explain a patch; "what does this do?" | Single-pass explanation without modifying the patch |
 
-Two ways to get AI-written, pedagogical step descriptions:
+## Admonition Tags
 
-**From Claude Code (no API key needed):**
-
-```bash
-# 1. Analyze — outputs step groupings as JSON
-python3 add_tutorial.py --analyze -i patches/patch.maxpat > steps.json
-
-# 2. You (Claude Code) read steps.json, write better names/descriptions/placement,
-#    save as enhanced-steps.json (same array format, with name/description/placement keys)
-
-# 3. Generate with enhanced descriptions
-python3 add_tutorial.py -i patches/patch.maxpat --steps-json enhanced-steps.json
-```
-
-The `--steps-json` file is a JSON array with one object per step:
-```json
-[
-  {"name": "Overview", "description": "...", "placement": "right"},
-  {"name": "Camera Capture", "description": "...", "placement": "right"}
-]
-```
-`placement` is `"right"`, `"left"`, `"above"`, or `"below"` — controls where the annotation bubble appears relative to the highlighted objects. Falls back to `"right"` if the chosen side doesn't fit.
-
-**With an API key (fully automated):**
-
-```bash
-export ANTHROPIC_API_KEY=sk-...
-python3 add_tutorial.py --ai -i patches/patch.maxpat
-```
-
-### Features
-
-- Analyzes the patch data-flow graph, splits spatially distant objects, merges related connected objects
-- Adds a `umenu` + `prev`/`next` message buttons + `loadbang` at the top-right of the patch
-- Generates a companion `<patch-name>-tutorial.js` alongside the `.maxpat` — place this next to the .maxpat when opening in Max
-- Each step highlights its objects with a background panel (locked, background layer) and shows a bubble-arrow annotation comment
-- `loadbang` auto-initializes to step 0 when the patch opens
-- The `v8` controller uses `patcher.getnamed()` to show/hide panels and annotations per step
-
-**When to use**: After creating a teaching patch or a complex patch the user wants to understand stage by stage.
-
-## Upstream Maintenance
-
-No external dependencies or build steps. `spec2maxpat.py` looks up I/O counts directly from the Cycling '74 maxref.xml files bundled with Max.app, on demand and per object, caching results for the session. No JSON database, no `build_objects_db.py`. Works automatically as long as Max is installed at a standard path (`/Applications/Max.app`, `/Applications/Max 9.app`, or `/Applications/Max 8.app`). Degrades gracefully if Max is not found — falls back to spec-provided I/O counts.
-
-Hand-verified entries in `NEWOBJ_IO` inside `spec2maxpat.py` always take precedence — those correct cases where even the official docs are wrong (e.g. `gain~` outlet 1 type).
-
-## Admonition Tags — How At-Action-Point Reminders Work
-
-Some headings in this file (and in any `*.md` at the repo root) end with tags like `{!pre-edit}` or `{!pre-commit}`. These mark sections that should be re-surfaced at a specific moment of action.
-
-The mechanism: `hooks/inject_admonitions.py <event>` runs as a `PreToolUse` hook on `Edit`/`Write` (with event `pre-edit`) and on `Bash` (with event `pre-commit`). It scans every `*.md` at the repo root for headings tagged with the matching `{!<event>}` marker, extracts each tagged section (heading through the next heading at the same or higher level), and injects them as `additionalContext` into Claude's next turn. Gates: `pre-edit` skips `/tmp/` and `/var/folders/`; `pre-commit` only fires when the Bash command contains the literal string `git commit`.
-
-**Adding a new admonition** is a one-tag edit: append `{!pre-edit}` or `{!pre-commit}` (or both) to the heading of any rule that should be re-surfaced at that moment. No Python changes needed. The rule and its at-action-point reminder are guaranteed-identical text — they cannot drift.
-
-**For students cloning the repo:** if you see `{!pre-edit}` in a heading, that's a tag, not part of the rule's title. The rest of the heading reads normally.
-
-**Known false positive:** the `pre-commit` matcher fires on any Bash command whose text contains `git commit`, including heredocs, log entries, or commands that merely mention `git commit` in a string literal. Harmless (the hook is advisory) but noisy.
+Headings in any `*.md` at the repo root tagged `{!pre-edit}` or `{!pre-commit}` are re-surfaced by `hooks/inject_admonitions.py` as `additionalContext` at the matching moment — `pre-edit` fires on Edit/Write tool calls; `pre-commit` fires when a Bash command contains `git commit`. To add a new at-action-point reminder: append the tag to any heading. No Python changes needed.
 
 ## Keeping Docs in Sync {!pre-commit}
 
@@ -502,4 +354,3 @@ At the end of any session where meaningful work was done, append an entry to `WO
 ```
 
 **Do not rely solely on the stop hook.** Sessions that hit the context limit are cut off without firing the hook. Instead, update `WORK_HISTORY.md` proactively — after any significant milestone within a session, not only at the very end.
-

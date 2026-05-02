@@ -24,6 +24,29 @@ JSON format for describing Max/MSP patches.
 | `objects` | yes | — | Dict of named objects (see below) |
 | `connections` | yes | — | Array of connections between objects |
 
+## Max's Three Patch Serialization Formats
+
+Max serializes patcher contents in one logical shape — `{boxes, lines, appversion, classnamespace}` — and ships it in three envelopes depending on context. Knowing which envelope you have determines how to read or write it; the payload inside is the same.
+
+| Format | Envelope around the payload | Where it appears | Read / write |
+|---|---|---|---|
+| **Standalone `.maxpat`** | `{"patcher": {boxes, lines, …}}` | Disk; one patcher per file | Direct JSON load |
+| **Copy-paste JSON** | `{boxes, lines, appversion, classnamespace}` (no `patcher` wrapper) | macOS clipboard after `Cmd-C`; consumed by `Edit > Paste From Clipboard`; also the body of forum-embedded patches | Direct JSON load + add `{"patcher": {…}}` wrapper to save as `.maxpat` |
+| **MCT (Max Compressed Text)** | `----------begin_max5_patcher----------\n<bytes>.<JUCE-base64-zlib(copy-paste-JSON)>\n-----------end_max5_patcher-----------` | Forum posts (Copy button); chat / docs sharing | `mct_decode()` / `mct_encode()` in `spec2maxpat.py` |
+
+The relationship is purely about what's around the same payload — going one direction requires only adding/removing the wrapper or compression. For instance, when `enumerate_forum_threads.py` fetches `https://cycling74.com/api/v1/patchers/<id>` the response carries copy-paste JSON inside an MCT envelope; decoding gives you the unwrapped form, which you can either (a) save as `.maxpat` after adding the `{"patcher": {…}}` wrapper, or (b) put on the clipboard verbatim and `Edit > Paste From Clipboard` it directly into an open patcher window.
+
+Practical implications for the converter:
+
+- `spec2maxpat.py convert`  → writes the `.maxpat` envelope (full file).
+- `spec2maxpat.py extract`  → strips the `.maxpat` envelope and emits the embedded Claude2Max spec.
+- `spec2maxpat.py mct`       → produces an MCT envelope from a `.maxpat`.
+- `spec2maxpat.py sync`      → reads either `.maxpat` or copy-paste JSON.
+
+Whether the wrapper is present in a forum-fetched body depends on what the author copied: a selection from inside a patcher gives you the unwrapped form; a copy of an entire `.maxpat` file gives you the wrapped form. `mct_to_maxpat()` in `enumerate_forum_threads.py` only adds the wrapper when missing, so the saved file always opens cleanly.
+
+The Claude2Max spec format itself is independent of all three envelopes — it is the project's intermediate representation, embedded as a hidden `text.codebox` (`id: "obj-spec-embed"`, `hidden: 1`) inside the `.maxpat`, wrapped in `--- CLAUDE2MAX SPEC ---` / `--- END SPEC ---` delimiters.
+
 ## Objects
 
 Objects are defined as a dict where each key is a unique ID you choose, and the value describes the object:
@@ -570,4 +593,80 @@ The `*.`, `+.` etc. variants are also valid float-mode objects, but prefer the f
   ]
 }
 ```
+
+## What the Converter Handles
+
+- Correct `numinlets`, `numoutlets`, `outlettype` for known objects
+- Variable-argument objects (trigger, pack, unpack, select, route, gate, etc.)
+- Spec embedding as hidden `text.codebox` for round-tripping
+- Auto-layout (but always use explicit `pos` — auto-layout is a fallback)
+
+## v8 / JavaScript Objects
+
+`v8` (Chrome V8 engine) and `js` (SpiderMonkey) objects share the same Max JS API. Prefer `v8` for new patches.
+
+**Spec usage** — `v8` is not in the converter's lookup table; always specify inlet/outlet counts:
+
+```json
+{
+  "type": "newobj",
+  "text": "v8 onesound.js",
+  "inlets": 1, "outlets": 6,
+  "outlettype": ["", "", "", "bang", "bang", "int"]
+}
+```
+
+**External JS files** — place `.js` files in the same directory as the `.maxpat`. Max resolves them relative to the patch file.
+
+**jsui objects** — use `"type": "jsui"` with `attrs: {"filename": "script.js"}`, not `type: "newobj", text: "jsui script.js"`. The `filename` attribute is how Max natively associates a JS file with a jsui; omitting it leaves the object unlinked and non-functional. Always include it:
+
+```json
+{
+  "type": "jsui",
+  "pos": [10, 28], "size": [560, 340],
+  "inlets": 1, "outlets": 2,
+  "outlettype": ["", ""],
+  "attrs": { "filename": "script.js" }
+}
+```
+
+Use just the filename (not an absolute path) so the patch is portable — Max finds the file in the patch's own directory.
+
+**Message routing** — Max dispatches incoming messages by selector (first word) to JS functions of the same name:
+
+| Max message | JS function called |
+|-------------|--------------------|
+| `bang` | `function bang()` |
+| `setmode 1` | `function setmode(val)` where `val=1` |
+| `parsetarget 13:00:00` | `function parsetarget(str)` where `str="13:00:00"` |
+
+- Set `inlets` and `outlets` globals at the top: `inlets = 1; outlets = 6;`
+- Output with `outlet(n, value)`. To send a bang: `outlet(n, "bang")`.
+- Use `post("message\n")` for Max console output.
+- Extra message arguments beyond the function's parameters are silently ignored.
+
+**When to use v8** — replace chains of `date`, `sprintf`, `match`, `change`, `fromsymbol`, `pack/unpack` logic with a single v8 object when the logic involves string parsing, date/time arithmetic, or stateful comparisons. v8 is not a DSP object — do not put signal processing inside JS.
+
+## Modifying Externally-Sourced Patches
+
+When a patch is pasted in from an external source and you modify it:
+
+- **Highlight changed objects** — amber background (`"bgcolor": [1.0, 0.82, 0.45, 1.0]`) + black text (`"textcolor": [0.0, 0.0, 0.0, 1.0]`) on changed message boxes; orange border (`"color": [1.0, 0.55, 0.0, 1.0]`) on changed newobj boxes
+- **Color affected patchcords** — apply the same orange (`"color": [1.0, 0.55, 0.0, 1.0]`) to any patchlines that were added or rerouted
+- **Annotate changes** — add comment objects labeling what changed (e.g. `"← was: 11clicks"`). Place comments at the right margin (x ≥ 565) or inline only where clearly clear of patchcords. No bgcolor on comments.
+- **Embed the spec** — include a hidden `text.codebox` (`id: "obj-spec-embed"`, `"hidden": 1`) below all other objects with the full spec JSON wrapped in `--- CLAUDE2MAX SPEC ---` / `--- END SPEC ---` delimiters
+
+## MCT Encoding Algorithm
+
+MCT format is `{compressed_byte_count}.{JUCE_base64(zlib_compress(json))}`, wrapped at 60 chars/line. `mct_encode` and `mct_decode` in `spec2maxpat.py` implement this. The JUCE base64 variant reads compressed bytes **LSB-first**, packing 6-bit chunks in order for bytes b0, b1, b2:
+
+| Chunk | Bits |
+|-------|------|
+| 0 | b0[5:0] |
+| 1 | b0[7:6] \| b1[3:0]<<2 |
+| 2 | b1[7:4] \| b2[1:0]<<4 |
+| 3 | b2[7:2] |
+
+Alphabet: `.ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+`
+(`.` = 0, A–Z = 1–26, a–z = 27–52, 0–9 = 53–62, `+` = 63)
 
