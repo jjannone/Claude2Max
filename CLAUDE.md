@@ -32,7 +32,7 @@ The recognition signal: **if I find myself reaching for an attribute or method n
 
 For instance: writing `bgcolor`, `peakcolor`, `knobcolor`, or `needlecolor` on `live.gain~` because those names exist on other UI objects is the same kind of mistake as writing `arr.contains()` in JavaScript because it sounds right (the actual method is `arr.includes()`). JS throws `TypeError`. Max silently accepts the unknown attribute and ignores it — the mistake survives a code review I would never let it survive in JS. The valid `live.gain~` color attrs are `coldcolor`, `warmcolor`, `hotcolor`, `overloadcolor`, `slidercolor`, `textcolor`, `tricolor`, `trioncolor`, `tribordercolor`, `focusbordercolor`, `modulationcolor`, `inactivecoldcolor`, `inactivewarmcolor` — confirmed by reading `/Applications/Max.app/Contents/Resources/C74/docs/refpages/m4l-ref/live.gain~.maxref.xml`.
 
-The verification mechanics for Max specifically — the refpage paths, the `grep` patterns, the `RefpageCache.lookup()` API — live in `MAX_PATCHING.md`. This rule states *why*; that file states *how*.
+The verification mechanics for Max specifically — the refpage paths, the `grep` patterns, the `RefpageCache.lookup()` API — live in `patching/MAX_PATCHING.md`. This rule states *why*; that file states *how*.
 
 **Verification is per-attribute, not per-object.** If I am writing N attributes for an object, I must verify N names against the refpage. Batching N attrs into one edit without per-name verification is the failure mode this rule is designed to prevent.
 
@@ -61,7 +61,7 @@ Long conversations accumulate uncommitted work and stale context — both compou
 A commit moment is "natural" when ALL of the following hold:
 
 - A coherent unit of work is complete — a feature, a fix, a refactor, a doc pass, a knowledge-base chunk, a queued task. No in-flight iteration; no "I'll fix that next."
-- All decisions, rules, and learnings have been propagated to the relevant repo files (`CLAUDE.md`, `SPEC_REFERENCE.md`, `MAX_PATCHING.md`, `TUTORIAL_GUIDELINES.md`, `WORK_HISTORY.md`, etc.) — the next session can rebuild context purely from disk.
+- All decisions, rules, and learnings have been propagated to the relevant repo files (`CLAUDE.md`, `SPEC_REFERENCE.md`, `patching/MAX_PATCHING.md`, `TUTORIAL_GUIDELINES.md`, `WORK_HISTORY.md`, etc.) — the next session can rebuild context purely from disk.
 - `WORK_HISTORY.md` has the work logged.
 - No pending verification is owed (e.g. "check that this works in Max and let me know").
 - The user is not mid-decision on something where the conversation's recent reasoning is the working memory.
@@ -141,13 +141,13 @@ When the analytical or design phase is complete and implementation begins (spec 
 
 Read and review the entire Claude2Max repo before starting — `CLAUDE.md`, `SPEC_REFERENCE.md`, `TUTORIAL_GUIDELINES.md`, and `spec2maxpat.py` — so your understanding of the current spec format, converter behavior, and conventions is fully up to date. Do not rely on prior session knowledge alone; the repo is the authoritative source.
 
-**Before constructing or editing any patch**, read `MAX_PATCHING.md`. It contains all patching principles, presentation view guidelines, documentation verification rules, and common pitfalls. Treat its presentation section as a checklist before starting any presentation layout.
+**Before constructing or editing any patch**, read `patching/MAX_PATCHING.md`. It contains all patching principles, presentation view guidelines, documentation verification rules, and common pitfalls. Treat its presentation section as a checklist before starting any presentation layout.
 
-**Before designing or analyzing anything inside a `gen~` / `gen` box**, also read `GEN_PATCHING.md`. gen~ is a separate dataflow language with its own object set and per-sample evaluation model — patterns from MSP do not necessarily translate.
+**Before designing or analyzing anything inside a `gen~` / `gen` box**, also read `patching/GEN_PATCHING.md`. gen~ is a separate dataflow language with its own object set and per-sample evaluation model — patterns from MSP do not necessarily translate.
 
-**Before designing or analyzing anything inside a `jit.gen` / `jit.gl.pix` box**, read `JIT_GEN_PATCHING.md`. Same gen language as gen~, but iteration is per-cell or per-pixel rather than per-sample — `samplerate` and audio-time idioms do not apply; position primitives (`norm`, `cell`, `dim`) and texture sampling do.
+**Before designing or analyzing anything inside a `jit.gen` / `jit.gl.pix` box**, read `patching/JIT_GEN_PATCHING.md`. Same gen language as gen~, but iteration is per-cell or per-pixel rather than per-sample — `samplerate` and audio-time idioms do not apply; position primitives (`norm`, `cell`, `dim`) and texture sampling do.
 
-**Before working on a Max for Live device**, read `M4L_PATCHING.md`. M4L adds the Live Object Model, `live.*` UI objects, device-lifecycle considerations, and `.amxd` packaging — none of which appear in standalone Max patches.
+**Before working on a Max for Live device**, read `patching/M4L_PATCHING.md`. M4L adds the Live Object Model, `live.*` UI objects, device-lifecycle considerations, and `.amxd` packaging — none of which appear in standalone Max patches.
 
 ## Workflow
 
@@ -185,10 +185,10 @@ To decode MCT received in the conversation: `python3 -c "from spec2maxpat import
 ## Key Files
 
 - `SPEC_REFERENCE.md` — **Read this first.** Complete spec format, object types, connection format, layout guidelines, v8/JS objects, MCT encoding, worked examples.
-- `MAX_PATCHING.md` — Patching principles, presentation guidelines, documentation verification rules, common pitfalls. Read before any patch work.
-- `GEN_PATCHING.md` — gen~ / gen programming model (audio rate / control rate), canonical idioms (slide envelope follower, samplerate→ms, equal-power crossfade), latency-compensation discipline. Read before any work inside a `gen~` / `gen` box.
-- `JIT_GEN_PATCHING.md` — jit.gen / jit.gl.pix programming model (per-cell / per-pixel), position primitives (`norm`, `cell`, `dim`), texture sampling, distance-field idioms. Read before any work inside a `jit.gen` / `jit.gl.pix` box.
-- `M4L_PATCHING.md` — Max for Live patterns: Live Object Model access chain, `live.thisdevice` init signal, `getpath` + `deferlow` race, Push 3 polyphonic pressure, `live.*` UI styling, `.amxd` packaging. Read before any M4L device work.
+- `patching/MAX_PATCHING.md` — Patching principles, presentation guidelines, documentation verification rules, common pitfalls. Read before any patch work.
+- `patching/GEN_PATCHING.md` — gen~ / gen programming model (audio rate / control rate), canonical idioms (slide envelope follower, samplerate→ms, equal-power crossfade), latency-compensation discipline. Read before any work inside a `gen~` / `gen` box.
+- `patching/JIT_GEN_PATCHING.md` — jit.gen / jit.gl.pix programming model (per-cell / per-pixel), position primitives (`norm`, `cell`, `dim`), texture sampling, distance-field idioms. Read before any work inside a `jit.gen` / `jit.gl.pix` box.
+- `patching/M4L_PATCHING.md` — Max for Live patterns: Live Object Model access chain, `live.thisdevice` init signal, `getpath` + `deferlow` race, Push 3 polyphonic pressure, `live.*` UI styling, `.amxd` packaging. Read before any M4L device work.
 - `spec2maxpat.py` — The converter. I/O data from C74 maxref.xml via `RefpageCache`; no external database.
 - `TUTORIAL_GUIDELINES.md` — Tutorial structural contract, panel/annotation attrs, comment-pile pattern, breakage diagnostic.
 - `packages/package_objects.json` — Curated reference of installed Max package objects with `use_when` judgments.
@@ -239,8 +239,8 @@ For instance: `live.*` objects were getting `parameter_enable: 1` and `saved_att
 
 ## What You Must Handle
 
-- **Object text, connections, layout** — write text exactly as you'd type it in Max. Get outlet/inlet indices right. Use explicit `pos`. See `SPEC_REFERENCE.md` and `MAX_PATCHING.md` for all rules.
-- **Presentation** — see `MAX_PATCHING.md` for all layout, spacing, and design rules. Key invariants: every presented control needs a comment label; set `openinpresentation: 1`; exclude infrastructure objects; use screenshots (computer-use MCP) to verify.
+- **Object text, connections, layout** — write text exactly as you'd type it in Max. Get outlet/inlet indices right. Use explicit `pos`. See `SPEC_REFERENCE.md` and `patching/MAX_PATCHING.md` for all rules.
+- **Presentation** — see `patching/MAX_PATCHING.md` for all layout, spacing, and design rules. Key invariants: every presented control needs a comment label; set `openinpresentation: 1`; exclude infrastructure objects; use screenshots (computer-use MCP) to verify.
 - **Subpatcher, abstraction, and poly~ inlet/outlet labeling** — every `inlet` and `outlet` in a subpatcher/abstraction/poly~ must be labeled in two places: (1) **outside** — `attrs: {"comment": "in 0: bang — purpose | out 0: list — result"}` on the `p`/`poly~` object; (2) **inside** — `attrs: {"comment": "..."}` on each inlet/outlet spec entry AND an adjacent `comment` box. Never create an encapsulated unit without both levels.
 - **Objects not in converter's tables** — supply `inlets`, `outlets`, `outlettype` in the spec.
 - **Always embed the spec** — every .maxpat produced via Claude2Max must include a hidden `text.codebox` (`id: "obj-spec-embed"`, `"hidden": 1`) below all other objects, with the full spec JSON wrapped in `--- CLAUDE2MAX SPEC ---` / `--- END SPEC ---` delimiters. This applies whether the output is from the converter or assembled manually.
@@ -274,7 +274,7 @@ Headings in any `*.md` at the repo root tagged `{!pre-edit}` or `{!pre-commit}` 
 Whenever you learn something new about Max behavior, fix a bug, or add/change a feature, **immediately** propagate that knowledge to all relevant files before committing:
 
 - `SPEC_REFERENCE.md` — object behavior, .maxpat format details, layout rules; object-specific behavioral notes and pitfalls
-- `MAX_PATCHING.md` — patching principles, presentation guidelines, documentation rules, common pitfalls
+- `patching/MAX_PATCHING.md` — patching principles, presentation guidelines, documentation rules, common pitfalls
 - `TUTORIAL_GUIDELINES.md` — tutorial generation lessons and conventions
 - `CLAUDE.md` — workflow, process rules, cross-cutting conventions
 - `WORK_HISTORY.md` — session summary (create it if absent)

@@ -144,7 +144,7 @@ On every page, follow linked external resources and classify:
 
 At the end of each session, scan `cookbook_insights.md` for
 `[PROMOTION-CANDIDATE]` entries and propose adding them to the appropriate
-repo file (`SPEC_REFERENCE.md`, `MAX_PATCHING.md`, or the relevant package
+repo file (`SPEC_REFERENCE.md`, `patching/MAX_PATCHING.md`, or the relevant package
 entry in `packages/package_objects.json`).
 
 ## Session notes / process observations

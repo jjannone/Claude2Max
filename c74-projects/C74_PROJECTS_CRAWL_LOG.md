@@ -50,7 +50,7 @@ This shapes the workflow:
    - No external URL → showcase-only; catalog-only; mark `showcase`.
 3. **Insights**: only when an actual patch is in hand. Write to
    `c74_projects_insights.md`. Mark entries `[PROMOTION-CANDIDATE]` where
-   they'd improve `MAX_PATCHING.md`, `SPEC_REFERENCE.md`, or
+   they'd improve `patching/MAX_PATCHING.md`, `SPEC_REFERENCE.md`, or
    `packages/package_objects.json`.
 
 ## Coverage
@@ -123,7 +123,7 @@ by source (GitHub / MaxForLive / Drive / direct-download / author).
 is *catalog* (answering "is there an existing M4L device that does X?")
 rather than *insight extraction* like the forum and cookbook crawls. But
 the older era yields enough academic free patches that an analysis pass
-on the highest-value candidates will produce real `MAX_PATCHING.md`-quality
+on the highest-value candidates will produce real `patching/MAX_PATCHING.md`-quality
 insights. Andy Farnell + Curtis Roads alone should be a substantial
 pedagogical contribution.
 

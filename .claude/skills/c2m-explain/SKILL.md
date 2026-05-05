@@ -15,13 +15,13 @@ This skill is read-only. It does not call `sync`, does not run `convert`, does n
 Pass the patch path as `$ARGUMENTS`. For the default walkthrough mode:
 
 ```bash
-python3 c2m_explain.py "$ARGUMENTS"
+python3 c2m-explain/c2m_explain.py "$ARGUMENTS"
 ```
 
 For a terser one-line-per-stage view (useful when iterating on a patch and "remind me what this does" is enough):
 
 ```bash
-python3 c2m_explain.py "$ARGUMENTS" --summary
+python3 c2m-explain/c2m_explain.py "$ARGUMENTS" --summary
 ```
 
 The script reuses Claude2Max infrastructure rather than reinventing analysis:
@@ -92,7 +92,7 @@ If invoked without `$ARGUMENTS`, ask the user which `.maxpat` to explain — don
 
 ## See also
 
-- `c2m_explain.py` — the implementation
+- `c2m-explain/c2m_explain.py` — the implementation
 - `c2m-explain/UPSTREAM-SKILL.md` — the upstream-distribution copy of this manifest
 - `add_tutorial.py` — `generate_steps`, `describe_object`, and `REFPAGE_ALIAS` shared with this skill
 - `/c2m-tutorial` — the complementary skill that *adds* an interactive tutorial to a patch

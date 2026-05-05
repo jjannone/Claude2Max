@@ -10,7 +10,7 @@ Behavior: scans every *.md file at the repo root for headings tagged
 next heading at the same or higher level) as additionalContext.
 
 This means rules and their at-action-point reminders are the *same text*
-in CLAUDE.md (and SPEC_REFERENCE.md, MAX_PATCHING.md, etc.) — adding a
+in CLAUDE.md (and SPEC_REFERENCE.md, patching/MAX_PATCHING.md, etc.) — adding a
 new admonition is a one-tag edit. No Python checklist to maintain.
 
 Event-specific gating:

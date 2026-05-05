@@ -6,7 +6,7 @@ user-invocable: true
 
 This skill explains a Max/MSP `.maxpat` patch by composing existing
 Claude2Max infrastructure into a one-shot walkthrough. It is a thin layer
-over `c2m_explain.py` at the repo root.
+over `c2m-explain/c2m_explain.py` at the repo root.
 
 **This file is the upstream/distribution copy of the manifest.** The
 in-repo, slash-command-discoverable copy lives at
@@ -17,8 +17,8 @@ two in rough sync; the local copy is authoritative for behavior.
 ## How to use
 
 ```bash
-python3 c2m_explain.py <patch.maxpat>            # walkthrough (default)
-python3 c2m_explain.py <patch.maxpat> --summary  # terse one-line-per-stage
+python3 c2m-explain/c2m_explain.py <patch.maxpat>            # walkthrough (default)
+python3 c2m-explain/c2m_explain.py <patch.maxpat> --summary  # terse one-line-per-stage
 ```
 
 - **Walkthrough** (default): one section per functional stage, with the

@@ -4,7 +4,7 @@
 
 Claude2Max is a toolkit for generating, modifying, and explaining Max/MSP patches with the help of an LLM (Claude). You describe the patch you want in plain English — maybe sketching in a few specific objects you have in mind — and Claude translates that into a JSON spec the converter turns into a `.maxpat` file. The spec is embedded inside the generated patch, so Claude can read it back, reason about the patch later, and make targeted edits without rebuilding from scratch.
 
-The tool is designed for students and educators with little coding or CLI experience. Claude reads the repo's documentation files (`CLAUDE.md`, `SPEC_REFERENCE.md`, `MAX_PATCHING.md`) at the start of each session and uses them as a knowledge base — anything Claude needs to know about the spec format, conventions, and Max/MSP itself lives in those files.
+The tool is designed for students and educators with little coding or CLI experience. Claude reads the repo's documentation files (`CLAUDE.md`, `SPEC_REFERENCE.md`, `patching/MAX_PATCHING.md`) at the start of each session and uses them as a knowledge base — anything Claude needs to know about the spec format, conventions, and Max/MSP itself lives in those files.
 
 ---
 
@@ -52,7 +52,7 @@ Beyond the spec format, the repo carries curated patching knowledge gathered fro
 
 - `c74-forum/forum_insights.md` — non-obvious behaviors, preferred patterns, and performance pitfalls extracted from the Cycling '74 forums (with the artifact-bearing-thread crawl framework that produced them).
 - `cookbook/cookbook_insights.md` — insights from the Max Cookbook (Dobrian / UC Irvine), each example patch downloaded and read in full.
-- `MAX_PATCHING.md` — patching principles, presentation-view guidelines, common pitfalls, and the documentation-verification rules that prevent silent-failure bugs (e.g. invented attribute names that Max accepts and ignores).
+- `patching/MAX_PATCHING.md` — patching principles, presentation-view guidelines, common pitfalls, and the documentation-verification rules that prevent silent-failure bugs (e.g. invented attribute names that Max accepts and ignores).
 
 These sources are consulted by Claude during design and debugging, alongside the official refpages.
 
@@ -197,9 +197,9 @@ This makes `git diff` show changes to the embedded spec instead of the raw `.max
 |---------------|------------|
 | [`spec2maxpat.py`](spec2maxpat.py) | The converter (`convert`, `extract`, `sync`, `mct`). On-demand `RefpageCache`. |
 | [`add_tutorial.py`](add_tutorial.py) | Tutorial generator (data-flow analysis → step clustering → v8 controller). |
-| [`c2m_explain.py`](c2m_explain.py) | One-shot walkthrough generator. Read-only. |
+| [`c2m-explain/c2m_explain.py`](c2m-explain/c2m_explain.py) | One-shot walkthrough generator. Read-only. |
 | [`SPEC_REFERENCE.md`](SPEC_REFERENCE.md) | Full spec format reference. Read first. |
-| [`MAX_PATCHING.md`](MAX_PATCHING.md) | Patching principles, presentation guidelines, doc-verification rules. |
+| [`patching/MAX_PATCHING.md`](patching/MAX_PATCHING.md) | Patching principles, presentation guidelines, doc-verification rules. |
 | [`TUTORIAL_GUIDELINES.md`](TUTORIAL_GUIDELINES.md) | Tutorial structural contract and breakage diagnostic. |
 | [`CLAUDE.md`](CLAUDE.md) | Workflow, process rules, and cross-cutting conventions for any Claude instance. |
 | [`packages/`](packages/) | Curated package library (`package_objects.json`), per-package concepts, query CLI. |

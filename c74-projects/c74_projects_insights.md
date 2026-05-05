@@ -9,7 +9,7 @@ three knowledge sources can be searched the same way.
 projects belong in `c74_projects_database.md` (the catalog), not here.
 
 **Promotion**: mark entries `[PROMOTED 2026-05-04]` when the insight would
-improve `MAX_PATCHING.md`, `SPEC_REFERENCE.md`, `CLAUDE.md`, or
+improve `patching/MAX_PATCHING.md`, `SPEC_REFERENCE.md`, `CLAUDE.md`, or
 `packages/package_objects.json`. Per the `Rules from Corrected Errors`
 rule in CLAUDE.md, every promotion is user-confirmed before writing —
 never auto-promoted.
@@ -38,7 +38,7 @@ then becomes "lookahead" relative to the envelope, which is acoustically
 free. Putting FX on the env path instead would add latency to the gate,
 producing comb-filtering against the parallel signal path.
 
-`[PROMOTED 2026-05-04]` — three things worth lifting to `MAX_PATCHING.md` § gen~:
+`[PROMOTED 2026-05-04]` — three things worth lifting to `patching/MAX_PATCHING.md` § gen~:
 1. **`slide` is the canonical gen~ envelope follower** — separate slide-up and slide-down arguments express attack and decay as the standard pair.
 2. **`samplerate * (ms/1000) → delay N`** is the canonical millisecond→sample conversion idiom inside gen~ (where there's no `delay~` with millisecond mode).
 3. **Equal-power vs linear crossfade is one `selector 2` away** — both can coexist in the same gen~ patch, with a runtime parameter choosing between them, instead of duplicating the patch for each crossfade flavor.
@@ -57,7 +57,7 @@ multiplexing). Patterns worth noting:
 - **`expr` with multi-arg integer combinators** like `expr $i4 - (2*$i1 + 2*$i2 + $i3)` for combining stochastic counter outputs into resonator coefficient indices. This is the Max-typed analog of a tuple-pack-then-compute idiom.
 - **Preset rhythms as parameterized message lists**: `1 $1 1 $2 0 $3 0 $4 0.5 $1 0.5 $2 0 $3 0 $4 ...` — the message box stores a pattern in normalized form (0..1 amplitudes paired with $1-$4 substitutable parameter slots); the receiver substitutes time/pitch/voicing values at evaluation time. A pattrstorage-free preset strategy that survives copy-paste.
 
-`[PROMOTED 2026-05-04]` — *cycle~ at sub-Hz rates as the canonical slow LFO* deserves a one-line note in `MAX_PATCHING.md` modulation section, contrasted against the common student instinct to reach for `phasor~ + lookup~` or build LFO-from-line~ chains.
+`[PROMOTED 2026-05-04]` — *cycle~ at sub-Hz rates as the canonical slow LFO* deserves a one-line note in `patching/MAX_PATCHING.md` modulation section, contrasted against the common student instinct to reach for `phasor~ + lookup~` or build LFO-from-line~ chains.
 
 ## Patching Patterns
 
@@ -92,7 +92,7 @@ the shape `RefpageCache._parse` in `spec2maxpat.py` parses. So a
 properly-built community package becomes I/O-resolvable in Claude2Max
 specs without any override.
 
-`[PROMOTED 2026-05-04]` — `MAX_PATCHING.md` could grow a section
+`[PROMOTED 2026-05-04]` — `patching/MAX_PATCHING.md` could grow a section
 "Shipping a community package" with this directory layout as the
 reference. Especially for the audience of Claude2Max students, knowing
 that "putting JS in `javascript/`, refpage in `docs/`, helpfile in

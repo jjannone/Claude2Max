@@ -54,7 +54,7 @@ Ten reference themes:
 
 ## Step 3 — Design the layout
 
-Hard rules from `CLAUDE.md` and `MAX_PATCHING.md` that always apply:
+Hard rules from `CLAUDE.md` and `patching/MAX_PATCHING.md` that always apply:
 
 - ALL CAPS for any user-defined name (sends, receives, buffers, pv/v vars, JS vars, patcher names)
 - No emoji, ever

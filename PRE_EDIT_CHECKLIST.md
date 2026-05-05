@@ -4,7 +4,7 @@ You're about to write or edit a file. Scan this list — each item is "if X appl
 
 ## Reference material — consult before acting
 - For every Max object or external API I'm about to encode in this edit: have I read its refpage / docs / header file in the last few seconds? Family resemblance to other objects is not evidence — names that "sound right" are guesses.
-- For this task area (presentation view, tutorials, specs, packages, Max patching, converter): have I re-read the relevant repo docs this session — MAX_PATCHING.md, SPEC_REFERENCE.md, TUTORIAL_GUIDELINES.md, packages/package_concepts.md?
+- For this task area (presentation view, tutorials, specs, packages, Max patching, converter): have I re-read the relevant repo docs this session — patching/MAX_PATCHING.md, SPEC_REFERENCE.md, TUTORIAL_GUIDELINES.md, packages/package_concepts.md?
 - Have I scanned WORK_HISTORY.md (and insights.md if on a user branch) for prior notes on this area before starting?
 - For visual changes (presentation view, layout, color, object position): have I taken a screenshot via computer-use MCP to verify how the last build actually looks before iterating?
 - Before composing a long chain of native Max objects to do something: have I run `python3 packages/query_packages.py search <term>` to check whether an installed package handles it in one object?
@@ -51,7 +51,7 @@ You're about to write or edit a file. Scan this list — each item is "if X appl
 - If this edit adds or changes a rule in CLAUDE.md or any *.md at the repo root: did I first propose the exact wording in chat and receive user confirmation, before writing it?
 - If writing a rule prompted by an error: have I stated the underlying concern (general principle), not the specific incident (recipe)? Lead with intent, follow with "for instance".
 - If a rule references a specific file as "what correct looks like": is the rule pinned to the structural contract (attributes, invariants, shape), with the file mentioned as "for instance" rather than as the rule's source of truth?
-- If this session produced an insight: have I propagated it to all relevant files — SPEC_REFERENCE.md / MAX_PATCHING.md / TUTORIAL_GUIDELINES.md / CLAUDE.md / WORK_HISTORY.md?
+- If this session produced an insight: have I propagated it to all relevant files — SPEC_REFERENCE.md / patching/MAX_PATCHING.md / TUTORIAL_GUIDELINES.md / CLAUDE.md / WORK_HISTORY.md?
 - If this rule applies to the repo (not just my personal context with this user): is it going into the repo's CLAUDE.md or other tracked *.md, NOT into personal memory? Memory holds user/feedback/project context only — repo rules go to disk where collaborators see them.
 - If meaningful work happened this session: has WORK_HISTORY.md been appended proactively, not held until end of session?
 

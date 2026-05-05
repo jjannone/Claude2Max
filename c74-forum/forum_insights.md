@@ -16,34 +16,34 @@ section of `SPEC_REFERENCE.md`. If a package-object insight accumulates,
 fold it into `package_objects.json`.
 
 Entries flagged **[PROMOTED 2026-05-04]** are queued for evaluation as
-candidate rules in `CLAUDE.md` / `SPEC_REFERENCE.md` / `MAX_PATCHING.md`.
+candidate rules in `CLAUDE.md` / `SPEC_REFERENCE.md` / `patching/MAX_PATCHING.md`.
 Promotion is user-confirmed only — see "Rules from Corrected Errors" in CLAUDE.md.
 
 ## Audio (MSP)
 
 > **`phasor~ → delta~ → <~ 0` is the canonical signal-rate edge detector for one-bang-per-cycle triggers.** `delta~` outputs the per-sample difference of its input; on a `phasor~`, this is small-positive most samples but **negative** at the wrap-point (the only time the phase ramp goes backward). Comparing `<~ 0` produces a one-sample positive pulse exactly at the wrap. The MSP-canonical companion `edge~` does the same job for any `<~`/`>~` source. Useful for triggering an event once per phasor cycle without leaving signal rate (no scheduler jitter).
 > *Source*: [phasor~ > function sequencer question](https://cycling74.com/forums/phasor-greater-function-sequencer-question).
-> *Why it matters*: belongs in `MAX_PATCHING.md` as the canonical "fire on phasor wrap" idiom. Already referenced by several existing entries indirectly. **[PROMOTION-CANDIDATE]**.
+> *Why it matters*: belongs in `patching/MAX_PATCHING.md` as the canonical "fire on phasor wrap" idiom. Already referenced by several existing entries indirectly. **[PROMOTION-CANDIDATE]**.
 
 > **`function → setdomain $1` rescales the function UI's time axis without rewriting breakpoints.** The function object stores breakpoint times in milliseconds by default, but `setdomain N` makes the same breakpoints span 0..N. Combined with a `phasor~` and `play~ <buffer>`, this gives a tempo-synced envelope playback where changing BPM only resends a new domain — the breakpoints don't need to be recomputed. The BPM→ms conversion chain is `BPM → / 60000. → !/ 1. → * 1000.` (gives milliseconds-per-beat).
 > *Source*: [phasor~ > function sequencer question](https://cycling74.com/forums/phasor-greater-function-sequencer-question).
-> *Why it matters*: `MAX_PATCHING.md` § Modulation could grow a "tempo-synced envelopes" subsection. The `setdomain` reset is the load-bearing trick.
+> *Why it matters*: `patching/MAX_PATCHING.md` § Modulation could grow a "tempo-synced envelopes" subsection. The `setdomain` reset is the load-bearing trick.
 
 > **Smoothed preset interpolation via `function → buffer~ → play~`** — store the interpolation curve once as `function` breakpoints; `dump` to a `peek~` chain populates `buffer~ function @samps 1000`; trigger `start 0 $1 1000` on `play~ function` to play the curve back at variable speed (`$1` = duration in ms; `play~` accepts ms even though `buffer~` is sample-quantised). Gives sample-accurate, click-free preset transitions with arbitrary curves (linear, exponential, S-curve, sigmoid). The pattern uses `getattr samps → sampstoms~` to convert buffer length back to ms when changing the buffer's domain.
 > *Source*: [Smoothed Preset Interpolation with line envelope](https://cycling74.com/forums/smoothed-preset-interpolation-with-line-envelope).
-> *Why it matters*: this is a more flexible answer than `line~` for any preset interpolation that needs anything other than a linear ramp. Document in `MAX_PATCHING.md` § Modulation. **[PROMOTION-CANDIDATE]**.
+> *Why it matters*: this is a more flexible answer than `line~` for any preset interpolation that needs anything other than a linear ramp. Document in `patching/MAX_PATCHING.md` § Modulation. **[PROMOTION-CANDIDATE]**.
 
 > **`comb~ delay_ms feedback_gain decay damping` is the classic Karplus-Strong / resonator primitive.** Args: max-delay-in-ms, current-delay-in-ms, feedback-gain (typically 0.99..-0.999 for sustained ringing), decay-time. Stack two with prime-number-related delays for stereo Karplus-Strong: `comb~ 1500 175 1 0 0.2 → comb~ 500 400 1 0 0.5`. Works inside `gen~` too if you use `delay` + `history` to build the comb manually.
 > *Source*: [Panning pre-synthesis?](https://cycling74.com/forums/panning-pre-synthesis).
-> *Why it matters*: comb-as-primitive often gets buried in students' minds under "build a Karplus-Strong from scratch" framings. Document in `MAX_PATCHING.md` Audio knowledge section.
+> *Why it matters*: comb-as-primitive often gets buried in students' minds under "build a Karplus-Strong from scratch" framings. Document in `patching/MAX_PATCHING.md` Audio knowledge section.
 
 > **Mass-spring-damper physical-modelling via `jit.phys.body` + `jit.phys.barslide` is the canonical Jitter-physics chain for 1D resonant modes.** `jit.phys.body` is the rigid body; `jit.phys.barslide` constrains its motion to one axis. N bodies + N-1 springs (`jit.phys.spring`) between adjacent bodies = an N-mode resonant string/bar. `resetquat 0 0 0.7071 0.7071` rotates the constraint axis 90° (since barslide defaults to vertical). `loadmess 50` and `loadmess 0.9` set spring-strength and damping respectively. Driven by `mousestate` for picking, the result audifies via `jit.phys.body`'s position-output feeding `live.gain~`.
 > *Source*: [Mass-Spring-Damper Model](https://cycling74.com/forums/mass-spring-damper-model).
-> *Why it matters*: the jit.phys → audio bridge is non-obvious. Document in `MAX_PATCHING.md` § Audio Knowledge as a physical-modelling alternative to gen~/MSP-only chains. **[PROMOTION-CANDIDATE]**.
+> *Why it matters*: the jit.phys → audio bridge is non-obvious. Document in `patching/MAX_PATCHING.md` § Audio Knowledge as a physical-modelling alternative to gen~/MSP-only chains. **[PROMOTION-CANDIDATE]**.
 
 > **`speedlim N` is the Max-canonical anti-flood limiter for control rate** — accepts any input but emits at most one message per N milliseconds. Cheaper and more predictable than `qlim` for human-input event streams (mouse, slider, MIDI CC) where you want responsiveness with a hard upper bound. Don't confuse with `qlim` (which queues and emits the latest N ms after the last input) — `speedlim` is "throttle", `qlim` is "debounce".
 > *Source*: [decrease speed of messages? (non destructively)](https://cycling74.com/forums/decrease-speed-of-messages-non-destructively).
-> *Why it matters*: belongs in `MAX_PATCHING.md` § common-pitfalls with the `qlim` distinction.
+> *Why it matters*: belongs in `patching/MAX_PATCHING.md` § common-pitfalls with the `qlim` distinction.
 
 ## Video / Jitter
 
@@ -70,7 +70,7 @@ Promotion is user-confirmed only — see "Rules from Corrected Errors" in CLAUDE
 > **[PROMOTED 2026-05-04]** **In a custom `.jxs` shader, textures bind by *declaration order* of `<param>` entries, NOT by matching name to the patch's `@texture` list.**
 > The seductive (and wrong) assumption: a JXS `<param name="txKalid" type="int">` will auto-bind to the texture named `txKalid` listed in `jit.gl.shader @texture txChix txKalid`. Reality (Rob Ramirez, C74): the first `<param>` of int-type binds to texture unit 0 (the first name in `@texture`), the second to unit 1, etc. Names are arbitrary labels, not hooks. Symptom of getting it wrong: swapping which texture you sample produces identical output — both samplers point to the same unit. Fix: declare each texture as a separate `<param name="..." type="int" default="N" />` matching the position. Useful references: JXS file format spec, "Your First Shader" tutorial, Jitter manual chapters 41-43.
 > *Source*: [Using Vizzie Kalider texture output in shader code issue?](https://cycling74.com/forums/using-vizzie-kalider-texture-output-in-shader-code-issue) — Rob Ramirez (C74).
-> *Why it matters*: any Claude2Max patch with a multi-texture custom shader needs this convention spelled out. Belongs in `MAX_PATCHING.md` shader section as the canonical multi-texture binding rule.
+> *Why it matters*: any Claude2Max patch with a multi-texture custom shader needs this convention spelled out. Belongs in `patching/MAX_PATCHING.md` shader section as the canonical multi-texture binding rule.
 
 > **For PNG textures with transparency in a custom Jitter shader: `discard` fragments where alpha is below threshold to avoid depth-test failures.**
 > Naive setup: load PNG → `jit.gl.texture` → bind to shader sampler → `texture(tex0, jit_in.texcoord0)`. Symptom: opaque artifacts visible *behind* transparent regions. Cause: transparent fragments still write depth, so geometry behind them gets depth-tested away. Fix in the fragment stage: `if (color.a < 0.5) discard;` before writing the color. Adjacent insight from the same thread: when scaling line-width offsets in a geometry shader by image aspect ratio, use `ratio = dimY / dimX` and apply as `vec2 n0 = vec2(-v0.y, v0.x) * dist * ratio * 0.5` where `dist = length(p1 - p0)`.
@@ -100,7 +100,7 @@ Promotion is user-confirmed only — see "Rules from Corrected Errors" in CLAUDE
 > **[PROMOTED 2026-05-04]** **For instanced GPU rendering with multiple `jit.gl.buffer`s, the working pattern is *one buffer per named inlet of `jit.gl.mesh`*, NOT multiple on the same inlet.**
 > Marson's diagnosis (the OP's intuition was wrong): the problem is not race conditions or scheduler timing — it's that fanning multiple `jit.gl.buffer`s into the same `jit.gl.mesh` inlet causes the most recent connection to *replace* the prior one. Patchcord connections to `jit.gl.buffer` declare GPU buffer-attachment dependencies, not message edges. Each named inlet (`color`, `position`, `vertex_attr0`–`vertex_attr3`) routes to one attachment. Once each buffer has its own inlet, any update strategy works — including banging all buffers per frame. Two adjacent perf rules surfaced from the same code: (a) consolidate shared vertex data across instances (the OP went from ~100MB/device down a lot by deduplicating); (b) precompute expensive math (sin/cos) on CPU and pass via uniforms/buffers — don't recompute per-vertex/per-fragment. Suggested doc improvement (from the OP, accepted): warn when multiple buffers attach to one inlet.
 > *Source*: [Trouble updating multiple instanced jit.gl.buffers in real time](https://cycling74.com/forums/trouble-updating-multiple-instanced-jitglbuffers-in-real-time) — Matteo Marson (C74).
-> *Why it matters*: structural rule for any Claude2Max GPU-instanced render patch. Belongs in `MAX_PATCHING.md` as the canonical wiring recipe with the `vertex_attr*` inlet table.
+> *Why it matters*: structural rule for any Claude2Max GPU-instanced render patch. Belongs in `patching/MAX_PATCHING.md` as the canonical wiring recipe with the `vertex_attr*` inlet table.
 
 > **[PROMOTED 2026-05-04]** **Patcher arguments are not directly readable from `js`/`v8` — instantiate a `patcherargs` external, route to JS, handle in `list()`. `this.patcher.box.boxtext` reads the calling box's text as a related but indirect alternative.**
 > Confirmed by Jeremy Bernstein: the Patcher class has no `args` property or `getArgs()` method; this is a long-standing capability gap. The community-standard workaround (johnpitcairn, confirmed by Mattijs): `patcherargs` external in the parent patcher → outlet routes into the JS object → on `bang`, JS receives args via a `list()` handler. After args are captured, the `patcherargs` can be deleted if dynamic. Box-text inspection: `this.patcher.box.boxtext` returns the literal text of the box that contains your JS — useful for parsing args from "v8 myscript.js arg1 arg2" type wiring, but stringly-typed.
@@ -142,15 +142,15 @@ Promotion is user-confirmed only — see "Rules from Corrected Errors" in CLAUDE
 
 > **Max 8.3+ PBR transparency stack: `jit.gl.pbr @gamma_correction 0` on every transparent shape + `jit.world @transparency 1`. Pair with `jit.gl.skybox @gamma_correction 0` and `jit.gl.environment @file <hdr>.exr` for image-based lighting.** Confirmed working chain from the [Max 8.3 Jitter Features](https://cycling74.com/forums/max-8-3-jitter-features) thread's `transparency example.maxpat`: each `jit.gl.gridshape` declares `@blend_enable 1 @cull_face 3` (back+front cull, with PBR handling depth correctly via the world's transparency pass). `jit.gl.pass @fxname gamma @quality hi` runs as the final post-process. Without `@gamma_correction 0` on each piece, gamma double-corrects and colors come out wrong. The `@locklook 1 @tripod 1` pair on `jit.gl.camera` keeps view-target stable while orbiting.
 > *Source*: [Max 8.3 Jitter Features](https://cycling74.com/forums/max-8-3-jitter-features).
-> *Why it matters*: belongs in `MAX_PATCHING.md` — already partially captured by the OIT promotion. Complete the recipe with the gamma + skybox + environment steps. **[PROMOTION-CANDIDATE]**.
+> *Why it matters*: belongs in `patching/MAX_PATCHING.md` — already partially captured by the OIT promotion. Complete the recipe with the gamma + skybox + environment steps. **[PROMOTION-CANDIDATE]**.
 
 > **`jit.gl.cornerpin` for projection mapping integrates with `pwindow` for in-patch live editing — pwindow forwards mouse coordinates to the cornerpin's drag-handler.** The cornerpin object exposes 4 corners (TL/TR/BL/BR); a `route` chain from the pwindow's mouse output lets the user drag corners directly in the GL preview. Bind via `pattr` for state persistence; `prepend pak` packs the corner index + xy. Useful for projection-mapped video installations where the projection geometry needs runtime adjustment without leaving Max.
 > *Source*: [Jitter: edit cornerpin from pwindow ?](https://cycling74.com/forums/jitter-edit-cornerpin-from-pwindow).
-> *Why it matters*: belongs in `MAX_PATCHING.md` Jitter section as the canonical projection-mapping editor pattern.
+> *Why it matters*: belongs in `patching/MAX_PATCHING.md` Jitter section as the canonical projection-mapping editor pattern.
 
 > **For point-cloud rendering, `jit.gl.mesh @gl_color 1 1 1 1 @point_size 2 @draw_mode points` is the canonical setup; pair with `jit.slide @slide_down 30 @slide_up 30` upstream for temporal smoothing of the point matrix.** The `@draw_mode points` instructs the GPU to rasterize each vertex as a sprite of `@point_size` pixels rather than connecting them into triangles. `jit.slide` operates on Jitter matrices the same way the audio `slide~` operates on signals — separate up/down rates for asymmetric smoothing of incoming motion. Useful for point-cloud crossfading: feed two normalized point-cloud matrices through `jit.xfade` upstream of `jit.gl.mesh`, and the same shader/material/material chain renders the blended result.
 > *Source*: [is it possible to cross fade between two jit.gl.models?](https://cycling74.com/forums/is-it-possible-to-cross-fade-between-two-jitglmodels).
-> *Why it matters*: extend `MAX_PATCHING.md` Jitter section with the point-cloud setup.
+> *Why it matters*: extend `patching/MAX_PATCHING.md` Jitter section with the point-cloud setup.
 
 > **For PLY point-cloud import, the canonical chain is to parse the .ply text manually then load the result into a `jit.matrix 3 float32 N` (one cell per point, RGB or XYZ in the planes).** PLY files are plain text (ASCII variant) and trivially parseable; the binary variant requires more work. Once in a matrix, `jit.gl.mesh @draw_mode points` renders directly. The thread's example patch [forums_is-there-a-way-to-import-ply-point-clouds-in-jitter](https://cycling74.com/forums/is-there-a-way-to-import-ply-point-clouds-in-jitter) bundles a working v8/js parser. Cycling '74 has not shipped a native `jit.ply.read` external as of Max 9.
 > *Source*: [is there a way to import PLY point clouds in jitter?](https://cycling74.com/forums/is-there-a-way-to-import-ply-point-clouds-in-jitter).
@@ -158,7 +158,7 @@ Promotion is user-confirmed only — see "Rules from Corrected Errors" in CLAUDE
 
 > **Databending — `jit.matrix` reads any binary file as raw bytes if you set `read mode raw <file>`. Reinterpreting non-image binary data as an image gives the classic glitch-art "databent" look.** For audio files, the WAV header creates the characteristic stripe at the top. The thread bundles a working patch that reads any file → matrix → texture → display. Useful as both a glitch effect and a debug visualization of any binary blob.
 > *Source*: [Databending - Convert raw data into image](https://cycling74.com/forums/databending-convert-raw-data-into-image).
-> *Why it matters*: belongs in `MAX_PATCHING.md` Jitter section as the canonical raw-binary-as-image idiom.
+> *Why it matters*: belongs in `patching/MAX_PATCHING.md` Jitter section as the canonical raw-binary-as-image idiom.
 
 > **Smooth jit.world frame timing on Windows: ensure `enabled 1` on the renderer + at least Max 8.5; intermittent frame drops on Windows have been a persistent thread.** The pass-2 thread documents the workaround attempts: `cpuclock` measurement of inter-frame intervals shows clean 60 Hz most of the time but a 1-2-frame spike every few seconds. Root cause is OS-level: Windows DWM compositor occasionally throttles. No known patch-side fix; mitigation is to render to a texture and present via a second, independent thread (which Max won't do natively).
 > *Source*: [Intermittent Frame Drops with jit.world (Max 8 / Max 9) on a Windows System](https://cycling74.com/forums/intermittent-frame-drops-with-jit-world-max-8-max-9-on-a-windows-system).
@@ -166,7 +166,7 @@ Promotion is user-confirmed only — see "Rules from Corrected Errors" in CLAUDE
 
 > **For matrix-feedback particle/trail effects: route `jit.gl.layer` capture → `jit.matrix` → upstream feedback inlet of a gen patch (`jit.gen` or shader) that mixes new content with previous frame at a damping factor.** Pattern: `jit.gl.world` → `@capture` to a `jit.matrix` → `jit.gl.pix` mixer that does `out = clamp(in * damping + new_content, 0, 1)` → back into the renderer. Damping = 0.95 gives several-second trails; 0.5 gives short comet-tails. Critical: the loop needs an explicit one-frame delay (`jit.matrix → jit.matrix` chain) to break the simultaneous-read-write feedback.
 > *Source*: [Matrix > Gen > Matrix Feedback Loop: Particle Trails / Continuous Effects](https://cycling74.com/forums/matrix-greater-gen-greater-matrix-feedback-loop-particle-trails-continuous-effects).
-> *Why it matters*: belongs in `MAX_PATCHING.md` Jitter section as the canonical particle-trail/visual-feedback idiom.
+> *Why it matters*: belongs in `patching/MAX_PATCHING.md` Jitter section as the canonical particle-trail/visual-feedback idiom.
 
 ## JavaScript / v8
 
@@ -208,7 +208,7 @@ Promotion is user-confirmed only — see "Rules from Corrected Errors" in CLAUDE
 
 > **Pitchbend in RNBO arrives as 0..127 from `bendin` and needs `div 127.` (or equivalent) for ±1 normalization, then `pak f f` to combine MSB+LSB into a 14-bit float.** The naive `bendin → rnbo~ pitch` wiring sends the raw 0..127 byte; the working pattern is `bendin → div 127. → list.sum → pak f f → rnbo~`. The thread also documents that high-resolution (14-bit) pitch bend requires both MSB and LSB, packed via `pak`.
 > *Source*: [Trouble with [pak] and [bendin]](https://cycling74.com/forums/trouble-with-pak-and-bendin).
-> *Why it matters*: belongs in `MAX_PATCHING.md` § MIDI as the canonical bendin-to-RNBO wiring.
+> *Why it matters*: belongs in `patching/MAX_PATCHING.md` § MIDI as the canonical bendin-to-RNBO wiring.
 
 ## UI / Presentation
 
@@ -242,57 +242,57 @@ Promotion is user-confirmed only — see "Rules from Corrected Errors" in CLAUDE
 
 The 2026-05-04 forum pass-2 surveyed 39 gen~/genexpr threads (entirely new
 subforum coverage) plus several MSP threads with `.gendsp` artifacts.
-Distilled idioms below; companion file `GEN_PATCHING.md` already covers
+Distilled idioms below; companion file `patching/GEN_PATCHING.md` already covers
 slide-as-envelope-follower, samplerate→ms, and equal-power crossfade.
 
 > **`history NAME init_value` declares a one-sample-feedback variable AND its initial value in one syntax.** Examples from the chaos-library Lorenz attractor: `history xi 0.1`, `history yi 0.`, `history zi 0.`. Without an init value, gen~ assumes 0 — fine for filter state but wrong for chaotic systems where the attractor needs a non-zero seed (Lorenz collapses to origin if all three start at 0). Combine with `param` for runtime-tweakable initial conditions when needed.
 > *Source*: [Chaos Library?](https://cycling74.com/forums/chaos-library) — `Lorenz.gendsp`.
-> *Why it matters*: when Claude2Max generates an IIR filter or recurrent dynamics in gen~, name the history variable and seed it. Document in `GEN_PATCHING.md` § state.
+> *Why it matters*: when Claude2Max generates an IIR filter or recurrent dynamics in gen~, name the history variable and seed it. Document in `patching/GEN_PATCHING.md` § state.
 
 > **`samplerate` and `twopi` are first-class identifiers inside gen~** — write `* -twopi/samplerate` directly in arithmetic, no `expr` wrapper, no `* (-2 * 3.14159)` literals. Both compile to constants at edit time. Also: `dim(buffer_name)` returns the buffer's frame count as a sample-rate-evaluated value; `* dim(tape)` lets a normalized 0..1 read-head become an absolute sample index without storing the buffer length elsewhere. Verified across 8 gen~ patches in the pass-2 corpus (`303_filter`, `varispeed-overdubbing`, multiple chaos sources).
 > *Source*: [TB-303 patch](https://cycling74.com/forums/tb-303-patch) — `303_filter.gendsp`; [Varispeed overdubbing in looper](https://cycling74.com/forums/varispeed-overdubbing-in-looper-delay-line-approach-to-rate-greater-1).
-> *Why it matters*: `GEN_PATCHING.md` should mention these as canonical idioms. The `dim(name)` form is especially useful for any gen~ that reads from a `buffer NAME` declared in the parent patcher.
+> *Why it matters*: `patching/GEN_PATCHING.md` should mention these as canonical idioms. The `dim(name)` form is especially useful for any gen~ that reads from a `buffer NAME` declared in the parent patcher.
 
 > **`peek NAME @boundmode wrap @interp linear` is the canonical gen~ buffer-read for variable-rate loopers.** `@boundmode` ∈ `wrap` / `clip` / `fold` / `ignore`; `@interp` ∈ `linear` / `cubic` / `spline` / `none`. Without `@boundmode`, an out-of-bounds index reads zero (silent dropouts at loop edges). The companion writer `poke NAME` has the same attributes. Source: a 50-reply varispeed-overdubbing thread with a working `gen~` looper that handles rate-greater-than-1 writes via a feedback `history` ring buffer pattern.
 > *Source*: [Varispeed overdubbing in looper — delay-line approach to rate>1](https://cycling74.com/forums/varispeed-overdubbing-in-looper-delay-line-approach-to-rate-greater-1).
-> *Why it matters*: `GEN_PATCHING.md` should document the `@boundmode wrap @interp linear` defaults as the safe baseline for any buffer read in gen~. **[PROMOTED 2026-05-04]** target — already reflected in `GEN_PATCHING.md` "buffer read" subsection where applicable.
+> *Why it matters*: `patching/GEN_PATCHING.md` should document the `@boundmode wrap @interp linear` defaults as the safe baseline for any buffer read in gen~. **[PROMOTED 2026-05-04]** target — already reflected in `patching/GEN_PATCHING.md` "buffer read" subsection where applicable.
 
 > **`fixnan` is the gen~ NaN-replacer** — emits the input verbatim unless it's NaN, in which case it emits 0. Critical in any gen~ patch that does `pow`, `log`, division by a possibly-zero signal, or chaotic dynamics. Without it, a single NaN propagates through the rest of the gen~ subgraph and silently zeroes downstream multipliers / accumulates in `history`. Used in the Henon-Heiles attractor for the energy-conservation cross-term where division by zero is theoretically possible.
 > *Source*: [Chaos Library?](https://cycling74.com/forums/chaos-library) — `henonheiles.gendsp`.
-> *Why it matters*: add `fixnan` to `GEN_PATCHING.md` operator inventory. Recommend adding it after any operation that could produce NaN/Inf (`/ 0`, `log(<=0)`, `sqrt(<0)`, `pow(<0, frac)`).
+> *Why it matters*: add `fixnan` to `patching/GEN_PATCHING.md` operator inventory. Recommend adding it after any operation that could produce NaN/Inf (`/ 0`, `log(<=0)`, `sqrt(<0)`, `pow(<0, frac)`).
 
-> **`codebox` is gen~'s inline-genexpr block** — a code object that holds multi-line genexpr text rather than wiring N gen-domain operators by patchcord. Useful for state-heavy update equations where 10+ wires would otherwise tangle. Inputs map to `in1, in2, ...`, outputs to `out1, out2, ...`. Variable-rate looper used a `codebox` for the read-head wrapping logic; chaos library uses them for energy-conservation invariants. Spec the `codebox` with `inlets: N, outlets: M, outlettype: ["signal", ...]` matching the genexpr signature. **[PROMOTION-CANDIDATE]** — a one-line `codebox` reference belongs in `GEN_PATCHING.md`.
+> **`codebox` is gen~'s inline-genexpr block** — a code object that holds multi-line genexpr text rather than wiring N gen-domain operators by patchcord. Useful for state-heavy update equations where 10+ wires would otherwise tangle. Inputs map to `in1, in2, ...`, outputs to `out1, out2, ...`. Variable-rate looper used a `codebox` for the read-head wrapping logic; chaos library uses them for energy-conservation invariants. Spec the `codebox` with `inlets: N, outlets: M, outlettype: ["signal", ...]` matching the genexpr signature. **[PROMOTION-CANDIDATE]** — a one-line `codebox` reference belongs in `patching/GEN_PATCHING.md`.
 > *Source*: [Varispeed overdubbing](https://cycling74.com/forums/varispeed-overdubbing-in-looper-delay-line-approach-to-rate-greater-1).
 
 > **`mc.gen~ @chans N` runs N independent gen~ subgraphs in parallel; address parameters per-channel via `param NAME value` messages routed to specific channels.** Send `harmonic $2 freq $1` (a list with two args) to set channels independently. Receive per-channel signals via `mc.unpack~`; mix down via `mc.mixdown~ N`. Caveat from the source thread: phase relationships across channels can drift if each channel runs its own `phasor` — use a single shared phasor and `mc.combine~` patterns when phase-locking matters.
 > *Source*: [Targetting params in mc.gen~ patch](https://cycling74.com/forums/targetting-params-in-mcgen-patch-with-messages-like-deviate-spread-etc); [Trouble with phase in my mc.gen~ sequencer](https://cycling74.com/forums/trouble-with-phase-in-my-mcgen-sequencer).
-> *Why it matters*: when Claude2Max generates a poly-voice synth or analyzer, `mc.gen~` is the right tool over N parallel `gen~` boxes. Document the param-list-routing pattern in `GEN_PATCHING.md`.
+> *Why it matters*: when Claude2Max generates a poly-voice synth or analyzer, `mc.gen~` is the right tool over N parallel `gen~` boxes. Document the param-list-routing pattern in `patching/GEN_PATCHING.md`.
 
 > **Multi-parameter buffer-as-config-table for gen~ oscillator banks** — pack each parameter (amplitude, pitch, phase, etc.) into a different *channel* of a single multi-channel `buffer~ NAME 0 N @samps M`, then have a single `gen~ → genexpr` walk all M cells per sample and synthesize. From `oscbank-in-genexpr`: `buffer~ oscdata 0 4 @samps 250` holds 250 oscillators × 4 channels (amp, pitch, ?, ?). `listfunnel` converts a list to (index, value) pairs for `peek~` writing. Faster than N parallel sub-patches and trivially scales to large N.
 > *Source*: [oscbank in genexpr](https://cycling74.com/forums/oscbank-in-genexpr).
-> *Why it matters*: `GEN_PATCHING.md` could grow a "buffer-as-config-table" section. **[PROMOTION-CANDIDATE]**.
+> *Why it matters*: `patching/GEN_PATCHING.md` could grow a "buffer-as-config-table" section. **[PROMOTION-CANDIDATE]**.
 
 > **`buffer~ copyto` + `duplicate <name>` message produces transient glitch when the source buffer is being read by an active gen~ — the duplicate is non-atomic.** The diagnostic from the linked thread: `live.scope~` shows `1/44100` constant most of the time but momentary jumps to `1` during the duplicate. Workaround: pause the gen~ DSP during duplication, or use a double-buffer ping-pong pattern (active reader points at A while you write into B; swap pointers). For one-shot init-time copies, fire `duplicate` from `loadbang` before any gen~ goes hot.
 > *Source*: [Copying buffer contents causes glitch in gen~](https://cycling74.com/forums/copying-buffer-contents-causes-glitch-in-gen).
-> *Why it matters*: pitfall worth noting in `GEN_PATCHING.md`. Generalizes: any gen~ patch that depends on a `buffer~` whose contents change at runtime needs to either pause DSP, double-buffer, or accept transient artifacts.
+> *Why it matters*: pitfall worth noting in `patching/GEN_PATCHING.md`. Generalizes: any gen~ patch that depends on a `buffer~` whose contents change at runtime needs to either pause DSP, double-buffer, or accept transient artifacts.
 
 > **`uzi N → peek~ NAME → comparison chain` is the canonical buffer min/max/scan pattern outside of gen~.** From `how-to-find-minimum-and-maximum-values-in-a-buffer`: `uzi 44100 0 → peek~ AAA → t f → t i b → if $f1 >= $f2 then $f1` walks every sample of a 44100-sample buffer comparing each value to the running max. The `t i b` route both feeds the index forward AND triggers the comparison; `if $f1 >= $f2 then $f1` is the running-max accumulator. Useful for buffer normalization, peak detection, RMS computation outside the realtime path.
 > *Source*: [How to find minimum and maximum values in a buffer](https://cycling74.com/forums/how-to-find-minimum-and-maximum-values-in-a-buffer).
-> *Why it matters*: belongs in `MAX_PATCHING.md` § Audio knowledge as the canonical "scan a buffer" pattern. Same pattern works inside gen~ via a `for` loop in `codebox`. **[PROMOTION-CANDIDATE]**.
+> *Why it matters*: belongs in `patching/MAX_PATCHING.md` § Audio knowledge as the canonical "scan a buffer" pattern. Same pattern works inside gen~ via a `for` loop in `codebox`. **[PROMOTION-CANDIDATE]**.
 
 > **Lorenz / Henon-Heiles / strange-attractor gen~ template — three `history` storages for state, three `expr` lines for the derivative update, one `/ samplerate` for sample-rate-independent step size, three `out` for x/y/z.** The Lorenz canonical form: `history xi 0.1, history yi 0., history zi 0.; xi += (yi-xi) * fo * (1/sr); yi += (-xi*zi + l*xi - yi) * (1/sr); zi += (xi*yi - b*zi) * (1/sr)`. Output divided by ~10 to keep audio range. The chaos-library repo bundles Lorenz, Henon-Heiles, Rössler, Duffing, etc. — all share the same template with different `expr` content.
 > *Source*: [Chaos Library?](https://cycling74.com/forums/chaos-library).
-> *Why it matters*: `GEN_PATCHING.md` could grow an "ODE integrator template" section. The dynamic-systems-as-audio-source pattern is unusual but well-suited to gen~'s state-storage model. **[PROMOTION-CANDIDATE]**.
+> *Why it matters*: `patching/GEN_PATCHING.md` could grow an "ODE integrator template" section. The dynamic-systems-as-audio-source pattern is unusual but well-suited to gen~'s state-storage model. **[PROMOTION-CANDIDATE]**.
 
 > **TB-303 / Moog ladder filter in gen~ — one-block-per-pole IIR, `* -twopi/samplerate → abs → exp` for cutoff coefficient, `tanh` between poles for soft drive, `dcblock` at output, `mix` for resonance feedback.** From the `303_filter.gendsp` artifact: input chain is `mix → -twopi/samplerate → exp → mix [4×]→ dcblock → tanh → out`. The `* -twopi/samplerate → exp` pair is the one-pole exponential coefficient (the bilinear transform's frequency-warp factor). `tanh` saturation between stages is what gives ladder filters their characteristic drive; `dcblock` (gen~ built-in) prevents low-frequency drift from the resonance feedback.
 > *Source*: [TB-303 patch](https://cycling74.com/forums/tb-303-patch).
-> *Why it matters*: `GEN_PATCHING.md` could grow a "filter design templates" section with this as a worked example. Useful as both a working filter and a teaching example for one-pole-cascade IIR design in gen~.
+> *Why it matters*: `patching/GEN_PATCHING.md` could grow a "filter design templates" section with this as a worked example. Useful as both a working filter and a teaching example for one-pole-cascade IIR design in gen~.
 
 ## Max for Live
 
 > **`live.path → live.object → get … → route` is the canonical chain to query the LOM (Live Object Model).** `live.path` outputs an `id N` token that `live.object` consumes; sending `get <property>` to `live.object` outputs the property prefixed with the property name; `route <property>` peels the prefix. Pattern observed across half a dozen pass-2 M4L threads. To follow a path: `path live_set tracks 0 clip_slots 1 clip` is the canonical way to get-clip-1-on-track-0; the path tokens are `id`-numeric or symbolic, mix freely.
 > *Source*: [LOM tracks that are in group finder](https://cycling74.com/forums/lom-tracks-that-are-in-group-finder); [Select All Tracks belonging to a group](https://cycling74.com/forums/select-all-tracks-belonging-to-a-group); [Can you observ if a device is selected in Ableton?](https://cycling74.com/forums/can-you-observ-if-a-device-is-selected-in-ableton); [Get playing clip name. Also in arrangement.](https://cycling74.com/forums/get-playing-clip-name-also-in-arrangement).
-> *Why it matters*: `MAX_PATCHING.md` could grow a § Max for Live section opening with this canonical chain. **[PROMOTION-CANDIDATE]**.
+> *Why it matters*: `patching/MAX_PATCHING.md` could grow a § Max for Live section opening with this canonical chain. **[PROMOTION-CANDIDATE]**.
 
 > **`getpath` from a `clip` LOM object only returns reliably when wrapped in a `deferlow` — without it, the path is sometimes blank.** A 40-reply M4L thread documents the workaround: `clip-id → deferlow → getpath`. The reason is a Live-side timing race: when the clip-trigger fires, the `clip` object exists but its path-resolution metadata isn't yet populated. `deferlow` pushes the `getpath` to the next scheduler turn, by which point the path is valid. Same pattern needed for any LOM property that depends on Live's internal sync state (clip name, clip start time, clip length).
 > *Source*: [getpath of a clip only with deferlow?](https://cycling74.com/forums/getpath-of-a-clip-only-with-deferlow).
@@ -326,7 +326,7 @@ slide-as-envelope-follower, samplerate→ms, and equal-power crossfade.
 
 > **`cpuclock → - 0. → cpuclock` is the canonical Max/RNBO pattern for measuring elapsed wall-clock time between two events.** `cpuclock` outputs the current wall-clock time in milliseconds (high-precision); subtracting two cpuclocks gives the interval. From the [Report Elapsed Sample Time Between Two Events](https://cycling74.com/forums/report-elapsed-sample-time-between-two-events) thread: `cpuclock → - 0.` (where `0.` is the previously-stored start time) → `mstosamps~` to convert to samples. The `- 0.` form uses an arg-as-state hack: each new `cpuclock → -` updates the right inlet, so the subtraction always uses the *previous* sample. Cleaner: `t f → cpuclock → - $1` for explicit before/after capture.
 > *Source*: [Report Elapsed Sample Time Between Two Events](https://cycling74.com/forums/report-elapsed-sample-time-between-two-events).
-> *Why it matters*: belongs in `MAX_PATCHING.md` § Audio knowledge as the canonical interval-measurement pattern. Useful for performance profiling, beat-tracking, swing-quantization. **[PROMOTION-CANDIDATE]**.
+> *Why it matters*: belongs in `patching/MAX_PATCHING.md` § Audio knowledge as the canonical interval-measurement pattern. Useful for performance profiling, beat-tracking, swing-quantization. **[PROMOTION-CANDIDATE]**.
 
 > **For sample-dependency export failure (`Export seems to fail on sample dependencies`), the working pattern is to embed every sample in the rnbo~ as a `data` reference rather than letting RNBO scan the patch for `buffer~ FILE` references.** Move RNBO's exporter scans for inline buffer references; if they don't resolve at export time (file moved, missing path, samplerate mismatch), the export silently produces a broken archive. The robust pattern: declare `data NAME @file <path>` inside the rnbo~ subpatcher; that locks the dependency at edit time.
 > *Source*: [Export seems to fail on sample dependencies](https://cycling74.com/forums/export-seems-to-fail-on-sample-dependencies).

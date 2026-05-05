@@ -25,6 +25,13 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
+# This script lives in c2m-explain/, but imports `add_tutorial` and
+# `spec2maxpat` which live at the repo root. Make those importable
+# regardless of cwd.
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+
 import add_tutorial            # generate_steps, find_nearby_comment, describe_object
 import spec2maxpat as s2m      # REFPAGE_CACHE (used indirectly via add_tutorial)
 
