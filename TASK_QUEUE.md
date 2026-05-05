@@ -71,7 +71,15 @@ Tasks requiring deep analysis, architecture decisions, or sustained judgment. Pr
 
   **Fits into the larger system**: this is the spine that makes every other rule load-bearing. Without it, every other entry in TASK_QUEUE.md, every CLAUDE.md rule, every checklist item is advisory. With it, the repo defines a strict operating environment that any Claude instance — current or future, this user or another — is bound to.
 
-- [pending] **Cycling '74 Projects Crawl** — Systematically crawl `https://cycling74.com/projects` (the community projects gallery), build a searchable database of user projects organized by topic/interest area, and read accompanying patches (`.maxpat` / `.maxproj`) where available to extract patching insights into the same knowledge corpus as the forum and cookbook crawls.
+- [in progress] **Cycling '74 Projects Crawl** — Systematically crawl `https://cycling74.com/projects` (the community projects gallery), build a searchable database of user projects organized by topic/interest area, and read accompanying patches (`.maxpat` / `.maxproj`) where available to extract patching insights into the same knowledge corpus as the forum and cookbook crawls.
+
+  *In progress (2026-05-03c): pages 1-21 surveyed = **210 projects of 1822 captured (~11.5%)**. Final classification after triage: **37 free-extractable** (15 GitHub + 4 MaxForLive.com + 2 Google Drive + 1 direct-download + 15 author-site free/academic), 118 commercial, 49 showcase, 6 still-ambiguous, 0 inline. **Era-split confirmed**: pages 1-11 (2024-26) yield ~11% free; pages 12-21 (2021-23) yield ~25% — older era is **5× more open-source**. **3 patches analyzed** so far in `c74_projects_insights.md`: transient_crossfade (gen~ envelope split — 3 promotion-candidate gen~ patterns), !SHAKE! (parent/child multi-outlet abstraction + sub-Hz cycle~), Dirigera Max (exemplar community-package layout). 34 free candidates queued in insights "Future-analysis queue". Database maintains an Observations section with 8 named gallery-shape findings.*
+
+  **Next-session options**:
+  1. **Continue analysis pass on the queued 34 free-extractable** (native-Max only — three georgeNikmus repos excluded per 2026-05-04 user decision; they're Pd-shim or binary ports, not native Max idiom). Top priorities: Facet (mjcella, ★★, 109 stars — active live-coding system), sonus (★★, C++ algorithmic composition package), DGMD (★★, ML training-data generator), SwiftRNBO (★★, Swift↔RNBO host-integration), the 4 free MaxForLive devices, and the academic author-site set (MMM4Live, Cosmolab, ATTRACTORS).
+  2. **Continue forward — pages 22-31** — extends the older-era sample; based on the era-split trend, expected ~25-30% free yield rate.
+  3. **Sample-deep — pages 50, 100, 150** — confirms whether the era-trend is monotonic or hits a floor.
+  4. **Promotion-candidate review pass** for the 5 PROMOTION-CANDIDATEs already flagged in `c74_projects_insights.md` (gen~ slide envelope follower; gen~ samplerate→ms idiom; gen~ equal-power vs linear crossfade with selector; sub-Hz cycle~ as canonical slow LFO; community-package layout reference). All await user confirmation before promotion to `MAX_PATCHING.md`.
 
   **What this is**: The Projects gallery is community-submitted Max work — instruments, performances, installations, tools, generative systems, video pieces, etc. It's a different surface from the forums (questions/answers) and the cookbook (curated educational examples): it's *finished work* tagged by author with descriptions, screenshots, audio/video, and often downloadable patches. High-signal source for "how do experienced users actually structure a complete patch?"
 
@@ -130,9 +138,11 @@ Tasks requiring deep analysis, architecture decisions, or sustained judgment. Pr
   - **Page-metadata scan** (cheap first pass — title + attachment URL identified): 723 scanned, 12 downloaded, 5 skipped, 1 pending. Effectively complete.
   - **Patch download**: only 12 recipes have status `downloaded`. The patches mined for insights below appear to have been processed outside the state machine and are not reflected in the on-disk status counts.
   - **Insight extraction (the substantive work)**: **23 of 735 viable recipes analyzed (~3%)**. Two chunks done — (1) MSP envelope/amplitude — 11 recipes, 16 insights, 3 PROMOTION-CANDIDATEs (2026-05-01h); (2) Jitter matrix manipulation — 12 recipes, 12 insights, 3 PROMOTION-CANDIDATEs (2026-05-01k). **0 recipes have reached the final `scraped` status flag** — the state machine's terminal status is unused; the log is the source of truth for what's been analyzed.
-  - **Remaining**: ~712 viable recipes to open, trace, and mine. At ~12 recipes per session, this is dozens of sessions of work.
+  - **Remaining**: ~712 viable recipes to open, trace, and mine.
 
-  **Resume point**: pick the next chunk per `cookbook/COOKBOOK_CRAWL_LOG.md` — candidate clusters include Jitter GL/3D, Jitter video-sources/feedback, MSP buffer/loop, MSP synthesis, Max sequencer/composition, MIDI. Also consider: backfill the state machine so on-disk status (`scraped`) matches reality after each session, so this percentage is auditable from the JSON alone in future.*
+  **Per-session target (updated 2026-05-03)**: aim for **20 recipes per session** (was 12). Rationale per user: gather more data per session and see what shape the insight stream takes at higher throughput before deciding the project's long-term cadence. State-machine `scraped` flag should be set as recipes are processed so the on-disk count matches reality (currently the log is the source of truth — fix this drift inline with the next chunk).
+
+  **Resume point**: pick the next chunk per `cookbook/COOKBOOK_CRAWL_LOG.md` — candidate clusters include Jitter GL/3D, Jitter video-sources/feedback, MSP buffer/loop, MSP synthesis, Max sequencer/composition, MIDI.*
 
   **What this is**: The Max Cookbook is a curated educational reference covering foundational and advanced Max patching patterns. Each section has text explanations plus downloadable example patches. **Insights live in the patches, not the text** — every example patch must be downloaded and read in full, not just the page descriptions.
 
@@ -160,47 +170,44 @@ Tasks requiring deep analysis, architecture decisions, or sustained judgment. Pr
   - CLAUDE.md already updated with `cookbook/cookbook_insights.md` in the Knowledge Resources index
   - `cookbook/` folder does not exist yet — create it at the start of the first session
 
-- [pending] **Test claude2max-design skill** — validate the `UPSTREAM-SKILL.md` skill manifest in `c2m-themes/` before integrating it into the main Claude2Max workflow. The skill claims to generate well-branded presentation panels, jsui canvases, and tutorial overlays using the `tokens.css` + theme system.
+- [pending] **Return to claude2max-design skill — extend design sense + Phase 3 screenshot verification on current patches** — merger of "Test claude2max-design skill" and "Layout Engine Phase 3" (both 2026-04-26/27 era). The c2m-design skill in its current form is fundamentally incomplete — it has no generalized design sense, cannot extract design principles from sample references, and cannot reliably implement the principles it does understand. Phase 3 (screenshot verification of presentation views) is the natural verification half of this same loop: design intent in, screenshot out, gap measured.
 
-  **What to test**:
-  1. Install the skill by placing `UPSTREAM-SKILL.md` where Claude Code can find it (confirm the correct install path for user-invocable skills)
-  2. Invoke `/claude2max-design` and test against representative tasks: generate a presentation panel mock in LCARS theme, then in Swiss, then in a theme of choice
-  3. Verify output honors the token contract — no hard-coded hex values, correct `--c2m-*` variable usage, ALL-CAPS names, no emoji, tabular numerals
-  4. Test the two-option presentation UI workflow from CLAUDE.md rule 6: does invoking the skill produce a layout description that can be translated back into spec coordinates?
-  5. Evaluate the 5 new themes (swiss, bauhaus, memphis, soviet, lcars-bold) — do they visually match their reference aesthetics and obey their per-theme rules?
+  **What's broken / missing in c2m-design**:
+  1. **No principle extraction from samples** — the skill can't take a reference image (a real LCARS screen, a Swiss poster, a Constructivist composition) and back out the visual rules driving it (hierarchy, alignment, proportional system, color rhythm, type scale). It only consumes rules someone else articulated up front.
+  2. **Weak generalization** — given the 10 themes in `c2m-themes/themes/*.css`, the skill applies token values literally but can't compose new layouts that obey the underlying philosophy without being told the philosophy explicitly.
+  3. **Implementation gap** — even when the skill correctly states a design rule (e.g. "use an 8px baseline grid", "labels right-align with their controls"), it doesn't enforce that rule in the generated `presentation_rect` coordinates.
 
-  **Output**: if the skill works well, add a note to CLAUDE.md rule 6 and `MAX_PATCHING.md` directing Claude to invoke `/claude2max-design` for presentation UI design. If it needs fixes, document them in `c2m-themes/README.md`.
+  **Phase 3 — screenshot verification (originally a separate Sonnet task)**:
+  - Use computer-use MCP to screenshot current patches' presentation views and compare against design intent
+  - Catch: overlapping objects, clipped text, label/control misalignment, broken visual hierarchy, color contrast failures, comment-padding compensation drift
+  - Fix issues found and re-screenshot to confirm
+  - Patches in scope (current repo state — replaces 2026-04-27 references to face-capture which was rebuilt as jit-grab-scale on 2026-04-30):
+    - `patches/drift-sequencer-lcars.maxpat`
+    - `patches/drift-sequencer-soviet.maxpat`
+    - `patches/jit-grab-scale.maxpat`
+    - `patches/ensemble-sequencer-v5.maxpat`
+    - `patches/lcars.maxpat`
 
-  **Prerequisites**: skill must be installed and accessible via `/claude2max-design` before testing.
+  **What to build / explore**:
+  1. **Sample → principles extractor** — feed reference images (a screenshot of a real LCARS console, a Swiss poster scan, a Bauhaus layout), extract explicit rules: alignment grid spacing, type scale ratios, color palette in token form, spacing rhythm, hierarchical weight assignment. Output writable as additions/refinements to a theme CSS file.
+  2. **Principles → coordinates emitter** — take an articulated rule set + the spec object list, emit `presentation_rect` tuples that obey the rules. The "Layout Engine Phase 1" function (`presentation_layout()` in `spec2maxpat.py` — Phases 1 & 2 complete 2026-04-26) is the existing seam to extend.
+  3. **Verification step** — screenshot the resulting patch, compare against the principles, flag drift. This closes the loop and is the original Phase 3 deliverable.
 
-- [complete] **Borrow MaxMCP's Claude Code plugin/skills surfacing pattern** — completed 2026-05-01. Built four skills in `.claude/skills/`: `/c2m-design`, `/c2m-package-search`, `/c2m-tutorial`, `/c2m-sync`. Added `## Plugin / Slash Commands` section to `CLAUDE.md` listing all five skills (including `/c2m-explain`). Compressed `CLAUDE.md` from 609 → 354 lines by moving reference content to `SPEC_REFERENCE.md` (v8/JS, converter handles, modifying external patches, MCT algorithm) and `packages/CURATION.md` (new file). Polish pass (skill trimming, /c2m-explain shim, upstream vs in-repo distinction) tracked separately.
+  **Prerequisites**:
+  - Computer-use MCP enabled and screen recording granted
+  - Familiarity with `c2m-themes/` token contract (`tokens.css` + per-theme overrides)
+  - Existing `presentation_layout()` function in `spec2maxpat.py`
+  - Per CLAUDE.md model-selection rule #6: this task warrants Opus or a Claude Design hand-off — prompt the user before starting
 
-  **What to build**:
-  1. **Plugin skeleton** — a `.claude/plugins/claude2max/` (or appropriate location per current Claude Code plugin conventions; verify before scaffolding — plugin layout has been evolving) that registers the skills below as user-invocable slash commands. Pattern after `c2m-themes/UPSTREAM-SKILL.md` (the existing `/claude2max-design` skill manifest).
-  2. **Skills to ship** (each focused, single-purpose — not a kitchen-sink wrapper):
-     - `/c2m-design` — converges with the existing "Test claude2max-design skill" task above.
-     - `/c2m-package-search <term>` — wraps `python3 packages/query_packages.py search`, surfaces top hits with `use_when` text, prompts Claude to consider the package object before composing native chains. Replaces the implicit "Consult Installed Packages Before Long Native Chains" rule with an explicit prompt-time action.
-     - `/c2m-tutorial` — wraps `add_tutorial.py --analyze` → enhanced JSON → `--steps-json`, the existing two-pass workflow, into a single guided command.
-     - `/c2m-sync` — wraps the sync-first rule (`python3 spec2maxpat.py sync`) and explains what's about to happen before running it; reduces the chance a student or Claude instance skips sync.
-     - `/c2m-explain <maxpat>` — shipped 2026-05-01 as a standalone skill; manifest at `.claude/skills/c2m-explain/SKILL.md`. When this plugin task adds the `## Plugin / Slash Commands` section to CLAUDE.md, list `/c2m-explain` there alongside the others.
-  3. **Skill descriptions matter** — Claude Code's skill auto-trigger uses the `description` field. Each skill's description must clearly state trigger conditions (when to use, when not to use) so auto-triggering works without false positives. Use installed `claude-api`, `simplify`, etc. skills as reference for description quality.
-  4. **Documentation** — add a `## Plugin / Slash Commands` section to `CLAUDE.md` listing the skills, what they do, and when to invoke them. Rules already enshrined in `CLAUDE.md` stay there as the authoritative reference; the skills are *fast paths* to the relevant rule + action, not replacements for the rule.
-  5. **Pedagogy framing** — for the student audience, the slash commands make Claude2Max approachable without reading any documentation first. A student can type `/c2m-package-search distortion` and get a useful answer immediately. Prioritize discoverability over feature density.
+  **Inlet/outlet labeling rule** (carries forward from Phase 2): every subpatcher / abstraction / poly~ must label inlets and outlets in two places — `@comment` attr on the `p` / `poly~` box (outside) AND a `comment` box adjacent to each `inlet`/`outlet` (inside). Never create an encapsulated unit without both.
 
-  **Why it's needed**: `CLAUDE.md` is now 600+ lines. New Claude instances and new students both face a high cost-to-first-useful-action. MaxMCP's plugin/skills pattern is a credible solution proven in a sister project. Adopting it lowers Claude2Max's onboarding cost without losing the rule corpus that makes it correct.
-
-  **Implementation notes**:
-  - Verify current Claude Code plugin layout conventions before scaffolding — slash-command/skill plugin format has been evolving.
-  - The `claude-api` skill (already installed) is a good shape reference: focused trigger conditions, clear scope, no scope creep.
-  - Each skill should be testable in isolation — `/c2m-package-search` should work even if the rest of the plugin isn't installed.
-
-  **Prerequisites**: existing `c2m-themes/UPSTREAM-SKILL.md` (the queued `claude2max-design` skill); current Claude Code plugin docs read end-to-end before scaffolding.
-
-  **Fits into the larger system**: this is the "expose what we already have" task — Claude2Max's accumulated knowledge (refpage cache, package library, tutorial system, theme system, spec format) is currently buried in CLAUDE.md and helper scripts. Skills make that knowledge clickable. Source: 2026-05-01 forum/project research session — see `c74-forum/forum_insights.md` "LLM / AI-Assisted Patching" section.
+  **Source**: 2026-05-03 queue review with user. Merging makes the design loop end-to-end: principles in, layout out, screenshot verified, drift caught.
 
 - [in progress] **Forum Knowledge Crawl** — Systematically crawl the Cycling '74 forums in chunks, extracting Max principles, techniques, and approaches from experienced community members. Build a growing reference of non-obvious patching knowledge that supplements the official docs.
 
-  *In progress (2026-05-01): infrastructure built (enumerator + MCT pipeline + serialization-format reference). Test crawl insights purged. **First real crawl session is the next thing to do.** See `c74-forum/FORUM_CRAWL_LOG.md` for the canonical recipe and the suggested initial focus areas.*
+  *In progress (2026-05-04 — pass-2 chunk done): **321 threads total in state** (81 from 2026-05-01e + 240 from 2026-05-04). Pass-2 covered MaxMSP pp.2-5 + Jitter pp.4-7 + RNBO pp.2-5 + Javascript pp.4-7 + Gen pp.1-4 (NEW subforum) + Misc pp.1-3 + Max For Live pp.1-2. 103 artifact-bearing threads in pass-2 yielded 212 files (167 .maxpat from MCT, 18 .zip, 24 other, plus .js / .jxs / .rnbopack). ~30 new insights written across the existing sections + a fresh "Gen / gen~" section (10 entries). 5 new [PROMOTION-CANDIDATE] flags planted on this pass; 20 [PROMOTION-CANDIDATE]s from prior passes were promoted to MAX_PATCHING.md / SPEC_REFERENCE.md / GEN_PATCHING.md (new) on the same date. State decisions: 147 downloaded / 168 skipped-no-artifact / 6 phase-C-scraped.*
+
+  **Resume point**: pick the next subforum chunk per `c74-forum/FORUM_CRAWL_LOG.md`. Candidate areas now: MaxMSP pp.6+, Jitter pp.8+, RNBO pp.6+, Javascript pp.8+, Gen pp.5+, Misc pp.4+, Max For Live pp.3+. Java subforum entirely unscanned. Use `enumerate_forum_threads.py --diff` against `c74-forum/forum_crawl_state.json` to surface only NEW or UPDATED threads when revisiting a prior subforum.
 
   **Approach (chunked across sessions)**:
   - Each session picks a focused area: one subforum, one topic thread cluster, or one search query (e.g. "jit.matrix best practices", "audio synthesis techniques", "v8 patterns"). Track progress in `c74-forum/FORUM_CRAWL_LOG.md` so each session knows where to resume.
@@ -290,11 +297,9 @@ Tasks requiring deep analysis, architecture decisions, or sustained judgment. Pr
 
 Tasks that are primarily implementation, file editing, or verification — no deep architectural judgment required.
 
-- [complete] **Cross-link `/c2m-explain` from CLAUDE.md** — completed 2026-05-01. Listed in the `## Plugin / Slash Commands` table in `CLAUDE.md` alongside the four other c2m skills. Slash command shim (`.claude/skills/c2m-explain/SKILL.md`) still pending under the polish pass task.
-
 - [pending] **Plugin/skills polish pass** — follow-up clean-up after the Opus "Borrow MaxMCP's plugin/skills surfacing pattern" task ships. Six focused subtasks; do them as a single session for coherence:
 
-  1. **Move the queue hygiene** — mark "Test claude2max-design skill" complete (the `/c2m-design` skill in `.claude/skills/` supersedes it; testing happens organically as the skill is used) and mark `/c2m-explain` Sonnet task complete (the implementation at `c2m_explain.py` and the manifest at `c2m-explain/UPSTREAM-SKILL.md` exist). Move both to the Done section with completion date.
+  1. **Move the queue hygiene** — *handled 2026-05-03 during a queue review pass*. The `/c2m-explain` Sonnet task and the parent Borrow MaxMCP Opus task are now in the Done section. The "Test claude2max-design skill" entry was **not** marked complete; instead it was merged with "Layout Engine Phase 3" into a single Opus task ("Return to claude2max-design skill — extend design sense + Phase 3 screenshot verification on current patches") because the skill is fundamentally incomplete (no generalized design sense, no principle extraction from samples, no implementation of the principles it does articulate). See the merged task for current scope.
 
   2. **Wire `/c2m-explain` as a slash command in this repo** — add `.claude/skills/c2m-explain/SKILL.md` (modeled on the other four), pointing at `c2m_explain.py` at the repo root. Without this shim, `/c2m-explain` is not auto-discoverable as a slash command — only the CLI form (`python3 c2m_explain.py …`) works. Alternative if intentional: leave the shim out and document explicitly in CLAUDE.md that `/c2m-explain` is CLI-only, not a slash command. Pick one and document.
 
@@ -310,38 +315,13 @@ Tasks that are primarily implementation, file editing, or verification — no de
 
   **Why split from the parent task**: keeping the parent task focused on "build the four skills + add a CLAUDE.md section" lets it finish cleanly; the polish work has a different shape (mechanical edits + queue hygiene) and benefits from a fresh session that can read the freshly-written skills with cold eyes.
 
-- [in progress] **Layout engine Phase 3 — screenshot verification** (Phases 1 & 2 complete 2026-04-26) — three-phase approach covering both views, each with its own emphasis:
-
-  *In progress (2026-04-27): drift-sequencer reviewed and fixed (presentation layout, monospace font, ignoreclick on note display, content-driven multislider width). face-capture not yet reviewed — resume there.*
-
-  **Phase 1 — Layout engine (presentation view)**: add a `presentation_layout()` function to `spec2maxpat.py` that computes `presentation_rect` for every presented object automatically from the spec, replacing manual post-processing. The engine should:
-  - Accept logical layout hints in the spec: column/row grouping, margins, object sizes
-  - Compute x/y positions using consistent margins (15px outer, 10–15px between groups) and the label-width estimation rules already in CLAUDE.md
-  - Handle common patterns such as the two-panel layout (setup left, performance right)
-  - Output `presentation_rect` values directly into the generated .maxpat JSON
-
-  **Phase 2 — Layout engine (patching view)**: apply layout logic to the patching view as well, with different goals. Patching view emphasis is on:
-  - **Structural logic** — data flow reads top-to-bottom, left-to-right; signal path is visually distinct from control path
-  - **Readability** — related objects grouped spatially; consistent spacing; no crossing patchcords where avoidable
-  - **Functional units** — logically related clusters of objects are visually grouped and clearly separated from other clusters
-  - **Encapsulation** — where a functional unit is self-contained, consider wrapping it in a subpatcher (`p`) to reduce clutter and reinforce the logical boundary. The spec already supports subpatchers; the layout engine should identify candidates and apply encapsulation where it improves clarity. See inlet/outlet labeling rule below.
-
-  **Inlet/outlet labeling rule** (applies to all subpatchers, abstractions, and poly~ abstractions — not just those created by the layout engine):
-  1. **Outside**: set `@comment` on the `p`/`poly~` object itself (via `attrs: {"comment": "..."}` in the spec) describing all inlets and outlets — index, type, purpose. E.g. `"in 0: bang — trigger generate  |  out 0: list — permutation"`.
-  2. **Inside**: place an actual `comment` box immediately adjacent to each `inlet` and `outlet` object. E.g. `"← bang: trigger generate"` next to the inlet, `"→ list: permutation result"` next to the outlet.
-  Never create an encapsulated unit without both levels of labeling. Applies at creation time.
-
-  **Phase 3 — Screenshot verification**: after conversion, use computer-use MCP to:
-  - Screenshot patching view — review for structural clarity, readable data flow, well-grouped functional units, encapsulation opportunities missed by the engine
-  - Screenshot presentation view (Cmd-Shift-E) — review for overlapping objects, clipped text, misaligned labels, crowded groups
-  - Fix issues found and re-screenshot to confirm
-  - Requires computer-use MCP enabled in Claude Desktop; if unavailable, note what to check manually
-
-  **Prerequisite**: computer-use MCP must be enabled and screen recording granted to Claude. Phases 1 and 2 (layout engines) work without it; Phase 3 (screenshots) requires it.
-
 ---
 
 ## Done
+
+- [complete] **Borrow MaxMCP's Claude Code plugin/skills surfacing pattern** — completed 2026-05-01. Built four skills in `.claude/skills/`: `/c2m-design`, `/c2m-package-search`, `/c2m-tutorial`, `/c2m-sync`. Added `## Plugin / Slash Commands` section to `CLAUDE.md` listing all five skills (including `/c2m-explain`). Compressed `CLAUDE.md` from 609 → 354 lines by moving reference content to `SPEC_REFERENCE.md` (v8/JS, converter handles, modifying external patches, MCT algorithm) and `packages/CURATION.md` (new file). Polish-pass follow-ups (skill trimming, /c2m-explain shim, upstream-vs-in-repo distinction) tracked separately in the Sonnet polish-pass entry.
+
+- [complete] **Cross-link `/c2m-explain` from CLAUDE.md** — completed 2026-05-01. Listed in the `## Plugin / Slash Commands` table in `CLAUDE.md` alongside the four other c2m skills. Slash-command shim at `.claude/skills/c2m-explain/SKILL.md` was added in the same session as the parent task; the polish-pass entry's subtask 2 about that shim is therefore also satisfied.
 
 - [complete] **Add `/c2m-explain` — first-class "explain this patch" skill** — completed 2026-05-01. Built `c2m_explain.py` (read-only walkthrough generator) with two output modes: walkthrough (default) and `--summary`. Skill manifest at `.claude/skills/c2m-explain/SKILL.md` (Claude Code's auto-discovery scans `.claude/skills/`), parallel to the four sibling c2m skills; upstream-distribution copy at `c2m-explain/UPSTREAM-SKILL.md`. Bidirectional integration with `add_tutorial.py`: shared `describe_object` cascade (curated `OBJ_DESCRIPTIONS` → C74 refpage with `REFPAGE_ALIAS` for symbolic operators → installed-package digest) lives in `add_tutorial.py` and is now used by both tutorial step descriptions and the explain skill — tutorials get refpage + package digests for every object instead of just the ~50 hand-curated ones. The explain skill detects an embedded tutorial (`v8 <name>-tutorial.js` + companion JS file with `STEPS` array) and overlays the tutorial's authored step names + descriptions when cluster count matches exactly (mismatch → silently fall back to auto-generated, with a header note explaining the source). Tested on jit-grab-scale (overlay applies cleanly), drift-sequencer-soviet and drift-sequencer-lcars (tutorials drifted; correctly falls back).
 

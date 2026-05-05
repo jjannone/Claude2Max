@@ -1,0 +1,4968 @@
+{
+  "-avp-000-audiovisualpiece000": {
+    "attach_urls_seen": [],
+    "authors": [
+      "motoko"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "https://www.instagram.com/motoko.v_s",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-12-16T00:00:00.000Z",
+    "page": 15,
+    "project_keywords": [],
+    "tags": [
+      "AudioVisual",
+      "max8",
+      "max for live",
+      "modular synth",
+      "osc",
+      "unreal engine",
+      "live performance"
+    ],
+    "title": "[AVP-000] AudioVisualPiece000",
+    "topic": "Misc",
+    "website_url": "https://www.youtube.com/c/motoko-v-s"
+  },
+  "-tlp-000-tapelooppiece000": {
+    "attach_urls_seen": [],
+    "authors": [
+      "motoko"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://www.instagram.com/motoko.v_s",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-02-24T00:00:00.000Z",
+    "page": 14,
+    "project_keywords": [],
+    "tags": [
+      "Max for Live",
+      "Tape Loop",
+      "Tape Music",
+      "Modular Synth",
+      "TouchOSC",
+      "experimental music",
+      "non-music",
+      "motoko",
+      "\ubaa8\ud1a0\ucf54"
+    ],
+    "title": "[TLP-000] TapeLoopPiece000",
+    "topic": "Misc",
+    "website_url": "https://www.youtube.com/c/motoko-v-s"
+  },
+  "11uilayer-external": {
+    "attach_urls_seen": [],
+    "authors": [
+      "11OLSEN"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://11olsen.de",
+    "decision": "enumerated-free-download",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-10-10T00:00:00.000Z",
+    "page": 12,
+    "project_keywords": [],
+    "tags": [
+      "external",
+      "GUI"
+    ],
+    "title": "11UILayer external",
+    "topic": "Misc",
+    "website_url": "https://11olsen.de/max-msp-externals/download/6-max-msp-externals/30-11uilayer"
+  },
+  "8-steps-lfo": {
+    "attach_urls_seen": [],
+    "authors": [
+      "axers fall"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://youtube.com/@axersfall369?si=if2P12JC0ICufkQa",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-01-09T00:00:00.000Z",
+    "page": 11,
+    "project_keywords": [],
+    "tags": [
+      "LFO",
+      "Modulation",
+      "step sequencer",
+      "automatic",
+      "max for live",
+      "M4L"
+    ],
+    "title": "8-steps LFO",
+    "topic": "Misc",
+    "website_url": "https://axersfall369.gumroad.com/l/jkcsls"
+  },
+  "a-mar-the-sea-to-love": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Andr\u00e9 Rangel"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "http://3kta.net/",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-01-10T00:00:00.000Z",
+    "page": 19,
+    "project_keywords": [],
+    "tags": [
+      "API",
+      "Arduino",
+      "Sound Synthesis",
+      "Installation",
+      "Light Art"
+    ],
+    "title": "A Mar (The Sea, To Love)",
+    "topic": "Misc",
+    "website_url": "http://3kta.net/3amar.php"
+  },
+  "a10": {
+    "attach_urls_seen": [],
+    "authors": [
+      "motoko"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "https://www.instagram.com/motoko.v_s",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-12-15T00:00:00.000Z",
+    "page": 18,
+    "project_keywords": [],
+    "tags": [
+      "Max for Live",
+      "modular synth",
+      "live performance",
+      "ableton live",
+      "eurorack",
+      "touchosc",
+      "experimental music",
+      "ambient",
+      "sound design",
+      "soundscape",
+      "noise",
+      "cinematic",
+      "synth",
+      "motoko",
+      "votage + signal"
+    ],
+    "title": "a10",
+    "topic": "Misc",
+    "website_url": "https://www.youtube.com/c/motoko-v-s"
+  },
+  "abby-m4l": {
+    "attach_urls_seen": [],
+    "authors": [
+      "sam ssaem"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://simple-machines.net/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-12-16T00:00:00.000Z",
+    "page": 1,
+    "project_keywords": [
+      "Max for Live",
+      "M4L",
+      "A/B"
+    ],
+    "tags": [],
+    "title": "ABBY (M4L)",
+    "topic": "Misc",
+    "website_url": "https://simple-machines.net/products/abby"
+  },
+  "abletube-nodejs-max-for-live-youtube-streaming-device": {
+    "attach_urls_seen": [],
+    "authors": [
+      "XTERMINATORAPPS"
+    ],
+    "created_at_year": "2026",
+    "creator_url": "https://xterminatorapps.gumroad.com/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2026-01-13T00:00:00.000Z",
+    "page": 1,
+    "project_keywords": [
+      "YouTube",
+      "Streaming",
+      "Node.js",
+      "Max for Live"
+    ],
+    "tags": [],
+    "title": "ABLETUBE - Node.js + Max for Live YouTube Streaming Device",
+    "topic": "Misc",
+    "website_url": "https://xterminatorapps.gumroad.com/"
+  },
+  "adjustable-swing-for-live-12": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Wind Makes Waves LLC"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://www.windmakeswaves.com/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-09-13T00:00:00.000Z",
+    "page": 6,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Adjustable Swing for Live 12",
+    "topic": "Misc",
+    "website_url": "https://www.windmakeswaves.com/swing"
+  },
+  "aftermath": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Oa Catus"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "http://gfunkhouser.net/index_sound_art.html",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-07-19T00:00:00.000Z",
+    "page": 20,
+    "project_keywords": [],
+    "tags": [
+      "sound art",
+      " installation art",
+      "quadraphonic",
+      "conceptual art",
+      "graphical score"
+    ],
+    "title": "AfterMath",
+    "topic": "Misc",
+    "website_url": "https://www.uclmal.com/exhibition?pgid=kq1927vp-1ea70967-1ac6-4e1b-9653-0eea5ed43eeb"
+  },
+  "again-max-package-to-create-seamlessly-looping-gifs": {
+    "attach_urls_seen": [],
+    "authors": [
+      "TFL"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://tflcl.xyz/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-01-09T00:00:00.000Z",
+    "page": 10,
+    "project_keywords": [],
+    "tags": [
+      "gif",
+      "loop",
+      "simplex",
+      "perlin",
+      "animation",
+      "offline rendering"
+    ],
+    "title": "again. Max package to create seamlessly looping GIFs",
+    "topic": "Misc",
+    "website_url": "https://glucose47.gumroad.com/l/again"
+  },
+  "aisles": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Ian Dicke"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://www.novelmusic.org",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-08-30T00:00:00.000Z",
+    "page": 13,
+    "project_keywords": [],
+    "tags": [
+      "rhythmicon",
+      "sequencer",
+      "midi",
+      "max for live",
+      "ableton",
+      "overtones",
+      "harmonics",
+      "ratios"
+    ],
+    "title": "Aisles",
+    "topic": "Misc",
+    "website_url": "https://www.novelmusic.org/m4l/aisles"
+  },
+  "al-kimiya-live-coded-album": {
+    "attach_urls_seen": [],
+    "authors": [
+      "tmhglnd"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "https://www.timohoogland.com",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-08-22T00:00:00.000Z",
+    "page": 16,
+    "project_keywords": [],
+    "tags": [
+      "music",
+      "electronic",
+      "live coding",
+      "live",
+      "mercury",
+      "generative",
+      "algorithmic",
+      "audiovisual",
+      "jitter",
+      "nodejs",
+      "techno",
+      "idm",
+      "soundscape",
+      "electronica"
+    ],
+    "title": "Al-kimiya (Live Coded Album)",
+    "topic": "Misc",
+    "website_url": "https://timohoogland.bandcamp.com/album/al-kimiya"
+  },
+  "ambient-image-controller-and-projector": {
+    "attach_urls_seen": [],
+    "authors": [
+      "proppjones"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "https://www.proppjonesstudio.com/new-gallery-64",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-12-08T00:00:00.000Z",
+    "page": 18,
+    "project_keywords": [],
+    "tags": [
+      "ambient images",
+      "Wotja",
+      "max w/vizzie modules",
+      "photography",
+      "You tube"
+    ],
+    "title": "Ambient Image controller and projector",
+    "topic": "Misc",
+    "website_url": ""
+  },
+  "andy-farnell's-designing-sound-examples-for-maxmsp": {
+    "attach_urls_seen": [],
+    "authors": [
+      "George N."
+    ],
+    "created_at_year": "2023",
+    "creator_url": "",
+    "decision": "enumerated-free-github",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-08-30T00:00:00.000Z",
+    "page": 13,
+    "project_keywords": [],
+    "tags": [
+      "Sound Design",
+      "Max/MSP patches",
+      "Designing Sound",
+      "Farnell"
+    ],
+    "title": "Andy Farnell's Designing Sound examples for Max/MSP",
+    "topic": "Misc",
+    "website_url": "https://github.com/georgeNikmus/Designing-Sound-Max-Patches"
+  },
+  "antifeedback-patch-for-behringer-x-m-consoles": {
+    "attach_urls_seen": [],
+    "authors": [
+      "John Kozas"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "www.linkedin.com/in/john-kozas-587b97262",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-05-05T00:00:00.000Z",
+    "page": 8,
+    "project_keywords": [],
+    "tags": [
+      "Antifeedback",
+      "Pfft",
+      "fft",
+      "Behringer x32",
+      "osc",
+      "Acoustic feedback"
+    ],
+    "title": "Antifeedback patch for Behringer X-M consoles",
+    "topic": "Misc",
+    "website_url": ""
+  },
+  "apg-ness": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Damien Jacquet"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://www.arbane-groupe.com/en/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-02-17T00:00:00.000Z",
+    "page": 14,
+    "project_keywords": [],
+    "tags": [
+      "spatial",
+      "immersive",
+      "WFS",
+      "spatialization",
+      "NESS",
+      "APG",
+      "FREE",
+      "DBAP",
+      "VBAP",
+      "panning",
+      "ARBANE",
+      "Wave Front Synthesis",
+      "Ableton",
+      "Live",
+      "sound system"
+    ],
+    "title": "APG NESS",
+    "topic": "Misc",
+    "website_url": "https://www.apg.audio/en/products/softwares/ness-en/189-ness-en.html"
+  },
+  "arpeggio": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Emir Baser"
+    ],
+    "created_at_year": "2026",
+    "creator_url": "",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2026-01-13T00:00:00.000Z",
+    "page": 1,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Arpeggio",
+    "topic": "Misc",
+    "website_url": ""
+  },
+  "articulator-pro-42-a-ultimate-articulation-control-toolset-m4l-device": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Darling Lee"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-10-08T00:00:00.000Z",
+    "page": 6,
+    "project_keywords": [],
+    "tags": [],
+    "title": "ArticulatOR Pro 4.2 -- A Ultimate Articulation Control Toolset M4L Device",
+    "topic": "Misc",
+    "website_url": "https://darlinglee.gumroad.com/l/atorp"
+  },
+  "attractors": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Julien Bayle"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://julienbayle.net",
+    "decision": "enumerated-free-author",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-03-20T00:00:00.000Z",
+    "page": 9,
+    "project_keywords": [],
+    "tags": [
+      "sound",
+      "music",
+      "audioreactive",
+      "shader",
+      "jit.gl.pix",
+      "video",
+      "realtime",
+      "syphon",
+      "pixel processing"
+    ],
+    "title": "ATTRACTORS",
+    "topic": "Misc",
+    "website_url": "https://julienbayle.net/works/attractors"
+  },
+  "audio-scene-player": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Steve Valentin"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "www.stevevalentin.com",
+    "decision": "enumerated-free-author",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-10-07T00:00:00.000Z",
+    "page": 16,
+    "project_keywords": [],
+    "tags": [
+      "Player",
+      "osc",
+      "atmospheric",
+      "multichannel",
+      "looper",
+      "playback"
+    ],
+    "title": "Audio Scene Player",
+    "topic": "Misc",
+    "website_url": "http://audioplayer.stevevalentin.com"
+  },
+  "aura's-interaction-with-a-trackpad-projet-qualia": {
+    "attach_urls_seen": [],
+    "authors": [
+      "t00r0p"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "https://www.gouelle.net",
+    "decision": "enumerated-author-site",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-08-29T00:00:00.000Z",
+    "page": 16,
+    "project_keywords": [],
+    "tags": [
+      "Interaction",
+      "NoAmbisonic",
+      "spatialisation",
+      "jitter",
+      "mathematics",
+      "speakers",
+      "avignon",
+      "qualia"
+    ],
+    "title": "Aura's Interaction with a Trackpad. Projet Qualia",
+    "topic": "Misc",
+    "website_url": "https://www.facebook.com/events/781681146611926"
+  },
+  "auren-pro-multiband-spectral-delay": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Feri G"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://dystopianwaves.gumroad.com/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-10-10T00:00:00.000Z",
+    "page": 2,
+    "project_keywords": [
+      "Max for Live",
+      "Spectral",
+      "Spectral Delay",
+      "Multiband Delay",
+      "Sound Design"
+    ],
+    "tags": [],
+    "title": "Auren Pro - Multiband Spectral Delay",
+    "topic": "Misc",
+    "website_url": "https://dystopianwaves.gumroad.com/l/mauren"
+  },
+  "auren-spectral-delay": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Feri G"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://dystopianwaves.gumroad.com/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-09-15T00:00:00.000Z",
+    "page": 2,
+    "project_keywords": [
+      "Spectral",
+      "spectral delay",
+      "sound design"
+    ],
+    "tags": [],
+    "title": "Auren Spectral Delay",
+    "topic": "Misc",
+    "website_url": "https://dystopianwaves.gumroad.com/l/mauren"
+  },
+  "autoslide": {
+    "attach_urls_seen": [],
+    "authors": [
+      "tyler mazaika"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://www.zoftloud.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-06-14T00:00:00.000Z",
+    "page": 15,
+    "project_keywords": [],
+    "tags": [
+      "Max for Live",
+      "MPE"
+    ],
+    "title": "AutoSlide",
+    "topic": "Misc",
+    "website_url": "https://zoftloud.gumroad.com/l/autoslide"
+  },
+  "avp-001-audiovisualpiece001": {
+    "attach_urls_seen": [],
+    "authors": [
+      "motoko"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://www.instagram.com/motoko.v_s",
+    "decision": "enumerated-author-site",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-08-31T00:00:00.000Z",
+    "page": 12,
+    "project_keywords": [],
+    "tags": [
+      "max for live",
+      "audiovisual",
+      "live performance",
+      "modular synth",
+      "touchosc",
+      "experimental music",
+      "non-music",
+      "motoko",
+      "\ubaa8\ud1a0\ucf54"
+    ],
+    "title": "[AVP-001] AudioVisualPiece001",
+    "topic": "Misc",
+    "website_url": "https:://www.youtube.com/@motoko.v_s"
+  },
+  "axoa": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Francois Weber"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "",
+    "decision": "enumerated-free-author",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-11-01T00:00:00.000Z",
+    "page": 11,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Axoa ",
+    "topic": "Misc",
+    "website_url": "http://hapax84.free.fr/Axoa.html"
+  },
+  "beat-for-solo-drum-kit": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Martin Daigle"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://www.martindrum.com/",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-02-15T00:00:00.000Z",
+    "page": 15,
+    "project_keywords": [],
+    "tags": [],
+    "title": "beat for solo drum kit",
+    "topic": "Misc",
+    "website_url": "https://youtu.be/2KXqug8V1JM"
+  },
+  "big-ghost-prototype": {
+    "attach_urls_seen": [],
+    "authors": [
+      "weightausend"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://www.instagram.com/weightausend/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-03-20T00:00:00.000Z",
+    "page": 9,
+    "project_keywords": [],
+    "tags": [
+      "standalone",
+      "gen",
+      "synthesis",
+      "granular",
+      "experimental"
+    ],
+    "title": "Big Ghost Prototype - \u5927\u9b3c\u539f\u578b",
+    "topic": "Misc",
+    "website_url": "https://ko-fi.com/s/dac1743018"
+  },
+  "bpm-wizard": {
+    "attach_urls_seen": [],
+    "authors": [
+      "skewborg"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://www.soundmanufacture.net",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-02-08T00:00:00.000Z",
+    "page": 10,
+    "project_keywords": [],
+    "tags": [
+      "tempo manipulation",
+      "tempo lfo",
+      "Ableton Link"
+    ],
+    "title": "BPM Wizard",
+    "topic": "Misc",
+    "website_url": "https://www.soundmanufacture.net/devices/bpm-wizard"
+  },
+  "buffer-delay": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Fernando ARAUZ"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "https://fernando-arauz-producciones-musicales.webnode.com/",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-01-28T00:00:00.000Z",
+    "page": 18,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Buffer Delay",
+    "topic": "Misc",
+    "website_url": ""
+  },
+  "catch": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Ian Dicke"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://www.novelmusic.org",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-10-10T00:00:00.000Z",
+    "page": 12,
+    "project_keywords": [],
+    "tags": [
+      "sampler",
+      "live audio",
+      "midi instrument",
+      "max for live",
+      "ableton"
+    ],
+    "title": "Catch",
+    "topic": "Misc",
+    "website_url": "https://novelmusic.org/m4l/catch"
+  },
+  "celestine-v20": {
+    "attach_urls_seen": [],
+    "authors": [
+      "ianjojo"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://devices.ianjojo.dev",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2026-02-28T00:00:00.000Z",
+    "page": 2,
+    "project_keywords": [
+      "max4live",
+      "ambient",
+      "granular"
+    ],
+    "tags": [],
+    "title": "Celestine v2.0",
+    "topic": "Misc",
+    "website_url": "https://ko-fi.com/s/076eac37c5"
+  },
+  "celium": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Feri G"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://dystopianwaves.gumroad.com/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-09-02T00:00:00.000Z",
+    "page": 3,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Celium ",
+    "topic": "Misc",
+    "website_url": "https://dystopianwaves.gumroad.com/l/m4celium"
+  },
+  "cellopad": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Tim Halloran"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "https://www.tim10000.com/posts/cellopad",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-09-30T00:00:00.000Z",
+    "page": 16,
+    "project_keywords": [],
+    "tags": [
+      "ableton",
+      "music",
+      "ipad",
+      "mira",
+      "motion",
+      "gyroscope",
+      "max for live"
+    ],
+    "title": "CelloPad",
+    "topic": "Misc",
+    "website_url": "https://www.tim10000.com"
+  },
+  "chromaphase": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Feri G"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://dystopianwaves.gumroad.com/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-09-01T00:00:00.000Z",
+    "page": 3,
+    "project_keywords": [
+      "Chorus",
+      "Audio Effect",
+      "multi-Voice",
+      "Wow/Flutter",
+      "Frequency Shift"
+    ],
+    "tags": [],
+    "title": "ChromaPhase",
+    "topic": "Misc",
+    "website_url": "https://dystopianwaves.gumroad.com/l/m4chromap"
+  },
+  "chrysalis": {
+    "attach_urls_seen": [],
+    "authors": [
+      "rrriiikkkyy"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "https://www.instagram.com/rrriiikkkyy/",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-03-10T00:00:00.000Z",
+    "page": 17,
+    "project_keywords": [],
+    "tags": [
+      "sounddesign",
+      "soundart",
+      "fft",
+      "mc",
+      "ml",
+      "matrix",
+      "jitter"
+    ],
+    "title": "Chrysalis",
+    "topic": "Misc",
+    "website_url": "https://errorgrid.bandcamp.com/album/chrysalis"
+  },
+  "cicada": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Capiuz"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "https://www.favaroluca.com/",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-10-20T00:00:00.000Z",
+    "page": 19,
+    "project_keywords": [],
+    "tags": [
+      "effect",
+      "max for live",
+      "time warp",
+      "audio",
+      "device"
+    ],
+    "title": "Cicada",
+    "topic": "Misc",
+    "website_url": "https://unizone.bandcamp.com/album/confined-space"
+  },
+  "circular-sequencer": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Michael Reichmann"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://www.michaelreichmann.at",
+    "decision": "enumerated-free-github",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-02-24T00:00:00.000Z",
+    "page": 14,
+    "project_keywords": [],
+    "tags": [
+      "Max for Live",
+      "Sequencer",
+      "MIDI",
+      "Jitter",
+      "Generative music"
+    ],
+    "title": "Circular Sequencer",
+    "topic": "Misc",
+    "website_url": "https://github.com/michaelreichmann/Circular_Sequencer"
+  },
+  "classicfizer": {
+    "attach_urls_seen": [],
+    "authors": [
+      "weightausend"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://www.instagram.com/weightausend/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-11-25T00:00:00.000Z",
+    "page": 5,
+    "project_keywords": [
+      "timestretch",
+      "akai",
+      "gen",
+      "standalone",
+      "jungle"
+    ],
+    "tags": [],
+    "title": "ClassiCfizer",
+    "topic": "Misc",
+    "website_url": "https://ko-fi.com/s/f497443b48"
+  },
+  "classicfizer-maxforlive": {
+    "attach_urls_seen": [],
+    "authors": [
+      "weightausend"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://www.instagram.com/weightausend/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-12-11T00:00:00.000Z",
+    "page": 5,
+    "project_keywords": [
+      "sampler",
+      "sampling"
+    ],
+    "tags": [],
+    "title": "ClassiCfizer - MaxForLive",
+    "topic": "Misc",
+    "website_url": "https://ko-fi.com/s/42151c852c"
+  },
+  "composition-draftworks-new-installment-to-shared-software-project": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Bill Kleinsasser"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "http://wkleinsasser.net",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-05-03T00:00:00.000Z",
+    "page": 17,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Composition Draftworks (new installment to Shared Software Project)",
+    "topic": "Misc",
+    "website_url": "http://wkleinsasser.net/distribution/SharedSoftwareProject/Shared_Software_Project.html"
+  },
+  "compositor-ntp": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Ruslan"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://www.ruslanyusipov.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-08-30T00:00:00.000Z",
+    "page": 13,
+    "project_keywords": [],
+    "tags": [
+      "NTP",
+      "Odometry",
+      "Metronome",
+      "Spiral",
+      "Gen~",
+      "ExportCode",
+      "Ethernet",
+      "Loopback"
+    ],
+    "title": "Compositor NTP",
+    "topic": "Misc",
+    "website_url": "https://www.compositorsoftware.com/compositor-ntp/"
+  },
+  "converser": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Manifest Audio"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://manifest.audio",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-09-30T00:00:00.000Z",
+    "page": 6,
+    "project_keywords": [
+      "MIDI Tool",
+      "Generator",
+      "Max for Live",
+      "Call & Response"
+    ],
+    "tags": [],
+    "title": "Converser",
+    "topic": "Misc",
+    "website_url": "https://manifest.audio/converser"
+  },
+  "cosmolab-professional-audio-developer-kit-based-on-electrosmiths-daisy-seed": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Francesco Mulassano"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://faselunare.com",
+    "decision": "enumerated-free-author",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-12-10T00:00:00.000Z",
+    "page": 2,
+    "project_keywords": [
+      "daisy",
+      "electrosmith",
+      "gen~",
+      "synth",
+      "eurorack",
+      "prototyping",
+      "R/D"
+    ],
+    "tags": [],
+    "title": "Cosmolab \u2013 Professional Audio Developer Kit based on Electrosmith's Daisy Seed",
+    "topic": "Misc",
+    "website_url": "https://cosmolab.faselunare.com"
+  },
+  "coucou-bird-cadenzas-improvisations-for-solo-instruments-and-computer": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Carl Winter"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "https://carlwinter.bandcamp.com/music",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-03-03T00:00:00.000Z",
+    "page": 18,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Coucou Bird Cadenzas:  Improvisations for solo Instruments and Computer",
+    "topic": "Misc",
+    "website_url": "https://carlwinter.bandcamp.com/album/coucou-bird-cadenzas-improvisations-for-solo-instruments-and-computer"
+  },
+  "crt-flux-phaser": {
+    "attach_urls_seen": [],
+    "authors": [
+      "James Connolly"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "https://jameshconnolly.com",
+    "decision": "enumerated-free-author",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-08-30T00:00:00.000Z",
+    "page": 16,
+    "project_keywords": [],
+    "tags": [],
+    "title": "CRT Flux Phaser",
+    "topic": "Misc",
+    "website_url": "https://jameshconnolly.com/crtfluxphaser"
+  },
+  "currents-1": {
+    "attach_urls_seen": [],
+    "authors": [
+      "sam ssaem"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://simple-machines.net/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-04-15T00:00:00.000Z",
+    "page": 4,
+    "project_keywords": [
+      "Max for Live",
+      "Audio Effect"
+    ],
+    "tags": [],
+    "title": "Currents",
+    "topic": "Misc",
+    "website_url": "https://simple-machines.net/products/currents"
+  },
+  "cymatics-audiovisualizer": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Austin Santos"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://gnsd.neocities.org",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-01-09T00:00:00.000Z",
+    "page": 10,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Cymatics Audiovisualizer",
+    "topic": "Misc",
+    "website_url": ""
+  },
+  "dataset-generator-for-musical-devices": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Stefano Fasciani"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://stefanofasciani.com/",
+    "decision": "enumerated-free-github",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-05-08T00:00:00.000Z",
+    "page": 4,
+    "project_keywords": [
+      "audio effects",
+      "sound synthesizers",
+      "dataset",
+      "machine learning"
+    ],
+    "tags": [],
+    "title": "Dataset Generator for Musical Devices",
+    "topic": "Misc",
+    "website_url": "https://github.com/stefanofasciani/DGMD"
+  },
+  "ddv-909-librarian": {
+    "attach_urls_seen": [],
+    "authors": [
+      "sotnickd"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-08-30T00:00:00.000Z",
+    "page": 13,
+    "project_keywords": [],
+    "tags": [
+      "TR-909 RE-909 Sysex MIDI Librarian",
+      "TR-909",
+      "Sysex",
+      "MIDI",
+      "RE-909",
+      "Librarian"
+    ],
+    "title": "DDV 909 Librarian",
+    "topic": "Misc",
+    "website_url": "http://909librarian.ddv.com"
+  },
+  "desaceleracao": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Andr\u00e9 Rangel"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://3kta.net/",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-01-11T00:00:00.000Z",
+    "page": 10,
+    "project_keywords": [],
+    "tags": [
+      "Computational art",
+      "Intermedia",
+      "bioart",
+      "laserart",
+      "lightart"
+    ],
+    "title": "(Des)acelera\u00e7\u00e3o",
+    "topic": "Misc",
+    "website_url": "https://3kta.net/3desacel.php"
+  },
+  "dirigera-max": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Maciek Odro"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://maciekodro.com/",
+    "decision": "enumerated-free-github",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-07-17T00:00:00.000Z",
+    "page": 6,
+    "project_keywords": [],
+    "tags": [
+      "javascript",
+      "smarthome",
+      "dirigera",
+      "tradfri",
+      "zigbee"
+    ],
+    "title": "Dirigera Max",
+    "topic": "Misc",
+    "website_url": "https://github.com/maceq687/dirigera-max"
+  },
+  "dispatch-v1-0-a-global-modulation-matrix-for-live-10-11": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Cong Burn"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "https://www.congburn.co.uk",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-06-04T00:00:00.000Z",
+    "page": 21,
+    "project_keywords": [],
+    "tags": [
+      "maxforlive",
+      "lfo",
+      "modulation",
+      "matrix",
+      "modulation matrix",
+      "sequencer",
+      "utility",
+      "hardware",
+      "push"
+    ],
+    "title": "Dispatch v1.0 - A global modulation matrix for Live 10 & 11",
+    "topic": "Misc",
+    "website_url": "https://www.congburn.co.uk/dispatch"
+  },
+  "drinfinityne": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Capiuz"
+    ],
+    "created_at_year": "2026",
+    "creator_url": "https://www.favaroluca.com/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-30T00:00:00.000Z",
+    "page": 1,
+    "project_keywords": [
+      "Drone",
+      "Synthesizer",
+      "Ableton Device",
+      "Instrument",
+      "Max for Live"
+    ],
+    "tags": [],
+    "title": "Dr\u221ene",
+    "topic": "Misc",
+    "website_url": "https://h-4.digital/product/droone-hide-device-x15/"
+  },
+  "drox-glitchstutter-audio-effect": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Feri G"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://dystopianwaves.gumroad.com/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-08-22T00:00:00.000Z",
+    "page": 3,
+    "project_keywords": [
+      "Random",
+      "Stutter",
+      "Glitch",
+      "Dropout",
+      "Mangler"
+    ],
+    "tags": [],
+    "title": "Drox Glitch/Stutter audio effect",
+    "topic": "Misc",
+    "website_url": "https://dystopianwaves.gumroad.com/l/mdrox"
+  },
+  "drox-ii": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Feri G"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://dystopianwaves.gumroad.com/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-10-21T00:00:00.000Z",
+    "page": 2,
+    "project_keywords": [
+      "Max for Live",
+      "Stutter",
+      "Glitch",
+      "Dropout",
+      "CD Skip",
+      "Sound Design"
+    ],
+    "tags": [],
+    "title": "Drox II",
+    "topic": "Misc",
+    "website_url": "https://dystopianwaves.gumroad.com/l/droxiif"
+  },
+  "drox-ii-pro-stutter-glitch-engine": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Feri G"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://dystopianwaves.gumroad.com/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-10-21T00:00:00.000Z",
+    "page": 2,
+    "project_keywords": [
+      "Max for Live",
+      "Sound Design",
+      "Stutter",
+      "Dropout",
+      "Tape Stop",
+      "CD Skip",
+      "Sequencer"
+    ],
+    "tags": [],
+    "title": "Drox II Pro Stutter Glitch Engine",
+    "topic": "Misc",
+    "website_url": "https://dystopianwaves.gumroad.com/l/droxiip"
+  },
+  "dsi-tetr4-editor": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Marco Cinque"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "https://www.marcocinque.net/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-04-22T00:00:00.000Z",
+    "page": 21,
+    "project_keywords": [
+      "DSI",
+      "Tetra",
+      "Tetr4",
+      "NRPN"
+    ],
+    "tags": [
+      "DSI",
+      "Tetra",
+      "Tetr4",
+      "editor"
+    ],
+    "title": "DSI Tetr4 editor",
+    "topic": "Misc",
+    "website_url": "https://www.marcocinque.net/page/dsi-tetra-editor-max/"
+  },
+  "dynamic-split-module-websampler-with-63-audio-separation-models-in-ableton-1": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Ostin Solo"
+    ],
+    "created_at_year": "2026",
+    "creator_url": "https://ostinsolo.co.uk/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-24T00:00:00.000Z",
+    "page": 1,
+    "project_keywords": [
+      "Neural Network",
+      "Stem Separator",
+      "WebSampler"
+    ],
+    "tags": [],
+    "title": "DYNAMIC SPLIT MODULE - WebSampler with 63 Audio Separation models in Ableton",
+    "topic": "Misc",
+    "website_url": "https://vstopia.com/max-for-live-devices/dynamic-split-module"
+  },
+  "electronic-music-and-sound-design-for-max-8-volume-3": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Maurizio Giri"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-03-14T00:00:00.000Z",
+    "page": 15,
+    "project_keywords": [],
+    "tags": [
+      "Book",
+      "Educational",
+      "Learning",
+      "FFT",
+      "Convolution",
+      "Modulation",
+      "Granular Synthesis",
+      "Reverperation",
+      "Spatialization",
+      "Jitter",
+      "Gen",
+      "Reverberation",
+      "Distortion",
+      "FM AM PM RM"
+    ],
+    "title": "Electronic Music and Sound Design for Max 8 Volume 3",
+    "topic": "Misc",
+    "website_url": "https://www.contemponet.com/en/shop/electronic-music-and-sound-design-3/"
+  },
+  "evorn-multi-lfo-modulator": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Feri G"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://dystopianwaves.gumroad.com/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-09-29T00:00:00.000Z",
+    "page": 2,
+    "project_keywords": [
+      "Max for Live",
+      "LFO",
+      "Multi LFO",
+      "Modulator",
+      "Modulation",
+      "Sound Design"
+    ],
+    "tags": [],
+    "title": "Evorn -  Multi LFO Modulator",
+    "topic": "Misc",
+    "website_url": "https://dystopianwaves.gumroad.com/l/mevorn"
+  },
+  "exp-spectone": {
+    "attach_urls_seen": [],
+    "authors": [
+      "axers fall"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://ko-fi.com/axersfall/shop",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-11-25T00:00:00.000Z",
+    "page": 2,
+    "project_keywords": [
+      "max for live",
+      "experimental",
+      "spectral process",
+      "sci-fi",
+      "dark ambient"
+    ],
+    "tags": [],
+    "title": "Exp. SpecTone",
+    "topic": "Misc",
+    "website_url": "https://ko-fi.com/s/d5ce1664b5"
+  },
+  "facet": {
+    "attach_urls_seen": [],
+    "authors": [
+      "reflectwhat"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "http://nnirror.xyz",
+    "decision": "enumerated-free-github",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-05-26T00:00:00.000Z",
+    "page": 21,
+    "project_keywords": [],
+    "tags": [
+      "livecoding",
+      "live coding",
+      "node for max",
+      "browser",
+      "generative",
+      "scripting",
+      "internet",
+      "node",
+      "patterns",
+      "patterning"
+    ],
+    "title": "Facet",
+    "topic": "Misc",
+    "website_url": "https://github.com/mjcella/facet"
+  },
+  "feedback-control-for-performing-with-audible-ecosystem": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Ricardo Thomasi"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "https://linktr.ee/ricardothomasi",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-11-18T00:00:00.000Z",
+    "page": 19,
+    "project_keywords": [
+      "acoustic ecology",
+      "audible ecosystem",
+      "feedback system",
+      "positive feedback",
+      "live electronics",
+      "download"
+    ],
+    "tags": [],
+    "title": "Feedback control for performing with audible ecosystem",
+    "topic": "Misc",
+    "website_url": "https://zenodo.org/record/5649265#.YZU1omDMKrw"
+  },
+  "feedcomb": {
+    "attach_urls_seen": [],
+    "authors": [
+      "axers fall"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://axersfall369.gumroad.com/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-08-13T00:00:00.000Z",
+    "page": 6,
+    "project_keywords": [],
+    "tags": [
+      "distortion",
+      "\"comb delay\"",
+      "feedback",
+      "bit crusher",
+      "ableton",
+      "sound design",
+      "experimental"
+    ],
+    "title": "Feedcomb",
+    "topic": "Misc",
+    "website_url": "https://axersfall369.gumroad.com/l/ngsckw"
+  },
+  "flat-bed-volume-1-original-copy": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Riccardo Carbone"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://johnstrutton.com",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-02-10T00:00:00.000Z",
+    "page": 15,
+    "project_keywords": [],
+    "tags": [
+      "text",
+      "art",
+      "translate",
+      "process",
+      "AV",
+      "performance",
+      "jitter",
+      "drawings",
+      "paintings",
+      "microscope",
+      "rgb",
+      "soundscape"
+    ],
+    "title": "Flat Bed: Volume 1 - Original Copy",
+    "topic": "Misc",
+    "website_url": "https://youtube.com/playlist?list=PLWpphTWri7NCCzrRl2RtyIxSZ3EOe_5mx"
+  },
+  "flat-bed-volume-2-original-copy": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Riccardo Carbone"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://www.youtube.com/channel/UCVWaSj9sDcpzTgxs-Px7i9A",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-10-10T00:00:00.000Z",
+    "page": 12,
+    "project_keywords": [],
+    "tags": [
+      "Performance",
+      "translation",
+      "language",
+      "rgb",
+      "drawings",
+      "paintings",
+      "loops",
+      "communication"
+    ],
+    "title": "Flat Bed: Volume 2 - Original Copy",
+    "topic": "Misc",
+    "website_url": "https://www.youtube.com/playlist?list=PLWpphTWri7NBgUYV2NIR8eX9C0NoSMbyZ"
+  },
+  "fluid": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Arthur Sauer"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "https://www.sauermusic.com",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-06-01T00:00:00.000Z",
+    "page": 17,
+    "project_keywords": [],
+    "tags": [
+      "Field recording",
+      " spectral processing"
+    ],
+    "title": "Fluid",
+    "topic": "Misc",
+    "website_url": "https://arthursauer.bandcamp.com/album/fluid"
+  },
+  "flurry": {
+    "attach_urls_seen": [],
+    "authors": [
+      "sam ssaem"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://simple-machines.net/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-04-16T00:00:00.000Z",
+    "page": 4,
+    "project_keywords": [
+      "Max for Live",
+      "Audio Effect",
+      "Sequencer",
+      "Spectral"
+    ],
+    "tags": [],
+    "title": "Flurry",
+    "topic": "Misc",
+    "website_url": "https://simple-machines.net/products/flurry"
+  },
+  "frequia": {
+    "attach_urls_seen": [],
+    "authors": [
+      "riotchild"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "https://drmarkbassett.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-07-01T00:00:00.000Z",
+    "page": 16,
+    "project_keywords": [
+      "audio education",
+      "critical listening",
+      "ear training",
+      "edtech",
+      "music technology"
+    ],
+    "tags": [
+      "audioeducation",
+      "eartraining",
+      "musictech",
+      "criticallistening",
+      "edtech"
+    ],
+    "title": "FREQUIA",
+    "topic": "Misc",
+    "website_url": "https://frequia.io"
+  },
+  "generative-sound-control-interface": {
+    "attach_urls_seen": [],
+    "authors": [
+      "michaelpromeo"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "http://www.michaelpromeo.com/",
+    "decision": "enumerated-free-github",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-08-30T00:00:00.000Z",
+    "page": 14,
+    "project_keywords": [],
+    "tags": [
+      "Mubu",
+      "concatenative synthesis",
+      "Granular Synthesis",
+      "Particle",
+      "Particle System",
+      "GUI"
+    ],
+    "title": "Generative Sound Control Interface",
+    "topic": "Misc",
+    "website_url": "https://github.com/nightshining/Mubu_Generative_Sound_Control_Interface"
+  },
+  "ghanta": {
+    "attach_urls_seen": [],
+    "authors": [
+      "glittech"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-02-18T00:00:00.000Z",
+    "page": 9,
+    "project_keywords": [],
+    "tags": [
+      "experimental",
+      "node",
+      "dharma",
+      "gong"
+    ],
+    "title": "Ghanta",
+    "topic": "Misc",
+    "website_url": ""
+  },
+  "glideverb": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Alex DeGroot"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "alexdg.net",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-02-27T00:00:00.000Z",
+    "page": 9,
+    "project_keywords": [],
+    "tags": [
+      "Reverse Reverb",
+      "Max for Live",
+      "Audio Effect"
+    ],
+    "title": "glideverb",
+    "topic": "Misc",
+    "website_url": "https://alexdegroot.gumroad.com/l/glideverb"
+  },
+  "gmaudio-squeeze": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Robert Koster"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://fixationstudios.com.au/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-10-17T00:00:00.000Z",
+    "page": 11,
+    "project_keywords": [],
+    "tags": [
+      "limiter",
+      "expander",
+      "",
+      "ax for live",
+      "max for live",
+      "gmaudio",
+      "fixation studios",
+      "dynamics",
+      "ableton live",
+      "multiband processing"
+    ],
+    "title": "GMaudio Squeeze",
+    "topic": "Misc",
+    "website_url": "https://robertkgm.gumroad.com/l/gma-squeeze"
+  },
+  "gr4imulator": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Daniele Fabris"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "https://www.instagram.com/daniele.fabris/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-06-07T00:00:00.000Z",
+    "page": 21,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Gr4imulator",
+    "topic": "Misc",
+    "website_url": "https://www.danielefabris.com/gr4imulator/"
+  },
+  "grotta-3d": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Daniele Fabris"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-11-05T00:00:00.000Z",
+    "page": 6,
+    "project_keywords": [
+      "#spatialaudio",
+      "#spatialinstrument",
+      "#Multichannel",
+      "#Ambisonics",
+      "#Quadrophonic",
+      "#3DSound",
+      "#Envelop",
+      "#maxforlive",
+      "#madewithrnbo"
+    ],
+    "tags": [],
+    "title": "GROTTA 3D",
+    "topic": "Misc",
+    "website_url": "https://www.outerfields.net/libraries/grotta3d/"
+  },
+  "grotta-granular-texturizer": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Daniele Fabris"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "https://www.danielefabris.com/projects/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-12-02T00:00:00.000Z",
+    "page": 18,
+    "project_keywords": [],
+    "tags": [
+      "m4l",
+      "maxforlive",
+      "realtime granular synthesis",
+      "audio effect ",
+      "gen ~",
+      "field recording",
+      "computer music "
+    ],
+    "title": "GROTTA Granular Texturizer ",
+    "topic": "Misc",
+    "website_url": "https://www.outerfields.net/libraries/grotta/"
+  },
+  "gtm-humaniser": {
+    "attach_urls_seen": [],
+    "authors": [
+      "George Meikle"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "https://linktr.ee/metrosync",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-03-14T00:00:00.000Z",
+    "page": 17,
+    "project_keywords": [],
+    "tags": [
+      "Max for Live",
+      "Ableton Live 11",
+      "Ableton Live"
+    ],
+    "title": "gtm.humaniser",
+    "topic": "Misc",
+    "website_url": "https://metrosync.gumroad.com/l/humaniser"
+  },
+  "gtm-mididrone": {
+    "attach_urls_seen": [],
+    "authors": [
+      "George Meikle"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "https://www.instagram.com/metr0sync/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-11-10T00:00:00.000Z",
+    "page": 19,
+    "project_keywords": [],
+    "tags": [
+      "Ableton Live",
+      "Max for Live",
+      "Ambient Music",
+      "Drone",
+      "MIDI",
+      "Sequencer",
+      "Step Sequencer"
+    ],
+    "title": "gtm.MIDIdrone",
+    "topic": "Misc",
+    "website_url": "https://metrosync.gumroad.com/l/mididrone"
+  },
+  "gtmmarkov": {
+    "attach_urls_seen": [],
+    "authors": [
+      "George Meikle"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://linktr.ee/metrosync",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-06-21T00:00:00.000Z",
+    "page": 8,
+    "project_keywords": [],
+    "tags": [
+      "RNBO",
+      "Codebox",
+      "Markov chains",
+      "Algorithmic music",
+      "Generative music"
+    ],
+    "title": "gtm.markov",
+    "topic": "Misc",
+    "website_url": "https://youtube.com/playlist?list=PLvNKPx9B39fq2S7vGQMf1VOxzu2Vah6KQ&si=B_kvuwodJONgbYLP"
+  },
+  "high-roller": {
+    "attach_urls_seen": [],
+    "authors": [
+      "sam ssaem"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://simple-machines.net/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-04-17T00:00:00.000Z",
+    "page": 5,
+    "project_keywords": [
+      "Max for Live",
+      "Audio Effect"
+    ],
+    "tags": [],
+    "title": "High Roller",
+    "topic": "Misc",
+    "website_url": "https://simple-machines.net/products/high-roller"
+  },
+  "icon-button-designer": {
+    "attach_urls_seen": [],
+    "authors": [
+      "rbdev"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://www.jornal-rb.uk/buttondesigner",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-06-24T00:00:00.000Z",
+    "page": 8,
+    "project_keywords": [],
+    "tags": [
+      "tool",
+      "helper",
+      "program"
+    ],
+    "title": "Icon Button Designer",
+    "topic": "Misc",
+    "website_url": "https://www.jornal-rb.uk/buttondesigner"
+  },
+  "if-you-divide-the-octave-equally": {
+    "attach_urls_seen": [],
+    "authors": [
+      "tomoyoshi fuseya"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://www.youtube.com/@tetorium",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-01-09T00:00:00.000Z",
+    "page": 10,
+    "project_keywords": [],
+    "tags": [
+      "max",
+      "edo",
+      "logic"
+    ],
+    "title": "2 to 36 equal temperament scale graphically visualized marimba version",
+    "topic": "Misc",
+    "website_url": "https://www.youtube.com/watch?v=1qxou2dn6-U"
+  },
+  "ilov-nf-1": {
+    "attach_urls_seen": [],
+    "authors": [
+      "ludo lov"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "http://ilovmachines.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-06-30T00:00:00.000Z",
+    "page": 20,
+    "project_keywords": [],
+    "tags": [],
+    "title": "iLov NF-1",
+    "topic": "Misc",
+    "website_url": "https://gumroad.com/l/ilovnf1"
+  },
+  "in-vino-vanitas": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Stefano Scarani"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "http://www.stefanoscarani.com/",
+    "decision": "enumerated-free-author",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-08-30T00:00:00.000Z",
+    "page": 13,
+    "project_keywords": [],
+    "tags": [
+      "Electroacoustic music",
+      "Dance",
+      "Hibrid musical instruments",
+      "percussions",
+      "contemporary music"
+    ],
+    "title": "In vino vanitas",
+    "topic": "Misc",
+    "website_url": "http://www.stefanoscarani.com/art/fragments/In%20vino%20vanitas/Vino.html"
+  },
+  "intervallic-demon-with-piano": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Joel Fairstein"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "https://youtu.be/qWNenCF4qnE",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-05-29T00:00:00.000Z",
+    "page": 17,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Intervallic Demon with piano",
+    "topic": "Misc",
+    "website_url": "https://youtu.be/qWNenCF4qnE"
+  },
+  "irin-2018-update": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Carlos Caires"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "https://www.carloscaires.com/",
+    "decision": "enumerated-free-author",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-07-08T00:00:00.000Z",
+    "page": 21,
+    "project_keywords": [
+      "Micromontage",
+      "Concatenative synthesis",
+      "Multiscale",
+      "Audio sequencer"
+    ],
+    "tags": [
+      "Micromontage",
+      "Concatenative synthesis",
+      "Granular synthesis"
+    ],
+    "title": "IRIN",
+    "topic": "Misc",
+    "website_url": "https://irin.carloscaires.com/"
+  },
+  "jamshid-jam-setar-and-electronics": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Jean-Francois Charles"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-02-09T00:00:00.000Z",
+    "page": 9,
+    "project_keywords": [],
+    "tags": [
+      "setar",
+      "max",
+      "jitter",
+      "live electronics",
+      "persian",
+      "DJ Controller"
+    ],
+    "title": "Jamshid Jam - setar & electronics",
+    "topic": "Misc",
+    "website_url": "https://www.jamshidjam.com"
+  },
+  "jangdan": {
+    "attach_urls_seen": [],
+    "authors": [
+      "sam ssaem"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://simple-machines.net/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-04-16T00:00:00.000Z",
+    "page": 4,
+    "project_keywords": [
+      "Max for Live",
+      "MIDI Device"
+    ],
+    "tags": [],
+    "title": "Jangdan",
+    "topic": "Misc",
+    "website_url": "https://simple-machines.net/products/jangdan"
+  },
+  "krynn": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Capiuz"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "https://www.favaroluca.com/",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-11-29T00:00:00.000Z",
+    "page": 15,
+    "project_keywords": [],
+    "tags": [
+      "multiband stereo distortion",
+      "audio effect",
+      "max for live device",
+      "multiband",
+      "distortion"
+    ],
+    "title": "Krynn",
+    "topic": "Misc",
+    "website_url": "https://hide.bandcamp.com/merch/krynn-hide-device-x09"
+  },
+  "lambda-ii": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Riccardo"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "https://linktr.ee/RiccardoSellan",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-02-24T00:00:00.000Z",
+    "page": 18,
+    "project_keywords": [
+      "M4L",
+      "Max for Live",
+      "granular synthesis",
+      "GEN~",
+      "Granular effect"
+    ],
+    "tags": [
+      "Max for Live",
+      " granular synthesis"
+    ],
+    "title": "Lambda II",
+    "topic": "Misc",
+    "website_url": "https://isotonikstudios.com/product/lambda-ii/"
+  },
+  "laserimpro": {
+    "attach_urls_seen": [],
+    "authors": [
+      "JesterN"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "http://www.jestern.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-12-21T00:00:00.000Z",
+    "page": 18,
+    "project_keywords": [],
+    "tags": [],
+    "title": "LaserImpro",
+    "topic": "Misc",
+    "website_url": "https://jestern.gumroad.com/l/WhRur"
+  },
+  "linux-audio-plugins-for-maxmsp": {
+    "attach_urls_seen": [],
+    "authors": [
+      "George N."
+    ],
+    "created_at_year": "2023",
+    "creator_url": "",
+    "decision": "enumerated-free-github",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-08-30T00:00:00.000Z",
+    "page": 14,
+    "project_keywords": [],
+    "tags": [
+      "externals",
+      "c/c++",
+      "linux audio",
+      "linux plugins",
+      "open source plugins",
+      "DSP"
+    ],
+    "title": "Linux Audio Plugins for Max/MSP",
+    "topic": "Misc",
+    "website_url": "https://github.com/georgeNikmus/Linux4Max"
+  },
+  "low-roller": {
+    "attach_urls_seen": [],
+    "authors": [
+      "sam ssaem"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://simple-machines.net/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-04-15T00:00:00.000Z",
+    "page": 4,
+    "project_keywords": [
+      "Max for Live",
+      "Audio Effect"
+    ],
+    "tags": [],
+    "title": "Low Roller",
+    "topic": "Misc",
+    "website_url": "https://simple-machines.net/products/low-roller"
+  },
+  "max-for-live-*grain-\u2014-granular-sampler": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Tilman Ehrhorn"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "http://tilmanehrhorn.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-05-05T00:00:00.000Z",
+    "page": 21,
+    "project_keywords": [
+      "GRANULAR SYNTHESIS",
+      "SAMPLER",
+      "POLYPHONY"
+    ],
+    "tags": [
+      "Granular Synthesis  ",
+      "Sampler",
+      "polyphony"
+    ],
+    "title": "Max for Live *grain \u2014 Granular Sampler",
+    "topic": "Misc",
+    "website_url": "https://gum.co/OojK"
+  },
+  "max-for-live-*reso-\u2014-resonator-synth": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Tilman Ehrhorn"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "http://tilmanehrhorn.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-07-12T00:00:00.000Z",
+    "page": 20,
+    "project_keywords": [
+      "Physical Modelling",
+      "Synthesizer",
+      "Resonator",
+      "Wind Instrument"
+    ],
+    "tags": [],
+    "title": "Max for Live *reso \u2014 Resonator Synth",
+    "topic": "Misc",
+    "website_url": "https://gum.co/XnXnls"
+  },
+  "max-for-live-*tape-\u2014-tape-loop-emulator": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Tilman Ehrhorn"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "http://tilmanehrhorn.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-08-30T00:00:00.000Z",
+    "page": 13,
+    "project_keywords": [],
+    "tags": [
+      "tape",
+      "Microloops",
+      "Loop Station",
+      "Sampler",
+      "Scrubbing",
+      "Musique Concr\u00e8te"
+    ],
+    "title": "Max for Live *tape \u2014 Tape Loop Emulator ",
+    "topic": "Misc",
+    "website_url": "https://tilman-ehrhorn.gumroad.com/l/mllaio"
+  },
+  "max-for-live-*tape_multi-\u2014-multi-channel-tape-loop-emulator": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Tilman Ehrhorn"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "http://www.tilmanehrhorn.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-08-30T00:00:00.000Z",
+    "page": 13,
+    "project_keywords": [],
+    "tags": [
+      "Tape",
+      "MC",
+      "Multi Channel",
+      "Sampler",
+      "Microloops",
+      "Musique Concr\u00e8te",
+      "Deviation",
+      "Harmonics",
+      "Overtones"
+    ],
+    "title": "Max for Live *tape_multi  \u2014 Multi Channel Tape Loop Emulator",
+    "topic": "Misc",
+    "website_url": "https://tilman-ehrhorn.gumroad.com/l/sakuz"
+  },
+  "max-for-live-*wave-\u2014-wavetable-synth": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Tilman Ehrhorn"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "http://tilmanehrhorn.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-06-11T00:00:00.000Z",
+    "page": 20,
+    "project_keywords": [
+      "Synthesizer",
+      "Wavetable",
+      "Waveshaping",
+      "Frequency Modulation#",
+      "Amplitude Modulation"
+    ],
+    "tags": [
+      "Wavetable",
+      "Waveshaping",
+      "Frequency Modulation",
+      "Amplitude Modulation",
+      "Synthesizer"
+    ],
+    "title": "Max for Live *wave \u2014 Wavetable Synth",
+    "topic": "Misc",
+    "website_url": "https://gum.co/ukjrj"
+  },
+  "max-for-live-4-track-multitracker": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Tilman Ehrhorn"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "http://www.tilmanehrhorn.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-03-25T00:00:00.000Z",
+    "page": 9,
+    "project_keywords": [],
+    "tags": [
+      "SAMPLER",
+      "LOOP",
+      "SCRUBBING",
+      "INTERPOLATION",
+      "TEXTURE",
+      "MULTICHANNEL",
+      "MC"
+    ],
+    "title": "Max for Live *4-track \u2014 Multitracker",
+    "topic": "Misc",
+    "website_url": "https://tilman-ehrhorn.gumroad.com/l/pxrcx"
+  },
+  "max-for-live-control-mappable-multislider": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Tilman Ehrhorn"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "http://tilmanehrhorn.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-04-01T00:00:00.000Z",
+    "page": 8,
+    "project_keywords": [],
+    "tags": [
+      "Controller",
+      "Midi",
+      "MPE",
+      "Mapping",
+      "Modulator"
+    ],
+    "title": "Max for Live *control \u2014 Mappable Multislider",
+    "topic": "Misc",
+    "website_url": "https://tilman-ehrhorn.gumroad.com/l/hbpgu"
+  },
+  "max-for-live-sq01-step-sequencer": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Tilman Ehrhorn"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "http://tilmanehrhorn.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-07-05T00:00:00.000Z",
+    "page": 8,
+    "project_keywords": [],
+    "tags": [
+      "Midi FX",
+      "Step Sequencer",
+      "Events",
+      "Probability"
+    ],
+    "title": "Max for Live *sq01 \u2014 Step Sequencer ",
+    "topic": "Misc",
+    "website_url": "https://tilman-ehrhorn.gumroad.com/l/dkzckr"
+  },
+  "max-for-live-sq02-pattern-generator": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Tilman Ehrhorn"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "http://tilmanehrhorn.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-07-05T00:00:00.000Z",
+    "page": 7,
+    "project_keywords": [],
+    "tags": [
+      "Midi FX",
+      "Step Sequencer",
+      "Patterns",
+      "Generator",
+      "subdivisions"
+    ],
+    "title": "Max for Live *sq02 \u2014 Pattern Generator ",
+    "topic": "Misc",
+    "website_url": "https://tilman-ehrhorn.gumroad.com/l/gysxw"
+  },
+  "max-for-live-sq03-polyphonic-step-sequencer": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Tilman Ehrhorn"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "http://tilmanehrhorn.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-07-05T00:00:00.000Z",
+    "page": 7,
+    "project_keywords": [],
+    "tags": [
+      "Midi FX",
+      "Step Sequencer",
+      "SWING",
+      "Events",
+      "Probability",
+      "acceleration",
+      "delay"
+    ],
+    "title": "Max for Live *sq03 \u2014 Polyphonic Step Sequencer",
+    "topic": "Misc",
+    "website_url": "https://tilman-ehrhorn.gumroad.com/l/ocftl"
+  },
+  "max-for-live-sq04-subdivision-stepper": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Tilman Ehrhorn"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "http://tilmanehrhorn.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-07-05T00:00:00.000Z",
+    "page": 7,
+    "project_keywords": [],
+    "tags": [
+      "Midi FX",
+      "Step Sequencer",
+      "Events",
+      "Subdivision",
+      "Probability",
+      "Dynamics"
+    ],
+    "title": "Max for Live *sq04 \u2014 Subdivision Stepper",
+    "topic": "Misc",
+    "website_url": "https://tilman-ehrhorn.gumroad.com/l/llbcc"
+  },
+  "max-for-live-sq05-euclidean-sequencer": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Tilman Ehrhorn"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "http://tilmanehrhorn.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-07-05T00:00:00.000Z",
+    "page": 7,
+    "project_keywords": [],
+    "tags": [
+      "Euclidean",
+      "Sequencer",
+      "Events",
+      "Polyrhythm",
+      "Synchronicity"
+    ],
+    "title": "Max for Live *sq05 \u2014 Euclidean Sequencer ",
+    "topic": "Misc",
+    "website_url": "https://tilman-ehrhorn.gumroad.com/l/ylonf"
+  },
+  "max-for-live-sq06-variable-step-sequencer": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Tilman Ehrhorn"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "http://tilmanehrhorn.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-07-08T00:00:00.000Z",
+    "page": 7,
+    "project_keywords": [],
+    "tags": [
+      "Midi FX",
+      "Step Sequencer",
+      "Events",
+      "ODD METER",
+      "Subdivisions"
+    ],
+    "title": "Max for Live *sq06 \u2014 Variable Step Sequencer ",
+    "topic": "Misc",
+    "website_url": "https://tilman-ehrhorn.gumroad.com/l/ryzjux"
+  },
+  "max-for-live-sq07-dynamic-step-sequencer": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Tilman Ehrhorn"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "http://tilmanehrhorn.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-07-08T00:00:00.000Z",
+    "page": 7,
+    "project_keywords": [],
+    "tags": [
+      "Midi FX",
+      "Step Sequencer",
+      "Events",
+      "Intellijel Metropolis"
+    ],
+    "title": "Max for Live *sq07 \u2014 Dynamic Step Sequencer",
+    "topic": "Misc",
+    "website_url": "https://tilman-ehrhorn.gumroad.com/l/nauwo"
+  },
+  "max-for-live-sq08-synchronized-looper": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Tilman Ehrhorn"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "http://tilmanehrhorn.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-07-08T00:00:00.000Z",
+    "page": 7,
+    "project_keywords": [],
+    "tags": [
+      "Midi FX",
+      "loops",
+      "Sequencer",
+      "cycles",
+      "modulo"
+    ],
+    "title": "Max for Live *sq08 \u2014 Synchronized Looper ",
+    "topic": "Misc",
+    "website_url": "https://tilman-ehrhorn.gumroad.com/l/fzrjf"
+  },
+  "max-for-live-sq09-pattern-randomizer": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Tilman Ehrhorn"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "http://tilmanehrhorn.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-07-08T00:00:00.000Z",
+    "page": 7,
+    "project_keywords": [],
+    "tags": [
+      "Midi FX",
+      "Arpeggiator",
+      "Patterns",
+      "Randomize",
+      "Sequencer"
+    ],
+    "title": "Max for Live *sq09 \u2014 Pattern Randomizer",
+    "topic": "Misc",
+    "website_url": "https://tilman-ehrhorn.gumroad.com/l/nkgjdu"
+  },
+  "max-for-live-sq10-note-generator": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Tilman Ehrhorn"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "http://tilmanehrhorn.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-07-08T00:00:00.000Z",
+    "page": 7,
+    "project_keywords": [],
+    "tags": [
+      "Midi FX",
+      "Generator",
+      "loop",
+      "cycle",
+      "probability"
+    ],
+    "title": "Max for Live *sq10 \u2014 Note Generator ",
+    "topic": "Misc",
+    "website_url": "https://tilman-ehrhorn.gumroad.com/l/irgpmq"
+  },
+  "max-image-processor": {
+    "attach_urls_seen": [],
+    "authors": [
+      "proppjones"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "https://www.proppjonesstudio.com/new-gallery-64",
+    "decision": "enumerated-author-site",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-09-18T00:00:00.000Z",
+    "page": 16,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Max image processor",
+    "topic": "Misc",
+    "website_url": "https://proppjonesstudio@gmail.com"
+  },
+  "max-objects-network-graph": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Julien Bayle"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://structure-void.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-09-02T00:00:00.000Z",
+    "page": 3,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Max Objects Network Graph",
+    "topic": "Misc",
+    "website_url": "https://structure-void.com/max-objects-network/"
+  },
+  "maxzine-vol-1-un-fanzine-en-espa\u00f1ol-sobre-max": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Martin Olavarria"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "http://www.martinrivera.net/",
+    "decision": "enumerated-free-github",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-03-06T00:00:00.000Z",
+    "page": 14,
+    "project_keywords": [],
+    "tags": [
+      "tutorial",
+      "fanzine",
+      "education",
+      "spanish"
+    ],
+    "title": "MaxZine vol.1 - Un fanzine en espa\u00f1ol sobre Max",
+    "topic": "Misc",
+    "website_url": "https://github.com/mrtnRivera/MaxZine1_Diccionarios/releases/tag/v1.0.0"
+  },
+  "mc-rtpsendreceive~": {
+    "attach_urls_seen": [],
+    "authors": [
+      "tomoya matsuura"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "https://matsuuratomoya.com/en",
+    "decision": "enumerated-free-github",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-05-24T00:00:00.000Z",
+    "page": 21,
+    "project_keywords": [],
+    "tags": [
+      "mc object",
+      "streaming",
+      "external"
+    ],
+    "title": "mc.rtpsendreceive~",
+    "topic": "Misc",
+    "website_url": "https://github.com/tomoyanonymous/rtpsendreceive"
+  },
+  "meridian-generative-euclidean-sequencer": {
+    "attach_urls_seen": [],
+    "authors": [
+      "ianjojo"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://devices.ianjojo.dev",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-05-12T00:00:00.000Z",
+    "page": 4,
+    "project_keywords": [
+      "euclidean",
+      "sequencer",
+      "generative"
+    ],
+    "tags": [],
+    "title": "Meridian - Generative Euclidean sequencer",
+    "topic": "Misc",
+    "website_url": "https://ko-fi.com/ijoaudio"
+  },
+  "microtuner": {
+    "attach_urls_seen": [],
+    "authors": [
+      "ThomasA"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "microtuner.se",
+    "decision": "enumerated-author-site",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-01-09T00:00:00.000Z",
+    "page": 11,
+    "project_keywords": [],
+    "tags": [
+      "Microtuning",
+      "Temperament",
+      "Just intonation",
+      "Equal temperament",
+      "Partials"
+    ],
+    "title": "Microtuner",
+    "topic": "Misc",
+    "website_url": "microtuner.se"
+  },
+  "midi-parsing-using-javascript-in-max": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Sylvia Zhang"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://www.sylviastudio.cn/",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-03-28T00:00:00.000Z",
+    "page": 8,
+    "project_keywords": [],
+    "tags": [
+      "Node",
+      "javascript",
+      "midi parse"
+    ],
+    "title": "MIDI parsing using JavaScript in Max",
+    "topic": "Misc",
+    "website_url": ""
+  },
+  "midify": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Martel Martin"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "https://www.instagram.com/mj_keyz/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-01-11T00:00:00.000Z",
+    "page": 18,
+    "project_keywords": [],
+    "tags": [
+      "midi",
+      "midi player",
+      "chord detector",
+      "music",
+      "piano",
+      "tutorial",
+      "software",
+      "synthesizer",
+      "musician"
+    ],
+    "title": "Midify",
+    "topic": "Misc",
+    "website_url": "http://midifyx.com/"
+  },
+  "mini-koi-m4l-karplus-strong-synthesizer": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Massimo Ciancarelli"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://www.youtube.com/watch?v=x2lGh2BS4r4",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2026-01-06T00:00:00.000Z",
+    "page": 1,
+    "project_keywords": [
+      "Synth",
+      "Karplus",
+      "Strong",
+      "Physical",
+      "modelling",
+      "max for live",
+      "max instrument"
+    ],
+    "tags": [],
+    "title": "Mini Koi (M4L Karplus Strong Synthesizer)",
+    "topic": "Misc",
+    "website_url": "https://max1994.gumroad.com/l/rrczqf"
+  },
+  "mmm4live": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Renaud Bougueng"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://philippepasquier.com/",
+    "decision": "enumerated-free-author",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-07-25T00:00:00.000Z",
+    "page": 6,
+    "project_keywords": [],
+    "tags": [
+      "AI Music",
+      "MIDI-GPT",
+      "Creative AI",
+      "Multi-Track Generation",
+      "Multi-track",
+      "Music ai",
+      "MIDI"
+    ],
+    "title": "MMM4Live",
+    "topic": "Misc",
+    "website_url": "https://www.metacreation.net/projects/mmm4live"
+  },
+  "modulus": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Stephen Black"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://www.maxforlive.com/profile/user/Supertramp162",
+    "decision": "enumerated-free-m4l",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-04-14T00:00:00.000Z",
+    "page": 5,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Modulus ",
+    "topic": "Misc",
+    "website_url": "https://www.maxforlive.com/library/device/10950/modulus"
+  },
+  "molecular-\u2013-mutative-arpeggiator-\u2013-max-for-live": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Roland Sproll"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "https://www.mididope.com/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-05-19T00:00:00.000Z",
+    "page": 21,
+    "project_keywords": [],
+    "tags": [
+      "Arpeggiator",
+      " Max for Live",
+      "Generative",
+      "MIDI Looper",
+      "Sequencer"
+    ],
+    "title": "MOLECULAR \u2013 Mutative Arpeggiator \u2013 Max for Live",
+    "topic": "Misc",
+    "website_url": "https://www.mididope.com/molecular/"
+  },
+  "monsoon-by-sonoran-music-devices": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Sonoran Music Devices"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://sonoranmusicdevices.gumroad.com/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-09-06T00:00:00.000Z",
+    "page": 12,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Monsoon by Sonoran Music Devices",
+    "topic": "Misc",
+    "website_url": "https://sonoranmusicdevices.gumroad.com/l/monsoon"
+  },
+  "moving-towards-synchrony": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Johnny Tomasiello"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "https://linktr.ee/johnnytomasiello",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-09-07T00:00:00.000Z",
+    "page": 20,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Moving Towards Synchrony",
+    "topic": "Misc",
+    "website_url": "https://www.youtube.com/watch?v=TYoxibXyLYQ"
+  },
+  "multiband-madness": {
+    "attach_urls_seen": [],
+    "authors": [
+      "\u00c1rni Halld\u00f3rsson"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "",
+    "decision": "enumerated-free-fileshare",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-01-05T00:00:00.000Z",
+    "page": 15,
+    "project_keywords": [],
+    "tags": [
+      "fft",
+      "pfft",
+      "multiband",
+      "audio effect",
+      "max msp"
+    ],
+    "title": "Multiband Madness",
+    "topic": "Misc",
+    "website_url": "https://drive.google.com/drive/folders/1u_NulzXXXtMp7OV3VlaDuWu_R1918CBl?usp=sharing"
+  },
+  "multirev-yaled": {
+    "attach_urls_seen": [],
+    "authors": [
+      "axers fall"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://axersfall369.gumroad.com/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-10-14T00:00:00.000Z",
+    "page": 6,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Multirev yaled",
+    "topic": "Misc",
+    "website_url": "https://axersfall369.gumroad.com/l/ymcxy"
+  },
+  "musical-applications-for-student-and-people-with-cognitive-impairments": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Matteo Olivo"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "https://www.matteoolivo.com/index_fr.html",
+    "decision": "enumerated-free-author",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-09-23T00:00:00.000Z",
+    "page": 19,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Musical applications for students and people with cognitive impairments",
+    "topic": "Misc",
+    "website_url": "https://www.matteoolivo.com/maxapplications_en.html"
+  },
+  "musics-using-self-made-max-patches-for-composing-n-equal-temperament-music": {
+    "attach_urls_seen": [],
+    "authors": [
+      "tomoyoshi fuseya"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-09-07T00:00:00.000Z",
+    "page": 20,
+    "project_keywords": [],
+    "tags": [
+      "Max",
+      "n equal temperament",
+      "Self-made Max patch"
+    ],
+    "title": "Musics using self-made Max patches for composing n equal temperament music",
+    "topic": "Misc",
+    "website_url": ""
+  },
+  "no-dispositivo": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Nicolas Villa"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://cargocollective.com/nicolasvilla/NO-DISPOSITIVO",
+    "decision": "enumerated-free-author",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-05-12T00:00:00.000Z",
+    "page": 8,
+    "project_keywords": [],
+    "tags": [
+      "Robotics",
+      "Arduino and Max",
+      "Movement data",
+      "Barcelona",
+      "Body",
+      "Presence",
+      "Automation",
+      "Choreography"
+    ],
+    "title": "No Dispositivo",
+    "topic": "Misc",
+    "website_url": "https://cargocollective.com/nicolasvilla/NO-DISPOSITIVO"
+  },
+  "nof-midi2patch": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Norman Freund"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-08-30T00:00:00.000Z",
+    "page": 14,
+    "project_keywords": [],
+    "tags": [
+      "Max for Live",
+      "Midi foot controller",
+      "FCB1010",
+      "Midi mapping",
+      "Ableton Live",
+      "Ableton Live Device",
+      "Music Software",
+      "Hands free instrument control"
+    ],
+    "title": "NOF-Midi2Patch",
+    "topic": "Misc",
+    "website_url": "https://normanfreund.gumroad.com/l/NOF-Mid2Patch"
+  },
+  "nostalgia-panner": {
+    "attach_urls_seen": [],
+    "authors": [
+      "zac folk"
+    ],
+    "created_at_year": "2026",
+    "creator_url": "",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2026-01-06T00:00:00.000Z",
+    "page": 1,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Nostalgia Panner",
+    "topic": "Misc",
+    "website_url": ""
+  },
+  "paula-20-max-for-live-a1200pt2-sampler": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Ashleigh Fournier-Kelleher"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "www.wavefrontinsurgency.com",
+    "decision": "enumerated-free-m4l",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-01-03T00:00:00.000Z",
+    "page": 5,
+    "project_keywords": [
+      "PAULA",
+      "Amiga",
+      "Max 9",
+      "Max for Live",
+      "downsampling",
+      "upsampling",
+      "bitcrushing",
+      "8 bit",
+      "12 bit",
+      "phasor"
+    ],
+    "tags": [],
+    "title": "PAULA 2.0 - Max for Live A1200/PT2 sampler ",
+    "topic": "Misc",
+    "website_url": "https://maxforlive.com/library/device/11737/PAULA"
+  },
+  "pendolo": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Ostin Solo"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "www.ostinsolo.co.uk",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-03-25T00:00:00.000Z",
+    "page": 5,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Pendolo",
+    "topic": "Misc",
+    "website_url": "https://ostinsolo.co.uk/devices/PENDOLO"
+  },
+  "pendulum-2021": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Rack"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "https://youtube.com/playlist?list=PLbZfOmpWZpe8jhO2hHo8U54exLjX0wdwa",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-10-07T00:00:00.000Z",
+    "page": 19,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Pendulum 2021",
+    "topic": "Misc",
+    "website_url": ""
+  },
+  "percent-bands": {
+    "attach_urls_seen": [],
+    "authors": [
+      "axers fall"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "patreon.com/user?u=42206236",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-01-09T00:00:00.000Z",
+    "page": 10,
+    "project_keywords": [],
+    "tags": [
+      "spectral filter",
+      "M4L",
+      "sound design",
+      "experimental",
+      "ambient",
+      "audio effect",
+      "pfft~",
+      "ableton"
+    ],
+    "title": "% bands",
+    "topic": "Misc",
+    "website_url": "https://axersfall369.gumroad.com/l/zzbyw"
+  },
+  "perfect-interval-solver": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Erik Luo"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://erikluo.gumroad.com/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-08-30T00:00:00.000Z",
+    "page": 13,
+    "project_keywords": [],
+    "tags": [
+      "Additive Synthesizer",
+      "Midi",
+      "Max For Live",
+      "Ableton",
+      "Temperament",
+      "Harmonics",
+      "OverTones",
+      "Tuning Algorithm"
+    ],
+    "title": "Perfect Interval Solver",
+    "topic": "Misc",
+    "website_url": "https://erikluo.gumroad.com/l/PerfectIntervalSolver"
+  },
+  "phasorgate": {
+    "attach_urls_seen": [],
+    "authors": [
+      "axers fall"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://axersfall369.gumroad.com/",
+    "decision": "enumerated-author-site",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-10-23T00:00:00.000Z",
+    "page": 11,
+    "project_keywords": [],
+    "tags": [
+      "rhythmic",
+      "max for live",
+      "audio effect",
+      "ableton",
+      "gate",
+      "ADSR",
+      "amplitude envelope",
+      "glitch"
+    ],
+    "title": "Phasorgate",
+    "topic": "Misc",
+    "website_url": "axersfall369.gumroad.com/l/ipjko"
+  },
+  "pink-pong-generator": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Matthew Barile"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "www.4chambersound.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-07-14T00:00:00.000Z",
+    "page": 3,
+    "project_keywords": [
+      "midi generator",
+      "midi plugin",
+      "generative music",
+      "pong game",
+      "ping pong",
+      "pink pong",
+      "4 chamber sound",
+      "generative sequencer",
+      "sequencer",
+      "harmony",
+      "pattern generator",
+      "harmony generator",
+      "loop generator",
+      "melody generator",
+      "melody",
+      "preset-based",
+      "real-time midi generation",
+      "composition tool",
+      "polyrhythms",
+      "visual midi",
+      "arcade game"
+    ],
+    "tags": [],
+    "title": "Pink Pong Generator",
+    "topic": "Misc",
+    "website_url": "https://4chambersound.com/pink-pong-max-4-live-midi-device/"
+  },
+  "pinkai-generative-composer-a-modularmulti-track-max-for-live-midi-generator": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Matthew Barile"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://4chambersound.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-11-08T00:00:00.000Z",
+    "page": 6,
+    "project_keywords": [],
+    "tags": [],
+    "title": "PinkAI Generative Composer: a Modular/Multi-track Max for Live MIDI Generator",
+    "topic": "Misc",
+    "website_url": "https://4chambersound.com/pinkai/"
+  },
+  "pinkai-harmonaizer": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Matthew Barile"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://www.4chambersound.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-03-04T00:00:00.000Z",
+    "page": 5,
+    "project_keywords": [],
+    "tags": [],
+    "title": "PinkAI HarmonAIzer",
+    "topic": "Misc",
+    "website_url": "https://www.4chambersound.com/pinkai-harmonaizer-max-4-live-midi-device/"
+  },
+  "pixsound": {
+    "attach_urls_seen": [],
+    "authors": [
+      "rrriiikkkyy"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://www.instagram.com/rrriiikkkyy",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-01-22T00:00:00.000Z",
+    "page": 10,
+    "project_keywords": [],
+    "tags": [],
+    "title": "pixSound",
+    "topic": "Misc",
+    "website_url": "https://vimeo.com/manage/folders/19206575"
+  },
+  "pulser": {
+    "attach_urls_seen": [],
+    "authors": [
+      "sam ssaem"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://simple-machines.net/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-04-17T00:00:00.000Z",
+    "page": 4,
+    "project_keywords": [
+      "Max for Live",
+      "MIDI Device"
+    ],
+    "tags": [],
+    "title": "Pulser",
+    "topic": "Misc",
+    "website_url": "https://simple-machines.net/products/pulser"
+  },
+  "pv_tools": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Panayiotis Velianitis"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "https://velianitis1.wixsite.com/velianitis",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-05-05T00:00:00.000Z",
+    "page": 17,
+    "project_keywords": [],
+    "tags": [
+      "interactive",
+      "motion to sound",
+      "color tracking"
+    ],
+    "title": "PV_Tools",
+    "topic": "Misc",
+    "website_url": ""
+  },
+  "quantum": {
+    "attach_urls_seen": [],
+    "authors": [
+      "a s"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://cores.cx/",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-10-10T00:00:00.000Z",
+    "page": 11,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Quantum",
+    "topic": "Misc",
+    "website_url": "https://cores.cx/quantum/"
+  },
+  "radioknife": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Holland Sersen"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://hollandsersen.com/posts/radioknife",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-08-30T00:00:00.000Z",
+    "page": 13,
+    "project_keywords": [],
+    "tags": [
+      "RNBO Web Audio",
+      "RNBO",
+      "Web Audio",
+      "JS",
+      "Javascript",
+      "Node",
+      "API"
+    ],
+    "title": "RadioKnife",
+    "topic": "Misc",
+    "website_url": "https://www.radioknife.co/home"
+  },
+  "randstut": {
+    "attach_urls_seen": [],
+    "authors": [
+      "axers fall"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://axersfall369.gumroad.com/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-03-28T00:00:00.000Z",
+    "page": 9,
+    "project_keywords": [],
+    "tags": [
+      "glitch",
+      "delay",
+      "stutter",
+      "M4L",
+      "ableton",
+      "bit crusher",
+      "ambient",
+      "audio effect",
+      "experimental"
+    ],
+    "title": "RandStut",
+    "topic": "Misc",
+    "website_url": "https://axersfall369.gumroad.com/l/zdradf"
+  },
+  "rechteck-fyrkant-if-they-were-the-same-thing-they-were-the-same-thing-but-they-are-not": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Andr\u00e9 Rangel"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://3kta.net/",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-01-11T00:00:00.000Z",
+    "page": 10,
+    "project_keywords": [],
+    "tags": [
+      "Computational art",
+      "light art",
+      "sound art",
+      "audiovisuals",
+      "intermedia"
+    ],
+    "title": "Rechteck Fyrkant \u2013 If they were the same thing, they were the same thing, but they are not.",
+    "topic": "Misc",
+    "website_url": "https://3kta.net/3rechteckfyrkant.php"
+  },
+  "rifflemess": {
+    "attach_urls_seen": [],
+    "authors": [
+      "lazy circuit"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "",
+    "decision": "enumerated-free-m4l",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-10-10T00:00:00.000Z",
+    "page": 12,
+    "project_keywords": [],
+    "tags": [
+      "sampler",
+      "random"
+    ],
+    "title": "rifflemess",
+    "topic": "Misc",
+    "website_url": "https://maxforlive.com/library/device/9582/rifflemess"
+  },
+  "rnbo-preset-backup": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Jan M"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://janmech.net",
+    "decision": "enumerated-free-github",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-10-10T00:00:00.000Z",
+    "page": 11,
+    "project_keywords": [],
+    "tags": [
+      "Preset-Management",
+      "RNBO",
+      "Raspberry Pi"
+    ],
+    "title": "RNBO Preset Backup",
+    "topic": "Misc",
+    "website_url": "https://github.com/janmech/RNBO_PresetBackup_1.2.1"
+  },
+  "rubix-generator": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Liam Fisher"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://www.linkedin.com/in/liam-fisher-2035161b5/",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-03-10T00:00:00.000Z",
+    "page": 9,
+    "project_keywords": [],
+    "tags": [
+      "Generative",
+      "AudioVisual",
+      "Web",
+      "RNBO"
+    ],
+    "title": "Rubix Generator",
+    "topic": "Misc",
+    "website_url": "https://interactive-media-projects.web.app/"
+  },
+  "sae-mackie-1604vlz4-simulator": {
+    "attach_urls_seen": [],
+    "authors": [
+      "riotchild"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "https://drmarkbassett.com/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-06-01T00:00:00.000Z",
+    "page": 21,
+    "project_keywords": [],
+    "tags": [],
+    "title": "SAE Mackie 1604VLZ4 Simulator",
+    "topic": "Misc",
+    "website_url": "https://sae.edu.au/showcase/software/"
+  },
+  "sail-synchronous-as-in-life": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Andr\u00e9 Rangel"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "http://3kta.net/",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-02-15T00:00:00.000Z",
+    "page": 19,
+    "project_keywords": [],
+    "tags": [
+      "Addressable LED",
+      "Sound Synthesis",
+      "Audiovisual Synchonisation"
+    ],
+    "title": "Sail -  Synchronous As In Life",
+    "topic": "Misc",
+    "website_url": "http://3kta.net/3sail.php"
+  },
+  "sapporoph-sky-machine": {
+    "attach_urls_seen": [],
+    "authors": [
+      "paolo ferraguti"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "https://www.vgu39.it",
+    "decision": "enumerated-free-fileshare",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-02-14T00:00:00.000Z",
+    "page": 18,
+    "project_keywords": [],
+    "tags": [],
+    "title": "SAPPOROPH SKY MACHINE",
+    "topic": "Misc",
+    "website_url": "https://drive.google.com/drive/folders/1a2sgTe0L6-V5bWi0oMAlw2RwtxNEfew0"
+  },
+  "saser-for-iphone-and-ipad": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Ruslan"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://www.compositorsoftware.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-08-30T00:00:00.000Z",
+    "page": 14,
+    "project_keywords": [],
+    "tags": [
+      "SDR",
+      "VLF",
+      "ULF",
+      "Radio",
+      "Gen~",
+      "JUCE",
+      "MaxMSP",
+      "Loopback",
+      "AppStore",
+      "Apple",
+      "iOS",
+      "iPadOS",
+      "AppleSilicon"
+    ],
+    "title": "SASER for iPhone and iPad",
+    "topic": "Misc",
+    "website_url": "https://wwww.compositorsoftware.com/saser"
+  },
+  "seeds": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Ian Dicke"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "https://novelmusic.org",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-09-07T00:00:00.000Z",
+    "page": 20,
+    "project_keywords": [],
+    "tags": [
+      "Max for Live",
+      " MIDI",
+      "Modular",
+      "sequencer",
+      "utility",
+      "modulator",
+      "clock",
+      "stochastic",
+      "generative",
+      "algorithmic"
+    ],
+    "title": "SEEDS",
+    "topic": "Misc",
+    "website_url": "https://novelmusic.org/m4l/seeds"
+  },
+  "sektor-spectral-audio-effectlooper": {
+    "attach_urls_seen": [],
+    "authors": [
+      "David Meyer"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://davidjohannesmeyer.gumroad.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-09-12T00:00:00.000Z",
+    "page": 12,
+    "project_keywords": [],
+    "tags": [
+      "FFT",
+      "Max For Live",
+      "spectral processing",
+      "looper",
+      "audio effect",
+      "Ableton Live"
+    ],
+    "title": "Sektor - Spectral Audio Effect/Looper",
+    "topic": "Misc",
+    "website_url": "https://davidjohannesmeyer.gumroad.com/l/sektor?layout=profile"
+  },
+  "shake": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Davor Branimir Vincze"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "http://db-vincze.com",
+    "decision": "enumerated-free-github",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-08-20T00:00:00.000Z",
+    "page": 3,
+    "project_keywords": [
+      "virtual shakers",
+      "physical modeling",
+      "granular imitation",
+      "digital instrument design",
+      "bandpass filter",
+      "percussion synthesis"
+    ],
+    "tags": [],
+    "title": "!SHAKE!",
+    "topic": "Misc",
+    "website_url": "https://github.com/Vinczius/Shake.git"
+  },
+  "shakespeare-talkbot-with-chatgpt-and-jitter": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Christopher"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-10-08T00:00:00.000Z",
+    "page": 14,
+    "project_keywords": [],
+    "tags": [
+      "nodeJS",
+      "chatGPT",
+      "DEEPGRAM",
+      "APIs",
+      "Javascript",
+      "speech-to-text",
+      "Jitter",
+      "node.script"
+    ],
+    "title": "Shakespeare Talkbot with ChatGPT and Jitter",
+    "topic": "Misc",
+    "website_url": "https://youtu.be/qbTJgspGcfk"
+  },
+  "simple-fm-with-molecular-dynamics": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Claudio Morgado"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "https://grexono.com/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-10-03T00:00:00.000Z",
+    "page": 17,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Simple FM with Molecular Dynamics",
+    "topic": "Misc",
+    "website_url": "https://grexono.com/"
+  },
+  "simpler-shuffler": {
+    "attach_urls_seen": [],
+    "authors": [
+      "sam ssaem"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://simple-machines.net/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-09-15T00:00:00.000Z",
+    "page": 2,
+    "project_keywords": [
+      "Max for Live",
+      "MIDI",
+      "Sampler",
+      "Sequencer"
+    ],
+    "tags": [],
+    "title": "Simpler Shuffler",
+    "topic": "Misc",
+    "website_url": "https://simple-machines.net/products/simpler-shuffler"
+  },
+  "sonus": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Valerio Orlandini"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "http://valeriorlandini.com/",
+    "decision": "enumerated-free-github",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-07-15T00:00:00.000Z",
+    "page": 7,
+    "project_keywords": [],
+    "tags": [
+      "externals",
+      "artificial intelligence",
+      "sound design",
+      "open source",
+      "max for live"
+    ],
+    "title": "sonus",
+    "topic": "Misc",
+    "website_url": "https://valeriorlandini.github.io/sonus/"
+  },
+  "sound-objects": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Capiuz"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://www.favaroluca.com/",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-10-10T00:00:00.000Z",
+    "page": 12,
+    "project_keywords": [],
+    "tags": [
+      "max4live instrument",
+      "synth drums",
+      "experimental percussions",
+      "max device"
+    ],
+    "title": "Sound Objects",
+    "topic": "Misc",
+    "website_url": "https://hide.bandcamp.com/album/sound-objects"
+  },
+  "soundstrokes": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Johnnyc777"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-07-24T00:00:00.000Z",
+    "page": 3,
+    "project_keywords": [
+      "Movement tracking",
+      "Audio Reactive",
+      "Digital Painting"
+    ],
+    "tags": [],
+    "title": "SoundStrokes",
+    "topic": "Misc",
+    "website_url": "https://www.themelodycrafters.com/"
+  },
+  "sousafx": {
+    "attach_urls_seen": [],
+    "authors": [
+      "sousastep"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://www.sousastep.quest/links/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-04-22T00:00:00.000Z",
+    "page": 8,
+    "project_keywords": [],
+    "tags": [
+      "tuba",
+      "sousaphone",
+      "controllerism",
+      "livetronica",
+      "dubstep",
+      "spacebass"
+    ],
+    "title": "SousaFX",
+    "topic": "Misc",
+    "website_url": "https://doc.sousastep.quest/index.html"
+  },
+  "spatial-instrument": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Ricardo Thomasi"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "https://linktr.ee/ricardothomasi",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-11-21T00:00:00.000Z",
+    "page": 19,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Spatial Instrument",
+    "topic": "Misc",
+    "website_url": ""
+  },
+  "spectral-ease": {
+    "attach_urls_seen": [],
+    "authors": [
+      "axers fall"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://ko-fi.com/axersfall/shop",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-06-24T00:00:00.000Z",
+    "page": 4,
+    "project_keywords": [
+      "waveshaper",
+      "distortion",
+      "M4L",
+      "spectral process",
+      "experimental"
+    ],
+    "tags": [],
+    "title": "spectral ease",
+    "topic": "Misc",
+    "website_url": "https://axersfall369.gumroad.com/l/ofcto"
+  },
+  "spectral-hq": {
+    "attach_urls_seen": [],
+    "authors": [
+      "axers fall"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://ko-fi.com/axersfall",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-05-01T00:00:00.000Z",
+    "page": 4,
+    "project_keywords": [
+      "spectral process",
+      "fft",
+      "experimental",
+      "\"bitcrusher\"",
+      "sound design"
+    ],
+    "tags": [],
+    "title": "spectral HQ",
+    "topic": "Misc",
+    "website_url": "https://ko-fi.com/s/8361b44cf8"
+  },
+  "spectral-wobbler": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Feri G"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://dystopianwaves.gumroad.com/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-08-25T00:00:00.000Z",
+    "page": 3,
+    "project_keywords": [
+      "Spectral",
+      "Sound design",
+      "Spectral modulation",
+      "Chorus",
+      "Frequency shifting"
+    ],
+    "tags": [],
+    "title": "Spectral Wobbler",
+    "topic": "Misc",
+    "website_url": "https://dystopianwaves.gumroad.com/l/mwobble"
+  },
+  "spectranaut": {
+    "attach_urls_seen": [],
+    "authors": [
+      "ianjojo"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://devices.ianjojo.dev",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-08-14T00:00:00.000Z",
+    "page": 3,
+    "project_keywords": [
+      "ambient",
+      "max4live",
+      "spectral",
+      "reverb"
+    ],
+    "tags": [],
+    "title": "Spectranaut",
+    "topic": "Misc",
+    "website_url": "https://ko-fi.com/s/e679d53058"
+  },
+  "spirits-voices-from-heavens-and-underworlds": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Morgan Edgerton"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-01-08T00:00:00.000Z",
+    "page": 18,
+    "project_keywords": [],
+    "tags": [
+      "Vocal",
+      " vocal effect",
+      "vocal multiplier",
+      "Vibrato",
+      "vocal delay",
+      "vocal reverb",
+      "chorus",
+      "pitchshift",
+      "pitchshifting"
+    ],
+    "title": "Spirits - Voices from Heavens and Underworlds",
+    "topic": "Misc",
+    "website_url": ""
+  },
+  "staircase": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Ian Dicke"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://www.novelmusic.org",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-07-05T00:00:00.000Z",
+    "page": 8,
+    "project_keywords": [],
+    "tags": [
+      "midi",
+      "modulation",
+      "max for live",
+      "sequencer"
+    ],
+    "title": "Staircase",
+    "topic": "Misc",
+    "website_url": "https://novelmusic.org/m4l/staircase"
+  },
+  "step-arpeggiator": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Udo R. Br\u00e4una"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://udorbrauna.gumroad.com/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-01-09T00:00:00.000Z",
+    "page": 11,
+    "project_keywords": [],
+    "tags": [
+      "arpeggiator",
+      "step",
+      "step arpeggiator",
+      "midi",
+      "m4l"
+    ],
+    "title": "Step Arpeggiator",
+    "topic": "Misc",
+    "website_url": "https://udorbrauna.gumroad.com/l/StepArpeggiator"
+  },
+  "stepper-2-00": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Denys Suminov"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-08-08T00:00:00.000Z",
+    "page": 16,
+    "project_keywords": [
+      "sequencer",
+      "step sequencer",
+      "midi",
+      "midi effect",
+      "max for live"
+    ],
+    "tags": [
+      "sequencer",
+      "step sequencer",
+      "midi",
+      "midi effect",
+      "max for live"
+    ],
+    "title": "Stepper 2.00",
+    "topic": "Misc",
+    "website_url": "https://dmsc.gumroad.com/l/duvys"
+  },
+  "supersystem": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Julien Bayle"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://julienbayle.net/",
+    "decision": "enumerated-author-site",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-12-01T00:00:00.000Z",
+    "page": 2,
+    "project_keywords": [
+      "live performance",
+      "jitter",
+      "openframeworks",
+      "music",
+      "audiovisual",
+      "shaders"
+    ],
+    "tags": [],
+    "title": "SUPER.SYSTEM",
+    "topic": "Misc",
+    "website_url": "https://julienbayle.net/works/super-system/"
+  },
+  "swiftrnbo": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Eldar Sadykov"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://ceam.space",
+    "decision": "enumerated-free-github",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-09-19T00:00:00.000Z",
+    "page": 14,
+    "project_keywords": [],
+    "tags": [
+      "rnbo",
+      "Swift",
+      "SwiftUI",
+      "iOS",
+      "macOS",
+      "Mobile Development"
+    ],
+    "title": "SwiftRNBO",
+    "topic": "Misc",
+    "website_url": "https://github.com/ceammc/SwiftRNBO"
+  },
+  "synesthesia": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Oscar Bergqvist"
+    ],
+    "created_at_year": "2026",
+    "creator_url": "",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-24T00:00:00.000Z",
+    "page": 1,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Synesthesia",
+    "topic": "Misc",
+    "website_url": ""
+  },
+  "synthcore-gen~-library-filter-and-eq-supplements": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Ernest"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "https://www.yofiel.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-01-18T00:00:00.000Z",
+    "page": 19,
+    "project_keywords": [],
+    "tags": [],
+    "title": "SynthCore gen~ library Filter and EQ supplements",
+    "topic": "Misc",
+    "website_url": "https://yofiel.com/audio/synthcore.php"
+  },
+  "tapes": {
+    "attach_urls_seen": [],
+    "authors": [
+      "matissev"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://matissev.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-08-30T00:00:00.000Z",
+    "page": 12,
+    "project_keywords": [],
+    "tags": [
+      "Max for live",
+      "analog",
+      "reel to reel",
+      "varispeed",
+      "tape",
+      "tape machine",
+      "ableton live"
+    ],
+    "title": "Tapes",
+    "topic": "Misc",
+    "website_url": "https://matissev.gumroad.com"
+  },
+  "tbt-track-organizer": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Trevor being Trevor"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://youtube.com/@trevorbeingtrevor?si=mBBrNtE0FlB34JP4",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-10-12T00:00:00.000Z",
+    "page": 11,
+    "project_keywords": [],
+    "tags": [
+      "Utility",
+      "Organization",
+      "Max for Live"
+    ],
+    "title": "TBT Track Organizer",
+    "topic": "Misc",
+    "website_url": "https://trevorbeingtrevor.gumroad.com/l/tbtTrackOrganizer"
+  },
+  "the-art-of-max-for-live": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Julien Bayle"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://julienbayle.net",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-04-15T00:00:00.000Z",
+    "page": 4,
+    "project_keywords": [
+      "book",
+      "English",
+      "French",
+      "Max Certified Trainer",
+      "Structure Void",
+      "Max for Live",
+      "Live Object Model"
+    ],
+    "tags": [],
+    "title": "The Art of Max for Live",
+    "topic": "Misc",
+    "website_url": "https://structure-void.com/the-art-of-max-for-live-book/"
+  },
+  "the-chrominance-collection": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Felipe Vareschi"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "https://www.felipevareschi.com/",
+    "decision": "enumerated-free-author",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-05-19T00:00:00.000Z",
+    "page": 21,
+    "project_keywords": [],
+    "tags": [
+      "Instrument",
+      "Light",
+      "MAX",
+      "Synthesis",
+      "SoundArt",
+      "Audio"
+    ],
+    "title": "The Chrominance Collection",
+    "topic": "Misc",
+    "website_url": "https://www.felipevareschi.com/chrominance"
+  },
+  "the-earth-organ": {
+    "attach_urls_seen": [],
+    "authors": [
+      "soundslikelind"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "https://soundslikelind.se",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-07-26T00:00:00.000Z",
+    "page": 16,
+    "project_keywords": [],
+    "tags": [
+      "Outdoor",
+      " interactive sound art",
+      " max",
+      " maxuino",
+      " Anders Lind",
+      " lines",
+      " composer",
+      " sound artist",
+      " soundslikelind"
+    ],
+    "title": "The Earth Organ",
+    "topic": "Misc",
+    "website_url": "https://youtu.be/Fl9EyMp_7xk"
+  },
+  "the-intervallic-demon": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Joel Fairstein"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "https://youtu.be/laolaXuJbRU",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-04-19T00:00:00.000Z",
+    "page": 17,
+    "project_keywords": [],
+    "tags": [
+      "Algorithmic music",
+      " Generative music",
+      "Scribblr"
+    ],
+    "title": "The Intervallic Demon",
+    "topic": "Misc",
+    "website_url": "https://youtu.be/laolaXuJbRU"
+  },
+  "the-pacemaker-10": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Max Epperson"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://www.maxepperson.com/",
+    "decision": "enumerated-free-author",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-02-26T00:00:00.000Z",
+    "page": 9,
+    "project_keywords": [],
+    "tags": [
+      "synth",
+      "custom synth",
+      "additive synthesis",
+      "synth interface",
+      "oscillators",
+      "adsr",
+      "filters",
+      "pattern sequence",
+      "heart",
+      "pacemaker"
+    ],
+    "title": "The Pacemaker 1.0",
+    "topic": "Misc",
+    "website_url": "https://www.maxepperson.com/pacemaker"
+  },
+  "the-theoy-and-technique-of-electronic-music-examples-for-maxmsp": {
+    "attach_urls_seen": [],
+    "authors": [
+      "George N."
+    ],
+    "created_at_year": "2023",
+    "creator_url": "",
+    "decision": "enumerated-free-github",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-08-30T00:00:00.000Z",
+    "page": 13,
+    "project_keywords": [],
+    "tags": [
+      "Puckette",
+      "electronic music",
+      "theory and practice",
+      "real-time",
+      "live electronics"
+    ],
+    "title": "The Theory and Technique of Electronic Music examples for Max/MSP",
+    "topic": "Misc",
+    "website_url": "https://github.com/georgeNikmus/The-Theory-and-Technique-of-Electronic-Music-Max-Patches"
+  },
+  "tidewater": {
+    "attach_urls_seen": [],
+    "authors": [
+      "axers fall"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://ko-fi.com/axersfall/shop",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-11-21T00:00:00.000Z",
+    "page": 5,
+    "project_keywords": [
+      "spectral filter",
+      "auto filter",
+      "sound design"
+    ],
+    "tags": [],
+    "title": "TideWater",
+    "topic": "Misc",
+    "website_url": "https://ko-fi.com/s/8cfb91af3c"
+  },
+  "tonis": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Andr\u00e9 Rangel"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://3kta.net/",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-01-11T00:00:00.000Z",
+    "page": 10,
+    "project_keywords": [],
+    "tags": [
+      "Computational art",
+      "Laser art"
+    ],
+    "title": "Tonis",
+    "topic": "Misc",
+    "website_url": "https://3kta.net/3tonis.php"
+  },
+  "transient-crossfade": {
+    "attach_urls_seen": [],
+    "authors": [
+      "sousastep"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "https://www.sousastep.com/",
+    "decision": "enumerated-free-github",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-11-14T00:00:00.000Z",
+    "page": 15,
+    "project_keywords": [],
+    "tags": [
+      "crossfade",
+      "transient",
+      "envelope",
+      "dry/wet",
+      "gen~"
+    ],
+    "title": "transient crossfade",
+    "topic": "Misc",
+    "website_url": "https://github.com/jbaylies/transient_crossfade"
+  },
+  "travelogue": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Ian Dicke"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://www.iandicke.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2023-03-02T00:00:00.000Z",
+    "page": 15,
+    "project_keywords": [],
+    "tags": [
+      "generative",
+      "sequencer",
+      "midi",
+      "algorithmic"
+    ],
+    "title": "Travelogue",
+    "topic": "Misc",
+    "website_url": "https://novelmusic.org/m4l/travelogue"
+  },
+  "trifecta": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Manifest Audio"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://manifest.audio/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-11-21T00:00:00.000Z",
+    "page": 5,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Trifecta",
+    "topic": "Misc",
+    "website_url": "https://manifest.audio/trifecta"
+  },
+  "ultra-chop-ii": {
+    "attach_urls_seen": [],
+    "authors": [
+      "weightausend"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://www.instagram.com/weightausend/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-03-21T00:00:00.000Z",
+    "page": 9,
+    "project_keywords": [],
+    "tags": [
+      "gen",
+      "maxforlive",
+      "ableton",
+      "wavetable",
+      "custom",
+      "production",
+      "techno"
+    ],
+    "title": "Ultra Chop II",
+    "topic": "Misc",
+    "website_url": "https://ko-fi.com/s/27300c1ba4"
+  },
+  "um-par-meeting-union-synthesis-and-fusion": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Andr\u00e9 Rangel"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://3kta.net/",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-01-11T00:00:00.000Z",
+    "page": 10,
+    "project_keywords": [],
+    "tags": [
+      "Computational Art",
+      "Intermedia",
+      "Audiovisuals",
+      "Sound art",
+      "Light art"
+    ],
+    "title": "Um-par \u2013 Meeting, Union, Synthesis and Fusion.",
+    "topic": "Misc",
+    "website_url": "https://3kta.net/3umpar.php"
+  },
+  "url_1": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Capiuz"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "https://www.favaroluca.com/",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-10-04T00:00:00.000Z",
+    "page": 19,
+    "project_keywords": [],
+    "tags": [
+      "sound installation",
+      "interactive",
+      "digital",
+      "soundart",
+      "point and click"
+    ],
+    "title": "URL_1",
+    "topic": "Misc",
+    "website_url": "https://hide.bandcamp.com/album/url-1"
+  },
+  "vela": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Capiuz"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "https://www.favaroluca.com/",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-05-18T00:00:00.000Z",
+    "page": 17,
+    "project_keywords": [],
+    "tags": [
+      "device",
+      "granular",
+      "pulsar synthesis",
+      "max for live",
+      "ableton"
+    ],
+    "title": "Vela",
+    "topic": "Misc",
+    "website_url": "https://hide.bandcamp.com/merch/vela-hide-device-x07"
+  },
+  "verkl\u00e4rter-rohr": {
+    "attach_urls_seen": [],
+    "authors": [
+      "jullian"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "https://jullianhoff.com/",
+    "decision": "enumerated-free-author",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-01-05T00:00:00.000Z",
+    "page": 20,
+    "project_keywords": [],
+    "tags": [
+      "generative",
+      "audiovisual",
+      "Bass clarinet",
+      "Polweisky"
+    ],
+    "title": "Verkl\u00e4rter Rohr",
+    "topic": "Misc",
+    "website_url": "https://jullianhoff.com/2019/01/11/verklarter-rohr-transfigured-tube/"
+  },
+  "videoplayer-for-ableton-live": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Julien Bayle"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://structure-void.com/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-07-07T00:00:00.000Z",
+    "page": 8,
+    "project_keywords": [],
+    "tags": [
+      "video",
+      "jitter",
+      "max for live",
+      "ableton live",
+      "blur",
+      "video delay",
+      "live object model"
+    ],
+    "title": "videoplayer for Ableton Live",
+    "topic": "Misc",
+    "website_url": "https://structure-void.com/outils/videoplayer/"
+  },
+  "visualmix": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Enrico Gazzetto"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "",
+    "decision": "enumerated-showcase",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-07-08T00:00:00.000Z",
+    "page": 16,
+    "project_keywords": [],
+    "tags": [
+      "educational",
+      "education",
+      "mixing",
+      "visual mixing"
+    ],
+    "title": "VisualMIX",
+    "topic": "Misc",
+    "website_url": ""
+  },
+  "void-filter-bob": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Julien Bayle"
+    ],
+    "created_at_year": "2026",
+    "creator_url": "https://julienbayle.net",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-30T00:00:00.000Z",
+    "page": 1,
+    "project_keywords": [],
+    "tags": [],
+    "title": "VOID Filter Bob ",
+    "topic": "Misc",
+    "website_url": "https://structure-void.com/tools/max-for-live/void-filter-bob-m4l"
+  },
+  "void-midi-random-or-m4l-stochastic-melodic-engine": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Julien Bayle"
+    ],
+    "created_at_year": "2026",
+    "creator_url": "https://julienbayle.net",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-30T00:00:00.000Z",
+    "page": 1,
+    "project_keywords": [
+      "random",
+      "max for live",
+      "midi effect",
+      "max external",
+      "ableton live"
+    ],
+    "tags": [],
+    "title": "VOID MIDI RANDOM | M4L Stochastic melodic engine",
+    "topic": "Misc",
+    "website_url": "https://structure-void.com/tools/max-for-live/void-midi-random-m4l/"
+  },
+  "vsthost": {
+    "attach_urls_seen": [],
+    "authors": [
+      "rbdev"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-12-05T00:00:00.000Z",
+    "page": 15,
+    "project_keywords": [],
+    "tags": [
+      "vst",
+      "vsti",
+      "vsthost",
+      "maxmsp",
+      "project",
+      "application",
+      "gui"
+    ],
+    "title": "vsthost",
+    "topic": "Misc",
+    "website_url": "https://www.zaamedia.uk/vsthost"
+  },
+  "wah-pedal": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Feri G"
+    ],
+    "created_at_year": "2025",
+    "creator_url": "https://dystopianwaves.gumroad.com/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-08-29T00:00:00.000Z",
+    "page": 3,
+    "project_keywords": [
+      "Filter",
+      "Wah"
+    ],
+    "tags": [],
+    "title": "Wah Pedal",
+    "topic": "Misc",
+    "website_url": "https://dystopianwaves.gumroad.com/l/mwahpedal"
+  },
+  "wise-wavetable-integrated-sample-engine": {
+    "attach_urls_seen": [],
+    "authors": [
+      "weightausend"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://www.instagram.com/weightausend/",
+    "decision": "enumerated-free-m4l",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-07-08T00:00:00.000Z",
+    "page": 12,
+    "project_keywords": [],
+    "tags": [
+      "topology",
+      "maxforlive",
+      "wavetable",
+      "experimental",
+      "glitch",
+      "sample player",
+      "varispeedm",
+      "maxmsp",
+      "gen"
+    ],
+    "title": "W.I.S.E.",
+    "topic": "Misc",
+    "website_url": "https://maxforlive.com/library/device/9591/w-i-s-e"
+  },
+  "x-ponder": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Manifest Audio"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://manifest.audio",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-08-14T00:00:00.000Z",
+    "page": 6,
+    "project_keywords": [],
+    "tags": [],
+    "title": "X-Ponder",
+    "topic": "Misc",
+    "website_url": "https://manifest.audio/x-ponder"
+  },
+  "x-translate": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Manifest Audio"
+    ],
+    "created_at_year": "2023",
+    "creator_url": "https://manifest.audio/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2024-08-14T00:00:00.000Z",
+    "page": 11,
+    "project_keywords": [],
+    "tags": [
+      "Audio-to-MIDI",
+      "real-time Audio-to-MIDI",
+      "Creative",
+      "MIDI Effect",
+      "Unique MIDI Input"
+    ],
+    "title": "X-Translate",
+    "topic": "Misc",
+    "website_url": "https://manifest.audio/x-translate"
+  },
+  "xp4l": {
+    "attach_urls_seen": [],
+    "authors": [
+      "fraction"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "https://www.fractionisnoise.art/",
+    "decision": "enumerated-free-author",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-07-08T00:00:00.000Z",
+    "page": 20,
+    "project_keywords": [],
+    "tags": [
+      "spatialaudio",
+      "spatialsound",
+      "immersiveaudio",
+      "immersive",
+      "3daudio",
+      "ableton",
+      "maxforlive",
+      "m4l",
+      "spat"
+    ],
+    "title": "xp4l",
+    "topic": "Misc",
+    "website_url": "https://www.xp4l.com"
+  },
+  "yofiel-synth-and-gen~-dsp-library": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Ernest"
+    ],
+    "created_at_year": "2021",
+    "creator_url": "https://www.yofiel.com",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2021-06-30T00:00:00.000Z",
+    "page": 20,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Yofiel synth and gen~ DSP library",
+    "topic": "Misc",
+    "website_url": "https://www.yofiel.com/max.php"
+  },
+  "zwobot": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Herr Markant"
+    ],
+    "created_at_year": "2024",
+    "creator_url": "https://amrec.de/",
+    "decision": "enumerated-commercial",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2025-02-17T00:00:00.000Z",
+    "page": 5,
+    "project_keywords": [],
+    "tags": [],
+    "title": "Zwobot",
+    "topic": "Misc",
+    "website_url": "https://www.zwobotmax.com/"
+  },
+  "\u00e1rtemis": {
+    "attach_urls_seen": [],
+    "authors": [
+      "Stefano Scarani"
+    ],
+    "created_at_year": "2022",
+    "creator_url": "http://www.stefanoscarani.com/",
+    "decision": "enumerated-free-author",
+    "marked_at": "2026-05-04T02:07:11Z",
+    "mct_ids_seen": [],
+    "modified_at": "2022-05-31T00:00:00.000Z",
+    "page": 17,
+    "project_keywords": [
+      "Electroacoustic music",
+      "Interactive dance",
+      "Kinect",
+      "sensors"
+    ],
+    "tags": [
+      "Electroacoustic music",
+      "Interactive dance",
+      "Kinect"
+    ],
+    "title": "\u00c1rtemis",
+    "topic": "Misc",
+    "website_url": "http://www.stefanoscarani.com/art/fragments/Artemis/Artemis.html"
+  }
+}

@@ -143,6 +143,8 @@ Read and review the entire Claude2Max repo before starting — `CLAUDE.md`, `SPE
 
 **Before constructing or editing any patch**, read `MAX_PATCHING.md`. It contains all patching principles, presentation view guidelines, documentation verification rules, and common pitfalls. Treat its presentation section as a checklist before starting any presentation layout.
 
+**Before designing or analyzing anything inside a `gen~` / `gen` / `jit.gen` box**, also read `GEN_PATCHING.md`. gen~ is a separate dataflow language with its own object set and per-sample evaluation model — patterns from MSP do not necessarily translate.
+
 ## Workflow
 
 ### Working on an existing patch — sync first, always
@@ -180,6 +182,7 @@ To decode MCT received in the conversation: `python3 -c "from spec2maxpat import
 
 - `SPEC_REFERENCE.md` — **Read this first.** Complete spec format, object types, connection format, layout guidelines, v8/JS objects, MCT encoding, worked examples.
 - `MAX_PATCHING.md` — Patching principles, presentation guidelines, documentation verification rules, common pitfalls. Read before any patch work.
+- `GEN_PATCHING.md` — gen~ programming model, canonical idioms (slide envelope follower, samplerate→ms, equal-power crossfade), latency-compensation discipline. Read before any work inside a `gen~` / `gen` / `jit.gen` box.
 - `spec2maxpat.py` — The converter. I/O data from C74 maxref.xml via `RefpageCache`; no external database.
 - `TUTORIAL_GUIDELINES.md` — Tutorial structural contract, panel/annotation attrs, comment-pile pattern, breakage diagnostic.
 - `packages/package_objects.json` — Curated reference of installed Max package objects with `use_when` judgments.
@@ -187,7 +190,7 @@ To decode MCT received in the conversation: `python3 -c "from spec2maxpat import
 - `packages/package_schema.py` — Canonical schema; `normalize()`/`validate()` for `package_objects.json`.
 - `packages/query_packages.py` — `list`, `search <term>`, `validate`. Read-only CLI for the package library.
 - `packages/CURATION.md` — How to extend package coverage: extractor CLIs, schema norms, `use_when` quality bar.
-- `c74-forum/forum_insights.md` / `cookbook/cookbook_insights.md` — Community knowledge, non-obvious patterns, real examples.
+- `c74-forum/forum_insights.md` / `cookbook/cookbook_insights.md` / `c74-projects/c74_projects_database.md` — Community knowledge, non-obvious patterns, real examples, and a catalog of community projects.
 
 ## Knowledge Resources — Consult Before Designing
 
@@ -197,6 +200,7 @@ When designing or debugging a patch, consult these curated sources — not just 
 - **`packages/package_concepts.md`** — Paradigms for packages with custom types (bach lllls, FrameLib chains, FluCoMa workflow). Read when using a new package.
 - **`c74-forum/forum_insights.md`** — Non-obvious behaviors, preferred patterns, performance pitfalls from Cycling '74 forums.
 - **`cookbook/cookbook_insights.md`** — Insights from Max Cookbook examples (Dobrian/UCI).
+- **`c74-projects/c74_projects_database.md`** — Catalog of community projects from <https://cycling74.com/projects>. Search this when answering "is there an existing Max for Live device that does X?" or "who has built something like Y?". Note: most gallery entries link to commercial products (paid M4L on gumroad / vstopia / vendor stores) — patch source is rarely available. Free patches that are extracted go to `c74-projects/c74_projects_insights.md`.
 
 _Add new scraped resources here. Every knowledge folder: `<source>/CRAWL_LOG.md`, `<source>/crawl_state.json`, `<source>/<source>_insights.md`._
 

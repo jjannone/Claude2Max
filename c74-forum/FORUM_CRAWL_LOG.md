@@ -21,6 +21,7 @@ Threads or topic clusters whose insights have been folded into
 | Date       | Area | Threads in chunk | Artifact-bearing | Insights written | Notes |
 |------------|------|------------------|------------------|------------------|-------|
 | 2026-05-01 | First chunk: Jitter pp.1-3 + JS pp.1-3 + MaxMSP p.1 + RNBO p.1 (M4L excluded) | 81 | 44 | 28 | 119 artifact files (88 .maxpat / 9 .js / 8 .zip / 6 .rnbopack / 3 .jxs / others) saved to `/tmp/forum/`. State file `forum_crawl_state.json` records every slug with decision: `downloaded` (44) / `scraped` (6 Phase C) / `skipped-no-artifact` (31). |
+| 2026-05-04 | Pass-2 chunk: MaxMSP pp.2-5 + Jitter pp.4-7 + RNBO pp.2-5 + Javascript pp.4-7 + Gen pp.1-4 (NEW subforum) + Misc pp.1-3 + Max For Live pp.1-2 | 240 | 103 | 32 (across 7 sections incl. fresh Gen / gen~ section) | 212 artifact files (167 .maxpat / 18 .zip / 24 other / 1 .js / 1 .jxs / 1 .rnbopack) saved to `/tmp/forum-pass2/`. Patched a Unicode-slug bug in the enumerator (`urllib.parse.quote(slug, safe='/-')`). 5 PROMOTION-CANDIDATE flags applied; will be promoted in the closing sweep. State file now totals 321 entries across both chunks. |
 
 ## Resume point
 

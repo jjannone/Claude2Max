@@ -173,6 +173,9 @@ These automatically get `parameter_enable` set:
 - Output with `outlet(n, value)`. Send a bang with `outlet(n, "bang")`.
 - Use `v8` rather than `js` for new work (Chrome V8 is faster and more standards-compliant).
 - **Good candidates for v8**: date/time logic, string parsing, stateful comparisons, anything that would require a chain of `sprintf`, `fromsymbol`, `pack/unpack`, `match`, or `change` objects.
+- **Patcher arguments are not directly readable from `js` / `v8`.** Wrapping a JS object in a subpatcher with `#1`/`#2` patcher args does not expose those args to the JS code. The canonical pattern is: instantiate a `patcherargs` external in the subpatcher, route its outlet to the JS inlet, and handle the incoming list in `function list(...args)`. As a related but indirect alternative, `this.patcher.box.boxtext` reads the calling box's full text — useful when the JS is the box itself and the args are its trailing tokens. (Source: Cycling '74 forum.)
+- **Jitter ↔ JS interop — `copymatrixtoarray` / `copyarraytomatrix` is the canonical bridge.** Send `jit_matrix <name>` to a JS inlet, then call `JitterMatrix("name").copymatrixtoarray(typedArray)` to read every cell into a typed array (`Float32Array`/`Int32Array`/`Uint8Array` matching the matrix `type`). Reverse with `copyarraytomatrix`. For sift / filter / sort over matrix cells, prefer JS `Array.sort` (TimSort, O(n log n)) over `jit.bsort` (bubble sort, O(n²)) — the per-cell JS round-trip is dwarfed by the algorithmic improvement on any matrix above ~hundreds of cells. (Source: Cycling '74 forum.)
+- **ESM in `node.script` (Max 8.6+)**: rename the file to `.mjs`, use ES module imports (`import Max from 'max-api'`), and recreate `__filename` / `__dirname` if needed via `import { fileURLToPath } from 'url'; const __filename = fileURLToPath(import.meta.url); const __dirname = path.dirname(__filename);`. Without these recreations, code that depends on CommonJS-only `__filename`/`__dirname` will throw `ReferenceError`. (Source: Cycling '74 forum.)
 
 #### Jitter Display
 
@@ -194,6 +197,8 @@ These automatically get `parameter_enable` set:
 ```
 
 Send a `jit_matrix` directly to `jit.world`'s inlet — no `jit.gl.layer`, `jit.gl.render`, or explicit render-trigger chain needed for simple matrix display. For GL compositing with `jit.gl.layer`, name the context: `jit.world ctx @floating 1` and `jit.gl.layer ctx`; they share the context automatically.
+
+**Custom `.jxs` shaders bind textures by `<param>` declaration order, NOT by name.** When a patch sends multiple `texture0`, `texture1`, ... messages to a `jit.gl.shader`, the shader binds them positionally to its `<param type="int" ...>` declarations in the order they appear in the JXS XML, not by matching `name=` attributes. Reordering or inserting a `<param>` shifts every subsequent texture binding silently. The diagnostic for "my second texture is showing up where the third should be" is almost always a `<param>`-order mismatch. (Source: Cycling '74 forum.)
 
 ## jit.cellblock Notes
 

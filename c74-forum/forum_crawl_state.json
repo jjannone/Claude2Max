@@ -13,6 +13,16 @@
     "scraped_at": "2026-05-01T17:43:04Z",
     "title": "4 x Looper"
   },
+  "/forums/a-chaos-library-updated": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-02-21T16:52:52.791Z",
+    "replies_last_modified_at": "2026-02-21T16:52:52.782Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "a-chaos library - updated"
+  },
   "/forums/accessing-patcher-arguments-with-javascript": {
     "attach_urls_seen": [],
     "category": "Javascript",
@@ -34,6 +44,154 @@
     "scraped_at": "2026-05-01T17:53:39Z",
     "title": "Accessing per-voice params inside polyphonic RNBO subpatcher"
   },
+  "/forums/accessing-recorded-buffer-in-rnbo-web-export-device": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-09-12T17:45:12.655Z",
+    "replies_last_modified_at": "2025-09-12T17:45:12.651Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Accessing recorded buffer in RNBO Web Export device"
+  },
+  "/forums/accumulators-and-modulos-in-loops-help": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-05T02:03:45.525Z",
+    "replies_last_modified_at": "2026-04-05T02:03:45.522Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Accumulators and modulos in loops help"
+  },
+  "/forums/add-image-texture-to-andrew-benson-jit-gl-bfg-example": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/549de18ab72a08f47d74acbf/2022-05-15T00:06:04Z/AndrewB_BFG-220514.maxpat",
+      "https://usercontent.cdn.cycling74.com/549de18ab72a08f47d74acbf/2022-05-15T00:06:13Z/andrew-220514-7.jxs"
+    ],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "9632596c35b55b8bc9e689d4489354e1",
+      "4abe2ac6f27759f48d8f17e9aac492f4"
+    ],
+    "modified_at": "2025-12-19T15:21:15.354Z",
+    "replies_last_modified_at": "2025-12-19T15:21:15.349Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Add image texture to Andrew Benson jit.gl.bfg example"
+  },
+  "/forums/adding-more-than-two-matrices": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-11-29T08:47:51.453Z",
+    "replies_last_modified_at": "2025-11-29T08:47:51.450Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Adding more than two matrices"
+  },
+  "/forums/additive-synthesis-with-gencodebox": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-10-26T12:43:43.439Z",
+    "replies_last_modified_at": "2025-10-26T12:43:43.437Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "additive synthesis with gen.codebox~"
+  },
+  "/forums/advice-to-distribute-standalone-app-with-externals": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-05-04T08:52:18.453Z",
+    "replies_last_modified_at": "2026-05-04T08:52:18.448Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Advice to distribute Standalone app with externals"
+  },
+  "/forums/aharker-descriptorsrt-reference": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-02-06T08:55:01.633Z",
+    "replies_last_modified_at": "2026-02-04T11:36:14.482Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "AHarker descriptorsrt~ reference"
+  },
+  "/forums/ai-integration-with-ableton-live-max-for-live-beta-testing-looking-for-friendly-users": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/5457d00f8b0925dd03980ec0/2026-05-01T09:02:17Z/2ad93d04-7113-4dca-a972-306d6d14cab1.pdf",
+      "https://usercontent.cdn.cycling74.com/5457d00f8b0925dd03980ec0/2026-05-01T09:02:49Z/23357a4c-f754-4302-8b9d-10b2d2a62912.pdf"
+    ],
+    "category": "Misc",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-05-01T09:02:50.888Z",
+    "replies_last_modified_at": "2026-05-01T09:02:50.884Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "AI integration with Ableton Live (Max for Live) - Beta Testing / looking for friendly users"
+  },
+  "/forums/ambient-spectral-process-and-generative-granular-system": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-23T01:49:51.056Z",
+    "replies_last_modified_at": "2026-04-23T01:48:11.098Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Ambient, spectral process and generative granular audio system"
+  },
+  "/forums/analog-video-input-m1-silicone-mac": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-12-30T09:52:33.218Z",
+    "replies_last_modified_at": "2025-12-30T09:52:33.212Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "analog video input M1 Silicone Mac"
+  },
+  "/forums/animation-of-a-logarithmic-scale": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "57bce5372e0cf590d56a6475eff09a6b",
+      "fd0aabbcedd4436cfcdaf18f4792ad37"
+    ],
+    "modified_at": "2026-02-18T07:50:44.583Z",
+    "replies_last_modified_at": "2026-02-18T07:50:44.579Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Animation of a logarithmic scale"
+  },
+  "/forums/ann-new-msp-external-rez-sample-accurate-looper-wbuilt-in-declickingoneshot-beta-testing-from-now-til-1202021": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/5463f0ce12d581fd44b362a0/2020-10-21T03:23:53Z/rez_v007.zip",
+      "https://usercontent.cdn.cycling74.com/5e8b5813138e94496a81966a/2021-11-15T22:22:23Z/oneshotreverse%20patch.maxpat",
+      "https://usercontent.cdn.cycling74.com/5463f0ce12d581fd44b362a0/2023-04-04T22:58:58Z/rez~_aplsili.zip"
+    ],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "b5d17e6c4e42df82289f4c35fd60fb1d"
+    ],
+    "modified_at": "2026-03-03T01:27:31.200Z",
+    "replies_last_modified_at": "2026-03-03T01:27:31.190Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "[MSP Extern:] rez~ - a sample-accurate looper - (update for apple sili)"
+  },
+  "/forums/are-liveapi-objects-instantiated-in-js-garbage-collected": {
+    "attach_urls_seen": [],
+    "category": "Max For Live",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-27T15:20:03.096Z",
+    "replies_last_modified_at": "2026-03-27T15:20:03.087Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Are LiveAPI objects instantiated in JS garbage collected ?"
+  },
   "/forums/async-4track-looper-for-move": {
     "attach_urls_seen": [
       "https://usercontent.cdn.cycling74.com/56e5c29b2d4fd1451f652a38/2026-04-03T14:46:57Z/4b3a87cf-2911-41c4-b648-30e570d80dd0.rnbopack"
@@ -45,6 +203,16 @@
     "replies_last_modified_at": "2026-04-10T15:16:47.381Z",
     "scraped_at": "2026-05-01T17:43:04Z",
     "title": "Async 4Track Looper for Move"
+  },
+  "/forums/audio-and-midi-over-usb-with-rnbo-on-raspberry-pi": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-01-31T21:42:56.321Z",
+    "replies_last_modified_at": "2026-01-31T21:42:56.315Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Audio and Midi over USB with RNBO on Raspberry Pi"
   },
   "/forums/automatically-initialize-midi-controllers-with-mapped-parameter-values": {
     "attach_urls_seen": [],
@@ -68,6 +236,49 @@
     "scraped_at": "2026-05-01T17:53:37Z",
     "title": "[sharing] AV Toolbox"
   },
+  "/forums/best-practice-for-js-file-organization-in-max-for-live-devices": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-04-07T13:51:23.473Z",
+    "replies_last_modified_at": "2025-03-15T10:22:30.468Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Best practice for JS file organization in Max for Live devices"
+  },
+  "/forums/best-practices-for-controlling-max-patches-from-node4max": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-04-15T13:13:12.954Z",
+    "replies_last_modified_at": "2025-04-15T13:13:12.951Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "best practices for controlling max patches from node4max"
+  },
+  "/forums/best-practices-to-handle-polyphonic-midi-output-in-node-for-max": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-06-03T15:23:09.444Z",
+    "replies_last_modified_at": "2025-05-05T13:02:24.222Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Best practices to handle polyphonic midi output in node for max?"
+  },
+  "/forums/blinking-text-cursor-in-jitter": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "bc5839ddb84f6d910ea3be93fc9fc3f9",
+      "09e31ed8f783c5e093527cc58dc24aec"
+    ],
+    "modified_at": "2025-11-27T12:07:55.468Z",
+    "replies_last_modified_at": "2025-11-27T12:07:55.464Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Blinking text cursor in jitter"
+  },
   "/forums/bluetooth-headset-to-max-msp-causes-crash": {
     "attach_urls_seen": [],
     "category": "MaxMSP",
@@ -78,6 +289,16 @@
     "replies_last_modified_at": null,
     "scraped_at": "2026-05-01T17:53:37Z",
     "title": "Bluetooth Headset to Max Msp causes Crash"
+  },
+  "/forums/buffer-title-changing-via-abstractions-in-a-gen-patch": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-12-28T15:36:16.151Z",
+    "replies_last_modified_at": "2025-12-28T15:36:16.147Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Buffer title changing via abstractions in a gen~ patch."
   },
   "/forums/buffering-issues-while-trying-to-create-a-physarum-simulation": {
     "attach_urls_seen": [
@@ -90,6 +311,18 @@
     "replies_last_modified_at": "2026-02-20T10:06:40.504Z",
     "scraped_at": "2026-05-01T17:42:47Z",
     "title": "Buffering issues while trying to create a physarum simulation"
+  },
+  "/forums/bug-function-alt-drag-to-set-curve": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "218b905fea8ea3fb1b5d2484ddb8c1d3"
+    ],
+    "modified_at": "2026-04-24T12:04:06.854Z",
+    "replies_last_modified_at": "2026-04-24T12:04:06.849Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "bug? function alt drag to set curve"
   },
   "/forums/calling-multiple-instances-of-one-movie": {
     "attach_urls_seen": [],
@@ -107,6 +340,62 @@
     "scraped_at": "2026-05-01T17:42:45Z",
     "title": "Calling multiple instances of one movie"
   },
+  "/forums/camera-lookat-not-working-correctly-rotation-values-not-resetting": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/5ae7eb40d6262479e4f0cd32/2026-05-03T20:57:53Z/95a24ff1-98e1-4417-ab3e-6b4ad13fa429.maxpat"
+    ],
+    "category": "Misc",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-05-04T13:09:56.093Z",
+    "replies_last_modified_at": "2026-05-04T13:09:56.089Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Camera lookat not working correctly - rotation values not resetting"
+  },
+  "/forums/can-you-hear-what-i-can-hear": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-07T10:55:38.832Z",
+    "replies_last_modified_at": "2026-03-07T10:55:38.825Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Can you hear what I can hear?"
+  },
+  "/forums/can-you-observ-if-a-device-is-selected-in-ableton": {
+    "attach_urls_seen": [],
+    "category": "Max For Live",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "6334d2290132daed1ff05417aeb2b262"
+    ],
+    "modified_at": "2026-03-29T10:26:07.933Z",
+    "replies_last_modified_at": "2026-03-29T10:26:07.932Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Can you observ if a device is selected in Ableton?"
+  },
+  "/forums/cant-create-buffers-in-array-in-js-v8": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-04-29T14:16:37.706Z",
+    "replies_last_modified_at": "2025-04-29T14:16:37.703Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Can't create buffers in array in JS (v8)"
+  },
+  "/forums/cant-define-patchingrect-of-object-when-creating-it-by-script": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "c25e883d555a9ce233af7ef1924327a5"
+    ],
+    "modified_at": "2025-05-13T14:00:49.768Z",
+    "replies_last_modified_at": "2025-05-13T14:00:49.765Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Can't define patching_rect of object when creating it by script"
+  },
   "/forums/change-jitcellblock-scrollbar-width": {
     "attach_urls_seen": [],
     "category": "Javascript",
@@ -118,6 +407,67 @@
     "replies_last_modified_at": "2025-10-30T09:45:04.676Z",
     "scraped_at": "2026-05-01T17:42:54Z",
     "title": "Change jit.cellblock scrollbar width"
+  },
+  "/forums/chaos-library": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/54af91dfb1a299ed73162861/2017-12-06T23:39:25Z/Lorenz.gendsp",
+      "https://usercontent.cdn.cycling74.com/54af91dfb1a299ed73162861/2017-12-06T23:39:25Z/NLDS_Lorenz.maxpat",
+      "https://usercontent.cdn.cycling74.com/58ed0535285705c15ccfbf33/2018-01-08T17:39:03Z/henonheiles.gendsp",
+      "https://usercontent.cdn.cycling74.com/58ed0535285705c15ccfbf33/2018-01-09T14:24:39Z/henonheilesGH.gendsp",
+      "https://usercontent.cdn.cycling74.com/58ed0535285705c15ccfbf33/2018-01-09T14:34:51Z/gen~.henonheiles05.maxpat",
+      "https://usercontent.cdn.cycling74.com/58ed0535285705c15ccfbf33/2018-01-10T11:00:06Z/henonheilesGH.gendsp",
+      "https://usercontent.cdn.cycling74.com/58ed0535285705c15ccfbf33/2018-01-10T11:01:42Z/henonheilesGH-02.maxpat",
+      "https://usercontent.cdn.cycling74.com/58ed0568285705c15ccfcc9b/2018-05-22T18:09:31Z/a-chaos-lib_helpfiles.zip",
+      "https://usercontent.cdn.cycling74.com/5499090bb72a08f47d74796b/2020-03-02T07:57:13Z/a-chaos-lib_win.zip"
+    ],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "a19077cbfa50f9f112c7e765db7e982d",
+      "e9ca446c051635842b52587d192e10ab",
+      "e33b49c195ce847b2cec2f0fc12aeaff"
+    ],
+    "modified_at": "2026-02-21T16:53:18.253Z",
+    "replies_last_modified_at": "2026-02-21T16:53:18.243Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Chaos Library?"
+  },
+  "/forums/clipping-noise-in-poly-object": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/58c19825137a734d614af536/2026-04-22T14:22:17Z/53d524c4-6fcf-4539-92c9-bcb60359b74e.maxpat",
+      "https://usercontent.cdn.cycling74.com/58c19825137a734d614af536/2026-04-22T14:24:36Z/9d9daeb6-f1df-4cbb-9b73-0decaa279656.maxpat",
+      "https://usercontent.cdn.cycling74.com/58c19825137a734d614af536/2026-04-22T14:25:35Z/bc93cdb2-139d-4a4d-a597-6964afcd4841.maxpat"
+    ],
+    "category": "Misc",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-28T23:41:58.186Z",
+    "replies_last_modified_at": "2026-04-28T23:41:58.184Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Clipping noise in poly~ object"
+  },
+  "/forums/colour-inversion-jitworld": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "4247eca350066ebf83cf8400d8250a44",
+      "0177f989a156ea777c0dbba4f476be96"
+    ],
+    "modified_at": "2026-01-05T14:33:20.467Z",
+    "replies_last_modified_at": "2026-01-05T14:33:20.463Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Colour inversion jit.world"
+  },
+  "/forums/confusion-around-accessing-arrays-as-dict-values": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-02-12T16:42:58.549Z",
+    "replies_last_modified_at": "2026-02-12T16:42:58.548Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Confusion around accessing arrays as dict values"
   },
   "/forums/connecting-nodejs-file-with-rnbo-inside-a-raspberrypi": {
     "attach_urls_seen": [
@@ -131,6 +481,122 @@
     "scraped_at": "2026-05-01T17:43:05Z",
     "title": "Connecting node.JS file with RNBO inside a raspberryPi"
   },
+  "/forums/copying-buffer-contents-causes-glitch-in-gen": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "874b5d61727cd0171078be8e53c95887"
+    ],
+    "modified_at": "2026-02-21T19:53:32.052Z",
+    "replies_last_modified_at": "2026-02-21T19:53:32.048Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Copying buffer contents causes glitch in gen~"
+  },
+  "/forums/count-characters-in-textedit-and-split-them": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "993571710a90319acba220fd08746f18"
+    ],
+    "modified_at": "2026-04-29T18:13:52.412Z",
+    "replies_last_modified_at": "2026-04-29T18:13:52.408Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Count characters in Textedit and split them?"
+  },
+  "/forums/counting-occurrences-of-numbers-in-a-list-in-rnbo": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "22132aa6844cdd895cdfa4759452d2ea",
+      "54d9e84eb3c587926ea5fb4e38c67714"
+    ],
+    "modified_at": "2025-12-10T17:59:49.842Z",
+    "replies_last_modified_at": "2025-12-10T17:59:49.841Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Counting occurrences of numbers in a list in RNBO"
+  },
+  "/forums/cpu-consumption-close-patch-vs-open-patch": {
+    "attach_urls_seen": [],
+    "category": "Max For Live",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-30T08:09:08.646Z",
+    "replies_last_modified_at": "2026-04-30T08:09:08.632Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "CPU Consumption. Close patch vs Open patch"
+  },
+  "/forums/create-a-bandpass-filter-with-slope-and-two-cutoff-frequencies": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "3a29a686806a1b0f9f8b45adb985f209"
+    ],
+    "modified_at": "2026-02-15T23:29:16.786Z",
+    "replies_last_modified_at": "2026-02-15T23:29:16.777Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "CREATE A BANDPASS FILTER WITH SLOPE, AND TWO CUTOFF FREQUENCIES"
+  },
+  "/forums/create-vcv-rack-and-4ms-metamodule-plugins-using-rnbo": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-01-21T18:47:22.833Z",
+    "replies_last_modified_at": "2026-01-21T18:47:22.829Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Create VCV Rack and 4ms MetaModule plugins using RNBO"
+  },
+  "/forums/databending-convert-raw-data-into-image": {
+    "attach_urls_seen": [
+      "https://1cyjknyddcx62agyb002-c74projects.s3.amazonaws.com/files/2016/08/raw_example.jpg",
+      "https://1cyjknyddcx62agyb002-c74projects.s3.amazonaws.com/files/2016/08/databendingtotex.maxpat.zip"
+    ],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2025-10-25T17:28:25.176Z",
+    "replies_last_modified_at": "2025-10-25T17:28:25.170Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Databending - Convert raw data into image"
+  },
+  "/forums/decrease-speed-of-messages-non-destructively": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "60d6e02d25496c8c7d5f68fc6f3831da"
+    ],
+    "modified_at": "2026-02-02T15:20:37.410Z",
+    "replies_last_modified_at": "2026-02-02T15:20:37.406Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "decrease speed of messages? (non destructively)"
+  },
+  "/forums/deepdarkspacespectral-grains-with-pfft": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-12-06T12:32:07.626Z",
+    "replies_last_modified_at": "2025-12-06T12:32:07.614Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "(Deep.Dark..Space...)spectral grains with pfft~"
+  },
+  "/forums/default-prototypes": {
+    "attach_urls_seen": [
+      "https://1cyjknyddcx62agyb002-c74projects.s3.amazonaws.com/files/2016/03/my_UI_starter.maxpat"
+    ],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-02-13T00:30:29.752Z",
+    "replies_last_modified_at": "2026-02-13T00:30:29.751Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Default Prototypes?"
+  },
   "/forums/default-user-after-installing-lightdm-raspberry-pi-imager": {
     "attach_urls_seen": [],
     "category": "RNBO",
@@ -141,6 +607,92 @@
     "replies_last_modified_at": null,
     "scraped_at": "2026-05-01T17:53:37Z",
     "title": "Default user after installing lightdm (Raspberry Pi Imager)?"
+  },
+  "/forums/delay-simply-doesnt-work": {
+    "attach_urls_seen": [],
+    "category": "Max For Live",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "bc2b0cfbd599c76747f5ea1ab389df6f"
+    ],
+    "modified_at": "2026-03-27T19:52:27.858Z",
+    "replies_last_modified_at": "2026-03-27T19:52:27.853Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Delay Simply Doesn't Work"
+  },
+  "/forums/dict-property-in-max-for-live": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "965fc22532098ff4bd0582ea7c708fe7"
+    ],
+    "modified_at": "2025-04-05T08:37:06.150Z",
+    "replies_last_modified_at": "2025-04-05T08:37:06.144Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Dict property in Max for Live"
+  },
+  "/forums/different-jitglmesh-in-one-screen": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "1952b33528fcb5f173c88c964ec14de7"
+    ],
+    "modified_at": "2025-09-14T23:06:29.315Z",
+    "replies_last_modified_at": "2025-09-14T23:06:29.313Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "different jit.gl.mesh in one screen"
+  },
+  "/forums/disintegration-loops-sound-system": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-15T07:09:34.991Z",
+    "replies_last_modified_at": "2026-03-15T07:09:34.983Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "\"disintegration loops\" sound system"
+  },
+  "/forums/does-rnbo-work-like": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-12-16T14:34:33.682Z",
+    "replies_last_modified_at": "2025-12-16T14:34:33.678Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Does RNBO work like the Organelle?"
+  },
+  "/forums/drifting-periodic-granular-ambient-system-with-recursion-modulations": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-09T08:32:27.159Z",
+    "replies_last_modified_at": "2026-04-09T08:32:27.152Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Drifting periodic granular ambient system with recursion modulations"
+  },
+  "/forums/drunk-issue": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-08-23T07:31:48.882Z",
+    "replies_last_modified_at": "2025-08-23T07:31:48.879Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Drunk issue ?"
+  },
+  "/forums/dsp-enablesdisables-in-quick-succession-on-project-load": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-24T11:40:45.041Z",
+    "replies_last_modified_at": "2026-04-24T11:40:45.029Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "DSP enables/disables in quick succession on project load"
   },
   "/forums/dynamic-metro-objects-for-multiple-video-players-in-js": {
     "attach_urls_seen": [
@@ -161,6 +713,16 @@
     "scraped_at": "2026-05-01T17:42:54Z",
     "title": "Dynamic metro objects for multiple video players in JS"
   },
+  "/forums/dynamic-renaming-of-lives-ui-items": {
+    "attach_urls_seen": [],
+    "category": "Max For Live",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-04T17:53:18.081Z",
+    "replies_last_modified_at": "2026-04-04T17:53:18.075Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Dynamic renaming of Live's ui items..?"
+  },
   "/forums/dynamically-naming-colls": {
     "attach_urls_seen": [],
     "category": "MaxMSP",
@@ -172,6 +734,18 @@
     "replies_last_modified_at": "2026-04-29T15:07:30.019Z",
     "scraped_at": "2026-05-01T17:42:58Z",
     "title": "Dynamically naming colls?"
+  },
+  "/forums/dynamics-controlling-slider-rslider-or-other": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "df77b0d28ec420348a9d683f57c7167a"
+    ],
+    "modified_at": "2026-04-29T13:47:01.173Z",
+    "replies_last_modified_at": "2026-04-29T13:47:01.171Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "dynamics controlling slider (rslider or other)"
   },
   "/forums/embed-javascript-in-m4l-object": {
     "attach_urls_seen": [],
@@ -194,6 +768,242 @@
     "scraped_at": "2026-05-01T17:53:37Z",
     "title": "Emulating  jit.gl.handle autorotate ?"
   },
+  "/forums/even-number-conundrum": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "4ad1b205ad693582b6f5a72a82b0025a"
+    ],
+    "modified_at": "2026-02-08T11:32:12.229Z",
+    "replies_last_modified_at": "2026-02-08T11:32:12.226Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "even number conundrum"
+  },
+  "/forums/export-seems-to-fail-on-sample-dependencies": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "aeaf4fdc85e36d7079c4678cad756d71"
+    ],
+    "modified_at": "2026-01-12T11:08:57.473Z",
+    "replies_last_modified_at": "2026-01-12T11:08:57.471Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Export seems to fail on sample dependencies"
+  },
+  "/forums/exporting-to-c-juiceaid-not-working": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-10-07T03:02:25.415Z",
+    "replies_last_modified_at": "2025-10-07T03:02:25.410Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Exporting to C++ Juiceaid not working?"
+  },
+  "/forums/face-detection-with-opencv-jweb-mediapipe-or-alternative": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/58c19825137a734d614af536/2025-07-14T15:09:29Z/a0085d80-3dbb-4f77-aa3f-c6c2e5da3977.maxpat"
+    ],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2025-09-20T19:52:30.508Z",
+    "replies_last_modified_at": "2025-09-20T19:52:30.504Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Face Detection with OpenCV, jweb-mediapipe or alternative"
+  },
+  "/forums/feature-request-subpatcher-invocation-from-within-codebox-genexpr": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-11T17:40:33.673Z",
+    "replies_last_modified_at": "2026-03-11T17:40:33.672Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Feature request: subpatcher invocation from within codebox / GenExpr"
+  },
+  "/forums/feature-request-supporting-external-editors-for-rnboscript": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-07T14:00:13.330Z",
+    "replies_last_modified_at": "2026-03-07T14:00:13.294Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Feature Request \u2013 Supporting External Editors for rnboscript"
+  },
+  "/forums/fft-hann-window-not-working-properly": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-11-12T05:34:38.641Z",
+    "replies_last_modified_at": "2025-11-12T05:34:38.629Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "fft hann window not working properly"
+  },
+  "/forums/fft-in-rnbo": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-01-15T19:55:07.644Z",
+    "replies_last_modified_at": "2026-01-15T19:55:07.638Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "FFT in RNBO"
+  },
+  "/forums/fft-in-rnbo-fft-part-7": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/610f98b27175a8725bd166e4/2025-11-25T15:02:03Z/9c39982f-7444-4a99-a9ca-bcf82bea6984.maxpat"
+    ],
+    "category": "RNBO",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2025-11-25T15:05:02.892Z",
+    "replies_last_modified_at": "2025-11-25T15:05:02.883Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "FFT in RNBO FFT Part 7"
+  },
+  "/forums/fist-subdiv-not-output-when-using-phasor-lock-1-and-transport-is-started-for-the-first-time": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/6193dfbf6b5f3303358bdd35/2025-10-25T12:48:03Z/60a6ee76-c93e-48ed-8395-69a160d1a3d5.amxd",
+      "https://usercontent.cdn.cycling74.com/69e4ed372ad0dcd4c46fe95a/2026-04-19T15:20:23Z/f97c4067-0187-4932-b8ab-05568f9b2d99.amxd"
+    ],
+    "category": "Max For Live",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "4e2866f0724e8278652cd8e1c2d34a08"
+    ],
+    "modified_at": "2026-04-24T20:33:10.341Z",
+    "replies_last_modified_at": "2026-04-24T20:33:10.339Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Fist subdiv not output when using phasor @lock 1 and transport is started for the first time"
+  },
+  "/forums/floating-patcher-with-windom-zoom-does-not-recall-zoom": {
+    "attach_urls_seen": [],
+    "category": "Max For Live",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-26T07:40:33.181Z",
+    "replies_last_modified_at": "2026-04-26T07:40:33.175Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Floating patcher with windom zoom does not recall zoom"
+  },
+  "/forums/forbidden-planet-example-max-vs-rnbo": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-02-02T23:19:15.432Z",
+    "replies_last_modified_at": "2026-02-02T23:19:15.431Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Forbidden Planet example, Max vs. RNBO"
+  },
+  "/forums/gen-in-bpatcher-and-gen-conflict": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "905cd53f56680feece0aadbcdd46c3e1"
+    ],
+    "modified_at": "2025-12-09T09:27:54.557Z",
+    "replies_last_modified_at": "2025-12-08T18:06:00.519Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Gen in bpatcher and Gen~ conflict?"
+  },
+  "/forums/gencodebox-tutorial-for-beginners": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-12-22T12:12:29.940Z",
+    "replies_last_modified_at": "2025-12-22T12:12:29.935Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Gen.codebox~ tutorial for beginners"
+  },
+  "/forums/generative-idm-style-sonic-texture-with-granular-resynthesis": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-28T09:28:03.563Z",
+    "replies_last_modified_at": "2026-04-28T09:28:03.556Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Generative IDM-style sonic texture with granular resynthesis"
+  },
+  "/forums/genexpr-elapsed-as-condition": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-11-22T07:11:46.248Z",
+    "replies_last_modified_at": "2025-11-22T07:11:46.233Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "GenExpr: elapsed as condition"
+  },
+  "/forums/get-playing-clip-name-also-in-arrangement": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/557dca6b1e00771a62042f78/2022-10-01T08:57:16Z/clip-name.amxd",
+      "https://usercontent.cdn.cycling74.com/65e8e5b1ddcf25343381d3a4/2024-03-07T08:42:33Z/Clip%20name%20window%20(audio%20device).amxd",
+      "https://usercontent.cdn.cycling74.com/5a231a460aed70b44af1dd74/2025-03-22T01:47:06Z/active_clip.maxpat",
+      "https://usercontent.cdn.cycling74.com/654c4843c440980b3eedd76a/2026-04-26T22:06:05Z/b0ca2e67-6cfe-4ef5-a6f3-5d748083b789.maxpat"
+    ],
+    "category": "Max For Live",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "abcea3d54eecfb4086ac3d5dbd2e67c9",
+      "788b3290be8a3194cdd61c93ac2a60a6",
+      "c55dec7c3e6b098bd5eb7929829acda4"
+    ],
+    "modified_at": "2026-04-27T06:11:00.375Z",
+    "replies_last_modified_at": "2026-04-27T06:11:00.372Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Get playing clip name. Also in arrangement."
+  },
+  "/forums/get-the-real-content-of-a-dict-if-there-is-lots-of-decimals": {
+    "attach_urls_seen": [],
+    "category": "Max For Live",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "283afd81304f3a737f7c6948d5fc8d07",
+      "235e64557781533603a5f3ff1fb7ece1"
+    ],
+    "modified_at": "2026-03-28T11:58:36.655Z",
+    "replies_last_modified_at": "2026-03-28T11:58:36.652Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "get the real content of a dict if there is lots of decimals"
+  },
+  "/forums/get-the-value-of-a-value": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-04-28T13:00:08.139Z",
+    "replies_last_modified_at": "2025-04-28T13:00:08.132Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Get the value of a [value]"
+  },
+  "/forums/getpath-of-a-clip-only-with-deferlow": {
+    "attach_urls_seen": [
+      "https://cycling74-web-assets.s3.amazonaws.com/bb-attachments/2862.getpathproblem.amxd.zip",
+      "https://cycling74-web-assets.s3.amazonaws.com/bb-attachments/2865.getpathproblem2.amxd.zip",
+      "https://cycling74-web-assets.s3.amazonaws.com/bb-attachments/2866.getpathproblemme.amxd",
+      "https://cycling74-web-assets.s3.amazonaws.com/bb-attachments/2880.getpathproblemtriggerdependency.amxd",
+      "https://1cyjknyddcx62agyb002-c74projects.s3.amazonaws.com/files/2014/10/chainref.png",
+      "https://1cyjknyddcx62agyb002-c74projects.s3.amazonaws.com/files/2014/10/deferref.png",
+      "https://1cyjknyddcx62agyb002-c74projects.s3.amazonaws.com/files/2014/10/deferlowref.maxpat",
+      "https://1cyjknyddcx62agyb002-c74projects.s3.amazonaws.com/files/2014/10/Screen-Shot-2014-10-22-at-8.06.25-PM.png"
+    ],
+    "category": "Max For Live",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-31T14:43:02.433Z",
+    "replies_last_modified_at": "2026-03-31T14:43:02.427Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "getpath of a clip only with deferlow?"
+  },
   "/forums/getting-a-handle-on-layering-in-jitter": {
     "attach_urls_seen": [
       "https://usercontent.cdn.cycling74.com/598672672ba646b40d14a522/2026-02-15T18:46:34Z/602d4074-b688-48d6-8fb8-39dfa7af735c.json"
@@ -212,6 +1022,46 @@
     "scraped_at": "2026-05-01T17:42:43Z",
     "title": "getting a handle on layering in Jitter"
   },
+  "/forums/glitchy-dreamy-and-ethereal-vocal-process": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-02-20T15:50:10.547Z",
+    "replies_last_modified_at": "2026-02-17T08:45:54.729Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Glitchy, Dreamy and Ethereal vocal process"
+  },
+  "/forums/glitchy-granular-drums-with-organic-textures": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-01-08T13:14:14.466Z",
+    "replies_last_modified_at": "2026-01-08T13:09:46.077Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Glitchy Granular Drums with Organic Textures"
+  },
+  "/forums/granular-resynthesis-makes-everything-sound-futuristic": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-02-11T01:58:06.914Z",
+    "replies_last_modified_at": "2026-02-11T01:58:06.906Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Granular Resynthesis Makes Everything Sound Futuristic"
+  },
+  "/forums/groove-sync-output-stops-working-over-night": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-11-24T15:16:01.631Z",
+    "replies_last_modified_at": "2025-11-24T15:16:01.630Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Groove~ sync output stops working over night"
+  },
   "/forums/guitar-hero-like-behaviour-in-jitter": {
     "attach_urls_seen": [
       "https://usercontent.cdn.cycling74.com/5fad77ca899d560ac6c630dc/2026-04-17T18:00:24Z/348ea5f1-349e-4478-b35d-33f45d51901a.zip",
@@ -227,6 +1077,50 @@
     "scraped_at": "2026-05-01T17:42:44Z",
     "title": "Guitar-hero like behaviour in jitter"
   },
+  "/forums/hap-codec-for-max-in-windows": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-10-18T18:21:05.285Z",
+    "replies_last_modified_at": "2025-10-18T18:21:05.284Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "HAP codec for Max in Windows?"
+  },
+  "/forums/help-give-me-a-line-break": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/617df3313cbf2d1585a06b17/2026-01-25T21:49:59Z/e703af59-3b93-4034-8044-f1654b432caf.maxpat"
+    ],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "45e36f01236c0d5825bd4bc14a68322b"
+    ],
+    "modified_at": "2026-01-25T22:14:55.223Z",
+    "replies_last_modified_at": "2026-01-25T22:14:55.219Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Help! Give me a line break!"
+  },
+  "/forums/help-rnbo-wont-launch-with-911-update-project-due-122": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-12-01T06:57:44.970Z",
+    "replies_last_modified_at": "2025-12-01T06:57:44.967Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "HELP! RNBO WON'T LAUNCH WITH 9.1.1 UPDATE. PROJECT DUE 12/2!"
+  },
+  "/forums/help-spectral-delay-theory": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-27T15:22:47.474Z",
+    "replies_last_modified_at": "2026-04-27T15:22:47.470Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Help spectral delay theory"
+  },
   "/forums/help-with-mute-function-for-step-sequencers": {
     "attach_urls_seen": [],
     "category": "MaxMSP",
@@ -238,6 +1132,85 @@
     "replies_last_modified_at": "2026-04-25T15:06:19.458Z",
     "scraped_at": "2026-05-01T17:42:59Z",
     "title": "help with mute function for step sequencers"
+  },
+  "/forums/helpfilesrefpages-for-jsuiv8ui-in-max-9-no-longer-accessible": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/56f418a6b24263ba03f83fed/2025-04-19T10:28:47Z/the-define-message.zip"
+    ],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2025-07-08T11:15:45.187Z",
+    "replies_last_modified_at": "2025-04-20T16:58:47.841Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "helpfiles/refpages for jsui/v8ui in Max 9 no longer accessible ?"
+  },
+  "/forums/high-cpu-usage-with-no-patches-running-due-to-node-on-windows": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-07-08T11:15:48.773Z",
+    "replies_last_modified_at": "2024-12-31T18:25:42.040Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "High CPU usage with no patches running due to Node on Windows"
+  },
+  "/forums/how-do-i-use-gen-objects-to-implement-the-features-in-codebox": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-05T13:25:17.230Z",
+    "replies_last_modified_at": "2026-04-05T13:25:17.227Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "How do I use Gen Objects to implement the features in CodeBox?"
+  },
+  "/forums/how-is-the-new-themes-stuff-supposed-to-work-in-max-86": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "d261d1cb15303338a8a18901092492cf"
+    ],
+    "modified_at": "2026-03-24T17:09:51.355Z",
+    "replies_last_modified_at": "2026-02-23T22:58:44.080Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "How is the new \"Themes\" stuff supposed to work in Max 8.6?"
+  },
+  "/forums/how-to-create-a-list-to-input-to-mcline-and-how-to-identify-the-cause-of-the-patch-crash": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/5c70ccc28160fc282690deb0/2026-04-23T21:20:33Z/bddab9c4-39d1-44a3-bd56-13af55e25b28.maxpat"
+    ],
+    "category": "Misc",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-23T21:20:49.915Z",
+    "replies_last_modified_at": "2026-04-23T21:20:49.906Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "How to create a list to input to mc.line~ and how to identify the cause of the patch crash."
+  },
+  "/forums/how-to-find-minimum-and-maximum-values-in-a-buffer": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "06accb86cd601cc6bb7b1dcbbd3b4d89",
+      "83ea30792b275b14c5459351edda6aa2"
+    ],
+    "modified_at": "2025-11-11T00:10:18.829Z",
+    "replies_last_modified_at": "2025-11-11T00:10:18.828Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "How to find minimum and maximum values in a buffer"
+  },
+  "/forums/how-to-force-the-use-of-the-correct-abstraction-after-unfreezing-a-device": {
+    "attach_urls_seen": [],
+    "category": "Max For Live",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-26T09:24:45.068Z",
+    "replies_last_modified_at": "2026-04-26T09:24:45.063Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "How to force the use of the correct abstraction after unfreezing a device?"
   },
   "/forums/how-to-get-two-instances-of-the-same-javascript-object-in-separate-top-level-patchers-communicating": {
     "attach_urls_seen": [
@@ -256,6 +1229,26 @@
     "scraped_at": "2026-05-01T17:42:53Z",
     "title": "How to get two instances of \"the same\" javascript object in separate top level patchers communicating"
   },
+  "/forums/how-to-input-symbols-in-jsv8": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2024-12-29T09:03:30.729Z",
+    "replies_last_modified_at": "2024-12-29T09:03:30.722Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "How to input symbols in JSv8?"
+  },
+  "/forums/how-to-make-custom-interactive-objects-with-htmlcssjs": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-04-14T22:35:59.597Z",
+    "replies_last_modified_at": "2025-04-14T22:35:59.593Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "how to make custom interactive objects with html/css/js?"
+  },
   "/forums/how-to-mirror-an-image-with-jitglpix": {
     "attach_urls_seen": [],
     "category": "Jitter",
@@ -269,6 +1262,126 @@
     "scraped_at": "2026-05-01T17:42:44Z",
     "title": "how to mirror an image with jit.gl.pix ?"
   },
+  "/forums/how-to-prevent-pops-and-clicks-when-playing-a-synth": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-25T01:50:12.176Z",
+    "replies_last_modified_at": "2026-04-25T01:50:12.162Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "How to prevent pops and clicks when playing a synth?"
+  },
+  "/forums/how-to-re-create-a-ringmod-sidechain-with-look-ahead-and-attack": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-02-15T17:35:18.155Z",
+    "replies_last_modified_at": "2026-02-15T17:35:18.153Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "How to re-create a \"ringmod sidechain\"  with look-ahead and attack?"
+  },
+  "/forums/how-to-send-midi-data-directly-to-max-from-nodescript": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-05-14T14:51:41.778Z",
+    "replies_last_modified_at": "2025-05-14T14:51:41.774Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "How to send midi data directly to max from node.script?"
+  },
+  "/forums/how-to-store-a-list-directly-into-a-rnbo-data-object-ist-that-possible": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-12-10T11:20:04.545Z",
+    "replies_last_modified_at": "2025-12-10T11:20:04.531Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "How to store a list directly into a RNBO data object? ist that possible"
+  },
+  "/forums/how-to-turn-off-max-console-window-in-max-for-live": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/55772f46159cb3a443ede048/2026-03-27T19:57:49Z/0cb923d9-9b95-42e6-9147-c3b871f695c0.amxd"
+    ],
+    "category": "Max For Live",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-28T09:12:20.413Z",
+    "replies_last_modified_at": "2026-03-28T09:12:20.411Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "How to turn OFF max console window in Max for Live?"
+  },
+  "/forums/how-to-use-getnamed-to-seek-in-subpatchers-not-only-in-main-patcher": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "aec2eabbb5245f24281a38d831a0428f"
+    ],
+    "modified_at": "2025-04-28T20:21:16.900Z",
+    "replies_last_modified_at": "2025-04-28T20:21:16.897Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "How to use getnamed() to seek in subpatchers, not only in main patcher?"
+  },
+  "/forums/hslrgb-conversion": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "828507234048c195e678d9ca8bbde8f7"
+    ],
+    "modified_at": "2025-09-11T17:12:25.917Z",
+    "replies_last_modified_at": "2025-09-11T17:12:25.912Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "HSL/RGB conversion"
+  },
+  "/forums/i-changed-my-documents-folder-location-and-now-max-is-angry": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-29T21:02:12.249Z",
+    "replies_last_modified_at": "2026-04-29T21:02:12.242Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "I changed my documents folder location, and now max is angry"
+  },
+  "/forums/im-stuck-how-to-send-parameter-ids-from-zl-to-livemodulate": {
+    "attach_urls_seen": [],
+    "category": "Max For Live",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "ff826acb1a414eac6154216c13b0c004"
+    ],
+    "modified_at": "2026-04-29T08:54:02.516Z",
+    "replies_last_modified_at": "2026-04-29T08:54:02.506Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Help! I'm stuck. How to send parameter IDs from [zl] to [live.modulate]?"
+  },
+  "/forums/implementing-a-graph-floodfill-algorithm-with-dynamically-changing-jitmatrix-and-dictionary-using-v8": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2024-12-17T21:42:16.926Z",
+    "replies_last_modified_at": "2024-12-16T22:22:40.011Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "implementing dynamically changing ramp (like line/line~) in v8"
+  },
+  "/forums/integrating-grooveduck-or-zero-crossings-into-phasor-based-beat-slicer": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/6181e4e33cbf2d1585a071c1/2026-03-14T18:14:58Z/44477fc4-9be7-4fc3-8c85-935f12c5081d.maxpat"
+    ],
+    "category": "Gen",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-17T16:29:49.283Z",
+    "replies_last_modified_at": "2026-03-17T16:29:49.280Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "integrating grooveduck or zero-crossings into phasor-based beat slicer"
+  },
   "/forums/intercepting-objects-output-with-javascript-possible": {
     "attach_urls_seen": [],
     "category": "Javascript",
@@ -280,6 +1393,73 @@
     "scraped_at": "2026-05-01T17:53:37Z",
     "title": "Intercepting object's output with Javascript: possible?"
   },
+  "/forums/intermittent-frame-drops-with-jitworld-max-8-max-9-on-any-computer": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "f11c287efb7dce59332f51b5dc363a0b"
+    ],
+    "modified_at": "2025-12-31T00:16:16.122Z",
+    "replies_last_modified_at": "2025-12-31T00:16:16.115Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Intermittent Frame Drops with jit.world (Max 8 / Max 9) on any computer"
+  },
+  "/forums/introducing-the-jitlygia-package": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-10-30T15:51:47.161Z",
+    "replies_last_modified_at": "2025-10-30T15:51:47.159Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Introducing the JitLygia Package"
+  },
+  "/forums/is-it-feasible-to-make-a-good-ev-engine-sound-generation-with-max-rnbo": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-01-16T17:00:25.041Z",
+    "replies_last_modified_at": "2026-01-14T23:02:50.596Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Is it feasible to make a good EV engine sound generation with MAX / RNBO?"
+  },
+  "/forums/is-it-possible-to-cross-fade-between-two-jitglmodels": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "102981f0d1f36b88db91bc41e25293cd",
+      "56788fe7a3e2b31ff553b68ecff87ab4",
+      "2604f805d98d66607cc76dda3b724a2d",
+      "46d7839e0f12ad2af0b03f1cd881413e"
+    ],
+    "modified_at": "2025-11-12T18:08:41.400Z",
+    "replies_last_modified_at": "2025-11-12T18:08:41.395Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "is it possible to cross fade between two jit.gl.models?"
+  },
+  "/forums/is-it-possible-to-rename-a-v8-with-embedded-code-without-having-the-code-deleted": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-01-03T10:49:29.621Z",
+    "replies_last_modified_at": "2025-01-03T10:49:29.614Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Is it possible to rename a V8 with embedded code without having the code deleted?"
+  },
+  "/forums/is-the-rnbo-runner-141-for-the-raspberry-pi-zero-2-w-limited-to-48khz": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-09-29T18:32:38.989Z",
+    "replies_last_modified_at": "2025-09-29T18:32:38.987Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Is the RNBO runner 1.4.1 for the Raspberry PI Zero 2 W limited to 48kHz?"
+  },
   "/forums/is-there-a-mgraphics-getpixel-equivalent": {
     "attach_urls_seen": [],
     "category": "Javascript",
@@ -290,6 +1470,88 @@
     "replies_last_modified_at": null,
     "scraped_at": "2026-05-01T17:53:37Z",
     "title": "Is there a MGraphics getpixel equivalent?"
+  },
+  "/forums/is-there-a-way-to-import-ply-point-clouds-in-jitter": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/532091d1782ba55b54131523/2025-11-11T17:01:11Z/ab122fed-69ee-4eed-a5c0-24ad2aac407d.zip",
+      "https://usercontent.cdn.cycling74.com/542a700a38b401d6799abd8d/2025-11-11T17:55:23Z/2bfc7f4f-f13b-4bdf-8c14-c9fdb2c809aa.zip"
+    ],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2025-11-11T19:43:34.919Z",
+    "replies_last_modified_at": "2025-11-11T19:43:34.911Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "is there a way to import PLY point clouds in jitter?"
+  },
+  "/forums/is-there-an-easier-way-to-get-a-buffers-sampling-rate-in-js": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-05-05T07:24:16.571Z",
+    "replies_last_modified_at": "2025-05-05T07:24:16.567Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Is there an easier way to get a buffer's sampling rate in JS?"
+  },
+  "/forums/is-there-any-way-to-get-all-selected-clips-in-js": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-01-28T10:47:55.110Z",
+    "replies_last_modified_at": "2025-01-27T21:54:18.902Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Is there any way to get all selected clips in JS?"
+  },
+  "/forums/issue-compiling-new-rnbo-patches-in-hise-maincpp-build-failed-old-patches-work-fine": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-01-27T00:12:09.144Z",
+    "replies_last_modified_at": "2026-01-27T00:12:09.134Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Issue compiling new RNBO patches in Hise (Main.cpp Build Failed) - Old patches work fine"
+  },
+  "/forums/issues-with-polyphonic-synth": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/68c8910fcdb18b4e397d2bbd/2026-03-13T15:15:47Z/f363e874-bde9-4ff6-8b4c-ac2326453d32.maxpat"
+    ],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-14T13:30:20.459Z",
+    "replies_last_modified_at": "2026-03-13T15:15:52.078Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "FM Synthesis using mc.poly"
+  },
+  "/forums/its-ok-to-share-twinpusher": {
+    "attach_urls_seen": [
+      "https://cycling74-web-assets.s3.amazonaws.com/bb-attachments/725.TwinPusher.maxpat.zip",
+      "https://cycling74-web-assets.s3.amazonaws.com/bb-attachments/726.Archive.zip"
+    ],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-13T13:55:37.508Z",
+    "replies_last_modified_at": "2026-03-13T13:55:37.504Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "[It's OK to share] TwinPusher"
+  },
+  "/forums/jasch-objects-v-0-7-for-max-7-released-3264bit-mac-os-x": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/54632bfcbdbb99652da7b1c3/2026-01-31T10:45:08Z/828bf54d-18bf-4913-a100-e4fa7ccc1c29.zip"
+    ],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "3463254b9c5d11879c0ea795c1023a80"
+    ],
+    "modified_at": "2026-01-31T10:45:27.924Z",
+    "replies_last_modified_at": "2026-01-31T10:45:27.923Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "jasch objects v 0.7 for Max 7 released - 32/64bit Mac OS X"
   },
   "/forums/javascript-and-defineattribute-how-to-use-enumindex": {
     "attach_urls_seen": [],
@@ -350,6 +1612,71 @@
     "scraped_at": "2026-05-01T17:53:37Z",
     "title": "jit.fft as a sound filter"
   },
+  "/forums/jitfxpatternjs": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-11-28T13:24:29.539Z",
+    "replies_last_modified_at": "2025-11-28T13:24:29.536Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Jit.fx.pattern.js"
+  },
+  "/forums/jitgl-row-and-column-scrambler": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "805410789ba038733b920b922c694ad5",
+      "73ca425baedb3b2ee675c382fee6fd04"
+    ],
+    "modified_at": "2025-09-24T23:03:45.294Z",
+    "replies_last_modified_at": "2025-09-24T23:03:45.293Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Jit.gl. row and column scrambler."
+  },
+  "/forums/jitglmesh-using-nonagon-face-selection": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "fbb9b84ef477d68fbfd1b85a29ae685e"
+    ],
+    "modified_at": "2025-10-04T21:00:21.297Z",
+    "replies_last_modified_at": "2025-10-04T21:00:21.289Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "jit.gl.mesh, using nonagon face selection"
+  },
+  "/forums/jitglpbr-heightmap-parallax-upgrades-in-max-9": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-11-06T15:32:18.992Z",
+    "replies_last_modified_at": "2025-11-06T15:32:18.989Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "jit.gl.pbr Heightmap (parallax) upgrades in Max 9 ?"
+  },
+  "/forums/jitglshader-compilation-vs-binding-and-autowatch-behavior": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-09-27T11:00:44.353Z",
+    "replies_last_modified_at": "2025-09-27T11:00:44.349Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "jit.gl.shader \u2014 compilation vs. binding, and autowatch behavior"
+  },
+  "/forums/jitgltextmult-broken": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-23T15:20:39.336Z",
+    "replies_last_modified_at": "2026-04-23T15:20:39.321Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "jit.gl.textmult broken"
+  },
   "/forums/jitmo-for-max-7": {
     "attach_urls_seen": [],
     "category": "Jitter",
@@ -360,6 +1687,59 @@
     "replies_last_modified_at": null,
     "scraped_at": "2026-05-01T17:53:37Z",
     "title": "Jit.mo for Max 7"
+  },
+  "/forums/jitphys-non-oscillating-spring-rubber-band-simulation": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-01-07T16:54:55.262Z",
+    "replies_last_modified_at": "2026-01-07T16:54:55.256Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "jit.phys non-oscillating spring / rubber band simulation"
+  },
+  "/forums/jitpwindow-doesnt-understand-float": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "ec26c5e89c2e980f6c6fb36526c931a0"
+    ],
+    "modified_at": "2026-04-24T12:12:23.634Z",
+    "replies_last_modified_at": "2026-04-24T12:12:23.629Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "jit.pwindow: doesn't understand \"float\""
+  },
+  "/forums/jitter-edit-cornerpin-from-pwindow": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/54afcab1af79d7ec1df8edcc/2025-11-13T14:30:42Z/0754663a-f893-4b0f-ad38-5962f573a10b.maxpat",
+      "https://usercontent.cdn.cycling74.com/5456e45b8b0925dd03980c37/2025-11-13T18:20:13Z/2914d4ec-787e-41ba-8aa2-c551354b0c9b.maxpat",
+      "https://usercontent.cdn.cycling74.com/54afcab1af79d7ec1df8edcc/2025-11-14T08:30:14Z/2560e7f2-1631-41a7-ac65-e391957fa7ed.maxpat"
+    ],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "a0ae4818f3b1775a994b2e68970bb832",
+      "a627f88a5f88f004eeb5089b63939678",
+      "18d0f2851353e76ff23083024ee7662b"
+    ],
+    "modified_at": "2025-11-25T12:17:15.225Z",
+    "replies_last_modified_at": "2025-11-25T12:17:15.220Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Jitter : edit cornerpin from pwindow ?"
+  },
+  "/forums/jitter-effect-question": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "06e5630aad3d09e511e14cf4c0e9f9ec",
+      "a28e196d77db62b49b0fc56a7ace1f14"
+    ],
+    "modified_at": "2025-10-01T06:32:18.194Z",
+    "replies_last_modified_at": "2025-10-01T06:32:18.190Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "jitter effect question"
   },
   "/forums/jitter-fx-slab-router": {
     "attach_urls_seen": [
@@ -372,6 +1752,86 @@
     "replies_last_modified_at": "2026-02-12T01:26:42.811Z",
     "scraped_at": "2026-05-01T17:42:46Z",
     "title": "Jitter FX / Slab router"
+  },
+  "/forums/jitter-geometry-vs-jitter-c-external": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/58c19825137a734d614af536/2025-12-03T14:44:21Z/944dff0a-9f16-478b-9b44-fc56a803e0cc.maxpat"
+    ],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "4173de9a8c0cec9e384541f05295c8f6"
+    ],
+    "modified_at": "2025-12-05T20:35:49.239Z",
+    "replies_last_modified_at": "2025-12-05T20:35:49.237Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Jitter Geometry vs. Jitter C External"
+  },
+  "/forums/jitter-javascript-examples-of-using-jitter3dutilsinterface-in-v8": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2024-12-17T22:31:17.901Z",
+    "replies_last_modified_at": "2024-12-17T22:31:17.895Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "[Jitter, Javascript] Examples of jitter geometry in v8 or just using Jitter3dUtilsInterface in v8?"
+  },
+  "/forums/jitter-javascript-tracking-down-the-position-of-gridshape-being-transferred-by-jitanimnode-in-js-api-async-function": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2024-12-19T16:37:10.607Z",
+    "replies_last_modified_at": "2024-12-19T15:37:59.740Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "[Jitter, JavaScript] Tracking down the position of gridshape being transferred by jit.anim.node in js api async function"
+  },
+  "/forums/jitter-javascript-tracking-down-the-position-of-gridshape-being-transferred-by-jitanimnode-in-js-api-async-function-1": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2024-12-28T11:38:31.295Z",
+    "replies_last_modified_at": "2024-12-28T11:38:31.286Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "[Jitter, JavaScript] Tracking down the position of gridshape being transferred by jit.anim.node in js api async function"
+  },
+  "/forums/jitter-js-api-the-issue-with-jitanimnode-worldpos-and-if-statement": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/6280a6e7a8dcef597c8669fc/2025-01-21T11:55:02Z/TestingAnimation.maxpat",
+      "https://usercontent.cdn.cycling74.com/6280a6e7a8dcef597c8669fc/2025-01-21T11:55:02Z/testAnimation.js"
+    ],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "a3edbfceda9d5c4f09788434a4b19bf9",
+      "f5826b718be399958b724874cd6ace8b"
+    ],
+    "modified_at": "2025-07-08T11:15:45.197Z",
+    "replies_last_modified_at": "2025-01-21T13:16:07.664Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "jitter, js api: The issue with jit.anim.node worldpos and if statement"
+  },
+  "/forums/jitter-noob-help": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-17T16:55:42.880Z",
+    "replies_last_modified_at": "2025-11-07T16:39:02.059Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "jitter noob help"
+  },
+  "/forums/jitui-for-js-is-crashing-my-computer": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-04-20T23:33:34.007Z",
+    "replies_last_modified_at": "2025-04-20T23:33:34.001Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "jit.ui for js is crashing my computer"
   },
   "/forums/js-arrays-when-posted-directly-to-max-window": {
     "attach_urls_seen": [],
@@ -386,6 +1846,95 @@
     "scraped_at": "2026-05-01T17:42:54Z",
     "title": "JS arrays when posted directly to Max window"
   },
+  "/forums/js-jitter-unexpected-behavior-when-executing-many-async-processes-with-jitgl-objects-in-v8": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/6280a6e7a8dcef597c8669fc/2025-01-23T20:55:38Z/graph.maxpat"
+    ],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2025-07-08T11:15:48.857Z",
+    "replies_last_modified_at": "2025-01-23T20:56:57.278Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "[JS, Jitter] Unexpected behavior when executing many async processes with jit.gl objects in v8"
+  },
+  "/forums/js-setting-maxobjlistener-crashes-max-94": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "95f33384d5234366e0d00e7006bcf34a"
+    ],
+    "modified_at": "2025-02-18T09:00:31.603Z",
+    "replies_last_modified_at": "2025-02-18T09:00:31.601Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "JS Setting MaxObjlistener crashes Max 9.4"
+  },
+  "/forums/jsarguments-how-to-set-without-quotes": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2024-12-31T09:20:53.916Z",
+    "replies_last_modified_at": "2024-12-31T09:20:53.906Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "jsarguments, how to set without quotes ?"
+  },
+  "/forums/jweb-windowmaxsetdict-doesnt-write-json-data-to-dict": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-04-15T13:05:24.531Z",
+    "replies_last_modified_at": "2025-04-15T13:05:24.528Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "[jweb] window.max.setDict doesn't write JSON data  to dict"
+  },
+  "/forums/kick-off-the-year-with-a-dark-evolving-drone-sound": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-01-01T10:11:24.855Z",
+    "replies_last_modified_at": "2026-01-01T10:11:24.848Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Kick off the year with a Dark Evolving drone sound"
+  },
+  "/forums/livedrop-data-wont-populate-pattrstorage-slots-max-911": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "0bc9e91bcea049aa24fbd1657c79be11",
+      "5e0ff241f706da922f77cdc674cea58c"
+    ],
+    "modified_at": "2026-05-02T10:44:20.757Z",
+    "replies_last_modified_at": "2026-05-02T10:44:20.754Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "live.drop data won't populate pattrstorage slots - Max 9.1.1"
+  },
+  "/forums/logic-style-learn-parameter-button": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-08-16T11:26:40.811Z",
+    "replies_last_modified_at": "2025-08-16T11:26:40.805Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Logic style 'Learn Parameter' button?"
+  },
+  "/forums/lom-tracks-that-are-in-group-finder": {
+    "attach_urls_seen": [],
+    "category": "Max For Live",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "0bfaee9a8bfdd0254e052a1e82247e91"
+    ],
+    "modified_at": "2026-03-28T01:13:02.244Z",
+    "replies_last_modified_at": "2026-03-28T01:13:02.240Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "LOM tracks that are in group finder"
+  },
   "/forums/long-process-and-progress-indicator": {
     "attach_urls_seen": [],
     "category": "MaxMSP",
@@ -396,6 +1945,28 @@
     "replies_last_modified_at": null,
     "scraped_at": "2026-05-01T17:53:37Z",
     "title": "long Javascript process and progress indicator"
+  },
+  "/forums/looking-for-a-precompiled-jitter-library-for-windows": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-12-15T18:54:15.539Z",
+    "replies_last_modified_at": "2025-12-15T18:54:15.536Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Looking for a precompiled Jitter library for Windows."
+  },
+  "/forums/m4l-generator-setting-selection-livemiditoolout": {
+    "attach_urls_seen": [],
+    "category": "Max For Live",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "4f70a754149eb68434fea9f77c116e2f"
+    ],
+    "modified_at": "2026-03-28T13:11:27.942Z",
+    "replies_last_modified_at": "2026-03-28T13:11:27.939Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "M4L Generator setting selection (live.miditool.out)"
   },
   "/forums/making-alpha-channel-work-in-jitglmultiple-while-lightenable-is-on": {
     "attach_urls_seen": [
@@ -413,6 +1984,50 @@
     "scraped_at": "2026-05-01T17:42:46Z",
     "title": "Making Alpha channel work in jit.gl.multiple while light_enable is on"
   },
+  "/forums/mass-spring-damper-model": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/532091d1782ba55b54131523/2021-08-30T15:36:52Z/jit.phys-sliders.maxpat",
+      "https://usercontent.cdn.cycling74.com/55ea1585511e463e531296f9/2021-09-11T19:28:39Z/16%20faders%20spring%20mass.mov",
+      "https://usercontent.cdn.cycling74.com/55ea1585511e463e531296f9/2021-09-14T08:21:52Z/mass%20spring%20trigger.mov"
+    ],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "1f77d21be8594bf94b920486c4a187db",
+      "7f6d61a9f95f410e80f9125fceb053ec",
+      "66ba38757910ffdf0ef619574901a527"
+    ],
+    "modified_at": "2026-03-19T22:22:12.200Z",
+    "replies_last_modified_at": "2026-03-19T22:22:12.195Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Mass-Spring-Damper Model"
+  },
+  "/forums/massive-sound-wall-with-granular-reconstruction": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-01-19T01:59:51.088Z",
+    "replies_last_modified_at": "2026-01-19T01:59:51.080Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "MASSIVE sound wall with GRANULAR RECONSTRUCTION"
+  },
+  "/forums/matrix-greater-gen-greater-matrix-feedback-loop-particle-trails-continuous-lines": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/5467f7a4aafdf1577750fb08/2025-11-25T16:25:22Z/e7567566-a565-438f-b327-2a8da25ba9c2.maxpat",
+      "https://usercontent.cdn.cycling74.com/5467f7a4aafdf1577750fb08/2025-12-13T19:00:10Z/50eb6611-f5b4-4e2f-a866-1ce1a3f4eb3f.maxpat"
+    ],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "f95fd0a24fddb01ed0d42f87b496f9b2",
+      "a2865b6906a7719eef86f59760d38db4"
+    ],
+    "modified_at": "2025-12-13T19:01:09.664Z",
+    "replies_last_modified_at": "2025-12-13T19:01:09.658Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Matrix > Gen > Matrix Feedback Loop: Particle Trails / Continuous Lines"
+  },
   "/forums/matrix-row-miss-match": {
     "attach_urls_seen": [],
     "category": "Jitter",
@@ -426,6 +2041,93 @@
     "replies_last_modified_at": "2026-03-28T15:57:59.784Z",
     "scraped_at": "2026-05-01T17:42:46Z",
     "title": "Matrix row miss match"
+  },
+  "/forums/max-8-3-jitter-features": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/54a7d323c282fe440243d14a/2025-11-07T10:54:42Z/a22ab3ff-568b-406a-b0b7-a36cf55366c0.maxpat"
+    ],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "4cb76a175e314f0a836a061dd5402d84",
+      "c74ff4581df0f862dc3d1d9ac93761ad"
+    ],
+    "modified_at": "2025-11-07T10:54:52.611Z",
+    "replies_last_modified_at": "2025-11-07T10:54:52.605Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Max 8.3 Jitter Features"
+  },
+  "/forums/max-9-parameterlistener-and-maxobjlistener": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "47da3233b6c565faf4dd3f2979a8a42b"
+    ],
+    "modified_at": "2025-01-01T20:08:46.218Z",
+    "replies_last_modified_at": "2025-01-01T20:08:46.209Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "max 9, ParameterListener and MaxobjListener"
+  },
+  "/forums/max-9-tools-for-animating-drawings": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-10-08T15:50:13.297Z",
+    "replies_last_modified_at": "2025-10-08T15:50:13.293Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Max 9 tools for animating drawings"
+  },
+  "/forums/max-913-rnbo-143-released": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-07T15:48:37.368Z",
+    "replies_last_modified_at": "2026-03-10T16:21:25.504Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Max 9.1.3 / RNBO 1.4.3 Released"
+  },
+  "/forums/max-914-released": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-07T17:03:17.672Z",
+    "replies_last_modified_at": "2026-04-07T17:03:17.666Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Max 9.1.4 Released"
+  },
+  "/forums/max-and-large-language-models-generative-ai-gpt-etc": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-07T19:41:12.739Z",
+    "replies_last_modified_at": "2026-04-07T19:41:12.732Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Max and Large Language Models / Generative AI / GPT / etc...."
+  },
+  "/forums/max-crashes-3": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-05-04T08:32:58.247Z",
+    "replies_last_modified_at": "2026-05-04T08:32:58.243Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Max Crashing"
+  },
+  "/forums/max-gen-bit-operator": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-19T15:39:16.195Z",
+    "replies_last_modified_at": "2026-04-19T15:39:16.191Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Max Gen bitwise operator"
   },
   "/forums/max-on-linux": {
     "attach_urls_seen": [
@@ -463,6 +2165,16 @@
     "scraped_at": "2026-05-01T17:53:39Z",
     "title": "MaxOrch - a front end for computer-assisted orchestration tool Orchidea"
   },
+  "/forums/maxpy-studio-generate-max-for-live-devices-from-prompts": {
+    "attach_urls_seen": [],
+    "category": "Max For Live",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-25T19:42:18.211Z",
+    "replies_last_modified_at": "2026-04-25T19:19:18.760Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Web platform for generating Max for Live devices from prompts"
+  },
   "/forums/mc-waveform": {
     "attach_urls_seen": [
       "https://usercontent.cdn.cycling74.com/547cda153cbd30117cb698a9/2020-01-22T21:06:20Z/mcwaveform.zip"
@@ -474,6 +2186,16 @@
     "replies_last_modified_at": "2025-11-26T13:04:50.040Z",
     "scraped_at": "2026-05-01T17:42:54Z",
     "title": "mc.waveform"
+  },
+  "/forums/measure-elapsed-time": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-12-10T23:09:29.859Z",
+    "replies_last_modified_at": "2025-12-10T23:07:51.201Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Daisy Seed + gen~: LED brightness from button hold (no Codebox)"
   },
   "/forums/measuring-parentpatchers-scrolling-drift": {
     "attach_urls_seen": [],
@@ -497,6 +2219,28 @@
     "scraped_at": "2026-05-01T17:53:37Z",
     "title": "MGraphics: jsvg_get_size behavior has changed WHY ?"
   },
+  "/forums/midi-file-parsing-javascript-help": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-03-31T08:28:36.408Z",
+    "replies_last_modified_at": "2025-03-29T02:20:48.404Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "MIDI file parsing - Javascript help"
+  },
+  "/forums/midi-trigger-audio": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "cba4110ae8e58fc4cbe475d52f3237bf"
+    ],
+    "modified_at": "2026-04-28T11:21:14.241Z",
+    "replies_last_modified_at": "2026-04-28T11:21:14.230Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Midi Trigger Audio"
+  },
   "/forums/migrating-to-max-9-how-to-find-all-js-max-objects": {
     "attach_urls_seen": [],
     "category": "Javascript",
@@ -507,6 +2251,44 @@
     "replies_last_modified_at": null,
     "scraped_at": "2026-05-01T17:53:37Z",
     "title": "Migrating to Max 9 - how to find all js max objects"
+  },
+  "/forums/minimum-system-requirements-for-jitter-patches": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-12-10T14:07:44.309Z",
+    "replies_last_modified_at": "2025-12-10T14:07:44.306Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "minimum System Requirements for Jitter patches"
+  },
+  "/forums/more-than-one-parameter-in-a-jsuiv8ui": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "8ca3924a70a96ad4423468319b14d18f",
+      "b43258cc444307b189b2e91f5189566d",
+      "6ba0308bd7544481bcddfe8d58ccf1ff",
+      "474df43716242625b7e47837778c127a",
+      "1b412e614a39918eced6f487cd0a324d"
+    ],
+    "modified_at": "2025-01-27T13:46:10.197Z",
+    "replies_last_modified_at": "2025-01-27T13:46:10.186Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "more than one parameter in a jsui/v8ui ?"
+  },
+  "/forums/motion-detection-to-trigger-samples": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "c123c133fda3d7fb7f85ccee1bf2ee0e"
+    ],
+    "modified_at": "2025-10-19T14:33:25.028Z",
+    "replies_last_modified_at": "2025-10-19T14:33:25.025Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Motion detection to trigger samples"
   },
   "/forums/move-drawing-toy-sketchy-etcher": {
     "attach_urls_seen": [
@@ -521,6 +2303,16 @@
     "scraped_at": "2026-05-01T17:43:04Z",
     "title": "Move Drawing Toy (Sketchy Etcher)"
   },
+  "/forums/multi-instance-m4l-device-how-to-reliably-attach-track-name-to-osc-audio-data-rms-spectrum": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-28T12:53:08.180Z",
+    "replies_last_modified_at": "2026-04-28T12:53:08.175Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Multi-instance M4L device: how to reliably attach track name to OSC audio data (RMS + spectrum)?"
+  },
   "/forums/multiple-3d-models": {
     "attach_urls_seen": [],
     "category": "Jitter",
@@ -531,6 +2323,16 @@
     "replies_last_modified_at": null,
     "scraped_at": "2026-05-01T17:53:37Z",
     "title": "Multiple 3d models"
+  },
+  "/forums/multiple-rnbo-devices-with-141": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-09-30T11:26:49.973Z",
+    "replies_last_modified_at": "2025-09-30T11:26:49.969Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Multiple RNBO Devices with 1.4.1"
   },
   "/forums/multislider-bug-1": {
     "attach_urls_seen": [],
@@ -558,6 +2360,16 @@
     "scraped_at": "2026-05-01T17:42:45Z",
     "title": "Music video sync and triggering video events"
   },
+  "/forums/native-typescript-support-in-node-for-max-with-working-example": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-04-27T22:35:43.187Z",
+    "replies_last_modified_at": "2025-04-27T22:35:43.184Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Native TypeScript support in Node for Max (with working example)"
+  },
   "/forums/need-help-creating-a-filter-interface-in-jsui-v8ui": {
     "attach_urls_seen": [],
     "category": "Javascript",
@@ -568,6 +2380,48 @@
     "replies_last_modified_at": null,
     "scraped_at": "2026-05-01T17:53:37Z",
     "title": "Need help creating a filter interface in JSUI / V8UI"
+  },
+  "/forums/neural-amp-modeler-maxmsp-external": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-28T17:23:07.383Z",
+    "replies_last_modified_at": "2026-04-28T17:23:07.370Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Neural amp modeler Max/MSP external"
+  },
+  "/forums/new-sends-arent-working": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-02-09T15:13:21.108Z",
+    "replies_last_modified_at": "2026-02-09T14:03:28.986Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Solved my problem... it was a silly mistake (sorry for the post)"
+  },
+  "/forums/no-sysex-output-from-rnbo-vst": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/637789b5a3848a6a529c6129/2025-12-10T02:51:01Z/128b1528-20f9-4034-b0b4-60a32482835a.maxpat"
+    ],
+    "category": "RNBO",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2025-12-12T14:14:31.315Z",
+    "replies_last_modified_at": "2025-12-12T14:14:31.312Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "No Sysex output from RNBO VST"
+  },
+  "/forums/node-for-max-bundling-in-collectives-standalones-and-max-for-live-devices": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-07-08T11:11:46.204Z",
+    "replies_last_modified_at": "2025-04-09T13:09:24.620Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Node For Max Bundling in Collectives, Standalones and Max For Live Devices"
   },
   "/forums/node-for-max-memory-issue": {
     "attach_urls_seen": [],
@@ -594,6 +2448,30 @@
     "scraped_at": "2026-05-01T17:53:37Z",
     "title": "Node js trouble with require and import"
   },
+  "/forums/node-script-and-standalone": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-07-08T11:16:12.873Z",
+    "replies_last_modified_at": "2025-04-15T08:25:12.842Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Node script and standalone"
+  },
+  "/forums/noise-vocoder-not-working-properly": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/6543e6acfe76c604f1a7277d/2024-03-10T09:50:29Z/message%20(2).txt"
+    ],
+    "category": "RNBO",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "ad55bdd080ffec1b49066d63ebef8e2a"
+    ],
+    "modified_at": "2025-11-10T09:03:00.491Z",
+    "replies_last_modified_at": "2025-11-10T09:03:00.486Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Noise Vocoder not working properly"
+  },
   "/forums/objectclassinternal-bad-object": {
     "attach_urls_seen": [],
     "category": "Javascript",
@@ -604,6 +2482,40 @@
     "replies_last_modified_at": null,
     "scraped_at": "2026-05-01T17:53:37Z",
     "title": "object_class_internal: bad object"
+  },
+  "/forums/office-hours-with-benjamin-wynn-deru-this-wednesday-429": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-27T20:48:12.672Z",
+    "replies_last_modified_at": "2026-04-27T20:48:12.665Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "\u2b50\ufe0f OFFICE HOURS WITH BENJAMIN WYNN (DERU) THIS WEDNESDAY (4/29)! \u2b50\ufe0f"
+  },
+  "/forums/offset-and-random-values-to-rows-of-matrixctrl": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "f79053684db1a29f226c4de9bca46b48"
+    ],
+    "modified_at": "2026-04-29T10:40:03.196Z",
+    "replies_last_modified_at": "2026-04-29T10:40:03.173Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Offset and random values to rows of matrixctrl"
+  },
+  "/forums/open-subpatches-with-sending-a-bang-into-the-subpatch-only": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "6266415279702dd2b3f9e35191d80c7f"
+    ],
+    "modified_at": "2026-02-09T13:52:09.301Z",
+    "replies_last_modified_at": "2026-02-09T13:52:09.297Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Open subpatches with sending a bang into the subpatch only?"
   },
   "/forums/optimizing-jitgltext-behaviour": {
     "attach_urls_seen": [],
@@ -637,6 +2549,89 @@
     "scraped_at": "2026-05-01T17:42:44Z",
     "title": "Order Independent Transparency in Max 9 - can't get it to work"
   },
+  "/forums/osc-to-rme-totalmix": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/5ba5ece24355fd166ae4179c/2026-02-07T04:59:28Z/39a45f13-cdbf-4b11-b553-dbf3e38c3210.maxpat"
+    ],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-02-07T05:05:28.323Z",
+    "replies_last_modified_at": "2026-02-07T05:05:28.318Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "OSC to RME Totalmix"
+  },
+  "/forums/oscbank-in-genexpr": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "52a0fb029f172d5e195ed7162fcc1d2b",
+      "c7401a751d60eb956e95346271294d29"
+    ],
+    "modified_at": "2026-02-09T14:41:48.698Z",
+    "replies_last_modified_at": "2026-02-09T14:41:48.695Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "oscbank in genexpr"
+  },
+  "/forums/output-data-from-matrixcntrl-for-dummies": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "9af90a050fbd1e31500d61d7e7851fae"
+    ],
+    "modified_at": "2026-03-09T12:57:05.724Z",
+    "replies_last_modified_at": "2026-03-09T12:57:05.719Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Output data from matrixcntrl for dummies"
+  },
+  "/forums/package-mc-movement-studies-jsui-errors": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-04-11T07:38:12.815Z",
+    "replies_last_modified_at": "2025-04-11T07:38:12.811Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Package : MC Movement Studies  - jsui errors"
+  },
+  "/forums/paid-eeg-data-to-generative-music-system": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-24T18:15:13.302Z",
+    "replies_last_modified_at": "2026-04-23T20:10:50.844Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Paid - EEG data to generative music system"
+  },
+  "/forums/pan-law-needed-suffering-from-loudness-bump": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-02-04T05:50:01.755Z",
+    "replies_last_modified_at": "2026-02-04T05:49:45.858Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "pan law needed; suffering from loudness bump"
+  },
+  "/forums/panning-pre-synthesis": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "0f018900e1307f032e79754fb7a2c984",
+      "5c50eb79ec7b9236ad32d336b995a322",
+      "a40588cb4dfa0891d3e6ce67a8b477b7",
+      "2a1c828c57b905e36a5b0103a2f795ad",
+      "96be2bab8476f4a8b5b66b0346820897"
+    ],
+    "modified_at": "2026-05-04T12:05:31.765Z",
+    "replies_last_modified_at": "2026-05-04T12:05:31.762Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Panning pre-synthesis?"
+  },
   "/forums/parameterlistener-broken-in-v8": {
     "attach_urls_seen": [],
     "category": "Javascript",
@@ -660,6 +2655,16 @@
     "scraped_at": "2026-05-01T17:42:54Z",
     "title": "passing a matrix to a texture in js"
   },
+  "/forums/patchcord-outlet-out-of-range-error-when-connecting-two-jitterobjects-in-async-function": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2024-12-19T12:13:12.794Z",
+    "replies_last_modified_at": "2024-12-18T18:23:12.828Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Listening to or monitoring jitter object's position in js api inside async await func"
+  },
   "/forums/patcherargs-loading-order": {
     "attach_urls_seen": [],
     "category": "MaxMSP",
@@ -671,6 +2676,86 @@
     "replies_last_modified_at": "2026-04-21T19:37:48.909Z",
     "scraped_at": "2026-05-01T17:42:59Z",
     "title": "patcherargs loading order"
+  },
+  "/forums/patchwindsetlocation-method-not-supported": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "68eca3bc2806b797bc440a21af757616",
+      "9716af7f9c4da7b8106a1f3d7c9cd48e"
+    ],
+    "modified_at": "2025-07-08T11:15:37.798Z",
+    "replies_last_modified_at": "2024-12-15T21:51:05.689Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "[SOLVED in 9.0.3] patch.wind.setlocation() method not supported"
+  },
+  "/forums/pattrstorage-and-preset-to-save-snapshots": {
+    "attach_urls_seen": [],
+    "category": "Max For Live",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-30T20:04:18.960Z",
+    "replies_last_modified_at": "2026-03-30T20:04:18.954Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "pattrstorage and preset to save snapshots"
+  },
+  "/forums/pd-bob-ported-for-max": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "5c198768f0027ef36a341a4e48256bbf"
+    ],
+    "modified_at": "2026-03-21T09:06:48.335Z",
+    "replies_last_modified_at": "2026-03-21T09:06:48.332Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "PD bob~ ported for Max"
+  },
+  "/forums/peek-syntax-in-gen": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-04T21:23:20.719Z",
+    "replies_last_modified_at": "2026-03-04T19:05:28.495Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "peek syntax in gen"
+  },
+  "/forums/phase-distortion-and-waveshaper-effect": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-10-20T00:22:55.511Z",
+    "replies_last_modified_at": "2025-10-20T00:22:55.501Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "phase distortion and waveshaper effect"
+  },
+  "/forums/phasor-greater-function-sequencer-question": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "46df29ea23dbb57b51f2a8abf5bce2dc",
+      "0b633881ad7367517cbfed687c95fb3c",
+      "933645a8693a80f2d66bfb8ac6139a02",
+      "ca978a32a89738187a52b9435881afc4"
+    ],
+    "modified_at": "2026-03-17T08:10:43.835Z",
+    "replies_last_modified_at": "2026-03-17T08:10:43.831Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "phasor~ > function sequencer question"
+  },
+  "/forums/phasor-sync-with-gen-patch": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-12-31T07:34:39.558Z",
+    "replies_last_modified_at": "2025-12-31T07:34:39.551Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "phasor sync with gen~ patch."
   },
   "/forums/png-as-texture-in-shader": {
     "attach_urls_seen": [
@@ -685,6 +2770,68 @@
     "replies_last_modified_at": "2026-04-22T13:42:00.322Z",
     "scraped_at": "2026-05-01T17:42:47Z",
     "title": "PNG as Texture in Shader"
+  },
+  "/forums/polyphonic-key-pressure-of-push-via-live-object-model-controlsurface": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/5466e91faafdf1577750bf07/2026-03-16T04:49:45Z/223fb502-fa97-4a76-b63e-d449396499e2.amxd"
+    ],
+    "category": "Max For Live",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-28T10:14:34.385Z",
+    "replies_last_modified_at": "2026-03-28T10:14:34.382Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "polyphonic key pressure of Push via Live Object Model (ControlSurface)"
+  },
+  "/forums/precise-size-in-pixels-for-video-mappingcompositing": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "bd1066745b20c076803f4e1c0a5b3a8a"
+    ],
+    "modified_at": "2025-11-07T17:08:18.651Z",
+    "replies_last_modified_at": "2025-11-07T17:08:18.646Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Precise size in pixels for video mapping/compositing"
+  },
+  "/forums/preserved-aspect-ratio-and-jitglnode": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "9259c3d334ac3b21cc439fd14f413ccd",
+      "8f7db763240f8b99c9f3185e1827d1b1",
+      "e976020e42d4d5d8ef349631083ea696"
+    ],
+    "modified_at": "2025-11-21T17:46:19.064Z",
+    "replies_last_modified_at": "2025-11-21T17:46:19.060Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "preserved aspect ratio and jit.gl.node"
+  },
+  "/forums/preset-disconnected-but-it-still-controls-the-object": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-02-19T10:35:22.639Z",
+    "replies_last_modified_at": "2026-02-19T10:35:22.634Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Preset disconnected, but it still controls the object: **PROBLEM SOLVED**"
+  },
+  "/forums/program-changes-to-osc-messages": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "dc9c359dd29e0e0d3ff312f9fd6f3b80",
+      "0f4718558da8ba845babfe85dda19bd9",
+      "09504741e1f11376b765a1f31fe0ae8a"
+    ],
+    "modified_at": "2026-02-06T18:36:18.492Z",
+    "replies_last_modified_at": "2026-02-06T18:36:18.491Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Program Changes to OSC Messages"
   },
   "/forums/pworld-opacity": {
     "attach_urls_seen": [],
@@ -709,6 +2856,36 @@
     "scraped_at": "2026-05-01T17:53:37Z",
     "title": "Quicktime Track - Markers from FCP->Jitter"
   },
+  "/forums/random-nam-already-in-use-ob3d-does-not-allow-multiple-bindings": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-12-02T15:15:09.597Z",
+    "replies_last_modified_at": "2025-12-02T15:15:09.582Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Random \"name already in use. ob3d does not allow multiple bindings\""
+  },
+  "/forums/random-text-generator": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-24T20:39:38.680Z",
+    "replies_last_modified_at": "2026-03-02T17:24:38.754Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "random text generator"
+  },
+  "/forums/raspberry-not-showing-as-online-in-target-export-window": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-02-20T15:51:24.647Z",
+    "replies_last_modified_at": "2026-02-20T15:51:24.642Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Raspberry not showing as online in target export window"
+  },
   "/forums/replacing-everything-black-of-a-texture-with-another-texture": {
     "attach_urls_seen": [],
     "category": "Jitter",
@@ -719,6 +2896,30 @@
     "replies_last_modified_at": null,
     "scraped_at": "2026-05-01T17:53:37Z",
     "title": "Replacing everything black of a Texture with another Texture"
+  },
+  "/forums/report-elapsed-sample-time-between-two-events": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "f4a509c636850ed6c275f56027af90df"
+    ],
+    "modified_at": "2025-08-21T15:29:07.212Z",
+    "replies_last_modified_at": "2025-08-21T15:29:07.210Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "[solved] Report elapsed sample time between two events"
+  },
+  "/forums/retrieving-the-filter-type-from-filtergraph": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "75a1cdc5aad18ab48a212eee4ffaedd4"
+    ],
+    "modified_at": "2026-04-27T14:53:32.558Z",
+    "replies_last_modified_at": "2026-04-27T14:53:32.554Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Retrieving the filter type from filtergraph"
   },
   "/forums/rnbo-143-refuses-to-start": {
     "attach_urls_seen": [],
@@ -753,6 +2954,16 @@
     "scraped_at": "2026-05-01T17:53:37Z",
     "title": "RNBO Daisy example builds and flashes correctly, but produces no output"
   },
+  "/forums/rnbo-javascript": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-08-21T18:52:50.554Z",
+    "replies_last_modified_at": "2025-08-21T18:52:50.549Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "RNBO JS - functional website but no sound from buffer when onclick"
+  },
   "/forums/rnbo-move-takeover-experimental-alpha-143-alpha0-released": {
     "attach_urls_seen": [],
     "category": "RNBO",
@@ -763,6 +2974,79 @@
     "replies_last_modified_at": null,
     "scraped_at": "2026-05-01T17:53:37Z",
     "title": "RNBO Move Takeover Experimental Alpha 1.4.3-alpha.1 Released"
+  },
+  "/forums/rnbo-on-raspberry-pi-5": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-18T09:20:32.975Z",
+    "replies_last_modified_at": "2026-03-18T09:20:32.961Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "RNBO on Raspberry Pi 5"
+  },
+  "/forums/rnbo-param-namespaces-break-when-title-is-changed": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-01-02T22:33:57.131Z",
+    "replies_last_modified_at": "2026-01-02T22:33:57.129Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "RNBO param namespaces break when @title is changed"
+  },
+  "/forums/rnbo-raspberry-pi-2-w-codec-zero": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-13T19:25:43.707Z",
+    "replies_last_modified_at": "2026-03-13T19:25:43.696Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "RNBO - Raspberry Pi 2 W + Codec Zero"
+  },
+  "/forums/rnbo-raspberry-pi-apt-get-on-startup": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-10-20T17:31:23.442Z",
+    "replies_last_modified_at": "2025-10-20T17:31:23.438Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "RNBO - raspberry pi - apt-get on startup"
+  },
+  "/forums/rnbo-subpatcher-parameters-breaks-automation": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-02-12T13:51:53.693Z",
+    "replies_last_modified_at": "2026-02-12T13:51:53.683Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "RNBO subpatcher parameters breaks automation"
+  },
+  "/forums/rnbo-target-export-error-could-not-activate-runners-audio-please-check-your-audio-configuration-settings": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-01-22T16:44:08.318Z",
+    "replies_last_modified_at": "2026-01-22T16:44:08.312Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "RNBO Target Export Error - Could not activate runner's audio, please check your audio configuration settings"
+  },
+  "/forums/rnbo-web-export": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/546312c9bdbb99652da7ad11/2025-11-24T13:33:22Z/bc9dd11b-42e1-4186-9d3f-9d76c482dce6.zip",
+      "https://usercontent.cdn.cycling74.com/5308e9961104024207897942/2025-11-24T14:21:26Z/123f647f-5e11-42b5-b6af-1f0da01dff56.zip"
+    ],
+    "category": "RNBO",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2025-11-24T16:55:02.030Z",
+    "replies_last_modified_at": "2025-11-24T16:55:02.022Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "RNBO Web Export"
   },
   "/forums/rothko-like-images": {
     "attach_urls_seen": [],
@@ -788,6 +3072,85 @@
     "replies_last_modified_at": "2026-03-04T04:43:49.318Z",
     "scraped_at": "2026-05-01T17:42:44Z",
     "title": "RTSP stream into Jitter/Max 8"
+  },
+  "/forums/sample-and-loop": {
+    "attach_urls_seen": [
+      "https://cycling74-web-assets.s3.amazonaws.com/bb-attachments/4220.GenLooperStereoMod.gendsp",
+      "https://1cyjknyddcx62agyb002-c74projects.s3.amazonaws.com/files/2015/01/Ian\u2019s-Looper.zip",
+      "https://1cyjknyddcx62agyb002-c74projects.s3.amazonaws.com/files/2015/02/loopgen.amxd",
+      "https://1cyjknyddcx62agyb002-c74projects.s3.amazonaws.com/files/2015/09/best-loop.maxpat",
+      "https://usercontent.cdn.cycling74.com/564cbf8f5748f2c03eceb44d/2020-03-27T01:14:03Z/gtr%20patch%20test.zip"
+    ],
+    "category": "Gen",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "0bfd8f1409ed77c90a162c5b70b57acb",
+      "2178e3e0fdfd6ac2c9fb7bc06253fd82",
+      "21c16271107a748781c2ad7658896aee",
+      "07e71d9d86961896dfbfeaf1dc093fbe"
+    ],
+    "modified_at": "2025-12-07T16:26:23.148Z",
+    "replies_last_modified_at": "2025-12-07T16:26:23.139Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Sample and loop"
+  },
+  "/forums/sample-object-in-gen-patch-not-outputting-sound": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/6503a4056675290497573e34/2025-12-19T04:16:28Z/7716837a-bf16-474c-bb70-41dc98006e0b.maxpat"
+    ],
+    "category": "Gen",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2025-12-19T05:28:02.437Z",
+    "replies_last_modified_at": "2025-12-19T05:28:02.433Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Sample Object in Gen~ patch not outputting sound"
+  },
+  "/forums/scrolling-patcher": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-18T10:13:50.570Z",
+    "replies_last_modified_at": "2026-03-18T10:13:50.568Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "scrolling patcher"
+  },
+  "/forums/scrolloffsetarrayget-problem": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-02-04T20:31:39.481Z",
+    "replies_last_modified_at": "2025-02-04T20:31:39.475Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "scrolloffset(array,get) problem"
+  },
+  "/forums/select-all-tracks-belonging-to-a-group": {
+    "attach_urls_seen": [],
+    "category": "Max For Live",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "50f1dc5046d7f85f491e0a700b031f4c"
+    ],
+    "modified_at": "2026-03-28T13:17:38.561Z",
+    "replies_last_modified_at": "2026-03-28T13:17:38.559Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Select All Tracks belonging to a group"
+  },
+  "/forums/sending-messages-to-a-specific-video-within-a-jitplaylist": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/5e00dad36cc4903d72e0bc86/2025-10-26T12:19:33Z/e9f1fd80-b34d-43c4-a068-04ed26599166.maxpat"
+    ],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "796b663784e4ff0e672b23ec7f0a4570"
+    ],
+    "modified_at": "2025-10-27T18:21:11.001Z",
+    "replies_last_modified_at": "2025-10-27T18:21:10.998Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Sending messages to a specific video within a jit.playlist"
   },
   "/forums/shadows-jit-gl-multiple": {
     "attach_urls_seen": [],
@@ -818,6 +3181,16 @@
     "scraped_at": "2026-05-01T17:53:37Z",
     "title": "[share] jit.void.qrcode encode anything to a QR Code jitter matrix"
   },
+  "/forums/sharing-digital-pll-made-with-gen": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-01-17T16:42:56.497Z",
+    "replies_last_modified_at": "2026-01-17T16:42:56.492Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "[sharing] Digital PLL made with gen~"
+  },
   "/forums/sharing-my-take-on-an-enttec-dmx-usb-pro-external": {
     "attach_urls_seen": [
       "https://usercontent.cdn.cycling74.com/56139938101a9ccc7f15d3fc/2025-07-03T10:00:21Z/Exemple-DMX.maxpat",
@@ -846,6 +3219,79 @@
     "scraped_at": "2026-05-01T17:53:38Z",
     "title": "Silenting (or destroying) a ParameterListener ?"
   },
+  "/forums/simulating-mouse-clicks-1": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/58ed04e7285705c15ccfa694/2026-03-30T15:15:33Z/515fbbae-1390-4568-847f-93de4272d514.zip"
+    ],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "071151e5bb061798fa75e05920c6cfd3",
+      "c026f1533317a65a2b287d51c983e5f4"
+    ],
+    "modified_at": "2026-03-30T17:48:31.348Z",
+    "replies_last_modified_at": "2026-03-30T17:48:31.342Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Simulating Mouse Clicks"
+  },
+  "/forums/smoothed-preset-interpolation-with-line-envelope": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "d5a44c87170011b4e6dca286fb9505b7",
+      "aea693e8c35511166d3845426e9886fc",
+      "3ab1a761165e6363d44e5a5ebd131661",
+      "ea0b99adb6c1dec224b95b20e8a9c609"
+    ],
+    "modified_at": "2026-03-07T13:00:46.450Z",
+    "replies_last_modified_at": "2026-03-07T13:00:46.442Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Smoothed Preset Interpolation with line envelope"
+  },
+  "/forums/some-questions-about-rnbo-integration-to-a-custom-gameapp": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-01-27T22:13:58.071Z",
+    "replies_last_modified_at": "2026-01-27T22:13:58.066Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Some questions about RNBO integration to a custom game/app."
+  },
+  "/forums/spectraplot-ala-cipriani": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-23T17:10:24.314Z",
+    "replies_last_modified_at": "2026-04-23T17:10:24.300Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Spectraplot ala Cipriani"
+  },
+  "/forums/spectroscope-1": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "698c8a165c874938e3ccab0bf7eb3bfd",
+      "6b30375a10a3bbcf77e78c99ab39d342"
+    ],
+    "modified_at": "2025-11-29T15:41:48.710Z",
+    "replies_last_modified_at": "2025-11-28T00:58:09.916Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Spectroscope"
+  },
+  "/forums/splat-couple-of-bugs": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-15T14:44:32.484Z",
+    "replies_last_modified_at": "2026-04-15T14:44:32.478Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Splat - couple of bugs?"
+  },
   "/forums/stable-8-hour-av-installation-stereo-audio-two-separate-video-outputs-beginner": {
     "attach_urls_seen": [],
     "category": "Jitter",
@@ -857,6 +3303,29 @@
     "replies_last_modified_at": "2026-03-20T11:45:54.932Z",
     "scraped_at": "2026-05-01T17:42:46Z",
     "title": "Urgent: Stable 8-hour AV installation \u2013 stereo audio + two separate video outputs (beginner)"
+  },
+  "/forums/store-midi-information": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "b8575844228880e09868f002b46d3b20",
+      "caecdf49ce4291e7594d22ad82d6e60f"
+    ],
+    "modified_at": "2026-03-14T19:53:55.958Z",
+    "replies_last_modified_at": "2026-03-14T19:53:55.957Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Store midi-information"
+  },
+  "/forums/stranges-messages-adding-more-than-one-perform-routine-to-dsp-chain-is-not-recommended": {
+    "attach_urls_seen": [],
+    "category": "MaxMSP",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-02-07T14:57:23.327Z",
+    "replies_last_modified_at": "2026-02-07T14:57:23.325Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Stranges messages : adding more than one perform routine to dsp chain is not recommended"
   },
   "/forums/suckah-object-not-working-bug": {
     "attach_urls_seen": [],
@@ -891,6 +3360,30 @@
     "scraped_at": "2026-05-01T17:42:54Z",
     "title": "Support modern ESM imports in Node for Max"
   },
+  "/forums/targetting-params-in-mcgen-patch-with-messages-like-deviate-spread-etc": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "d34324be1b7abc74199eb42d7b7ed7bd"
+    ],
+    "modified_at": "2026-02-26T19:19:41.567Z",
+    "replies_last_modified_at": "2026-02-26T19:19:41.565Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Targetting params in mc.gen~ patch with messages like deviate, spread etc."
+  },
+  "/forums/tb-303-patch": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/5e241914bd929c2e7b9c4390/2026-03-03T15:37:35Z/c293604e-f73c-4524-8850-eb4d3908248f.gendsp"
+    ],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-10T10:54:59.730Z",
+    "replies_last_modified_at": "2026-03-03T15:38:14.088Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "TB-303 patch"
+  },
   "/forums/tcpreset-a-new-companion-to-pattrstorage": {
     "attach_urls_seen": [],
     "category": "Javascript",
@@ -904,6 +3397,46 @@
     "replies_last_modified_at": "2025-12-05T14:20:06.912Z",
     "scraped_at": "2026-05-01T17:42:54Z",
     "title": "tc.preset: a new companion to pattrstorage"
+  },
+  "/forums/this-is-enough-to-set-you-apart-from-other-ambient-producers": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-16T02:29:09.351Z",
+    "replies_last_modified_at": "2026-04-16T02:29:09.341Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "This is enough to set you apart from other ambient producers"
+  },
+  "/forums/this-might-be-the-best-timestretch-algorithm": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-31T09:58:58.020Z",
+    "replies_last_modified_at": "2026-03-31T09:58:58.013Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "This might be the best timestretch algorithm......"
+  },
+  "/forums/this-sound-gives-me-goosebumps": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-11-30T02:23:36.555Z",
+    "replies_last_modified_at": "2025-11-30T02:23:36.549Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "This sound gives me goosebumps\u2026"
+  },
+  "/forums/touchosc-switchable-mapping-to-m4l-device": {
+    "attach_urls_seen": [],
+    "category": "Max For Live",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-04-23T10:28:23.948Z",
+    "replies_last_modified_at": "2026-04-23T10:28:23.945Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "TouchOSC switchable mapping to M4L Device"
   },
   "/forums/trouble-updating-multiple-instanced-jitglbuffers-in-real-time": {
     "attach_urls_seen": [
@@ -924,6 +3457,63 @@
     "scraped_at": "2026-05-01T17:42:44Z",
     "title": "Trouble updating multiple instanced jit.gl.buffers in real time"
   },
+  "/forums/trouble-with-pak-and-bendin": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "b2b68346ebcaaf61c694680ff2a6c0e0",
+      "14e7a4272f4552595bd21ac650b3baed"
+    ],
+    "modified_at": "2026-01-08T10:26:55.296Z",
+    "replies_last_modified_at": "2026-01-08T10:26:55.291Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Trouble with [pak] and [bendin]"
+  },
+  "/forums/trouble-with-phase-in-my-mcgen-sequencer": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/688d87ec4a3d920587dfdb37/2025-12-31T03:40:00Z/a05eff44-50c5-43cb-89fa-1478af645a92.maxpat"
+    ],
+    "category": "Gen",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2025-12-31T03:42:53.400Z",
+    "replies_last_modified_at": "2025-12-31T03:42:53.393Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Trouble with phase in my mc.gen~ sequencer"
+  },
+  "/forums/troubleshooting-user-issues": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-05-03T16:47:20.393Z",
+    "replies_last_modified_at": "2026-05-03T16:47:20.389Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Troubleshooting user issues"
+  },
+  "/forums/tuned-karplus-strong-rnbo-move-package": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/5f0cb45014036a023fe866d1/2026-03-19T13:22:26Z/294a2233-04d2-4873-bbfd-2051243b04a6.rnbopack"
+    ],
+    "category": "RNBO",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-19T13:26:53.295Z",
+    "replies_last_modified_at": "2026-03-19T13:26:53.282Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Tuned Karplus-Strong RNBO Move Package"
+  },
+  "/forums/tutorials-on-how-to-set-up-up-dev-environments-for-the-open-source-parts-of-the-rnbo-stack": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-09-18T17:55:33.774Z",
+    "replies_last_modified_at": "2025-09-18T17:55:33.768Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Tutorials on how to set up up dev environments for the open source parts of the RNBO stack"
+  },
   "/forums/typescript-bundler-and-declareattribute": {
     "attach_urls_seen": [],
     "category": "Javascript",
@@ -936,6 +3526,16 @@
     "scraped_at": "2026-05-01T17:42:54Z",
     "title": "TypeScript + bundler & declareattribute"
   },
+  "/forums/udpsend-to-millumin-via-ethernet": {
+    "attach_urls_seen": [],
+    "category": "Jitter",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-09-23T17:32:26.926Z",
+    "replies_last_modified_at": "2025-09-23T12:39:41.923Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "[udpsend] to Millumin via ethernet"
+  },
   "/forums/understanding-c74s-use-of-the-phrase-global-variable-in-javascript-documentation": {
     "attach_urls_seen": [],
     "category": "Javascript",
@@ -947,6 +3547,29 @@
     "replies_last_modified_at": "2025-10-03T17:27:32.261Z",
     "scraped_at": "2026-05-01T17:42:54Z",
     "title": "Understanding C74's use of the phrase \"global variable\" in javascript documentation"
+  },
+  "/forums/update-packages-for-offline-rpi": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-12-13T03:43:51.568Z",
+    "replies_last_modified_at": "2025-12-13T03:43:51.565Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Update packages for Offline RPi"
+  },
+  "/forums/using-sprintf-for-multiple-outlets-in-a-bpatcher": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/587a74661b285e33100c1ed2/2026-03-03T22:18:07Z/7fd039a0-22f7-4def-a612-ed819142a29b.maxpat",
+      "https://usercontent.cdn.cycling74.com/587a74661b285e33100c1ed2/2026-03-03T22:18:14Z/0ec2ce00-6fc8-420a-8fcd-4c3cb23d4e8e.maxpat"
+    ],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-04T11:53:39.576Z",
+    "replies_last_modified_at": "2026-03-04T11:53:39.570Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Using sprintf for multiple outlets in a Bpatcher"
   },
   "/forums/using-vizzie-kalider-texture-output-in-shader-code-issue": {
     "attach_urls_seen": [],
@@ -972,6 +3595,31 @@
     "replies_last_modified_at": "2025-07-02T14:16:00.732Z",
     "scraped_at": "2026-05-01T17:42:54Z",
     "title": "v8 and require a json file"
+  },
+  "/forums/v8-do-the-javascript-import-and-require-statements-work-as-intended-with-v8": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/53066381110402420789793d/2025-03-09T18:32:51Z/02-numeric-example.zip"
+    ],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2025-07-08T11:15:31.235Z",
+    "replies_last_modified_at": "2025-03-11T11:06:04.527Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "v8: Do the JavaScript \"import\" and \"require\" statements work as intended with v8?"
+  },
+  "/forums/v8-js-push-successive-lists-into-an-array-and-output-a-dict": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "e815c569ac97437e349bdcfc0af9daef",
+      "7789a640b0ee3f7de25249e370da0719"
+    ],
+    "modified_at": "2025-04-06T12:00:31.347Z",
+    "replies_last_modified_at": "2025-04-06T12:00:31.343Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "v8 JS:  push successive lists into an array and output a dict"
   },
   "/forums/v8ui-strange-behaviour": {
     "attach_urls_seen": [
@@ -1001,6 +3649,68 @@
     "scraped_at": "2026-05-01T17:42:43Z",
     "title": "vanilla Max version of xray.jit.sift ?"
   },
+  "/forums/variable-not-defined-error-gen-codebox": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-02-20T08:50:41.254Z",
+    "replies_last_modified_at": "2026-02-20T08:50:41.250Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Variable Not Defined Error Gen Codebox"
+  },
+  "/forums/varispeed-overdubbing-in-looper-delay-line-approach-to-rate-greater-1": {
+    "attach_urls_seen": [],
+    "category": "Gen",
+    "decision": "downloaded",
+    "mct_ids_seen": [
+      "381b096be71d59bcaa1d5e132745122b"
+    ],
+    "modified_at": "2026-04-24T13:58:39.133Z",
+    "replies_last_modified_at": "2026-04-24T13:58:39.129Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Writing to buffer at rate>1 - delay-line approach questions"
+  },
+  "/forums/voidlinkaudio-ableton-link-audio-for-maxmsp-and-beyond-open-source-multi-host": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-05-03T21:32:36.521Z",
+    "replies_last_modified_at": "2026-05-03T21:30:20.445Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "VoidLinkAudio // Ableton Link Audio for Max/MSP and beyond (open-source, multi-host)"
+  },
+  "/forums/voidlinkaudio-ableton-link-audio-for-maxmsp-beyond-open-source-multi-host": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-05-03T11:08:24.105Z",
+    "replies_last_modified_at": "2026-05-03T11:04:56.161Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "error to be deleted"
+  },
+  "/forums/vst-380-sdk-released": {
+    "attach_urls_seen": [],
+    "category": "RNBO",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-10-27T08:53:38.904Z",
+    "replies_last_modified_at": "2025-10-27T08:53:38.898Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "VST 3.8.0 SDK Released"
+  },
+  "/forums/web-api-and-rendermode-attribute": {
+    "attach_urls_seen": [],
+    "category": "Javascript",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2025-02-28T22:25:07.203Z",
+    "replies_last_modified_at": "2025-02-27T16:42:25.676Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "web API and rendermode attribute"
+  },
   "/forums/where-does-rnbo-runner-panel-store-graphset-preset-files-on-raspberry-pi": {
     "attach_urls_seen": [],
     "category": "RNBO",
@@ -1011,5 +3721,28 @@
     "replies_last_modified_at": null,
     "scraped_at": "2026-05-01T17:53:37Z",
     "title": "Where does RNBO Runner Panel store graph/set preset files on Raspberry Pi?"
+  },
+  "/forums/writing-and-drawing-with-xy-detection-jitter-or-maxmsp": {
+    "attach_urls_seen": [
+      "https://usercontent.cdn.cycling74.com/5ba229ca4355fd166ae41427/2020-03-27T19:17:44Z/Whiteboard.maxpat",
+      "https://usercontent.cdn.cycling74.com/68e6cd56fac79f5b9fc10012/2026-03-20T15:25:57Z/0180faae-4402-4495-81e2-ac4c4c252bb6.maxpat"
+    ],
+    "category": "MaxMSP",
+    "decision": "downloaded",
+    "mct_ids_seen": [],
+    "modified_at": "2026-03-20T15:30:35.698Z",
+    "replies_last_modified_at": "2026-03-20T15:30:35.693Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "Writing and drawing with xy detection (jitter or max/msp??)"
+  },
+  "/forums/yin-unresponsive-over-time": {
+    "attach_urls_seen": [],
+    "category": "Misc",
+    "decision": "skipped-no-artifact",
+    "mct_ids_seen": [],
+    "modified_at": "2026-05-01T03:34:59.233Z",
+    "replies_last_modified_at": "2026-04-29T13:54:25.712Z",
+    "scraped_at": "2026-05-04T14:44:43Z",
+    "title": "yin~ unresponsive over time"
   }
 }
