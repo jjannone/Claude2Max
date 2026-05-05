@@ -143,7 +143,11 @@ Read and review the entire Claude2Max repo before starting — `CLAUDE.md`, `SPE
 
 **Before constructing or editing any patch**, read `MAX_PATCHING.md`. It contains all patching principles, presentation view guidelines, documentation verification rules, and common pitfalls. Treat its presentation section as a checklist before starting any presentation layout.
 
-**Before designing or analyzing anything inside a `gen~` / `gen` / `jit.gen` box**, also read `GEN_PATCHING.md`. gen~ is a separate dataflow language with its own object set and per-sample evaluation model — patterns from MSP do not necessarily translate.
+**Before designing or analyzing anything inside a `gen~` / `gen` box**, also read `GEN_PATCHING.md`. gen~ is a separate dataflow language with its own object set and per-sample evaluation model — patterns from MSP do not necessarily translate.
+
+**Before designing or analyzing anything inside a `jit.gen` / `jit.gl.pix` box**, read `JIT_GEN_PATCHING.md`. Same gen language as gen~, but iteration is per-cell or per-pixel rather than per-sample — `samplerate` and audio-time idioms do not apply; position primitives (`norm`, `cell`, `dim`) and texture sampling do.
+
+**Before working on a Max for Live device**, read `M4L_PATCHING.md`. M4L adds the Live Object Model, `live.*` UI objects, device-lifecycle considerations, and `.amxd` packaging — none of which appear in standalone Max patches.
 
 ## Workflow
 
@@ -182,7 +186,9 @@ To decode MCT received in the conversation: `python3 -c "from spec2maxpat import
 
 - `SPEC_REFERENCE.md` — **Read this first.** Complete spec format, object types, connection format, layout guidelines, v8/JS objects, MCT encoding, worked examples.
 - `MAX_PATCHING.md` — Patching principles, presentation guidelines, documentation verification rules, common pitfalls. Read before any patch work.
-- `GEN_PATCHING.md` — gen~ programming model, canonical idioms (slide envelope follower, samplerate→ms, equal-power crossfade), latency-compensation discipline. Read before any work inside a `gen~` / `gen` / `jit.gen` box.
+- `GEN_PATCHING.md` — gen~ / gen programming model (audio rate / control rate), canonical idioms (slide envelope follower, samplerate→ms, equal-power crossfade), latency-compensation discipline. Read before any work inside a `gen~` / `gen` box.
+- `JIT_GEN_PATCHING.md` — jit.gen / jit.gl.pix programming model (per-cell / per-pixel), position primitives (`norm`, `cell`, `dim`), texture sampling, distance-field idioms. Read before any work inside a `jit.gen` / `jit.gl.pix` box.
+- `M4L_PATCHING.md` — Max for Live patterns: Live Object Model access chain, `live.thisdevice` init signal, `getpath` + `deferlow` race, Push 3 polyphonic pressure, `live.*` UI styling, `.amxd` packaging. Read before any M4L device work.
 - `spec2maxpat.py` — The converter. I/O data from C74 maxref.xml via `RefpageCache`; no external database.
 - `TUTORIAL_GUIDELINES.md` — Tutorial structural contract, panel/annotation attrs, comment-pile pattern, breakage diagnostic.
 - `packages/package_objects.json` — Curated reference of installed Max package objects with `use_when` judgments.

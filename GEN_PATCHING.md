@@ -1,14 +1,18 @@
 # gen~ Patching Reference
 
-Specialized companion to `MAX_PATCHING.md`. Covers gen~-domain patching —
-the per-sample subgraph that lives inside `gen~`, `gen`, and `jit.gen`
-boxes. Read this when designing or analyzing anything inside a `gen~`.
+Specialized companion to `MAX_PATCHING.md`. Covers `gen~` (audio rate,
+per-sample) and `gen` (control rate, per-event) — the two audio/control
+flavors of the gen language family. For the per-pixel / per-cell flavor
+(`jit.gen` and `jit.gl.pix`), see `JIT_GEN_PATCHING.md`.
 
 `gen~` is **not** Max — it is a separate dataflow language with its own
 object set, its own type model (everything is float at signal rate inside
 gen~), and its own performance characteristics (per-sample evaluation,
 compiled to native code at edit time). Patterns that work in MSP do not
-necessarily work in gen~, and vice versa.
+necessarily work in gen~, and vice versa. `gen` (no `~`) shares the
+language but executes per-event at control rate rather than per-sample;
+most idioms below translate, with the obvious exception of `samplerate`
+and signal-rate-only operators.
 
 ## Always Verify Against Max Documentation — Never Guess
 
@@ -130,9 +134,12 @@ a bug (misaligned gate).
 
 - **MSP-side patterns** — see `MAX_PATCHING.md`. Anything outside the
   `gen~` box uses Max + MSP rules, not gen~ rules.
-- **gen~ in jit.gen / jit.gl.pix** — same dataflow model, but per-pixel
-  rather than per-sample. Most idioms here translate; `samplerate` does
-  not.
+- **Per-pixel / per-cell variants (`jit.gen`, `jit.gl.pix`)** —
+  see `JIT_GEN_PATCHING.md`. The dataflow model is identical (compiled
+  graph, `in N` / `out N` / `param NAME` / `history`), but the iteration
+  is over matrix cells or pixel coordinates rather than samples.
+  `samplerate`, `cycle`, MSP-rate `phasor`, and the audio-time idioms in
+  this doc do not apply there.
 - **Refpage source of truth** —
   `/Applications/Max.app/Contents/Resources/C74/docs/refpages/gen-ref/<obj>.maxref.xml`.
   These follow the same `<c74object>` schema as MSP refpages and are
