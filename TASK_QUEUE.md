@@ -315,6 +315,24 @@ Tasks that are primarily implementation, file editing, or verification — no de
 
   **Why split from the parent task**: keeping the parent task focused on "build the four skills + add a CLAUDE.md section" lets it finish cleanly; the polish work has a different shape (mechanical edits + queue hygiene) and benefits from a fresh session that can read the freshly-written skills with cold eyes.
 
+- [pending] **`spec2maxpat.py` — sync silently drops live layout, convert silently ignores `presentation_rect`** — Two related bugs in `spec2maxpat.py` cause `extract → edit → convert` and `sync` workflows to silently lose every manual layout change a user has made in Max. Together they make claude2max's "Modify, Don't Rebuild" rule (CLAUDE.md) impossible to honor in practice — observed 2026-05-05 when generating ensemble-sequencer-v6 from a manually-edited v5: the embedded spec said `jit_cellblock = [15, 54, 350, 165]` and `jit_permlist = [385, 65, 320, 170]`, but the live boxes in the .maxpat had `[15, 54, 223, 165]` and `[258, 57, 432, 655]`. Working around it required reading `presentation_rect` directly from each live box and translating to the spec's `presentation` field.
+
+  **Bug 1 — `reconcile_spec` does not fold live box rects back into the embedded spec.** `sync_spec()` calls `reconcile_spec(existing_spec, maxpat)` when an embedded spec is present, but `reconcile_spec` returns the existing spec largely unchanged with respect to per-box `presentation_rect` / `patching_rect` / `size` / `pos`. A user's manual moves and resizes in Max never make it back into the embedded spec, so the next `extract → convert` regenerates the patch with the *original* spec coordinates and silently destroys the manual layout. Reproduce: open any patch, move a box in presentation view, save, run `python3 spec2maxpat.py sync -i <patch>`, then `extract -o` — the extracted spec still has the old coordinates.
+
+  **Bug 2 — `build_box` ignores `obj["presentation_rect"]` and reads only `obj["presentation"]`.** In `convert_patcher` → `build_box` (around line 873–881), the function checks `obj_spec.get("presentation")`: if the value is a list of length 4, it becomes the box's `presentation_rect`; if it's `True` or any non-list truthy value, only `presentation: 1` is set with no rect. There is no code path that reads a separate `presentation_rect` field from the spec object. But `extract_spec` emits *both* `presentation: True` *and* `presentation_rect: [x, y, w, h]` as sibling fields — so the round-trip `extract → convert` silently drops every rect unless the editor knows to merge them into `presentation`. This is also why someone editing the spec by hand and writing `"presentation_rect": [...]` (the obvious name) gets no error and no effect.
+
+  **Fix — three coordinated changes:**
+
+  1. In `reconcile_spec`: for every box in the live `.maxpat` that has a corresponding entry in `existing_spec.objects` (match by box `id`, or by `varname`, or by patching top-left if neither is available), copy its live `presentation_rect`, `patching_rect.x/y` (→ `pos`), and `patching_rect.w/h` (→ `size`) back into the spec object. Preserve the spec's `presentation` field as the 4-element list form so it survives a subsequent convert.
+
+  2. In `build_box`: also accept `obj_spec.get("presentation_rect")` as an alternative to `obj_spec.get("presentation")`. When both are present, `presentation_rect` wins (it's more specific). This makes the `extract → edit → convert` round-trip lossless without requiring users to translate field names.
+
+  3. In `extract_spec`: emit a single canonical form — `presentation: [x, y, w, h]` — instead of the current pair of `presentation: True` + `presentation_rect: [...]`. This eliminates the asymmetry at the source. Keep backward-compat reading of the pair form in convert.
+
+  **Test:** add a regression test that opens a fixture .maxpat with a manually-resized presented box, runs sync, runs extract, runs convert, and asserts the live `presentation_rect` of the resized box is preserved end-to-end. The ensemble-sequencer-v5 → v6 case is a good real-world fixture (perm list resized to `[258, 57, 432, 655]`).
+
+  **Why this matters:** every "Modify, Don't Rebuild" task in this repo depends on sync being lossless. A silent loss is worse than a noisy one — the regenerated patch *opens fine* in Max, just with all the user's manual layout work erased. The user only notices when the layout looks wrong, by which point the manual work is gone unless they had a backup.
+
 ---
 
 ## Done
