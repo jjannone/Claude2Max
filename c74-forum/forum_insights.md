@@ -53,6 +53,10 @@ Promotion is user-confirmed only — see "Rules from Corrected Errors" in CLAUDE
 > *Source*: [Live Looping in 2025 - Object suggestions for a novice](https://cycling74.com/forums/live-looping-in-2025-object-suggestions-for-a-novice) — Source Audio.
 > *Why it matters*: full looper recipe pulls together half a dozen idioms. Document in `patching/MAX_PATCHING.md` § Audio Knowledge. **[PROMOTION-CANDIDATE]**.
 
+> **For DAW-transport-locked playback, use `phasor~ 4n @lock 1` with the patcher's Overdrive AND Audio Interrupt scheduler flags both enabled.** The `4n` argument names the phasor's period in transport units (a quarter note); `@lock 1` snaps it to the transport's clock, not the standalone audio clock. Without Overdrive + Audio Interrupt, the scheduler's data-rate operations drift relative to the audio clock and the phase resets land at inconsistent samples. The deeper rule is "do not mix signal-rate and data-rate operations unless unavoidable" — when sequencing a phasor against transport, keep everything signal-rate where possible.
+> *Source*: [Best way to sync a Phasor~ with transport?](https://cycling74.com/forums/best-way-to-sync-a-phasor-with-transport) — TFL / Roman Thilenius.
+> *Why it matters*: any tempo-synced sequencer or LFO that uses `phasor~` needs the @lock + Overdrive + Audio Interrupt combo. Document in `patching/MAX_PATCHING.md` § Audio Knowledge.
+
 ## Video / Jitter
 
 > **For multiple independent playheads on one movie file, use `jit.gl.polymovie` (Max 8.2+) — don't load the movie multiple times.**
@@ -192,6 +196,22 @@ Promotion is user-confirmed only — see "Rules from Corrected Errors" in CLAUDE
 > *Source*: [How to import random images (png,jpeg…) from a folder to jit.matrix automatically](https://cycling74.com/forums/how-to-import-random-images-pngjpeg-from-a-folder-to-jit-matrix-automatically) — TFL.
 > *Why it matters*: covers both the simple case (umenu) and the performance case (textureset). Document in `patching/MAX_PATCHING.md` Jitter notes.
 
+> **Audio-driven 3D mesh: `jit.gl.mesh` reads coordinates as `x` in plane 0, `y` in plane 1, `z` in plane 2 — NOT interleaved.** Successive vertices live in successive rows of the same matrix; resampling each input audio cycle to fit the mesh's row count requires zero-crossing detection plus interpolation. Inside `gen~`, the canonical resampling reads the input via `peek`, computes `wavelen = samplerate / freq`, and walks the cycle with `ivalL = wavelen / bufLen` per row, writing into the mesh-coordinate plane buffer with `poke`. The plane-per-axis ordering convention is non-obvious — a common mistake is to interleave x/y/z per cell, producing spirals instead of surfaces.
+> *Source*: [Creating OpenGL mesh object from two audio waves in real time](https://cycling74.com/forums/creating-opengl-mesh-object-from-two-audio-waves-in-real-time) — Ernest / Tikoda / Pedro Santos.
+> *Why it matters*: any audio-to-3D bridge in Jitter must follow the plane-per-axis convention. Document in `patching/MAX_PATCHING.md` Jitter notes.
+
+> **Matrix argmax via `jit.gen` "single-pixel rendering": invert dimensions so the gen pixel iterates the search matrix and emits to a 1×1 result.** `jit.gen`'s map-reduce limitation makes a naive max-search awkward — but driving a 1×1 output matrix through gen.codebox with a `nearest`-style loop over the larger source matrix lets each search-cell run sequentially in the codebox while only one output cell is emitted. For 1D buffer searches, `jit.buffer~` + Gen is fastest; `jit.findbounds` + `jit.3m` is the canonical Jitter-only path for max-value detection without index recovery.
+> *Source*: [get index of maximum in matrix (with gen?)](https://cycling74.com/forums/get-index-of-maximum-in-matrix-with-gen) — Graham Wakefield (C74) / Diemo Schwarz.
+> *Why it matters*: the inverted-dimension idiom is reusable for any reduce-style operation in jit.gen. Document in `patching/JIT_GEN_PATCHING.md` § Idioms.
+
+> **`jit.gl.slab` and `jit.gl.pix` need a `bang` or a `jit_gl_texture <name>` message every frame to emit; they are NOT @automatic by default.** Routing textures by name (`jit_gl_texture <name>` to a downstream slab/pix) avoids patchcord clutter, but the message must be re-sent each frame to drive output — the message both routes the texture AND triggers the operation. `jit.gl.node` is the exception: it has `@automatic 1` by default and runs every frame without external triggering. Mismatched expectations between these two object families are a frequent source of "my shader stops updating" symptoms.
+> *Source*: [distributing textures by name](https://cycling74.com/forums/distributing-textures-my-name) — Rob Ramirez (C74) / TFL.
+> *Why it matters*: clarifies a common Jitter GL trigger-vs-route confusion. Document in `patching/MAX_PATCHING.md` Jitter notes.
+
+> **For computer-vision tracking (face mesh, hand pose, body), prefer the jweb-based MediaPipe path (Rob Ramirez's repo) over older n4m / Electron approaches.** Older n4m wrappers around MediaPipe break in Max 9.x due to system-level video-capture conflicts; the jweb path runs MediaPipe inside Max's embedded browser via the MediaPipe CDN, streams results out as OSC, and bypasses the OS-level capture stack entirely. Multi-person tracking exposes `results.landmarks[0]` / `results.landmarks[1]` indexed per detection.
+> *Source*: [Google MediaPipe in Max (n4m, jweb)](https://cycling74.com/forums/n4m-facemesh-handpose-google-mediapipe) — Lysdexic / Rob Ramirez (C74).
+> *Why it matters*: any vision-tracking patch should use jweb-based MediaPipe rather than n4m wrappers — saves a class of platform-stability issues. Document in `patching/MAX_PATCHING.md` Jitter notes if vision tracking enters scope.
+
 ## JavaScript / v8
 
 > **For multiple parameters in one `jsui`/`v8ui`, use one `pattr` per parameter pointing at the jsui's JS-side identifier, plus `pattrstorage @savemode 0`.** The thread's working pattern: `pattr myattr1` and `pattr myattr2` each bind to a JS-side variable inside the jsui (named via `scriptingname`); `autopattr` registers them; `pattrstorage @savemode 0` (don't save with patcher) handles snapshot/recall. Setting/getting a parameter from outside is a normal `pattr` set/get; the jsui handles the redraw via its `setvalueof()`/`getvalueof()` callbacks. Source confirms this works for arrays as well as scalars (`message 1 2 3` stores a 3-element list in a single param).
@@ -235,6 +255,10 @@ Promotion is user-confirmed only — see "Rules from Corrected Errors" in CLAUDE
 > **Nested dict→array→dict structures (typical Node-for-Max payloads) need a chain of `dict.unpack <key>:` to peel each layer.** A printed dict that contains `array: [{probability: 0.5}, …]` is one outer dict, one inner array of dicts. Peel: `dict.unpack array:` → `array.iter` → `dict.unpack probability:`. Use `array.foreach` for named-key access per element instead of indexed iteration.
 > *Source*: [How do you extract data from a specific array?](https://cycling74.com/forums/how-do-you-extract-data-from-a-specific-array) — TFL.
 > *Why it matters*: avoids the JS-fallback path for nested-data unpacking. Document near the dict / array notes in `SPEC_REFERENCE.md`.
+
+> **To load a `.jxf` matrix file from JS, instantiate `new JitterMatrix()` inside the JS object and call `.read(path)` on it directly — do NOT message an external `jit.matrix`.** The "can't find file" symptom from messaging an external object stems from path-resolution differences between the external's working directory and JS's. The fix is to keep the matrix entirely inside JS: `var m = new JitterMatrix(); m.read(path); outlet(0, "jit_matrix", m.name);`. Pair with `function notifydeleted() { m.freepeer(); }` to free the matrix on object-delete.
+> *Source*: [loading matrix file from js](https://cycling74.com/forums/loading-matrix-file-from-js) — Federico-AmazingMaxStuff.
+> *Why it matters*: avoids a path-resolution gotcha when bridging files into JS-driven matrix work. Document in `SPEC_REFERENCE.md` § JavaScript Objects.
 
 ## MIDI
 
@@ -285,6 +309,10 @@ Promotion is user-confirmed only — see "Rules from Corrected Errors" in CLAUDE
 > **`dict` does not accept raw integers — `outlet(0, intValue)` from JS into a `dict` produces `dict: doesn't understand 'int'`.** The dict object expects either a control message (`bang`, `set <key> <value>`, `get <key>`, etc.) or its own dict-name as a reference. Bare integers are rejected. From JS, send `outlet(0, "set", "key", value)` (after `Dict("name").set(key, val)`) or `outlet(0, "bang")`, never the value alone.
 > *Source*: [Dict error message](https://cycling74.com/forums/dict-error-message) — TFL.
 > *Why it matters*: common pitfall transitioning from list-based to dict-based JS workflows. Document in `SPEC_REFERENCE.md` § dict.
+
+> **[PROMOTED 2026-05-05]** **`pattrstorage` supports weighted multi-preset interpolation via `recallmulti <preset> <weight> [<preset> <weight> ...]` — weights are auto-normalised across any number of presets.** A common student instinct is to morph between two stored states; `recallmulti` extends this to N-way morphing in one message: `recallmulti 1 0.3 2 0.3 5 0.4` weights preset 1 at 30%, preset 2 at 30%, preset 5 at 40%. (The ratio doesn't have to sum to 1 — pattrstorage normalises automatically.) For per-element multi-dimensional morphing across multisliders or buffers, `mxj ej.linterp` and `tap.jit.ali` cover the same use case with extra interpolation modes.
+> *Source*: [interpolating between multiple patterns?](https://cycling74.com/forums/interpolating-between-multiple-patterns) — Emmanuel Jourdan (C74).
+> *Why it matters*: replaces hand-rolled cross-fade ladders for preset morphing. Document in `patching/MAX_PATCHING.md` § Patching Patterns. **[PROMOTION-CANDIDATE]**.
 
 ## Gen / gen~
 
@@ -360,6 +388,30 @@ slide-as-envelope-follower, samplerate→ms, and equal-power crossfade.
 > *Source*: [All gen~ version of RNBO's Freezer example](https://cycling74.com/forums/all-gen-version-of-rnbos-freezer-example) — Graham Wakefield (C74).
 > *Why it matters*: gen~ polyphony pattern. Document in `patching/GEN_PATCHING.md` § Architecture.
 
+> **Hard-sync a `gen~` sine oscillator without aliasing by tracking the sub-sample crossover point of the sync input and applying a brief sinc-impulse smoothing across the discontinuity.** The naive sync (reset phase to 0 at sync-input edge) lands the reset on a sample boundary, producing harsh harmonics that no oversampling fully removes. The right path is sub-sample timing: detect the sync edge, compute the fractional sample offset where the edge actually crossed (via interpolation between the pre/post-edge sample values), and apply a band-limited correction (integrated sinc / "ramp-to-curve" shaper from Wakefield's GO book) across the discontinuity. Test rigs at `[poly~ <patch> up 4]` for oversampled comparison.
+> *Source*: [gen~: oscillator without delays lines or cos/sin function. how is it possible?](https://cycling74.com/forums/simple-fm-ready-sinewave-oscillator-with-sync) — Graham Wakefield (C74) / Roman Thilenius.
+> *Why it matters*: principle generalises beyond oscillators — any audio-rate event-detection chain (transient triggers, gate openings, etc.) benefits from sub-sample-timed correction. Document in `patching/GEN_PATCHING.md` § Audio-rate idioms.
+
+> **[PROMOTED 2026-05-05]** **Windowed leaky accumulator in `gen~`: read from a `data` buffer at the current index, subtract from `accum`, zero the position, then `poke` the new sample N positions ahead with `@overdub` enabled.** Naive circular-subtract approaches leak when N changes mid-stream — the "tape-overdub" pattern (zero the read cell so it can't be read twice; write the new sample N samples in the future via overdub) survives dynamic window resizing because every sample is guaranteed to be subtracted exactly once. Useful for moving-RMS, moving-average, and any rolling-statistic computation at signal rate.
+> *Source*: [How to make a leaky accumulator in Gen?](https://cycling74.com/forums/how-to-make-a-leaky-accumulator-in-gen) — Graham Wakefield (C74).
+> *Why it matters*: standard windowed-statistic primitive for gen~. Document in `patching/GEN_PATCHING.md` § Audio-rate idioms. **[PROMOTION-CANDIDATE]**.
+
+> **[PROMOTED 2026-05-05]** **Click between the last and first sample of a `gen~` circular buffer means the read/write index is crossing the boundary without interpolation — set `@boundmode wrap` on `peek`/`poke` AND overshoot the index by one sample to give the interpolator a wrap-aware lookahead cell.** All `@interp` modes in `gen~` respect `@boundmode wrap`, but only when the read/write *index* range itself is one cell wider than the buffer length — without the overshoot, the interpolator fetches the boundary cell unsmoothed and clicks at the wrap. The fact that the click persists after dropping playback rate to 1× confirms it's a boundary-state issue, not a rate-related artifact.
+> *Source*: [circular buffer - click between the last and first sample](https://cycling74.com/forums/circular-buffer-click-between-the-last-and-first-sample) — Thomas / Graham Wakefield (C74).
+> *Why it matters*: the @boundmode + overshoot combo is the canonical fix for any gen~ circular-buffer click. Document in `patching/GEN_PATCHING.md` § Audio-rate idioms. **[PROMOTION-CANDIDATE]**.
+
+> **[PROMOTED 2026-05-05]** **For envelope-like data in `gen~`, store control points (time, value) as buffer entries and interpolate on the fly via `peek + scale + accum`. Don't pre-rasterize the envelope into a sample buffer.** The naive approach pre-fills a full-length sample buffer with every interpolated value — wasting both memory and the buffer-write step. The vector-style approach treats the buffer as a list of breakpoints; gen advances an `accum` counter, peeks the surrounding two breakpoints, and uses `scale` to interpolate. Editing breakpoints (or changing duration) is a single buffer-write rather than a full re-rasterization.
+> *Source*: [Gen~ simple data management with buffer](https://cycling74.com/forums/gen-simple-data-management-with-buffer) — Graham Wakefield (C74).
+> *Why it matters*: efficient envelope/curve representation pattern. Document in `patching/GEN_PATCHING.md` § Architecture. **[PROMOTION-CANDIDATE]**.
+
+> **Per-bin spectral feedback in a `pfft~` requires `[delay 2048]` (or whatever your FFT frame size is) to provide one-frame history; mix the delayed bin pre-fader, scaled by per-bin feedback coefficients pulled from a parameter buffer.** The minimum feedback latency is one FFT frame — inherent to the pfft~ architecture; trying to feedback faster than one frame is impossible without rewriting the time/frequency boundary. Per-bin coefficients come from a parameter buffer indexed by frame position, allowing different feedback gains per frequency band. Pre-fader mixing keeps the dry signal level independent of the feedback amount.
+> *Source*: [Spectral Delay Example (trying to add feedback)](https://cycling74.com/forums/spectral-delay-example-trying-to-add-feedback) — Graham Wakefield (C74).
+> *Why it matters*: spectral-feedback architecture for any pfft~-based delay/comb. Document in `patching/GEN_PATCHING.md` § FFT/spectral idioms.
+
+> **[PROMOTED 2026-05-05]** **N-band crossover in `gen~` preserves phase by cascading allpass filters on EVERY previously-split signal whenever a new lowpass stage is introduced — not just on the new highpass output.** A 3-band crossover is LP1 → AP2 / HP1 → LP2 / HP2; extending to 5 bands is *not* "add LP3, LP4 to the lowest band" — it requires an allpass chain on every previously-split branch. Generalised: out_k for the lowest band needs (LP_k → AP_{k+1} → AP_{k+2} → … → AP_N); the bands above need their own LP at their split point and matching APs on every later split. Without this, phase coherence across bands is lost and recombining the bands sums to a comb-filtered version of the input rather than the input.
+> *Source*: [Modify gen~ crossover example](https://cycling74.com/forums/modify-gen-crossover-example) — Graham Wakefield (C74).
+> *Why it matters*: phase-correct crossovers are core audio-DSP; the cascading-allpass rule generalises to any multi-band split. Document in `patching/GEN_PATCHING.md` § Audio-rate idioms. **[PROMOTION-CANDIDATE]**.
+
 ## Max for Live
 
 > **`live.path → live.object → get … → route` is the canonical chain to query the LOM (Live Object Model).** `live.path` outputs an `id N` token that `live.object` consumes; sending `get <property>` to `live.object` outputs the property prefixed with the property name; `route <property>` peels the prefix. Pattern observed across half a dozen pass-2 M4L threads. To follow a path: `path live_set tracks 0 clip_slots 1 clip` is the canonical way to get-clip-1-on-track-0; the path tokens are `id`-numeric or symbolic, mix freely.
@@ -381,6 +433,10 @@ slide-as-envelope-follower, samplerate→ms, and equal-power crossfade.
 > **[PROMOTED 2026-05-05]** **`pfft~` in Max for Live: prefix every internal object with `---` for per-instance isolation, not just the `pfft~` declaration. Global names (s/r pairs, jit.* names) inside the pfft~ subpatch leak across all device instances.** Without the prefix, two devices' `pfft~` subpatches collide on every send/receive name and any jit.* coloname inside, causing crashes and parameter cross-talk. The naming convention extends throughout the subpatch's contents — every send name, receive name, named buffer, jit.matrix coloname, etc.
 > *Source*: [Problems with pfft~ in Max4Live](https://cycling74.com/forums/problems-with-pfft-in-max4live) — Blue Wall Loop.
 > *Why it matters*: an M4L-only pitfall (Max-standalone is fine). Document in `patching/M4L_PATCHING.md` § Namespacing. **[PROMOTION-CANDIDATE]**.
+
+> **To duplicate a currently-playing MIDI clip's length (or perform any operation on the playing clip) from a Max for Live device, navigate `live.thisdevice → canonical_parent → playing_slot_index → clip_slot → clip` then send `duplicate_loop`.** The non-obvious complication is **rack placement**: a device on a track has a different `canonical_parent` chain than a device inside an instrument or audio rack. A device meant to work both ways must walk both possible parent shapes (`live_set tracks N` for direct-track placement vs `live_set tracks N devices M chains K devices L` for rack-nested) before fetching the playing clip.
+> *Source*: [Duplicate length (actually double) midi clip - possible?](https://cycling74.com/forums/duplicate-length-actually-double-midi-clip-possible) — 11OLSEN.
+> *Why it matters*: any M4L device that operates on the device's own track's playing clip needs the canonical_parent variation handled. Document in `patching/M4L_PATCHING.md` § LOM patterns.
 
 ## LLM / AI-Assisted Patching
 

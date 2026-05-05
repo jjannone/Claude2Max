@@ -196,6 +196,104 @@ discards local-variable state across iterations. (Source: Cycling '74
 forum, "Why won't the for loop do what I want it to", Graham
 Wakefield.)
 
+### Windowed accumulator (moving sum) via "tape-overdub" pattern in `Data`
+
+For a rolling sum / moving-average / moving-RMS at signal rate, the
+naive circular-subtract pattern leaks values when the window length
+changes mid-stream. The robust pattern is "tape overdubbing" — every
+input sample is guaranteed to be subtracted exactly once because the
+read cell is zeroed after the subtract, and the new sample is `poke`d
+N samples ahead with overdub mode.
+
+The shape:
+
+```
+read  = peek(buf, idx);        // sample leaving the window
+sum   = sum + input - read;    // add new, subtract old
+poke(buf, 0,     idx);         // zero the read cell
+poke(buf, input, (idx + N) % len, 1);   // overdub-mode write N samples ahead
+idx   = (idx + 1) % len;
+```
+
+Because the `0` write happens before the future `input` write to the
+same cell, and the future write uses overdub, dynamic N (window resize)
+never produces a stale-value leak: a cell that no longer falls inside
+the window has been zeroed before any later overdub touches it.
+Generalises to any windowed statistic (RMS, peak, variance) by
+substituting the running operator. (Source: Cycling '74 forum, "How to
+make a leaky accumulator in Gen?", Graham Wakefield.)
+
+### Click-free circular buffers in `gen~`: `@boundmode wrap` AND a one-cell index overshoot
+
+A circular buffer with `peek` / `poke` clicking at the wrap boundary
+isn't a rate or interpolation problem — it's a boundary-cell problem.
+All `gen~` `@interp` modes respect `@boundmode wrap` correctly, but
+only when the index range itself extends one cell past the buffer
+length. Without the overshoot, the interpolator at the boundary fetches
+the wrap-side cell unsmoothed and clicks.
+
+```
+peek buf @boundmode wrap @interp linear     // or @interp cubic / spline
+poke buf @boundmode wrap
+```
+
+Drive the index range as `0 ≤ idx ≤ len` (note: `≤ len`, not `< len`)
+so the interpolator can fetch the boundary lookahead. A click that
+persists after dropping playback rate to 1× is the diagnostic — it
+means the issue is the boundary state, not a rate-related artifact.
+(Source: Cycling '74 forum, "circular buffer - click between the last
+and first sample", Graham Wakefield.)
+
+### Store envelope/curve data as breakpoint coordinates, not as rasterised samples
+
+For envelope-like data inside `gen~`, the efficient representation is
+control points (time, value pairs) stored in a buffer, with `gen~`
+interpolating between them on the fly. The naive approach pre-fills a
+sample-rate buffer with every interpolated value — wasting memory and
+buffer-write cost.
+
+Vector-style approach:
+
+```
+// buffer holds [t0, v0, t1, v1, ..., tN, vN]
+counter += 1 / total_samples;
+seg     = find_segment(counter, breakpoints);  // which (ti, ti+1) bracket?
+t_norm  = (counter - ti) / (t_{i+1} - ti);
+output  = scale(t_norm, 0, 1, vi, v_{i+1});
+```
+
+Editing breakpoints (or changing total duration) is one or a few
+buffer-writes, not a full rasterisation pass. The pattern generalises
+to any piecewise representation — multi-stage envelopes, parameter
+trajectories, lookup tables with sparse control points. (Source:
+Cycling '74 forum, "Gen~ simple data management with buffer", Graham
+Wakefield.)
+
+### N-band crossover: cascade allpasses on every previously-split branch when adding a new lowpass stage
+
+A phase-coherent N-band crossover preserves the property that summing
+all bands recovers the input. The rule for extending a 2-band split
+(LP1 / HP1) to a 3-band (LP1 / HP1 with LP1 already split, then LP2 /
+HP2 inside HP1) is: **every previously-split branch needs an allpass
+at the new split's frequency**, not just the band being newly split.
+
+For a 5-band split with crossover frequencies f1 < f2 < f3 < f4:
+
+```
+out_1 (lowest)  = LP_f1 → AP_f2 → AP_f3 → AP_f4
+out_2           = HP_f1 → LP_f2 → AP_f3 → AP_f4
+out_3           = HP_f1 → HP_f2 → LP_f3 → AP_f4
+out_4           = HP_f1 → HP_f2 → HP_f3 → LP_f4
+out_5 (highest) = HP_f1 → HP_f2 → HP_f3 → HP_f4
+```
+
+Without the trailing allpass cascade on each non-newest band, summing
+the bands no longer reconstructs the input — instead it produces a
+comb-filtered version with phase notches at the missing-allpass
+frequencies. This is the same mechanism behind Linkwitz-Riley
+multi-band design, generalised to N bands. (Source: Cycling '74 forum,
+"Modify gen~ crossover example", Graham Wakefield.)
+
 ## Latency Compensation in gen~ Signal Splits
 
 When an envelope-follower drives a crossfade, the **env path is the
