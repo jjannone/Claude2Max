@@ -117,6 +117,85 @@ equal-power when 1. Crossfading between the two branches at a value
 between gives an interpolated crossfade — useful when the right curve
 depends on the source material.
 
+### A 2-sample feedback delay = a quadrature oscillator
+
+An oscillator can emerge from `gen~` without an explicit `cos` / `sin`
+call or a wavetable. The construction is two feedback delays of one and
+two samples summed via gain coefficients — mathematically the same as
+a complex multiplication, which is a rotation of a 2-vector around the
+origin. Frequency is set by the gain coefficients; the rotating vector
+*is* the oscillation. Same math as waveguide synthesis and the standard
+quadrature-oscillator state-variable formulation.
+
+For instance, a working 2-state feedback loop in a `gen~` codebox:
+
+```
+History x1, x2;
+y = a*x1 + b*x2;
+x2 = x1;
+x1 = y;
+```
+
+with `a` and `b` chosen so that `a² + b² = 1` and `cos(angle) = a/2`
+gives a stable rotation at the corresponding frequency. Reach for this
+pattern when CPU is critical and many oscillators are needed — the
+2-state form can beat a `cycle()` lookup chain on tight budgets.
+(Source: Cycling '74 forum, "gen~: oscillator without delays lines or
+cos/sin function", Graham Wakefield.)
+
+### Multi-stage envelopes as `accum → clip 0 1 → shape(t) → scale → out` with `>= 1` stage transitions
+
+A general way to model any envelope stage in `gen~` is a normalised
+0..1 ramp, a shape function over that ramp, and a scale to the desired
+target range. The stage advances when the ramp reaches 1.
+
+```
+samples_for_stage = mstosamps(stage_duration_ms)
+ramp_increment = 1 / samples_for_stage
+t = accum(ramp_increment)            // 0..1 ramp at stage rate
+t_clipped = clip(t, 0, 1)
+shaped = pow(t_clipped, k)           // any function of t in [0,1]
+out = scale(shaped, 0, 1, start, end)
+advance_stage = (t >= 1)             // single-comparator stage transition
+```
+
+The decoupling matters: timing lives in the `accum`/`mstosamps` chain;
+shape lives in the function applied to `t`; mapping lives in `scale`.
+ADSR, ADHSR, multi-segment, and arbitrary breakpoint envelopes all
+share this template — only the per-stage parameters differ. (Source:
+Cycling '74 forum, "Gen~ adsr with curved stages", Graham Wakefield.)
+
+### `cycle()` inside a codebox `for` loop is *one* oscillator run N times — not N independent oscillators
+
+A naive harmonic-stack attempt
+```
+for (i = 0; i < N; i += 1) sum += cycle(freq * (i + 1));
+```
+produces a single high-frequency tone rather than N partials. The body
+of the `for` loop runs N times within one sample's evaluation; each
+iteration calls `cycle()` on a fresh internal state, so all iterations
+collapse into one oscillator advanced N times in zero time.
+
+To run N independent oscillators inside a codebox loop, store N phases
+in a `Data` buffer and advance each one explicitly:
+
+```
+Data phases(16);
+for (i = 0; i < N; i += 1) {
+    f = freq * (i + 1);
+    phase = peek(phases, i);
+    phase = wrap(phase + (f / samplerate), 0, 1);
+    poke(phases, phase, i);
+    sum += sin(phase * twopi) / (i + 1);
+}
+```
+
+This is the canonical "additive synthesis in a loop" pattern — phase
+state lives in the `Data` buffer because gen's per-sample evaluation
+discards local-variable state across iterations. (Source: Cycling '74
+forum, "Why won't the for loop do what I want it to", Graham
+Wakefield.)
+
 ## Latency Compensation in gen~ Signal Splits
 
 When an envelope-follower drives a crossfade, the **env path is the

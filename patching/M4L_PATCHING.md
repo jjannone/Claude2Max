@@ -133,6 +133,33 @@ to add it — the converter intentionally matches Max's defaults, never
 exceeds them. (See `CLAUDE.md` § "Converter Design Rule — Match Max's
 Defaults, Never Exceed Them".)
 
+## Namespace isolation inside per-instance subpatchers — `---` prefix every internal name
+
+When the same M4L device is instantiated on multiple Live tracks (or
+multiple times on one track), every globally-named Max object inside
+the device shares state across all instances unless its name is
+prefixed with `---`. The prefix is a Max convention: an object name
+starting with `---` is rewritten per-instance into a unique symbol,
+isolating each device copy.
+
+The non-obvious part is that the convention extends through every
+*content* object inside a per-instance subpatcher — not just the
+subpatcher's declaration. For instance, a `pfft~` subpatch declared
+`pfft~ ---my-fft 1024` only escapes per-instance for the `pfft~` name
+itself; every `s` / `r` / `buffer~` / `jit.matrix` / `coll` *inside*
+that subpatch is still global until each of those is also `---`-
+prefixed. Symptoms of incomplete prefixing range from cross-talk
+between instances (parameter changes on one device affect the other) to
+hard crashes when two instances try to write the same global resource
+simultaneously.
+
+The rule generalises beyond `pfft~`: any subpatcher meant to be
+per-instance — `poly~` voices that hold global state, `gen~` patches
+with named buffers, abstractions wrapping per-device assets — must
+prefix every internal global name. The prefix is structural; missing
+one breaks instance isolation silently. (Source: Cycling '74 forum,
+"Problems with pfft~ in Max4Live".)
+
 ## `.amxd` packaging — what the file holds
 
 A `.amxd` file is a Live device wrapper around a `.maxpat`:
