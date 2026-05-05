@@ -45,6 +45,14 @@ Promotion is user-confirmed only — see "Rules from Corrected Errors" in CLAUDE
 > *Source*: [decrease speed of messages? (non destructively)](https://cycling74.com/forums/decrease-speed-of-messages-non-destructively).
 > *Why it matters*: belongs in `patching/MAX_PATCHING.md` § common-pitfalls with the `qlim` distinction.
 
+> **`record~` always repositions to the buffer head when toggled — replace it with `count~` + `poke~` for circular overdub.** A common circular-looper attempt drives `record~` from the same `groove~` that's playing the buffer back, expecting overdub to write at the current playhead. It doesn't: each `record~ 1` restarts at sample 0. The fix is to feed `groove~`'s sync output to `count~` (with the buffer's sample-length) and use `poke~` as the writer — `count~` becomes the master clock, `poke~` the writer with no internal state to reset.
+> *Source*: [Circular looper overdub with record~ always resets to beginning](https://cycling74.com/forums/circular-looper-overdub-with-record-always-resets-to-beginning) — Source Audio.
+> *Why it matters*: belongs in `patching/MAX_PATCHING.md` § Audio Knowledge as the canonical "live overdub" pattern. **[PROMOTION-CANDIDATE]**.
+
+> **Canonical full-feature live-looper architecture: `accum + wrap` cycling index in `gen~`, with fades on the audio inputs (not on indices) for click-free record/overdub.** Build the cycling sample index inside `gen~` using `accum 1 → wrap 0 length`. Use `splat~` for interpolated writing and `wave~` for reading. The non-obvious move: place fade-in/out envelopes on the **input audio** to record/overdub, not on the buffer indices or read/write positions. This avoids click artifacts more cleanly than crossfading sample-index logic. For undo, maintain a parallel buffer and copy in chunks (not in one go) to avoid CPU spikes.
+> *Source*: [Live Looping in 2025 - Object suggestions for a novice](https://cycling74.com/forums/live-looping-in-2025-object-suggestions-for-a-novice) — Source Audio.
+> *Why it matters*: full looper recipe pulls together half a dozen idioms. Document in `patching/MAX_PATCHING.md` § Audio Knowledge. **[PROMOTION-CANDIDATE]**.
+
 ## Video / Jitter
 
 > **For multiple independent playheads on one movie file, use `jit.gl.polymovie` (Max 8.2+) — don't load the movie multiple times.**
@@ -168,6 +176,22 @@ Promotion is user-confirmed only — see "Rules from Corrected Errors" in CLAUDE
 > *Source*: [Matrix > Gen > Matrix Feedback Loop: Particle Trails / Continuous Effects](https://cycling74.com/forums/matrix-greater-gen-greater-matrix-feedback-loop-particle-trails-continuous-effects).
 > *Why it matters*: belongs in `patching/MAX_PATCHING.md` Jitter section as the canonical particle-trail/visual-feedback idiom.
 
+> **`jit.anim.path` requires `setrotatexyz` for per-point rotation — `setorient` is a `jit.gl.path`-only message.** A common confusion is to expect `setorient` to work on both: it doesn't. `jit.anim.path` (the animatable path) needs `setrotatexyz x y z` messages at each point to drive child orientation. Disable `@tripod 1` to prevent the model flipping when path direction reverses. Wrap the path-driven orientation in a hierarchy of `jit.anim.node` objects so the model can independently rotate apart from the path frame.
+> *Source*: [jit.anim.path ribbon orient / rotation](https://cycling74.com/forums/jitanimpath-ribbon-orient-rotation) — TFL.
+> *Why it matters*: the symptom (your ribbon rotates wrong) and fix (different message for the different object) is hard to find by docs alone. Document in `patching/MAX_PATCHING.md` Jitter notes when a `jit.anim.path` example ships.
+
+> **For continuous audio-buffer waveform visualization, capture into a texture via `jit.gl.node` rather than redrawing into a `jit.matrix` each cycle.** A naive approach pokes audio samples column-by-column into a `jit.matrix` and pwindows it — but the matrix gets overwritten when the phasor wraps, producing a clear-and-redraw flicker rather than a continuous scope. `jit.gl.node` capture-to-texture preserves the prior frame implicitly, then the texture is shown by a `jit.pwindow` (or `jit.world`). Gives a CRT-style rolling scope with no manual matrix-copy.
+> *Source*: [Real-Time Audio Buffer Write](https://cycling74.com/forums/real-time-audio-buffer-write) — Matteo Marson.
+> *Why it matters*: the matrix-clearing problem is a frequent question; jit.gl.node-as-texture-cache is the right answer for any "persistent visual write" use case in Jitter.
+
+> **Aspect-preserving image fit: scale by the *shorter* source dimension and center the result *before* cropping — not after.** Cropping first then centering distorts when the source is much wider or taller than the target. The math: `scale = min(target_w / src_w, target_h / src_h)`. Use `jit.matrix @adapt 0 @float32 1 @fsaa 1` for quality during the resize. After scaling, paste into a larger canvas with offset `((canvas_w-scaled_w)/2, (canvas_h-scaled_h)/2)` via `jit.matrix usedstdim`/`dstdim` messages.
+> *Source*: [Scaling images while preserving aspect ratio and placing on larger canvas in Max 9](https://cycling74.com/forums/scaling-images-while-preserving-aspect-ratio-and-placing-on-larger-canvas-in-max-9) — Herr Markant.
+> *Why it matters*: typical image-prep utility. Document in `patching/MAX_PATCHING.md` Jitter notes for any Claude2Max patch that ingests user images.
+
+> **Random-image folder iteration: `umenu @autopopulate 1 @prefix <folder>` → random/urn → umenu (read by index) → `importmovie`. For high-rate sequencing, preload all images into `jit.gl.textureset` via `read` messages and switch via `outputtexture N`.** The `umenu` chain is fine for slideshow rates, but disk reads at performance time stall on large folders. `jit.gl.textureset`'s VRAM cache eliminates per-frame disk I/O, making 30+ fps image cycling practical.
+> *Source*: [How to import random images (png,jpeg…) from a folder to jit.matrix automatically](https://cycling74.com/forums/how-to-import-random-images-pngjpeg-from-a-folder-to-jit-matrix-automatically) — TFL.
+> *Why it matters*: covers both the simple case (umenu) and the performance case (textureset). Document in `patching/MAX_PATCHING.md` Jitter notes.
+
 ## JavaScript / v8
 
 > **For multiple parameters in one `jsui`/`v8ui`, use one `pattr` per parameter pointing at the jsui's JS-side identifier, plus `pattrstorage @savemode 0`.** The thread's working pattern: `pattr myattr1` and `pattr myattr2` each bind to a JS-side variable inside the jsui (named via `scriptingname`); `autopattr` registers them; `pattrstorage @savemode 0` (don't save with patcher) handles snapshot/recall. Setting/getting a parameter from outside is a normal `pattr` set/get; the jsui handles the redraw via its `setvalueof()`/`getvalueof()` callbacks. Source confirms this works for arrays as well as scalars (`message 1 2 3` stores a 3-element list in a single param).
@@ -204,15 +228,31 @@ Promotion is user-confirmed only — see "Rules from Corrected Errors" in CLAUDE
 > *Source*: [Support modern ESM imports in Node for Max](https://cycling74.com/forums/support-modern-esm-imports-in-node-for-max) — Joshua Kit Clayton (C74), Florian Demmer (C74).
 > *Why it matters*: this is the canonical ESM recipe for Claude2Max projects that use `node.script`. Belongs in CLAUDE.md's v8/JavaScript section alongside the existing CJS/ESM warning.
 
+> **Max 9 introduces `MaxArray`, a bridge between V8 native arrays and Max-side named arrays.** Inside a `v8` object, receive the array name in a method, instantiate `new MaxArray()`, set its `name` property, then convert via `JSON.parse(maxArray.stringify())` to manipulate as a JS array. After mutation, write back with `maxArray.set(jsArr)` and emit via `outlet(0, 'array', maxArray.name)` (the array reference, not the values). Methods: `set()`, `get()`, `length`, `append()`.
+> *Source*: [[SOLVED] Max 9: Array support in JS/V8?](https://cycling74.com/forums/max-9-array-support-in-jsv8) — TFL.
+> *Why it matters*: prior `js` / `v8` had no first-class array type — code passed lists or Dict references. Max 9's `MaxArray` is the canonical bridge. Document in `SPEC_REFERENCE.md` § JS / v8. **[PROMOTION-CANDIDATE]**.
+
+> **Nested dict→array→dict structures (typical Node-for-Max payloads) need a chain of `dict.unpack <key>:` to peel each layer.** A printed dict that contains `array: [{probability: 0.5}, …]` is one outer dict, one inner array of dicts. Peel: `dict.unpack array:` → `array.iter` → `dict.unpack probability:`. Use `array.foreach` for named-key access per element instead of indexed iteration.
+> *Source*: [How do you extract data from a specific array?](https://cycling74.com/forums/how-do-you-extract-data-from-a-specific-array) — TFL.
+> *Why it matters*: avoids the JS-fallback path for nested-data unpacking. Document near the dict / array notes in `SPEC_REFERENCE.md`.
+
 ## MIDI
 
 > **Pitchbend in RNBO arrives as 0..127 from `bendin` and needs `div 127.` (or equivalent) for ±1 normalization, then `pak f f` to combine MSB+LSB into a 14-bit float.** The naive `bendin → rnbo~ pitch` wiring sends the raw 0..127 byte; the working pattern is `bendin → div 127. → list.sum → pak f f → rnbo~`. The thread also documents that high-resolution (14-bit) pitch bend requires both MSB and LSB, packed via `pak`.
 > *Source*: [Trouble with [pak] and [bendin]](https://cycling74.com/forums/trouble-with-pak-and-bendin).
 > *Why it matters*: belongs in `patching/MAX_PATCHING.md` § MIDI as the canonical bendin-to-RNBO wiring.
 
+> **For chord-aware MIDI processing (sort, identify root, etc.), use `delay 0 → zl.group → zl.sort` to defer the chord into one event after all per-note bangs settle.** Live often emits chord notes in press-order, not pitch order, and not strictly simultaneously. `delay 0` pushes a message to the end of the current scheduler tick — no measurable latency, but everything queued before it lands first. Combined with `zl.group N` and `zl.sort`, this is the canonical "wait for chord, sort, output" pattern with effectively zero latency.
+> *Source*: [Sorting Midi Low to High](https://cycling74.com/forums/sorting-midi-low-to-high) — Source Audio.
+> *Why it matters*: the `delay 0` scheduler trick is broadly useful (chord-aware ops, simultaneous-event grouping). Document in `patching/MAX_PATCHING.md` § Patching Patterns. **[PROMOTION-CANDIDATE]**.
+
 ## UI / Presentation
 
 (no entries yet)
+
+> **`jit.cellblock` has built-in mouse tracking — drag-and-drop list reordering doesn't need a custom mousedown/mouseup state machine.** `jit.cellblock` itself emits cell-coordinate events on click and drag. Pair it with `coll` for the underlying data store: read positions on click, swap on drop, refresh the cellblock. Far simpler than rolling the same UI in `jsui`.
+> *Source*: [drag and drop reordering of a list](https://cycling74.com/forums/drag-and-drop-reordering-of-a-list) — Nikola Kołodziejczyk.
+> *Why it matters*: useful UI primitive that's easily missed in favor of jsui. Document in `patching/MAX_PATCHING.md` § UI Patterns.
 
 ## Performance
 
@@ -220,6 +260,10 @@ Promotion is user-confirmed only — see "Rules from Corrected Errors" in CLAUDE
 > Dan (C74 support) reproduced and escalated this bug after Gabriel Lavoie Viau measured unbounded growth. macOS Instruments traces show thousands of persistent `malloc` allocations (144B and 80B blocks) in `hashtab_storeflags` / `dictionary_appendatom_flags` paths, with no corresponding deallocation. The leak appears to live in the serialization layer of the `node.script.mxo` external rather than in user code. Initial GC-pressure hypothesis (V8 inside Node falling behind) was disproven — leak persists at modest rates (~44Hz) where GC has plenty of headroom. **No workaround documented as of the thread close.** Practical advice for Claude2Max patches that send heavy traffic to `node.script`: budget for periodic restarts, or push the heavy work back into `v8` (in-patcher, no leak observed) when feasible.
 > *Source*: [Node for Max Memory Issue?](https://cycling74.com/forums/node-for-max-memory-issue) — Dan (C74).
 > *Why it matters*: this is a planning consideration for any long-running Claude2Max patch using `node.script` for high-rate I/O (DMX, MIDI flood, network firehoses). The bug is real, confirmed, unresolved.
+
+> **`dict.serialize` over UDP creates one new symbol per serialised string — over time, a streaming dict source floods Max's symbol hash table, and the symbols never get GC'd.** RAM grows monotonically until restart. Two avoidance paths: (a) Max 9's OSC dict support — `udpsend / udpreceive` carrying OSC messages preserves dict structure natively without symbol creation; (b) third-party `o.pack` (Odot package) packs dicts without symbol creation. Only use `dict.serialize` for one-shot or low-rate transmissions.
+> *Source*: [how to avoid flooding Max symbol hash table?](https://cycling74.com/forums/how-to-avoid-flooding-max-symbol-hash-table) — Mathieu Chamagne.
+> *Why it matters*: RAM-leak symptom in any long-running networked Max application. Document in `patching/MAX_PATCHING.md` § Performance. **[PROMOTION-CANDIDATE]**.
 
 ## Patching Patterns (general)
 
@@ -237,6 +281,10 @@ Promotion is user-confirmed only — see "Rules from Corrected Errors" in CLAUDE
 > The mode that fires only on mouse-up is `@contdata 2`, but Max 8's inspector only exposes a binary checkbox toggling 0 ↔ 1 — mode 2 is reachable only by editing the spec/text. This is documented but undiscoverable through the GUI. Workarounds: (a) `mousefilter` to dedupe; (b) `zl reg` on the output to debounce; (c) Max 9's inspector reportedly exposes all three modes. The double-output is intentional — mode 0 is "fires on mouse-down + mouse-up". The bug is the inspector's incomplete exposure of the modes, not the multislider itself.
 > *Source*: [multislider bug](https://cycling74.com/forums/multislider-bug-1).
 > *Why it matters*: when Claude2Max generates a multislider that should fire only when the user finishes dragging, set `@contdata 2` explicitly in the spec. Belongs in SPEC_REFERENCE.md as a multislider object note.
+
+> **`dict` does not accept raw integers — `outlet(0, intValue)` from JS into a `dict` produces `dict: doesn't understand 'int'`.** The dict object expects either a control message (`bang`, `set <key> <value>`, `get <key>`, etc.) or its own dict-name as a reference. Bare integers are rejected. From JS, send `outlet(0, "set", "key", value)` (after `Dict("name").set(key, val)`) or `outlet(0, "bang")`, never the value alone.
+> *Source*: [Dict error message](https://cycling74.com/forums/dict-error-message) — TFL.
+> *Why it matters*: common pitfall transitioning from list-based to dict-based JS workflows. Document in `SPEC_REFERENCE.md` § dict.
 
 ## Gen / gen~
 
@@ -288,6 +336,30 @@ slide-as-envelope-follower, samplerate→ms, and equal-power crossfade.
 > *Source*: [TB-303 patch](https://cycling74.com/forums/tb-303-patch).
 > *Why it matters*: `patching/GEN_PATCHING.md` could grow a "filter design templates" section with this as a worked example. Useful as both a working filter and a teaching example for one-pole-cascade IIR design in gen~.
 
+> **`fold 0 1` after a `+ 0.01` accumulator silently mis-folds because the accumulator overshoots `1.0` to `1.01` *before* fold sees it.** Fold operates on its input as-presented; if the value sequence is `…0.99 → 1.00 → 1.01 → 1.02…`, fold reflects from the 1.01 frame onward, never reaching exactly 1.0 reliably. Fix: split the integration outlet from the rendering outlet — drive the accumulator on outlet 0; fold the output for downstream use on outlet 1, never feeding fold's output back into the accumulator. Equivalently, drive a clean 0..1 ramp from outside `jit.gen` with `jit.time.tri @scale 0.5 @offset 0.5`.
+> *Source*: [fold within jit.gen broken?](https://cycling74.com/forums/fold-within-jitgen-broken) — TFL.
+> *Why it matters*: subtle gen/jit.gen feedback ordering hazard; symptom (fold appearing to clamp) misleads the diagnosis. Document in `patching/JIT_GEN_PATCHING.md` Gotchas.
+
+> **For multiplane FFT-result matrices, flatten to single plane and use `[cell]` + modulo to assign each original plane to its own row — avoids hand-coding N `swiz` operators for varying FFT sizes.** Inside `jit.gen`: `out_x = in_x mod planes_per_row ; out_y = in_x / planes_per_row` (integer divide) reorganises the flattened sequence into a 2D grid where each row corresponds to one original plane. Generalises to any FFT length — change one parameter, no patcher edit needed.
+> *Source*: [Dynamic plane separation in Jit.gen](https://cycling74.com/forums/dynamic-plane-separation-in-jitgen) — TFL.
+> *Why it matters*: small jit.gen idiom for plane-handling at scale. Document in `patching/JIT_GEN_PATCHING.md` § Idioms.
+
+> **An oscillator can emerge from `gen~` without an explicit `cos`/`sin` call or wavetable, by using a feedback delay line of one and two samples mixed with a gain — the junction is mathematically a complex multiplication = a vector rotation, which is what an oscillator *is*.** Two delays (`delay 1`, `delay 2`) summed via gain coefficients form a 2D state vector; the per-sample update is a matrix-multiplication that rotates the vector around the origin at a frequency determined by the gain coefficients. Same math behind waveguide synthesis and quadrature oscillators. Practical use: when CPU is critical and many oscillators are needed, the 2-state-feedback formulation can beat trig tables.
+> *Source*: [gen~: oscillator without delays lines or cos/sin function. how is it possible?](https://cycling74.com/forums/gen-oscillator-without-delays-lines-or-cossin-function-how-is-it-possible) — Graham Wakefield (C74).
+> *Why it matters*: deep DSP insight worth surfacing. Document in `patching/GEN_PATCHING.md` § Audio-rate idioms. **[PROMOTION-CANDIDATE]**.
+
+> **The general way to model any envelope stage in `gen~` is `accum → clip 0 1 → shape(t) → scale to range`. The `>= 1` test on the normalised ramp triggers the next stage. Curve shape is just a function of `t ∈ [0,1]` (e.g. `pow(t, k)` for power curves).** This decouples timing (the ramp) from shape (the curve), and stage transitions reduce to a single comparator. Multi-stage envelopes (ADSR, ADHSR, multi-segment) become a small state machine where each state owns a duration, target value, and shape function — no special-case logic per stage.
+> *Source*: [Gen~ adsr with curved stages](https://cycling74.com/forums/gen-adsr-with-curved-stages) — Graham Wakefield (C74).
+> *Why it matters*: clean ADSR architecture in gen~. Document in `patching/GEN_PATCHING.md` § Audio-rate idioms — alongside the slide envelope-follower entry. **[PROMOTION-CANDIDATE]**.
+
+> **A `for` loop containing `cycle()` in `gen.codebox` does NOT create N parallel oscillators — it runs the same oscillator N times, resetting its state each iteration.** The naive `for (i=0;i<N;i+=1) sum += cycle(freq*(i+1))` produces a single high-frequency tone, not a harmonic stack. To make N independent oscillators in a loop, store N phases in a `Data` buffer and update them with peek/poke per iteration: `phase = peek(phases, i); phase = wrap(phase + freq/samplerate, 0, 1); poke(phases, phase, i); sum += sin(phase * twopi);`. Canonical "additive synth in a loop" pattern.
+> *Source*: [Why won't the for loop do what I want it to](https://cycling74.com/forums/why-wont-the-for-loop-do-what-i-want-it-to) — Graham Wakefield (C74).
+> *Why it matters*: easily-misunderstood gen.codebox semantics. Document in `patching/GEN_PATCHING.md` § Codebox semantics. **[PROMOTION-CANDIDATE]**.
+
+> **For polyphony in `gen~` — N independent voices — instantiate N subpatchers each with a different argument/input rather than one subpatcher with parameter routing.** Avoids parameter-management overhead of selecting/multiplexing voice state inside one larger gen patch, and produces a flat structure where each voice's path is independently traceable. Helper objects: `go.slewlimit` (smooth ramping), `go.onepole.hz` (frequency-domain EQ), `go.line.ms` (millisecond-rate fades), `accum 1` for timing, `change` for edge detection. Running-average for attack detection is a useful auxiliary pattern for transient-triggered freezing.
+> *Source*: [All gen~ version of RNBO's Freezer example](https://cycling74.com/forums/all-gen-version-of-rnbos-freezer-example) — Graham Wakefield (C74).
+> *Why it matters*: gen~ polyphony pattern. Document in `patching/GEN_PATCHING.md` § Architecture.
+
 ## Max for Live
 
 > **`live.path → live.object → get … → route` is the canonical chain to query the LOM (Live Object Model).** `live.path` outputs an `id N` token that `live.object` consumes; sending `get <property>` to `live.object` outputs the property prefixed with the property name; `route <property>` peels the prefix. Pattern observed across half a dozen pass-2 M4L threads. To follow a path: `path live_set tracks 0 clip_slots 1 clip` is the canonical way to get-clip-1-on-track-0; the path tokens are `id`-numeric or symbolic, mix freely.
@@ -305,6 +377,10 @@ slide-as-envelope-follower, samplerate→ms, and equal-power crossfade.
 > **Push 3's per-pad polyphonic key-pressure (full per-pad MPE) is exposed via the LOM `Control_Surfaces` path, NOT the standard MIDI input.** A working test patch (`Push 3 Button Matrix Test.amxd`) walks `live_set → control_surfaces → 0 → ...` to subscribe to per-pad pressure events. The naive `notein`/`midiin` path only gives you global pressure, not per-pad. This is undocumented in the M4L API reference; the working pattern is in the linked thread.
 > *Source*: [polyphonic key pressure of Push via Live Object Model](https://cycling74.com/forums/polyphonic-key-pressure-of-push-via-live-object-model-control_surfaces).
 > *Why it matters*: SDK-quality knowledge for any Push 3 M4L work. Document in `SPEC_REFERENCE.md` M4L section.
+
+> **`pfft~` in Max for Live: prefix every internal object with `---` for per-instance isolation, not just the `pfft~` declaration. Global names (s/r pairs, jit.* names) inside the pfft~ subpatch leak across all device instances.** Without the prefix, two devices' `pfft~` subpatches collide on every send/receive name and any jit.* coloname inside, causing crashes and parameter cross-talk. The naming convention extends throughout the subpatch's contents — every send name, receive name, named buffer, jit.matrix coloname, etc.
+> *Source*: [Problems with pfft~ in Max4Live](https://cycling74.com/forums/problems-with-pfft-in-max4live) — Blue Wall Loop.
+> *Why it matters*: an M4L-only pitfall (Max-standalone is fine). Document in `patching/M4L_PATCHING.md` § Namespacing. **[PROMOTION-CANDIDATE]**.
 
 ## LLM / AI-Assisted Patching
 
@@ -340,3 +416,12 @@ slide-as-envelope-follower, samplerate→ms, and equal-power crossfade.
 > The `.rnbopack` format is the canonical way to distribute an RNBO graph between Max users — single file, opens directly in Max. The Cycling '74-maintained repository [github.com/Cycling74/rnbo.runner.content](https://github.com/Cycling74/rnbo.runner.content) hosts reference patches for the Move device including the `sketchyetcher` and `4Loopers` examples studied here. Useful patterns observed in those examples: (a) on Move, motion controls map most intuitively when `y` increases-up (turn-right-up, turn-left-down) — this is non-default and worth setting explicitly; (b) for multi-looper architectures where one looper sets the master cycle and others quantize to it, store recordings in distinct buffers with synchronized lengths; (c) UI feedback via color-coded button states (red recording, green playback, white stopped) is the convention.
 > *Source*: [Move Drawing Toy (Sketchy Etcher)](https://cycling74.com/forums/move-drawing-toy-sketchy-etcher) — Alex Norman (C74); [4 x Looper](https://cycling74.com/forums/4-x-looper) — pag.
 > *Why it matters*: when Claude2Max produces an RNBO patch, especially for Move, the GitHub reference repo is a higher-quality starting point than the bundled examples. Note the `.rnbopack` distribution format in spec/CLAUDE2MAX docs.
+
+> **`delay` (and `delay~` derivatives) in RNBO drift over time when the requested delay is a non-integer sample count.** Tempo-synced delays compute samples-per-beat from BPM × samplerate / 60, almost always non-integer. Sample-quantised delay accumulates error per beat. Fix: use a subsample-accurate delay built from `filterdelay` + allpass interpolation, or deduct one vector of samples to compensate for feedback-loop timing. Beat-accurate timing in RNBO is not free — requires explicit subsample logic.
+> *Source*: [Delay~ in RNBO drifting over time](https://cycling74.com/forums/delay-in-rnbo-drifting-over-time) — sousastep.
+> *Why it matters*: any RNBO patch with tempo-synced delay needs to handle subsample drift explicitly.
+
+> **RNBO has no built-in mechanism to dynamically load multiple audio files from a folder; the platform requires either preconcatenated single-buffer-with-offsets or external preprocessing.** Acknowledged as an open feature gap by Cycling '74. Workaround: concatenate files into one buffer, store per-file offsets in a `data` object, and read with offset+length. C++-export-time concatenation of raw audio data is technically invalid (sample-rate / format mismatch); convert to a uniform format first.
+> *Source*: [Multiples audio files loading in RNBO](https://cycling74.com/forums/multiples-audio-files-loading-in-rnbo) — Alex Norman (C74).
+> *Why it matters*: RNBO limitation worth knowing before designing a sample-based RNBO patch.
+
