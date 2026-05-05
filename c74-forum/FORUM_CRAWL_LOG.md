@@ -22,25 +22,36 @@ Threads or topic clusters whose insights have been folded into
 |------------|------|------------------|------------------|------------------|-------|
 | 2026-05-01 | First chunk: Jitter pp.1-3 + JS pp.1-3 + MaxMSP p.1 + RNBO p.1 (M4L excluded) | 81 | 44 | 28 | 119 artifact files (88 .maxpat / 9 .js / 8 .zip / 6 .rnbopack / 3 .jxs / others) saved to `/tmp/forum/`. State file `forum_crawl_state.json` records every slug with decision: `downloaded` (44) / `scraped` (6 Phase C) / `skipped-no-artifact` (31). |
 | 2026-05-04 | Pass-2 chunk: MaxMSP pp.2-5 + Jitter pp.4-7 + RNBO pp.2-5 + Javascript pp.4-7 + Gen pp.1-4 (NEW subforum) + Misc pp.1-3 + Max For Live pp.1-2 | 240 | 103 | 32 (across 7 sections incl. fresh Gen / gen~ section) | 212 artifact files (167 .maxpat / 18 .zip / 24 other / 1 .js / 1 .jxs / 1 .rnbopack) saved to `/tmp/forum-pass2/`. Patched a Unicode-slug bug in the enumerator (`urllib.parse.quote(slug, safe='/-')`). 5 PROMOTION-CANDIDATE flags applied; will be promoted in the closing sweep. State file now totals 321 entries across both chunks. |
+| 2026-05-05 | Scheduled pass-3 attempt: all candidate subforums (MaxMSP pp.6+, Jitter pp.8+, RNBO pp.6+, Javascript pp.8+, Gen pp.5+, Misc pp.4+, Max For Live pp.3+, Java pp.1+) | 0 | 0 | 0 | cycling74.com returning HTTP 403 `x-deny-reason: host_not_allowed` for all requests (both direct urllib and WebFetch). Cloudflare WAF block on this environment's host/IP — not a transient rate limit. Crawl exhausted at current scan depth pending environment change. |
 
 ## Resume point
 
-Next session should start at one of these (artifact density tends to drop on later pages — verify with `--has-content` first):
+**BLOCKED as of 2026-05-05** — cycling74.com returns HTTP 403 `x-deny-reason: host_not_allowed` for all requests from this crawl environment. The Cloudflare WAF is blocking the host/IP. Both direct `urllib` and WebFetch routes are affected. This is not a transient rate-limit; no backoff will resolve it.
 
-- **Jitter pages 4-6** — continuing the largest contributor of artifact-bearing threads
-- **Javascript pages 4-5** — covers up to thread #189 (forum total)
-- **MaxMSP pages 2-4** — 75% of the subforum still unscanned
-- **RNBO pages 2-4** — only page 1 covered so far
-- **Gen pages 1-3** — entirely unscanned, novel territory
-- **Misc page 1** — also unscanned; broader-purpose threads
+Pending subforums (all unscanned beyond the pass-2 watermark):
 
-To check what's NEW vs UNCHANGED on any page, use `--diff` against the state file:
+- **MaxMSP pp.6+** — pass-2 covered pp.2-5
+- **Jitter pp.8+** — pass-2 covered pp.4-7
+- **RNBO pp.6+** — pass-2 covered pp.2-5
+- **Javascript pp.8+** — pass-2 covered pp.4-7
+- **Gen pp.5+** — pass-2 covered pp.1-4
+- **Misc pp.4+** — pass-2 covered pp.1-3
+- **Max For Live pp.3+** — pass-2 covered pp.1-2
+- **Java pp.1+** — entirely unscanned
+
+When the crawl environment changes (different egress IP, proxy, etc.), verify first:
 
 ```bash
-python3 enumerate_forum_threads.py --category Jitter --pages 1-6 --diff --detect-content
+curl -s -o /dev/null -w "%{http_code} %header{x-deny-reason}" "https://cycling74.com/forums?category=MaxMSP&page=1"
 ```
 
-That command will show only NEW (slug never in state) or UPDATED (new replies since last scrape) threads — already-done ones are silently filtered out.
+If that returns `200`, resume with:
+
+```bash
+python3 enumerate_forum_threads.py --category MaxMSP --pages 6-8 --diff --detect-content
+python3 enumerate_forum_threads.py --category Jitter --pages 8-10 --diff --detect-content
+# ... and so on per the list above
+```
 
 ## Queue
 
