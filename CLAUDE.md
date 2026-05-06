@@ -237,6 +237,14 @@ For instance: `live.*` objects were getting `parameter_enable: 1` and `saved_att
 
 **When adding any auto-generated attr to the converter, verify first by creating the object fresh in Max and inspecting its JSON — only inject what's absent but required for correct wiring, never what's absent because Max intentionally leaves it unset.**
 
+## Converter Reverse Direction — Capture What Max Keeps, Drop What Max Strips
+
+When reconciling a live `.maxpat` back into the spec (sync), the live box is authoritative. Anything Max stores on a box is potentially load-bearing — colors, automation state, scripting names, font choices, attrs the spec author didn't anticipate — and a curated allowlist will always be incomplete. Default to denylist semantics: capture every box key except those that have dedicated structured representation elsewhere in the spec.
+
+Symmetrically, attrs the spec listed but Max didn't preserve should be dropped, not retained — that's how sync surfaces typos and Max-stripped attrs instead of letting them rot in the spec across cycles.
+
+For instance: the original `_PRESERVE_ATTRS` allowlist covered styling and identity attrs but missed every `live.gain~` color attr, every `dial`/`function`/`multislider` attr, and `live.*` parameter automation state. Each new attr the user discovered required an explicit code change. The 2026-05-05 denylist swap (`_attrs_from_box`) captures everything Max keeps; the structured-slot exclusions (`patching_rect`, `presentation`, `presentation_rect`, etc.) are excluded only because they appear elsewhere in the spec, not because they don't matter.
+
 ## What You Must Handle
 
 - **Object text, connections, layout** — write text exactly as you'd type it in Max. Get outlet/inlet indices right. Use explicit `pos`. See `SPEC_REFERENCE.md` and `patching/MAX_PATCHING.md` for all rules.

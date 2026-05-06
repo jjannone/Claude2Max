@@ -444,6 +444,10 @@ Use `attrs` to set any additional Max box attributes:
 }
 ```
 
+### Sync semantics — the live box is authoritative
+
+On `sync`, every attribute Max keeps on a box is captured into the spec's `attrs` dict; anything in the spec's `attrs` that Max didn't preserve is dropped. If you wrote an attribute name that doesn't exist on the object, Max silently strips it and sync will reflect that — your typo will not survive the round trip. To preserve a hand-tuned attr through sync, place the object in Max and confirm Max kept the attr before relying on it.
+
 ## Layout Guidelines
 
 **Always use explicit `pos` for every object.** The auto-layout engine arranges left-to-right, but hand-placed patches are far more readable. Follow these rules when placing objects:
