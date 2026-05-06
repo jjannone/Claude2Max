@@ -281,6 +281,8 @@ Whenever you learn something new about Max behavior, fix a bug, or add/change a 
 
 **Before every commit/push**, check: did this session produce insights that belong in the reference docs? If so, update them in the same commit. Do not wait for the user to ask — this is automatic.
 
+**Never use local Claude memory as a substitute for repo documentation.** This repo is specifically designed so that every Claude instance — across all users who clone it — has the same knowledge. Saving a Max behavioral insight or Claude2Max convention to `~/.claude/…/memory/` instead of the repo docs defeats that purpose entirely: it stays private to one machine, it won't travel with the repo, and future instances won't have it. If an insight is worth remembering, it belongs here.
+
 ## New User Setup
 
 **At the start of every conversation**, after the long-gap check, run this:
