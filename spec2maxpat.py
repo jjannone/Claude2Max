@@ -951,22 +951,52 @@ def extract_spec(maxpat):
 # Box IDs that are internal Claude2Max scaffolding, never spec objects
 _SKIP_BOX_IDS = {"obj-spec-embed", "obj-title"}
 
-# Box attrs to carry back into spec on sync.
-# Anything Max stores on a box that affects appearance, identity, or runtime
-# behavior must be listed here — otherwise sync drops it from the spec and the
-# next convert cycle erases it from the .maxpat. Tutorial breakage rules:
-#   - identity: varname (scripting name — referenced by JS via patcher.getnamed())
-#   - visibility: hidden (panels/annotations start hidden; JS unhides current step)
-#   - z-order: background (panels render BEHIND highlighted objects, not on top)
-#   - panel chrome: bordercolor / border / rounded / locked_bgcolor
-#   - styling: bgcolor / textcolor / color / fontsize / fontface / fontname
-#   - bubble comments: bubble / bubbleside / bubblepoint / bubbletextmargin
-_PRESERVE_ATTRS = {"bgcolor", "textcolor", "color", "fontsize", "fontface", "fontname",
-                   "varname", "hidden", "background", "bordercolor", "border",
-                   "rounded", "locked_bgcolor",
-                   "bubble", "bubbleside", "bubblepoint", "bubbletextmargin",
-                   "bubble_bgcolor",   # bubble comments use this, NOT plain bgcolor
-                   "items", "prefix"}   # umenu menu items + auto-prefix
+# Box keys that have dedicated structured representation in the spec — they
+# must NOT be mirrored into the `attrs` dict, because the converter would
+# write them twice and disagree with itself on the round trip. Everything
+# else Max stores on a box is captured into `attrs` on sync (denylist
+# semantics — the live box is authoritative; if Max didn't keep an attr,
+# neither does the spec).
+_INTERNAL_BOX_KEYS = {
+    "id",                # spec dict key, not an attr
+    "maxclass",          # spec `type` field
+    "text",              # spec `text` field
+    "numinlets",         # derived from text or `inlets` override
+    "numoutlets",        # derived from text or `outlets` override
+    "outlettype",        # derived from text or `outlettype` override
+    "patching_rect",     # spec `pos` + `size`
+    "presentation",      # spec `presentation` flag
+    "presentation_rect", # spec `presentation` rect
+    "patcher",           # recursive subpatcher (separate path)
+}
+
+
+def _attrs_from_box(box, existing_attrs=None):
+    """
+    Return the spec `attrs` dict reconciled from a live box.
+
+    Captures everything Max stores on the box except keys with structured
+    spec slots (see _INTERNAL_BOX_KEYS) and font defaults (which the
+    converter applies anyway, so writing them would be noise).
+
+    The live box is authoritative: any attr the user set in the spec but
+    Max didn't keep on the live box is dropped — that's how sync surfaces
+    typos and Max-stripped attrs instead of letting them rot in the spec.
+    `existing_attrs` is kept only for callers that need to merge non-box
+    metadata; presently unused.
+    """
+    new_attrs = {}
+    for k, val in box.items():
+        if k in _INTERNAL_BOX_KEYS:
+            continue
+        if k == "fontsize" and val == DEFAULT_FONT_SIZE:
+            continue
+        if k == "fontface" and val == 0:
+            continue
+        if k == "fontname" and val == DEFAULT_FONT_NAME:
+            continue
+        new_attrs[k] = val
+    return new_attrs
 
 
 def _collect_boxes(maxpat):
@@ -1000,6 +1030,42 @@ def _make_spec_id(box, used_ids):
     return candidate
 
 
+def _live_size_for_spec(maxclass, text, w, h):
+    """
+    Return [w, h] to write to the spec, or None if dimensions match the
+    converter's default for this object class.
+
+    UI_SIZES classes have a fixed default. Everything else (comment, newobj,
+    message, ...) defaults to estimate_text_width(text) × 22 — same formula
+    the converter uses when no `size` is given.
+
+    A return of None means "omit `size` from spec" (round-trip stable).
+    A non-None return means the user resized the box in Max — preserve it.
+    """
+    iw, ih = int(w), int(h)
+    default_wh = UI_SIZES.get(maxclass)
+    if default_wh:
+        return None if (iw, ih) == default_wh else [iw, ih]
+    expected_w = estimate_text_width(text) if text else 40
+    if iw == expected_w and ih == 22:
+        return None
+    return [iw, ih]
+
+
+def _live_presentation_for_spec(box):
+    """
+    Return the presentation field to write to the spec, or None if the box
+    is not in presentation. A 4-tuple [x, y, w, h] is always returned when
+    presentation is set — Max stores all four; we preserve all four.
+    """
+    if not box.get("presentation"):
+        return None
+    prect = box.get("presentation_rect")
+    if prect and len(prect) >= 4:
+        return [int(prect[0]), int(prect[1]), int(prect[2]), int(prect[3])]
+    return [0, 0]
+
+
 def _box_to_spec_obj(box):
     """Convert a raw .maxpat box dict to a Claude2Max spec object."""
     maxclass = box.get("maxclass", "newobj")
@@ -1012,35 +1078,15 @@ def _box_to_spec_obj(box):
     if text and maxclass in ("newobj", "message", "comment", "live.text"):
         obj["text"] = text
 
-    # Size — include only when meaningfully non-default
-    default_wh = UI_SIZES.get(maxclass)
-    if default_wh:
-        if (int(w), int(h)) != default_wh:
-            obj["size"] = [int(w), int(h)]
-    elif int(h) != 22:
-        obj["size"] = [int(w), int(h)]
+    size = _live_size_for_spec(maxclass, text, w, h)
+    if size:
+        obj["size"] = size
 
-    # Presentation
-    if box.get("presentation"):
-        prect = box.get("presentation_rect")
-        if prect:
-            obj["presentation"] = [int(prect[0]), int(prect[1]), int(prect[2]), int(prect[3])]
-        else:
-            obj["presentation"] = [0, 0]
+    pres = _live_presentation_for_spec(box)
+    if pres is not None:
+        obj["presentation"] = pres
 
-    # Styling attrs
-    attrs = {}
-    for k in _PRESERVE_ATTRS:
-        if k not in box:
-            continue
-        val = box[k]
-        if k == "fontsize" and val == DEFAULT_FONT_SIZE:
-            continue
-        if k == "fontface" and val == 0:
-            continue
-        if k == "fontname" and val == DEFAULT_FONT_NAME:
-            continue
-        attrs[k] = val
+    attrs = _attrs_from_box(box)
     if attrs:
         obj["attrs"] = attrs
 
@@ -1164,26 +1210,31 @@ def reconcile_spec(existing_spec, maxpat):
                 updated["text"] = box_text
             elif "text" in updated:
                 del updated["text"]
-        # Re-extract preserved attrs (varname, styling, hidden) from the live box
-        # so manual edits in Max are captured. Merge into existing spec attrs;
-        # box value wins on conflict because the live patch is the source of truth.
-        merged_attrs = dict(updated.get("attrs", {}))
-        for k in _PRESERVE_ATTRS:
-            if k not in box:
-                continue
-            val = box[k]
-            if k == "fontsize" and val == DEFAULT_FONT_SIZE:
-                merged_attrs.pop(k, None)
-                continue
-            if k == "fontface" and val == 0:
-                merged_attrs.pop(k, None)
-                continue
-            if k == "fontname" and val == DEFAULT_FONT_NAME:
-                merged_attrs.pop(k, None)
-                continue
-            merged_attrs[k] = val
-        if merged_attrs:
-            updated["attrs"] = merged_attrs
+        # Reconcile geometry — width/height of patching_rect AND presentation_rect.
+        # Without this, manual resizes in Max are silently lost on the next convert.
+        maxclass = updated.get("type", box.get("maxclass", "newobj"))
+        text_for_size = updated.get("text", box.get("text", ""))
+        w = r[2] if len(r) > 2 else 0
+        h = r[3] if len(r) > 3 else 0
+        size = _live_size_for_spec(maxclass, text_for_size, w, h)
+        if size:
+            updated["size"] = size
+        elif "size" in updated:
+            del updated["size"]
+        pres = _live_presentation_for_spec(box)
+        if pres is not None:
+            updated["presentation"] = pres
+        elif "presentation" in updated:
+            del updated["presentation"]
+        # Reconcile attrs — the live box is authoritative. Anything Max stores
+        # on the box that isn't already represented structurally elsewhere in
+        # the spec (pos, size, presentation, type, text, ...) becomes a spec
+        # attr. Attrs that exist in the spec but were stripped by Max (typos,
+        # unrecognized names) are dropped, surfacing the divergence rather
+        # than letting it rot.
+        new_attrs = _attrs_from_box(box)
+        if new_attrs:
+            updated["attrs"] = new_attrs
         elif "attrs" in updated:
             del updated["attrs"]
         updated_objects[sid] = updated

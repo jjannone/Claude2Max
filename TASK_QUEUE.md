@@ -297,6 +297,33 @@ Tasks requiring deep analysis, architecture decisions, or sustained judgment. Pr
 
 Tasks that are primarily implementation, file editing, or verification — no deep architectural judgment required.
 
+- [pending] **Fix `reconcile_spec()` matching for piled boxes (sync idempotency)** — `spec2maxpat.py:reconcile_spec()` currently produces duplicate spec entries on every sync when multiple boxes coincide at the same `(x, y)` with the same type. Most visible: tutorial annotation comments (6 piled at `(10, 700)` per the comment-pile pattern in `TUTORIAL_GUIDELINES.md`) and untitled `panel` boxes (often 2 at the same location for layered presentation chrome). On every sync, ~5 of those collide, fall through both match passes, and get re-IDed via `_make_spec_id()` as `Overview_2`, `panel_14`, etc. The duplicate spec entries accumulate forever — the spec embed grows unboundedly across sync cycles even when the user has made no edits.
+
+  **Why the current matcher fails**:
+
+  - **Pass 1 (`pos + type`)**: builds `pos_to_bid = {(x, y): bid}` from live boxes. When multiple boxes share a position, dict assignment keeps only the last. The other piled boxes are unreachable through Pass 1.
+  - **Pass 2 (`type + text` fallback)**: scans unmatched boxes for a type+text match. Falls down when (a) text is empty (two untitled panels — nothing to distinguish them), or (b) text differs subtly between spec and live box (newline encoding, whitespace normalization — happens on tut-ann comments where the spec author's escape differs from Max's round-trip form).
+
+  **Proposed fix** (~30 lines in `reconcile_spec()`):
+
+  1. **Add `varname` as the primary tiebreaker.** `varname` is a unique stable identity attribute Max preserves across edits. The tut-ann boxes are `tut-ann-0` through `tut-ann-5`; piled panels usually have varnames if anyone scripts them. New match order:
+     1. Spec has `varname` AND a live box has the same `varname` → match (regardless of position).
+     2. Same `(pos, type)` AND same `varname` → match.
+     3. Same `(pos, type, text)` → match.
+     4. Same `(pos, type)` first available → match (current Pass 1, only used when nothing more specific applies).
+     5. Same `(type, text)` anywhere → match (current Pass 2).
+
+  2. **Switch position index to buckets.** Change `pos_to_bid: {pos: bid}` to `pos_to_bids: {pos: [bid, ...]}` so all colliding boxes are visible to the matcher. Iterate spec entries and let each one claim the best-fit unmatched box from the bucket.
+
+  **Verification**:
+  - Round-trip idempotency: `cp X.maxpat /tmp/rt1.maxpat; sync /tmp/rt1.maxpat; cp /tmp/rt1.maxpat /tmp/rt2.maxpat; sync /tmp/rt2.maxpat; diff <(extract /tmp/rt1.maxpat) <(extract /tmp/rt2.maxpat)`. The diff should be empty across every patch in `patches/` (currently fails with 5+ duplicates on tutorial-bearing patches).
+  - Test fixtures: `patches/jit-grab-scale.maxpat` (6-pile tut-ann), `patches/drift-sequencer.maxpat` (2-pile panels), at least one non-piled patch as control.
+  - Test that scripting `patcher.getnamed("tut-ann-3")` from JS still resolves correctly after sync (varname stability).
+
+  **Why split from the geometry/attrs fix (2026-05-05)**: different problem class, different risk profile. Geometry capture is contained; matching changes the spec→box correspondence that the embedded-spec workflow depends on. Wants its own session with focused regression testing.
+
+  **Source**: surfaced 2026-05-05 during smoke-testing of the geometry-preservation fix. Reproduced identically on pre-edit code via `git stash`, so it's independent of that fix.
+
 - [pending] **Plugin/skills polish pass** — follow-up clean-up after the Opus "Borrow MaxMCP's plugin/skills surfacing pattern" task ships. Six focused subtasks; do them as a single session for coherence:
 
   1. **Move the queue hygiene** — *handled 2026-05-03 during a queue review pass*. The `/c2m-explain` Sonnet task and the parent Borrow MaxMCP Opus task are now in the Done section. The "Test claude2max-design skill" entry was **not** marked complete; instead it was merged with "Layout Engine Phase 3" into a single Opus task ("Return to claude2max-design skill — extend design sense + Phase 3 screenshot verification on current patches") because the skill is fundamentally incomplete (no generalized design sense, no principle extraction from samples, no implementation of the principles it does articulate). See the merged task for current scope.
