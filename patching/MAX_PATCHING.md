@@ -197,6 +197,14 @@ Labels go to the **right** of their control — never above, never below (unless
 ### Comment text starts inside the box — compensate for left-alignment
 Max `comment` objects have internal left padding: the text starts a few pixels right of the box's left edge. The offset is approximately 4 px at common UI font sizes but varies with font and size. When precise visual left-alignment between a comment label and a UI object is required, offset the comment's x coordinate leftward and verify visually — do not assume 4 px is exact.
 
+### Comment width is user-set; height is automatic — never override either independently
+
+Max `comment` objects auto-wrap text based on the box's width (`patching_rect[2]`). Height (`patching_rect[3]`) is computed automatically by Max from the width and the wrapped content — it is **not** an independent dimension.
+
+**In a spec:** set only `size[0]` (width). Do not record or hard-code a height. If a comment overflows its layout area, narrow `size[0]` — do not add explicit `\n` line breaks, since auto-wrap is the correct mechanism.
+
+**Sync caveat:** `sync_spec` in `spec2maxpat.py` currently captures `pos` from the live `patching_rect` but does **not** capture `size` (width/height). This means if a user narrows a comment in Max, that width change is silently dropped on the next sync, and the next `convert` writes the old wide width back. Until this is fixed, manually update `size[0]` in the spec after syncing if a comment width was changed in Max.
+
 ### Reset affordances co-located
 Place reset buttons **inside** the panel they affect, near the bottom of the group. Never put a global reset in a utility area separate from the controls it resets.
 
