@@ -57,6 +57,10 @@ Promotion is user-confirmed only — see "Rules from Corrected Errors" in CLAUDE
 > *Source*: [Best way to sync a Phasor~ with transport?](https://cycling74.com/forums/best-way-to-sync-a-phasor-with-transport) — TFL / Roman Thilenius.
 > *Why it matters*: any tempo-synced sequencer or LFO that uses `phasor~` needs the @lock + Overdrive + Audio Interrupt combo. Document in `patching/MAX_PATCHING.md` § Audio Knowledge.
 
+> **[PROMOTED 2026-05-06]** **For variable-speed `groove~` playback (vinyl-scratch, scrubbing, jog-wheel control), smooth the speed-control signal with `slide~` rather than `rampsmooth~` — `rampsmooth~` produces edge artifacts near zero-speed transitions that `slide~`'s gradual smoothing avoids.** The shape: `controller → zmap -60 60 -3 3 → slide~ 100 → groove~ rate-input`. The `zmap` clips and rescales the input range; `slide~ 100` provides asymmetric smoothing (100-sample slide-up and slide-down by default) without the discontinuities `rampsmooth~` exhibits at direction reversal. Add `dcblock~` at the output if any DC offset accumulates from the rate transitions.
+> *Source*: [vinyl scratch, help with eliminating clicks?](https://cycling74.com/forums/vinyl-scratch-help-with-eliminating-clicks) — Source Audio.
+> *Why it matters*: belongs in `patching/MAX_PATCHING.md` § Audio Knowledge — the slide~/rampsmooth~ distinction generalises beyond `groove~` to any signal-driving control where direction-reversal smoothness matters. **[PROMOTION-CANDIDATE]**.
+
 ## Video / Jitter
 
 > **For multiple independent playheads on one movie file, use `jit.gl.polymovie` (Max 8.2+) — don't load the movie multiple times.**
@@ -212,6 +216,54 @@ Promotion is user-confirmed only — see "Rules from Corrected Errors" in CLAUDE
 > *Source*: [Google MediaPipe in Max (n4m, jweb)](https://cycling74.com/forums/n4m-facemesh-handpose-google-mediapipe) — Lysdexic / Rob Ramirez (C74).
 > *Why it matters*: any vision-tracking patch should use jweb-based MediaPipe rather than n4m wrappers — saves a class of platform-stability issues. Document in `patching/MAX_PATCHING.md` Jitter notes if vision tracking enters scope.
 
+> **`jit.pix` / `jit.gen` `@precision float32` vs default fixed precision is a CPU-vs-quality tradeoff that beginners miss.** Fixed precision is cheaper but produces "cruft" artifacts (banding, quantization noise) — sometimes desirably for retro / lo-fi aesthetics, often not. `@precision float32` smooths these at higher CPU cost. Pair with `[radians]` operators (rather than `* PI/180` chains) when working in fixed-point trig contexts to avoid additional precision loss.
+> *Source*: [Gen patch-a-day](https://cycling74.com/forums/gen-patch-a-day) — Darwin Grosse / Wesley Smith / Andrew Pask (C74 Material Team).
+> *Why it matters*: precision tradeoff applies to any `jit.pix` / `jit.gen` patch; document in `patching/JIT_GEN_PATCHING.md` § Idioms.
+
+> **[PROMOTED 2026-05-06]** **Texture patchcords are not connections — they're attribute-set operations on the receiving object's `texture` attribute, and the attribute persists after the patchcord is deleted.** Removing the cord doesn't unset the attribute; the receiving object continues to render the last-received texture. To clear, ACTIVELY replace it: connect a different texture source (or an empty `jit.matrix`/`jit.gl.texture`) to overwrite the attribute. Symptom: "I deleted the connection but the effect is still there" — that's a stale texture attribute, not a residual cord.
+> *Source*: [Vsynth Package](https://cycling74.com/forums/vsynth-package) — 2K (Kevin) / Rob Ramirez (C74).
+> *Why it matters*: fundamental Jitter texture-routing semantics. Document in `patching/MAX_PATCHING.md` Jitter notes. **[PROMOTION-CANDIDATE]**.
+
+> **`jit.gl.textmult` uses named-context routing instead of patchcords — declare with the context name as first argument, declare additional `@glparams` for the parameter matrices it accepts (position, scale, rotation), and bang the leftmost inlet after each parameter-matrix update to apply.** Standard `jit.gl.*` objects bind via `jit_gl_texture` patchcords; `jit.gl.textmult` does not. The shape: `jit.gl.textmult ctxname 2 @glparams position scale` then `jit.world ctxname`. Without the explicit bang after a parameter-matrix update, the geometry doesn't refresh.
+> *Source*: [Question about jit.gl.textmult](https://cycling74.com/forums/question-about-jitgltextmult) — TFL / Wil.
+> *Why it matters*: `jit.gl.textmult` is the canonical multi-character-text-as-geometry path — its API quirk catches anyone porting from `jit.gl.text`-style assumptions.
+
+> **For frame-accurate 0→1→0 ramps in a Jitter render context, use `jit.time.tri @scale 0.5 @offset 0.5` (one value per frame, locked to the render rate) — NOT `line` or `phasor~` (scheduler-rate or signal-rate, neither matches frame timing).** `line`'s multi-segment form (`0., 1. 1000., 0. 1000.`) is the right answer for control-rate animation, but a Jitter render typically wants exactly one ramp value per rendered frame, which only `jit.time.tri` (and the `jit.mo` package) deliver. The mismatched-rate symptoms are subtle: animation that mostly looks fine but has occasional skipped or doubled frames depending on whether scheduler ticks line up with frame ticks.
+> *Source*: [Create a smooth loop from 0 to 1 to 0](https://cycling74.com/forums/create-a-smooth-loop-from-0-to-1-to-0) — double_UG.
+> *Why it matters*: rate-domain matching is the load-bearing decision in any Jitter animation. Document in `patching/MAX_PATCHING.md` Jitter notes.
+
+> **[PROMOTED 2026-05-06]** **The canonical Jitter layer-compositing trio: `@layer N` on each renderable + `@depth_enable 0` on the rendering context (`jit.world` or `jit.gl.render`) + `@blend_enable 1` for transparency.** Higher `@layer` numbers render on top. Without `@depth_enable 0`, depth-testing produces inconsistent stacking that looks like random ordering. Without `@blend_enable 1`, transparency keys produce hard edges instead of compositing. `jit.gl.layer` exists as a convenience wrapper that handles all three settings inline. The trio is mandatory for any 2D-style overlay system in a 3D Jitter context.
+> *Source*: [Overlay one videoplane on another](https://cycling74.com/forums/overlay-one-videoplane-on-another) — Rob Ramirez (C74) / cap10subtext.
+> *Why it matters*: extends the existing layer-ordering note in `patching/MAX_PATCHING.md` with the depth+blend pair. Document there. **[PROMOTION-CANDIDATE]**.
+
+> **[PROMOTED 2026-05-06]** **Jitter GL position uses normalised coordinates with `±2` spanning the visible window — NOT pixels.** A `jit.gl.videoplane @pos 1 0 0` is half-screen to the right; `@pos 2 0 0` is at the right edge. Pixel-distance math requires pre-scaling: `pixel_offset / (window_width / 2)` gives the normalised offset. The `±2` extent (not `±1`) is non-obvious — ±1 lands at quarter-screen, not half — and is the source of "my object is in the wrong place" misalignment.
+> *Source*: [Attaching two screens like layers](https://cycling74.com/forums/attaching-two-screens-like-layers) — Wil.
+> *Why it matters*: any Jitter patch that positions GL objects in absolute terms needs the ±2 conversion. Document in `patching/MAX_PATCHING.md` Jitter notes. **[PROMOTION-CANDIDATE]**.
+
+> **For point-cloud or per-vertex rendering, store coordinates as a `jit.matrix` (planes = X/Y/Z) and route through `jit.gl.multiple` or `jit.gl.mesh` — manipulate via `jit.gen` rather than treating each point as a separate object instance.** Per-point colour, scale, or selection becomes a matrix operation: `jit.gen` reads the coordinate matrix, applies per-cell math, writes a parallel attribute matrix (colour, scale, selection mask). The cell-iteration model handles thousands of points where per-instance objects would be infeasible. Normalise coordinates to the `±1`-or-`±2` Jitter range during the matrix prep step.
+> *Source*: [Interpreting 3d Motion capture data in Max MSP gen/jitter](https://cycling74.com/forums/interpreting-3d-motion-capture-data-in-max-msp) — MakePatchesNotWar.
+> *Why it matters*: the matrix-as-point-cloud framing scales to any large-N visual data (mocap, particle systems, FFT bins as positions). Document in `patching/MAX_PATCHING.md` Jitter notes.
+
+> **For multi-instance rotation in `jit.gl.multiple`, pass a per-instance `rotatexyz` matrix rather than rotating each instance individually after instantiation.** A common goal — "make N cones face outward" — gets solved by sending a 1-row N-column matrix of `(rx, ry, rz)` triplets to the `rotatexyz` inlet. The matrix's per-cell value drives the corresponding instance's rotation. If the base mesh's "up" axis doesn't match what you want oriented (e.g. cone points along Y but you want Z), pre-rotate the SOURCE mesh before instantiation rather than fighting per-instance rotation math.
+> *Source*: [Jit.gl.muiltiple rotation](https://cycling74.com/forums/jitglmuiltiple-rotation) — TFL.
+> *Why it matters*: pre-rotate-source-mesh insight generalises to any per-instance transform problem.
+
+> **[PROMOTED 2026-05-06]** **`jit.glue` requires both matching `dim` AND matching plane count across all input matrices — not just dim.** Mismatched plane counts (e.g. one matrix is 1-plane, another is 3-plane) cause `jit.glue` to silently produce wrong output or fail. Standardise inputs through a fixed-spec `jit.matrix N <type> <dim>` chain before `jit.glue`. The same plane-match rule applies to `jit.pack`, `jit.unpack`, `jit.scissors`, and any other matrix-combining `jit.*` object.
+> *Source*: [Q: Different FFT spectrum - jit.matrix, jit.glue, jit.world](https://cycling74.com/forums/q-different-fft-spectrum-jitmatrix-jitglue-jitworld) — TFL.
+> *Why it matters*: matrix-combining operations have invisible plane-count requirements. Document in `patching/MAX_PATCHING.md` Jitter notes. **[PROMOTION-CANDIDATE]**.
+
+> **[PROMOTED 2026-05-06]** **For modern GPU rendering with `jit.gl.multiple` / `jit.gl.gridshape`, attach a `jit.gl.material` to enable shader-based rendering — the default fixed-function pipeline is no longer optimised by current NVIDIA / AMD drivers.** Counter-intuitive symptom: integrated graphics outperforming discrete NVIDIA on Jitter geometry tests. Cause: deprecated fixed-function OpenGL gets de-prioritised on newer drivers. Adding a single `jit.gl.material` (even with default settings) routes the render through the shader pipeline that drivers actively optimise. Mandatory for any performance-sensitive `jit.gl.*` geometry chain.
+> *Source*: [Benchmarking Jitter's CPU/GPU performance on your computer](https://cycling74.com/forums/benchmarking-jitters-cpugpu-performance-on-your-computer) — Rob Ramirez (C74).
+> *Why it matters*: critical performance migration. Document in `patching/MAX_PATCHING.md` Jitter notes. **[PROMOTION-CANDIDATE]**.
+
+> **For retro / lo-fi transparency aesthetics (Sega-era checkerboard), use stochastic transparency via a Bayer matrix in `jit.gl.pix` (or `jit.gl.shader`) — NOT alpha blending.** A Bayer-matrix lookup keyed off screen-space coordinates picks a per-fragment threshold; fragments below the threshold are discarded entirely. Cheaper than full alpha blending and produces the dithered ordered-checkerboard look characteristic of mid-1990s consoles. The pattern generalises beyond aesthetics — stochastic transparency avoids the order-dependence problems of alpha blending, useful in any multi-overlapping-transparent-shape rendering.
+> *Source*: [Dithered/checkerboard false transparencies in Jitter?](https://cycling74.com/forums/ditheredcheckerboard-false-transparencies-in-jitter) — Matteo Marson.
+> *Why it matters*: useful Jitter rendering technique with both retro and order-independence applications.
+
+> **For seamless skybox transitions in `jit.gl.skyblox`, use `jit.gl.pix` to convert equirectangular textures to cubemaps — NOT `jit.gen` + `fpic`.** The `jit.gen` route causes frame-skipping artifacts when textures update in real time because matrix-based intermediate buffers don't synchronize with the GL render. Pre-loading equirectangular images as `jit.gl.texture` instances and processing through `jit.gl.pix`'s built-in equirect→cubemap shader keeps everything in the GL domain and skip-free.
+> *Source*: [dynamic transition between environements in jit.gl.skyblox](https://cycling74.com/forums/dynamic-transition-between-environements-in-jitglskyblox) — LSka.
+> *Why it matters*: GL-domain-end-to-end is the right architecture for any real-time texture-source change.
+
 ## JavaScript / v8
 
 > **For multiple parameters in one `jsui`/`v8ui`, use one `pattr` per parameter pointing at the jsui's JS-side identifier, plus `pattrstorage @savemode 0`.** The thread's working pattern: `pattr myattr1` and `pattr myattr2` each bind to a JS-side variable inside the jsui (named via `scriptingname`); `autopattr` registers them; `pattrstorage @savemode 0` (don't save with patcher) handles snapshot/recall. Setting/getting a parameter from outside is a normal `pattr` set/get; the jsui handles the redraw via its `setvalueof()`/`getvalueof()` callbacks. Source confirms this works for arrays as well as scalars (`message 1 2 3` stores a 3-element list in a single param).
@@ -314,6 +366,22 @@ Promotion is user-confirmed only — see "Rules from Corrected Errors" in CLAUDE
 > *Source*: [interpolating between multiple patterns?](https://cycling74.com/forums/interpolating-between-multiple-patterns) — Emmanuel Jourdan (C74).
 > *Why it matters*: replaces hand-rolled cross-fade ladders for preset morphing. Document in `patching/MAX_PATCHING.md` § Patching Patterns. **[PROMOTION-CANDIDATE]**.
 
+> **[PROMOTED 2026-05-06]** **`jit.cellblock` emits its current selection on every selection change — programmatic selection from a parent patch produces output that can re-trigger the parent, creating an infinite loop.** When the selection logic and the data-output need to be decoupled, switch UI primitive: the `chooser` object provides the same "select-an-item" semantics without the data-output coupling. Trying to configure `jit.cellblock` to suppress the output on programmatic selection is harder than swapping objects.
+> *Source*: [jit.cellblock - select a cell without getting output](https://cycling74.com/forums/jitcellblock-select-a-cell-without-getting-output) — zolikov / Source Audio.
+> *Why it matters*: avoid an entire class of "my cellblock auto-loops" debugging. Document in `patching/MAX_PATCHING.md` § UI Patterns. **[PROMOTION-CANDIDATE]**.
+
+> **Nested dicts in Max: `set <keyname> dictionary <existing_dict_name>` stores the existing dict as the value of `<keyname>` — that's the canonical nesting message.** `dict.pack` builds a dict from a key/value list and can target nested keys with the same syntax. Note that JSON dict keys have NO defined order — sorted-by-key access requires maintaining a parallel sorted-keys list (in `coll` or `zl.sort`). This is by-design, not a Max limitation; mirroring JavaScript object semantics.
+> *Source*: [Creating dict of dicts in Max](https://cycling74.com/forums/creating-dict-of-dicts-in-max) — TFL.
+> *Why it matters*: dict-of-dicts pattern is common for hierarchical state (scenes containing presets, tracks containing voices). Document in `SPEC_REFERENCE.md` § dict.
+
+> **[PROMOTED 2026-05-06]** **For "hold-until-next-input" semantics — output the previous value when a new value arrives — the canonical Max objects are `bucket` (strict shift register) or `zl.reg` (named register).** `bucket` shifts inputs through a fixed-length pipeline; `bucket 1` outputs the previous value when the new one arrives. `zl.reg` is the more flexible "store one value, output it on next input" with both store and recall semantics. Time-based delays (`delay`, `pipe`) are the wrong tool — this is event-state-shifting, not temporal delay.
+> *Source*: [Delaying output of number until new number is recieved](https://cycling74.com/forums/delaying-output-of-number-until-new-number-is-recieved) — TFL / Wil / Source Audio.
+> *Why it matters*: the event-state-shift vs temporal-delay distinction is fundamental. Document in `patching/MAX_PATCHING.md` § Patching Patterns. **[PROMOTION-CANDIDATE]**.
+
+> **Programmatic Max-window clearing: `max clearmaxwindow;` (Max 7.3.2+).** Send via a message box (semicolon syntax sends to the global `max` object). Cycling '74 deliberately omitted this for years — they considered the Max window a development log to preserve — but eventually shipped the message in 7.3.2. Useful in self-resetting test rigs and demo patches where clutter from prior runs interferes with the next run's diagnostic output.
+> *Source*: [clear the max window from within a patcher?](https://cycling74.com/forums/clear-the-max-window-from-within-a-patcher) — EarHax.
+> *Why it matters*: convenient debug command. Document in `patching/MAX_PATCHING.md` § Common Pitfalls / Debugging.
+
 ## Gen / gen~
 
 The 2026-05-04 forum pass-2 surveyed 39 gen~/genexpr threads (entirely new
@@ -412,6 +480,10 @@ slide-as-envelope-follower, samplerate→ms, and equal-power crossfade.
 > *Source*: [Modify gen~ crossover example](https://cycling74.com/forums/modify-gen-crossover-example) — Graham Wakefield (C74).
 > *Why it matters*: phase-correct crossovers are core audio-DSP; the cascading-allpass rule generalises to any multi-band split. Document in `patching/GEN_PATCHING.md` § Audio-rate idioms. **[PROMOTION-CANDIDATE]**.
 
+> **[PROMOTED 2026-05-06]** **`gen` codebox cannot use a function-call return value directly inside an `if`-statement condition — store it in a `History` first.** The naive `if (myFunction() == 1)` produces compile error `attempt to index local 'instance' (a nil value)`. The workaround: `History result(0); result = myFunction(); if (result == 1) { … }`. This is a `gen` codebox compiler limitation; `jit.gen` is unaffected. The History storage is the canonical workaround for any function-result-in-conditional pattern in `gen`.
+> *Source*: [Impossible to use returned value from function in if-statement](https://cycling74.com/forums/impossible-to-use-returned-value-from-function-in-if-statement) — Tarik Barri.
+> *Why it matters*: silent compile failure with misleading error; document in `patching/GEN_PATCHING.md` § Codebox semantics. **[PROMOTION-CANDIDATE]**.
+
 ## Max for Live
 
 > **`live.path → live.object → get … → route` is the canonical chain to query the LOM (Live Object Model).** `live.path` outputs an `id N` token that `live.object` consumes; sending `get <property>` to `live.object` outputs the property prefixed with the property name; `route <property>` peels the prefix. Pattern observed across half a dozen pass-2 M4L threads. To follow a path: `path live_set tracks 0 clip_slots 1 clip` is the canonical way to get-clip-1-on-track-0; the path tokens are `id`-numeric or symbolic, mix freely.
@@ -437,6 +509,10 @@ slide-as-envelope-follower, samplerate→ms, and equal-power crossfade.
 > **To duplicate a currently-playing MIDI clip's length (or perform any operation on the playing clip) from a Max for Live device, navigate `live.thisdevice → canonical_parent → playing_slot_index → clip_slot → clip` then send `duplicate_loop`.** The non-obvious complication is **rack placement**: a device on a track has a different `canonical_parent` chain than a device inside an instrument or audio rack. A device meant to work both ways must walk both possible parent shapes (`live_set tracks N` for direct-track placement vs `live_set tracks N devices M chains K devices L` for rack-nested) before fetching the playing clip.
 > *Source*: [Duplicate length (actually double) midi clip - possible?](https://cycling74.com/forums/duplicate-length-actually-double-midi-clip-possible) — 11OLSEN.
 > *Why it matters*: any M4L device that operates on the device's own track's playing clip needs the canonical_parent variation handled. Document in `patching/M4L_PATCHING.md` § LOM patterns.
+
+> **[PROMOTED 2026-05-06]** **`live.menu` items can be changed at runtime via `_parameter_range` messages — but the item COUNT must stay constant for parameter recall, MIDI mapping, and Live-set reload to keep working.** If you must vary item count, pre-allocate the maximum number with empty placeholder entries. Push 2 has an additional quirk: menu changes don't refresh on the controller until the user manually deselects and re-selects the device. Push 3 may differ — verify per device. For non-automated dynamic menus that don't need parameter behavior, use `umenu` instead and side-step the M4L parameter-system constraints.
+> *Source*: [Changing live.menu items on the fly](https://cycling74.com/forums/changing-live-menu-items-on-the-fly) — Tyler Mazaika.
+> *Why it matters*: required reading before any M4L device with dynamic menu content. Document in `patching/M4L_PATCHING.md` § live.* UI patterns. **[PROMOTION-CANDIDATE]**.
 
 ## LLM / AI-Assisted Patching
 

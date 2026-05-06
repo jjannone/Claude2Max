@@ -133,6 +133,32 @@ to add it — the converter intentionally matches Max's defaults, never
 exceeds them. (See `CLAUDE.md` § "Converter Design Rule — Match Max's
 Defaults, Never Exceed Them".)
 
+## `live.menu` items can change at runtime — but the COUNT must stay constant
+
+Live's parameter system tracks each `live.menu` by its enum identity:
+the index of each item is what gets stored in the Live set, sent over
+MIDI mapping, and reloaded on Live-set open. Mutating the menu by
+sending a `_parameter_range <items…>` message updates the displayed
+labels without breaking that identity, *as long as the item count
+stays the same*. Changing the count breaks parameter recall and MIDI
+mappings — Live can no longer reconcile saved index N against a
+shorter or longer enum.
+
+The robust pattern: pre-allocate the maximum number of menu items the
+device will ever need, fill unused slots with empty placeholders, and
+mutate labels in place. If the device truly needs a varying item
+count, either accept the parameter-state tradeoff or use a regular
+`umenu` instead — `umenu` is not a Live parameter and so is not
+subject to this constraint.
+
+A controller-specific quirk: Push 2 doesn't refresh the displayed
+menu items until the user manually deselects and re-selects the
+device. Push 3 may differ — verify per device when targeting hardware
+controllers.
+
+(Source: Cycling '74 forum, "Changing live.menu items on the fly",
+Tyler Mazaika.)
+
 ## Namespace isolation inside per-instance subpatchers — `---` prefix every internal name
 
 When the same M4L device is instantiated on multiple Live tracks (or

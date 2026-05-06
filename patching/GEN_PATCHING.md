@@ -294,6 +294,37 @@ frequencies. This is the same mechanism behind Linkwitz-Riley
 multi-band design, generalised to N bands. (Source: Cycling '74 forum,
 "Modify gen~ crossover example", Graham Wakefield.)
 
+### Codebox compiler limitation: function return values cannot be used directly in `if`-conditions — store them in `History` first
+
+In `gen` codebox (this is `gen` only, not `jit.gen`), a function call
+inside an `if`-statement condition produces the misleading compile
+error `attempt to index local 'instance' (a nil value)`. The naive
+form fails:
+
+```
+if (myFunction() == 1) { … }   // compile error
+```
+
+The canonical workaround is a `History` declaration that captures the
+function's return value, then references that variable in the
+condition:
+
+```
+History result(0);
+result = myFunction();
+if (result == 1) {
+    out1 = 1;
+}
+```
+
+Generalises to any "use-this-function-return-here-once" pattern in
+codebox: the History acts as a single-cycle latch even when its
+"history" semantics aren't otherwise needed. The error message points
+at the wrong abstraction layer and is not a useful diagnostic; pattern
+recognition of the error string is the fastest path to the fix.
+(Source: Cycling '74 forum, "Impossible to use returned value from
+function in if-statement", Tarik Barri.)
+
 ## Latency Compensation in gen~ Signal Splits
 
 When an envelope-follower drives a crossfade, the **env path is the
