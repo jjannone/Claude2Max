@@ -297,6 +297,53 @@ Tasks requiring deep analysis, architecture decisions, or sustained judgment. Pr
 
 Tasks that are primarily implementation, file editing, or verification — no deep architectural judgment required.
 
+- [in progress] **Max Userguide Topics Crawl — extract principles into `patching/` companions** — Systematically read the Max userguide topic files at `/Applications/Max.app/Contents/Resources/C74/docs/userguide/content/` (82 top-level `.json` files + subdirs `gen/`, `jitter/`, `m4l/`, `mc/`, `lua/`) and extract underlying principles into the existing `patching/*.md` knowledge files plus two new companions.
+
+  *In progress (2026-05-07 — session 1): infrastructure built — `userguide/USERGUIDE_CRAWL_LOG.md`, `userguide/userguide_crawl_state.json` (147 topics enumerated; 7 extracted, 20 skipped UI/refpage-overlap, 120 pending), `userguide/userguide_insights.md` (26 entries from the foundational MAX_PATCHING.md cluster — patcher_lifecycle, patching_mechanics, scheduler, polyphony, abstractions, subpatchers, bpatchers; 9 flagged `[PROMOTION-CANDIDATE]`). Both new patching companions created as scoped stubs: `patching/JITTER_PATCHING.md` (16 jitter/ + 5 lua/ topics queued) and `patching/MC_PATCHING.md` (28 mc/ topics queued). CLAUDE.md updated with three new index entries (Key Files: JITTER_PATCHING, MC_PATCHING; Knowledge Resources: userguide_insights.md). Resume point: pick next cluster per `userguide/USERGUIDE_CRAWL_LOG.md` § Sessions § Resume point — strong candidates are "Data and state" (pattr, parameter_mode, presets, snapshots, dictionaries, prototypes), "Audio infrastructure" (audio_channels, frequency_domain, sample_accurate_messages, transport, non_realtime), or starting JITTER_PATCHING.md / MC_PATCHING.md fill.* **Refpages are deliberately out of scope** — they are already addressable on demand via `RefpageCache` and the `refpages/` tree. The userguide *topics* are the non-reference, principle-bearing material that explains *how Max works* (scheduler, threading, polyphony, message vs signal, patcher lifecycle, abstractions, parameter mode, dictionaries, etc.) — exactly the kind of cross-cutting knowledge that doesn't fit in a refpage.
+
+  **Why this matters**: principles in the userguide are the "rules of the system" — they apply across many objects and shape correct patching at the level above per-object reference. They're also stable enough to be worth distilling once and stored, unlike refpages which are better looked up live. Without this pass, Claude is forced to either re-derive principles from scattered refpages (slow, error-prone) or proceed without them (silent gaps).
+
+  **Approach (chunked across sessions, mirrors the forum/cookbook pattern)**:
+
+  1. **New folder `userguide/`** alongside `c74-forum/` and `cookbook/`:
+     - `USERGUIDE_CRAWL_LOG.md` — session recipe, progress, resume point
+     - `userguide_crawl_state.json` — per-topic status (`pending` / `read` / `extracted` / `skipped`), with the topic title and target patching/*.md file
+     - `userguide_insights.md` — extracted principles, topic-organized to mirror `forum_insights.md` / `cookbook_insights.md`
+
+  2. **Two new patching companions to create** (confirmed with user 2026-05-07):
+     - `patching/JITTER_PATCHING.md` — for the jitter topic cluster (matrix, textures, video, video_engine, graphics_engine, graphics_processing, geometry, render_passes, depth_layer_blend, jxs_file_format, jitter_expr). Parallel to the existing gen/jit-gen/m4l split.
+     - `patching/MC_PATCHING.md` — for the mc/ cluster (channel topology, dynamic routing, function generators, gen integration, event wrappers).
+
+  3. **Cluster topics by destination file** before starting:
+     - `patching/MAX_PATCHING.md` — patcher_lifecycle, patching_mechanics, scheduler, polyphony, abstractions, subpatchers, bpatchers, message_types, messages, dictionaries, mapping, parameter_mode, pattr, presets_and_interpolation, snapshots, styles, prototypes, projects, snippets, scripting_overview, javascript, OSC, midi, audio_channels, frequency_domain, sample_accurate_messages, transport, time_value_syntax, debugging_and_probing, error_messages, etc.
+     - `patching/GEN_PATCHING.md` — `gen/_gen_overview.json`, `gen/gen_common_operators.json`, `gen/gen_genexpr.json`, `gen/gen~_operators.json`
+     - `patching/JIT_GEN_PATCHING.md` — `gen/gen_jitter_operators.json` + relevant jitter topics
+     - `patching/M4L_PATCHING.md` — every file under `m4l/`
+     - `patching/JITTER_PATCHING.md` (new) — jitter cluster as listed above
+     - `patching/MC_PATCHING.md` (new) — mc cluster as listed above
+
+  4. **Per-session shape** (chunk size: ~5-8 topics): pick a coherent cluster, read each JSON in full, distill principles into `userguide_insights.md` first under topic-organized headings (Audio/MSP, Jitter, Patching Patterns, Scheduler/Threading, M4L, etc.), then mark insights `[PROMOTION-CANDIDATE]` where they belong in a `patching/*.md` companion. Userguide content is C74 official, so the candidate bar is *lower* than for forum/cookbook crawls — official material is generally trustworthy — but still surface candidates for user review per the "Rules from Corrected Errors" pattern.
+
+  5. **Promotion pass** at the end of each chunk — propose `[PROMOTION-CANDIDATE]` entries to user with target file and exact wording, write only the yeses.
+
+  6. **Update `CLAUDE.md` Knowledge Resources** to add `userguide/userguide_insights.md` once the first chunk lands, and add the two new `patching/*.md` files (Jitter, MC) when they're created.
+
+  **Skip rules**:
+  - Topics whose content is purely UI/menu walkthrough (`action_menu`, `extras_menu`, `format_palette`, `inspector`, `documentation_window`, `web_browser`, `file_browser`, `sidebar_search`, `repl`, `external_text_editor`, `error_messages` — though `error_messages` may be worth a brief skim for diagnostic principles) — note in state, mark `skipped`.
+  - Topics that overlap heavily with refpages (`object_reference`, `objects`) — skip; refpages are authoritative.
+  - Topics already covered by an existing companion (gen overview if `GEN_PATCHING.md` already covers it) — read for completeness but only extract *additional* principles.
+
+  **Prerequisites**:
+  - `userguide/` folder doesn't exist; create at session start
+  - Forum / cookbook crawl pattern is the template — copy that shape (`enumerate_*.py` is *not* needed here since the file list is local and finite — direct iteration over the directory is fine)
+  - Per the model-selection rule in CLAUDE.md, the *analysis* of dense documentation can warrant Opus on a per-cluster basis (especially `scheduler.json`, `polyphony.json`, m4l/`live_api*.json`). At session start, eyeball the cluster and prompt the user to switch to Opus if the topics look dense; otherwise proceed on Sonnet.
+
+  **First-session target**: enumerate all topics into `userguide_crawl_state.json`, classify each by destination file, and tackle the first cluster — the foundational MAX_PATCHING.md cluster (patcher_lifecycle, patching_mechanics, scheduler, polyphony, abstractions, subpatchers, bpatchers — ~7 topics).
+
+  **Fits into the larger system**: fourth knowledge source alongside forum (Q&A), cookbook (curated educational), and projects (community gallery). Userguide is the *first-party* layer those three orbit around — the principles the community is implicitly drawing on. Capturing it explicitly closes the loop: principles flow into `patching/*.md`, examples flow in from cookbook/forum/projects, and refpages stay live-looked-up.
+
+  **Source**: 2026-05-07 conversation. User confirmed (a) creating both new patching companions (`JITTER_PATCHING.md`, `MC_PATCHING.md`), and (b) the foundational MAX_PATCHING.md cluster as first session target.
+
 - [pending] **Plugin/skills polish pass** — follow-up clean-up after the Opus "Borrow MaxMCP's plugin/skills surfacing pattern" task ships. Six focused subtasks; do them as a single session for coherence:
 
   1. **Move the queue hygiene** — *handled 2026-05-03 during a queue review pass*. The `/c2m-explain` Sonnet task and the parent Borrow MaxMCP Opus task are now in the Done section. The "Test claude2max-design skill" entry was **not** marked complete; instead it was merged with "Layout Engine Phase 3" into a single Opus task ("Return to claude2max-design skill — extend design sense + Phase 3 screenshot verification on current patches") because the skill is fundamentally incomplete (no generalized design sense, no principle extraction from samples, no implementation of the principles it does articulate). See the merged task for current scope.

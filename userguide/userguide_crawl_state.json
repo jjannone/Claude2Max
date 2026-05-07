@@ -1,0 +1,1031 @@
+{
+  "OSC.json": {
+    "title": "OpenSoundControl (OSC)",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "abl.json": {
+    "title": "Ableton DSP",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "abstractions.json": {
+    "title": "Abstractions",
+    "status": "extracted",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": "2026-05-07",
+    "notes": "First cluster \u2014 foundational MAX_PATCHING.md topics."
+  },
+  "action_menu.json": {
+    "title": "Action Menu",
+    "status": "skipped",
+    "destination": null,
+    "session": "2026-05-07",
+    "notes": "UI/menu walkthrough or refpage overlap \u2014 skipped per task scope."
+  },
+  "arrays.json": {
+    "title": "Arrays",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "audio_channels.json": {
+    "title": "Multi-Channel Audio I/O",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "bpatchers.json": {
+    "title": "bpatchers",
+    "status": "extracted",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": "2026-05-07",
+    "notes": "First cluster \u2014 foundational MAX_PATCHING.md topics."
+  },
+  "color_palette.json": {
+    "title": "Color Palette",
+    "status": "skipped",
+    "destination": null,
+    "session": "2026-05-07",
+    "notes": "UI/menu walkthrough or refpage overlap \u2014 skipped per task scope."
+  },
+  "color_themes.json": {
+    "title": "Color Themes",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "controlling_max_with_messages.json": {
+    "title": "Controlling Max with Messages",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "conversion.json": {
+    "title": "Conversion Cheat Sheet",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "custom_ui_objects.json": {
+    "title": "Custom UI Objects",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "debugging_and_probing.json": {
+    "title": "Debugging and Probing",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "dictionaries.json": {
+    "title": "Dictionaries",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "documentation_window.json": {
+    "title": "The Documentation Window",
+    "status": "skipped",
+    "destination": null,
+    "session": "2026-05-07",
+    "notes": "UI/menu walkthrough or refpage overlap \u2014 skipped per task scope."
+  },
+  "dynamic_colors.json": {
+    "title": "Dynamic Colors",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "error_messages.json": {
+    "title": "Error Messages",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "external_text_editor.json": {
+    "title": "External Text Editor",
+    "status": "skipped",
+    "destination": null,
+    "session": "2026-05-07",
+    "notes": "UI/menu walkthrough or refpage overlap \u2014 skipped per task scope."
+  },
+  "externals.json": {
+    "title": "Externals",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "extras_menu.json": {
+    "title": "Extras Menu",
+    "status": "skipped",
+    "destination": null,
+    "session": "2026-05-07",
+    "notes": "UI/menu walkthrough or refpage overlap \u2014 skipped per task scope."
+  },
+  "file_browser.json": {
+    "title": "File Browser",
+    "status": "skipped",
+    "destination": null,
+    "session": "2026-05-07",
+    "notes": "UI/menu walkthrough or refpage overlap \u2014 skipped per task scope."
+  },
+  "filetypes.json": {
+    "title": "File Types",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "format_palette.json": {
+    "title": "Format Palette",
+    "status": "skipped",
+    "destination": null,
+    "session": "2026-05-07",
+    "notes": "UI/menu walkthrough or refpage overlap \u2014 skipped per task scope."
+  },
+  "frequency_domain.json": {
+    "title": "Frequency Domain Processing",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "gen/_gen_overview.json": {
+    "title": "Gen Overview",
+    "status": "pending",
+    "destination": "patching/GEN_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "gen/gen_common_operators.json": {
+    "title": "Gen Common Operators",
+    "status": "pending",
+    "destination": "patching/GEN_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "gen/gen_genexpr.json": {
+    "title": "GenExpr",
+    "status": "pending",
+    "destination": "patching/GEN_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "gen/gen_jitter_operators.json": {
+    "title": "Jitter Operators",
+    "status": "pending",
+    "destination": "patching/JIT_GEN_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "gen/gen~_operators.json": {
+    "title": "gen~ Operators",
+    "status": "pending",
+    "destination": "patching/GEN_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "glossary_common_terms.json": {
+    "title": "Glossary of Common Terminology",
+    "status": "skipped",
+    "destination": null,
+    "session": "2026-05-07",
+    "notes": "UI/menu walkthrough or refpage overlap \u2014 skipped per task scope."
+  },
+  "illustration_mode.json": {
+    "title": "Illustration Mode",
+    "status": "skipped",
+    "destination": null,
+    "session": "2026-05-07",
+    "notes": "UI/menu walkthrough or refpage overlap \u2014 skipped per task scope."
+  },
+  "index.json": {
+    "title": "Max User Guide",
+    "status": "skipped",
+    "destination": null,
+    "session": "2026-05-07",
+    "notes": "UI/menu walkthrough or refpage overlap \u2014 skipped per task scope."
+  },
+  "inspector.json": {
+    "title": "Inspector",
+    "status": "skipped",
+    "destination": null,
+    "session": "2026-05-07",
+    "notes": "UI/menu walkthrough or refpage overlap \u2014 skipped per task scope."
+  },
+  "integers_vs_floats.json": {
+    "title": "Integers and Floats",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "javascript.json": {
+    "title": "JavaScript",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "jitter/depth_layer_blend.json": {
+    "title": "Depth Testing and Layering",
+    "status": "pending",
+    "destination": "patching/JITTER_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "jitter/geometry.json": {
+    "title": "Geometry Objects",
+    "status": "pending",
+    "destination": "patching/JITTER_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "jitter/graphics_engine.json": {
+    "title": "Graphics Engine",
+    "status": "pending",
+    "destination": "patching/JITTER_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "jitter/graphics_processing.json": {
+    "title": "Graphics Processing",
+    "status": "pending",
+    "destination": "patching/JITTER_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "jitter/jitter_expr.json": {
+    "title": "Jitter expr",
+    "status": "pending",
+    "destination": "patching/JITTER_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "jitter/jxs_file_format.json": {
+    "title": "The JXS File Format",
+    "status": "pending",
+    "destination": "patching/JITTER_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "jitter/matrix.json": {
+    "title": "Jitter Matrix",
+    "status": "pending",
+    "destination": "patching/JITTER_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "jitter/render_passes.json": {
+    "title": "Render Passes",
+    "status": "pending",
+    "destination": "patching/JITTER_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "jitter/textures.json": {
+    "title": "Textures",
+    "status": "pending",
+    "destination": "patching/JITTER_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "jitter/video.json": {
+    "title": "Video",
+    "status": "pending",
+    "destination": "patching/JITTER_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "jitter/video_engine.json": {
+    "title": "Video Engine",
+    "status": "pending",
+    "destination": "patching/JITTER_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "lua/jit_gl_lua_color_bindings.json": {
+    "title": "jit.gl.lua Color Bindings",
+    "status": "pending",
+    "destination": "patching/JITTER_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "lua/jit_gl_lua_opengl_bindings.json": {
+    "title": "jit.gl.lua OpenGL Bindings",
+    "status": "pending",
+    "destination": "patching/JITTER_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "lua/jit_gl_lua_opengl_glu_bindings.json": {
+    "title": "jit.gl.lua OpenGL GLU Bindings",
+    "status": "pending",
+    "destination": "patching/JITTER_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "lua/jit_gl_lua_overview.json": {
+    "title": "jit.gl.lua Overview",
+    "status": "pending",
+    "destination": "patching/JITTER_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "lua/jit_gl_lua_vector_math.json": {
+    "title": "jit.gl.lua Vector Math",
+    "status": "pending",
+    "destination": "patching/JITTER_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "m4l/_m4l_overview.json": {
+    "title": "Max for Live Overview",
+    "status": "pending",
+    "destination": "patching/M4L_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "m4l/live_api.json": {
+    "title": "Creating Devices that use the Live API",
+    "status": "pending",
+    "destination": "patching/M4L_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "m4l/live_api_overview.json": {
+    "title": "Live API Overview",
+    "status": "pending",
+    "destination": "patching/M4L_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "m4l/live_audiodevices.json": {
+    "title": "Creating Audio Effect Devices",
+    "status": "pending",
+    "destination": "patching/M4L_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "m4l/live_automation.json": {
+    "title": "Automation",
+    "status": "pending",
+    "destination": "patching/M4L_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "m4l/live_creatingdevices.json": {
+    "title": "Creating Max for Live Devices",
+    "status": "pending",
+    "destination": "patching/M4L_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "m4l/live_files.json": {
+    "title": "Working With Files in Max for Live",
+    "status": "pending",
+    "destination": "patching/M4L_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "m4l/live_freezing.json": {
+    "title": "Freezing Max for Live Devices",
+    "status": "pending",
+    "destination": "patching/M4L_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "m4l/live_limitations.json": {
+    "title": "Max for Live Limitations",
+    "status": "pending",
+    "destination": "patching/M4L_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "m4l/live_midieffects.json": {
+    "title": "Creating MIDI Effects",
+    "status": "pending",
+    "destination": "patching/M4L_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "m4l/live_miditools.json": {
+    "title": "Max for Live MIDI Tools",
+    "status": "pending",
+    "destination": "patching/M4L_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "m4l/live_parameters.json": {
+    "title": "Device Parameters in Max for Live",
+    "status": "pending",
+    "destination": "patching/M4L_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "m4l/live_parameterswindow.json": {
+    "title": "The Parameters Window",
+    "status": "pending",
+    "destination": "patching/M4L_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "m4l/live_pattr.json": {
+    "title": "Using {pattr} in Live Devices",
+    "status": "pending",
+    "destination": "patching/M4L_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "m4l/live_presets.json": {
+    "title": "Presets",
+    "status": "pending",
+    "destination": "patching/M4L_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "m4l/live_preview.json": {
+    "title": "Preview Mode",
+    "status": "pending",
+    "destination": "patching/M4L_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "m4l/live_resolveconflicts.json": {
+    "title": "Resolving Conflicts in Frozen Devices",
+    "status": "pending",
+    "destination": "patching/M4L_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "m4l/live_sharing.json": {
+    "title": "Sharing Max for Live Devices",
+    "status": "pending",
+    "destination": "patching/M4L_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "m4l/live_symbols.json": {
+    "title": "Using Symbols in Max for Live",
+    "status": "pending",
+    "destination": "patching/M4L_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "m4l/live_timing.json": {
+    "title": "Timing and Synchronization in Max for Live",
+    "status": "pending",
+    "destination": "patching/M4L_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "m4l/live_unfreezing.json": {
+    "title": "Unfreezing Devices",
+    "status": "pending",
+    "destination": "patching/M4L_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "m4l/live_userinterfaces.json": {
+    "title": "User Interfaces in Max for Live",
+    "status": "pending",
+    "destination": "patching/M4L_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mapping.json": {
+    "title": "Mapping",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "max_console.json": {
+    "title": "Max Console",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "max_define.json": {
+    "title": "The define Message",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc.json": {
+    "title": "MC",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_audio_delays.json": {
+    "title": "Multichannel Delay Systems",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_channel_topology.json": {
+    "title": "MC Channel Topology",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_dynamic_routing.json": {
+    "title": "MC Dynamic Routing",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_events_newfunctions.json": {
+    "title": "Processing Events from MC Objects",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_events_newobjects.json": {
+    "title": "MC Event Objects",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_function_generators.json": {
+    "title": "MC Function Generators",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_gen.json": {
+    "title": "MC and Gen",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_gen_event_wrapper.json": {
+    "title": "Using mc.gen with the MC Wrapper",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_gen_instances.json": {
+    "title": "MC Gen Instances",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_gen_newfeatures.json": {
+    "title": "Gen Features for MC",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_gen_newobjects.json": {
+    "title": "MC Gen Operators",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_generated_messages.json": {
+    "title": "Generating Values for All MC Wrapper Instances",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_maxforlive_interface.json": {
+    "title": "MC and Max for Live",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_mcvsmcs.json": {
+    "title": "MC vs MCS Objects",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_messages_to_wrapper.json": {
+    "title": "Messages to the MC Wrapper",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_mixing_panning.json": {
+    "title": "MC Mixing and Panning",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_multichannel_sources.json": {
+    "title": "MC Recording and Playback",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_patchcords.json": {
+    "title": "MC Patchcords",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_plugins.json": {
+    "title": "Using Plug-ins with MC",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_poly_multiple_patchers.json": {
+    "title": "Polyphony with Multiple Patchers",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_poly_newfeatures.json": {
+    "title": "Polyphony Using mc.poly~",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_poly_without_polytilde.json": {
+    "title": "MC Managed Polyphony",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_polyphony.json": {
+    "title": "MC Polyphony",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_signals_newobjects.json": {
+    "title": "MC Signal Manipulation Objects",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_spatialization.json": {
+    "title": "MC Spatialization",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_visualization.json": {
+    "title": "MC Visualization and Probing",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "mc/mc_wrapper.json": {
+    "title": "MC Wrapper",
+    "status": "pending",
+    "destination": "patching/MC_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "message_types.json": {
+    "title": "Message Types",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "messages.json": {
+    "title": "Messages",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "midi.json": {
+    "title": "MIDI",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "new_in_max9.json": {
+    "title": "What's New in Max 9",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "non_realtime.json": {
+    "title": "Non-real-time Processing",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "object_reference.json": {
+    "title": "Object Reference",
+    "status": "skipped",
+    "destination": null,
+    "session": "2026-05-07",
+    "notes": "UI/menu walkthrough or refpage overlap \u2014 skipped per task scope."
+  },
+  "objects.json": {
+    "title": "Objects",
+    "status": "skipped",
+    "destination": null,
+    "session": "2026-05-07",
+    "notes": "UI/menu walkthrough or refpage overlap \u2014 skipped per task scope."
+  },
+  "package_manager.json": {
+    "title": "Package Manager",
+    "status": "skipped",
+    "destination": null,
+    "session": "2026-05-07",
+    "notes": "UI/menu walkthrough or refpage overlap \u2014 skipped per task scope."
+  },
+  "packages.json": {
+    "title": "Packages",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "param_connect.json": {
+    "title": "Connecting Parameters",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "parameter_mode.json": {
+    "title": "Parameter Mode",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "patch_cords.json": {
+    "title": "Patch Cords",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "patcher_lifecycle.json": {
+    "title": "Patcher Lifecycle",
+    "status": "extracted",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": "2026-05-07",
+    "notes": "First cluster \u2014 foundational MAX_PATCHING.md topics."
+  },
+  "patcher_window.json": {
+    "title": "Patcher Window and Toolbars",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "patching.json": {
+    "title": "Patching",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "patching_mechanics.json": {
+    "title": "Patching Mechanics",
+    "status": "extracted",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": "2026-05-07",
+    "notes": "First cluster \u2014 foundational MAX_PATCHING.md topics."
+  },
+  "pattr.json": {
+    "title": "Saving State with pattr",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "plugins.json": {
+    "title": "Plugins",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "polyphony.json": {
+    "title": "Polyphony",
+    "status": "extracted",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": "2026-05-07",
+    "notes": "First cluster \u2014 foundational MAX_PATCHING.md topics."
+  },
+  "preferences_and_settings.json": {
+    "title": "Preferences",
+    "status": "skipped",
+    "destination": null,
+    "session": "2026-05-07",
+    "notes": "UI/menu walkthrough or refpage overlap \u2014 skipped per task scope."
+  },
+  "presets_and_interpolation.json": {
+    "title": "Presets and Interpolation",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "projects.json": {
+    "title": "Projects",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "prototypes.json": {
+    "title": "Prototypes",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "recording.json": {
+    "title": "Recording and Exporting",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "repl.json": {
+    "title": "REPL",
+    "status": "skipped",
+    "destination": null,
+    "session": "2026-05-07",
+    "notes": "UI/menu walkthrough or refpage overlap \u2014 skipped per task scope."
+  },
+  "rnbo.json": {
+    "title": "RNBO",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "sample_accurate_messages.json": {
+    "title": "Sample Accurate Messages",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "scheduler.json": {
+    "title": "Scheduler and Priority",
+    "status": "extracted",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": "2026-05-07",
+    "notes": "First cluster \u2014 foundational MAX_PATCHING.md topics."
+  },
+  "scripting_overview.json": {
+    "title": "Scripting",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "search_path.json": {
+    "title": "Search Path",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "sharing.json": {
+    "title": "Sharing Patchers",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "sidebar_search.json": {
+    "title": "Search",
+    "status": "skipped",
+    "destination": null,
+    "session": "2026-05-07",
+    "notes": "UI/menu walkthrough or refpage overlap \u2014 skipped per task scope."
+  },
+  "snapshots.json": {
+    "title": "Snapshots",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "snippets.json": {
+    "title": "Snippets",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "standalones_and_collectives.json": {
+    "title": "Standalones and Collectives",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "strings.json": {
+    "title": "Strings",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "styles.json": {
+    "title": "Styles",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "subpatchers.json": {
+    "title": "Subpatchers and Encapsulation",
+    "status": "extracted",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": "2026-05-07",
+    "notes": "First cluster \u2014 foundational MAX_PATCHING.md topics."
+  },
+  "syntax_coloring.json": {
+    "title": "Syntax Coloring",
+    "status": "skipped",
+    "destination": null,
+    "session": "2026-05-07",
+    "notes": "UI/menu walkthrough or refpage overlap \u2014 skipped per task scope."
+  },
+  "templates.json": {
+    "title": "Templates",
+    "status": "skipped",
+    "destination": null,
+    "session": "2026-05-07",
+    "notes": "UI/menu walkthrough or refpage overlap \u2014 skipped per task scope."
+  },
+  "time_value_syntax.json": {
+    "title": "Time Value Syntax",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "transport.json": {
+    "title": "Transport",
+    "status": "pending",
+    "destination": "patching/MAX_PATCHING.md",
+    "session": null,
+    "notes": ""
+  },
+  "web_browser.json": {
+    "title": "Web Browser and jweb",
+    "status": "skipped",
+    "destination": null,
+    "session": "2026-05-07",
+    "notes": "UI/menu walkthrough or refpage overlap \u2014 skipped per task scope."
+  }
+}

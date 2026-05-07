@@ -104,6 +104,9 @@ Objects that all operate on the same data belong together — in the same subpat
 ### Every control must initialize to a known state on patch load
 Any number box, toggle, or flonum added to a patch must have a `loadmess` (or `loadbang` → `message`) that fires a sensible default on load. A control without a default is a source of undefined state that reproduces inconsistently and is hard to debug.
 
+### Use `trigger` for explicit ordering whenever order matters — including at load time
+Max does not guarantee the order in which two objects emit during the same lifecycle phase, the same scheduler tick, or any other "simultaneous" moment. Whenever the correctness of a patch depends on A happening before B, route through `trigger` (or an explicit chain like `loadmess` fanning out to `t b b`) rather than relying on box position or expected propagation. This applies as much at load time as it does during normal execution — in fact, load-time ordering bugs are harder to find because they only fire once and may be intermittent depending on file size and machine speed.
+
 ---
 
 ## Max Patching Knowledge
@@ -138,6 +141,138 @@ Any number box, toggle, or flonum added to a patch must have a `loadmess` (or `l
 - **Jitter GL position uses normalised coordinates with `±2` spanning the visible window — NOT pixels, and NOT `±1`.** A `@pos 1 0 0` is half-screen to the right; `@pos 2 0 0` is at the right edge. Pixel-distance math requires pre-scaling: `pixel_offset / (window_width / 2)` gives the normalised offset. The `±2` range is the source of "my object is in the wrong place" misalignment when porting from pixel-coordinate systems. (Source: Cycling '74 forum, "Attaching two screens like layers".)
 - **`jit.glue` (and any matrix-combining `jit.*` object: `jit.pack`, `jit.unpack`, `jit.scissors`) requires both matching `dim` AND matching plane count across all input matrices.** Mismatched plane counts (e.g. 1-plane and 3-plane mixed) silently produce wrong output rather than emitting an error. Standardise inputs through fixed-spec `jit.matrix N <type> <dim>` chains before any combine operation. (Source: Cycling '74 forum, "Q: Different FFT spectrum - jit.matrix, jit.glue, jit.world".)
 - **Connect `jit.gl.material` to `jit.gl.multiple` / `jit.gl.gridshape` to enable shader-based rendering — current NVIDIA / AMD drivers no longer optimise the deprecated fixed-function OpenGL pipeline.** Counter-intuitive symptom: integrated graphics outperforming discrete NVIDIA on Jitter geometry tests because the drivers de-prioritise fixed-function. Adding a single `jit.gl.material` (default settings are fine) routes the render through the shader pipeline drivers actively optimise. Mandatory for any performance-sensitive `jit.gl.*` geometry chain. (Source: Cycling '74 forum, "Benchmarking Jitter's CPU/GPU performance on your computer", Rob Ramirez (C74).)
+
+---
+
+## Patcher Lifecycle
+
+Init and teardown happen in well-defined phases. Knowing the order is the difference between robust load-time logic and intermittent bugs that only show up on slower machines or larger patches. (Source: C74 userguide § Patcher Lifecycle.)
+
+### Eight-phase init order at patch open
+
+When Max opens a patcher, every object goes through eight phases in this order:
+
+1. **Object initialization** — every object is constructed. Some objects do synchronous work here (`buffer~ FOO somefile.wav` loads the file synchronously at this stage; later `replace` messages are async).
+2. **Patchcord connection** — patchcords are reconnected. Crucially, **any message an object tries to send during phase 1 may not route as expected**, because cords don't yet exist.
+3. **Parameter initialization** — objects with Parameter Mode enabled set themselves to their initial values and emit them.
+4. **`pattr` restoration** — `pattr` objects with `@autorestore` enabled restore their last-saved value and emit it.
+5. **`loadbang` and `loadmess`** — fire only now, after all the above.
+6. **`live.thisdevice`** — fires after `loadbang` (M4L-specific; in a regular patcher, equivalent to `loadbang` but later in the sequence).
+7. **Window activity** — window appears, `active` objects emit; `patcherargs` initial output is deferred to here.
+8. **`dspstate~` and DSP graph** — DSP graph is built; `dspstate~` emits sample rate, DSP on/off, etc. **`dspstate~` is the only reliable "DSP is ready" signal** — by `loadbang` time, DSP isn't built yet.
+
+**Subpatchers init before their parents within each phase.** A `loadbang` in a subpatcher fires before a `loadbang` in the parent. But a `buffer~` (object init, phase 1) in the parent loads before any `loadbang` (phase 5) anywhere — phase order trumps depth.
+
+### `closebang` in subpatchers fires only on direct close
+
+Closing a parent window does **not** fire `closebang` in subpatchers — only manually closing the subpatcher window does. Cleanup logic that lives in a subpatcher and assumes "patch is closing → I run" will silently not fire. Put `closebang` at the top level, or use `freebang` (which fires on every object's free, regardless of how it got freed) for guaranteed teardown.
+
+---
+
+## Scheduler and Priority
+
+Every event in Max is either high-priority (handled by the scheduler at a specific time) or low-priority (queued FIFO). The split is invisible at the box level most of the time — but it determines what happens under load, when threads are split, and when backlog can crash the application. (Source: C74 userguide § Scheduler and Priority.)
+
+### Two priority lanes
+
+- **High-priority (scheduler) events** carry timing information — MIDI input, `metro`, audio-driven events. Handled by Max's scheduler at the requested time.
+- **Low-priority (queue) events** are everything else — UI, file I/O, drawing, screen redraw, dialogs.
+
+**Overdrive** runs the two on separate threads (better timing accuracy for high-priority; worse interactivity if low-priority is starved). Default off — turn on for MIDI/audio work, leave off for Jitter (GL drawing needs to share thread with patcher logic). **The debugging features only work with Overdrive disabled.**
+
+**Scheduler in Audio Interrupt (SIAI)** runs the high-priority scheduler inside the audio thread, advancing scheduler time with DSP time. Best timing accuracy w.r.t. the audio sample counter; worst w.r.t. real-world clock. Use when audio↔event sync matters; disable when external-hardware sync matters.
+
+### Message propagation is depth-first
+
+Within one event, Max walks the patcher graph depth-first: a path is followed to its terminal node before adjacent paths receive any message. This is what makes `trigger`'s right-to-left ordering deterministic, and why a `t b b` fires its right outlet before its left.
+
+### Stack overflow on infinite message loops — break with `pipe`/`delay`/`deferlow`
+
+Max **does not catch message-graph cycles at compile time** — only DSP cycles. A feedback loop in messages will recurse until stack overflow, at which point Max disables outputs and posts an error. Break the cycle with:
+
+- `pipe N` or `delay N` — schedule a high-priority deferred event (back into the scheduler later).
+- `deferlow` — schedule a low-priority event (back of the queue).
+
+Each turns "send-and-recurse" into "send-and-yield".
+
+### `defer` vs `deferlow` — order semantics
+
+- **`defer`**: front of the low-priority queue; if already running in low priority, passes through unchanged. Can reverse the order of a sequence because it's LIFO into the front.
+- **`deferlow`**: back of the low-priority queue; always defers, even from low priority. Preserves order.
+
+**Use `deferlow` when order matters.** Use `defer` only when "now-ish" deferral with no order requirement is fine.
+
+### Backlog hazard — high-rate source into always-low-priority sink
+
+Some objects always execute at low priority regardless of how the triggering message arrived: `buffer~` (file ops), file-reading objects, drawing/UI, `v8`/`js`, dialog launchers. Connecting a high-rate source to one of these creates **event backlog** — events pile up faster than the queue can drain, eventually crashing Max.
+
+The canonical fix is **data rate reduction** with `speedlim`, `qlim`, or `onebang`. For instance: `snapshot~ → speedlim 20 → v8` caps the v8 input at 50 Hz regardless of how fast `snapshot~` produces. Always insert one of these on a connection from a fast source to a `v8`/`js`/file-I/O sink — the bug is silent until the patch crashes after running for a while.
+
+---
+
+## Polyphony
+
+Max has multiple polyphony solutions and they are not equivalent — pick by what you need. (Source: C74 userguide § Polyphony.)
+
+### Three approaches — decision matrix
+
+| Approach | Use when |
+|---|---|
+| `ddg.mono` | You want monophonic output from polyphonic input (last-key-priority) |
+| `poly` | You need MIDI voice routing only — no per-voice DSP instances |
+| `poly~` | You need both voice routing AND independent DSP per voice (loaded abstraction × N) |
+| `mc.noteallocator~` / `mc.voiceallocator~` | MC-style polyphony without `poly~`'s subpatcher model |
+
+The most common production pattern is `poly~` — its abstraction-per-voice model is the cleanest way to scale a synth voice to N copies.
+
+### `poly~` abstraction inlets/outlets — `in N`/`out N`, not `inlet`/`outlet`
+
+Inside a `poly~` abstraction, declare I/O with `in N` / `out N` / `in~ N` / `out~ N` instead of `inlet`/`outlet`. **The argument is the index, not the position.** Multiple `in N` boxes with the same index share that inlet (multi-receive at one inlet). Left-to-right placement does not matter.
+
+This contrasts with regular abstractions and subpatchers, where `inlet`/`outlet` order is determined by left-to-right placement and silently breaks if you swap them.
+
+### Mute via `thispoly~` is mandatory for any sustaining-voice synth
+
+When a `poly~` voice is muted, Max skips DSP for that voice's signal-rate objects (messages still flow). For an N-voice synth where most voices are idle most of the time, this is the difference between viable and unviable.
+
+Inside the abstraction, send `thispoly~`:
+
+- A `1` to mark busy
+- A `0` to mark free
+- A signal — non-zero = busy, zero = free
+
+**The canonical idiom is `adsr~` → `thispoly~`** because `adsr~` automatically sends mute/unmute messages too. This single connection covers both busy state and DSP muting in one wiring. Use it unless you have a specific reason not to.
+
+---
+
+## Abstractions, Subpatchers, bpatchers
+
+Three flavors of "patcher inside a patcher", each with different lifetime, state, and parameterization rules. (Source: C74 userguide § Abstractions / Subpatchers / bpatchers.)
+
+### Abstraction vs subpatcher
+
+- **Abstraction**: external `.maxpat` file referenced by name. **Editing the file modifies every instance.** Loaded by Max when a `newobj` named like the file is created and the file is on the search path.
+- **Subpatcher** (`p` / `patcher`): contents embedded inline in the parent patcher. **Each instance is independent** — editing one does not affect others. Lives in the parent's JSON.
+
+The trade-off: abstractions give you DRY and shared updates; subpatchers give you isolated state and no external dependencies.
+
+### `#0-NAME` for per-instance `send`/`receive`
+
+Inside an abstraction, `#0` (only when at the start of a word) gets replaced with a number unique to that abstraction instance. **Use `#0-NAME` for `send`/`receive` symbols inside an abstraction** to keep instances from sharing a bus.
+
+For instance: `send #0-TRIGGER` and `receive #0-TRIGGER` inside an abstraction give per-instance trigger buses with no manual numbering. This pairs with the project's ALL-CAPS naming rule: when defining a `send`/`receive` bus inside an abstraction, prefix with `#0-` so each instance gets its own copy.
+
+### Encapsulation resets internal state — common gotcha
+
+When you select a group of objects and press ⌘-Shift-E (Ctrl-Shift-E) to encapsulate, Max **copies** the selected objects into a new subpatcher and **deletes** the originals. The new objects are fresh — their internal state is back to initial values.
+
+If you encapsulated a `delay` line that was holding a queued event, that event is gone. If you encapsulated a `coll` with table data, the data is gone unless persisted via `read`. **Save state externally before encapsulating anything that holds runtime state.**
+
+### bpatcher presentation view — `@openinpresentation` on the *contained* patcher
+
+This is a common point of confusion: to make a bpatcher display the contained patcher's presentation view, set `@openinpresentation 1` **on the contained patcher** (via its Patcher Inspector), **not on the bpatcher object itself**. Setting it on the bpatcher silently does nothing.
+
+Likewise, `@offset x y` (used to shift the displayed origin for tabbed displays or paged controls) **must be sent to a `thispatcher` inside the embedded patcher** — the bpatcher object doesn't accept the message directly.
 
 ---
 

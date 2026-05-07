@@ -188,7 +188,9 @@ To decode MCT received in the conversation: `python3 -c "from spec2maxpat import
 - `patching/MAX_PATCHING.md` — Patching principles, presentation guidelines, documentation verification rules, common pitfalls. Read before any patch work.
 - `patching/GEN_PATCHING.md` — gen~ / gen programming model (audio rate / control rate), canonical idioms (slide envelope follower, samplerate→ms, equal-power crossfade), latency-compensation discipline. Read before any work inside a `gen~` / `gen` box.
 - `patching/JIT_GEN_PATCHING.md` — jit.gen / jit.gl.pix programming model (per-cell / per-pixel), position primitives (`norm`, `cell`, `dim`), texture sampling, distance-field idioms. Read before any work inside a `jit.gen` / `jit.gl.pix` box.
+- `patching/JITTER_PATCHING.md` — Patcher-level Jitter (matrix routing, texture binding, GL pipeline, video). Currently a scoped stub; filled incrementally by the userguide crawl.
 - `patching/M4L_PATCHING.md` — Max for Live patterns: Live Object Model access chain, `live.thisdevice` init signal, `getpath` + `deferlow` race, Push 3 polyphonic pressure, `live.*` UI styling, `.amxd` packaging. Read before any M4L device work.
+- `patching/MC_PATCHING.md` — MC (multichannel) system: `mc.*`/`mcs.*` objects, channel topology, MC polyphony (`mc.poly~`/`mcs.poly~`), MC-with-gen. Currently a scoped stub; filled incrementally by the userguide crawl.
 - `spec2maxpat.py` — The converter. I/O data from C74 maxref.xml via `RefpageCache`; no external database.
 - `TUTORIAL_GUIDELINES.md` — Tutorial structural contract, panel/annotation attrs, comment-pile pattern, breakage diagnostic.
 - `packages/package_objects.json` — Curated reference of installed Max package objects with `use_when` judgments.
@@ -207,6 +209,7 @@ When designing or debugging a patch, consult these curated sources — not just 
 - **`c74-forum/forum_insights.md`** — Non-obvious behaviors, preferred patterns, performance pitfalls from Cycling '74 forums.
 - **`cookbook/cookbook_insights.md`** — Insights from Max Cookbook examples (Dobrian/UCI).
 - **`c74-projects/c74_projects_database.md`** — Catalog of community projects from <https://cycling74.com/projects>. Search this when answering "is there an existing Max for Live device that does X?" or "who has built something like Y?". Note: most gallery entries link to commercial products (paid M4L on gumroad / vstopia / vendor stores) — patch source is rarely available. Free patches that are extracted go to `c74-projects/c74_projects_insights.md`.
+- **`userguide/userguide_insights.md`** — Cross-cutting principles distilled from C74's first-party userguide topics (`/Applications/Max.app/Contents/Resources/C74/docs/userguide/content/`). Patcher lifecycle, scheduler & priority, polyphony, abstractions/subpatchers/bpatchers, etc. Refpages are deliberately out of scope (use `RefpageCache` for those).
 
 _Add new scraped resources here. Every knowledge folder: `<source>/CRAWL_LOG.md`, `<source>/crawl_state.json`, `<source>/<source>_insights.md`._
 
