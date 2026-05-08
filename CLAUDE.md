@@ -56,7 +56,9 @@ Acting on my own interpretation of an un-answered branch produces work the user 
 
 ## Flag Natural Commit Moments — Proactively Suggest Commit, Sync, and New Session
 
-Long conversations accumulate uncommitted work and stale context — both compound. The default cadence is: commit early, sync often, restart frequently. When the work reaches a natural commit boundary — a self-contained chunk that could land as one logical commit — **proactively suggest committing, pushing to origin, and starting a new session**. Don't wait to be asked, and err on the side of suggesting more often rather than less.
+Long conversations accumulate uncommitted work and stale context — both compound. The default cadence is: commit early, sync often, start a new session frequently. When the work reaches a natural commit boundary — a self-contained chunk that could land as one logical commit — **proactively suggest committing, pushing to origin, and starting a new session**. Don't wait to be asked, and err on the side of suggesting more often rather than less.
+
+**Suggest starting a new session, not clearing the current one.** Old sessions are kept as reference — the transcript of how a decision was reached, what was tried, what was rejected, and the back-and-forth that led to the working answer is often more valuable than the diff alone. Starting a new session preserves that history; clearing destroys it. Phrase the prompt accordingly: never tell the user to `/clear`. The new-session prompt is what they should hear.
 
 A commit moment is "natural" when ALL of the following hold:
 
@@ -66,11 +68,11 @@ A commit moment is "natural" when ALL of the following hold:
 - No pending verification is owed (e.g. "check that this works in Max and let me know").
 - The user is not mid-decision on something where the conversation's recent reasoning is the working memory.
 
-When such a moment arrives, surface it concretely. For instance: "This looks like a natural commit point — want me to commit `<short description>` and push to origin? After that, you can clear and pick up the next chunk cold." Include the proposed commit subject so the user can accept or redirect quickly.
+When such a moment arrives, surface it concretely. For instance: "This looks like a natural commit point — want me to commit `<short description>` and push to origin? After that, this is a good place to start a new session for the next chunk." Include the proposed commit subject so the user can accept or redirect quickly.
 
 Bad commit moments (do NOT suggest here): mid-debug, mid-iteration, after a partial fix that hasn't been verified, when external verification is pending, or when the user is exploring options whose tradeoffs are still actively in conversation.
 
-When the user does commit at one of these moments, the follow-up is: (a) confirm `WORK_HISTORY.md` has the session's summary; (b) verify any pending changes in the actual application before clearing — easier to iterate while context is warm than after a cold restart; (c) note any chips/follow-ups that should survive into the next session via files rather than memory.
+When the user does commit at one of these moments, the follow-up is: (a) confirm `WORK_HISTORY.md` has the session's summary; (b) verify any pending changes in the actual application before they start the next session — easier to iterate while context is warm than after a cold restart; (c) note any chips/follow-ups that should survive into the next session via files rather than memory.
 
 ## Modify, Don't Rebuild — and Treat Observed-Good Patterns as Binding
 
