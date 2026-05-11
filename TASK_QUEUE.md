@@ -333,6 +333,53 @@ Tasks that are primarily implementation, file editing, or verification — no de
 
   **Why this matters:** every "Modify, Don't Rebuild" task in this repo depends on sync being lossless. A silent loss is worse than a noisy one — the regenerated patch *opens fine* in Max, just with all the user's manual layout work erased. The user only notices when the layout looks wrong, by which point the manual work is gone unless they had a backup.
 
+- [pending] **PATCH_ANATOMY — verify built-in object names against Max refpages** — The `patching/PATCH_ANATOMY.md` doc was authored on a Linux VM without Max installed, so several built-in object names were written from memory and only pruned post-hoc against `packages/package_objects.json`. That catches package objects but not core Max / MSP / Jitter built-ins, which silent-fail by showing a red box rather than throwing. Walk the doc and verify every built-in name against `/Applications/Max.app/Contents/Resources/C74/docs/refpages/<area>/<obj>.maxref.xml` on a machine with Max installed.
+
+  **Unverified built-ins to confirm**:
+  - §1 input: `adc~`, `sfplay~`, `groove~`, `cycle~`, `noise~`, `saw~`, `buffer~`, `midiin`, `notein`, `ctlin`, `key`, `mousestate`, `metro`, `serial`, `udpreceive`
+  - §2 UI: `slider`, `dial`, `live.dial`, `live.gain~`, `multislider`, `button`, `toggle`, `live.text`, `umenu`, `matrixctrl`, `number`, `flonum`, `comment`, `meter~`, `scope~`, `spectroscope~`, `live.meter~`
+  - §4 state: `pv`, `value`, `pattrstorage`, `preset`, `coll`, `dict`
+  - §5 logic: `v8`, `js`, `jsui`, `node.script`, `mxj`, `expr`, `vexpr`
+  - §7 routing: `send`, `receive`, `s`, `r`, `forward`, `send~`, `receive~`, `trigger`, `t`, `gate`, `switch`, `route`, `sel`, `if`
+  - §8 external: `vst~`, `amxd~`, `mc.vst~`, `udpsend`, `midiout`, `notein`/`noteout`, `ctlin`/`ctlout`, `sysexin`, `serial`, `hi`, `maxurl`, `jweb`, `live.path`, `live.object`, `live.observer`
+  - §9 output: `dac~`, `sfrecord~`, `jit.window`, `jit.world`, `jit.pwindow`
+  - §10 infrastructure: `loadbang`, `loadmess`, `inlet`, `outlet`, `poly~`, `pcontrol`, `thispatcher`, `live.thisdevice`
+
+  For each: if the refpage XML exists, keep. If not, replace with a verified equivalent or drop. Output: a single commit updating `patching/PATCH_ANATOMY.md` with all confirmed names.
+
+  **Prerequisites**: a machine with Max installed (this task is blocked on Linux-VM-only environments).
+
+  **Source**: 2026-05-11 — landed PATCH_ANATOMY.md without environmental ability to verify built-in object names; the cleanup pass needs a Max-equipped host.
+
+- [pending] **PATCH_ANATOMY — cross-reference from CLAUDE.md and MAX_PATCHING.md** — The new `patching/PATCH_ANATOMY.md` is not currently discoverable from any other doc. Make it discoverable so any Claude instance reading CLAUDE.md cold sees the orientation reference.
+
+  **What to do**:
+  1. Add an entry to the **Key Files** section of `CLAUDE.md` between `SPEC_REFERENCE.md` and `patching/MAX_PATCHING.md`:
+     > `patching/PATCH_ANATOMY.md` — Orientation for the Max landscape: ten functional categories of a Max patch (input, UI, domain processing, state, logic, compiled low-level, routing, external services, output, infrastructure). Read first when planning a new patch or decomposing an existing one.
+  2. Add a one-line pointer near the top of `patching/MAX_PATCHING.md` (in the existing introductory paragraph or as a "see also" line):
+     > For an overview of the functional categories a Max patch is built from, see `patching/PATCH_ANATOMY.md`.
+
+  **Output**: a single commit touching both files. No other edits.
+
+  **Source**: 2026-05-11 — landed PATCH_ANATOMY.md without cross-references; deferred so the discoverability change can land cleanly in its own commit.
+
+- [pending] **PATCH_ANATOMY — qualify or remove unverified package references in §3** — The §3 "Domain processing" section of `patching/PATCH_ANATOMY.md` asserts the following package names without object-level verification against `packages/package_objects.json`:
+
+  **Unverified packages**: HISSTools, FFTease, CNMAT, FrameLib, HOA Library, spat / spat5, ml.star, MaxScore, MuBu / PiPo / IMTr.
+
+  **Confirmed packages (no action needed)**: cv.jit, bach, FluidCorpusManipulation, karma, Syphon, Vsynth, zsa.descriptors.
+
+  **What to do**: for each unverified entry, run `python3 packages/query_packages.py search "<package-name>"`. If present in the curated library, keep as-is. If absent, either (a) drop the entry, (b) qualify with a note like "(not in `package_objects.json` on this install — consult the package's own docs)", or (c) consult the package's own refpages/helpfiles on a Mac with the package installed and curate it into `packages/package_objects.json` via `packages/CURATION.md` first.
+
+  **Specific suspicions worth checking**:
+  - "IMTr" is likely wrong — the MuBu suite uses `pipo`, `mubu.*`, `imubu` prefixes; IMTr may not be a real namespace.
+  - "ml.star" objects use `ml.*` prefix; verify that prefix is correct.
+  - "HOA Library" — official name may be "HoaLibrary" or similar; confirm before keeping.
+
+  **Output**: a single commit updating §3 of `patching/PATCH_ANATOMY.md`. Cross-task: if any package gets curated into the library during this pass, also update `WORK_HISTORY.md`.
+
+  **Source**: 2026-05-11 — landed PATCH_ANATOMY.md with package names that survived a curated-library spot-check but weren't all individually confirmed; this task closes the gap.
+
 ---
 
 ## Done
