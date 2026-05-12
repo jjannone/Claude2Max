@@ -380,6 +380,47 @@ Tasks that are primarily implementation, file editing, or verification — no de
 
   **Source**: 2026-05-11 — landed PATCH_ANATOMY.md with package names that survived a curated-library spot-check but weren't all individually confirmed; this task closes the gap.
 
+- [pending] **Built-in Max objects directory for VM environments** — When Claude works in a Linux VM or any environment without `/Applications/Max.app/Contents/Resources/C74/docs/refpages/`, built-in object names cannot be refpage-verified. This is the failure mode that hit `patching/PATCH_ANATOMY.md` — names like `saw~`, `spectroscope~`, `radiogroup`, `v8.codebox`, `jit.gl.spoutreceive` were written from memory and only some could be pruned via `packages/package_objects.json` (which covers package objects, not built-ins). The `CLAUDE.md` "Never Write API Names From Memory" rule depends on per-name verification being possible in every environment, not just on a Mac with Max installed.
+
+  **What to build** — a persisted, queryable directory of all built-in Max / MSP / Jitter / M4L objects, parallel in shape to `packages/package_objects.json`:
+
+  1. **New folder `builtins/`**:
+     - `builtins/builtin_objects.json` — extracted data, one record per object, keyed by `<area>/<name>` (e.g. `msp/cycle~`, `jit/jit.matrix`)
+     - `builtins/build_builtin_objects.py` — extractor that walks `/Applications/Max.app/Contents/Resources/C74/docs/refpages/{max-ref,msp-ref,jit-ref,m4l-ref}/*.maxref.xml` and writes the JSON. Reuse `RefpageCache._parse` from `spec2maxpat.py` — it already extracts everything needed; this script just persists the output.
+     - `builtins/query_builtins.py` — read-only CLI mirroring `packages/query_packages.py`: `list`, `search <term>`, `describe <obj>`, `validate`. Search ranks across `digest` hits highest; `describe` prints the full record (attrs, messages, args, I/O) for verifying a name's existence and its attribute vocabulary.
+     - `builtins/CURATION.md` — how to extend; note that the directory is **machine-extracted**, not hand-curated, so it should be regenerated whenever Max version changes.
+
+  2. **Per-record schema** (cribbed from `packages/package_schema.py` with built-in-specific additions):
+     - `area` — `max` / `msp` / `jit` / `m4l`
+     - `digest` — one-line description from refpage `<digest>`
+     - `numinlets`, `numoutlets`, `outlettype` — I/O contract
+     - `args` — constructor argument names
+     - `attrs` — attribute records: name, type, size, default, get/set, label
+     - `messages` — message records: name, args, inlet
+     - `seealso` — refpage cross-references
+     - `outputs` — per-outlet descriptions
+     - `source` — always `refpage` for built-ins (no helpfile fallback needed — Max ships full refpages for everything)
+
+  3. **`spec2maxpat.py` integration** — add a `BuiltinObjectsCache` class parallel to `PackageObjectsCache`, consulted as a fallback when `RefpageCache.lookup()` returns `None` (which happens when running on a host without Max installed). Lookup order in `guess_newobj_io()`: `RefpageCache` (live XML, source of truth on Mac) → `BuiltinObjectsCache` (cached snapshot, works everywhere) → `PackageObjectsCache` (current final fallback). This keeps the converter usable in VM environments without losing live-XML accuracy when Max is present.
+
+  4. **CLAUDE.md update** — extend the **"Never Write API Names From Memory"** section to point at `builtins/builtin_objects.json` and `builtins/query_builtins.py` as the environment-independent verification path. Specifically: when refpages aren't on disk, the directory is the authoritative source for "does this object exist?" and "what attrs does it have?" — same role refpages play on a Mac.
+
+  5. **Refresh discipline** — the directory must be regenerated whenever Max is updated. Add a one-line note to `CLAUDE.md` ("after upgrading Max, run `python3 builtins/build_builtin_objects.py` and commit the diff") and a comment at the top of `builtin_objects.json` recording the Max version it was extracted from.
+
+  **Prerequisites**:
+  - A machine with Max installed (for the initial extraction; the resulting JSON commits to the repo and works everywhere afterward)
+  - `RefpageCache._parse` in `spec2maxpat.py` (already in place — the extractor is essentially a persistence wrapper around it)
+  - `packages/package_schema.py` as a structural template; consider whether a unified `objects_schema.py` is worth factoring out, or whether built-ins keep their own schema for the M4L/area distinction
+
+  **Open design questions** (resolve at start of task):
+  - Should attribute metadata be included or omitted? **Recommend include** — the silent-failure mode this rule guards against is mostly attribute-name guessing (the `live.gain~ bgcolor` case), not object-name guessing. Attrs make the directory load-bearing for the more common failure.
+  - Should M4L UI objects (`live.*`) be a separate file or merged? **Recommend merged with `area: m4l`** so a single `describe()` call works regardless of namespace.
+  - File size budget — full attrs across ~600 built-in objects will produce a JSON of similar magnitude to `package_objects.json` (~2 MB). Acceptable; same precedent.
+
+  **Fits into the larger system**: closes a verification gap that currently makes `CLAUDE.md`'s strictest rule ("Never Write API Names From Memory") unenforceable in cloud/VM environments. Parallel to `packages/package_objects.json` — same shape, same query CLI pattern, same converter-fallback role. Together the two libraries give Claude environment-independent access to the full Max + installed-package object vocabulary.
+
+  **Source**: 2026-05-11 — exposed during `patching/PATCH_ANATOMY.md` authoring on a Linux VM, where built-in object names had to be written from memory because the `RefpageCache` had no XML to read.
+
 ---
 
 ## Done
