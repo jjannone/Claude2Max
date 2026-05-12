@@ -333,6 +333,94 @@ Tasks that are primarily implementation, file editing, or verification — no de
 
   **Why this matters:** every "Modify, Don't Rebuild" task in this repo depends on sync being lossless. A silent loss is worse than a noisy one — the regenerated patch *opens fine* in Max, just with all the user's manual layout work erased. The user only notices when the layout looks wrong, by which point the manual work is gone unless they had a backup.
 
+- [pending] **PATCH_ANATOMY — verify built-in object names against Max refpages** — The `patching/PATCH_ANATOMY.md` doc was authored on a Linux VM without Max installed, so several built-in object names were written from memory and only pruned post-hoc against `packages/package_objects.json`. That catches package objects but not core Max / MSP / Jitter built-ins, which silent-fail by showing a red box rather than throwing. Walk the doc and verify every built-in name against `/Applications/Max.app/Contents/Resources/C74/docs/refpages/<area>/<obj>.maxref.xml` on a machine with Max installed.
+
+  **Unverified built-ins to confirm**:
+  - §1 input: `adc~`, `sfplay~`, `groove~`, `cycle~`, `noise~`, `saw~`, `buffer~`, `midiin`, `notein`, `ctlin`, `key`, `mousestate`, `metro`, `serial`, `udpreceive`
+  - §2 UI: `slider`, `dial`, `live.dial`, `live.gain~`, `multislider`, `button`, `toggle`, `live.text`, `umenu`, `matrixctrl`, `number`, `flonum`, `comment`, `meter~`, `scope~`, `spectroscope~`, `live.meter~`
+  - §4 state: `pv`, `value`, `pattrstorage`, `preset`, `coll`, `dict`
+  - §5 logic: `v8`, `js`, `jsui`, `node.script`, `mxj`, `expr`, `vexpr`
+  - §7 routing: `send`, `receive`, `s`, `r`, `forward`, `send~`, `receive~`, `trigger`, `t`, `gate`, `switch`, `route`, `sel`, `if`
+  - §8 external: `vst~`, `amxd~`, `mc.vst~`, `udpsend`, `midiout`, `notein`/`noteout`, `ctlin`/`ctlout`, `sysexin`, `serial`, `hi`, `maxurl`, `jweb`, `live.path`, `live.object`, `live.observer`
+  - §9 output: `dac~`, `sfrecord~`, `jit.window`, `jit.world`, `jit.pwindow`
+  - §10 infrastructure: `loadbang`, `loadmess`, `inlet`, `outlet`, `poly~`, `pcontrol`, `thispatcher`, `live.thisdevice`
+
+  For each: if the refpage XML exists, keep. If not, replace with a verified equivalent or drop. Output: a single commit updating `patching/PATCH_ANATOMY.md` with all confirmed names.
+
+  **Prerequisites**: a machine with Max installed (this task is blocked on Linux-VM-only environments).
+
+  **Source**: 2026-05-11 — landed PATCH_ANATOMY.md without environmental ability to verify built-in object names; the cleanup pass needs a Max-equipped host.
+
+- [pending] **PATCH_ANATOMY — cross-reference from CLAUDE.md and MAX_PATCHING.md** — The new `patching/PATCH_ANATOMY.md` is not currently discoverable from any other doc. Make it discoverable so any Claude instance reading CLAUDE.md cold sees the orientation reference.
+
+  **What to do**:
+  1. Add an entry to the **Key Files** section of `CLAUDE.md` between `SPEC_REFERENCE.md` and `patching/MAX_PATCHING.md`:
+     > `patching/PATCH_ANATOMY.md` — Orientation for the Max landscape: ten functional categories of a Max patch (input, UI, domain processing, state, logic, compiled low-level, routing, external services, output, infrastructure). Read first when planning a new patch or decomposing an existing one.
+  2. Add a one-line pointer near the top of `patching/MAX_PATCHING.md` (in the existing introductory paragraph or as a "see also" line):
+     > For an overview of the functional categories a Max patch is built from, see `patching/PATCH_ANATOMY.md`.
+
+  **Output**: a single commit touching both files. No other edits.
+
+  **Source**: 2026-05-11 — landed PATCH_ANATOMY.md without cross-references; deferred so the discoverability change can land cleanly in its own commit.
+
+- [pending] **PATCH_ANATOMY — qualify or remove unverified package references in §3** — The §3 "Domain processing" section of `patching/PATCH_ANATOMY.md` asserts the following package names without object-level verification against `packages/package_objects.json`:
+
+  **Unverified packages**: HISSTools, FFTease, CNMAT, FrameLib, HOA Library, spat / spat5, ml.star, MaxScore, MuBu / PiPo / IMTr.
+
+  **Confirmed packages (no action needed)**: cv.jit, bach, FluidCorpusManipulation, karma, Syphon, Vsynth, zsa.descriptors.
+
+  **What to do**: for each unverified entry, run `python3 packages/query_packages.py search "<package-name>"`. If present in the curated library, keep as-is. If absent, either (a) drop the entry, (b) qualify with a note like "(not in `package_objects.json` on this install — consult the package's own docs)", or (c) consult the package's own refpages/helpfiles on a Mac with the package installed and curate it into `packages/package_objects.json` via `packages/CURATION.md` first.
+
+  **Specific suspicions worth checking**:
+  - "IMTr" is likely wrong — the MuBu suite uses `pipo`, `mubu.*`, `imubu` prefixes; IMTr may not be a real namespace.
+  - "ml.star" objects use `ml.*` prefix; verify that prefix is correct.
+  - "HOA Library" — official name may be "HoaLibrary" or similar; confirm before keeping.
+
+  **Output**: a single commit updating §3 of `patching/PATCH_ANATOMY.md`. Cross-task: if any package gets curated into the library during this pass, also update `WORK_HISTORY.md`.
+
+  **Source**: 2026-05-11 — landed PATCH_ANATOMY.md with package names that survived a curated-library spot-check but weren't all individually confirmed; this task closes the gap.
+
+- [pending] **Built-in Max objects directory for VM environments** — When Claude works in a Linux VM or any environment without `/Applications/Max.app/Contents/Resources/C74/docs/refpages/`, built-in object names cannot be refpage-verified. This is the failure mode that hit `patching/PATCH_ANATOMY.md` — names like `saw~`, `spectroscope~`, `radiogroup`, `v8.codebox`, `jit.gl.spoutreceive` were written from memory and only some could be pruned via `packages/package_objects.json` (which covers package objects, not built-ins). The `CLAUDE.md` "Never Write API Names From Memory" rule depends on per-name verification being possible in every environment, not just on a Mac with Max installed.
+
+  **What to build** — a persisted, queryable directory of all built-in Max / MSP / Jitter / M4L objects, parallel in shape to `packages/package_objects.json`:
+
+  1. **New folder `builtins/`**:
+     - `builtins/builtin_objects.json` — extracted data, one record per object, keyed by `<area>/<name>` (e.g. `msp/cycle~`, `jit/jit.matrix`)
+     - `builtins/build_builtin_objects.py` — extractor that walks `/Applications/Max.app/Contents/Resources/C74/docs/refpages/{max-ref,msp-ref,jit-ref,m4l-ref}/*.maxref.xml` and writes the JSON. Reuse `RefpageCache._parse` from `spec2maxpat.py` — it already extracts everything needed; this script just persists the output.
+     - `builtins/query_builtins.py` — read-only CLI mirroring `packages/query_packages.py`: `list`, `search <term>`, `describe <obj>`, `validate`. Search ranks across `digest` hits highest; `describe` prints the full record (attrs, messages, args, I/O) for verifying a name's existence and its attribute vocabulary.
+     - `builtins/CURATION.md` — how to extend; note that the directory is **machine-extracted**, not hand-curated, so it should be regenerated whenever Max version changes.
+
+  2. **Per-record schema** (cribbed from `packages/package_schema.py` with built-in-specific additions):
+     - `area` — `max` / `msp` / `jit` / `m4l`
+     - `digest` — one-line description from refpage `<digest>`
+     - `numinlets`, `numoutlets`, `outlettype` — I/O contract
+     - `args` — constructor argument names
+     - `attrs` — attribute records: name, type, size, default, get/set, label
+     - `messages` — message records: name, args, inlet
+     - `seealso` — refpage cross-references
+     - `outputs` — per-outlet descriptions
+     - `source` — always `refpage` for built-ins (no helpfile fallback needed — Max ships full refpages for everything)
+
+  3. **`spec2maxpat.py` integration** — add a `BuiltinObjectsCache` class parallel to `PackageObjectsCache`, consulted as a fallback when `RefpageCache.lookup()` returns `None` (which happens when running on a host without Max installed). Lookup order in `guess_newobj_io()`: `RefpageCache` (live XML, source of truth on Mac) → `BuiltinObjectsCache` (cached snapshot, works everywhere) → `PackageObjectsCache` (current final fallback). This keeps the converter usable in VM environments without losing live-XML accuracy when Max is present.
+
+  4. **CLAUDE.md update** — extend the **"Never Write API Names From Memory"** section to point at `builtins/builtin_objects.json` and `builtins/query_builtins.py` as the environment-independent verification path. Specifically: when refpages aren't on disk, the directory is the authoritative source for "does this object exist?" and "what attrs does it have?" — same role refpages play on a Mac.
+
+  5. **Refresh discipline** — the directory must be regenerated whenever Max is updated. Add a one-line note to `CLAUDE.md` ("after upgrading Max, run `python3 builtins/build_builtin_objects.py` and commit the diff") and a comment at the top of `builtin_objects.json` recording the Max version it was extracted from.
+
+  **Prerequisites**:
+  - A machine with Max installed (for the initial extraction; the resulting JSON commits to the repo and works everywhere afterward)
+  - `RefpageCache._parse` in `spec2maxpat.py` (already in place — the extractor is essentially a persistence wrapper around it)
+  - `packages/package_schema.py` as a structural template; consider whether a unified `objects_schema.py` is worth factoring out, or whether built-ins keep their own schema for the M4L/area distinction
+
+  **Open design questions** (resolve at start of task):
+  - Should attribute metadata be included or omitted? **Recommend include** — the silent-failure mode this rule guards against is mostly attribute-name guessing (the `live.gain~ bgcolor` case), not object-name guessing. Attrs make the directory load-bearing for the more common failure.
+  - Should M4L UI objects (`live.*`) be a separate file or merged? **Recommend merged with `area: m4l`** so a single `describe()` call works regardless of namespace.
+  - File size budget — full attrs across ~600 built-in objects will produce a JSON of similar magnitude to `package_objects.json` (~2 MB). Acceptable; same precedent.
+
+  **Fits into the larger system**: closes a verification gap that currently makes `CLAUDE.md`'s strictest rule ("Never Write API Names From Memory") unenforceable in cloud/VM environments. Parallel to `packages/package_objects.json` — same shape, same query CLI pattern, same converter-fallback role. Together the two libraries give Claude environment-independent access to the full Max + installed-package object vocabulary.
+
+  **Source**: 2026-05-11 — exposed during `patching/PATCH_ANATOMY.md` authoring on a Linux VM, where built-in object names had to be written from memory because the `RefpageCache` had no XML to read.
+
 ---
 
 ## Done
