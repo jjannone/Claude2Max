@@ -8,6 +8,23 @@ The tool is designed for students and educators with little coding or CLI experi
 
 ---
 
+## Two Operating Modes
+
+Claude2Max can be used in either of two ways:
+
+**Mode A — Patches live inside the cloned repo.** `patches/` inside this folder holds your `.maxpat` files. Good for learning and for self-contained experiments. No setup beyond what's in [Requirements](#requirements).
+
+**Mode B — Claude2Max as a tool, patches in an external folder.** The cloned repo is treated as a toolkit; your patches live in your own Max projects directory (e.g. `~/Documents/Max 9/Projects/MyPiece/`). Open the Claude Code session inside the Claude2Max folder so the `.claude/skills/` slash commands are available, and pass absolute paths to the converter:
+
+```bash
+python3 spec2maxpat.py convert -i /tmp/spec.json \
+    -o "/Users/you/Documents/Max 9/Projects/MyPiece/main.maxpat"
+```
+
+The `.maxpat` is its own source of truth (the spec is embedded), so nothing else needs to be kept alongside it. `sync`, `extract`, and `mct` accept the same absolute paths. GitHub is optional in either mode — neither requires a remote.
+
+---
+
 ## Features
 
 ### The Spec Format
@@ -184,6 +201,8 @@ git config diff.claude2max.textconv "python3 spec2maxpat.py extract -i"
 ```
 
 This makes `git diff` show changes to the embedded spec instead of the raw `.maxpat` JSON.
+
+_This step is only useful if you plan to use `git diff` on your `.maxpat` files. Local-only users with no git tracking can skip it._
 
 ## Requirements
 

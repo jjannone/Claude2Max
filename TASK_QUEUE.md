@@ -333,6 +333,24 @@ Tasks that are primarily implementation, file editing, or verification — no de
 
   **Why this matters:** every "Modify, Don't Rebuild" task in this repo depends on sync being lossless. A silent loss is worse than a noisy one — the regenerated patch *opens fine* in Max, just with all the user's manual layout work erased. The user only notices when the layout looks wrong, by which point the manual work is gone unless they had a backup.
 
+- [pending] **Refine the student/user setup process and the Description→Plan→Instructor-Review→First-Draft workflow** — first pass landed 2026-05-22 in `CLAUDE.md` ("Local-Folder Use Is Fully Supported", "Suggested Student Workflow", gated New User Setup, "State-File Location for External Projects") and `README.md` ("Two Operating Modes", optional-Setup note). These are a starting point — they describe the intent but have not yet been tested against a real student-from-scratch onboarding. Open questions to resolve on the next pass:
+
+  1. **Onboarding script.** Should there be a top-level `setup.sh` (or `python3 setup.py`) that runs the conditional flow — detect git vs local-only, ask the student where their Max project lives, write a `.c2m-current-project` pointer if external, offer to remove `origin`, install the optional git diff filter only if wanted? Right now this is all manual prose in CLAUDE.md and depends on Claude noticing each branch at session start.
+
+  2. **External-project pointer mechanism.** The "tell Claude my project lives at X" convention is currently informal — the student has to say it in chat each session. A persistent pointer file (`.c2m-current-project` at the repo root, or `$HOME/.c2m-config`) would survive across sessions. Decide format and lifecycle (overwritten freely, or append-only history of projects).
+
+  3. **Student workflow steps 5–6 (instructor handoff).** Currently the student manually copies the proposal out of the Claude conversation and pastes the instructor's response back. Worth investigating whether a small helper would smooth this — e.g. a `c2m-export-proposal` command that snapshots the current plan to a file the student can email or paste into an LMS, and a matching `c2m-import-response` that re-attaches the instructor's reply to the conversation. Cost vs benefit unclear; skip if it adds more friction than it removes.
+
+  4. **Workflow step ordering and skip conditions.** The 9-step flow is linear. Test with a real student build to find out which steps actually fire, which get skipped, and whether the loop on steps 7–8 ever terminates cleanly in practice. Especially: does step 5 (instructor handoff) work for solo students with no instructor? Add an explicit "self-review" branch if so.
+
+  5. **Wording and tone for the local-only greeting.** The current greeting ("you're working locally without a GitHub remote — that's a fully supported setup") may read as defensive. Try alternative wording with at least one real first-time student before settling.
+
+  6. **State-file convention enforcement.** The "State-File Location for External Projects" rule currently says Claude should default state files into the external project folder if one has been declared. There is no mechanical enforcement — Claude could still write `WORK_HISTORY.md` to the toolkit repo by habit. Decide whether to add a PreToolUse hook that flags writes to `WORK_HISTORY.md` / `TASK_QUEUE.md` / `insights.md` at the toolkit root when an external project is active.
+
+  **Prerequisites**: ideally test with at least one new student before refining. The current pass is "intent captured, mechanics untested."
+
+  **Why this matters**: the local-folder workflow is the on-ramp for every student who clones this repo without a GitHub account. If it's smooth, students self-onboard; if it isn't, the friction shows up as confusion in their first session and Claude has to compensate with extra prompting every time. A small invested cost here pays off across every future student.
+
 ---
 
 ## Done

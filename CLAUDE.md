@@ -4,6 +4,23 @@ This repo is a tool for generating Max/MSP patches from Claude-authored JSON spe
 
 **Audience**: This tool is designed for students with little coding or CLI experience. CLAUDE.md serves as the primary knowledge base — when their instance of Claude reads it, it should learn everything needed to work with Max/MSP, the spec format, and the converter without requiring prior expertise. Include helpful general information here even if it seems basic — students benefit from it and Claude instances need it to assist them effectively.
 
+## Local-Folder Use Is Fully Supported — GitHub Is Optional
+
+Students cloning this repo do **not** need to turn their work into a GitHub repository. A purely local folder on disk is a first-class workflow. The intended local-only flow is:
+
+1. `git clone` this repo once. (If you don't want any GitHub coupling, you can `git remote remove origin` after — the repo still works as a self-contained toolkit.)
+2. Open a Claude Code session with the cloned Claude2Max folder as the working directory.
+3. Either save patches inside `patches/` (fine for learning), or point `convert -o` at any absolute path on disk where your Max project lives (e.g. a folder in `~/Documents/Max 9/Projects/`). The `.maxpat` is its own source of truth — the spec is embedded — so there are no stray files to manage outside it.
+4. Iterate locally. No commits, pushes, or PRs are required.
+
+**Implications for Claude operating in this repo:**
+
+- Do not assume a GitHub remote exists. Never run `git push`, `gh` commands, or suggest "open a PR" unless the user has explicitly opted into GitHub for this session.
+- The `New User Setup` flow below creates a local `insights/<name>` git branch only when the working directory is actually a git checkout — see the gating step in that section. Never suggest pushing a local-only branch.
+- The `Setup` step in `README.md` that configures `diff.claude2max.textconv` is git-only — mention it as optional to local-only students rather than running it automatically.
+- State files (`WORK_HISTORY.md`, `TASK_QUEUE.md`, `insights.md`) follow the convention in **State-File Location for External Projects** further down.
+- When in doubt about whether a git/GitHub-flavored action is wanted, ask once at session start and remember the answer for the rest of the session.
+
 ## Rules from Corrected Errors {!pre-commit}
 
 After fixing any error, derive a general rule that would have prevented it. Present the proposed rule(s) to the user in plain language before writing them to CLAUDE.md or SPEC_REFERENCE.md. Only enshrine rules the user confirms. This keeps the knowledge base accurate and user-approved rather than accumulating unreviewed assumptions.
@@ -56,7 +73,7 @@ Acting on my own interpretation of an un-answered branch produces work the user 
 
 ## Flag Natural Commit Moments — Proactively Suggest Commit, Sync, and New Session
 
-Long conversations accumulate uncommitted work and stale context — both compound. The default cadence is: commit early, sync often, start a new session frequently. When the work reaches a natural commit boundary — a self-contained chunk that could land as one logical commit — **proactively suggest committing, pushing to origin, and starting a new session**. Don't wait to be asked, and err on the side of suggesting more often rather than less.
+Long conversations accumulate uncommitted work and stale context — both compound. The default cadence is: commit early, sync often, start a new session frequently. When the work reaches a natural commit boundary — a self-contained chunk that could land as one logical commit — **proactively suggest committing and starting a new session**. Don't wait to be asked, and err on the side of suggesting more often rather than less. If a GitHub remote is configured and the user has opted in to pushing, include `git push origin <branch>` as part of the same step; if not, the local commit is the whole story.
 
 **Suggest starting a new session, not clearing the current one.** Old sessions are kept as reference — the transcript of how a decision was reached, what was tried, what was rejected, and the back-and-forth that led to the working answer is often more valuable than the diff alone. Starting a new session preserves that history; clearing destroys it. Phrase the prompt accordingly: never tell the user to `/clear`. The new-session prompt is what they should hear.
 
@@ -68,7 +85,7 @@ A commit moment is "natural" when ALL of the following hold:
 - No pending verification is owed (e.g. "check that this works in Max and let me know").
 - The user is not mid-decision on something where the conversation's recent reasoning is the working memory.
 
-When such a moment arrives, surface it concretely. For instance: "This looks like a natural commit point — want me to commit `<short description>` and push to origin? After that, this is a good place to start a new session for the next chunk." Include the proposed commit subject so the user can accept or redirect quickly.
+When such a moment arrives, surface it concretely. For instance: "This looks like a natural commit point — want me to commit `<short description>`? After that, this is a good place to start a new session for the next chunk." Add "and push to origin" only when a remote is configured and pushes have been opted into. Include the proposed commit subject so the user can accept or redirect quickly.
 
 Bad commit moments (do NOT suggest here): mid-debug, mid-iteration, after a partial fix that hasn't been verified, when external verification is pending, or when the user is exploring options whose tradeoffs are still actively in conversation.
 
@@ -169,6 +186,22 @@ The spec is embedded inside every `.maxpat`. Standalone `.json` spec files are o
 2. Write a JSON spec following `SPEC_REFERENCE.md`
 3. Convert: `python3 spec2maxpat.py convert -i /tmp/spec.json -o patches/patch.maxpat`
 4. User opens in Max, gives feedback, iterate
+
+### Suggested Student Workflow — Description → Plan → Instructor Review → First Draft
+
+This is the recommended path for building a new patch from scratch, especially in a classroom context. It is deliberately slower than "describe it and Claude builds it in one shot" — the extra steps give the student a chance to refine their thinking and let the instructor catch problems before they are baked into a patch. Treat this as a starting point, not a fixed rule; refine it with the student as you go.
+
+1. **Student describes the patch.** Plain English — what it should do, what it should sound like or react to, what the controls should be. No Max objects yet.
+2. **Claude proposes a planned structure.** A high-level workflow: input → main processing stages → output, including any sub-systems (sequencer, voice manager, FX bus, GUI). Still no specific object names — just the shape of the patch and the data flow between stages.
+3. **Student edits the proposal.** The student adjusts the structure until it matches what they actually want. Claude treats this as iterative — every change is folded back into the plan before moving on.
+4. **Claude proposes a concrete object approach.** Now Claude names specific Max objects for each stage (`metro`, `groove~`, `cv.jit.faces`, etc.), consulting `packages/package_objects.json` first to avoid long native chains when a single package object covers the need. The proposal includes inlet/outlet wiring at a high level and identifies any sub-patchers.
+5. **Submit the object proposal to the instructor.** The student copies the proposal out and asks their instructor for revisions or additional suggestions. Claude does not build yet.
+6. **Student returns the instructor's response.** Paste it into the conversation. Claude reads it as authoritative — instructor feedback overrides Claude's earlier choices unless the student says otherwise.
+7. **Claude asks follow-up questions.** Anything ambiguous in the instructor's response, anything that conflicts with the earlier plan, or anything Claude would otherwise have to guess at — surface it as a question rather than silently picking an answer.
+8. **Student and/or instructor answer the questions.** Loop on steps 7–8 until Claude has enough to build without guessing.
+9. **Claude builds the first-draft .maxpat.** Write the spec, embed it, run `convert`, and hand the patch back for student testing in Max.
+
+After the first draft, normal Claude2Max iteration applies — sync before any edit, observe what's working before changing it, and keep `WORK_HISTORY.md` and `insights.md` up to date.
 
 ### Existing patch (externally sourced or manually edited)
 
@@ -281,20 +314,32 @@ Whenever you learn something new about Max behavior, fix a bug, or add/change a 
 - `CLAUDE.md` — workflow, process rules, cross-cutting conventions
 - `WORK_HISTORY.md` — session summary (create it if absent)
 
-**Before every commit/push**, check: did this session produce insights that belong in the reference docs? If so, update them in the same commit. Do not wait for the user to ask — this is automatic.
+**Before every commit** (and before every push, when a remote is configured), check: did this session produce insights that belong in the reference docs? If so, update them in the same commit. Do not wait for the user to ask — this is automatic.
 
 **Never use local Claude memory as a substitute for repo documentation.** This repo is specifically designed so that every Claude instance — across all users who clone it — has the same knowledge. Saving a Max behavioral insight or Claude2Max convention to `~/.claude/…/memory/` instead of the repo docs defeats that purpose entirely: it stays private to one machine, it won't travel with the repo, and future instances won't have it. If an insight is worth remembering, it belongs here.
 
 ## New User Setup
 
-**At the start of every conversation**, after the long-gap check, run this:
+**At the start of every conversation**, after the long-gap check, first determine whether the working directory is a git checkout:
+
+```bash
+if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    echo "LOCAL_ONLY"
+fi
+```
+
+If the output is `LOCAL_ONLY`, the student is using Claude2Max as a purely local folder (see **Local-Folder Use Is Fully Supported** above). Skip the branch-creation flow entirely, do not run any `git config` / `git branch` / `git checkout` commands, and never suggest `git push` or PR contributions. Still create `insights.md` in the working directory with the same template described further down, and still log discoveries to it during the session. Greet the local-only user as:
+
+> "Welcome to Claude2Max. You're working locally without a GitHub remote — that's a fully supported setup. I'll log useful discoveries and corrections to `insights.md` in this folder as we work, in case you want to refer back to them later."
+
+Otherwise (git checkout is present), run this:
 
 ```bash
 USER_EMAIL=$(git config user.email)
 echo "$USER_EMAIL"
 ```
 
-If `USER_EMAIL` is `jannone@mac.com`, skip this section entirely.
+If `USER_EMAIL` is `jannone@mac.com`, skip the rest of this section entirely.
 
 Otherwise:
 
@@ -310,9 +355,19 @@ If the branch does not exist (empty output):
 git checkout -b "$BRANCH"
 ```
 
-Then greet the new user:
+After branch creation, detect whether a GitHub remote is configured:
+
+```bash
+HAS_REMOTE=$(git remote 2>/dev/null | head -1)
+```
+
+If `HAS_REMOTE` is non-empty, greet the new user:
 
 > "Welcome to Claude2Max. I've created a branch **`insights/<your-name>`** to track your session. As we work together, I'll log useful discoveries, workflow improvements, and corrections to `insights.md` on this branch. If anything seems worth sharing with other users, I'll let you know — it only takes a PR to contribute it back."
+
+Otherwise (no remote configured), greet:
+
+> "Welcome to Claude2Max. I've created a local branch **`insights/<your-name>`** to track your session. As we work together, I'll log useful discoveries, workflow improvements, and corrections to `insights.md` on this branch. Your notes stay on this machine — if you ever decide to add a GitHub remote, the same branch can be pushed and shared as a PR."
 
 Create `insights.md` if it doesn't exist:
 
@@ -320,7 +375,8 @@ Create `insights.md` if it doesn't exist:
 # Claude2Max Insights — <user name>
 
 Discoveries, corrections, and workflow improvements gathered during use.
-Candidates for upstream PRs are marked **[PR candidate]**.
+Entries broadly useful to other users are marked **[shareable]** — if a GitHub
+remote is configured, these are candidates for an upstream PR.
 
 ## Log
 
@@ -328,8 +384,17 @@ Candidates for upstream PRs are marked **[PR candidate]**.
 
 From that point forward in the session:
 - Append any confirmed new rule, correction, or non-obvious workflow insight to `insights.md` under the `## Log` section with today's date
-- Mark entries `**[PR candidate]**` when they seem broadly useful (not just specific to this user's patch)
-- At the end of the session, if there are any PR candidates, remind the user: "There are N entries in `insights.md` marked as PR candidates — consider opening a pull request to share them upstream."
+- Mark entries `**[shareable]**` when they seem broadly useful (not just specific to this user's patch)
+- At the end of the session, if there are any `[shareable]` entries **and a GitHub remote is configured**, remind the user: "There are N entries in `insights.md` marked as shareable — consider opening a pull request to share them upstream." If no remote is configured, skip the reminder — the notes remain on disk for the user's own reference.
+
+## State-File Location for External Projects
+
+When a student is using Claude2Max as a tool against an external project folder (see **Local-Folder Use Is Fully Supported**), the per-project state files belong with the project, not with the toolkit:
+
+- `WORK_HISTORY.md`, `TASK_QUEUE.md`, and `insights.md` should live in the external project folder so they travel with the student's work.
+- The Claude2Max repo's own `WORK_HISTORY.md` is reserved for changes to the toolkit itself (converter, skills, docs).
+
+At session start, if the student has told Claude that they are working on a project at a specific path, treat that path as the home for these files. If the student has not pointed at an external folder, default to this repo as today. Ask once when it's ambiguous and remember the answer for the rest of the session.
 
 ## Work History {!pre-commit}
 
