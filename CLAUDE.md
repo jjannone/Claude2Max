@@ -111,6 +111,44 @@ For instance: writing in design critique that "the comment-padding compensation 
 
 - **Preserve wiring integrity when modifying patches programmatically.** Patchlines reference boxes by `id`, so renaming a box that has connections silently breaks all wiring to and from it. Keep original IDs intact; only assign new IDs to newly added boxes.
 
+## Always Create a Presentation View — Binding Rule
+
+Every patch that has a user interface gets a presentation view. "Has a user interface" means: it contains any object an operator will interact with at runtime — toggle, number, slider, dial, button, textedit, attrui, comment label, `jit.pwindow`, `jit.cellblock`, `live.*`, etc. The presentation is the patch's actual interface; the patching view is for editing the graph. Shipping a patch without a presentation forces the operator to navigate the editor view — friction even when the graph is well-organized.
+
+The mechanics:
+
+- Set `openinpresentation: 1` at the patcher root so the patch opens in presentation by default.
+- Set `presentation: 1` on every UI object the operator should see.
+- Set `presentation_rect: [x, y, w, h]` on each such object so it has an explicit position in the presentation layout. Presentation positions are independent of patching positions — optimize each view for its own purpose.
+- Include comment labels for every visible control. A control worth showing is worth labelling.
+- Omit internal logic objects from the presentation (`route`, `prepend`, `sprintf`, hidden message boxes used as routers, `print`, etc.). They live only in the patching view.
+
+The threshold is "any UI," not "lots of UI." A patch with four UI elements (a START button, a status comment, a port number box, a `jit.cellblock` monitor) still gets a presentation — those four are the operator's interface and the rest is editing scaffolding. See `SPEC_REFERENCE.md > Presentation View` for layout specifics, and `patching/MAX_PATCHING.md > Presentation Aesthetic` for the visual checklist (panel grouping, monospace labels, color semantics, action prominence hierarchy).
+
+Exempt cases: utility subpatchers embedded inside a parent's presentation (the parent supplies the UI), and pure-DSP / pure-utility patches with no operator at all (codebox modules called from elsewhere).
+
+## Always Hide Plumbing Patchcords — Binding Rule
+
+A patchcord whose sole job is to satisfy the graph — carrying a value between objects without itself communicating anything to a reader — must be hidden. Visible cords should mean something to the reader; everything else is noise on stage.
+
+**Cords that must be hidden** (`"hidden": 1` on the patchline):
+
+- Formatter cords — incoming and outgoing on any `prepend`, `sprintf`, `tosymbol`, `fromsymbol`, `pak/pack/unpack`, `zl` (when shaping), or message box that only reformats an upstream UI value.
+- Cords feeding a display-only UI element — `comment` used as a status display, `number`/`flonum` used as a readout, `live.toggle` / `live.numbox` used as indicators, `jit.cellblock`, `multislider`, `jit.pwindow`, similar.
+- Cords from operator-facing preset messages into internal logic (`node.script`, `js`, `v8`). The message box is the surface; the cord is plumbing.
+- Cords between hidden boxes. If a box has `"hidden": 1`, every cord touching it must also be hidden.
+
+**Cords that stay visible:**
+
+- The main data router lines (e.g. `[node.script] → [route ...]`) — visible because they communicate the data path to anyone reading the patch.
+- Connections between user-facing UI controls (e.g. `[live.gain~] → [ezdac~]`) where seeing the chain helps the operator reason about behavior.
+- Cords going into a `print` object — debug visibility is the *point*.
+- Cords inside a section deliberately presented as a wiring diagram for pedagogical reasons.
+
+The rule is symmetric: hiding a box for being plumbing creates an obligation to hide every cord touching it. A visible cord that terminates in nothing is worse than no cord at all.
+
+For instance: `[number] → [setport $1] → [node.script]`. The `[setport $1]` message box exists only because Node-for-Max can't read a raw int. Hide both incoming and outgoing cords on `[setport $1]`, and hide the message box itself. The locked view shows only the number box; the operator twiddles it and the message + cords stay invisible.
+
 ## Never Regress Functionality When Changing Modality
 
 **General rule**: when any working feature — display, control, behavior, format — is moved, replaced, or reimplemented in a different modality, it must arrive at least as capable as it left. A change of modality is not a reason to lose functionality.

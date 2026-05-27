@@ -394,6 +394,30 @@ Connections are an array of 4-element arrays:
 
 One source can connect to multiple destinations. Multiple sources can connect to the same inlet.
 
+### Always hide plumbing patchcords — this is binding
+
+A patchcord whose sole job is to satisfy the graph (carrying a value between objects without itself communicating anything to the operator) must be hidden in the locked / presentation view. Visible cords should mean something to the reader; everything else is noise on stage.
+
+In a spec, mark a connection as hidden with a fifth element on the connection array — `{"hidden": 1}` — or in raw `.maxpat` JSON set `"hidden": 1` on the patchline object next to `source` / `destination`.
+
+**Cords that must be hidden:**
+
+- **Formatter cords.** Any cord into a `prepend`, `sprintf`, `tosymbol`, `fromsymbol`, `pak`, `pack`, `unpack`, `zl` (when used purely as a list shaper), or a `message` box that exists only to reformat a value coming from an upstream UI element.
+- **Cords feeding a display-only UI element.** Any cord whose destination is a `comment` (when used as a status display), `number` / `flonum` (when used as a readout), `live.toggle` / `live.numbox` used as indicators, `jit.cellblock`, `multislider`, `jit.pwindow`, or similar. The UI element IS the surface; the cord into it is plumbing.
+- **Cords into `node.script` / `js` / `v8` from preset message boxes.** When the message box is the operator-facing affordance and the JS receiver is internal logic, the cord between them is plumbing.
+- **Cords between hidden boxes.** Any cord whose source OR destination is itself `"hidden": 1`.
+
+**Cords that stay visible:**
+
+- The main data router lines (e.g. `[node.script] → [route ...]`) — visible because they communicate the data path to anyone reading the patch.
+- Connections between user-facing UI controls (e.g. `[live.gain~] → [ezdac~]`) where seeing the chain helps the operator reason about what's happening.
+- Cords going into a `print` object (debug visibility is the *point*).
+- Cords inside a section that the patch author deliberately wants to display as a wiring diagram for pedagogical or debugging reasons.
+
+For instance: `[number] → [setport $1] → [node.script]` — the message box `[setport $1]` is a formatter that exists only because Node-for-Max can't read a raw int. Hide both incoming AND outgoing cords on `[setport $1]`, and hide the message box itself with `"hidden": 1`. The locked view shows only the number box; the operator twiddles it and the message + cords stay invisible.
+
+The rule is symmetric: when you hide a box for being plumbing, hide every cord touching it. A visible cord that terminates in nothing is worse than no cord at all.
+
 ## Subpatchers
 
 Any `newobj` with text starting with `p` can contain a nested patcher. Add a `patcher` field with the same spec structure. Use `inlet` and `outlet` types inside to define the subpatcher's inlets and outlets:
@@ -480,11 +504,23 @@ When a secondary control (velocity, duration, etc.) feeds into a later inlet of 
 
 Use the `presentation` field on objects to create a clean, user-facing layout separate from the patching view. Presentation mode hides all wiring and non-presented objects, showing only the controls the user needs.
 
+### Always create a presentation — this is binding
+
+**Every patch that has a user interface gets a presentation view.** "Has a user interface" means: it has any UI control (toggle, number, slider, dial, button, textedit, attrui, comment label, jit.pwindow, jit.cellblock, live.* objects) that a non-author operator will interact with at runtime. The presentation is the patch's actual interface; the patching view is for editing the graph. A patch shipped without a presentation forces the operator to navigate the editor view, which is friction even when the graph is well-organized.
+
+Concretely:
+
+- **Set `openinpresentation: 1`** at the patcher root so the patch opens in presentation by default.
+- **Set `presentation: 1`** on every UI object the operator needs to see or interact with.
+- **Set `presentation_rect: [x, y, w, h]`** on each such object so it has an explicit position in the presentation layout. The presentation positions are independent of patching positions — optimize each view for its own purpose.
+- **Include comment labels** for every visible control. A control worth showing is worth labelling.
+- **Omit internal logic objects** (route, prepend, sprintf, hidden message boxes used for routing, debug print, etc.). They live only in the patching view.
+
+The only exempt cases are: utility subpatchers that are themselves embedded inside a parent's presentation (the parent supplies the UI), and pure-DSP / pure-utility patches that have no operator at all (codebox modules called from elsewhere).
+
+For instance: a Max patch with a START button, a status text comment, a number box for port, and a `jit.cellblock` monitor — that has four UI elements. Even though that's not "many," it gets a presentation. The threshold is "any UI," not "lots of UI."
+
 ### When to use presentation
-
-Any patch with more than a handful of user-facing controls benefits from a presentation. Include all UI objects (toggles, number boxes, sliders, dials, gain controls, ezdac~, etc.) and their comment labels. Omit internal logic objects (newobj, message boxes used for routing, etc.).
-
-### Presentation layout
 
 - Every control in the presentation should have a comment label. If a control is worth showing to the user, it is worth labelling.
 - Place comment labels **above** the control they describe, with ~18px vertical gap so the label text clears the control cleanly. Comments render slightly taller in presentation than in patching view.
