@@ -245,6 +245,127 @@ When designing or debugging a patch, consult these curated sources — not just 
 
 _Add new scraped resources here. Every knowledge folder: `<source>/CRAWL_LOG.md`, `<source>/crawl_state.json`, `<source>/<source>_insights.md`._
 
+## Multi-User Template — Available Pattern for Phone-Driven Pieces
+
+There is a shared infrastructure repo, **`multi-user-template`**, at:
+
+```
+/Users/johnjannone/Library/CloudStorage/Dropbox-JohnJannone/john jannone/_Projects__________________/_GitHub/multi-user-template
+```
+
+Whenever a student (or John) asks for a Max patch that uses **multiple
+phones in the room as controllers / sensors / displays**, default to
+basing the work on this template instead of building the WebSocket /
+HTTP / OSC plumbing from scratch in a spec. The template already
+provides:
+
+### What's in the template
+
+- **LAN server** — Node-for-Max (`server.js`) loaded by `node.script` in
+  the patch. HTTP serves a static client; WebSocket fans events both
+  ways; OSC over UDP forwards sensor data to a `[udpreceive] → [oscparse]`
+  chain in the patch.
+- **Lobby + role flow** — name entry, role multi-select, admin
+  password (set in the patch), transport gate.
+- **Stage UI with 15 tabs** — every sensor the browser exposes (motion,
+  gyro, orientation, heading, geolocation, mic + STT, camera, multi-
+  touch, pointer/pencil, gamepad, ambient light, battery, network,
+  screen state, barometer, proximity, Bluetooth scan, NFC read) plus
+  test pages (4-slider + 4-dial, 16-pad grid, text keyboard, 2-octave
+  MIDI keyboard).
+- **Output engine on the phone** — Max → phone commands for `vibrate`,
+  `speak` (TTS), `beep`, `display`, and a full Web Audio synth engine
+  with osc / FM / wavetable / sample modes. All parameters drivable
+  live from Max.
+- **Cloudflare Worker cloud relay** (`cloud/worker/`) — a generic
+  Durable-Object-based WebSocket fan-out for remote performers and
+  audience members. **Deployed once for ALL pieces built on the
+  template** — a derived repo doesn't redeploy. The patch's "Piece" and
+  "Room" fields select which Durable Object it opens.
+
+### Message surface available to the patch
+
+When you generate a patch that ingests data from the template, route
+the `node.script` outlet by leading symbol:
+
+```
+performer add|remove|role|roles <name> [args]
+roster <name1> <name2> ...
+status <text>
+url <http://...>
+started <0|1>
+admincount <n>
+sensor <name> <kind> <args...>     kinds: motion gyro orient heading
+                                           geo mic touch pointer
+                                           gamepad button slider dial
+                                           key text midi battery net
+                                           light gravity linaccel
+                                           magnet pressure proximity
+                                           screen speech
+cloud status|connected <args>
+audience input|react|ping|join|leave <name> [args]
+```
+
+OSC arrives at `[udpreceive <port>] → [oscparse]` with addresses:
+
+```
+/user/<name>/<kind>[/<sub>]   sensors and controls
+/audience/<name>/<kind>/<id>  audience inputs
+```
+
+Message surface from the patch back to phones (just send to
+`node.script`'s inlet):
+
+```
+vibrate <ms>                  [vibrateto <name> <ms>]
+speak <text...>               [speakto <name> <text...>]
+beep <freq> <ms>              [beepto <name> <freq> <ms>]
+display <text...>             [displayto <name> <text...>]
+synthnote <note> <vel>        [synthnoteto <name> <note> <vel>]
+synthset <param> <value>      [synthsetto <name> <param> <value>]
+synthmode osc|fm|wavetable|sample   [synthmodeto <name> <mode>]
+```
+
+And, for cloud-relay control:
+
+```
+setcloudurl wss://...   setpiece <slug>   setroom <slug>
+cloudon                 cloudoff
+```
+
+### Authoritative documentation
+
+The template's own docs cover patterns, gotchas, and feature-detection
+tables in detail. Before designing a patch on top of the template,
+read:
+
+- `multi-user-template/README.md` — architecture, the LAN + cloud
+  topology, deployment notes.
+- `multi-user-template/CLAUDE.md` — load-bearing patterns (disconnect ≠
+  leave, heartbeat, duplicate-name handling, host singleton, sensor-by-
+  name dispatch, audience whitelist, etc.).
+- `multi-user-template/cloud/worker/README.md` — the relay's URL shape
+  and role conventions.
+
+### When to use it
+
+- A piece where **performers' phones drive Max** (motion, touch, MIDI,
+  text, voice).
+- A piece where **Max drives phone outputs** (synthesis, speech,
+  display, haptics).
+- A piece that needs **a lobby + admin gate + roles**.
+- A piece intended to support **remote performers or audience over the
+  internet** (use the cloud relay; no new Worker to deploy).
+- A spec where the student would otherwise reinvent the LAN HTTP+WS
+  scaffold — point them at the template instead.
+
+### When NOT to use it
+
+- A pure desktop / hardware-driven patch with no mobile component.
+- A patch using a fixed external controller (TouchOSC, MIDI keyboard
+  hardware) — those can still be wired alongside but the template is
+  overkill if there are no phones in the loop.
+
 ## Consult Installed Packages Before Long Native Chains
 
 Check `packages/package_objects.json` before composing any 3+ native-object chain. The `use_when` field is the load-bearing entry — it tells you when and how to drive the object. Use `/c2m-package-search` or `python3 packages/query_packages.py search "<term>"`.
