@@ -53,6 +53,18 @@ The verification mechanics for Max specifically — the refpage paths, the `grep
 
 **Verification is per-attribute, not per-object.** If I am writing N attributes for an object, I must verify N names against the refpage. Batching N attrs into one edit without per-name verification is the failure mode this rule is designed to prevent.
 
+**The rule applies independent of the workflow — including direct `.maxpat` edits.** The converter's lookup against `packages/package_objects.json` would have caught an unknown object name, but only when a spec is being converted. Hand-editing `.maxpat` JSON, modifying an existing patch with the Edit tool, generating boxes into a patch via Python or shell — none of those paths are gated by the converter. The verification discipline is the same in all of them. The recognition signal is identical to the attribute case: **if I'm typing an object's class name (the `text` field of a `newobj`) because it "sounds like the obvious name" for what I want to do, that is the moment verification is non-optional, regardless of which tool is producing the file.**
+
+For instance: writing `[oscparse]` between `[udpreceive]` and `[route /user]` because it's "the obvious complement to `udpreceive`" is the same kind of guess as `arr.contains()` in JS. Max 9 has no `oscparse`; OSC address-routing requires `[OSC-route]` from CNMAT Externals, and the path was a silent failure because the patch loaded with `[oscparse]` shown as a missing-object red box that's easy to overlook in a 100-box patch. Confirmed by `ls /Applications/Max.app/Contents/Resources/C74/docs/refpages/max-ref/ | grep -i osc` returning only `osc.codebox`, `osc.packet`, `param.osc` — none of which route by address.
+
+**Practical check before adding any `newobj` text to a patch, regardless of source:**
+
+1. Search the refpage directory: `ls /Applications/Max.app/Contents/Resources/C74/docs/refpages/max-ref/ | grep -i <name-fragment>` — fast and authoritative for built-ins.
+2. For package externals, search the curated list: `python3 packages/query_packages.py search "<name>"` from the Claude2Max repo.
+3. If both come up empty, the object doesn't exist as named. Either the wrong name, the wrong package assumption, or the wrong workflow (e.g. needs `[v8 …]` instead of a built-in).
+
+This is one extra `ls` per never-used object name — cheap insurance against the silent-failure mode the rest of this rule describes.
+
 ## Parsers Must Tolerate the Schema's Full Value Space, Not Just the Sample You Tested Against
 
 When parsing third-party data (XML, JSON, configs, refpages), don't coerce a field's type based on the values you happened to see in your test sample. The first input you didn't test against is the one that breaks. Fields that look numeric in examples may legitimately carry string sentinels like `"variable"`, `"auto"`, `"none"`, or `"all"`. Either confirm the documented schema's full value space before coercing, or accept the textual form and only coerce at the point of use, with a fallback for non-numeric values.
@@ -171,6 +183,32 @@ A patchcord whose sole job is to satisfy the graph — carrying a value between 
 The rule is symmetric: hiding a box for being plumbing creates an obligation to hide every cord touching it. A visible cord that terminates in nothing is worse than no cord at all.
 
 For instance: `[number] → [setport $1] → [node.script]`. The `[setport $1]` message box exists only because Node-for-Max can't read a raw int. Hide both incoming and outgoing cords on `[setport $1]`, and hide the message box itself. The locked view shows only the number box; the operator twiddles it and the message + cords stay invisible.
+
+## Never Render an Empty Container When Server-Driven State Hasn't Arrived — Binding Rule
+
+A UI region whose content comes from a server (snapshot, roster, role list, sensor stream, anything pushed) must distinguish three states in the rendering, not collapse them into one empty `<div>`:
+
+1. **Haven't received any state yet** — transport pending, server unreachable, host not online, etc.
+2. **State received but the field is genuinely empty** — operator configured no entries, no performers have joined, no events yet.
+3. **State received with content** — normal rendering.
+
+Rendering an empty container for cases (1) and (2) produces the same DOM as case (3) — the user sees nothing and has no way to tell which problem they have. "Nothing" reads as either "no entries exist" or "this app is broken," and the user reloads / closes / blames the network until they hit something else.
+
+**The fix is explicit labeling.** Each not-yet state must surface a visible placeholder that names *which* not-yet it is. For instance, in the multi-user-template Join page:
+
+- `!lastSnap && isCloud && cloudHello && cloudHello.connections.host === 0` → "Connected to the relay, but no Max host is online for this piece/room yet."
+- `!lastSnap && isCloud` → "Connecting to the relay…"
+- `!lastSnap` → "Connecting to the Max server…"
+- `lastSnap && availableRoles.length === 0` → "The host hasn't configured any roles."
+- `lastSnap && availableRoles.length > 0` → render the role tiles.
+
+The five branches use the same UI region, but a confused user now knows whether to wait, switch wifi, restart Max, or ask the operator to type roles into a textedit.
+
+**Where this applies.** Anywhere server state shapes the UI: WebSocket-driven dashboards, REST-fetched lists, real-time roster panels, async-arriving config, anything that starts `null` / `undefined` / `[]` and gets populated later. The rule is symmetric with [Always Hide Plumbing Patchcords] — silence isn't neutral. Visible state that turns out to be incomplete is much less confusing than absence that turns out to mean "still loading."
+
+**The recognition signal:** if I'm writing `(arr || []).map(...)` or `if (data) { ...render... }` and the falsy branch produces nothing — that's the moment a placeholder is required. The fix is not adding a "loading" spinner everywhere (spinners conflate loading with broken); it's naming the specific not-yet condition the user is in.
+
+For instance: an empty role grid on the Join page initially looked indistinguishable for the user between (a) WebSocket still connecting, (b) connected to relay but no Max host registered, (c) Max host registered but no roles configured. Three different fixes; one rendering. Replaced with an explicit "Waiting:" banner that names which case is current.
 
 ## Never Regress Functionality When Changing Modality
 
