@@ -127,6 +127,29 @@ The threshold is "any UI," not "lots of UI." A patch with four UI elements (a ST
 
 Exempt cases: utility subpatchers embedded inside a parent's presentation (the parent supplies the UI), and pure-DSP / pure-utility patches with no operator at all (codebox modules called from elsewhere).
 
+## Always Hide Redundant Message Boxes — Binding Rule
+
+When a UI control (button, number, slider, dial, toggle, textedit, attrui, live.*) sits directly upstream of a message box that exists only to format / dispatch the UI's output to its consumer, **the message box is plumbing.** Set `"hidden": 1` on the message box AND on every patchcord touching it.
+
+The pattern: `[UI control] → [message word $1] → [some receiver]`. The UI control is the operator-facing affordance. The message box is a formatter that the graph requires but the operator doesn't. Showing it clutters the locked view with a copy of the value the operator just set — and worse, invites the operator to click it as if it were an action button.
+
+Examples that must be hidden:
+
+- `[number] → [setport $1] → [node.script]` — the message box reformats the int as a `setport <n>` command. Hide it.
+- `[button] → [start] → [node.script]` — the message box converts the bang into a `start` symbol. Hide it.
+- `[textedit] → [prepend setpassword] → [node.script]` — the prepend (functionally a message-shaped formatter) reshapes the textedit value. Hide it.
+- `[live.toggle] → [if $1 == 1 then play else stop] → [transport]` — only the toggle is the operator surface; the conditional message is plumbing.
+
+Examples that stay visible (NOT redundant — operator-clickable):
+
+- A `[bang]` button or message box that the operator hits directly to fire a one-shot action.
+- A preset `[message setduration 30]` that the operator clicks to recall a specific value (no UI control upstream).
+- An `[init defaults]` message wired off a `[loadbang]` and intended to be visible as a recall affordance.
+
+The test: **remove the message box mentally. Does the operator still have a way to invoke the same action?** If yes (because the upstream UI control IS the action), the message box is redundant — hide it. If no (because the message box is itself the only way to fire the action), keep it visible.
+
+The rule is symmetric with [Always Hide Plumbing Patchcords](#always-hide-plumbing-patchcords--binding-rule): hiding the message box creates an obligation to hide every cord touching it. A visible cord ending in a hidden box (or a visible box receiving from a hidden cord) is worse than no cord at all.
+
 ## Always Hide Plumbing Patchcords — Binding Rule
 
 A patchcord whose sole job is to satisfy the graph — carrying a value between objects without itself communicating anything to a reader — must be hidden. Visible cords should mean something to the reader; everything else is noise on stage.

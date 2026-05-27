@@ -394,6 +394,29 @@ Connections are an array of 4-element arrays:
 
 One source can connect to multiple destinations. Multiple sources can connect to the same inlet.
 
+### Always hide redundant message boxes — this is binding
+
+A message box (or `prepend` / `sprintf` / `pak` / similar formatter) that sits directly downstream of a UI control (button, number, slider, dial, toggle, textedit, attrui, live.*) and exists only to reformat or dispatch that control's output is **plumbing**. Hide it with `"hidden": 1`, and hide every cord touching it.
+
+In a spec, set `"hidden": 1` on the box's `attrs` (or `box` overrides) and apply `{"hidden": 1}` to each connection involving it.
+
+The pattern looks like `[UI control] → [message word $1] → [some receiver]`. The UI control is the operator-facing affordance. The message box only exists because the downstream receiver expects a specific symbolic prefix. Showing the message box in the locked view duplicates the UI's value AND invites the operator to click the message as if it were an action button — neither is what you want.
+
+**Hide:**
+
+- `[number] → [setport $1] → [node.script]` — `[setport $1]` is plumbing.
+- `[button] → [start] → [node.script]` — the message box just converts the bang into a symbol.
+- `[textedit] → [prepend setpassword] → [node.script]` — the prepend is a formatter.
+- `[live.numbox] → [setbpm $1] → [transport]` — same shape.
+
+**Don't hide:**
+
+- A free-standing `[bang]` button or `[message]` box the operator clicks directly to fire a one-shot action.
+- A preset `[message setduration 30]` that recalls a specific stored value (no UI control upstream).
+- An `[init defaults]` message wired off a `[loadbang]` that is intentionally visible as a recall affordance.
+
+**The test:** mentally remove the message box. Does the operator still have a way to invoke the same action? If yes, the box is redundant — hide it. If no, keep it visible.
+
 ### Always hide plumbing patchcords — this is binding
 
 A patchcord whose sole job is to satisfy the graph (carrying a value between objects without itself communicating anything to the operator) must be hidden in the locked / presentation view. Visible cords should mean something to the reader; everything else is noise on stage.
