@@ -184,6 +184,41 @@ The rule is symmetric: hiding a box for being plumbing creates an obligation to 
 
 For instance: `[number] → [setport $1] → [node.script]`. The `[setport $1]` message box exists only because Node-for-Max can't read a raw int. Hide both incoming and outgoing cords on `[setport $1]`, and hide the message box itself. The locked view shows only the number box; the operator twiddles it and the message + cords stay invisible.
 
+## Don't Use `[textedit]` for Set-Once Configuration — Binding Rule
+
+`[textedit]` is the wrong object for any configuration value that is set once and then largely left alone (URLs, identifiers, file paths, hostnames, slugs, API keys, sample paths). It has three properties that make it brittle for this use case:
+
+1. **Output only fires on Enter, not on patch load.** A patch that has the right value displayed in a textedit but hasn't been Enter-confirmed since reopen sends nothing downstream. Anything reading the value gets stale state (a default, an empty string, or whatever previous value it cached). The user sees a populated field and assumes the downstream side has the value too. It doesn't.
+
+2. **Bang emits a `text`-prefixed list, not the bare content.** Patches that try to fix #1 by adding `[loadbang] → bang → textedit` discover that banging a textedit outputs `text <content>` as a multi-element list, NOT `<content>` alone. Downstream handlers that expect the value as the first argument silently receive the literal symbol `text`, producing surprises like `setpiece text-multi-user-template` (where the handler joined args with `-`). The bug is data corruption, not a parse error — the patch keeps running with the wrong value baked in.
+
+3. **Visible-but-rarely-touched is a UX smell.** A set-once value displayed prominently in presentation trains the operator to think it's something they should be twiddling. It isn't. The presence of an editable field implies editability is intended; for true config, that's a lie.
+
+### What to use instead
+
+| use case | preferred object | why |
+|---|---|---|
+| **Value is truly set once per piece / per deploy** | hardcode in the upstream code (Node-for-Max, JS, the Worker, etc.); reference it from the patch via a fixed message if the patch needs to "send" it | source-of-truth in code, no Max-side UI surface, no Enter-required step |
+| **Value is set occasionally and the operator types it** | `[dialog]` — modal popup, banged to prompt, outlet emits the entered symbol cleanly with no `text` prefix | explicit "open dialog → type → OK" workflow makes editing intentional; no risk of forgotten Enter |
+| **Value is chosen from a small finite set** | `[umenu]` | typing-free, surfaces the available options to the operator, emits the selected item |
+| **Value needs persistence + per-patch override** | `pattr` + `autopattr` with `@autorestore 1` | restores saved value at load time, banging outputs cleanly; emits on `parameter_initial` if wired |
+| **A click-to-recall preset** | `[message <value>]` | visible, intentional click action; no Enter required; no `text` prefix |
+| **Free-form text the user types repeatedly during a show** (chat, dynamic labels, search) | `[textedit]` — this is what it's actually for | the Enter-emit and `text`-prefix-on-bang behaviors are correct here |
+
+### Recognition signal
+
+If I'm about to add a `[textedit]` and the typical use is "the operator types in their URL / their server / their API key / their slug once and forgets about it," that is the moment to stop and pick a different object. Default to hardcoding in source. Escalate to `[dialog]` or `pattr` only if the value genuinely needs runtime mutability.
+
+### Concrete worked example
+
+The `multi-user-template` patch shipped a Cloud URL `[textedit]` with `parameter_initial` set to the deployed Worker URL. Symptoms during testing:
+
+- First use: user typed URL → didn't press Enter → Cloud connect refused with "set cloud URL first" (textedit value never reached server).
+- After adding `[loadbang] → bang → [textedit]`: Cloud connect dialled `wss://text wss://mu-relay…/mu/text-multi-user-template/text-main/host` (the `text` prefix corrupting every downstream arg).
+- After adding `teArgs()` to strip `text`: Cloud connect dialled the literal placeholder `wss://mu-relay.<your-subdomain>.workers.dev` (the textedit's `parameter_initial` was never updated to the real URL, only the displayed `text`).
+
+Three rounds of patching, three layers of workaround, all because a set-once config value was bound to a `[textedit]`. The fix that closed the bug class: delete the textedit, set the URL as a const in `server.js`. Derived repos override the const, not a UI field.
+
 ## Never Render an Empty Container When Server-Driven State Hasn't Arrived — Binding Rule
 
 A UI region whose content comes from a server (snapshot, roster, role list, sensor stream, anything pushed) must distinguish three states in the rendering, not collapse them into one empty `<div>`:
