@@ -467,6 +467,60 @@ setcloudurl wss://...   setpiece <slug>   setroom <slug>
 cloudon                 cloudoff
 ```
 
+### `/lan/<piece>/<room>` — static landing pages can link to the live LAN URL
+
+The relay also exposes a tiny HTTP redirect at
+`GET /lan/<piece>/<room>` that 302s to whatever LAN URL the host most
+recently announced. The host announces by sending
+`{type:"host-info", lanUrl:"http://<lan-ip>:<port>/"}` on its outbound
+WebSocket (the template's `server.js` does this on `sock.on("open")`
+and re-sends after `setport`). The relay stores it in the Durable
+Object and serves it back as a redirect; returns a friendly 404 with
+"No Max host is currently connected to this room" when nothing has
+registered.
+
+This is what lets a static landing page (e.g. john.jann.one) carry a
+"Local mode" button that resolves to the operator's *current* laptop
+IP without the static page knowing it. Pattern is:
+
+```
+john.jann.one card → /lan/<piece>/<room> on the relay
+                  → 302 → http://192.168.x.y:<port>/   (lifted from host-info)
+                  → the operator's LAN server serves the client
+```
+
+Multi-user-template's home-page card uses this; IMMER v2's does too.
+Any derived piece can adopt the pattern by sending `host-info` from
+its bridge — no Worker change.
+
+### Cloud-relay quirks worth knowing
+
+These bit IMMER v2 and would bite any derived piece in the same way.
+
+- **`textedit` outlet 0 emits `text <symbol>` by default
+  (`outputmode 0`).** Wiring it into `[setcloudurl $1]` captures the
+  literal symbol `"text"`. Set `@outputmode 1`, route through
+  `[route text]`, or skip the textedit and hardcode in code. Full
+  rule in the "Common Pitfalls" list further up.
+- **Broadcast ordering: `toRole:"perform"` first, per-name `to:<name>`
+  second.** The relay forwards both to a joined remote performer's
+  socket. The generic broadcast omits the `you` field; if it arrives
+  *after* the personalized one, it clobbers `you` on the client. The
+  inverse of "specific then general" — here specific arrives last so
+  it wins.
+- **`node.script @watch 1` re-execs the script but doesn't re-fire
+  loadbang.** Patch-side loadbang seeds vanish on every save unless
+  the same values are hardcoded in the script's initial literals.
+  Belt-and-suspenders: keep both — script defaults survive hot
+  restart, loadbang messages re-assert on fresh patch open.
+- **Hold-in-progress UI state is server-derived; let the snapshot
+  pipeline handle reverts.** For any UI signal driven by an
+  accumulator that can break before it locks (pair-hold, solo-hold),
+  expose the live accumulator set in every snapshot and have the
+  client re-apply the class on each render. Removal from the set in
+  the next snapshot drops the class — no client-side state machine
+  needed for the "revert when the hold breaks" behaviour.
+
 ### Authoritative documentation
 
 The template's own docs cover patterns, gotchas, and feature-detection
