@@ -423,6 +423,35 @@ A patchcord whose sole job is to satisfy the graph (carrying a value between obj
 
 In a spec, mark a connection as hidden with a fifth element on the connection array — `{"hidden": 1}` — or in raw `.maxpat` JSON set `"hidden": 1` on the patchline object next to `source` / `destination`.
 
+> **Known converter limitations — `extract` is lossy.** Two state shapes get dropped on the `.maxpat → spec` direction; `convert` honors them when present, so the bugs are in extract, not in the spec format or convert.
+>
+> 1. **Patchline `hidden` does NOT round-trip.** `extract` emits connections as bare 4-element arrays (`[src_id, src_outlet, dst_id, dst_inlet]`) regardless of the source patchline's `hidden` state, so a `.maxpat` whose patchlines were marked `hidden: 1` (either via the spec's 5th element or by direct JSON edit) loses that state on the next `extract → convert` cycle. Until this is fixed, treat patchline `hidden` flags as non-durable: either don't rely on them (show every cord — see the *Scope* qualifier in CLAUDE.md's "Always Hide Plumbing Patchcords" rule), or never round-trip a hide-disciplined patch through the spec. The companion "hide redundant message boxes" rule is partially affected too — box `hidden` survives extract, but cords touching those hidden boxes don't, ending up in the forbidden half-hidden state (hidden box + visible cord) after a round-trip.
+>
+> 2. **Non-default `numinlets` / `numoutlets` on `newobj` boxes do NOT round-trip, AND the workaround depends on the maxclass.** `extract` does not capture per-box `numinlets`/`numoutlets`, so any object that uses a non-default inlet/outlet count loses it on the next extract → convert. The converter then writes its per-maxclass default (for `newobj` that's `numinlets: 1, numoutlets: 1`). Two sub-cases with different fixes:
+>
+>     **`v8` boxes** — Max sizes the v8's inlets/outlets from the **box text arguments**, not from `numinlets` in the JSON. The script's `inlets = N` global is also ignored. So the workaround is to declare the counts in the `text` field of the spec:
+>
+>     ```json
+>     "v8_band_composer": {
+>       "type": "newobj",
+>       "text": "v8 bands_to_matrix.js 1 3"
+>     }
+>     ```
+>
+>     Order is `<filename> <outlets> <inlets>` — outlets FIRST. See `patching/JITTER_JS_PATCHING.md` for the full v8-vs-js inlet-declaration discussion.
+>
+>     **All other `newobj` boxes that read inlet count from the JSON** (`js`, `jit.gen`, `pfft~`, `poly~`, etc.) — use `attrs.numinlets` / `attrs.numoutlets`:
+>
+>     ```json
+>     "js_box": {
+>       "type": "newobj",
+>       "text": "js my_script.js",
+>       "attrs": { "numinlets": 3, "numoutlets": 1 }
+>     }
+>     ```
+>
+>     `attrs` survives extract→convert (it's read on extract and written on convert), so once the override is in the spec it stays correct across cycles.
+
 **Cords that must be hidden:**
 
 - **Formatter cords.** Any cord into a `prepend`, `sprintf`, `tosymbol`, `fromsymbol`, `pak`, `pack`, `unpack`, `zl` (when used purely as a list shaper), or a `message` box that exists only to reformat a value coming from an upstream UI element.
