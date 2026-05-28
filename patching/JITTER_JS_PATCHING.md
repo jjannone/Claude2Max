@@ -37,37 +37,59 @@ outlets = 1;
 autowatch = 1;
 ```
 
-These are global assignments at the top of the file. v8 and js both
-honour them at runtime — `inlet` dispatch and `outlet(N, …)` calls all
-work — BUT the box's saved `numinlets` / `numoutlets` in the `.maxpat`
-must also match. Max sizes the box's physical inlets/outlets from the
-saved JSON, not from the script's globals. A mismatch — script declares
-`inlets = 3`, box JSON declares `numinlets: 1` — gives a box with one
-physical inlet onto which every patchcord collapses, and `inlet`
-inside any handler is always `0`. Matrix sources fan into the same
-inlet, the `if (inlet === 1)` branch is never taken, and the script
-silently produces no output. This was the IMMER v3 failure mode on
-the first three builds — there was no error in the console, just an
-empty matrix forever.
+**Critical distinction — `js` and `v8` declare inlet/outlet counts
+differently, and getting it wrong in `v8` is a silent failure.**
 
-**In a Claude2Max spec, declare the inlet/outlet counts in `attrs`** —
-the converter's default for `newobj` is `numinlets: 1`, so v8/js
-boxes with anything other than 1/1 need explicit overrides:
+| Object | How inlet/outlet counts are set | Script globals (`inlets =`, `outlets =`) |
+|---|---|---|
+| `js`  | From the script's `inlets = N` / `outlets = N` globals AND the box's saved `numinlets` / `numoutlets`. Both must match. | Honored. |
+| `v8`  | From the **box-text instantiation args**: `[v8 <filename> <outlets> <inlets>]` — first int is outlets, second is inlets. | **IGNORED.** |
+
+Per the official v8 reference (https://docs.cycling74.com/reference/v8/),
+v8 reads the inlet/outlet count from the box's text arguments, not from
+the script. The default with no args is 1 outlet, 1 inlet. The box's
+saved `numinlets` in the .maxpat JSON does NOT override what v8 derives
+from the box text — when Max constructs the v8 from the patch, the box
+text is parsed and the inlets get sized from those ints, not from the
+JSON property. So a box like `[v8 bands.js]` always gets 1/1 even if
+the JSON says `numinlets: 3`; the cords landing on inlets 1 and 2
+silently collapse onto inlet 0, the `if (inlet === N)` branches in the
+script are never taken, and the v8 produces no output forever with no
+error. This was the IMMER v3 failure mode that took five debugging
+rounds to find.
+
+**For v8 with N inlets, M outlets — the box text MUST be:**
+
+```
+v8 <filename> M N
+```
+
+Note the order: **outlets first, inlets second.** For 1 outlet, 3 inlets
+with `bands_to_matrix.js`:
+
+```
+v8 bands_to_matrix.js 1 3
+```
+
+In a Claude2Max spec, this is the `text` field, not an `attrs` override:
 
 ```json
 "v8_band_composer": {
   "type": "newobj",
-  "text": "v8 bands_to_matrix.js",
-  "attrs": { "numinlets": 3, "numoutlets": 1 }
+  "text": "v8 bands_to_matrix.js 1 3"
 }
 ```
 
-Without the `attrs` block, the converter writes `numinlets: 1` no
-matter what the script says, and the silent-no-output mode is the
-result. (See SPEC_REFERENCE.md's "Known converter limitations" note —
-sync/extract also doesn't preserve a box's `numinlets`, so any
-multi-inlet v8 that round-trips through the spec needs the `attrs`
-override even if the box was originally hand-built correctly.)
+The script's `inlets = 3 / outlets = 1` globals can stay at the top of
+the file as self-documentation but they have no runtime effect in v8.
+
+(For `js` the older pattern still applies: declare `inlets = N` in the
+script AND set `attrs.numinlets` in the spec; both must agree because
+js sizes the inlets from the box JSON and reads the globals at
+script-load time. The two engines are converging — Cycling '74 has
+stated that v8 will eventually be the drop-in replacement for js — but
+until then the inlet-declaration mechanism is the load-bearing
+difference between them.)
 
 Inside any handler function, the global **`inlet`** tells you which
 inlet the message came in on:
