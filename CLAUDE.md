@@ -141,7 +141,11 @@ Exempt cases: utility subpatchers embedded inside a parent's presentation (the p
 
 ## Always Hide Redundant Message Boxes — Binding Rule
 
-When a UI control (button, number, slider, dial, toggle, textedit, attrui, live.*) sits directly upstream of a message box that exists only to format / dispatch the UI's output to its consumer, **the message box is plumbing.** Set `"hidden": 1` on the message box AND on every patchcord touching it.
+**Scope: applies when the patch has an operator-facing locked view** — either a presentation view, or a locked patching view that the operator drives the piece from. The rule's purpose is to declutter the surface the operator interacts with; "hide" only matters when something is doing the hiding (lock mode or presentation mode).
+
+For development-stage patches, or patches that live only in unlocked patching view with no operator-facing locked surface, **the rule is suspended** — show every box and every cord so the graph is fully legible. A half-hidden state (hidden box, visible cord — or vice versa) is worse than either pure state; if you can't commit to hiding everything that needs hiding (boxes AND every cord touching them), don't hide anything. *For instance:* IMMER v3's patch has no presentation view and is operated in unlocked patching view, so all the formatter message boxes (`setport $1`, `start`, `dim 1 $1`, the `prepend bandcount` / `prepend fade` plumbing) stay visible alongside the UI controls.
+
+When the patch DOES have an operator-facing locked view: when a UI control (button, number, slider, dial, toggle, textedit, attrui, live.*) sits directly upstream of a message box that exists only to format / dispatch the UI's output to its consumer, **the message box is plumbing.** Set `"hidden": 1` on the message box AND on every patchcord touching it.
 
 The pattern: `[UI control] → [message word $1] → [some receiver]`. The UI control is the operator-facing affordance. The message box is a formatter that the graph requires but the operator doesn't. Showing it clutters the locked view with a copy of the value the operator just set — and worse, invites the operator to click it as if it were an action button.
 
@@ -164,7 +168,11 @@ The rule is symmetric with [Always Hide Plumbing Patchcords](#always-hide-plumbi
 
 ## Always Hide Plumbing Patchcords — Binding Rule
 
-A patchcord whose sole job is to satisfy the graph — carrying a value between objects without itself communicating anything to a reader — must be hidden. Visible cords should mean something to the reader; everything else is noise on stage.
+**Scope: applies when the patch has an operator-facing locked view** — presentation mode or locked patching view. For patches that live only in unlocked patching view (development, or operator-uses-graph-directly), **the rule is suspended** — show every cord. Same reasoning as the message-box rule above: hidden-anything only matters when something is doing the hiding, and a half-hidden state (hidden cord touching a visible box, or visible cord touching a hidden box) is worse than either pure state.
+
+**Round-trip caveat:** `spec2maxpat.py extract` currently drops patchline `hidden` state when going `.maxpat → spec`, even though the spec format documents `{"hidden": 1}` as a valid fifth element on the connection array (see SPEC_REFERENCE.md). So a patch that's been hide-disciplined in raw `.maxpat` JSON loses that state on the next sync/extract/convert cycle. Until the extract is fixed, treat patchline `hidden` flags as non-durable — either don't rely on them (show everything), or commit to never round-tripping through the spec.
+
+When the patch has an operator-facing locked view: a patchcord whose sole job is to satisfy the graph — carrying a value between objects without itself communicating anything to a reader — must be hidden. Visible cords should mean something to the reader; everything else is noise on stage.
 
 **Cords that must be hidden** (`"hidden": 1` on the patchline):
 

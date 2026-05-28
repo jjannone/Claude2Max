@@ -423,6 +423,8 @@ A patchcord whose sole job is to satisfy the graph (carrying a value between obj
 
 In a spec, mark a connection as hidden with a fifth element on the connection array — `{"hidden": 1}` — or in raw `.maxpat` JSON set `"hidden": 1` on the patchline object next to `source` / `destination`.
 
+> **Known converter limitation — patchline `hidden` does NOT round-trip.** `spec2maxpat.py extract` currently emits connections as bare 4-element arrays (`[src_id, src_outlet, dst_id, dst_inlet]`) regardless of the source patchline's `hidden` state, so a `.maxpat` whose patchlines were marked `hidden: 1` (either via the spec's 5th element or by direct JSON edit) loses that state on the next `extract → convert` cycle. The `convert` side honors the 5th-element form if present in the spec, so the bug is in extract, not convert. Until this is fixed, treat patchline `hidden` flags as non-durable: either don't rely on them (show every cord — see the *Scope* qualifier in CLAUDE.md's "Always Hide Plumbing Patchcords" rule), or never round-trip a hide-disciplined patch through the spec. The companion "hide redundant message boxes" rule is partially affected too — box `hidden` survives extract, but cords touching those hidden boxes don't, ending up in the forbidden half-hidden state (hidden box + visible cord) after a round-trip.
+
 **Cords that must be hidden:**
 
 - **Formatter cords.** Any cord into a `prepend`, `sprintf`, `tosymbol`, `fromsymbol`, `pak`, `pack`, `unpack`, `zl` (when used purely as a list shaper), or a `message` box that exists only to reformat a value coming from an upstream UI element.
