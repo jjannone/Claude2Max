@@ -300,6 +300,8 @@ Read and review the entire Claude2Max repo before starting — `CLAUDE.md`, `SPE
 
 **Before designing or analyzing anything inside a `jit.gen` / `jit.gl.pix` box**, read `patching/JIT_GEN_PATCHING.md`. Same gen language as gen~, but iteration is per-cell or per-pixel rather than per-sample — `samplerate` and audio-time idioms do not apply; position primitives (`norm`, `cell`, `dim`) and texture sampling do.
 
+**Before writing a `[js]` or `[v8]` script that reads or writes a `jit_matrix`**, read `patching/JITTER_JS_PATCHING.md`. The JitterMatrix API has several silent-failure modes — most notably the constructor-name-as-first-arg trap, where passing a name as the first positional arg makes JS silently bind to a (possibly nonexistent) named peer and ignore the rest of the constructor args. The matrix then stays empty and every `setall` / `setcell2d` is a no-op with no warning. The file also covers inlet/outlet declaration, the canonical "consume a matrix, paint and emit another" template, and when to reach for `jit.gen` / `jit.gl.pix` / `jit.expr` instead of JS.
+
 **Before working on a Max for Live device**, read `patching/M4L_PATCHING.md`. M4L adds the Live Object Model, `live.*` UI objects, device-lifecycle considerations, and `.amxd` packaging — none of which appear in standalone Max patches.
 
 ## Workflow
@@ -357,6 +359,7 @@ To decode MCT received in the conversation: `python3 -c "from spec2maxpat import
 - `patching/MAX_PATCHING.md` — Patching principles, presentation guidelines, documentation verification rules, common pitfalls. Read before any patch work.
 - `patching/GEN_PATCHING.md` — gen~ / gen programming model (audio rate / control rate), canonical idioms (slide envelope follower, samplerate→ms, equal-power crossfade), latency-compensation discipline. Read before any work inside a `gen~` / `gen` box.
 - `patching/JIT_GEN_PATCHING.md` — jit.gen / jit.gl.pix programming model (per-cell / per-pixel), position primitives (`norm`, `cell`, `dim`), texture sampling, distance-field idioms. Read before any work inside a `jit.gen` / `jit.gl.pix` box.
+- `patching/JITTER_JS_PATCHING.md` — JitterMatrix API from `[js]` / `[v8]`: constructor forms (and the name-as-first-arg trap), `setall` / `setcell2d` / `getcell2d`, inlet/outlet declaration, the canonical "consume and emit" template, and when to reach for `jit.gen` / `jit.gl.pix` / `jit.expr` instead. Read before any JS-driven matrix work.
 - `patching/M4L_PATCHING.md` — Max for Live patterns: Live Object Model access chain, `live.thisdevice` init signal, `getpath` + `deferlow` race, Push 3 polyphonic pressure, `live.*` UI styling, `.amxd` packaging. Read before any M4L device work.
 - `spec2maxpat.py` — The converter. I/O data from C74 maxref.xml via `RefpageCache`; no external database.
 - `TUTORIAL_GUIDELINES.md` — Tutorial structural contract, panel/annotation attrs, comment-pile pattern, breakage diagnostic.
