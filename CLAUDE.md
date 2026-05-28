@@ -603,6 +603,78 @@ classes (`.urgent-slow`, `.urgent-fast`, `.urgent-solid`,
 state machines on `<body>` are cleaner than imperative show/hide in JS
 when the variants are mutually exclusive and span many DOM nodes.
 
+### Design for failure modes, not just the happy path
+
+In any live multi-user piece, the dominant UX failure isn't a bug in
+the code — it's a phone that drops mid-piece (lost wifi, screen lock,
+OS sleep, app backgrounded, accidental refresh, browser tab
+suspended, host laptop reboot). Plan for it from day one — recovery
+needs to be a single tap, not a name-typing exercise.
+
+**Server side** (most of this is already documented above; recap):
+
+- Don't conflate "WS closed" with "performer left." Preserve the
+  performer record across drops, set `connected: false`, force the
+  role to idle so accumulators stop ticking, and require an explicit
+  `{type:"leave"}` to actually delete state. See the "Disconnect ≠
+  leave" rule.
+- Use a heartbeat sweep — `ws.on("pong")` + periodic `ws.ping()` +
+  `terminate()` of stale sockets. `ws.on("close")` only fires on
+  *clean* TCP close; a phone in airplane mode or with a hung network
+  stack leaves the server-side socket "open" indefinitely without
+  this.
+- Duplicate-name join order matters: overwrite the `sockets` map
+  entry with the NEW socket FIRST, then close the old socket. The
+  reverse order has the old socket's close handler see its own entry
+  still in the map and call `disconnectPerformer` on the brand-new
+  connection. See the "Duplicate-name join must close the old socket"
+  rule.
+- For cloud-relay pieces: the relay's host-singleton lets a restarted
+  Max patch kick the old host without remote clients noticing.
+  Server-side restart is invisible to remotes as long as the new
+  host re-announces via `host-info` and broadcasts the current
+  snapshot on `open`.
+
+**Client side** — three affordances IMMER v2 carries; copy them for
+any derived piece:
+
+1. **Tap-to-rejoin on the roster chips.** When the viewer hasn't
+   joined yet, every chip in the "already joined" roster is clickable;
+   tapping fills the name input and fires Join. Because the server's
+   `addPerformer` is already idempotent on name, this re-attaches
+   to the existing performer record with all accumulated time,
+   pairings, and solo flags intact. No re-typing.
+
+2. **Visible disconnected status.** Expose a `disconnected: [name,
+   ...]` list in the snapshot. Style those chips on the client with
+   a `.gone` class — faded colour, dashed border. A returning user
+   sees their own dimmed chip immediately and knows to tap it,
+   without scanning the whole roster.
+
+3. **No `localStorage` for identity.** Refresh is the canonical
+   "reset me" gesture. Don't auto-rejoin under a previously-typed
+   name from local storage — that traps stale names after a CLEAR
+   and causes different phones to render different "already joined"
+   lists depending on when each one happened to load the page. Keep
+   `myName` in script memory only, so WS reconnects within the same
+   page session still auto-rejoin, but a hard refresh wipes it.
+
+The three combine: a phone that drops wifi and comes back after a
+refresh sees its own dimmed chip and re-joins with one tap. A phone
+that loses wifi momentarily without refreshing auto-rejoins on WS
+reconnect. A user who closes the tab is gone until they reopen the
+URL and tap.
+
+**The general principle.** For any live piece, list every way a
+client can vanish (refresh, lock, sleep, airplane mode, app
+background, OS update, host restart, server crash). For each, write
+down: (a) how the server notices, (b) what state survives, (c) how
+the user comes back, (d) how many taps that costs them. If any answer
+is "they re-type their name" or "they re-pick a role" or "they have
+to wait for someone to restart something" — the design is incomplete.
+The piece will hit that failure during the run, and the affordance is
+what saves the moment.
+
 ### Authoritative documentation
 
 The template's own docs cover patterns, gotchas, and feature-detection
