@@ -155,17 +155,20 @@ peer with default planecount/type/dim. Every subsequent `setall` /
 the `outlet(0, "jit_matrix", m.name)` emits the wrong shape — downstream
 consumers fail with no diagnostic.
 
-**The correct pattern when you want a named output matrix:**
+**The correct pattern: don't try to rename. Use the auto-generated name.**
 
 ```js
-var m = new JitterMatrix(3, "char", 1, 480);   // Form 1 — anonymous
-m.name = "immer_bands_mat";                    // then name via the setter
+var m = new JitterMatrix(3, "char", 1, 480);
+// m.name is auto-assigned to a globally-unique symbol (e.g. "u012345678").
+// Use it as-is when outletting downstream — every consumer can resolve it.
+outlet(0, "jit_matrix", m.name);
 ```
 
-The `.name` setter is the safe way to give a constructed matrix a
-downstream-resolvable name. The auto-generated name (the default) is
-also resolvable — only set `.name` explicitly when a downstream object
-references the matrix by a stable name (e.g. via `@texturename`).
+**A second silent-failure trap: assigning `.name` after construction REBINDS the JS handle, it does not rename the peer.** Per the Jitter JS reference, `.name` is read/write and the setter is documented as "bind to or create" a named matrix. Assigning `m.name = "my_name"` after construction makes the JS handle `m` point at a (newly-created, empty) peer with that name; the original peer's data is now unreachable through `m`. Every subsequent `setall` / `setcell2d` paints into the empty peer with no error, and `outlet(0, "jit_matrix", m.name)` emits the new (empty) peer's name to downstream consumers. They look it up, find an empty matrix, render nothing. Symptom: identical to the constructor-name trap — black output, no console error.
+
+Bundled examples confirm the safe pattern: `jittermatrixtester.js` and `jitaudio2nurbs.js` never assign `.name` on a constructed matrix. They use Form 3 (`new JitterMatrix()` then set `planecount` / `type` / `dim`) or Form 1 (positional), and always reference the auto-name in `outlet` calls.
+
+**If a downstream object references the matrix by a stable name** (e.g. `jit.gl.cornerpin @texturename foo`), the right way is to bind the JS handle to that existing named peer up-front via Form 2 (`new JitterMatrix("foo")`), not to construct anonymously and try to rename.
 
 ---
 
@@ -274,9 +277,10 @@ inlets    = 2;
 outlets   = 1;
 autowatch = 1;
 
-// Output matrix — Form 1 (anonymous), then named for downstream lookup.
+// Output matrix — Form 1 (anonymous, auto-named). Do NOT assign
+// `out.name = …` after construction; the setter rebinds the handle
+// to a different peer rather than renaming this one.
 var out = new JitterMatrix(3, "char", 1, 480);
-out.name = "my_output_matrix";
 out.setall(0);                         // start with a clean (black) frame
 
 function jit_matrix(name) {
