@@ -361,6 +361,44 @@ edits hot-reload.
 
 ## When NOT to use JS for matrix work
 
+**For anything that ends up on screen — prefer a GLSL shader via
+`[jit.gl.slab @file my_shader.jxs]` over a `[v8]` / `[js]` script
+painting the matrix in JS.** This is the strongest "don't use JS" of
+the rules below; the others are about choosing a Jitter-native object
+over JS for non-display matrix work.
+
+The case for GLSL on display pipelines:
+
+- The work happens on the GPU, which is where the pixels end up anyway. No round-trip through the JS↔Jitter boundary per pixel; no `setcell2d` call cost.
+- Shader uniforms (`<param>` declarations in the `.jxs`) become message-settable from the patch via `[param <name> $1]`, so the operator can twist values live without touching the script. The shader compiles once at load and runs as a pure function of its uniforms thereafter.
+- The output resolution is set on the slab (`@dim 1920 1080`), independent of the input texture dimensions. Tiny inputs (e.g. a 1×N control matrix) sample correctly into a full-HD output — the shader does the upscale implicitly via texcoord interpolation.
+- GLSL's silent-failure surface is much smaller than the JS Jitter API's. A shader either compiles or prints a named, line-numbered error to the Max console. Compare with JS, where the constructor-name trap, the `.name` rebind trap, the 1-plane scalar return trap, and the v8 inlet-count trap all silently produce a black frame with no diagnostic.
+
+**Worked evidence — IMMER v3's bands chain.** The first build of the
+bands renderer was a `[v8]` painting a `1×480` char matrix from
+incoming jit.noise data. It took five rounds of debugging across
+multiple sessions to find each silent-failure mode (one trap per round)
+and the final v8 never produced output reliably. The same logic
+expressed as a `.jxs` fragment shader for `[jit.gl.slab]` landed in
+one go — `<param>` declarations for `bandcount`, `alpha`, and
+`smoothness` became live message-settable uniforms; the small noise
+matrices became texture inputs (`sampler2DRect tex0` / `tex1`);
+texcoord interpolation handled the small-to-1920×1080 upscale; the
+two-pass per-pixel "find which band contains y" logic ran in parallel
+on the GPU. No JS, no matrix-API traps, no silent black frames.
+
+**The general rule.** When a piece of work is going to end up on the
+screen, the question to ask first is not "how do I write this in JS?"
+but "can this be a shader?" If the answer is yes (which it almost
+always is for per-pixel image/video work), reach for `.jxs` +
+`[jit.gl.slab]` (or `[jit.gl.pix]` for the gen-language variant) and
+skip the JS entirely. JS is for control-rate state machines, message
+dispatch, and small data transformations — not for painting pixels.
+
+---
+
+Beyond the display case, the older Jitter-native-vs-JS guidance:
+
 Reach for `jit.gen` / `jit.gl.pix` instead when:
 
 - The work is per-cell on a matrix larger than ~1k cells. The JS ↔ Jitter boundary is the bottleneck; gen runs on the GPU.
@@ -377,4 +415,8 @@ Reach for `jit.fill` / `jit.repos` / `jit.submatrix` etc. instead when:
 
 JS / v8 is the right tool when the matrix is small (≤1k cells), the
 logic is non-trivial (multiple cached state vars, branching, message
-dispatch), and the cadence is event-driven rather than per-frame.
+dispatch), the cadence is event-driven rather than per-frame, **AND
+the matrix is not destined for the screen**. The moment the output is
+something the operator will see in a `jit.world`, the GLSL path wins on
+every dimension that matters: debuggability, performance, and
+operator-facing tunability via `param` messages.
