@@ -107,17 +107,28 @@ Objects that all operate on the same data belong together — in the same subpat
 Any number box, toggle, or flonum added to a patch must have a `loadmess` (or `loadbang` → `message`) that fires a sensible default on load. A control without a default is a source of undefined state that reproduces inconsistently and is hard to debug.
 
 ### Prefer `[attrui]` for object/shader attributes — not a flonum + formatter chain
-When a UI element is exposing an *attribute* of a named object — a `jit.gl.*` attribute, a `pak`/`pack` parameter, a shader `<param>` from a `.jxs`, anything bound to `@name` somewhere — reach for `[attrui @attr <name>]` bound to the target object's varname, NOT a hand-built chain of `[flonum] → [<param-name> $1] → [target]`. The reasoning:
+When a UI element is exposing an *attribute* of a named object — a `jit.gl.*` attribute, a UI element's own attribute (e.g. a button's `blinktime`), a shader `<param>` from a `.jxs` (each `<param>` becomes a settable attribute on the slab), anything bound to `@name` somewhere — reach for `[attrui]` connected by patchcord to the target, NOT a hand-built chain of `[flonum] → [<param-name> $1] → [target]`. The reasoning:
 
 - One box per attribute instead of four (flonum + label comment + formatter message + loadbang/default), which keeps the patching view tight and the presentation view tighter.
 - `attrui` self-types: it renders as a number box, integer box, enum menu, swatch, list, or toggle depending on what the bound attribute actually is. A hand-built flonum chain breaks the moment the attribute's type changes (int vs float vs symbol) and silently truncates lists.
 - Bidirectional sync is free: the operator's input goes to the attribute AND attribute changes from elsewhere (presets, automation, OSC) flow back to the displayed value. The flonum chain is one-way unless you patch the round-trip yourself.
 - Inspector / Max presets / `pattr` automation all see the binding uniformly through `attrui`, which means parameter recall / "save state" features work without per-control plumbing.
-- Initialisation: include `@attr_target_obj <name> @attr <attribute>` on the attrui itself and a `[loadbang] → [<attr> <default>] → [target]` message that arms the underlying attribute on patch load. attrui reads the value back and displays it.
 
-The flonum + formatter chain stays the right tool when the destination isn't a named object exposing an attribute — server-side handlers reached via `[setfoo $1] → node.script`, message-only protocols, anything that consumes a list of args rather than setting a single `attribute = value`. Those don't have an attribute surface for attrui to bind to. Recognition signal: if you're typing `<word> $1` into a message box and connecting it to a destination that DOES have a varname and DOES expose `<word>` as an attribute, that's an attrui that wants to be born.
+**Canonical binding pattern — the patchcord IS the binding.** There is no `attr_target_obj` attribute (despite the natural assumption) — the target object is whichever object the attrui's outlet 0 is patchcorded into. The `@attr <name>` selects which attribute, and `@attrfilter <name>` restricts the dropdown to just that one (otherwise attrui shows a popup of all attributes on the target). Verified by the bundled `/Applications/Max.app/Contents/Resources/C74/help/max/attrui.maxhelp`:
 
-*For instance:* a `[jit.gl.slab @name immer_slab @file bands.jxs]` shader with `<param name="alpha" type="float">` etc. — every `<param>` becomes a settable attribute on `immer_slab`, so each operator-tunable parameter lands as `[attrui @attr_target_obj immer_slab @attr alpha]` in presentation, instead of a flonum + `[alpha $1]` formatter + loadbang default chain.
+```
+[attrui @attr smoothness @attrfilter smoothness]
+                 │
+                 ▼ outlet 0
+[jit.gl.slab @name immer_slab @file bands.jxs]
+                 inlet 0
+```
+
+The flonum + formatter chain stays the right tool when the destination isn't a named object exposing an attribute — server-side handlers reached via `[setfoo $1] → node.script`, message-only protocols, anything that consumes a list of args rather than setting a single `attribute = value`. Those don't have an attribute surface for attrui to bind to. Recognition signal: if you're typing `<word> $1` into a message box and connecting it to a destination that DOES expose `<word>` as an attribute, that's an attrui that wants to be born.
+
+**Always set `@orientation` to 0 (horizontal) — explicitly or by omission.** The horizontal layout puts the attribute label and the control side-by-side, which is what nearly every presentation layout actually wants. `@orientation 1` (vertical) stacks them, which doubles the row height and almost always misaligns a row of attrui widgets. The default IS 0 but a deliberate `@orientation 0` in the spec makes the intent explicit and protects against later inspector edits. Don't set 1 unless you're laying out a single-column tower where each row is one attribute and vertical truly fits the constraint.
+
+*For instance:* a `[jit.gl.slab @name immer_slab @file bands.jxs]` shader with `<param name="smoothness" type="float">` etc. — every `<param>` becomes a settable attribute on `immer_slab`, so each operator-tunable parameter lands as `[attrui @attr smoothness @attrfilter smoothness @orientation 0]` with a patchcord into the slab, instead of a flonum + `[smoothness $1]` formatter + loadbang default chain.
 
 ### Always think about utility flags — `@visible`, `@enable`, `@floating`, `@interactive`
 When adding any object that has operator-visible side effects beyond the patch's main work — a floating `jit.world` window, an automatic GL renderer, a continuously-firing `metro`, a Max console-spamming `print` — add presentation controls (a `[toggle]` or attrui) for the utility flags that turn those side effects on and off. The reason: the operator is going to want to suspend them sometimes (debugging on a single monitor, profiling, recording, preparing a clean screenshot for documentation, working through the patch graph without a 1080p floating window on top of it). Without a presentation-level kill switch, the operator has to navigate to the object box in patching view, click the inspector, and twiddle the attribute — friction in the wrong direction.
