@@ -222,14 +222,38 @@ setting each property individually when re-shaping per frame.
 ## Reading cells
 
 ```js
-var c = src.getcell2d(x, y);   // returns an array of plane values
+// Multi-plane matrix (≥2 plane): returns an array of plane values.
+var c = src.getcell2d(x, y);
 // c[0], c[1], c[2] for a 3-plane matrix.
+
+// 1-plane matrix: returns the scalar value directly.
+var w = src.getcell2d(x, y);
+// w is a number — use it directly, NOT w[0].
 ```
 
 For 1D matrices, `getcell(i)` is sufficient. For 3D, `getcell3d(x, y, z)`.
 
-The return is **always an array, even for 1-plane matrices** — index
-`c[0]` rather than treating `c` as a scalar.
+**The return shape depends on planecount** — this is the silent failure
+mode that costs the most time. Per the canonical 1-plane example
+`/Applications/Max.app/Contents/Resources/Examples/jitter-examples/javascript/other/jstable.js`,
+every `getcell(i)` on a 1-plane matrix is treated as a scalar throughout
+(`outlet(0, p)`, `total += getcell(i)`, etc. — no indexing). For multi-plane
+matrices the canonical pattern is an array (see `jittermatrixtester.js`).
+**Verify the planecount of the source matrix and choose accordingly.**
+
+Indexing a scalar with `[0]` returns `undefined` — and `undefined` silently
+poisons any downstream arithmetic into `NaN`. The visible symptom is one
+level removed from the bug: a `Math.max(EPS, undefined) = NaN`, `total +=
+NaN = NaN`, `Math.round(NaN) = NaN`, `for (y = 0; y < NaN; y++)` never
+enters its body, no `setcell2d` is called, the output matrix stays at
+whatever was last written (often the initial `setall(0)`) — and downstream
+consumers render black with no JS exception. The fix in the calling code
+is either to know the planecount up-front, or to handle both shapes:
+
+```js
+var w = src.getcell2d(0, j);
+widths[j] = (typeof w === "number") ? w : w[0];
+```
 
 Reading many cells in a loop is slow because every call crosses the JS
 ↔ Jitter boundary. For per-pixel work on a matrix larger than ~1k
@@ -329,7 +353,7 @@ edits hot-reload.
 - **`setcell2d` with wrong arity** for the planecount (e.g. 3 plane values into a 4-plane matrix) silently zeroes the missing planes. Verify `m.planecount` before writing.
 - **Forgetting to `outlet`** after modifying the matrix. In-place edits don't trigger downstream rendering — the explicit `outlet(N, "jit_matrix", m.name)` is required per frame / per change.
 - **Emitting a non-existent name.** If you build the outlet's name string from a property that's empty (`undefined`, `""`, etc.), Max silently drops the message. `post(name)` before emitting if you're unsure.
-- **Type mismatch on `getcell2d` return.** For a 1-plane matrix, `getcell2d(0, i)` returns `[v]` — a one-element array, not `v`. Indexing `[0]` is required.
+- **Plane-dependent `getcell` / `getcell2d` return shape.** 1-plane matrices return a scalar; multi-plane matrices return an array. Indexing a scalar with `[0]` returns `undefined`, which silently propagates as `NaN` through any arithmetic and breaks the consumer loop with no error. See the "Reading cells" section above for the defensive `typeof w === "number" ? w : w[0]` pattern and the worked symptom chain (matrix stays at the initial `setall(0)`; downstream renders black; no JS exception).
 - **`autowatch = 1` reloads the script but does not re-fire `loadbang` or run an `init()` you wrote.** If you depend on a setup step (creating the output matrix, seeding state), do it at the top of the file outside any function so it runs on every reload.
 - **Peer leaks across reload.** v8 reload re-runs the top of the file, which creates a new `JitterMatrix` peer each time. The old peer is garbage-collected eventually. For matrices touched ≤30 Hz this is fine; for tight loops creating per-call matrices, call `m.freepeer()` to release explicitly.
 
