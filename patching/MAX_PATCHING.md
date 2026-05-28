@@ -106,6 +106,36 @@ Objects that all operate on the same data belong together — in the same subpat
 ### Every control must initialize to a known state on patch load
 Any number box, toggle, or flonum added to a patch must have a `loadmess` (or `loadbang` → `message`) that fires a sensible default on load. A control without a default is a source of undefined state that reproduces inconsistently and is hard to debug.
 
+### Prefer `[attrui]` for object/shader attributes — not a flonum + formatter chain
+When a UI element is exposing an *attribute* of a named object — a `jit.gl.*` attribute, a `pak`/`pack` parameter, a shader `<param>` from a `.jxs`, anything bound to `@name` somewhere — reach for `[attrui @attr <name>]` bound to the target object's varname, NOT a hand-built chain of `[flonum] → [<param-name> $1] → [target]`. The reasoning:
+
+- One box per attribute instead of four (flonum + label comment + formatter message + loadbang/default), which keeps the patching view tight and the presentation view tighter.
+- `attrui` self-types: it renders as a number box, integer box, enum menu, swatch, list, or toggle depending on what the bound attribute actually is. A hand-built flonum chain breaks the moment the attribute's type changes (int vs float vs symbol) and silently truncates lists.
+- Bidirectional sync is free: the operator's input goes to the attribute AND attribute changes from elsewhere (presets, automation, OSC) flow back to the displayed value. The flonum chain is one-way unless you patch the round-trip yourself.
+- Inspector / Max presets / `pattr` automation all see the binding uniformly through `attrui`, which means parameter recall / "save state" features work without per-control plumbing.
+- Initialisation: include `@attr_target_obj <name> @attr <attribute>` on the attrui itself and a `[loadbang] → [<attr> <default>] → [target]` message that arms the underlying attribute on patch load. attrui reads the value back and displays it.
+
+The flonum + formatter chain stays the right tool when the destination isn't a named object exposing an attribute — server-side handlers reached via `[setfoo $1] → node.script`, message-only protocols, anything that consumes a list of args rather than setting a single `attribute = value`. Those don't have an attribute surface for attrui to bind to. Recognition signal: if you're typing `<word> $1` into a message box and connecting it to a destination that DOES have a varname and DOES expose `<word>` as an attribute, that's an attrui that wants to be born.
+
+*For instance:* a `[jit.gl.slab @name immer_slab @file bands.jxs]` shader with `<param name="alpha" type="float">` etc. — every `<param>` becomes a settable attribute on `immer_slab`, so each operator-tunable parameter lands as `[attrui @attr_target_obj immer_slab @attr alpha]` in presentation, instead of a flonum + `[alpha $1]` formatter + loadbang default chain.
+
+### Always think about utility flags — `@visible`, `@enable`, `@floating`, `@interactive`
+When adding any object that has operator-visible side effects beyond the patch's main work — a floating `jit.world` window, an automatic GL renderer, a continuously-firing `metro`, a Max console-spamming `print` — add presentation controls (a `[toggle]` or attrui) for the utility flags that turn those side effects on and off. The reason: the operator is going to want to suspend them sometimes (debugging on a single monitor, profiling, recording, preparing a clean screenshot for documentation, working through the patch graph without a 1080p floating window on top of it). Without a presentation-level kill switch, the operator has to navigate to the object box in patching view, click the inspector, and twiddle the attribute — friction in the wrong direction.
+
+The flags worth thinking about per common object:
+
+| Object | Utility flag(s) | What the toggle saves the operator from |
+|---|---|---|
+| `jit.world` | `@visible` | Hiding the floating window without disabling rendering (kills the visual but keeps GL state warm for re-show). `@enable` is the heavier kill switch. |
+| `jit.gl.render` (legacy world) | `@enable` | Same as above. |
+| `metro`, `qmetro` | (the `0` int to inlet 0) | Stopping the tick stream when debugging. |
+| `print` | `@open` / a gate upstream | Closing the Max console firehose during a clean test run. |
+| `dac~`, `ezdac~` | `0` / `1` | Muting audio at the patch level (operator-clickable) without going to the Audio Status window. |
+| `udpreceive`, `udpsend` | `@active` | Disconnecting network traffic when working offline. |
+| Any `*.maxhelp`-style debug subpatch | `@hidden` or a gate-wrapped presentation toggle | Hiding the whole debug surface from operator view. |
+
+The general principle: every object whose side effects are visible to the operator should have an operator-facing way to turn those side effects off without editing the patch. *For instance:* IMMER v3's `jit.world` runs a 1080p floating projection window that's perfect on stage but gets in the way when the operator is on a laptop preparing the patch — a single `[toggle] → [visible $1] → jit.world` in presentation lets the operator hide the window for development and bring it back for the show.
+
 ---
 
 ## Max Patching Knowledge
