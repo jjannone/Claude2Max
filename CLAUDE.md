@@ -1,25 +1,61 @@
 # Claude2Max
 
+> **When you think you've read enough, you haven't. Read it all. Use the tokens. You don't know Max and you can't fake it.**
+
+## If You Are A Claude Instance Reading This From Another Repo — Why You're Here
+
+You arrived because your global CLAUDE.md told you to consult this repo before doing Max work. Here is why that pointer exists and what reading it actually means.
+
+**You do not know Max.** Your training-data knowledge of Max/MSP is broadly correct on shape but wrong on specifics often enough to break patches silently. Max's failure mode is not exceptions, it is *acceptance* — unknown attributes get accepted and silently ignored (a `bgcolor` you wrote on an object that doesn't have one does nothing, no warning), made-up object names load as missing-object red boxes that are easy to miss in a 100-box patch, and presentation / wiring conventions you don't know produce patches that "work" but are unusable for the operator. None of these surface as errors. They surface as the student's patch behaving weirdly hours later, in a session you're no longer part of.
+
+**The minimum reading before any tool call that produces Max content is three files, in this order:**
+
+1. The rest of this file — `Claude2Max/CLAUDE.md`. Workflow, binding rules (always create a presentation view, always hide plumbing patchcords, never write API names from memory), the `c2m.inspect` debugging convention, the preferred-objects table, the multi-user-template if mobile is involved.
+2. `Claude2Max/SPEC_REFERENCE.md`. The spec format the converter consumes; object types and correctness notes; presentation layout specifics; jit.cellblock conventions; the v8 / JavaScript section.
+3. `Claude2Max/patching/MAX_PATCHING.md`. Common Pitfalls (the load-bearing section for silent-failure modes — read every bullet), presentation aesthetic checklist, per-object guidance.
+
+Add as relevant: `patching/GEN_PATCHING.md` for `gen~` work, `patching/JIT_GEN_PATCHING.md` for `jit.gen` / `jit.gl.pix`, `patching/JITTER_JS_PATCHING.md` for `[js]` / `[v8]` touching matrices, `patching/M4L_PATCHING.md` for Max for Live devices.
+
+Before producing any Max content in this session, also consult `packages/package_objects.json` (via `python3 packages/query_packages.py search "<term>"`) before composing any chain of 3+ native objects — there is often a single installed package object that does what your chain does, and you would not have known about it from training data alone.
+
+The cost of reading is a few minutes of context. The cost of skipping is a debugging session that may not surface for hours and that you cannot help with after the fact. Read.
+
+---
+
+## What This Repo Is
+
 This repo is a tool for generating Max/MSP patches from Claude-authored JSON specs. Your role is to **write specs and convert them to .maxpat files**.
 
 **Audience**: This tool is designed for students with little coding or CLI experience. CLAUDE.md serves as the primary knowledge base — when their instance of Claude reads it, it should learn everything needed to work with Max/MSP, the spec format, and the converter without requiring prior expertise. Include helpful general information here even if it seems basic — students benefit from it and Claude instances need it to assist them effectively.
 
-## Local-Folder Use Is Fully Supported — GitHub Is Optional
+## Default Workflow — Your Own GitHub Fork (Claude Handles the Setup)
 
-Students cloning this repo do **not** need to turn their work into a GitHub repository. A purely local folder on disk is a first-class workflow. The intended local-only flow is:
+The recommended workflow for every student is to work in their **own GitHub fork** of Claude2Max. Why:
 
-1. `git clone` this repo once. (If you don't want any GitHub coupling, you can `git remote remove origin` after — the repo still works as a self-contained toolkit.)
-2. Open a Claude Code session with the cloned Claude2Max folder as the working directory.
-3. Either save patches inside `patches/` (fine for learning), or point `convert -o` at any absolute path on disk where your Max project lives (e.g. a folder in `~/Documents/Max 9/Projects/`). The `.maxpat` is its own source of truth — the spec is embedded — so there are no stray files to manage outside it.
-4. Iterate locally. No commits, pushes, or PRs are required.
+- The student's session history, insights, and any patches they commit travel with them across machines and survive disk failure.
+- The student can pull upstream improvements into their fork without losing their work.
+- Discoveries the student makes during a session can be contributed back to the main repo as a pull request — see the community knowledge pipeline described in the **Community Knowledge — Insights Flow Upstream** section.
+- An instructor (or peer) can read the student's fork to see what they've been working on without needing access to their machine.
+
+**Students do not run `gh` or `git` commands themselves.** Claude is the interface. The student says "set me up" or "fork this so I have my own copy" and Claude runs the commands. The student's job is to describe what they want; Claude's job is to translate that into the right shell actions. Students with no prior CLI / git experience should never see a `git` invocation in the chat unless they ask to learn how the underlying mechanics work.
+
+The intended setup flow (driven by the `New User Setup` section below):
+
+1. `git clone` the upstream repo once (one-time, by hand or via Claude on first session).
+2. Claude detects on first session whether a fork exists for this user and offers to create one via `gh repo fork --remote --remote-name origin`. If `gh` isn't authenticated, Claude walks the student through `gh auth login` interactively — explaining each prompt in plain language.
+3. Claude creates an `insights/<name>` branch on the fork to track session-specific observations.
+4. From then on, normal use: edit patches, log discoveries, periodically Claude proposes pushing to the fork and (when there's broadly useful material) opening a PR upstream.
+
+**Fallback — local-only is still supported.** If a student explicitly declines a GitHub account, or `gh auth login` fails repeatedly and they don't want to troubleshoot, Claude falls back to a purely local-folder workflow: no remote, no push, no PR. Everything still works — the toolkit is self-contained — but the student's session history doesn't survive disk loss and can't be shared. Treat this as the exception, not the default. If a student lands here through reluctance rather than informed choice, gently re-offer the fork setup at the start of later sessions (not every session — once or twice is enough, then stop).
 
 **Implications for Claude operating in this repo:**
 
-- Do not assume a GitHub remote exists. Never run `git push`, `gh` commands, or suggest "open a PR" unless the user has explicitly opted into GitHub for this session.
-- The `New User Setup` flow below creates a local `insights/<name>` git branch only when the working directory is actually a git checkout — see the gating step in that section. Never suggest pushing a local-only branch.
-- The `Setup` step in `README.md` that configures `diff.claude2max.textconv` is git-only — mention it as optional to local-only students rather than running it automatically.
+- At session start, run the `New User Setup` flow to determine which mode the student is in (forked-with-remote, cloned-no-fork, or local-only).
+- For forked-with-remote: `git push`, `gh pr create`, and PR-related commands are all fair game when the work reaches a natural commit boundary or the student opts to share insights.
+- For cloned-no-fork: proactively offer to create a fork via `gh` when the moment is right — usually right at session start, or when the student first asks about sharing / backing up their work.
+- For local-only: do not run `git push` or `gh` commands. Do still write to `insights.md` locally so the notes survive in the working directory.
+- Never expect the student to type a `git` or `gh` command themselves. If a command needs to run, Claude runs it. If the student wants to learn what the command does, explain it after running it — not by asking them to type it.
 - State files (`WORK_HISTORY.md`, `TASK_QUEUE.md`, `insights.md`) follow the convention in **State-File Location for External Projects** further down.
-- When in doubt about whether a git/GitHub-flavored action is wanted, ask once at session start and remember the answer for the rest of the session.
 
 ## Rules from Corrected Errors {!pre-commit}
 
@@ -300,6 +336,8 @@ Read and review the entire Claude2Max repo before starting — `CLAUDE.md`, `SPE
 
 **Before designing or analyzing anything inside a `jit.gen` / `jit.gl.pix` box**, read `patching/JIT_GEN_PATCHING.md`. Same gen language as gen~, but iteration is per-cell or per-pixel rather than per-sample — `samplerate` and audio-time idioms do not apply; position primitives (`norm`, `cell`, `dim`) and texture sampling do.
 
+**Before writing a `[js]` or `[v8]` script that reads or writes a `jit_matrix`**, read `patching/JITTER_JS_PATCHING.md`. The JitterMatrix API has several silent-failure modes — most notably the constructor-name-as-first-arg trap, where passing a name as the first positional arg makes JS silently bind to a (possibly nonexistent) named peer and ignore the rest of the constructor args. The matrix then stays empty and every `setall` / `setcell2d` is a no-op with no warning. The file also covers inlet/outlet declaration, the canonical "consume a matrix, paint and emit another" template, and when to reach for `jit.gen` / `jit.gl.pix` / `jit.expr` instead of JS.
+
 **Before working on a Max for Live device**, read `patching/M4L_PATCHING.md`. M4L adds the Live Object Model, `live.*` UI objects, device-lifecycle considerations, and `.amxd` packaging — none of which appear in standalone Max patches.
 
 ## Workflow
@@ -337,6 +375,45 @@ This is the recommended path for building a new patch from scratch, especially i
 
 After the first draft, normal Claude2Max iteration applies — sync before any edit, observe what's working before changing it, and keep `WORK_HISTORY.md` and `insights.md` up to date.
 
+### Preferred Objects for Common Tasks
+
+When planning a patch for a student, default to the objects in the table below for each task. These are the first-instinct choices — Max often has three or four ways to do anything, but the entries here are the ones that are simplest to wire, easiest to explain, and most likely to be what a beginner actually wants. Reach for an alternative only when there's a specific reason the default doesn't fit (e.g. the student has asked for something the default can't do, an external they're already using exposes a different interface, or the package library surfaces a single-object solution to an otherwise-long chain).
+
+| Task | Default | Notes |
+|---|---|---|
+| Play a sound file | `playlist~` | One object, multi-file with crossfades; vastly better than rolling `sfplay~` + bank logic by hand. |
+| Play video | `jit.playlist` | Same idea on the Jitter side — multi-clip playlist with crossfades. |
+| Audio I/O | `ezadc~` (input) / `ezdac~` (output) | The toggle-style I/O objects. Click the speaker icon to enable. Don't use `adc~` / `dac~` for student patches — the toggle UI is the point. |
+| MIDI input | `notein` / `ctlin` / `bendin` directly | Skip `midiin` + `midiparse` — go straight to the object that emits the data you need. |
+| MIDI output | `noteout` / `ctlout` directly | Same as input — direct objects, no `midiformat` + `midiout` intermediate. |
+| Audio synthesis — basic oscillators | `saw~` / `tri~` / `rect~` | The trio of bandlimited classic waveforms. Pick the one whose harmonic content matches the timbre you want; layer two or more for richer tones. |
+| Audio synthesis — sample playback | `groove~` | Needs a named `buffer~` upstream; supports loop points, playback speed, and direction. |
+| Recording audio into a buffer | `record~` | Needs a named `buffer~`. Toggle to start/stop. |
+| Reverb | `bp.Gigaverb` (BEAP, ships with Max) | The lush default. `bp.Freeverb` is a lighter Schroeder-style alternative — also BEAP, also ships with Max. For higher fidelity, `hirt.convolutionreverb~` from HISSTools with a real IR — install the HISSTools package first. |
+| Delay line | `tapin~` / `tapout~` | `tapin~` holds the buffer; one or more `tapout~` objects read from it at different delay times. Don't reach for `delay~` — `tapin~/tapout~` is the standard idiom. |
+| Filter | `biquad~` with `filtergraph~` | `filtergraph~` is the editor — drag the graphical handle, send its output into `biquad~`'s right inlet to set coefficients. Visual + audible at the same time. |
+| Multi-value input | `multislider` | One object, N sliders, list output. Configure via inspector. |
+| Multi-column data display | `jit.cellblock` | The spreadsheet-style readout. Drive with `cell <col> <row> set <val>` messages. |
+| Sequencer / clock | `metro` | Send `1` to start, `0` to stop. Set interval as a creation argument or via the right inlet. |
+| Random / probability | `random` with attributes | Use creation argument or `@range` / `@seed` attributes — don't roll your own with `expr`. |
+| Scale / map a number range | `scale` | `scale <in_lo> <in_hi> <out_lo> <out_hi>` — one object, no math. Don't reach for `expr` for simple range mapping. |
+| Comparing / routing values | `v8` JavaScript | Branching logic with multiple conditions is far cleaner expressed as a few lines of JS than as a tree of `if` / `select` / `route` boxes. Use `v8`, not `js`. |
+| Single button / toggle / dial / slider | Varies by context | `button` for momentary, `toggle` for on/off state, `dial` or `live.dial` for continuous, `slider` or `multislider` for linear ranges. Pick the affordance that matches the operator's mental model for that control. |
+| Number readout (display only, no input) | `message` box with input to right inlet, OR `comment` with `set <value>` message | Send `flonum → sprintf "%.2f" → (right inlet of message)` for a clean float readout. The message displays the value but doesn't fire. Alternative: `flonum → sprintf "set %.2f" → comment` if you want the styling of a comment rather than a message. |
+| Text input from the user | `dialog` | A modal popup — bang to prompt, the entered text comes out the outlet. Avoid `textedit` for set-once configuration values (see the binding rule "Don't Use `[textedit]` for Set-Once Configuration"). |
+| List manipulation | `v8` JavaScript | Filtering, reshaping, mapping, sorting a list is one line of JS. Don't chain `zl` / `pak` / `unpack` / `vexpr` for anything beyond the trivial cases. |
+| Long-term storage | `dict` (default) | Key/value storage with nested structures, JSON-compatible. Other choices apply when the data shape calls for them: `coll` for indexed lists, `text` for plain-text bodies, `pattr` + `autopattr` when the values must persist with the patch. |
+| Jitter — load an image | `jit.matrix` + `importmovie <path>` message | One matrix, one message — the image lives in the matrix. From there, send it through any Jitter chain or `jit.gl.videoplane`. |
+| Jitter — display a matrix | `jit.world` + `jit.gl.videoplane` (sometimes called `jit.gl.layer` — an alias prototype with attributes pre-set) | Two-stage render: a first `jit.world` runs your scene, captured to a texture; a second `jit.world` reads that texture via `jit.gl.videoplane`, optionally routed through `jit.gl.cornerpin` for projector keystone correction. |
+| Webcam capture | `jit.grab` | Open the device, send `bang` per frame (or wire a `qmetro` upstream). One object, no driver wrangling. |
+| GL drawing | No strong preference | Pick the `jit.gl.*` object that matches the primitive you need — `jit.gl.gridshape`, `jit.gl.mesh`, `jit.gl.sketch`, `jit.gl.text`, etc. |
+| OSC | `udpreceive` + CNMAT odot `o.route` | Use `o.route` rather than the native `OSC-route` when CNMAT odot is installed — `o.route` has cleaner semantics and is what the rest of the OSC community converged on. Install via Package Manager → CNMAT Externals. |
+| Networking / WebSocket | `node.script` + the multi-user-template | When the patch needs to talk to phones, browsers, or the cloud, build on `multi-user-template` (see the dedicated section above) — don't roll a Node-for-Max LAN server from scratch. |
+| Send / receive between distant parts of a patch | `send` / `receive` for messages, `value` for shared scalar state, `pv` / `v` for patcher-scoped variables, `send~` / `receive~` for signal | Pick by lifetime and scope. `send`/`receive` for cross-patch broadcast of messages; `value` when two boxes need to read the same shared scalar; `pv`/`v` when the scope should not leak past the parent patcher; the `~` variants for signal-rate. |
+| JS / scripting | `v8` (default) | Modern JavaScript engine — ES6+, faster, better-supported. Use the older `js` object only when you have a specific reason (e.g. you're modifying an existing patch that already uses it). |
+
+When in doubt — or before composing any chain of 3+ native objects — run `python3 packages/query_packages.py search "<term>"` to see whether an installed package handles the whole task in a single object. The package library (2,795+ entries) often shortcuts a long chain into one well-named external.
+
 ### Existing patch (externally sourced or manually edited)
 
 Run `/c2m-sync` first. Extract, edit, convert. All patches live in `patches/`.
@@ -357,6 +434,7 @@ To decode MCT received in the conversation: `python3 -c "from spec2maxpat import
 - `patching/MAX_PATCHING.md` — Patching principles, presentation guidelines, documentation verification rules, common pitfalls. Read before any patch work.
 - `patching/GEN_PATCHING.md` — gen~ / gen programming model (audio rate / control rate), canonical idioms (slide envelope follower, samplerate→ms, equal-power crossfade), latency-compensation discipline. Read before any work inside a `gen~` / `gen` box.
 - `patching/JIT_GEN_PATCHING.md` — jit.gen / jit.gl.pix programming model (per-cell / per-pixel), position primitives (`norm`, `cell`, `dim`), texture sampling, distance-field idioms. Read before any work inside a `jit.gen` / `jit.gl.pix` box.
+- `patching/JITTER_JS_PATCHING.md` — JitterMatrix API from `[js]` / `[v8]`: constructor forms (and the name-as-first-arg trap), `setall` / `setcell2d` / `getcell2d`, inlet/outlet declaration, the canonical "consume and emit" template, and when to reach for `jit.gen` / `jit.gl.pix` / `jit.expr` instead. Read before any JS-driven matrix work.
 - `patching/M4L_PATCHING.md` — Max for Live patterns: Live Object Model access chain, `live.thisdevice` init signal, `getpath` + `deferlow` race, Push 3 polyphonic pressure, `live.*` UI styling, `.amxd` packaging. Read before any M4L device work.
 - `spec2maxpat.py` — The converter. I/O data from C74 maxref.xml via `RefpageCache`; no external database.
 - `TUTORIAL_GUIDELINES.md` — Tutorial structural contract, panel/annotation attrs, comment-pile pattern, breakage diagnostic.
@@ -762,6 +840,53 @@ These skills ship with the repo in `.claude/skills/` — cloners get slash comma
 | `/c2m-package-search` | "Is there a package for X?"; before building 3+ native chain | Searches `package_objects.json`, recommends or falls back |
 | `/c2m-design` | Design presentation UI; panel layout; themed UI; jsui canvas | Reads c2m-themes, designs layout, translates to spec coordinates |
 | `/c2m-explain` | Explain a patch; "what does this do?" | Single-pass explanation without modifying the patch |
+| `/c2m-inspect` | Debugging a running patch; need to see what's actually in a dict / buffer~ / jit.matrix | Sends OSC to `[c2m.inspect]` in the open patch; reads the dumped JSON from `/tmp/c2m_inspect_<tag>.json` |
+
+## Always Inspect, Never Guess — Reach for `/c2m-inspect` During Patch Debugging
+
+When debugging a running Max patch, any question whose answer hinges on the runtime contents of a named data structure (`dict`, `buffer~`, `jit.matrix`) gets answered by *dumping it*, not by reasoning from the upstream wiring. Wiring tells you what *should* happen; the dump tells you what *did* happen. Guessing from upstream logic is the failure mode this rule exists to prevent — the recognition signal is any sentence in your reasoning that begins "the dict probably contains…" or "the buffer should have…" or "the matrix is presumably…" — that's the moment to stop and run the dump instead.
+
+The mechanics:
+
+1. **If `[c2m.inspect]` is already in the patch**, run `python3 tools/c2m_inspect_send.py --timeout 1 ping` to confirm connectivity, then dump each suspect structure with distinct tags (`dump <tag> <kind> <name>`).
+2. **If `[c2m.inspect]` is NOT in the patch**, add it autonomously via the normal sync → edit-spec → convert workflow before debugging. Mark it as a debug addition per the convention in **Clearly Mark Debug Additions** below. Ask the user to reload the patch in Max, then proceed.
+3. **Read the resulting `/tmp/c2m_inspect_<tag>.json`** and interpret it against the expected state.
+
+This is the *first* tool to reach for in Max-runtime debugging, not the last. Most "why isn't this working?" questions in patches built on `dict` / `buffer~` / `jit.matrix` are answered in one round-trip by the dump.
+
+For coll/table (v1 gap), the same discipline applies but the workaround is different — see the v8 `messnamed` pitfall in `patching/MAX_PATCHING.md > Common Pitfalls`.
+
+## Clearly Mark Debug Additions to a User's Patch — Binding Rule
+
+Any object added to a user's patch for diagnostic purposes — `[c2m.inspect]`, extra `[print]` boxes, scope displays, value-watch comments, anything that is NOT part of the patch's intended functionality — must be visually unmistakable as debugging scaffolding. The user must be able to (a) see at a glance what Claude added vs. what's part of the patch, and (b) remove the scaffolding confidently when debugging is done, without second-guessing whether each box is "really part of the design."
+
+The rule is symmetric with **Always Hide Plumbing Patchcords**: visibility matches intent. Plumbing hides because it doesn't communicate to the reader; debug additions stand out because they MUST communicate "this is temporary."
+
+Conventions for every debug addition:
+
+- **Distinct bgcolor** — magenta `[1.0, 0.3, 0.8, 1.0]` reserved repo-wide for debug additions, with matching `bordercolor`. Not used elsewhere in Claude2Max's style guide.
+- **Adjacent comment label** — text `🔍 DEBUG (Claude) — remove when done`, same magenta bgcolor. One label per cluster, not per box.
+- **Spatially grouped** — place the cluster in the bottom-right corner of the patching view (or another corner the working graph doesn't occupy), physically separated from the patch's main flow so the operator's eye can ignore it.
+- **Tracked in the embedded spec** — add a top-level `debug_additions: ["<id1>", "<id2>", …]` array to the spec listing every debug object's ID. This lets a future cleanup pass find and remove all of them mechanically without parsing colors.
+- **NOT in the presentation view** — debug additions are patching-view scaffolding only; never set `presentation: 1` on them. The operator's UI must not be polluted by them.
+
+When debugging is complete and the user has confirmed the patch is working, propose a cleanup pass: remove every object listed in `debug_additions`, prune the array, sync/convert. Do this proactively — leaving scaffolding in a working patch is the same failure mode as a stale link on a landing page.
+
+The recognition signal during patch authoring: if I'm about to add a box that exists only to help *me* understand the patch's state — and the operator wouldn't ever look at it — that box needs the magenta marking. If it's part of the patch's actual functionality, it doesn't.
+
+## Debugging Data Structures Live — `c2m.inspect`
+
+When a patch is running and the question is *"what's actually inside this data structure right now?"*, drop the `[c2m.inspect]` abstraction (`patching/abstractions/c2m.inspect.maxpat`) into it. The abstraction listens on UDP 7474 for OSC; `tools/c2m_inspect_send.py` (stdlib-only, no python-osc dependency) talks to it and reads the dump back. Wrapped end-to-end by the `/c2m-inspect` skill.
+
+v1 supported kinds — those with a direct v8 wrapper class:
+
+- `dict` — via `Dict.stringify()`
+- `buffer~` — via `Buffer.peek()` (capped at `@samplecap`, default 4096 per channel)
+- `jit.matrix` — via `JitterMatrix.getcell()` (capped at `@cellcap`, default 10000)
+
+Not supported in v1: `coll`, `table`, `multislider`, `pattr`, `jit.cellblock`. These have no v8 wrapper and `messnamed` doesn't route to them. The graceful error response documents the workaround.
+
+The OSC pathway is one-way: Max writes JSON to disk, the Python sender polls disk for the updated mtime. Reads, then prints. No UDP reply, so no return-path dependency.
 
 ## Admonition Tags
 
@@ -783,7 +908,9 @@ Whenever you learn something new about Max behavior, fix a bug, or add/change a 
 
 ## New User Setup
 
-**At the start of every conversation**, after the long-gap check, first determine whether the working directory is a git checkout:
+**At the start of every conversation**, after the long-gap check, determine the student's mode (forked-with-remote / cloned-no-fork / local-only) and act accordingly. **Claude runs every `git` and `gh` command itself** — the student is never asked to type them. If the student wants to learn what a command does, explain it after running it; never make them type it.
+
+### Step 1 — Is the working directory a git checkout?
 
 ```bash
 if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
@@ -791,11 +918,9 @@ if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
 fi
 ```
 
-If the output is `LOCAL_ONLY`, the student is using Claude2Max as a purely local folder (see **Local-Folder Use Is Fully Supported** above). Skip the branch-creation flow entirely, do not run any `git config` / `git branch` / `git checkout` commands, and never suggest `git push` or PR contributions. Still create `insights.md` in the working directory with the same template described further down, and still log discoveries to it during the session. Greet the local-only user as:
+If the output is `LOCAL_ONLY`, fall through to the **Local-only fallback** further down. Otherwise continue.
 
-> "Welcome to Claude2Max. You're working locally without a GitHub remote — that's a fully supported setup. I'll log useful discoveries and corrections to `insights.md` in this folder as we work, in case you want to refer back to them later."
-
-Otherwise (git checkout is present), run this:
+### Step 2 — Is this the maintainer?
 
 ```bash
 USER_EMAIL=$(git config user.email)
@@ -804,42 +929,141 @@ echo "$USER_EMAIL"
 
 If `USER_EMAIL` is `jannone@mac.com`, skip the rest of this section entirely.
 
-Otherwise:
+### Step 3 — Install the global pointer to Claude2Max
+
+This step runs for every non-maintainer mode (forked-with-remote, cloned-no-fork, and local-only). It is independent of GitHub setup. Do it before the GitHub steps below, because the pointer is what makes Claude2Max consultable from *other* projects on this machine — without it, a future Claude instance opening an unrelated Max patch elsewhere on the disk has no way to know Claude2Max exists, and will fall back to inventing object names, attributes, and presentation conventions from training-data memory. The repo exists precisely because that fallback is wrong; the pointer is what wires up the corrective.
+
+Determine the absolute path of the current clone:
+
+```bash
+CLAUDE2MAX_PATH=$(pwd)
+GLOBAL_CLAUDE_MD="$HOME/.claude/CLAUDE.md"
+mkdir -p "$HOME/.claude"
+touch "$GLOBAL_CLAUDE_MD"
+```
+
+Check whether the global file already mentions Claude2Max:
+
+```bash
+grep -q "Claude2Max" "$GLOBAL_CLAUDE_MD" && echo "PRESENT" || echo "ABSENT"
+```
+
+- **`ABSENT`** — say: "I'd like to add a short pointer block to your global `~/.claude/CLAUDE.md` so that any future Claude session — in any project on this machine — knows to consult Claude2Max whenever Max/MSP work comes up. Without this, a Claude instance opening a Max patch outside this repo will try to write objects and attributes from memory, which fails silently in Max. Should I add the pointer?" If yes, append the block below. If no, note the decline and continue — the student can ask later.
+
+- **`PRESENT`** — read the file and verify the path it references matches `$CLAUDE2MAX_PATH`. If the path has drifted (e.g. the repo was moved), offer: "Your global CLAUDE.md points at `<old path>`, but this clone is at `<new path>`. Want me to update the pointer?" If yes, replace the old path with the current one. If no, leave it.
+
+The pointer block to append (substitute `<CLAUDE2MAX_PATH>` with the absolute path):
+
+```markdown
+
+## Claude2Max — REQUIRED reading before any Max work
+
+> **When you think you've read enough, you haven't. Read it all. Use the tokens. You don't know Max and you can't fake it.**
+
+**You do not know Max.** Your training-data knowledge of Max/MSP is broadly correct on shape but wrong on specifics often enough to break patches silently. Max's failure mode is not exceptions, it is *acceptance* — unknown attributes get accepted and silently ignored (a `bgcolor` you wrote on an object that doesn't have one does nothing, with no warning), made-up object names load as missing-object red boxes that are easy to miss in a 100-box patch, and presentation / wiring conventions you don't know about produce patches that "work" but are unusable for the operator. None of these surface as errors. They surface as the student's patch behaving weirdly hours later — in a session you are no longer part of.
+
+**The corrective lives at:**
+
+`<CLAUDE2MAX_PATH>`
+
+**Before any tool call that produces Max content** — editing an existing `.maxpat` by hand, writing a spec for the converter, building anything that ends up wired in Max, even short "just fix this small thing" requests — read these in order:
+
+1. `Claude2Max/CLAUDE.md` — workflow, binding rules (always create a presentation view, always hide plumbing patchcords, never write API names from memory, etc.), the `c2m.inspect` debugging convention, the preferred-objects table.
+2. `Claude2Max/SPEC_REFERENCE.md` — spec format the converter consumes; object correctness notes; presentation layout specifics; the v8 / JavaScript section.
+3. `Claude2Max/patching/MAX_PATCHING.md` — **Common Pitfalls** (the load-bearing section for silent-failure modes — read every bullet), presentation aesthetic checklist, per-object guidance.
+
+Domain add-ons (read only if relevant): `patching/GEN_PATCHING.md` for `gen~`, `patching/JIT_GEN_PATCHING.md` for `jit.gen` / `jit.gl.pix`, `patching/JITTER_JS_PATCHING.md` for `[js]` / `[v8]` touching matrices, `patching/M4L_PATCHING.md` for Max for Live.
+
+Also: before composing any chain of 3+ native Max objects, run `python3 packages/query_packages.py search "<term>"` from `<CLAUDE2MAX_PATH>` — there is often a single installed external that does what your chain does, and you would not have known about it from training data alone.
+
+The cost of reading is a few minutes of context. The cost of skipping is silent-failure debugging the student inherits after you're gone. **Read.**
+
+This rule supersedes any older Claude2Max instruction that gated consultation on the literal phrase "use claude2max." If the user mentions Max at all, you read.
+- `Claude2Max/spec2maxpat.py` — only when generating patches from a spec
+
+This rule supersedes any older Claude2Max instruction that gated consultation on the literal phrase "use claude2max."
+```
+
+Confirm the result with the student in plain language: "Added a Claude2Max pointer to your global CLAUDE.md. From now on, any Claude session on this machine — in any project — will know to consult this repo when Max work comes up."
+
+### Step 4 — Is `gh` available and authenticated?
+
+```bash
+which gh >/dev/null 2>&1 && gh auth status 2>&1 | head -3
+```
+
+Three outcomes:
+
+- **`gh` is missing entirely** — say: "GitHub CLI (`gh`) isn't installed. I can install it via Homebrew if you'd like — that's the smoothest path to having your own fork of Claude2Max where your work lives. Want me to install it, or work locally for now?" If yes, run `brew install gh`. If no, fall through to the **Local-only fallback**.
+- **`gh` is installed but not authenticated** (`gh auth status` shows "not logged in") — say: "I'd like to set you up with your own GitHub fork of Claude2Max so your session work is backed up and shareable. To do that, I need to log you into GitHub via `gh auth login`. I'll walk you through each prompt in plain language. Should I start, or would you rather work locally for now?" If yes, run `gh auth login` interactively (default settings: GitHub.com, HTTPS, login with a web browser — Claude explains each prompt as it appears). If no, fall through to the **Local-only fallback**.
+- **`gh` is installed and authenticated** — continue to Step 4.
+
+### Step 4 — Is the current clone already a fork of jjannone/Claude2Max?
+
+```bash
+gh repo view --json parent,nameWithOwner 2>/dev/null
+```
+
+If the JSON shows `"parent"` pointing at `jjannone/Claude2Max` (or the `nameWithOwner` already starts with `jjannone/`), the student is on their fork (or on the upstream itself). Continue to Step 5.
+
+Otherwise, the clone is upstream and the student doesn't have a fork yet. Offer one:
+
+> "I can create your own GitHub fork of Claude2Max — that way your patches, your insights, and your session history live in your account and survive any disk problem. I'll do it for you; you don't need to type any commands. Should I go ahead?"
+
+If yes, run:
+
+```bash
+gh repo fork --remote=true --remote-name=origin --clone=false
+git remote rename origin upstream 2>/dev/null || true   # if origin already existed
+git remote add upstream https://github.com/jjannone/Claude2Max.git 2>/dev/null || true
+# `gh repo fork --remote-name=origin` already points origin at the new fork
+```
+
+Then verify `git remote -v` shows: `origin` → student's fork, `upstream` → `jjannone/Claude2Max`.
+
+If no, fall through to the **Local-only fallback**.
+
+### Step 5 — Create the `insights/<name>` branch on the fork
 
 ```bash
 USER_NAME=$(git config user.name | tr ' ' '_' | tr '[:upper:]' '[:lower:]')
 BRANCH="insights/${USER_NAME}"
-git branch --list "$BRANCH"
+git rev-parse --verify "$BRANCH" >/dev/null 2>&1 || git checkout -b "$BRANCH"
+git push --set-upstream origin "$BRANCH" 2>/dev/null
 ```
 
-If the branch does not exist (empty output):
+Create `insights.md` (template under **`insights.md` template** below).
+
+Greet:
+
+> "Welcome to Claude2Max. You're set up with your own fork — I've made a branch **`insights/<your-name>`** to track this session. As we work, I'll log useful discoveries to `insights.md` and push them to your fork. When something looks broadly useful to other students, I'll offer to open a pull request back to the upstream repo so it becomes part of the shared knowledge."
+
+### Local-only fallback
+
+Use this branch when the student declined the fork setup, `gh` is unavailable, or the working directory isn't a git checkout.
+
+If a git checkout exists, create a local-only branch:
 
 ```bash
-git checkout -b "$BRANCH"
+USER_NAME=$(git config user.name | tr ' ' '_' | tr '[:upper:]' '[:lower:]')
+BRANCH="insights/${USER_NAME}"
+git rev-parse --verify "$BRANCH" >/dev/null 2>&1 || git checkout -b "$BRANCH"
 ```
 
-After branch creation, detect whether a GitHub remote is configured:
+Create `insights.md` (template below) regardless of whether a git checkout exists. Greet:
 
-```bash
-HAS_REMOTE=$(git remote 2>/dev/null | head -1)
-```
+> "Welcome to Claude2Max. You're working locally without a GitHub fork for now — fully supported. I'll log useful discoveries to `insights.md` in this folder as we work. If you change your mind later, just say the word and I'll set up the fork for you."
 
-If `HAS_REMOTE` is non-empty, greet the new user:
+Re-offer the fork setup **once or twice on later sessions**, then stop. Do not re-offer every session — that's nagging, not helpful.
 
-> "Welcome to Claude2Max. I've created a branch **`insights/<your-name>`** to track your session. As we work together, I'll log useful discoveries, workflow improvements, and corrections to `insights.md` on this branch. If anything seems worth sharing with other users, I'll let you know — it only takes a PR to contribute it back."
-
-Otherwise (no remote configured), greet:
-
-> "Welcome to Claude2Max. I've created a local branch **`insights/<your-name>`** to track your session. As we work together, I'll log useful discoveries, workflow improvements, and corrections to `insights.md` on this branch. Your notes stay on this machine — if you ever decide to add a GitHub remote, the same branch can be pushed and shared as a PR."
-
-Create `insights.md` if it doesn't exist:
+### `insights.md` template
 
 ```markdown
 # Claude2Max Insights — <user name>
 
 Discoveries, corrections, and workflow improvements gathered during use.
-Entries broadly useful to other users are marked **[shareable]** — if a GitHub
-remote is configured, these are candidates for an upstream PR.
+Entries broadly useful to other users are marked **[shareable]** — these are
+candidates for an upstream pull request via the **Community Knowledge** pipeline.
 
 ## Log
 
@@ -848,7 +1072,7 @@ remote is configured, these are candidates for an upstream PR.
 From that point forward in the session:
 - Append any confirmed new rule, correction, or non-obvious workflow insight to `insights.md` under the `## Log` section with today's date
 - Mark entries `**[shareable]**` when they seem broadly useful (not just specific to this user's patch)
-- At the end of the session, if there are any `[shareable]` entries **and a GitHub remote is configured**, remind the user: "There are N entries in `insights.md` marked as shareable — consider opening a pull request to share them upstream." If no remote is configured, skip the reminder — the notes remain on disk for the user's own reference.
+- At the end of the session, if there are any unshared `[shareable]` entries **and the student is in forked-with-remote mode**, say: "There are N shareable entries in `insights.md` — want me to open a pull request to contribute them upstream?" In local-only mode, skip the reminder — the notes stay on disk for the student's own reference, and Claude can offer to set up the fork at a future session if appropriate.
 
 ## State-File Location for External Projects
 

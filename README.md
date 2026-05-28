@@ -21,7 +21,9 @@ python3 spec2maxpat.py convert -i /tmp/spec.json \
     -o "/Users/you/Documents/Max 9/Projects/MyPiece/main.maxpat"
 ```
 
-The `.maxpat` is its own source of truth (the spec is embedded), so nothing else needs to be kept alongside it. `sync`, `extract`, and `mct` accept the same absolute paths. GitHub is optional in either mode — neither requires a remote.
+The `.maxpat` is its own source of truth (the spec is embedded), so nothing else needs to be kept alongside it. `sync`, `extract`, and `mct` accept the same absolute paths.
+
+The recommended workflow is to work in your **own GitHub fork** of Claude2Max — Claude sets this up for you on the first session, so you don't need to know `git` or the `gh` CLI. The fork keeps your patches, your insights, and your session history safe in your GitHub account, and lets useful discoveries flow back to the main repo as pull requests. A purely local clone with no remote also works as a fallback for students who don't want a GitHub account. See `CLAUDE.md` § *Default Workflow — Your Own GitHub Fork* for the full setup flow.
 
 ---
 

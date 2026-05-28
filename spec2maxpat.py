@@ -685,7 +685,7 @@ def auto_layout(objects, connections):
     for obj_id in objects:
         in_degree.setdefault(obj_id, 0)
     for conn in connections:
-        src, _, dst, _ = conn
+        src, _, dst, _ = conn[:4]
         successors[src].append(dst)
         predecessors[dst].append(src)
         in_degree[dst] = in_degree.get(dst, 0) + 1
@@ -1246,9 +1246,16 @@ def convert_patcher(spec):
 
     # Validate connections
     for conn in connections:
-        if len(conn) != 4:
-            raise ValueError(f"Connection must be [src, outlet, dst, inlet], got: {conn}")
-        src, _, dst, _ = conn
+        if len(conn) not in (4, 5):
+            raise ValueError(
+                f"Connection must be [src, outlet, dst, inlet] or "
+                f"[src, outlet, dst, inlet, attrs], got: {conn}"
+            )
+        if len(conn) == 5 and not isinstance(conn[4], dict):
+            raise ValueError(
+                f"Connection 5th element must be an attrs dict, got: {conn[4]!r}"
+            )
+        src, _, dst, _ = conn[:4]
         if src not in objects:
             raise ValueError(f"Connection source '{src}' not found in objects")
         if dst not in objects:
@@ -1277,13 +1284,14 @@ def convert_patcher(spec):
     # Build patchlines
     lines = []
     for conn in connections:
-        src_id, src_outlet, dst_id, dst_inlet = conn
-        lines.append({
-            "patchline": {
-                "destination": [id_map[dst_id], dst_inlet],
-                "source": [id_map[src_id], src_outlet],
-            }
-        })
+        src_id, src_outlet, dst_id, dst_inlet = conn[:4]
+        patchline = {
+            "destination": [id_map[dst_id], dst_inlet],
+            "source": [id_map[src_id], src_outlet],
+        }
+        if len(conn) == 5:
+            patchline.update(conn[4])
+        lines.append({"patchline": patchline})
 
     # Calculate extent for spec embed placement
     max_y = max((positions[uid][1] for uid in objects), default=Y_MARGIN) + 80

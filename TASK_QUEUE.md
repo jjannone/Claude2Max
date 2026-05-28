@@ -13,6 +13,42 @@ Format: `[pending]` = not started, `[complete]` = done (move to Done section), `
 
 Tasks requiring deep analysis, architecture decisions, or sustained judgment. Prompt the user to run `/model claude-opus-4-7` before starting any of these.
 
+- [pending] **Community Knowledge Pipeline — auto-gather usage data per fork, auto-PR back to upstream** — Every cloned Claude2Max fork should passively gather *structured* observations during use — what skills were invoked, which workflows fired, errors hit and how they were resolved, surprising Max behaviors, friction points, ideas the student articulated, instructor corrections — into a community-knowledge file on the student's `insights/<name>` branch. Periodically (after N entries, on natural commit moments, or via an explicit `/c2m-share-insights` skill), Claude opens a pull request against `jjannone/Claude2Max` to merge the generally-useful entries back into upstream knowledge files.
+
+  **Why this matters**: the rule "Never use local Claude memory as a substitute for repo documentation" already says the repo is the canonical knowledge base. But knowledge currently only flows ONE way — upstream-down. Every student session generates real signal (their errors, their workarounds, the Max gotchas they hit, the workflows that did or didn't fit) that disappears unless they manually write a PR. This pipeline closes the loop. The "Default Workflow — Your Own GitHub Fork" section in CLAUDE.md was added to make this possible — every student now has a fork, so every student now has a PR origin.
+
+  **Design space**:
+
+  1. **Data model** — extend the existing `insights.md` with a more structured companion (e.g. `community-data/observations.jsonl`) carrying: timestamp, category (`error-and-fix` / `workflow-observation` / `max-behavior` / `friction-point` / `feature-request` / `instructor-correction`), session context (file/skill), summary, optional `[shareable]` flag. JSONL keeps it append-only and machine-iterable; the prose `insights.md` stays for human-readable narrative.
+
+  2. **Capture moments** — Claude appends to the log when: a user corrects Claude's approach (already covered by the "Rules from Corrected Errors" rule, but currently only writes to CLAUDE.md proposals, not the log); an error surfaces in tool output that gets diagnosed and resolved; the student articulates a workflow preference; an instructor's response contains a non-obvious correction. Each capture is in-band, not a separate "tell Claude to log this" step.
+
+  3. **Anonymization / scope filter** — entries flagged `[shareable]` must be scrubbed of personal data (file paths inside the student's home dir, names of their pieces, student name, instructor name unless they consent) before going into a PR. Entries scoped to the specific student's project stay on their fork. Decide whether Claude does this at write time (better hygiene) or at PR time (less intrusive — but the raw log on the fork still leaks).
+
+  4. **PR cadence** — three triggers worth designing for: (a) automatic at natural commit moments when N shareable entries accumulate (N tunable, default ~5); (b) explicit via a new `/c2m-share-insights` skill the student invokes; (c) at session end if any shareable entries are unshared. Whichever fires, the student must see the PR draft (title, body, diff) and approve before `gh pr create` runs.
+
+  5. **Merging on the upstream side** — incoming PRs land observations into a `community-observations/` folder organized by category, with each contribution preserved as a dated entry. A separate review pass (manual, or via an `/c2m-promote-observations` skill) periodically lifts reusable insights into the canonical reference docs (`patching/MAX_PATCHING.md`, `SPEC_REFERENCE.md`, `cookbook/cookbook_insights.md`, etc.) — same promotion-candidate model already used for forum/cookbook insights.
+
+  6. **Branch model** — observations live on `insights/<name>`. PRs go from that branch on the student's fork → `community-observations/` on upstream main. Each PR is additive, not editing existing files — keeps conflict surface near zero.
+
+  7. **Skill surface** — at minimum `/c2m-share-insights` (review + anonymize + open PR) and `/c2m-log-observation <category> <text>` (the explicit-capture form for entries Claude would otherwise miss). The passive capture path is the primary one; the explicit form is the escape hatch.
+
+  **What to deliver**:
+  - `community-data/observations.jsonl` schema documented in CLAUDE.md
+  - `.claude/skills/c2m-share-insights/SKILL.md` + helper script
+  - `.claude/skills/c2m-log-observation/SKILL.md` + helper script
+  - PostToolUse hook (or equivalent) that recognizes capture moments and appends structured entries
+  - Upstream-side `community-observations/` folder layout + README
+  - CLAUDE.md "Community Knowledge — Insights Flow Upstream" section describing the pipeline end-to-end
+  - Update existing "Default Workflow — Your Own GitHub Fork" section to point at this pipeline as one of the reasons to fork (already named in passing — make the reference concrete once the pipeline exists)
+
+  **Prerequisites**:
+  - "Default Workflow — Your Own GitHub Fork" must be live (done 2026-05-27).
+  - Decide whether anonymization is at write time or PR time.
+  - Decide the JSONL category vocabulary up front; changing it later requires migrating every fork's log.
+
+  **Fits into the larger system**: closes the knowledge loop. Currently every Claude2Max convention propagates downstream (upstream → fork → session). With this pipeline, real-world friction propagates upstream (session → fork → PR → upstream knowledge files), so the next student inherits everyone else's lessons. Pairs naturally with the existing promotion-candidate review pass.
+
 - [pending] **Repo-as-Total-Scope Enforcement System** — Design and implement a system that makes the Claude2Max repo's rules, guidelines, workflows, and resource libraries *the entire operating environment* for any Claude session whose cwd is this repo. The goal is that "in this repo" means: the repo defines the work scope, the procedures, the thought-process, the resource libraries, and the action vocabulary. There is no independent thought except as it relates to the repo — improvements to the repo can be *proposed*, but until they are implemented, behavior conforms exactly to the repo as currently written.
 
   **Why this matters**: rules and guidelines that are written but not enforced are decorative. The repo currently has hundreds of lines of rules in CLAUDE.md, patching/MAX_PATCHING.md, SPEC_REFERENCE.md, TUTORIAL_GUIDELINES.md, PRE_EDIT_CHECKLIST.md, and others. The rules are correct, but compliance depends on the model noticing the rule applies and choosing to follow it. The "Partial Answers Are Not Consent" violation on 2026-05-02 is a recent example: the rule existed, the rule was visible in CLAUDE.md, the rule did not fire because action mode overrode noticing. Any rule that depends on noticing has a failure mode. The repo means something only if the rules are mechanically guaranteed.
