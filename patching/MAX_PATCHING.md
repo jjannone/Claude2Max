@@ -73,7 +73,12 @@ This pattern of reasoning applies broadly in Max patching:
 
 ## Max .maxpat Internals
 
-- **Z-order**: In the `boxes` array, earlier items render on top (in front). To put an object visually on top of others, place it first in the array. Background objects go last.
+- **Z-order in patching view**: In the `boxes` array, earlier items render on top (in front). To put an object visually on top of others in patching view, place it first in the array. Background objects go last.
+- **Z-order in presentation view is NOT controlled by boxes-array order.** Presentation has its own background layer, and a panel placed LAST in the boxes array can still render IN FRONT of controls when the patch is in presentation mode — eclipsing every button and number box that happens to sit in its rectangle. The control isn't gone; it's just hidden behind the panel. Symptom: a button that appears in patching view but is missing from presentation view, with no apparent layout bug. The fix is two-part:
+  1. **Set `background: 1` on every panel** (the "Include in Background" option in the Inspector). This moves the panel into the dedicated presentation background layer, behind all interactive controls, regardless of boxes-array order. Without this, the boxes-array Z-order rule above does NOT apply to presentation mode and the panel may sit on top.
+  2. **Set `bglocked: 1` at the patcher level** ("Lock Background" / Cmd-K-Cmd-L). This prevents the background panels from intercepting mouse hits even when nothing is on top of them — a click on the background panel does nothing instead of selecting/dragging the panel out of place at runtime.
+
+  Recognition signal: a Max patch where the presentation view looks like a uniform dark rectangle covering everything below the title, but inspecting the spec / .maxpat shows controls with `presentation: 1` in that area. The controls are there; the panel just hasn't been moved to the background layer. *Worked example:* IMMER v3's TEST panel had 5 buttons in the spec but only 4 visible — the fifth (Force visible, the rightmost) was eclipsed by the panel until both `background: 1` and `bglocked: 1` were set.
 - **@bubbleside** (comment bubble arrows): `0=top, 1=left, 2=bottom, 3=right`. The arrow appears on that side of the comment, pointing outward. Use `"bubble_bgcolor"` (not `"bgcolor"`) for bubble background color.
 
 ---
