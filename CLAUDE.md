@@ -521,6 +521,88 @@ These bit IMMER v2 and would bite any derived piece in the same way.
   the next snapshot drops the class — no client-side state machine
   needed for the "revert when the hold breaks" behaviour.
 
+### Time-bounded pieces — `completed` is its own state, not `started=false`
+
+A piece with a fixed duration (countdown to zero) has three transport
+states, not two: `countingIn → started → completed`. Without an
+explicit `completed` flag, "started=false" is ambiguous between "not
+yet started" and "finished" — clients drop back to the lobby with no
+end-of-run indication. Add a third boolean to the snapshot, set it
+true when the countdown hits zero (`Max.outlet("complete", "bang")`
+moment), and clear it on the next `beginCountIn` / `stopPiece` /
+`resetState` / `clear` so a fresh run is fresh. Clients use this to
+hold an end-of-run report screen instead of evaporating back to the
+join screen.
+
+Companion: manual STOP is NOT a natural end. Clear `completed` on
+manual stop so the end-report screen only ever appears after a clean
+durationMs countdown.
+
+### Pre-piece role staking — reset on phase entry, not on phase transition
+
+If the piece has a count-in phase with UI controls visible (role
+buttons, etc.), think about WHICH state mutations are allowed during
+count-in and WHEN you reset. The intuitive ordering — "reset on the
+actual piece start" — silently wipes any pre-staking the user did
+during count-in: buttons "work" then visibly revert to idle the
+moment the piece begins.
+
+Move the per-performer reset into `beginCountIn` instead, and remove
+the role-mutation guard (`if (!started) return`). Count-in begins from
+a clean slate; choices made during the staking window persist into the
+live piece; `accumulateTime` is already a no-op while `!started` so
+no time accrues prematurely.
+
+The general rule: **for any transitional phase with live UI, reset at
+phase entry, not at phase exit.** Exit-time reset and during-phase UI
+contradict each other.
+
+### Local-clock interpolation between server snapshots
+
+The template's `broadcastSnapshot` cadence is ~2 s during a running
+piece. UI signals that need sub-second resolution — countdown digits,
+threshold-crossing flashes ("turn red at 10 s remaining"), time-in-
+current-role displays — pin the server value at snapshot time and
+tick locally on a 1 Hz `setInterval`:
+
+```js
+let valueAtSnap = null, snapLocal = 0;
+// in render() on each snapshot:
+valueAtSnap = snap.someMs;
+snapLocal   = Date.now();
+// in setInterval(1000):
+const current = valueAtSnap - (Date.now() - snapLocal);
+applyUIState({ ...lastSnap, someMs: current });
+```
+
+Without this, threshold-crossing UI stutters with the snapshot cadence
+— users see "switch to red at 10 s" cross up to 2 seconds late. Used
+twice in IMMER v2: countdown digits and the red-urgency flash
+thresholds.
+
+### Null-user / watcher mode — body class, not a server role
+
+A monitoring phone that wants to see live state without joining the
+performer roster does NOT need a separate server-side role. The
+relay's `audience` role exists for a heavier audience tier
+(constrained input vocabulary, separate broadcast scope); a "just
+watch" phone is lighter than that. Skip it.
+
+Instead: the client just *doesn't send* `{type:"join"}`. Set a local
+`iAmWatching` flag and toggle a `body.watching` class. CSS rules swap
+performer-only DOM (role buttons, personal stats, "haven't played
+with" lists) for watcher-only DOM ("currently playing music" lists, a
+watching badge, a stop-watching button). The server side is
+completely untouched — the relay sees a connected perform socket
+with no name, the host's mu-presence handler ignores it (no name
+means no performer record to disconnect). Zero protocol change.
+
+Same `body.<state>` pattern works for the end-of-piece urgency
+classes (`.urgent-slow`, `.urgent-fast`, `.urgent-solid`,
+`.end-state`) and any other mutually-exclusive UI variant. CSS-driven
+state machines on `<body>` are cleaner than imperative show/hide in JS
+when the variants are mutually exclusive and span many DOM nodes.
+
 ### Authoritative documentation
 
 The template's own docs cover patterns, gotchas, and feature-detection
