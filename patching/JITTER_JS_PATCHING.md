@@ -38,9 +38,36 @@ autowatch = 1;
 ```
 
 These are global assignments at the top of the file. v8 and js both
-honour them; the box's `numinlets` / `numoutlets` in the .maxpat must
-match (the spec wrapper / converter handles this if you declare it in
-the spec, but if you hand-edit, bump both).
+honour them at runtime — `inlet` dispatch and `outlet(N, …)` calls all
+work — BUT the box's saved `numinlets` / `numoutlets` in the `.maxpat`
+must also match. Max sizes the box's physical inlets/outlets from the
+saved JSON, not from the script's globals. A mismatch — script declares
+`inlets = 3`, box JSON declares `numinlets: 1` — gives a box with one
+physical inlet onto which every patchcord collapses, and `inlet`
+inside any handler is always `0`. Matrix sources fan into the same
+inlet, the `if (inlet === 1)` branch is never taken, and the script
+silently produces no output. This was the IMMER v3 failure mode on
+the first three builds — there was no error in the console, just an
+empty matrix forever.
+
+**In a Claude2Max spec, declare the inlet/outlet counts in `attrs`** —
+the converter's default for `newobj` is `numinlets: 1`, so v8/js
+boxes with anything other than 1/1 need explicit overrides:
+
+```json
+"v8_band_composer": {
+  "type": "newobj",
+  "text": "v8 bands_to_matrix.js",
+  "attrs": { "numinlets": 3, "numoutlets": 1 }
+}
+```
+
+Without the `attrs` block, the converter writes `numinlets: 1` no
+matter what the script says, and the silent-no-output mode is the
+result. (See SPEC_REFERENCE.md's "Known converter limitations" note —
+sync/extract also doesn't preserve a box's `numinlets`, so any
+multi-inlet v8 that round-trips through the spec needs the `attrs`
+override even if the box was originally hand-built correctly.)
 
 Inside any handler function, the global **`inlet`** tells you which
 inlet the message came in on:

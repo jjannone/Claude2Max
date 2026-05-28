@@ -423,7 +423,21 @@ A patchcord whose sole job is to satisfy the graph (carrying a value between obj
 
 In a spec, mark a connection as hidden with a fifth element on the connection array — `{"hidden": 1}` — or in raw `.maxpat` JSON set `"hidden": 1` on the patchline object next to `source` / `destination`.
 
-> **Known converter limitation — patchline `hidden` does NOT round-trip.** `spec2maxpat.py extract` currently emits connections as bare 4-element arrays (`[src_id, src_outlet, dst_id, dst_inlet]`) regardless of the source patchline's `hidden` state, so a `.maxpat` whose patchlines were marked `hidden: 1` (either via the spec's 5th element or by direct JSON edit) loses that state on the next `extract → convert` cycle. The `convert` side honors the 5th-element form if present in the spec, so the bug is in extract, not convert. Until this is fixed, treat patchline `hidden` flags as non-durable: either don't rely on them (show every cord — see the *Scope* qualifier in CLAUDE.md's "Always Hide Plumbing Patchcords" rule), or never round-trip a hide-disciplined patch through the spec. The companion "hide redundant message boxes" rule is partially affected too — box `hidden` survives extract, but cords touching those hidden boxes don't, ending up in the forbidden half-hidden state (hidden box + visible cord) after a round-trip.
+> **Known converter limitations — `extract` is lossy.** Two state shapes get dropped on the `.maxpat → spec` direction; `convert` honors them when present, so the bugs are in extract, not in the spec format or convert.
+>
+> 1. **Patchline `hidden` does NOT round-trip.** `extract` emits connections as bare 4-element arrays (`[src_id, src_outlet, dst_id, dst_inlet]`) regardless of the source patchline's `hidden` state, so a `.maxpat` whose patchlines were marked `hidden: 1` (either via the spec's 5th element or by direct JSON edit) loses that state on the next `extract → convert` cycle. Until this is fixed, treat patchline `hidden` flags as non-durable: either don't rely on them (show every cord — see the *Scope* qualifier in CLAUDE.md's "Always Hide Plumbing Patchcords" rule), or never round-trip a hide-disciplined patch through the spec. The companion "hide redundant message boxes" rule is partially affected too — box `hidden` survives extract, but cords touching those hidden boxes don't, ending up in the forbidden half-hidden state (hidden box + visible cord) after a round-trip.
+>
+> 2. **Non-default `numinlets` / `numoutlets` on `newobj` boxes do NOT round-trip.** `extract` does not capture per-box `numinlets`/`numoutlets`, so any `v8` / `js` / `jit.gen` / `pfft~` / `poly~` etc. that uses a non-default inlet/outlet count loses it on the next extract → convert. The converter then writes its per-maxclass default (for `newobj` that's `numinlets: 1, numoutlets: 1`), which is wrong for any multi-inlet scripting box. Symptom: every patchcord that targeted a higher inlet collapses onto inlet 0, the script's `inlet === N` branches never match, and the box silently produces no output. The workaround is to declare the inlet/outlet count explicitly in the spec's `attrs`:
+>
+>     ```json
+>     "v8_band_composer": {
+>       "type": "newobj",
+>       "text": "v8 bands_to_matrix.js",
+>       "attrs": { "numinlets": 3, "numoutlets": 1 }
+>     }
+>     ```
+>
+>     `attrs` survives the round-trip (it's read on extract and written on convert), so once the override is in the spec it stays correct across cycles. See `patching/JITTER_JS_PATCHING.md` for the discussion of why the script's `inlets = N` global alone is not enough — Max sizes the box's physical inlets from the saved JSON, not from the script.
 
 **Cords that must be hidden:**
 
