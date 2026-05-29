@@ -3,6 +3,8 @@
 Pending tasks for future sessions. Claude reads this at session start and
 reports any incomplete items to the user before beginning other work.
 
+**Also read the *Queue Analysis & Hygiene Notes* section at the bottom of this file** for current cross-task relationships, soft prerequisites, supersession notes, and recent hygiene decisions. The analysis is dated; if it's stale relative to the queue contents above, redo it.
+
 Format: `[pending]` = not started, `[complete]` = done (move to Done section), `[in progress]` = currently being worked on.
 
 **When starting a task**, change its marker to `[in progress]` and add a brief note of what has been done so far (e.g. `*In progress: crawled audio subforum, resuming at MIDI threads*`). This ensures that if the session is cut off, the next Claude instance knows where to pick up. Clear the `[in progress]` marker and note when the task is finished or paused.
@@ -79,7 +81,7 @@ Tasks requiring deep analysis, architecture decisions, or sustained judgment. Pr
 
   **Working in the c2m repo**: yes, the MCP server can live entirely in the Claude2Max repo. `mcp_server/` as a new top-level directory. The server is invoked by Claude Code's MCP host pointing at `mcp_server/server.py`; the host manages the long-lived process. No external infrastructure needed. The server reads the existing source-of-truth files on disk. The installer wires Claude Code's MCP config to point at the server's path on the user's machine (resolved from the same Claude2Max-clone path the existing global pointer references).
 
-  **Fits into the larger system**: this is the architecturally complete answer to "how do we ensure Claude has the Max knowledge it needs?" The strengthened global pointer (2026-05-28) closed what could be closed with prose. This task closes the remaining gap with mechanics: knowledge becomes tools, tool invocation becomes mandatory at Max-touching moments. Pairs with the Community Knowledge Pipeline task — incoming PRs from forks can include not just prose insights but also test cases that get added to `verify_spec`'s rule library, growing the MCP's coverage over time. Pairs with the Repo-as-Total-Scope Enforcement task — that task addresses the same persuasion-vs-enforcement gap from the *inside-the-repo* direction; this task addresses it from the *outside-the-repo* direction. Together they close the loop on "Claude2Max defines the operating environment whenever Max is involved, wherever the cwd happens to be."
+  **Fits into the larger system**: this is the architecturally complete answer to "how do we ensure Claude has the Max knowledge it needs?" The strengthened global pointer (2026-05-28) closed what could be closed with prose. This task closes the remaining gap with mechanics: knowledge becomes tools, tool invocation becomes mandatory at Max-touching moments. Pairs with the Community Knowledge Pipeline task — incoming PRs from forks can include not just prose insights but also test cases that get added to `verify_spec`'s rule library, growing the MCP's coverage over time. Pairs with the Repo-as-Total-Scope Enforcement task — that task addresses the same persuasion-vs-enforcement gap from the *inside-the-repo* direction; this task addresses it from the *outside-the-repo* direction. Together they close the loop on "Claude2Max defines the operating environment whenever Max is involved, wherever the cwd happens to be." **Supersedes** the proposed `/c2m-refpage` skill (was subtask 5 of the Plugin/skills polish pass, now struck) — MCP's `lookup_object(name)` does what that skill would have done, but as a first-class tool with authoritative-result semantics rather than skill-printed text. **Soft prerequisite**: running the Promotion-candidate review pass first improves the launch quality of `essentials()` by ensuring any insights still flagged `[PROMOTION-CANDIDATE]` in `forum_insights.md` / `cookbook_insights.md` have landed in the canonical docs the MCP reads from. Not a blocker, but cheap and worth doing in the session before Step 2.
 
   **Timeline note**: scoped during May 2026 with no students until September — sufficient runway to design the architecture properly, build all three layers, test against multiple project topologies, and verify behavior on a fresh machine before students arrive. Suggested phasing: (i) MCP server with `essentials()` + `lookup_object` + `lookup_attribute` shipping first as the foundation; (ii) `verify_spec` + the shared rule library second; (iii) skill + hook + installer third, gated on MCP being functional; (iv) integration with `spec2maxpat.py convert` last. Each phase independently testable.
 
@@ -93,7 +95,7 @@ Tasks requiring deep analysis, architecture decisions, or sustained judgment. Pr
 
   **Step 4 — `lookup_attribute()` + `list_attributes()` (~1 session)**. The attribute side of the silent-failure protection. Extend `RefpageCache` (or add a sibling) to parse `<attribute>` entries from the refpage XML for a given object — same caching pattern as objects. `lookup_attribute(object_name, attr)` returns `{valid: bool, value_type, valid_values, source}`. Critical use case: *"Does `bgcolor` exist on `live.gain~`?"* → `{valid: false, ...}` rather than silent success. `list_attributes(object_name)` returns all valid attrs as a list — useful when Claude is writing multiple attrs at once. Smoke test: `lookup_attribute("live.gain~", "bgcolor")` → invalid; `lookup_attribute("live.gain~", "coldcolor")` → valid (per the existing rule about `live.gain~` color attrs documented in CLAUDE.md). Deliverable: attribute verification as a tool. With this and `lookup_object`, the two highest-frequency silent-failure modes are addressable.
 
-  **Step 5 — End-to-end real-world test (~1 short session)**. Prove the foundation works without prose-reading. Open a fresh Claude session in a non-Claude2Max directory. Ask the session to build a small Max patch (something like "make me a 4-step sequencer playing MIDI notes"). Verify Claude calls `lookup_object` / `lookup_attribute` during the build — this likely requires a CLAUDE.md snippet in the test project telling it to (that's the "project-level CLAUDE.md snippet" deliverable from the main task's design space). Compare the resulting patch against what an unguided Claude (no MCP) would produce: fewer unknown-object red boxes, correct attribute names, presentation conventions respected. Document findings in `mcp_server/SMOKE_TEST_RESULTS.md` for the next phase. Deliverable: real-world evidence the foundation works; informs Phase (ii) (`verify_spec` + rule library) and Phase (iii) (skill + hook + installer).
+  **Step 5 — End-to-end real-world test (~1 short session)**. Prove the foundation works without prose-reading. Open a fresh Claude session in a non-Claude2Max directory. Ask the session to build a small Max patch (something like "make me a 4-step sequencer playing MIDI notes"). Verify Claude calls `lookup_object` / `lookup_attribute` during the build — this likely requires a CLAUDE.md snippet in the test project telling it to (that's the "project-level CLAUDE.md snippet" deliverable from the main task's design space). Compare the resulting patch against what an unguided Claude (no MCP) would produce: fewer unknown-object red boxes, correct attribute names, presentation conventions respected. Document findings in `mcp_server/SMOKE_TEST_RESULTS.md` for the next phase. Deliverable: real-world evidence the foundation works; informs Phase (ii) (`verify_spec` + rule library) and Phase (iii) (skill + hook + installer). **Pairing note**: this test scenario overlaps with the "Refine the student/user setup process" Sonnet task — both want to validate a fresh-machine, fresh-project Claude session against a real onboarding flow. Run them in the same session window if convenient; the fresh-machine setup the Student Setup task wants to test is the same fresh-machine setup MCP Step 5 needs.
 
   After these five steps the MCP foundation is in place. Remaining phases build on it without needing redesign.
 
@@ -347,19 +349,45 @@ Tasks requiring deep analysis, architecture decisions, or sustained judgment. Pr
 
   **Session format**: start each chunk by reading `c74-forum/FORUM_CRAWL_LOG.md` to see what's been covered, do one focused crawl pass, append new entries to `c74-forum/forum_insights.md`, update the log with what was covered and what to do next.
 
-- [in progress] **Package Objects Library — quality upgrade pass** — every extractable installed package is now in `packages/package_objects.json` (2,795 records across 68 of 79 installed packages, refpage + helpfile sources). Library validates clean. Foundational/decision-relevant objects across the major packages are at HISSTools-tier operational quality; the remaining ~1,869 templated entries (mostly utility wrappers — math/trig, panners, list utilities) consist of `<digest>. <package framing>.` and are adequate for utility wrappers but could be upgraded for substantive objects.
+- [in progress] **Package Library — operational quality pass (per-object `use_when` upgrade + per-package concept sections)** — merged 2026-05-28 from two separate tasks: the per-object `use_when` quality upgrade for `packages/package_objects.json`, and the per-package paradigm backfill for `packages/package_concepts.md`. Same audience, same files mostly, same goal: elevate package knowledge from "everything extracted" to "everything decision-useful." Both layers feed the same downstream consumers (MCP `lookup_object` + `search_packages`, the converter's `PackageObjectsCache` fallback, the `/c2m-package-search` skill).
 
-  **What's done**:
+  **Layer A — per-object `use_when` quality upgrade** (status: in progress). Every extractable installed package is in `packages/package_objects.json` (2,795 records across 68 of 79 installed packages, refpage + helpfile sources). Library validates clean. Foundational/decision-relevant objects across the major packages are at HISSTools-tier operational quality; the remaining ~1,869 templated entries (mostly utility wrappers — math/trig, panners, list utilities) consist of `<digest>. <package framing>.` and are adequate for utility wrappers but could be upgraded for substantive objects.
+
+  **A — what's done**:
   - All 56 extractable refpage-XML packages curated (1,369 entries from the mass pass + 241 from bach's full pass).
   - All 10 extractable helpfile-only packages curated (533 entries).
-  - 12 packages have concept sections in `packages/package_concepts.md`: bach, cage, dada, FrameLib, ears, odot, MuBu For Max, PeRColate, grainflow, Digital Orchestra Toolbox, Vsynth, RNBO Synth Building Blocks, EAMIR SDK.
   - Tooling: `packages/query_packages.py` (list / search / validate); unified schema in `packages/package_schema.py` with `normalize()` chokepoint preventing drift; `PackageObjectsCache` in `spec2maxpat.py` as final I/O fallback (2,051 resolvable objects); two-stage `_supplemental_io()` probe in the refpage extractor for packages whose refpages don't carry `<inletlist>`/`<outletlist>` (helpfile canonical instance, then abstraction `.maxpat` inlet/outlet count, both case-insensitive).
 
-  **What's left**:
+  **A — what's left**:
   1. **Quality upgrade for substantive templated entries** — pick objects with >5 attributes, >3 distinct messages, or known alternatives in other packages, and write fuller operational entries (HISSTools-baseline tier). Skip pure utility wrappers (math/trig). See conversation `2026-05-01` for the prioritisation heuristic.
   2. **Help-less packages (11)** — ABL Effect Modules, AudioMix, Delicious Tutorials, Gen CV Tools, JitLygia, Jitter Recipes, MC Movement Studies, PGS-1, adsr221, gen~ Plugin Export, µK Bundle. No refpages and no `.maxhelp` files. Would need a third extractor approach (inspect example abstractions / source patcher metadata) — deferred.
 
-  **Tooling notes**: `RefpageCache._find_xml()` and the `_supplemental_io()` probe are the entry points for any new extractor. The `use_when` field is the high-value output — written by Claude after reading refpage attrs/methods, not auto-generated for substantive objects. The canonical schema and `normalize()` chokepoint live in `packages/package_schema.py`; new extractors must import and use them.
+  **A — tooling notes**: `RefpageCache._find_xml()` and the `_supplemental_io()` probe are the entry points for any new extractor. The `use_when` field is the high-value output — written by Claude after reading refpage attrs/methods, not auto-generated for substantive objects. The canonical schema and `normalize()` chokepoint live in `packages/package_schema.py`; new extractors must import and use them.
+
+  **Layer B — per-package concept sections in `packages/package_concepts.md`** (status: partial backfill done; substantial paradigms still pending).
+
+  **B — already covered** (concept sections written): bach, cage, dada (bach extensions), FrameLib, ears (HISSTools-aligned pointer), odot, MuBu For Max, PeRColate, grainflow, Digital Orchestra Toolbox, Vsynth, RNBO Synth Building Blocks, EAMIR SDK.
+
+  **B — still pending — packages with substantial paradigms worth capturing**:
+  - **HISSTools (HIRT)** — convolution-domain workflow (zero-padding vs circular, magnitude/phase deconvolution modes, IR file management); buffer-vs-realtime split; tail handling. The ears section already points here; should be standalone.
+  - **FFTease** — pvoc paradigm, FFT framing, magnitude/phase fork in spectral processors, gain compensation across windowing schemes.
+  - **zsa.descriptors** — sigmund~/yin~ analysis pipeline, descriptor categories (low-level vs perceptual), framing.
+  - **Sound Design Toolkit (SDT)** — physical-modelling architecture (resonator + interaction + control), the "control object" pattern (e.g. sdt.scraping~ → sdt.friction~), parameter ranges.
+  - **FluidCorpusManipulation (FluCoMa)** — corpus-based concatenative synthesis paradigm; buf/realtime split; JIT-Lib integration; dataset/labelset/kdtree workflow; fluid.transients vs fluid.harmonic vs fluid.percussive decomposition philosophy.
+  - **CNMAT Externals** — beyond the existing odot section, capture: resonators~ paradigm; SDIF integration; deprecation pointers for the older OSC objects.
+  - **catart-mubu** — concatenative synthesis paradigm, MuBu container abstraction (cross-reference the MuBu section), descriptor pipeline, granular vs corpus selection.
+  - **cv.jit** — computer-vision pipeline conventions (greyscale matrix → analysis → annotation), info-outlet pattern (`getnfaces` → `route nfaces`), image-coordinate conventions.
+  - **RTC-lib** — Karlheinz Essl's compositional algorithms: Koenig selection principles, ED rhythm objects, twelve-tone tools.
+
+  **B — likely no concepts to capture** (verify first, then document the decision):
+  - **ejies** — Erbe's general-purpose utilities; mostly thin idiomatic wrappers.
+  - **modulo** — utility wrappers.
+
+  **B — what to write**: same shape as the bach section — one-line summary, then named subsections for each foundational concept, ending with a "common gotchas" pair where applicable. Read tutorials/intro patchers first, not just refpages.
+
+  **B — prerequisites**: package installed locally; foundational tutorials/help patchers present.
+
+  **Why the combine**: both layers are about elevating package knowledge to higher operational quality, both write into the `packages/` tree, both serve the same downstream consumers, and a session that's loading a package's docs to write `use_when` for its objects has the same context loaded to write its concept section. Doing them as one task lets a session opportunistically advance whichever layer is the higher-value next move for the package in front of it.
 
 ---
 
@@ -390,29 +418,6 @@ Tasks requiring deep analysis, architecture decisions, or sustained judgment. Pr
 
 ---
 
-- [pending] **Backfill `packages/package_concepts.md` for remaining packages** — partial backfill complete; the substantial-paradigm packages still need full concept sections.
-
-  **Already covered in `packages/package_concepts.md`** (concept sections written): bach, cage, dada (bach extensions), FrameLib, ears (HISSTools-aligned pointer), odot, MuBu For Max, PeRColate, grainflow, Digital Orchestra Toolbox, Vsynth, RNBO Synth Building Blocks, EAMIR SDK.
-
-  **Still pending — packages with substantial paradigms worth capturing**:
-  - **HISSTools (HIRT)** — convolution-domain workflow (zero-padding vs circular, magnitude/phase deconvolution modes, IR file management); buffer-vs-realtime split; tail handling. The ears section already points here; should be standalone.
-  - **FFTease** — pvoc paradigm, FFT framing, magnitude/phase fork in spectral processors, gain compensation across windowing schemes.
-  - **zsa.descriptors** — sigmund~/yin~ analysis pipeline, descriptor categories (low-level vs perceptual), framing.
-  - **Sound Design Toolkit (SDT)** — physical-modelling architecture (resonator + interaction + control), the "control object" pattern (e.g. sdt.scraping~ → sdt.friction~), parameter ranges.
-  - **FluidCorpusManipulation (FluCoMa)** — corpus-based concatenative synthesis paradigm; buf/realtime split; JIT-Lib integration; dataset/labelset/kdtree workflow; fluid.transients vs fluid.harmonic vs fluid.percussive decomposition philosophy.
-  - **CNMAT Externals** — beyond the existing odot section, capture: resonators~ paradigm; SDIF integration; deprecation pointers for the older OSC objects.
-  - **catart-mubu** — concatenative synthesis paradigm, MuBu container abstraction (cross-reference the MuBu section), descriptor pipeline, granular vs corpus selection.
-  - **cv.jit** — computer-vision pipeline conventions (greyscale matrix → analysis → annotation), info-outlet pattern (`getnfaces` → `route nfaces`), image-coordinate conventions.
-  - **RTC-lib** — Karlheinz Essl's compositional algorithms: Koenig selection principles, ED rhythm objects, twelve-tone tools.
-
-  **Likely no concepts to capture** (verify first, then document the decision):
-  - **ejies** — Erbe's general-purpose utilities; mostly thin idiomatic wrappers.
-  - **modulo** — utility wrappers.
-
-  **What to write**: same shape as the bach section — one-line summary, then named subsections for each foundational concept, ending with a "common gotchas" pair where applicable. Read tutorials/intro patchers first, not just refpages.
-
-  **Prerequisites**: package installed locally; foundational tutorials/help patchers present.
-
 ## Pending — Sonnet
 
 Tasks that are primarily implementation, file editing, or verification — no deep architectural judgment required.
@@ -427,7 +432,7 @@ Tasks that are primarily implementation, file editing, or verification — no de
 
   4. **Distinguish in-repo skills from upstream-publishable manifests** — `c2m-themes/UPSTREAM-SKILL.md` and `c2m-explain/UPSTREAM-SKILL.md` are upstream-snapshot manifests intended to be copied to a separate `Claude2Max-design` repo (per `c2m-themes/README.md`). `.claude/skills/<name>/SKILL.md` are the in-repo Claude Code slash commands. A cloner reading the repo cold cannot tell these apart. Add a one-paragraph note distinguishing the two patterns — either in the new `## Plugin / Slash Commands` section of CLAUDE.md, or as a top-level `c2m-explain/README.md` matching the `c2m-themes/README.md` pattern.
 
-  5. **(optional) Add `/c2m-refpage <object>` skill** — backed by a new `spec2maxpat.py refpage <object>` subcommand that calls `REFPAGE_CACHE.describe(name)` and prints the full canonical attribute/message/argument list. Reduces silent-failure risk of inventing Max attribute names — the single most-cited failure mode in `WORK_HISTORY.md` (live.gain~ color attrs, ezdac~ attrs, attribute-enable toggles, info outlets). Skill description should fire on phrases like "what attributes does <object> have", "show me the refpage for <object>". Makes verification a one-command action instead of an XML round-trip.
+  5. ~~**(optional) Add `/c2m-refpage <object>` skill**~~ — **superseded 2026-05-28** by the MCP server task's `lookup_object(name)` tool. The MCP tool does what this skill would have done — returns the canonical `{numinlets, numoutlets, outlettype, digest, use_when, refpage_text}` for a named object — but as a first-class MCP tool that Claude treats as authoritative rather than as a skill that prints text into the conversation. Drop this subtask; the use case is covered by the new top-priority Opus task.
 
   6. **(optional) Add `.claude/skills/README.md` index** — 10-line list of the five skills + what each does + which CLAUDE.md section each implements. Helps cloners discover the set without reading CLAUDE.md first. Strictly a discovery aid; the SKILL.md files remain the authoritative per-skill docs.
 
@@ -486,3 +491,49 @@ Tasks that are primarily implementation, file editing, or verification — no de
 - [complete] **Extended `RefpageCache` metadata** — completed 2026-04-26. Extended `_parse()` in `spec2maxpat.py` to extract digest, attributes (type/size/default/get/set/label), messages (args/inlet), object arguments, output descriptions, and see-also in a single XML parse pass. Added `describe(name)` convenience method for quick verification. Return structure now includes all seven fields alongside the original I/O counts.
 
 - [complete] **Permutation Summary Generator** — completed 2026-04-26. Created `perm-summary.js` with 10 analysis dimensions (role frequency, solos, co-occurrence, dominance, consecutive streaks, inverse pairs, group size variation, role transitions, sub-group recurrence, coverage gaps). Observations ranked by surprisingness; top 6 output as plain-English text to a `textedit` box. Added outlet 7 to `ensemble-v5.js` (`sendSummaryData()` called after generate). Integrated into `ensemble-sequencer-v5.maxpat` with textedit in presentation view (left panel, below transport controls).
+
+---
+
+## Queue Analysis & Hygiene Notes
+
+Cross-task relationships, soft prerequisites, supersession notes, and hygiene decisions discovered during periodic reviews. Read alongside the task entries above — this section is where the *relationships between* tasks live, vs. the per-task bodies which describe each task in isolation. Re-do the analysis when the queue contents above have drifted materially from the dates below.
+
+### Review — 2026-05-28
+
+Triggered by adding the new top-priority Opus task ("Claude2Max MCP server + global enforcement layer — knowledge as queryable tools, Max-file edits gated until tools fire"). Reviewed all 12 active tasks (3 in progress, 9 pending at time of review; combined to 11 after one merge).
+
+**Fold-ins executed**:
+- *Plugin/skills polish pass → subtask 5 (`/c2m-refpage` skill)* — struck through with a supersession note. MCP's `lookup_object(name)` does what that skill would have done, but as a first-class tool with authoritative-result semantics rather than skill-printed text. Polish-pass items 1–4 and 6 remain valid.
+
+**Merges executed**:
+- *Package Objects Library quality upgrade pass* + *Backfill `packages/package_concepts.md`* → merged into one entry **"Package Library — operational quality pass (per-object `use_when` upgrade + per-package concept sections)"**. Both layers are about elevating package knowledge to higher operational quality, both write into the `packages/` tree, both serve the same downstream consumers (MCP `lookup_object` + `search_packages`, the converter's `PackageObjectsCache` fallback, the `/c2m-package-search` skill). Same session context loads both. Internal sub-headings Layer A (per-object) / Layer B (per-package) preserve the original structure.
+
+**Soft prerequisites identified (not blockers, but improve launch quality if done first)**:
+- *Promotion-candidate review pass* → *MCP server task Step 2 (essentials() tool)*. The MCP's `essentials()` reads from `CLAUDE.md` / `SPEC_REFERENCE.md` / `patching/MAX_PATCHING.md`. Any insights still flagged `[PROMOTION-CANDIDATE]` in `forum_insights.md` / `cookbook_insights.md` are missing from the canonical docs and therefore from `essentials()`. Cross-reference added to the MCP task's "Fits into the larger system" paragraph.
+- *`spec2maxpat.py` sync/convert layout bug* (Sonnet task) → indirectly relevant to MCP Phase (ii) (`verify_spec`). Bug is in a different code path from the `RefpageCache` that MCP reuses, so doesn't strictly block MCP, but if `verify_spec` ends up consuming sync output downstream, the bug compounds. Worth fixing in the same general timeframe.
+- The in-progress knowledge crawls (*Forum Knowledge Crawl*, *Cookbook Analysis*, *Cycling '74 Projects Crawl*, *Package Library quality pass*) feed the MCP's source corpus. More in the source files = richer MCP at startup. Not blockers — MCP reads what's there when the server starts.
+
+**Pairings noted in task bodies**:
+- *MCP server Phase (i) Step 5 (end-to-end real-world test)* ↔ *Refine the student/user setup process (Sonnet)*. Both want to validate a fresh-machine, fresh-project Claude session against a real onboarding flow. Running them in the same session window lets one fresh-machine setup exercise both. Cross-reference added to MCP Step 5.
+- *MCP server task* ↔ *Repo-as-Total-Scope Enforcement System*. Both address the persuasion-vs-enforcement gap, but from opposite directions — MCP for outside-the-repo, Repo-as-Total-Scope for inside-the-repo. They share infrastructure (hooks, rule registries, mechanical enforcement). Once MCP ships, Repo-as-Total-Scope can reuse the rule-extraction code. Cross-reference already in MCP task body.
+- *MCP server task* ↔ *Community Knowledge Pipeline*. Incoming PRs from forks can include not just prose insights but also test cases that get added to `verify_spec`'s rule library, growing MCP's coverage over time. Cross-reference already in MCP task body.
+
+**Not folded (considered and rejected)**:
+- *Repo-as-Total-Scope Enforcement* — significant overlap with MCP enforcement layer, but Repo-as-Total-Scope is broader (rule categorization, violation logs, "no independent thought" frame, in-repo behavior gating). Folding would dilute MCP's focus. Kept separate with explicit cross-references in both directions.
+
+**Not combined (considered and rejected)**:
+- *Forum Crawl + Cookbook Analysis + Cycling '74 Projects Crawl* — all `[in progress]` knowledge-corpus builds with shared session shape ("pick chunk → scrape → write insights → log resume point"). Each has its own state file and log; combining would mostly be cosmetic and could slow each by forcing context-switching. Left as-is.
+
+**No tasks marked stale or deleted.** Queue is in good shape modulo the one redundancy (subtask 5, now struck) and the one merge (Package Library). The `[in progress]` tasks are real ongoing work, not abandoned.
+
+**Position note**: the new MCP task is now top-priority *by position* (first under "Pending — Opus"). The two prior top-priority Opus tasks (Community Knowledge Pipeline, Repo-as-Total-Scope) are still very relevant and pair conceptually with MCP, but appear demoted in the list ordering. This is positional, not semantic — work on them in whatever sequence makes architectural sense, not strictly by list position.
+
+**Tangential observations** (not action items now):
+- *TouchOSC mk2 Integration* and *Return to claude2max-design skill* are unrelated to the MCP push but both could *consume* MCP's `verify_spec` once it lands — TouchOSC's parallel converter wants the same spec validation; the design skill's layout output would benefit from rule-level checks alongside Phase 3 screenshot verification. Long-term integration story, not action items now.
+
+### How to use this section
+
+- **Periodic review trigger**: when adding any new task to "Pending — Opus" or "Pending — Sonnet", scan the existing entries for overlap and update this section. Date-stamp the review.
+- **Before starting a top-priority task**: read the latest dated review here for soft prerequisites and pairings before diving in.
+- **When queue contents drift materially** (>~5 task additions/completions since the latest dated review), redo the analysis and date-stamp the new pass. Keep prior dated reviews for historical context unless they contradict.
+- **Never use this section to track per-task progress** — that belongs in the task entry itself (`[in progress]` marker + inline note). This section is strictly for *relationships between tasks*.
