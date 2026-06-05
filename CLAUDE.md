@@ -340,6 +340,12 @@ Read and review the entire Claude2Max repo before starting — `CLAUDE.md`, `SPE
 
 **Before working on a Max for Live device**, read `patching/M4L_PATCHING.md`. M4L adds the Live Object Model, `live.*` UI objects, device-lifecycle considerations, and `.amxd` packaging — none of which appear in standalone Max patches.
 
+## Always Use Absolute Paths in Bash Commands — Never `cd`
+
+The Bash tool's working directory persists across calls within a session. A single `cd subdir/` silently shifts the cwd for every subsequent Bash call until it is manually restored — including cwd-relative tool configs, hook scripts, and env-var-sensitive imports that depend on the repo root. This is a session-wide silent failure: commands that looked correct keep running from the wrong directory with no error output.
+
+The defensive pattern: use absolute paths in every Bash command. When a tool genuinely needs a specific base directory (e.g. a Claude Code hook pointing at `$CLAUDE_PROJECT_DIR/...`), use the documented env var rather than `cd`. Do not use `cd` to set up an environment for subsequent calls — each call should be self-contained with absolute or env-var-anchored paths.
+
 ## Workflow
 
 ### Working on an existing patch — sync first, always
@@ -347,6 +353,25 @@ Read and review the entire Claude2Max repo before starting — `CLAUDE.md`, `SPE
 **Before any work on an existing .maxpat**, run sync to capture manual edits the user made in Max. No exceptions — not even for small fixes. `convert` regenerates the .maxpat from scratch and will silently destroy moved objects, added/deleted objects, hidden objects, and hidden cords.
 
 **The sync-first rule applies to any source of edits — not just user GUI changes.** Any direct modification to a .maxpat — whether a user edit in Max's GUI or a programmatic post-processing script — is invisible to the embedded spec and will be silently overwritten on the next `convert`. Use `/c2m-sync` or run `python3 spec2maxpat.py sync -i <patch>` immediately after any direct .maxpat modification.
+
+### Sync preserves; it does not prune — verify object count before every convert
+
+`sync` is a one-way mirror from `.maxpat` into the embedded spec. It captures whatever it finds, including orphan boxes that no longer wire to anything. If a prior session (or an imported patch) accumulated duplicate orphans — most commonly via repeated sync→convert cycles where each round adds another copy of a control box — `sync` will faithfully preserve every one of them, and the next `convert` will re-emit them as visible boxes in the regenerated patch. The patch silently re-explodes.
+
+For instance: a recent IMMER session's embedded spec held 1669 objects while the visible patch had 135. The 1534-object delta was a single message — `setfadein $1` — duplicated 1535 times in the spec, none of them wired. Converting that spec without pruning would have re-bloated the patch back to 1669 boxes, drowning the operator's view in clones during performance.
+
+**Right after every `sync` and before every `convert`, compare `len(spec.objects)` to `len(patch.boxes)`.** If they diverge by more than a handful, prune the spec before converting. Drop unreferenced `message` / `newobj` boxes (those genuinely serve no purpose without wiring). Keep unreferenced `comment` / `panel` / `pwindow` / `bpatcher` boxes — those are legitimate UI orphans (labels, background panels, presentation-only elements, embedded sub-patchers).
+
+Reference pruner:
+
+```python
+referenced = {n for c in spec['connections'] for n in (c[0], c[2])}
+to_drop = [n for n, o in spec['objects'].items()
+           if o.get('type') in ('message','newobj') and n not in referenced]
+for n in to_drop: del spec['objects'][n]
+```
+
+This is one extra check per sync — cheap insurance against a failure mode that does not surface until the patch is reopened and the operator scrolls into a forest of orphan controls.
 
 ### Spec files are temporary — do not leave them in the project
 

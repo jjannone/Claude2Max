@@ -165,6 +165,10 @@ ADSR, ADHSR, multi-segment, and arbitrary breakpoint envelopes all
 share this template — only the per-stage parameters differ. (Source:
 Cycling '74 forum, "Gen~ adsr with curved stages", Graham Wakefield.)
 
+### `codebox` — gen~'s inline-genexpr block
+
+`codebox` holds multi-line genexpr text rather than wiring N gen-domain operators by patchcord. Inputs map to `in1, in2, …`, outputs to `out1, out2, …`. Useful for state-heavy update equations where 10+ wires would otherwise tangle (e.g. ODE integrators, additive synth loops, chaos attractors). Spec with `inlets: N, outlets: M, outlettype: ["signal", …]` matching the genexpr signature. (Source: Cycling '74 forum, various gen~ threads.)
+
 ### `cycle()` inside a codebox `for` loop is *one* oscillator run N times — not N independent oscillators
 
 A naive harmonic-stack attempt
@@ -324,6 +328,26 @@ at the wrong abstraction layer and is not a useful diagnostic; pattern
 recognition of the error string is the fastest path to the fix.
 (Source: Cycling '74 forum, "Impossible to use returned value from
 function in if-statement", Tarik Barri.)
+
+### Multi-parameter buffer-as-config-table for large oscillator banks
+
+Pack N oscillator parameters (amplitude, pitch, phase, etc.) into N *planes* of a single `buffer~ NAME 0 N @samps M`, then have a single gen~ walk all M cells per sample via `peek` with a cycling index. `listfunnel` converts an incoming parameter list to `(index, value)` pairs for `peek~`-based writing into the buffer. This scales to hundreds of oscillators without creating parallel sub-patches. (Source: Cycling '74 forum, "oscbank in genexpr".)
+
+### Lorenz attractor / ODE integrator template
+
+Three `history` storages for state, three derivative-update expressions, one `/ samplerate` for sample-rate-independent step size, three `out N` for x/y/z. Output divided by ~10 to fit audio range.
+
+Lorenz canonical form in a `codebox`:
+```
+History xi(0.1), yi(0.), zi(0.);
+xi += (yi - xi) * sigma * (1 / samplerate);
+yi += (-xi * zi + rho * xi - yi) * (1 / samplerate);
+zi += (xi * yi - beta * zi) * (1 / samplerate);
+out1 = xi / 10;
+out2 = yi / 10;
+out3 = zi / 10;
+```
+Generalises to any first-order ODE system (Rössler, Duffing, Henon-Heiles) — swap the derivative expressions. Use `fixnan` after any term that could produce NaN (division, log, power with negative base). (Source: Cycling '74 forum, "Chaos Library?".)
 
 ## Latency Compensation in gen~ Signal Splits
 

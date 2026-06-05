@@ -391,33 +391,6 @@ Tasks requiring deep analysis, architecture decisions, or sustained judgment. Pr
 
 ---
 
-- [pending] **Promotion-candidate review pass** — sweep `c74-forum/forum_insights.md`, `cookbook/cookbook_insights.md`, and any other scraped resources for entries flagged `[PROMOTION-CANDIDATE]`, propose each to the user with target file (`SPEC_REFERENCE.md` / `patching/MAX_PATCHING.md` / `CLAUDE.md` / `packages/package_objects.json`), and write the confirmed ones. Per the "Rules from Corrected Errors" rule in CLAUDE.md, every promotion is user-confirmed before writing — never auto-promoted.
-
-  **Currently queued candidates**:
-
-  *From `cookbook/cookbook_insights.md` (2026-05-01h)*:
-  1. **dB-mapped slider with `select 0` short-circuit + `gain~`** as the canonical perceptually-linear amplitude control → `patching/MAX_PATCHING.md` UI section, as the default volume-control pattern.
-  2. **Cookbook poly~-ready abstraction template uses BOTH `inlet`/`outlet` AND `in N`/`out~ N`/`in~ N`** so the same patch works as a regular subpatch OR a poly~ voice → cite `subpatch-suitable-use-poly` (`FMsynth~.maxpat`) as the canonical reference example in CLAUDE.md's existing "Subpatcher, abstraction, and poly~ inlet/outlet labeling" rule. Confirms the rule is standard Max practice, not a Claude2Max stylistic preference.
-
-  *From `cookbook/cookbook_insights.md` Video/Jitter (2026-05-01k)*:
-  3. **Named `jit.matrix NAME` boxes share memory** — the matrix analog of `send`/`receive` (messages) and `pv`/`v` (variables). Matches the existing CLAUDE.md ALL-CAPS naming rule (covers buffer~ and coll names too). Propose: extend the CLAUDE.md "Naming Convention" section's coverage list to explicitly mention `jit.matrix NAME` and reaffirm that named matrices ARE shared storage by design, plus a `patching/MAX_PATCHING.md` data-storage entry pointing to `bidirectional-jitmatrix-scroll` as the canonical scrolling-buffer reference.
-  4. **Cheap blur via downsample-then-upsample-with-interp** (`jit.matrix 4 char 16 12 → jit.window @interp 1` or `jit.matrix … @interp 1`) → `patching/MAX_PATCHING.md` video-patterns section as the default soft-blur idiom over rolling a `jit.fastblur` chain or a custom shader.
-  5. **`jit.matrix` as a general multi-dimensional data buffer (not video-only)** — plane = "axis", dim_x × dim_y = arbitrary 2D structure. Faster and more memory-efficient than `coll`/`zl`/JS arrays for large numeric datasets (sequencer state, particle systems, FFT bins). → `patching/MAX_PATCHING.md` data-storage section.
-
-  *From the 2026-05-01h session (proposed in chat, awaiting confirmation)*:
-  3. **"Don't `cd` Away From the Project Root"** — propose to CLAUDE.md as a new rule. Underlying concern: cwd-relative tool configs (hooks, build scripts, env-var-sensitive imports) silently break the moment cwd shifts. The Bash tool's cwd persists across calls within a session, so a single `cd subdir/` poisons every subsequent tool call until cwd is restored — including the very `cd` command needed to recover. The defensive pattern is absolute paths in every Bash command, plus the documented base-dir env var when a tool's command genuinely needs one (for instance, `$CLAUDE_PROJECT_DIR/...` for Claude Code hooks — verified via the official hooks docs at `https://code.claude.com/docs/en/hooks.md`). Tag decision (`{!pre-edit}` vs no tag): TBD — leans no-tag because it's a Bash-time concern, not edit-time.
-
-  *From `c74-forum/forum_insights.md` (2026-05-01e — 13 candidates flagged)*:
-  4. Various Jitter/MSP/JS rules. Walk the file with `grep '\[PROMOTION-CANDIDATE\]' c74-forum/forum_insights.md` to enumerate.
-
-  **How to run a session**:
-  - `grep -n '\[PROMOTION-CANDIDATE\]' c74-forum/forum_insights.md cookbook/cookbook_insights.md` — list every candidate with line numbers.
-  - For each candidate: read the entry, propose the target file + exact wording in chat, get user yes/no, write only the yeses.
-  - When a candidate is promoted, drop the `[PROMOTION-CANDIDATE]` flag from the source insight (it's now also in the target file). When rejected, leave the flag if there's a chance of revisiting, or remove it and add a one-line "skipped because X" note.
-  - Update this section as candidates land.
-
----
-
 ## Pending — Sonnet
 
 Tasks that are primarily implementation, file editing, or verification — no deep architectural judgment required.
@@ -479,6 +452,8 @@ Tasks that are primarily implementation, file editing, or verification — no de
 ---
 
 ## Done
+
+- [complete] **Promotion-candidate review pass** — completed 2026-06-04. All flagged entries in `c74-forum/forum_insights.md` (35 total) and `cookbook/cookbook_insights.md` processed. 9 new entries promoted to target docs; 24 stale `[PROMOTION-CANDIDATE]` flags on already-promoted entries cleaned up; 0 flags remaining. New additions: 5 Audio entries (phasor edge detector, preset interpolation, mass-spring-damper, uzi buffer scan, cpuclock) + 1 Jitter (PBR full transparency stack) → `patching/MAX_PATCHING.md`; codebox intro + buffer-as-config-table + ODE integrator template → `patching/GEN_PATCHING.md`; "Always Use Absolute Paths in Bash" rule → `CLAUDE.md`. Cookbook items and M4L LOM chain/getpath confirmed already in target docs.
 
 - [complete] **Borrow MaxMCP's Claude Code plugin/skills surfacing pattern** — completed 2026-05-01. Built four skills in `.claude/skills/`: `/c2m-design`, `/c2m-package-search`, `/c2m-tutorial`, `/c2m-sync`. Added `## Plugin / Slash Commands` section to `CLAUDE.md` listing all five skills (including `/c2m-explain`). Compressed `CLAUDE.md` from 609 → 354 lines by moving reference content to `SPEC_REFERENCE.md` (v8/JS, converter handles, modifying external patches, MCT algorithm) and `packages/CURATION.md` (new file). Polish-pass follow-ups (skill trimming, /c2m-explain shim, upstream-vs-in-repo distinction) tracked separately in the Sonnet polish-pass entry.
 
