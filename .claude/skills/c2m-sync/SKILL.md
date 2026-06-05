@@ -6,21 +6,9 @@ argument-hint: "<path/to/patch.maxpat>"
 
 # c2m-sync — explicit sync of a .maxpat's embedded spec
 
-Use this skill to make the sync-first rule visible and pedagogical. The repo already has a PreToolUse hook (`hooks/sync_maxpat.py`) that auto-runs on Read, but explicit invocation:
+Use this skill to make the sync-first rule visible and pedagogical. The repo already has a PreToolUse hook (`hooks/sync_maxpat.py`) that auto-runs on Read, but explicit invocation surfaces the operation to a student, lets you sync without first reading the file, and gives a single-command entry point when triaging an externally-sourced `.maxpat`.
 
-- Surfaces the operation to a student so they understand *why* sync runs before edits
-- Lets the user (or you) sync without first reading the file
-- Provides a single-command entry point when triaging an externally-sourced .maxpat
-
-## Why sync exists
-
-`spec2maxpat.py convert` regenerates the entire .maxpat from the embedded spec. **Anything in the .maxpat that isn't in the spec is silently destroyed on the next convert.** Sources of such drift include:
-
-- User edits in Max's GUI (moving objects, adding/deleting boxes, hiding cords)
-- Programmatic post-processing scripts that mutate the .maxpat directly
-- Pasted-in patches from external sources
-
-Sync reconciles the .maxpat back into the embedded spec so convert sees the current state of the world.
+The rule and the failure mode it protects against live in `CLAUDE.md` § "Working on an existing patch — sync first, always" — read that for the *why*. This skill is the *how*.
 
 ## Step 1 — Run sync
 

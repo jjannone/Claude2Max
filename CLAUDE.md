@@ -867,6 +867,8 @@ These skills ship with the repo in `.claude/skills/` — cloners get slash comma
 | `/c2m-explain` | Explain a patch; "what does this do?" | Single-pass explanation without modifying the patch |
 | `/c2m-inspect` | Debugging a running patch; need to see what's actually in a dict / buffer~ / jit.matrix | Sends OSC to `[c2m.inspect]` in the open patch; reads the dumped JSON from `/tmp/c2m_inspect_<tag>.json` |
 
+**In-repo skill manifests vs. upstream-publishable manifests.** Files at `.claude/skills/<name>/SKILL.md` are the in-repo manifests that Claude Code auto-discovers as slash commands when this repo is the cwd. Files named `<tool>/UPSTREAM-SKILL.md` (currently `c2m-themes/UPSTREAM-SKILL.md` and `c2m-explain/UPSTREAM-SKILL.md`) are snapshot manifests intended to be copied to a separate distribution repo (e.g. `Claude2Max-design`) so the skill is usable outside this codebase. The two are not interchangeable — `.claude/skills/<name>/SKILL.md` is the source of truth for slash-command invocation here; `UPSTREAM-SKILL.md` is the bundleable export.
+
 ## Always Inspect, Never Guess — Reach for `/c2m-inspect` During Patch Debugging
 
 When debugging a running Max patch, any question whose answer hinges on the runtime contents of a named data structure (`dict`, `buffer~`, `jit.matrix`) gets answered by *dumping it*, not by reasoning from the upstream wiring. Wiring tells you what *should* happen; the dump tells you what *did* happen. Guessing from upstream logic is the failure mode this rule exists to prevent — the recognition signal is any sentence in your reasoning that begins "the dict probably contains…" or "the buffer should have…" or "the matrix is presumably…" — that's the moment to stop and run the dump instead.

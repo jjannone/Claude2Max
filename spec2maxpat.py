@@ -870,11 +870,18 @@ def build_box(user_id, obj_spec, index, x, y):
         if maxclass in ("live.text",):
             box["box"]["text"] = text
 
-    # Presentation
+    # Presentation — accept either obj["presentation"] or a sibling
+    # obj["presentation_rect"]. When both are present, presentation_rect wins
+    # (it is more specific). This makes hand-edited specs forgiving when the
+    # author writes the obvious field name, and lets reconcile_spec round-trip
+    # live rects without translating field names.
     pres = obj_spec.get("presentation")
-    if pres:
+    pres_rect_sibling = obj_spec.get("presentation_rect")
+    if pres or pres_rect_sibling:
         box["box"]["presentation"] = 1
-        if isinstance(pres, list):
+        if isinstance(pres_rect_sibling, list) and len(pres_rect_sibling) >= 4:
+            box["box"]["presentation_rect"] = [float(v) for v in pres_rect_sibling[:4]]
+        elif isinstance(pres, list):
             if len(pres) == 2:
                 box["box"]["presentation_rect"] = [float(pres[0]), float(pres[1]), float(w), float(h)]
             elif len(pres) >= 4:
@@ -1164,6 +1171,40 @@ def reconcile_spec(existing_spec, maxpat):
                 updated["text"] = box_text
             elif "text" in updated:
                 del updated["text"]
+
+        # Patching size — fold live patching_rect w/h back into spec.
+        # Use the same "meaningfully non-default" test as _box_to_spec_obj so
+        # specs stay clean of redundant size declarations.
+        w_live, h_live = int(r[2]), int(r[3])
+        maxclass_live = box.get("maxclass", spec_objects[sid].get("type", "newobj"))
+        default_wh = UI_SIZES.get(maxclass_live)
+        if default_wh:
+            if (w_live, h_live) != default_wh:
+                updated["size"] = [w_live, h_live]
+            elif "size" in updated:
+                del updated["size"]
+        elif h_live != 22:
+            updated["size"] = [w_live, h_live]
+        elif "size" in updated:
+            del updated["size"]
+
+        # Presentation — fold live presentation_rect back into spec as the
+        # canonical 4-element list form. A box dropped from presentation in
+        # Max removes the field from the spec. Drop the sibling
+        # `presentation_rect` field if it ever leaked in: the canonical form
+        # lives under `presentation`.
+        if box.get("presentation"):
+            prect = box.get("presentation_rect")
+            if prect and len(prect) >= 4:
+                updated["presentation"] = [int(prect[0]), int(prect[1]),
+                                            int(prect[2]), int(prect[3])]
+            elif "presentation" not in updated:
+                updated["presentation"] = [0, 0]
+        elif "presentation" in updated:
+            del updated["presentation"]
+        if "presentation_rect" in updated:
+            del updated["presentation_rect"]
+
         # Re-extract preserved attrs (varname, styling, hidden) from the live box
         # so manual edits in Max are captured. Merge into existing spec attrs;
         # box value wins on conflict because the live patch is the source of truth.
@@ -1315,8 +1356,12 @@ def convert_patcher(spec):
         "default_fontname": DEFAULT_FONT_NAME,
     }
 
-    # Enable presentation mode if any object has presentation data
-    has_presentation = any(obj.get("presentation") for obj in objects.values())
+    # Enable presentation mode if any object has presentation data.
+    # Accept either field — presentation_rect alone is sufficient.
+    has_presentation = any(
+        obj.get("presentation") or obj.get("presentation_rect")
+        for obj in objects.values()
+    )
     if has_presentation:
         patcher["openinpresentation"] = 1
 

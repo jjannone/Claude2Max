@@ -12,13 +12,11 @@ Read `TUTORIAL_GUIDELINES.md` before invoking. It contains the structural contra
 
 ## Step 0 — Sync the patch first
 
-Per the **sync-first rule** in `CLAUDE.md`, before doing anything to an existing .maxpat:
+Per the **sync-first rule** (`CLAUDE.md` § "Working on an existing patch — sync first, always"):
 
 ```bash
 python3 spec2maxpat.py sync -i "$ARGUMENTS"
 ```
-
-This captures any manual edits the user made in Max so they survive the upcoming convert. No exceptions.
 
 ## Step 1 — Analyze (no API key needed)
 
@@ -65,7 +63,7 @@ Open the patch in Max. Confirm:
 - Bubble annotations point in the chosen `placement` direction
 - The companion `*-tutorial.js` file is in the same directory as the `.maxpat`
 
-If anything is wrong, re-read `TUTORIAL_GUIDELINES.md` for the structural contract and the diagnostic script. Common failure modes: missing `varname` (breaks JS targeting), `hidden: 0` on a panel (shows in patching view when it shouldn't), missing `bubble: 1` on annotations (renders as a plain comment), wrong `bubbleside` (arrow points the wrong way: 0=top, 1=left, 2=bottom, 3=right).
+If anything is wrong, re-read `TUTORIAL_GUIDELINES.md` § "Breakage diagnostic" for the structural contract and the common failure modes (missing `varname`, panel `hidden`/`bubble`/`bubbleside` regressions).
 
 ## Step 5 — Cleanup
 

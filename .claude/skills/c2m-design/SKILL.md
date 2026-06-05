@@ -10,17 +10,9 @@ Use this skill when the user is designing the **presentation view** (the user-fa
 
 The patching surface itself is left to Max's native UI — never restyle boxes, cables, or object shapes.
 
-## Step 0 — Decide whether to switch to Opus
+## Step 0 — Offer the Opus / Claude Design switch
 
-Per `CLAUDE.md` "Model Selection", presentation UI design is one of the documented Opus trigger cases. If the user has not already switched, stop and offer them the two options below verbatim:
-
-> "Before we design the presentation UI, choose an approach:
-> - **Option A** — run `/model claude-opus-4-7` and we'll design it here (Opus = same model as Claude Design)
-> - **Option B** — take the design to [claude.ai/design](https://claude.ai/design), which has separate usage included with your account, then bring the layout back and I'll translate it into spec coordinates
->
-> Which would you prefer?"
-
-Wait for the user's choice. If they choose Option B, ask them to describe or paste the layout when they return and translate it into spec coordinates on Sonnet.
+Presentation UI design is an Opus trigger case. Surface the two-option prompt in `CLAUDE.md` § "Model Selection" (Option A: run `/model claude-opus-4-7`; Option B: take the design to claude.ai/design and bring the layout back for spec translation). Wait for the user's choice before designing.
 
 ## Step 1 — Read the design system
 
@@ -54,20 +46,9 @@ Ten reference themes:
 
 ## Step 3 — Design the layout
 
-Hard rules from `CLAUDE.md` and `patching/MAX_PATCHING.md` that always apply:
+Apply the presentation aesthetic checklist in `patching/MAX_PATCHING.md` and the binding rules in `CLAUDE.md` (always presentation, hide plumbing patchcords/messages, ALL CAPS user-defined names, mono-first typography with tabular numerals, comment-label every control, `presentation_rect` is `[x, y, w, h]`, comment width ~7 px/char for default / ~8.5 px/char for Courier, +4 px label-control alignment padding, multislider width = step_count × 40–50 px).
 
-- ALL CAPS for any user-defined name (sends, receives, buffers, pv/v vars, JS vars, patcher names)
-- No emoji, ever
-- `presentation_rect` is `[x, y, w, h]` — never two corners
-- Mono-first typography; tabular numerals on every readout
-- Every presented control needs an adjacent comment label
-- Set `openinpresentation: 1` on the patcher so it opens in presentation mode by default
-- Exclude infrastructure (metros, routers, loadbangs, print objects) from presentation
-- Multislider width = step_count × 40–50px, **never** window-derived
-- Comment widths use ~7px/char for default fonts, ~8.5px/char for Courier/Monaco
-- Compensate ~4px for Max comment internal padding when aligning labels with controls
-
-Plan the graphic elements **before** placing controls — they consume real space. For instance, a soviet layout needs vertical space reserved for the masthead title slab and horizontal red dividers between sections; an lcars layout needs ~70px reserved for the left rail.
+Plan the graphic elements **before** placing controls — they consume real space. For instance, a soviet layout needs vertical space reserved for the masthead title slab and horizontal red dividers between sections; an lcars layout needs ~70 px reserved for the left rail.
 
 ## Step 4 — Translate back into spec coordinates
 
