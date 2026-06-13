@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Claude2Max MCP server — Phase i, Step 2.
+Claude2Max MCP server — Phase i, Steps 2-3.
 
 Exposes Max/MSP patching knowledge as first-class callable tools so Claude can
 query binding rules, object existence, and attribute validity rather than
@@ -18,21 +18,66 @@ Tool surface (Phase i)
 ----------------------
   essentials()           Bootstrap. Call at session start before any Max work.
   lookup_object()        Step 3 — authoritative object existence + I/O.
+  search_packages()      Step 3 — search package library by term.
   lookup_attribute()     Step 4 — attribute validity check.
   list_attributes()      Step 4 — all valid attrs for an object.
 
 See mcp_server/DESIGN_DECISIONS.md for locked architectural choices.
 """
 
+import json
+import sys
+from pathlib import Path
+
 from mcp.server.fastmcp import FastMCP
+
+# ── repo-root imports ─────────────────────────────────────────────────────────
+# spec2maxpat.py lives one directory up from this file.  Adding the repo root
+# to sys.path lets us reuse RefpageCache — the same XML-backed lookup the
+# converter already uses — without duplicating the parsing logic.
+_REPO_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(_REPO_ROOT))
+
+from spec2maxpat import RefpageCache  # noqa: E402 — path must be set first
+
+_refpage = RefpageCache()
+
+# ── package library ───────────────────────────────────────────────────────────
+_PACKAGES_PATH = _REPO_ROOT / "packages" / "package_objects.json"
+_packages_raw: dict | None = None   # {pkg_name: {obj_name: record}}
+_packages_idx: dict | None = None   # {obj_name: (pkg_name, record)}  first-wins
+
+
+def _pkg_raw() -> dict:
+    global _packages_raw
+    if _packages_raw is None:
+        if _PACKAGES_PATH.exists():
+            try:
+                with _PACKAGES_PATH.open() as f:
+                    _packages_raw = json.load(f)
+            except (json.JSONDecodeError, OSError):
+                _packages_raw = {}
+        else:
+            _packages_raw = {}
+    return _packages_raw
+
+
+def _pkg_idx() -> dict:
+    global _packages_idx
+    if _packages_idx is None:
+        idx = {}
+        for pkg, objs in _pkg_raw().items():
+            for name, rec in objs.items():
+                if name not in idx:
+                    idx[name] = (pkg, rec)
+        _packages_idx = idx
+    return _packages_idx
+
 
 mcp = FastMCP("claude2max")
 
 # ---------------------------------------------------------------------------
 # essentials() — structured binding-rule summary (~1.5K tokens).
-#
-# Initial content is a hand-written constant; Steps 3-4 will add file-reading
-# with mtime-based caching when source files need to be ingested at runtime.
 # ---------------------------------------------------------------------------
 
 _ESSENTIALS_MD = """\
@@ -46,27 +91,21 @@ The patch loads and appears to work, then silently misbehaves.
 
 ## Before writing any object name (`newobj` text field)
 
-1. Verify built-in objects:
-   `ls /Applications/Max.app/Contents/Resources/C74/docs/refpages/max-ref/ | grep -i <name-fragment>`
-2. Verify installed package externals:
-   `python3 packages/query_packages.py search "<name>"` (from Claude2Max repo)
-3. If both return nothing → the object does not exist as named. Do NOT write it.
+Call `lookup_object(name)` — it queries C74 refpages and the 2,795-object
+package library authoritatively.  Do NOT write an object name until
+`lookup_object` confirms it exists.
 
 **Canonical example of silent failure**: `oscparse` — not in Max 9, accepted as
 a missing-object red box. OSC address-routing requires `o.route` from CNMAT
-Externals. The `ls` check above returns nothing for `oscparse`; it returns
-`osc.codebox osc.packet param.osc` — none of which route by address.
+Externals. `lookup_object("oscparse")` returns `found: false`; the right call
+is `lookup_object("o.route")` which resolves via the package library.
 
 ---
 
 ## Before writing any attribute on an object
 
-Verify it appears in the refpage XML:
-    /Applications/Max.app/Contents/Resources/C74/docs/refpages/<domain>/<objname>.maxref.xml
-
-Max silently accepts unknown attributes and ignores them — there is no error
-message. The recognition signal: **if a name "sounds right" for this kind of
-object, that is the exact moment verification is non-optional.**
+Call `list_attributes(object_name)` or `lookup_attribute(object_name, attr)`.
+Max silently accepts unknown attributes and ignores them — there is no error.
 
 `live.gain~` example — VALID color attrs:
   `coldcolor warmcolor hotcolor overloadcolor slidercolor textcolor tricolor
@@ -152,9 +191,8 @@ full spec JSON wrapped in `--- CLAUDE2MAX SPEC ---` / `--- END SPEC ---` delimit
 | Reverb | `bp.Gigaverb` (BEAP, ships with Max) | |
 | Variable delay | `tapin~` / `tapout~` | `delay~` |
 
-**Before composing any chain of 3+ native objects**, run:
-`python3 packages/query_packages.py search "<term>"`
-The 2,795-object library often covers the whole chain in one external.
+**Before composing any chain of 3+ native objects**, call:
+`search_packages(term)` — the 2,795-object library often covers the whole chain in one external.
 
 ---
 
@@ -181,10 +219,10 @@ different display, different data path):
 
 ## What to call next
 
-- `lookup_object(name)` — before adding any `newobj` to a patch (Step 3)
+- `lookup_object(name)` — before adding any `newobj` to a patch
+- `search_packages(term)` — before composing a 3+ native-object chain
 - `lookup_attribute(object_name, attr)` — before writing any attribute (Step 4)
 - `list_attributes(object_name)` — to see all valid attrs for an object (Step 4)
-- `search_packages(term)` — before composing a native-object chain (Step 3)
 """
 
 
@@ -204,6 +242,188 @@ def essentials() -> str:
     use lookup_rule() when available.)
     """
     return _ESSENTIALS_MD
+
+
+# ---------------------------------------------------------------------------
+# lookup_object() — Step 3.
+# ---------------------------------------------------------------------------
+
+@mcp.tool()
+def lookup_object(name: str) -> dict:
+    """
+    Call this before adding any `newobj` to a Max patch.
+
+    Returns authoritative existence, I/O signature, digest, and use_when
+    guidance for the named object.  Queries C74 refpages first (built-in
+    Max objects), then the 2,795-object Claude2Max package library
+    (installed externals).
+
+    Skipping this call is how you get silent-failure patches: Max accepts
+    any name, displays missing-object red boxes only after the patch is
+    open, and that's easy to miss in a 100-box patch.
+
+    Return keys
+    -----------
+    found        — bool. False means the object does not exist as named.
+    source       — "c74-refpage" | "package" | "unknown"
+    numinlets    — int (0 when unknown)
+    numoutlets   — int (0 when unknown)
+    outlettype   — list[str] — per-outlet type ("signal", "multichannelsignal", or "")
+    digest       — str — one-line description from refpage / package library
+    use_when     — str — curated guidance on when and how to use this object
+    deprecated_by — str — non-empty when the object is deprecated in favour of another
+    summary      — str — human-readable formatted block (paste into reasoning)
+
+    Smoke test cases
+    ----------------
+    lookup_object("metro")       → found=True, source="c74-refpage"
+    lookup_object("oscparse")    → found=False, source="unknown"
+    lookup_object("cv.jit.faces") → found=True, source="package"
+    """
+    name = name.strip()
+
+    # 1 — C74 refpage (built-in Max objects, C74 packages in the app bundle)
+    c74 = _refpage.lookup(name)
+    if c74 is not None:
+        summary_lines = [
+            f"FOUND in C74 refpages: {name}",
+            f"  {c74['digest']}" if c74["digest"] else "",
+            f"  inlets={c74['numinlets']}  outlets={c74['numoutlets']}",
+        ]
+        if c74["outlettype"]:
+            summary_lines.append(f"  outlet types: {c74['outlettype']}")
+        if c74["arguments"]:
+            args = ", ".join(
+                f"{a['name']}({'opt' if a['optional'] else 'req'}, {a['type']})"
+                for a in c74["arguments"]
+            )
+            summary_lines.append(f"  creation args: {args}")
+        if c74["seealso"]:
+            summary_lines.append(f"  see also: {', '.join(c74['seealso'])}")
+        return {
+            "found": True,
+            "source": "c74-refpage",
+            "numinlets": c74["numinlets"],
+            "numoutlets": c74["numoutlets"],
+            "outlettype": c74["outlettype"],
+            "digest": c74["digest"],
+            "use_when": "",
+            "deprecated_by": "",
+            "summary": "\n".join(l for l in summary_lines if l),
+        }
+
+    # 2 — Package library (installed externals)
+    idx = _pkg_idx()
+    if name in idx:
+        pkg_name, rec = idx[name]
+        digest       = rec.get("digest", "") or ""
+        use_when     = rec.get("use_when", "") or ""
+        deprecated_by = rec.get("deprecated_by", "") or ""
+        numinlets    = rec.get("numinlets", 0)
+        numoutlets   = rec.get("numoutlets", 0)
+        outlettype   = rec.get("outlettype", [])
+        summary_lines = [
+            f"FOUND in package library: {name}  (package: {pkg_name})",
+        ]
+        if deprecated_by:
+            summary_lines.append(f"  DEPRECATED — use {deprecated_by} instead")
+        if digest:
+            summary_lines.append(f"  {digest}")
+        summary_lines.append(f"  inlets={numinlets}  outlets={numoutlets}")
+        if outlettype:
+            summary_lines.append(f"  outlet types: {outlettype}")
+        if use_when:
+            summary_lines.append(f"  use_when: {use_when}")
+        return {
+            "found": True,
+            "source": "package",
+            "numinlets": numinlets,
+            "numoutlets": numoutlets,
+            "outlettype": outlettype,
+            "digest": digest,
+            "use_when": use_when,
+            "deprecated_by": deprecated_by,
+            "summary": "\n".join(summary_lines),
+        }
+
+    # 3 — Not found
+    return {
+        "found": False,
+        "source": "unknown",
+        "numinlets": 0,
+        "numoutlets": 0,
+        "outlettype": [],
+        "digest": "",
+        "use_when": "",
+        "deprecated_by": "",
+        "summary": (
+            f"NOT FOUND: '{name}' does not appear in C74 refpages or the "
+            f"package library. Do NOT write this name into a patch. "
+            f"Max will accept it silently and display a red missing-object box."
+        ),
+    }
+
+
+# ---------------------------------------------------------------------------
+# search_packages() — Step 3.
+# ---------------------------------------------------------------------------
+
+@mcp.tool()
+def search_packages(term: str, limit: int = 5) -> list:
+    """
+    Search the Claude2Max package library (2,795 installed externals) by term.
+
+    Call this before composing any chain of 3+ native Max objects — there is
+    often a single package external that covers the whole chain.
+
+    Scoring: use_when match (highest) > digest match > name match.
+    Results are sorted highest-relevance first, then alphabetically.
+
+    Parameters
+    ----------
+    term  — search term (case-insensitive substring match)
+    limit — max results to return (default 5; pass 0 for no cap)
+
+    Return
+    ------
+    List of dicts, each with:
+      name       — object name (e.g. "cv.jit.faces")
+      package    — package name (e.g. "cv.jit")
+      digest     — one-line description
+      use_when   — curated guidance
+      relevance  — "use_when" | "digest" | "name"
+    """
+    term_lower = term.lower().strip()
+    matches = []
+    for pkg, objs in _pkg_raw().items():
+        for name, rec in objs.items():
+            digest   = rec.get("digest", "") or ""
+            use_when = rec.get("use_when", "") or ""
+            score = 0
+            if term_lower in use_when.lower():
+                score = 3
+            elif term_lower in digest.lower():
+                score = 2
+            elif term_lower in name.lower():
+                score = 1
+            if score:
+                matches.append((score, pkg, name, digest, use_when))
+
+    matches.sort(key=lambda m: (-m[0], m[1], m[2]))
+    if limit and limit > 0:
+        matches = matches[:limit]
+
+    relevance_label = {3: "use_when", 2: "digest", 1: "name"}
+    return [
+        {
+            "name":      name,
+            "package":   pkg,
+            "digest":    digest,
+            "use_when":  use_when,
+            "relevance": relevance_label[score],
+        }
+        for score, pkg, name, digest, use_when in matches
+    ]
 
 
 if __name__ == "__main__":
