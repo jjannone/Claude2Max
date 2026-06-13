@@ -70,20 +70,15 @@ restart Claude Code to pick up the newly registered MCP server.
 
 ## Tool surface
 
-### Phase i (current)
+### Phase i (current — Steps 2-4 complete)
 
 | Tool | Description |
 |---|---|
 | `essentials()` | Bootstrap — call at session start before any Max work. Returns the must-load binding rules as structured markdown. |
-
-### Phase i Steps 3-4 (coming)
-
-| Tool | Description |
-|---|---|
-| `lookup_object(name)` | Authoritative object existence + I/O: found, source, numinlets, numoutlets, digest, use_when. Call before any `newobj`. |
-| `lookup_attribute(object_name, attr)` | Attribute validity: valid bool, value_type, valid_values. Call before writing any attribute. |
-| `list_attributes(object_name)` | All valid attribute names for an object. |
+| `lookup_object(name)` | Authoritative object existence + I/O: found, source, numinlets, numoutlets, digest, use_when. Call before adding any `newobj`. |
 | `search_packages(term, limit=5)` | Search the 2,795-object package library. Call before composing any chain of 3+ native objects. |
+| `lookup_attribute(object_name, attr)` | Attribute validity: valid bool, value_type, size, default, inspector_label. Call before writing any attribute. |
+| `list_attributes(object_name)` | All valid attribute names for an object, split into all / writable. |
 
 ### Phase ii (planned)
 

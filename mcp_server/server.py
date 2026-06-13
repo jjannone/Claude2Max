@@ -426,5 +426,200 @@ def search_packages(term: str, limit: int = 5) -> list:
     ]
 
 
+# ---------------------------------------------------------------------------
+# lookup_attribute() + list_attributes() — Step 4.
+# ---------------------------------------------------------------------------
+
+def _attrs_for(object_name: str) -> tuple[dict | None, str]:
+    """
+    Return (attributes_dict, source_label) for object_name.
+    attributes_dict is None when the object has no refpage (can't verify).
+    source_label: "c74-refpage" | "no-refpage".
+    """
+    c74 = _refpage.lookup(object_name)
+    if c74 is not None:
+        return c74["attributes"], "c74-refpage"
+    return None, "no-refpage"
+
+
+@mcp.tool()
+def lookup_attribute(object_name: str, attr: str) -> dict:
+    """
+    Call this before writing any attribute on a Max object.
+
+    Returns whether the named attribute is valid for this object, its type,
+    default value, and any enumerated valid values.  Max silently accepts
+    unknown attributes and ignores them — there is no error message.
+
+    The recognition signal: if an attribute name 'sounds right' for this kind
+    of object, that is the exact moment this call is non-optional.
+
+    Parameters
+    ----------
+    object_name  — the Max object class (e.g. "live.gain~", "metro", "jit.matrix")
+    attr         — the attribute name to check (e.g. "bgcolor", "coldcolor")
+
+    Return keys
+    -----------
+    valid           — bool. False means the attribute does NOT exist on this object.
+    value_type      — str — declared type ("int", "float", "symbol", "list", etc.)
+    size            — int or str — number of values (may be "variable")
+    default         — str — default value as declared in the refpage
+    readable        — bool — can be queried with `getattr`
+    writable        — bool — can be set with `@attr` or `setattr`
+    inspector_label — str — how the attribute appears in Max's Inspector UI
+    valid_values    — list[str] — always [] in v1 (Max refpages don't embed enum
+                      values in XML; `enumvals` fields are present but null)
+    source          — "c74-refpage" | "no-refpage"
+    summary         — str — human-readable result block
+
+    Smoke tests
+    -----------
+    lookup_attribute("live.gain~", "bgcolor")   → valid=False
+    lookup_attribute("live.gain~", "coldcolor") → valid=True
+    """
+    object_name = object_name.strip()
+    attr        = attr.strip()
+
+    attrs, source = _attrs_for(object_name)
+
+    if attrs is None:
+        # Object has no C74 refpage — can't verify attributes
+        # (Check whether the object exists at all for a better error message.)
+        obj_found = _refpage.lookup(object_name) is not None or object_name in _pkg_idx()
+        if obj_found:
+            msg = (
+                f"CANNOT VERIFY: '{object_name}' is a known package external "
+                f"but has no C74 refpage, so attribute names cannot be "
+                f"checked programmatically. Consult the package documentation "
+                f"before writing any attribute."
+            )
+        else:
+            msg = (
+                f"OBJECT NOT FOUND: '{object_name}' is not in C74 refpages "
+                f"or the package library. Resolve the object name first with "
+                f"lookup_object() before checking attributes."
+            )
+        return {
+            "valid":           False,
+            "value_type":      "",
+            "size":            0,
+            "default":         "",
+            "readable":        False,
+            "writable":        False,
+            "inspector_label": "",
+            "valid_values":    [],
+            "source":          source,
+            "summary":         msg,
+        }
+
+    entry = attrs.get(attr)
+    if entry is None:
+        return {
+            "valid":           False,
+            "value_type":      "",
+            "size":            0,
+            "default":         "",
+            "readable":        False,
+            "writable":        False,
+            "inspector_label": "",
+            "valid_values":    [],
+            "source":          source,
+            "summary": (
+                f"INVALID: '{attr}' is NOT a valid attribute of '{object_name}'. "
+                f"Max will silently accept and ignore it. "
+                f"Call list_attributes('{object_name}') to see all valid attrs."
+            ),
+        }
+
+    inspector_label = entry.get("label", "") or ""
+    size = entry["size"]
+    summary_lines = [
+        f"VALID: {object_name} @{attr}",
+        f"  type={entry['type']}  size={size}  default={entry['default']!r}",
+        f"  readable={entry['get']}  writable={entry['set']}",
+    ]
+    if inspector_label:
+        summary_lines.append(f"  inspector label: {inspector_label}")
+    return {
+        "valid":           True,
+        "value_type":      entry["type"],
+        "size":            size,
+        "default":         entry["default"],
+        "readable":        entry["get"],
+        "writable":        entry["set"],
+        "inspector_label": inspector_label,
+        "valid_values":    [],
+        "source":          source,
+        "summary":         "\n".join(summary_lines),
+    }
+
+
+@mcp.tool()
+def list_attributes(object_name: str) -> dict:
+    """
+    Return all valid attributes for a Max object, sorted alphabetically.
+
+    Use this when writing multiple attributes at once — verify the full set
+    up front rather than discovering invalid names one at a time.
+
+    Parameters
+    ----------
+    object_name — the Max object class (e.g. "live.gain~", "button", "jit.matrix")
+
+    Return keys
+    -----------
+    found        — bool. False if the object has no refpage (attributes unknown).
+    source       — "c74-refpage" | "no-refpage"
+    count        — int — number of valid attributes
+    attributes   — list[str] — attribute names, alphabetically sorted
+    writable     — list[str] — subset that are writable (settable)
+    summary      — str — formatted block for easy pasting into reasoning
+
+    Smoke tests
+    -----------
+    list_attributes("live.gain~")  → includes "coldcolor", NOT "bgcolor"
+    list_attributes("metro")       → includes "active", "interval"
+    """
+    object_name = object_name.strip()
+    attrs, source = _attrs_for(object_name)
+
+    if attrs is None:
+        obj_found = _refpage.lookup(object_name) is not None or object_name in _pkg_idx()
+        if obj_found:
+            msg = (
+                f"CANNOT LIST: '{object_name}' is a known package external "
+                f"but has no C74 refpage. Attribute list unavailable."
+            )
+        else:
+            msg = (
+                f"OBJECT NOT FOUND: '{object_name}'. Resolve with lookup_object() first."
+            )
+        return {
+            "found":      False,
+            "source":     source,
+            "count":      0,
+            "attributes": [],
+            "writable":   [],
+            "summary":    msg,
+        }
+
+    all_attrs    = sorted(attrs.keys())
+    writable     = sorted(n for n, e in attrs.items() if e["set"])
+    summary      = (
+        f"{object_name}: {len(all_attrs)} attributes ({source})\n"
+        f"  all:      {', '.join(all_attrs)}\n"
+        f"  writable: {', '.join(writable)}"
+    )
+    return {
+        "found":      True,
+        "source":     source,
+        "count":      len(all_attrs),
+        "attributes": all_attrs,
+        "writable":   writable,
+        "summary":    summary,
+    }
+
+
 if __name__ == "__main__":
     mcp.run()
