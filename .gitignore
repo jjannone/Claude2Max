@@ -4,6 +4,7 @@
 # Python build artifacts
 __pycache__/
 *.pyc
+mcp_server/.venv/
 
 # Claude Code — local personal overrides (not for sharing)
 .claude/settings.local.json
