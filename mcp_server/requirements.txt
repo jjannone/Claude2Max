@@ -1,0 +1,4 @@
+# Claude2Max MCP server dependencies.
+# See mcp_server/DESIGN_DECISIONS.md (a) for the rationale and pin policy.
+# Official Anthropic Python MCP SDK; FastMCP is bundled. Python >=3.10 required.
+mcp>=1.27.0
