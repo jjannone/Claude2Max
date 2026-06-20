@@ -1,12 +1,26 @@
 # Max for Live Patching Reference
 
-Specialized companion to `MAX_PATCHING.md`. Covers patterns specific to
-Max for Live (M4L) — the Live Object Model (LOM), `live.*` UI objects,
-device lifecycle, host-Live communication, and `.amxd` packaging.
+Specialized companion to `MAX_PATCHING.md`. Covers the Live Object
+Model (LOM), `live.*` UI objects, device lifecycle, host-Live
+communication, and `.amxd` packaging.
 
 For shared Max patterns (presentation view, gen~, jit.gl, package
-layout), the parent docs apply unchanged. This file collects M4L-only
-knowledge — anything that wouldn't appear in a standalone Max patch.
+layout), the parent docs apply unchanged.
+
+## What is and is NOT M4L-exclusive
+
+**M4L-only** (require Live to function — do not attempt in a standalone patch):
+- Live Object Model access: `live.path`, `live.object`, `live.observer`
+- `live.thisdevice` — the device's self-reference and load-complete signal
+- `.amxd` packaging and device-lifecycle messages
+
+**Available in any Max patch (not M4L-exclusive)**:
+- All `live.*` UI objects: `live.dial`, `live.step`, `live.numbox`, `live.toggle`, `live.gain~`, `live.menu`, `live.tab`, `live.text`, `live.slider`, `live.button`, etc.
+- `itable` — standard Max object for integer-indexed value display (`max-ref/`, not `m4l-ref/`)
+
+The refpage directory is *suggestive* but not definitive: `live.*` UI objects live in `m4l-ref/` even though they work in any Max patch. The test that is definitive: does the object interact with the Live Object Model or require a `.amxd` device context? If no, it works standalone.
+
+**Recognition signal**: never write "M4L-only" or "requires Live" next to a `live.*` UI object without verifying that it accesses the LOM or requires the device lifecycle. The UI objects do not.
 
 ## The Live Object Model (LOM) — canonical access chain
 

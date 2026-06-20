@@ -1,10 +1,24 @@
 #!/usr/bin/env python3
 """
-Claude2Max MCP server — Phase (i) complete (Steps 1-5).
+Claude2Max MCP server — Phase (i) complete; Phase (ii) module system in progress.
 
 Exposes Max/MSP patching knowledge as first-class callable tools so Claude can
 query binding rules, object existence, and attribute validity rather than
 reasoning from training-data memory (which fails silently in Max).
+
+Knowledge architecture
+----------------------
+assess()  → identify which domain modules the task needs
+load()    → load those modules into context (front-loads knowledge before patching)
+            modules are additive — call load() again if the task evolves
+
+Verification tools (use after knowledge is loaded)
+---------------------------------------------------
+lookup_object()     Authoritative object existence + I/O signature.
+search_packages()   Search 2,795-object package library by term.
+lookup_attribute()  Attribute validity check for a specific attr.
+list_attributes()   All valid attrs for an object (bulk verification).
+essentials()        Backward-compat alias for load(["core"]).
 
 Usage
 -----
@@ -14,17 +28,7 @@ Register (user scope — reachable from any cwd):
 Run directly for debugging:
     python3 mcp_server/server.py
 
-Tool surface (Phase i — all five tools live)
----------------------------------------------
-  essentials()           Bootstrap. Call at session start before any Max work.
-  lookup_object()        Authoritative object existence + I/O signature.
-  search_packages()      Search 2,795-object package library by term.
-  lookup_attribute()     Attribute validity check for a specific attr.
-  list_attributes()      All valid attrs for an object (bulk verification).
-
-See mcp_server/DESIGN_DECISIONS.md for locked architectural choices.
 See mcp_server/SMOKE_TEST_RESULTS.md for Phase (i) end-to-end test results.
-Next: Phase (ii) — verify_spec() + shared rule library.
 """
 
 import json
@@ -79,7 +83,177 @@ def _pkg_idx() -> dict:
 mcp = FastMCP("claude2max")
 
 # ---------------------------------------------------------------------------
-# essentials() — structured binding-rule summary (~1.5K tokens).
+# Module system — assess() + load()
+# ---------------------------------------------------------------------------
+
+_PATCHING_DIR = _REPO_ROOT / "patching"
+
+_MODULE_FILES: dict[str, list[Path]] = {
+    "gen":     [_PATCHING_DIR / "GEN_PATCHING.md"],
+    "jitter":  [_PATCHING_DIR / "JIT_GEN_PATCHING.md",
+                _PATCHING_DIR / "JITTER_JS_PATCHING.md"],
+    "m4l":     [_PATCHING_DIR / "M4L_PATCHING.md"],
+    "spec":    [_REPO_ROOT / "SPEC_REFERENCE.md"],
+}
+
+_DOMAIN_DESCRIPTIONS: dict[str, str] = {
+    "core":       "Binding rules, Common Pitfalls, preferred objects, naming convention — always loaded",
+    "gen":        "gen~ / gen programming model (per-sample evaluation, gen-specific objects, idioms)",
+    "jitter":     "Jitter matrix, jit.gen, jit.gl.pix, JS-driven JitterMatrix API",
+    "m4l":        "Max for Live — LOM access, live.* objects, device lifecycle, .amxd packaging",
+    "networking": "node.script, multi-user-template, WebSocket, OSC, phone-driven pieces",
+    "msp":        "Audio signal chain, DSP objects, buffer~, audio-specific pitfalls",
+    "spec":       "Spec format for spec2maxpat.py — object types, connections, layout fields",
+}
+
+_DOMAIN_KEYWORDS: dict[str, list[str]] = {
+    "gen":        ["gen~", "codebox", "[gen]", "gen box"],
+    "jitter":     ["jit.", "jitter", "gl.", "jit.gen", "jit.gl", "jit.world",
+                   "jit.grab", "jit.pwindow", "jit.matrix", "videoplane", "matrix"],
+    "m4l":        ["m4l", "max for live", "live.", ".amxd", "amxd", "lom",
+                   "live object model", "ableton"],
+    "networking": ["node.script", "websocket", "wss://", "ws://", "phone",
+                   "multi-user", "server.js", "udpreceive", "udpsend", "performer"],
+    "msp":        ["audio", "dsp", "signal", "buffer~", "groove~", "cycle~",
+                   "adc~", "dac~", "gain~", "filter~", "reverb", "tapin~",
+                   "playlist~", "ezdac~"],
+    "spec":       ["json spec", "from scratch", "write a spec", "spec file",
+                   "spec2maxpat", "converter"],
+}
+
+# Inline modules for domains without a dedicated file.
+
+_MSP_MODULE = """\
+# Max/MSP — Audio Signal Chain Module
+
+## Signal objects
+Objects processing audio use a `~` suffix. Never mix signal and message rate
+without a conversion object (`snapshot~`, `number~`, `sig~`).
+
+## Preferred audio objects
+- I/O: `ezadc~` / `ezdac~` (toggle-style; click the speaker icon to enable)
+- Level: `live.gain~` (stereo-aware, M4L aesthetic) or `gain~`
+- Oscillators (bandlimited): `saw~`, `tri~`, `rect~`
+- Sample playback: `groove~` — needs a named `buffer~`; supports loop points, speed, direction
+- File playback: `playlist~` — multi-file with crossfades; don't build sfplay~ + bank by hand
+- Reverb: `bp.Gigaverb` (BEAP, ships with Max) or `bp.Freeverb` (lighter Schroeder)
+- Delay: `tapin~` / `tapout~` — NOT `delay~`
+- Filter: `biquad~` + `filtergraph~` for visual coefficient editing
+- Recording: `record~` — needs a named `buffer~`
+
+## live.gain~ color attributes
+Valid: `coldcolor warmcolor hotcolor overloadcolor slidercolor textcolor tricolor
+trioncolor tribordercolor focusbordercolor modulationcolor inactivecoldcolor inactivewarmcolor`
+NOT valid (silently ignored): `bgcolor peakcolor knobcolor needlecolor`
+
+## Stereo
+Preserve both channels through the entire chain to `ezdac~`.
+`live.gain~` handles stereo natively (2 signal inlets, 2 signal outlets).
+
+## gen~ context
+Audio-rate DSP inside a gen~ box is a separate language — call `load(["gen"])`.
+"""
+
+_NETWORKING_MODULE = """\
+# Max Networking — node.script + multi-user-template Module
+
+## Use the template — don't build from scratch
+When a patch needs phones as controllers, Max driving phone outputs, lobby+roles,
+or remote performers over the internet, base it on multi-user-template.
+Repo: multi-user-template/ (sibling of Claude2Max on this machine)
+
+## Messages from node.script outlet (Max receives these — route by leading symbol)
+```
+performer add|remove|role|roles <name> [args]
+roster <name1> <name2> ...
+sensor <name> <kind> <args...>
+    kinds: motion gyro orient heading geo mic touch pointer
+           gamepad button slider dial key text midi
+cloud status|connected <args>
+```
+
+## Messages to node.script inlet (Max → phones)
+```
+vibrate <ms>             speak <text>
+beep <freq> <ms>         display <text>
+synthnote <note> <vel>   synthset <param> <val>
+synthmode osc|fm|wavetable|sample
+setcloudurl wss://...    setpiece <slug>    setroom <slug>
+cloudon                  cloudoff
+```
+
+## Cloud relay
+URL: `wss://mu-relay.jannone-544.workers.dev`
+Already deployed — do not stand up a parallel Worker.
+Piece + room slug pair selects the Durable Object.
+
+## Critical gotchas
+- **textedit outputmode**: outlet 0 emits `text <symbol>` — `[setcloudurl $1]` captures
+  `"text"`. Set `@outputmode 1`, use `[route text]`, or hardcode in server.js instead.
+- **OSC**: `udpreceive <port>` natively decodes flat OSC messages; `route /foo/bar`
+  matches directly. `o.route` (CNMAT odot) needed only for OSC bundles.
+- **node.script @watch 1**: re-execs the script but doesn't re-fire loadbang.
+  Keep defaults in BOTH the script literals AND loadbang messages.
+"""
+
+
+def _read_md(path: Path) -> str:
+    try:
+        return path.read_text(encoding="utf-8")
+    except OSError:
+        return f"[Module file not found: {path.name}]"
+
+
+def _extract_section(text: str, header: str) -> str:
+    """Extract one `## Header` section from markdown (stops at next `## ` heading)."""
+    lines = text.splitlines()
+    capturing = False
+    result: list[str] = []
+    for line in lines:
+        if line.strip() == header:
+            capturing = True
+            result.append(line)
+            continue
+        if capturing:
+            if line.startswith("## ") and line.strip() != header:
+                break
+            result.append(line)
+    return "\n".join(result)
+
+
+def _build_module(domain: str) -> str:
+    """Return the markdown content for a knowledge module."""
+    if domain == "msp":
+        return _MSP_MODULE
+    if domain == "networking":
+        return _NETWORKING_MODULE
+    paths = _MODULE_FILES.get(domain)
+    if not paths:
+        return f"[Unknown domain: {domain}]"
+    parts = [_read_md(p) for p in paths]
+    return "\n\n---\n\n".join(parts)
+
+
+_RE_EVAL_BLOCK = """\
+## Re-evaluation — call load() again when the task evolves
+
+If you encounter an object prefix, pattern, or concept outside what's currently loaded,
+stop and call `load([new_domain])` before proceeding. Modules accumulate — each call adds
+to context without replacing prior loads.
+
+Recognition signals:
+- `jit.` or `gl.` prefix → `load(["jitter"])`
+- Work inside a `gen~` or `gen` box → `load(["gen"])`
+- `live.*` objects, M4L device, LOM access → `load(["m4l"])`
+- `node.script`, WebSocket, phone performers, OSC server → `load(["networking"])`
+- Writing a spec from scratch for spec2maxpat.py → `load(["spec"])`
+- Audio signal chain, `~` objects, DSP → `load(["msp"])`
+- Any object whose prefix or namespace you don't recognise → call `assess()` again
+  with the new context before adding it to a patch
+"""
+
+# ---------------------------------------------------------------------------
+# essentials() — now a backward-compat alias for load(["core"]).
 # ---------------------------------------------------------------------------
 
 _ESSENTIALS_MD = """\
@@ -239,19 +413,119 @@ different display, different data path):
 @mcp.tool()
 def essentials() -> str:
     """
-    Bootstrap tool — CALL THIS at session start before any Max/MSP work.
+    Backward-compatible alias for load(["core"]).
 
-    Returns the must-load binding rules for patching with Claude2Max:
-    the silent-failure modes, the verification checklist for object names
-    and attributes, the binding rules (presentation view, hide plumbing,
-    textedit misuse, modify-don't-rebuild, sync-before-edit), the
-    preferred-objects table, and the naming convention.
-
-    This replaces the 'read these three files' workflow with queryable
-    structured rules. (~1.5K tokens structured summary. For full prose
-    use lookup_rule() when available.)
+    Prefer the assess() → load() two-call pattern for new work.
+    This alias exists so any PROJECT_CLAUDE_SNIPPET that calls essentials()
+    still works without change.
     """
-    return _ESSENTIALS_MD
+    return load(["core"])
+
+
+@mcp.tool()
+def assess(task_description: str) -> dict:
+    """
+    Evaluate which knowledge modules are needed for a Max/MSP task.
+
+    Call this at the start of any Max session, then pass the returned
+    domains list directly to load(). Two-call pattern:
+
+        modules = assess("build a step sequencer with audio output")
+        knowledge = load(modules["domains"])
+
+    If the task evolves mid-session (e.g. Jitter appears in a patch that
+    started as audio-only), call assess() again with the new context and
+    load() the additional domains — modules accumulate, they don't reset.
+
+    Parameters
+    ----------
+    task_description — plain-English description of what will be built or edited.
+
+    Return keys
+    -----------
+    domains       — list[str] — recommended modules to load (always includes "core")
+    reasoning     — dict[str, str] — why each domain was selected
+    next_step     — str — the load() call to make next
+    available     — dict[str, str] — all available modules with descriptions
+    """
+    desc = task_description.lower()
+    recommended = ["core"]
+    reasoning: dict[str, str] = {
+        "core": "always loaded — binding rules, Common Pitfalls, preferred objects",
+    }
+
+    for domain, keywords in _DOMAIN_KEYWORDS.items():
+        matched = [kw for kw in keywords if kw in desc]
+        if matched:
+            recommended.append(domain)
+            reasoning[domain] = f"matched: {', '.join(matched)}"
+
+    return {
+        "domains":   recommended,
+        "reasoning": reasoning,
+        "next_step": f"Call load({recommended!r}) to load these knowledge modules.",
+        "available": _DOMAIN_DESCRIPTIONS,
+    }
+
+
+@mcp.tool()
+def load(domains: list) -> str:
+    """
+    Load Max/MSP knowledge modules into context.
+
+    This is the primary knowledge-acquisition call. Call assess() first to
+    determine which domains to request, then call this. The returned text
+    is the knowledge Claude uses for the session — front-loaded before any
+    patch work begins.
+
+    Modules are additive: calling load() again with new domains adds to
+    what is already in context. Call it again whenever the task scope grows
+    to include a new domain (Jitter, gen~, M4L, networking, etc.).
+
+    Parameters
+    ----------
+    domains — list of domain names. "core" is always included even if omitted.
+              Available: "core", "gen", "jitter", "m4l", "networking", "msp", "spec"
+
+    Returns
+    -------
+    Assembled markdown covering all requested modules, ready to be read as
+    working knowledge for the session.
+    """
+    # Normalise — always include core, deduplicate, preserve order.
+    seen: set[str] = set()
+    ordered: list[str] = []
+    for d in (["core"] + list(domains)):
+        if d not in seen:
+            seen.add(d)
+            ordered.append(d)
+
+    sections: list[str] = []
+
+    for domain in ordered:
+        if domain == "core":
+            # Core = binding rules + re-evaluation signal + Common Pitfalls.
+            mp_text = _read_md(_PATCHING_DIR / "MAX_PATCHING.md")
+            pitfalls = _extract_section(mp_text, "## Common Pitfalls")
+            sections.append(
+                f"# Claude2Max — Core Module\n\n"
+                f"{_ESSENTIALS_MD}\n\n"
+                f"---\n\n"
+                f"{_RE_EVAL_BLOCK}\n\n"
+                f"---\n\n"
+                f"{pitfalls}"
+            )
+        else:
+            desc = _DOMAIN_DESCRIPTIONS.get(domain, domain)
+            content = _build_module(domain)
+            sections.append(f"# Claude2Max — {domain.upper()} Module\n_{desc}_\n\n{content}")
+
+    loaded_list = ", ".join(ordered)
+    header = (
+        f"<!-- Claude2Max knowledge loaded: {loaded_list} -->\n"
+        f"<!-- If the task evolves to include additional domains, call load([new_domain]) -->\n\n"
+    )
+    return header + "\n\n---\n\n".join(sections)
 
 
 # ---------------------------------------------------------------------------

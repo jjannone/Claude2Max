@@ -17,7 +17,23 @@ Tasks requiring deep analysis, architecture decisions, or sustained judgment. Pr
 
 - [in progress] **Claude2Max MCP server + global enforcement layer — knowledge as queryable tools, Max-file edits gated until tools fire** — Build a Model Context Protocol server (`claude2max-mcp`) that exposes Max-patching knowledge as first-class callable tools, paired with a global skill + PreToolUse hook that mechanically ensures Claude has consulted the tools before editing any Max file. Ship all three pieces designed together as one architecture: MCP for *knowledge representation*, skill for *active invocation*, hook for *enforcement*. The architecture replaces today's prose-pointer-and-hope-Claude-reads-it pattern with knowledge-as-tools-and-can't-act-without-them.
 
-  *In progress (2026-06-20): **Phase (i) Steps 1–5 complete — foundation done.** Step 5 (end-to-end real-world test) run 2026-06-20: called all five tools in sequence while building a 4-step MIDI sequencer spec; 9 objects verified via `lookup_object`, 2 attribute sets verified via `list_attributes`, 1 package search (no match — confirms native objects are correct choice). Patch converted cleanly: 24 boxes, 18 patchlines, 16 presented objects, `openinpresentation: 1`, all binding rules met. Two issues found and fixed in the same session: (1) `search_packages` returned silent empty list on no-match — now returns a dict with explicit `message` field. (2) `essentials()` missing creation-arg warning — added note that `counter`/`makenote`/`metro` range/defaults are creation args, not attributes. Project-level CLAUDE.md snippet written (`mcp_server/PROJECT_CLAUDE_SNIPPET.md`). Full test results in `mcp_server/SMOKE_TEST_RESULTS.md`. **Phase (i) complete. Resume at Phase (ii)** — `verify_spec()` + shared rule library (`mcp_server/claude2max_verify/`). Requires Opus for rule-extraction strategy decisions.*
+  *In progress (2026-06-20): **Phase (i) complete. Phase (ii) module system implemented.**
+
+  Phase (i) retrospective revealed the reactive tool-call architecture (lookup_object / list_attributes before each object) is insufficient — it makes Claude look up names while building, but Max knowledge needs to be front-loaded the same way JavaScript knowledge is. Claude needs to *know* Max before touching a patch, not query reactively mid-build.
+
+  **Phase (ii) — rethought architecture — implemented 2026-06-20**: Module system with two new primary tools:
+  - `assess(task_description)` → evaluates which knowledge domains the task needs; returns domain list + reasoning
+  - `load(domains)` → assembles and returns the full knowledge for those domains as readable markdown; front-loaded at session start; additive (call again when task scope grows)
+
+  Module taxonomy: `core` (always — binding rules, Common Pitfalls, preferred objects), `gen` (GEN_PATCHING.md), `jitter` (JIT_GEN + JITTER_JS patching), `m4l` (M4L_PATCHING.md), `networking` (multi-user-template pattern), `msp` (audio signal chain), `spec` (SPEC_REFERENCE.md). Each domain maps to existing Claude2Max files — no duplication.
+
+  Re-evaluation pathway: `core` module includes explicit recognition signals ("if you see `jit.` prefix → call `load(["jitter"])`") so Claude knows when to add modules mid-session without guessing upfront.
+
+  `essentials()` kept as backward-compat alias for `load(["core"])`. All five Phase (i) tools unchanged.
+
+  Smoke test: `assess("step sequencer with audio and jitter visuals")` → `["core", "jitter", "msp"]`. `load(["core"])` = 20K chars. `load(["core", "msp", "jitter"])` = 40K chars. All sections present, backward compat confirmed.
+
+  **Resume at**: (1) Update `mcp_server/PROJECT_CLAUDE_SNIPPET.md` to reference `assess()` + `load()` instead of `essentials()`. (2) End-to-end test with the new architecture. (3) `verify_spec()` is now Phase (iii) — safety-net checker, not primary knowledge mechanism.*
 
   **Why this matters**: today's failure mode is well-understood — Claude instances in repos that reference Claude2Max via the global pointer routinely skip the actual consultation step and proceed with training-data Max knowledge. Strengthening the pointer text (2026-05-28) moved persuasion as far as prose can go. The next step has to leave persuasion behind. Two orthogonal problems compound: (a) the knowledge is *prose*, which Claude reads-or-doesn't and remembers-or-doesn't across turns; (b) the consultation is *advisory*, with no mechanical guarantee. This task addresses both at once: MCP turns the prose into queryable tools (knowledge representation), and the skill+hook makes the queries unmissable (enforcement). Either piece alone is incomplete — better tools Claude doesn't call don't help; enforcement of stale prose-loading doesn't fix the brittleness of memorized text. They're designed and shipped together so the architecture is coherent from day one.
 
