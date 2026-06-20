@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Claude2Max MCP server — Phase i, Steps 2-3.
+Claude2Max MCP server — Phase (i) complete (Steps 1-5).
 
 Exposes Max/MSP patching knowledge as first-class callable tools so Claude can
 query binding rules, object existence, and attribute validity rather than
@@ -14,15 +14,17 @@ Register (user scope — reachable from any cwd):
 Run directly for debugging:
     python3 mcp_server/server.py
 
-Tool surface (Phase i)
-----------------------
+Tool surface (Phase i — all five tools live)
+---------------------------------------------
   essentials()           Bootstrap. Call at session start before any Max work.
-  lookup_object()        Step 3 — authoritative object existence + I/O.
-  search_packages()      Step 3 — search package library by term.
-  lookup_attribute()     Step 4 — attribute validity check.
-  list_attributes()      Step 4 — all valid attrs for an object.
+  lookup_object()        Authoritative object existence + I/O signature.
+  search_packages()      Search 2,795-object package library by term.
+  lookup_attribute()     Attribute validity check for a specific attr.
+  list_attributes()      All valid attrs for an object (bulk verification).
 
 See mcp_server/DESIGN_DECISIONS.md for locked architectural choices.
+See mcp_server/SMOKE_TEST_RESULTS.md for Phase (i) end-to-end test results.
+Next: Phase (ii) — verify_spec() + shared rule library.
 """
 
 import json
@@ -106,6 +108,14 @@ is `lookup_object("o.route")` which resolves via the package library.
 
 Call `list_attributes(object_name)` or `lookup_attribute(object_name, attr)`.
 Max silently accepts unknown attributes and ignores them — there is no error.
+
+**Also check creation args.** Some objects use creation args for what sounds like
+attributes — and those "attributes" don't exist, so writing them silently does nothing:
+- `counter 0 3` — min/max range is a **creation arg**, NOT `@min`/`@max` (neither exists)
+- `makenote 100 250` — velocity and duration are **creation args**, not attributes
+- `metro 500` — interval is a creation arg (also settable via right inlet at runtime)
+If `list_attributes` returns 0 or very few attrs, look at the `creation args` field in
+`lookup_object` — that's where the configurable values live.
 
 `live.gain~` example — VALID color attrs:
   `coldcolor warmcolor hotcolor overloadcolor slidercolor textcolor tricolor
@@ -369,7 +379,7 @@ def lookup_object(name: str) -> dict:
 # ---------------------------------------------------------------------------
 
 @mcp.tool()
-def search_packages(term: str, limit: int = 5) -> list:
+def search_packages(term: str, limit: int = 5) -> dict:
     """
     Search the Claude2Max package library (2,795 installed externals) by term.
 
@@ -386,12 +396,11 @@ def search_packages(term: str, limit: int = 5) -> list:
 
     Return
     ------
-    List of dicts, each with:
-      name       — object name (e.g. "cv.jit.faces")
-      package    — package name (e.g. "cv.jit")
-      digest     — one-line description
-      use_when   — curated guidance
-      relevance  — "use_when" | "digest" | "name"
+    Dict with:
+      results  — list of matching objects, each with:
+                   name, package, digest, use_when, relevance
+      count    — int — number of results returned
+      message  — str — human-readable summary (always present, including no-match case)
     """
     term_lower = term.lower().strip()
     matches = []
@@ -413,8 +422,19 @@ def search_packages(term: str, limit: int = 5) -> list:
     if limit and limit > 0:
         matches = matches[:limit]
 
+    if not matches:
+        return {
+            "results": [],
+            "count": 0,
+            "message": (
+                f"No packages matched '{term}'. "
+                f"Try a shorter or broader term (e.g. 'reverb' instead of "
+                f"'convolution reverb with IR'), or build with native Max objects."
+            ),
+        }
+
     relevance_label = {3: "use_when", 2: "digest", 1: "name"}
-    return [
+    results = [
         {
             "name":      name,
             "package":   pkg,
@@ -424,6 +444,11 @@ def search_packages(term: str, limit: int = 5) -> list:
         }
         for score, pkg, name, digest, use_when in matches
     ]
+    return {
+        "results": results,
+        "count":   len(results),
+        "message": f"{len(results)} result(s) for '{term}'.",
+    }
 
 
 # ---------------------------------------------------------------------------
