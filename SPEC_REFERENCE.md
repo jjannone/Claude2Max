@@ -716,7 +716,14 @@ The `*.`, `+.` etc. variants are also valid float-mode objects, but prefer the f
 }
 ```
 
-Use just the filename (not an absolute path) so the patch is portable — Max finds the file in the patch's own directory.
+Use just the filename (not an absolute path) so the patch is portable — Max finds the file in the patch's own directory. The same applies to `v8ui` (the V8-engine UI object, `maxclass: "v8ui"`) — same `filename` mechanism, modern JS engine; prefer it for new UI scripts.
+
+**`jsui`/`v8ui` attributes — declare custom ones in the script; colors are set in JS, not as attributes.**
+
+- **Custom scalar attributes**: declare in the script with the object-form `declareattribute("dotsize", {default:8, type:"float32", min:"1", max:"40", setter:"set_dotsize", label:"Dot Size"})` plus a `function set_dotsize(v){ dotsize=v; mgraphics.redraw(); }` setter. These become real `@attributes` (settable via `@attr`, message, attrui, Inspector). Set them in a spec via `attrs: {...}` like any box attribute.
+- **The converter's verifier does NOT validate attributes on script-loading objects** (`jsui`, `v8ui`, `js`, `v8`, `mxj`, `gen~`, `jit.gen`, `jit.gl.slab`, `rnbo~`) — their attribute set is open-ended (script-defined), so a refpage check would false-positive on every custom attr. Don't be surprised that `@dotsize` passes verification on a `v8ui`.
+- **Colors are set in JavaScript, NOT via `declareattribute`.** No rgba color-attribute declaration form is documented or used in any shipped jsui. The convention (see shipped `jsui_3ddial.js`) is to set colors from `jsarguments` (creation args) and from messages (e.g. `function frgb(r,g,b){...}`), storing them as `[r,g,b,a]` arrays for `mgraphics.set_source_rgba()`. So expose colors as messages (`dotcolor1 r g b a`, `hkeycolor r g b a`, …), not attributes. Max-native rgba uses 0.–1. floats.
+- **The drawing/mouse API** (verified against shipped `jsui_live_barslider.js`, `v8ui-pointer-test.js`): `mgraphics.init()` / `mgraphics.relative_coords = 0` / `mgraphics.autofill = 0` at top level; `function paint()` draws via `mgraphics.set_source_rgba / rectangle / ellipse / move_to / line_to / close_path / fill / stroke / set_line_width`; `mgraphics.size` → `[w,h]`; `function onclick(x,y)` / `ondrag(x,y)` give box-pixel coords; `mgraphics.redraw()` to repaint. Multi-inlet routing via an `inlet` global is NOT verifiable from shipped examples — use one inlet + selector messages.
 
 **Message routing** — Max dispatches incoming messages by selector (first word) to JS functions of the same name:
 

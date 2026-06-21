@@ -84,6 +84,17 @@ _DEBUG_MAGENTA = (1.0, 0.3, 0.8, 1.0)
 # per-object "unverified" flag is the escape hatch.
 _STRUCTURAL_NEWOBJ = {"p", "patcher"}
 
+# Objects that load a custom script / codebox and can `declareattribute` (or
+# `param`) arbitrary attribute names the refpage cannot list. Their attribute set
+# is open-ended, so refpage-based attribute validation would false-positive on
+# every custom attr (e.g. @dotsize on a v8ui). Skip attribute checks for these.
+_CUSTOM_ATTR_OBJECTS = {
+    "jsui", "v8ui", "js", "v8", "jspainter",
+    "mxj", "mxj~",
+    "gen~", "gen", "jit.gen", "jit.expr", "jit.gl.pix", "jit.gl.slab",
+    "rnbo~",
+}
+
 # Belt-and-suspenders supplement to the jbox base attrs the resolver unions in
 # (resolver.attrs_for already returns own-refpage ∪ jbox). These cover the few
 # box-universal keys the converter round-trips that aren't in jbox's
@@ -649,8 +660,8 @@ def rule_attribute_resolves(ctx: SpecContext, resolver) -> list:
         if not attrs or _is_unverified(obj):
             continue
         cls = _classname(ctx, obj)
-        if not cls or cls in _STRUCTURAL_NEWOBJ:
-            continue
+        if not cls or cls in _STRUCTURAL_NEWOBJ or cls in _CUSTOM_ATTR_OBJECTS:
+            continue  # custom-script objects declare arbitrary attrs; can't enumerate
         valid, _src = resolver.attrs_for(cls)
         if valid is None:
             continue  # no refpage → can't enumerate the valid set; don't block

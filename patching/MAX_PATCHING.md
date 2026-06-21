@@ -154,6 +154,12 @@ Any number box, toggle, or flonum added to a patch must have a `loadmess` (or `l
 
 When an object fans out to multiple destinations — for instance, both a processing chain and a display box — check whether placing all destinations at the same y-position will cause cords to cross. If so, stagger the destinations vertically so each incoming cord has a clear path. This is a case-by-case judgment based on the specific layout.
 
+### Signal flow runs top-to-bottom — inputs above, outputs below
+
+Lay every object so the things that feed it sit **above** it and the things it feeds sit **below** it, so cords run downward and the eye reads the patch top-to-bottom. Concretely: a control/message box that drives an object goes ABOVE that object; the object's outlets connect DOWN to displays, routers, and the next stage. Never place a feeder message box *below* the object it feeds — that forces the cord to run upward, which reads as broken or backwards and makes the patch hard to follow even when it works.
+
+The recognition signal: if a `message`/`number`/UI box that is an *input* to some object ends up at a larger `y` than that object, move it above. The only things that belong below an object are its *outputs* (and side-tap monitors). This applies to help files and demos especially, where each object's driving messages should form a column above it and its result displays a column below. (Derived from a help-patch layout where demo messages were placed under the widgets they drove, making the patch read as non-functional.)
+
 ---
 
 ## Common Pitfalls
