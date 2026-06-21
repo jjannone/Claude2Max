@@ -88,23 +88,52 @@ restart Claude Code to pick up the newly registered MCP server.
 
 ## Tool surface
 
-### Phase i (current — Steps 2-4 complete)
+### Knowledge — front-load before patching (Phase ii)
 
 | Tool | Description |
 |---|---|
-| `essentials()` | Bootstrap — call at session start before any Max work. Returns the must-load binding rules as structured markdown. |
+| `assess(task_description)` | Reads the task's intent and returns the knowledge modules it needs (`core`, `gen`, `jitter`, `m4l`, `networking`, `msp`, `spec`). |
+| `load(domains)` | Assembles and returns the full knowledge for those modules as markdown. Additive — call again as the task grows. |
+| `essentials()` | Backward-compat alias for `load(["core"])`. |
+
+### Verification — use after knowledge is loaded (Phase i)
+
+| Tool | Description |
+|---|---|
 | `lookup_object(name)` | Authoritative object existence + I/O: found, source, numinlets, numoutlets, digest, use_when. Call before adding any `newobj`. |
 | `search_packages(term, limit=5)` | Search the 2,795-object package library. Call before composing any chain of 3+ native objects. |
 | `lookup_attribute(object_name, attr)` | Attribute validity: valid bool, value_type, size, default, inspector_label. Call before writing any attribute. |
 | `list_attributes(object_name)` | All valid attribute names for an object, split into all / writable. |
 
-### Phase ii (planned)
+### Safety net — check the whole spec before converting (Phase iii)
 
 | Tool | Description |
 |---|---|
-| `verify_spec(spec_json)` | Static check against spec format + binding rules. Returns `{violations: [{rule, location, severity, message}]}`. |
+| `verify_spec(spec_json)` | Static check on a full spec — **including the anti-guessing layer**: every object name and every attribute is resolved against C74 refpages + the package library. Attribute validity uses the object's own refpage attrs **∪ the jbox base-class attrs** every box inherits, so inherited attrs (textcolor, background, …) pass while invented names (`oscparse`) and family-resemblance attrs (`bgcolor` on `live.gain~`) are caught. Returns `{ok, counts, violations, summary, report}`. The **same** library (`claude2max_verify/`) runs inside `spec2maxpat.py convert`, which **blocks the build** on any error. Run before `convert`; fix anything it flags. |
+
+### Later phases (planned)
+
+| Tool | Description |
+|---|---|
 | `search_pitfalls(term)` | Search Common Pitfalls + forum/cookbook insights for matches. |
 | `lookup_rule(name_fragment)` | Find binding rules by name fragment. |
+
+**`verify_spec` severities** — `error` **(blocks `convert`)**: unresolved object
+name, invalid attribute (not in the object's refpage ∪ jbox base), bad connection
+refs, malformed connections, out-of-range declared outlet/inlet indices;
+`warning`: no presentation view despite UI, unlabelled presented controls, visible
+cords on hidden boxes, unhidden formatter message boxes, unlabelled subpatcher
+I/O, untracked debug scaffolding; `style`: ALL-CAPS user names, `[v8]` over
+`[js]`.
+
+**The convert gate.** `spec2maxpat.py convert` refuses to emit a `.maxpat` when
+verification finds an error — turning Max's silent acceptance of invented
+names/attrs into an immediate, in-session failure. Escape hatches: mark a real
+abstraction `"unverified": true` in the spec (downgrades to a style note), drop a
+matching `<name>.maxpat` on the search path, or pass `--allow-unverified` to
+override. Attribute validity is the object's own refpage attrs ∪ the jbox
+base-class attrs every box inherits; objects with no refpage at all aren't
+attribute-checked (use `lookup_attribute` there).
 
 ---
 
@@ -136,9 +165,21 @@ claude mcp remove claude2max --scope user
 
 ```
 mcp_server/
-  server.py           MCP server entry point
-  __init__.py         Package marker
-  requirements.txt    SDK pin (mcp>=1.27.0)
-  DESIGN_DECISIONS.md Locked architectural choices (read before modifying)
-  README.md           This file
+  server.py                MCP server entry point
+  __init__.py              Package marker
+  requirements.txt         SDK pin (mcp>=1.27.0)
+  DESIGN_DECISIONS.md      Locked architectural choices (read before modifying)
+  README.md                This file
+  claude2max_verify/       Shared binding-rule checker (verify_spec)
+    __init__.py            Public API: verify_spec, verify_spec_json, format_report
+    rules.py               Hand-coded rule library + Violation/SpecContext
+    verify.py              Entry points + result-dict shape + format_report
+  tests/
+    test_verify.py         Golden specs with known violations (27 cases)
+```
+
+Run the verify tests standalone (no pytest needed):
+
+```bash
+python3 mcp_server/tests/test_verify.py
 ```

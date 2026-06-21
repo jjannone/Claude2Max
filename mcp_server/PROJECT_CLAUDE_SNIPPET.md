@@ -52,6 +52,21 @@ Before writing attributes:
 
 Before composing a chain of 3+ native objects:
     `mcp__claude2max__search_packages(term)` — 2,795-object library may cover it in one external
+
+### Before converting — check the whole spec (the gate WILL block guesses)
+
+Right before running `spec2maxpat.py convert`:
+    `mcp__claude2max__verify_spec(spec_json)` — checks the full spec, INCLUDING that every
+    object name and every attribute actually exists (resolved against C74 refpages + the
+    package library; attribute validity = the object's own refpage attrs ∪ the jbox base
+    attrs every box inherits). Fix every `error` before converting.
+
+`convert` runs the same check and **refuses to build** on any error — an invented object
+name (e.g. `oscparse`) or a non-existent live.* attribute stops the build with a message
+naming what to fix. The fix is to resolve the name with `lookup_object` / `list_attributes`,
+NOT to bypass the gate. Only for a real abstraction you've confirmed exists: set
+`"unverified": true` on that object in the spec (explicit, auditable) — or, in emergencies,
+`convert --allow-unverified`.
 ```
 
 ---
@@ -66,6 +81,8 @@ Before composing a chain of 3+ native objects:
   with `CLAUDE2MAX_ASSESS_MODEL`. See `README.md` § Register.
 - If the server is unreachable, Claude falls back to reading the prose files directly.
 - `essentials()` is kept as a backward-compat alias for `load(["core"])` — old snippets still work.
-- The enforcement hook (PreToolUse — blocks `.maxpat` edits until `load()` has been called) is
-  the Phase (iii) deliverable.
+- `verify_spec()` (Phase iii, done) shares its rule library (`claude2max_verify/`) with
+  `spec2maxpat.py convert`, so the binding-rule checks fire both via the tool and at convert time.
+- The enforcement hook (PreToolUse — blocks `.maxpat` edits until `load()` has been called),
+  global skill, and one-command installer are a later phase, gated on the MCP being functional.
 - Update this file whenever the tool surface changes (new tools, renamed parameters).

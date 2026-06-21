@@ -262,3 +262,138 @@ Every ⚠️ is what `install_global.py --verify` exercises on a student machine
 Server skeleton with one tool, `essentials()`, returning a ~1.5K-token
 structured summary of the binding rules. Uses FastMCP per (a); reads source
 files per (f); registered for testing via `claude mcp add --scope user` per (b).
+
+---
+
+## Phasing note — the renumber after the Phase (ii) rethink
+
+The original phasing (this file's "for Phase iii" labels on the hook mechanics
+above) put `verify_spec` in Phase (ii) and the skill+hook+installer in Phase
+(iii). The 2026-06-20 architecture rethink inserted the `assess()`/`load()`
+module system as the new Phase (ii), which pushed everything down one:
+
+- **Phase (i)** — `essentials` + `lookup_object` + `lookup_attribute` +
+  `list_attributes` + `search_packages`. ✅ done.
+- **Phase (ii)** — `assess()` + `load()` module system. ✅ done.
+- **Phase (iii)** — `verify_spec()` + the shared rule library. ✅ done
+  (2026-06-21).
+- **Phase (iv+)** — global skill + PreToolUse enforcement hook + one-command
+  installer. The "Hook mechanics — locked" section above still applies to that
+  phase; only its number changed.
+
+---
+
+## (g) verify_spec rule library — locked (Phase iii, 2026-06-21)
+
+**Rule extraction strategy — hand-coded, not markdown-parsed.** Per the main
+task's open-decision #1. The binding rules are stable; hand-coding them in Python
+is the only way to make `verify_spec` reliable. Parsing the prose docs at runtime
+would be brittle (heading drift, wording changes) and could not check structural
+invariants (connection shape, I/O index ranges) that aren't stated as prose at
+all. Each rule carries a `source` string pointing back at the doc section it
+enforces, so the prose stays the human-readable statement and the code stays the
+executable check — they reference each other rather than one generating the other.
+
+**Shared library, two consumers.** The rules live in
+`mcp_server/claude2max_verify/` as a dependency-free package (no `mcp`, no
+`spec2maxpat` imports). It backs BOTH the MCP `verify_spec()` tool AND
+`spec2maxpat.py convert` (via a guarded optional import that degrades silently if
+the package isn't importable). Single source of truth → convert-time and
+tool-time findings always agree.
+
+**Severity contract.** `error` = will break the patch or the converter (bad
+connection refs, malformed connections, out-of-range outlet/inlet indices —
+mirrors the ValueErrors `convert_patcher` already raises, but collected rather
+than fatal). `warning` = binding-rule violation that loads but is wrong for the
+operator (no presentation view despite UI, unlabelled presented controls, visible
+cords on hidden boxes, unhidden formatter message boxes, unlabelled subpatcher
+I/O, untracked debug scaffolding). `style` = convention nudge (ALL-CAPS user
+names, `[v8]` over `[js]`).
+
+**Convert integration prints to stderr.** `convert` prints `[verify]` findings to
+**stderr** so stdout stays pure `.maxpat` JSON. `--no-verify` skips the check
+entirely. Warnings/style never block; **errors block** (see § (h)).
+
+**Conservatism over coverage.** Rules are tuned to avoid false positives on real
+patches: the I/O-index check fires only when the spec explicitly declares
+`inlets`/`outlets` (never guesses); the redundant-message-box check fires only
+when every inbound source is an interactive control; the presentation check
+exempts pure-DSP patches with no operator controls. Verified against the
+production patches — `drift-sequencer-{lcars,soviet}` (114–118 objects) report
+zero violations; `jit-grab-scale` correctly flags its genuinely-missing
+presentation view.
+
+---
+
+## (h) The anti-guessing gate — convert BLOCKS on unresolved names (2026-06-21)
+
+The motivating problem: even with all the knowledge loaded and correct sample
+patches in front of it, Claude lapses into building Max objects/attributes from
+training-data memory, and Max *silently accepts* the guesses (missing-object red
+box, ignored attribute) — the failure surfaces hours later, out of session. The
+problem is epistemic (Claude doesn't believe it needs to check), and prose can't
+fix a belief problem. The only robust fix is to remove the possibility of acting
+on a guess at the one chokepoint every patch passes through: `convert`.
+
+**Decision: convert is a validating gate that blocks by default.** Maintainer
+chose "block by default" over warn-loud. `_gate_spec` runs `verify_spec` WITH an
+authoritative resolver; any `error` severity aborts the build (exit 1, nothing
+written) unless `--allow-unverified`. This turns the silent, out-of-session
+failure into a loud, in-session one — the feedback loop that actually retrains
+"resolve first." The same checks run via the `verify_spec` MCP tool so the author
+can pre-clear a spec.
+
+**What blocks (resolver-gated, ERROR):**
+- `object-unresolved` — a `newobj` name that resolves to no C74 refpage, no
+  installed package external, and no abstraction on disk. The canonical
+  invented-object case (`oscparse`).
+- `attribute-invalid` — an attribute not in the object's complete valid set
+  (see below). Applies to ALL objects, not just `live.*`.
+- plus the structural errors from § (g) (bad/dangling connections).
+
+**Attribute validity = own refpage ∪ jbox base — the load-bearing finding.** A
+Max object's refpage `<attributelist>` lists only its OBJECT-SPECIFIC attributes;
+the universal box attributes (textcolor, background, hidden, varname,
+presentation, …) are inherited from the `jbox` base class and live once in
+`jbox.maxref.xml`, never re-listed per object. Checking against the per-object
+refpage ALONE produced ~90 false positives per production patch (textcolor on
+`comment`, background on `panel`, …). The fix is to union the jbox base attrs
+(parsed from `jbox.maxref.xml`; `_JBOX_FALLBACK_ATTRS` when Max is absent) into
+the valid set: `valid(O) = own_refpage(O) ∪ jbox`. This is fully knowable from
+the docs — "not re-listed on the per-object refpage" does not mean "unknowable."
+With the union, attribute validation is correct for ALL objects and still catches
+the canonical trap (`bgcolor` on `live.gain~` — bgcolor is in neither
+live.gain~'s refpage nor jbox; its real color attrs are coldcolor / warmcolor /
+…). Objects with no refpage at all can't be enumerated, so their attrs aren't
+checked (lookup_attribute remains the tool there).
+
+**Validation finding (the gate caught real bugs).** Applied generally, the gate
+flagged 4 attrs in the production patches — `panel/locked_bgcolor`,
+`number/tribordercolor`, `multislider/contrast`, `multislider/bgfillcolor`. Each
+is absent from the object's refpage AND jbox AND from every shipped Cycling '74
+patch on that class — three independent signals that they are silent no-ops a
+prior session introduced (the exact family-resemblance error the gate targets),
+not refpage gaps. So "0 errors on production patches" was the WRONG success
+criterion — it had been masking real latent bugs. Residual limitation: if some
+object family inherits a valid attr from a base layer other than jbox, it could
+be flagged; the `"unverified"` flag / `--allow-unverified` cover that, and such a
+case should be reported so the base set can be extended.
+
+**Object resolution handles aliases.** Operators (`+`→`plus.maxref.xml`, …) come
+from `add_tutorial.REFPAGE_ALIAS`; common abbreviations (`t`→trigger, `sel`→
+select, `s`→send, `r`→receive, `b`→bangbang, `del`→delay, `j`→join) from a small
+map in `spec2maxpat._VERIFIED_WORD_ALIASES`, each verified to resolve. Without
+these, every `t i i` / `+ 1` in a real patch would false-positive.
+
+**Escape hatches (all explicit, none silent):**
+- `"unverified": true` on an object → downgrades its unresolved error to a STYLE
+  note (a deliberate, auditable "I confirmed this abstraction exists" assertion).
+- a matching `<name>.maxpat` on the search path (cwd, output dir, spec dir, repo
+  `patches/`) → auto-OK (real abstraction).
+- `--allow-unverified` on convert → build despite errors (emergency override).
+
+**Dependency-free via injection.** The verify package still imports nothing heavy;
+`run_all(spec, resolver=...)` takes the resolver as a duck-typed object.
+`spec2maxpat.build_resolver()` constructs it from the converter's existing
+`RefpageCache` + `PackageObjectsCache` + an on-disk abstraction check + a one-time
+scan of the refpage attribute universe. The MCP server passes the same resolver.

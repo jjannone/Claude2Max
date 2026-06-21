@@ -37,6 +37,177 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 # ---------------------------------------------------------------------------
+# Shared binding-rule checker (optional — degrades gracefully if absent).
+# Lives under mcp_server/claude2max_verify; the SAME library backs the MCP
+# server's verify_spec() tool, so convert-time and tool-time checks agree.
+# ---------------------------------------------------------------------------
+try:
+    sys.path.insert(0, str(Path(__file__).resolve().parent / "mcp_server"))
+    from claude2max_verify import format_report as _verify_report
+    from claude2max_verify import verify_spec as _verify_spec
+except Exception:  # pragma: no cover — checker is a convenience, never required
+    _verify_spec = None
+    _verify_report = None
+
+
+# Universal box attributes, inherited by every box from the jbox base class.
+# Source of truth at runtime is jbox.maxref.xml (parsed in _build_base_attrs);
+# this is the verified fallback for when Max isn't installed. Read from
+# .../docs/refpages/max-ref/jbox.maxref.xml — NOT written from memory.
+_JBOX_FALLBACK_ATTRS = {
+    "annotation", "background", "color", "fontface", "fontname", "fontsize",
+    "hidden", "hint", "ignoreclick", "jspainterfile", "patching_rect",
+    "position", "presentation", "presentation_rect", "rect", "size",
+    "textcolor", "textjustification", "valuepopup", "valuepopuplabel", "varname",
+}
+
+# Common Max object abbreviations that have no refpage under their own name.
+# Each target was verified to resolve to a real maxref.xml (see WORK_HISTORY).
+# Operators (+ - * == …) are handled separately via add_tutorial.REFPAGE_ALIAS.
+_VERIFIED_WORD_ALIASES = {
+    "t": "trigger",
+    "sel": "select",
+    "s": "send",
+    "r": "receive",
+    "b": "bangbang",
+    "del": "delay",
+    "j": "join",
+}
+
+
+class _GateResolver:
+    """Authoritative resolver passed to claude2max_verify's anti-guessing rules.
+
+    Wraps the same sources the converter already trusts — C74 refpages
+    (RefpageCache) and the curated package library (PackageObjectsCache) — plus
+    an on-disk abstraction check and the refpage attribute universe. Built once
+    via build_resolver(); see the duck type in claude2max_verify/rules.py.
+    """
+
+    def __init__(self, refpage, package_cache, search_dirs):
+        self._rp = refpage
+        self._pkg = package_cache
+        self._dirs = [Path(d) for d in search_dirs if d]
+        self._aliases = self._build_alias_map()
+        self._base_attrs = self._build_base_attrs()  # jbox: inherited by every box
+
+    def _build_base_attrs(self):
+        """Attributes every box inherits from the jbox base class.
+
+        Max object refpages list only object-SPECIFIC attributes; universal box
+        attributes (textcolor, background, hidden, varname, presentation, …) live
+        once in jbox.maxref.xml and are inherited, not re-listed. Unioning these
+        is what makes attribute validation correct for ALL objects, not just the
+        few whose refpages happen to be self-contained.
+        """
+        r = self._rp.lookup("jbox")
+        if r:
+            return set(r.get("attributes", {}).keys())
+        # jbox refpage absent (no Max install): fall back to the verified core set
+        return set(_JBOX_FALLBACK_ATTRS)
+
+    @staticmethod
+    def _build_alias_map():
+        """Map short/operator object names to the refpage that documents them.
+
+        Many valid objects have no refpage under their own name: operators
+        (`+` -> plus.maxref.xml) and common abbreviations (`t` -> trigger).
+        Operators come from add_tutorial.REFPAGE_ALIAS (already in the repo);
+        the word-aliases below were each verified to resolve to a real refpage.
+        """
+        aliases = dict(_VERIFIED_WORD_ALIASES)
+        try:
+            from add_tutorial import REFPAGE_ALIAS  # lazy: avoids import cycle
+            aliases.update(REFPAGE_ALIAS)
+        except Exception:
+            pass
+        return aliases
+
+    def resolve_object(self, name):
+        r = self._rp.lookup(name)
+        if r is not None:
+            return {"source": "c74-refpage", "numinlets": r["numinlets"],
+                    "numoutlets": r["numoutlets"], "outlettype": r["outlettype"]}
+        p = self._pkg.lookup(name)
+        if p is not None:
+            return {"source": "package", **p}
+        # Operator / abbreviation alias -> documented refpage name
+        alias = self._aliases.get(name)
+        if alias:
+            r = self._rp.lookup(alias)
+            if r is not None:
+                return {"source": "c74-refpage-alias", "numinlets": r["numinlets"],
+                        "numoutlets": r["numoutlets"], "outlettype": r["outlettype"]}
+        return None
+
+    def attrs_for(self, name):
+        """Complete valid-attribute set for an object: its own refpage attrs
+        UNION the jbox base attrs it inherits. Returns (set, source) or
+        (None, …) when the object has no refpage (can't enumerate)."""
+        r = self._rp.lookup(name)
+        if r is None:
+            return None, "no-refpage"
+        return set(r.get("attributes", {}).keys()) | self._base_attrs, "c74-refpage"
+
+    def abstraction_exists(self, name):
+        for d in self._dirs:
+            try:
+                if (d / f"{name}.maxpat").exists():
+                    return True
+            except OSError:
+                continue
+        return False
+
+def build_resolver(search_dirs=None):
+    """Construct the authoritative resolver for the anti-guessing checks.
+
+    Returns None if the verify library isn't importable (checker is optional).
+    search_dirs are extra directories to scan for abstractions (a <name>.maxpat);
+    cwd and the repo patches/ dir are always included.
+    """
+    if _verify_spec is None:
+        return None
+    dirs = [Path.cwd(), Path(__file__).resolve().parent / "patches"]
+    if search_dirs:
+        dirs.extend(search_dirs)
+    return _GateResolver(REFPAGE_CACHE, PACKAGE_OBJECTS_CACHE, dirs)
+
+
+def _gate_spec(spec, allow_unverified=False, search_dirs=None, stream=sys.stderr):
+    """Validate a spec before converting and decide whether to BLOCK the build.
+
+    Runs claude2max_verify WITH the authoritative resolver, so object names and
+    attributes are checked against C74 refpages + the package library — the
+    anti-guessing layer. Prints findings to stderr (stdout stays pure .maxpat).
+
+    Returns True if convert should proceed, False if it must abort. Any `error`
+    severity (unresolved object name, invalid attribute, malformed/dangling
+    connection) blocks unless allow_unverified is set. Warnings/style never block.
+    """
+    if _verify_spec is None:
+        return True  # checker unavailable — converter's own ValueErrors still apply
+    try:
+        resolver = build_resolver(search_dirs)
+        result = _verify_spec(spec, resolver=resolver)
+    except Exception:
+        return True  # never let a checker bug block a legitimate build
+    if result.get("violations"):
+        print("[verify] " + _verify_report(result).replace("\n", "\n[verify] "),
+              file=stream)
+    errors = result.get("counts", {}).get("error", 0)
+    if errors and not allow_unverified:
+        print(
+            f"\n[verify] BLOCKED: {errors} error(s) above must be fixed before "
+            f"converting. These are names/attributes/connections that do not "
+            f"exist in Max and would fail silently. Resolve them (lookup_object / "
+            f"list_attributes), or re-run with --allow-unverified to override.",
+            file=stream,
+        )
+        return False
+    return True
+
+
+# ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
 
@@ -54,6 +225,10 @@ MAXCLASS_DEFAULTS = {
     "button":   {"numinlets": 1, "numoutlets": 1, "outlettype": ["bang"]},
     "slider":   {"numinlets": 1, "numoutlets": 1, "outlettype": [""]},
     "dial":     {"numinlets": 1, "numoutlets": 1, "outlettype": ["float"]},
+    # kslider has 2 inlets (note / velocity) and 2 outlets (note out left,
+    # velocity out right — velocity fires first). Its refpage <misc name="Output">
+    # lists a single entry, so a refpage-derived count under-resolves it to 1/1.
+    "kslider":  {"numinlets": 2, "numoutlets": 2, "outlettype": ["", ""]},
     "inlet":    {"numinlets": 0, "numoutlets": 1, "outlettype": [""]},
     "outlet":   {"numinlets": 1, "numoutlets": 0, "outlettype": [""]},
     "textedit": {"numinlets": 1, "numoutlets": 4, "outlettype": ["", "int", "", ""]},
@@ -1504,6 +1679,12 @@ def main():
     p_convert = subparsers.add_parser("convert", help="Convert spec JSON to .maxpat")
     p_convert.add_argument("-i", "--input", help="Input spec JSON file (default: stdin)")
     p_convert.add_argument("-o", "--output", help="Output .maxpat file (default: stdout)")
+    p_convert.add_argument("--no-verify", action="store_true",
+                           help="Skip the binding-rule + anti-guessing check entirely")
+    p_convert.add_argument("--allow-unverified", action="store_true",
+                           help="Run the check but build even if it finds errors "
+                                "(unresolved object names, invalid attributes). "
+                                "Escape hatch — prefer fixing the spec.")
 
     # extract
     p_extract = subparsers.add_parser("extract", help="Extract spec from .maxpat")
@@ -1539,6 +1720,15 @@ def main():
                 spec = json.load(f)
         else:
             spec = json.load(sys.stdin)
+
+        if not getattr(args, "no_verify", False):
+            extra_dirs = [Path(args.input).resolve().parent] if args.input else []
+            if args.output:
+                extra_dirs.append(Path(args.output).resolve().parent)
+            if not _gate_spec(spec,
+                              allow_unverified=getattr(args, "allow_unverified", False),
+                              search_dirs=extra_dirs):
+                sys.exit(1)  # blocked — nothing written
 
         maxpat = convert_spec(spec)
         output = json.dumps(maxpat, indent=2)

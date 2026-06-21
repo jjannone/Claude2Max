@@ -70,7 +70,7 @@ The object ID (e.g. `"my_metro"`) is only used within the spec for wiring connec
 | `type` | yes | The Max object class (see supported types below) |
 | `text` | depends | Object text — required for `newobj`, `message`, `comment` |
 | `pos` | no | Explicit position as `[x, y]` — overrides auto-layout |
-| `size` | no | Explicit size as `[width, height]` |
+| `size` | no | Explicit **patching-view** size as `[width, height]`, overriding the object's default box size. Set only when the content needs it (wide `message`/`comment`, clipped routing text). Resizing for layout belongs in `presentation_rect`, not here — see *Preserve each object's default box size in the patching view* in `patching/MAX_PATCHING.md` § Common Pitfalls. |
 | `inlets` | no | Override number of inlets |
 | `outlets` | no | Override number of outlets |
 | `outlettype` | no | Override outlet types array |
@@ -246,6 +246,24 @@ Most Max objects only trigger output from inlet 0 (hot). These objects have two 
 | `dict` | 5 (dict, value, keys list, names list, status) | Assumed 2–3 |
 | `number` | 2 (value, bang-on-change) | Assumed 1 |
 | `flonum` | 2 (value, bang-on-change) | Assumed 1 |
+| `kslider` | 2 (note left, velocity right) **and** 2 inlets | Refpage `<misc name="Output">` has one entry → refpage-derived count under-resolves to 1/1 |
+
+`kslider` is now in `MAXCLASS_DEFAULTS` (2 in / 2 out), so a `type: "kslider"` spec no longer needs a manual `inlets`/`outlets` override. The refpage genuinely under-documents it; the converter override is the source of truth.
+
+### kslider — display messages, key range, mode
+
+`kslider` (onscreen keyboard) — verified against `max-ref/kslider.maxref.xml` and Max's shipped help:
+
+- **Outlets:** velocity out the **right** outlet *first*, then note out the **left** outlet. In a `pak`/`pack` to reassemble `[note vel]`, wire note → hot (left) inlet, velocity → cold (right) inlet.
+- **Display messages (what lights keys):**
+  - `chord <note> <vel> <note> <vel> …` — lights a whole set of notes at once (polyphonic, `mode 1`); sends note-offs for currently-held keys first, so it *replaces* the display. A bare `chord` (no pairs) clears it. **This is the only correct way to show a set of notes.** It does **not** echo back out the outlets, so a `chord` driven into a kslider whose outlets also feed logic does not feed back.
+  - `set <n>` — display a *single* value, **no output**. Cannot show a chord — `set` only ever holds one value.
+  - `clear` — clear highlighted notes, no output. `flush` — note-offs for held notes (poly), then clear.
+  - bare `int` / a note-on — displays **and outputs** (will echo). Use `chord`/`set`, not `int`, when driving the display from code you don't want to re-trigger.
+- **`mode` (int):** `0` = monophonic (one key), `1` = polyphonic (mirrors held note-ons/offs; a note-on with velocity 0 turns a key off), `2` = touchscreen.
+- **`offset` (int, default 36):** the **low MIDI key** (leftmost note), despite the refpage description saying "octaves" — the Inspector label is "Low MIDI Key Offset". *(Flagged for in-Max confirmation: the original Zendrum patch uses `offset 1`, which doesn't fit the low-MIDI-key reading cleanly — verify the exact semantics in Max before relying on non-default values.)*
+- **`range` (int, default 48):** number of keys displayed. Default offset + `range 13` ≈ one octave (36–48).
+- **`number` box and `kslider` both accept `set <n>`** = set displayed value without triggering output — use it to echo a value into a control without causing a feedback loop.
 
 ### Signal type compatibility
 
@@ -670,6 +688,8 @@ The `*.`, `+.` etc. variants are also valid float-mode objects, but prefer the f
 ## v8 / JavaScript Objects
 
 `v8` (Chrome V8 engine) and `js` (SpiderMonkey) objects share the same Max JS API. Prefer `v8` for new patches.
+
+> When the `v8`/`js` object is a reusable building block (not highly specific patch logic) — and especially when it reimplements, extends, or hybridizes an existing Max object — follow **Building Reusable Objects — Generalize, and Mirror the Vocabulary You Inherit** in `CLAUDE.md`: generalize it, stay backwards-compatible with the object it's based on, reuse the inherited object's message/attribute names, and flag any conflicts for the user rather than silently resolving them.
 
 **Spec usage** — `v8` is not in the converter's lookup table; always specify inlet/outlet counts:
 

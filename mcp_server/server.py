@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Claude2Max MCP server — Phase (i) complete; Phase (ii) module system in progress.
+Claude2Max MCP server — Phase (i) + (ii) complete; Phase (iii) verify_spec done.
 
 Exposes Max/MSP patching knowledge as first-class callable tools so Claude can
 query binding rules, object existence, and attribute validity rather than
@@ -18,7 +18,12 @@ lookup_object()     Authoritative object existence + I/O signature.
 search_packages()   Search 2,795-object package library by term.
 lookup_attribute()  Attribute validity check for a specific attr.
 list_attributes()   All valid attrs for an object (bulk verification).
+verify_spec()       Static binding-rule check on a spec before converting.
 essentials()        Backward-compat alias for load(["core"]).
+
+The verify_spec() rule library lives in mcp_server/claude2max_verify/ and is
+ALSO imported by spec2maxpat.py, so the same checks run automatically at convert
+time — one source of truth for the binding rules.
 
 Usage
 -----
@@ -43,9 +48,17 @@ from mcp.server.fastmcp import FastMCP
 # to sys.path lets us reuse RefpageCache — the same XML-backed lookup the
 # converter already uses — without duplicating the parsing logic.
 _REPO_ROOT = Path(__file__).resolve().parent.parent
+_MCP_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(_REPO_ROOT))
+sys.path.insert(0, str(_MCP_DIR))   # so claude2max_verify resolves when imported
 
 from spec2maxpat import RefpageCache  # noqa: E402 — path must be set first
+from spec2maxpat import build_resolver as _build_resolver  # noqa: E402
+
+# Shared rule library — also imported by spec2maxpat.py convert, so verification
+# fires both via this tool AND at convert time (single source of truth for rules).
+from claude2max_verify import format_report as _verify_report  # noqa: E402
+from claude2max_verify import verify_spec_json as _verify_spec_json  # noqa: E402
 
 _refpage = RefpageCache()
 
@@ -274,9 +287,32 @@ Recognition signals:
 _ESSENTIALS_MD = """\
 # Claude2Max — Max/MSP Binding Rules (essentials)
 
+## Operating stance — you do not know Max from memory
+
+Your training-data recall of Max object names, attributes, and wiring is right on
+shape but wrong on specifics often enough to break patches silently. So the rule
+is absolute: **every object name and every attribute you put in a spec must come
+from a tool call in this session — never from memory.** If a name "sounds right"
+for the kind of object, that feeling is not evidence; it is the exact signal to
+call `lookup_object` / `list_attributes` before writing it.
+
+This is enforced, not advisory. `spec2maxpat.py convert` runs the same checker as
+the `verify_spec` tool and **refuses to build** when it finds an object name that
+doesn't resolve (C74 refpage / installed package / abstraction on disk) or a
+`live.*` attribute that doesn't exist. A guess no longer ships silently — it
+stops the build with an error naming what to fix. Two consequences:
+
+1. Resolve first, write second. Call `verify_spec(spec_json)` before `convert`
+   to see and fix everything while you still hold the spec.
+2. If `convert` blocks you, the fix is to resolve the name (`lookup_object`) or
+   correct it — not to reach for `--allow-unverified`. Override only for a real
+   abstraction you've confirmed exists, and prefer marking that object
+   `"unverified": true` in the spec so the assertion is explicit and auditable.
+
 **Max's core failure mode is silent acceptance.** Unknown attributes, made-up
 object names, wrong inlet indices — all accepted without error, no warning.
-The patch loads and appears to work, then silently misbehaves.
+The patch loads and appears to work, then silently misbehaves. The gate above
+exists to turn that silent, out-of-session failure into a loud, in-session one.
 
 ---
 
@@ -1237,6 +1273,59 @@ def list_attributes(object_name: str) -> dict:
         "writable":   writable,
         "summary":    summary,
     }
+
+
+# ---------------------------------------------------------------------------
+# verify_spec() — static binding-rule checker (the safety net)
+# ---------------------------------------------------------------------------
+
+@mcp.tool()
+def verify_spec(spec_json: str) -> dict:
+    """
+    Statically check a Claude2Max spec against the binding rules BEFORE converting.
+
+    This is the safety net, not the primary knowledge mechanism — load() front-
+    loads the rules so you build correctly; verify_spec() catches what slipped
+    through. Run it on your spec JSON right before `spec2maxpat.py convert`. The
+    same checks also run automatically at convert time (shared rule library), so
+    this tool lets you see and fix violations while you still have the spec in
+    hand.
+
+    What it catches (by severity):
+      error   — will break the patch or the converter: connection referencing a
+                non-existent object, malformed connection shape, outlet/inlet
+                index past a declared count.
+      warning — binding-rule violations: no presentation view despite UI
+                controls, presented controls with no labels, visible cords
+                touching hidden boxes, redundant (unhidden) formatter message
+                boxes, unlabelled subpatcher inlets/outlets, untracked debug
+                scaffolding.
+      style   — convention nudges: non-ALL-CAPS user names, [js] instead of [v8].
+
+    Parameters
+    ----------
+    spec_json — the spec as a JSON string (the same JSON you pass to convert).
+
+    Return keys
+    -----------
+    ok          — bool. True iff zero errors AND zero warnings.
+    counts      — {"error": n, "warning": n, "style": n}
+    violations  — list of {rule, severity, location, message, source}
+    summary     — one-line headline
+    report      — pre-formatted multi-line text block (paste into reasoning)
+
+    Smoke tests
+    -----------
+    verify_spec('{"objects":{"a":{"type":"toggle"}},"connections":[]}')
+        → warning: presentation-required (UI control, no presentation view)
+    verify_spec('{"objects":{},"connections":[]}')  → ok: true
+    verify_spec('{"objects":{"x":{"type":"newobj","text":"oscparse"}},"connections":[]}')
+        → error: object-unresolved ('oscparse' is not a real Max object)
+    """
+    resolver = _build_resolver()  # authoritative: refpages + package library
+    result = _verify_spec_json(spec_json, resolver=resolver)
+    result["report"] = _verify_report(result)
+    return result
 
 
 if __name__ == "__main__":

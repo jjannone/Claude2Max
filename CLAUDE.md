@@ -291,6 +291,20 @@ This applies to: switching UI objects, reformatting data for a new display, repl
 
 Before implementing any new display for existing data, inventory every piece of information in the current format and confirm all of it is present in the new one.
 
+## Building Reusable Objects — Generalize, and Mirror the Vocabulary You Inherit
+
+When writing a `v8`/`js`/`jsui` object — or any new object that is **not** highly specific patch logic — the goal is a **reusable, drop-in building block**, not a one-off. A custom object is most valuable when it behaves like the Max objects it resembles, so anyone (including a future Claude) can wire it from existing knowledge without reading its source. Bespoke message/attribute names invented per-patch produce objects nobody can reuse and that silently break when wired like the object they look like. The discipline:
+
+1. **Generalize — build it for many situations, not the task in front of you.** Lift the specific patch's needs into parameters, attributes, and messages instead of hardcoding them. *Recognition signal:* if a value, range, count, or behavior is baked in because "that's what this patch needs," stop and expose it as an attribute/message with a sensible default.
+
+2. **If it is based on an existing object, it must be backwards-compatible** — it behaves as expected with **all** the existing messages and attributes of that object, so it can stand in for the original. The only exceptions are the specific messages/attributes the rewrite is deliberately changing — and those changes should be intentional and noted, not incidental.
+
+3. **If it inherits functionality from another object, reuse that object's message and attribute names** rather than inventing new ones — so the inherited behavior is driven exactly the way users already know. If reusing a name would create a conflict, **do not silently rename or resolve it — flag the conflict and let the user decide.**
+
+4. **If it is truly hybridizing two objects, import the full vocabulary of the base object and as much of the second object's as possible.** Import **all** attributes/messages from the base object; import as many as possible from the second. Keep the combined behavior as easy and transparent as you can, and **flag any confusions or conflicts (overlapping names, incompatible semantics) for the user to decide** rather than guessing. *For instance:* `zkeyboard` (`[v8ui]`, Zendrum_Player) hybridizes `kslider` (base) with `multislider` (second) — it imports the kslider attributes (`mode`, `offset`, `range`, …) and kslider messages (`int`/`float`, `set`, `chord`, `clear`, `flush`), adds the multislider-flavoured side (`setminmax`, `setval`, `fetch`, `list`, `clearvals`), and selects between the two behaviours with one new attribute (`@slidermode`). Where the two objects' conventions couldn't both be honored (e.g. right-inlet velocity passthrough), that was surfaced rather than silently dropped.
+
+This pairs with **Never Regress Functionality When Changing Modality** (a reimplementation arrives at least as capable) and **Never Write API Names From Memory** (verify the inherited object's real messages/attributes against its refpage before mirroring them). Note for verification: a custom object has no C74 refpage, so the `verify_spec` gate can't check its attributes — shipping a `<name>.maxref.xml` (and a `<name>.maxhelp`) for any reusable object you create lets the gate and other tooling validate it like a built-in.
+
 ## Model Selection — When to Use Opus vs Sonnet
 
 Claude Sonnet is the default and handles most tasks. **Do not proceed silently on Sonnet when Opus is warranted** — pause and prompt the user first. Use the exact phrasing below so the prompt is unambiguous.
