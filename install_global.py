@@ -25,6 +25,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent
 HOOK_SCRIPT = REPO_ROOT / "hooks" / "claude2max_max_edit_gate.py"
+CONTENT_GATE_SCRIPT = REPO_ROOT / "hooks" / "claude2max_maxpat_content_gate.py"
 SKILL_SRC   = REPO_ROOT / "skills" / "max-patching" / "SKILL.md"
 MCP_SERVER  = REPO_ROOT / "mcp_server" / "server.py"
 MCP_NAME    = "claude2max"
@@ -142,6 +143,61 @@ def install_hook(dry: bool) -> bool:
     return True
 
 
+# ── Content gate (PostToolUse) ────────────────────────────────────────────────
+# Anti-guessing check of a HAND-EDITED .maxpat — the half the convert gate can't
+# see. Registered globally so it fires on patch edits in ANY project.
+
+def _content_gate_entry() -> dict:
+    return {
+        "type": "command",
+        "command": f"python3 {CONTENT_GATE_SCRIPT}",
+        "statusMessage": "Checking patch for invented names...",
+    }
+
+
+def _content_gate_already_installed(settings: dict) -> bool:
+    cmd = str(CONTENT_GATE_SCRIPT)
+    for block in settings.get("hooks", {}).get("PostToolUse", []):
+        if block.get("matcher") == _HOOK_MATCHER:
+            for h in block.get("hooks", []):
+                if cmd in h.get("command", ""):
+                    return True
+    return False
+
+
+def install_content_gate(dry: bool) -> bool:
+    _dry(f"Merging PostToolUse content gate into {CLAUDE_SETTINGS}", dry)
+    if dry:
+        print(f"  matcher: {_HOOK_MATCHER}")
+        print(f"  command: python3 {CONTENT_GATE_SCRIPT}")
+        return True
+
+    CLAUDE_SETTINGS.parent.mkdir(parents=True, exist_ok=True)
+    settings: dict = {}
+    if CLAUDE_SETTINGS.exists():
+        try:
+            settings = json.loads(CLAUDE_SETTINGS.read_text())
+        except json.JSONDecodeError:
+            print(f"  ✗ {CLAUDE_SETTINGS} is not valid JSON — cannot merge gate safely.")
+            return False
+
+    if _content_gate_already_installed(settings):
+        print("  ✓ Content gate already installed — skipping")
+        return True
+
+    post = settings.setdefault("hooks", {}).setdefault("PostToolUse", [])
+    for block in post:
+        if block.get("matcher") == _HOOK_MATCHER:
+            block.setdefault("hooks", []).append(_content_gate_entry())
+            break
+    else:
+        post.append({"matcher": _HOOK_MATCHER, "hooks": [_content_gate_entry()]})
+
+    CLAUDE_SETTINGS.write_text(json.dumps(settings, indent=4))
+    print(f"  ✓ Content gate merged into {CLAUDE_SETTINGS}")
+    return True
+
+
 # ── Verification ──────────────────────────────────────────────────────────────
 
 def verify() -> None:
@@ -244,6 +300,7 @@ def main() -> None:
         install_mcp(args.env, dry),
         install_skill(dry),
         install_hook(dry),
+        install_content_gate(dry),
     ]
 
     print()

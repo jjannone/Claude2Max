@@ -20,17 +20,11 @@ from __future__ import annotations
 
 import json
 
-from .rules import ERROR, STYLE, WARNING, run_all
+from .rules import ERROR, STYLE, WARNING, run_all, run_resolver_rules
 
 
-def verify_spec(spec: dict, resolver=None) -> dict:
-    """Run every binding-rule check against a parsed spec dict.
-
-    Pass ``resolver`` (see spec2maxpat.build_resolver) to also run the
-    anti-guessing rules — object names and attributes checked against the
-    authoritative C74 refpages + package library.
-    """
-    violations = run_all(spec, resolver=resolver)
+def _shape(violations) -> dict:
+    """Build the stable result dict from a list of Violation objects."""
     counts = {ERROR: 0, WARNING: 0, STYLE: 0}
     for v in violations:
         counts[v.severity] = counts.get(v.severity, 0) + 1
@@ -55,6 +49,28 @@ def verify_spec(spec: dict, resolver=None) -> dict:
         "violations": [v.to_dict() for v in violations],
         "summary": headline,
     }
+
+
+def verify_resolver_only(spec: dict, resolver) -> dict:
+    """Run ONLY the anti-guessing resolver rules (object / attribute / message).
+
+    Same result-dict shape as verify_spec. Used by the post-edit .maxpat content
+    gate, which wants the silent-failure NAME checks without the spec-format
+    principle warnings. Returns the clean ``no resolver`` result if resolver is None.
+    """
+    if resolver is None:
+        return _shape([])
+    return _shape(run_resolver_rules(spec, resolver))
+
+
+def verify_spec(spec: dict, resolver=None) -> dict:
+    """Run every binding-rule check against a parsed spec dict.
+
+    Pass ``resolver`` (see spec2maxpat.build_resolver) to also run the
+    anti-guessing rules — object names and attributes checked against the
+    authoritative C74 refpages + package library.
+    """
+    return _shape(run_all(spec, resolver=resolver))
 
 
 def verify_spec_json(spec_json: str, resolver=None) -> dict:

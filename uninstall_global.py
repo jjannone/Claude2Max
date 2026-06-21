@@ -96,6 +96,41 @@ def remove_hook(dry: bool) -> None:
         print(f"  ✓ Hook was not installed — nothing to remove")
 
 
+def remove_content_gate(dry: bool) -> None:
+    _dry(f"Removing PostToolUse content gate from {CLAUDE_SETTINGS}", dry)
+    if dry:
+        return
+    if not CLAUDE_SETTINGS.exists():
+        print(f"  ✓ {CLAUDE_SETTINGS} not found — nothing to remove")
+        return
+    try:
+        settings = json.loads(CLAUDE_SETTINGS.read_text())
+    except json.JSONDecodeError:
+        print(f"  ✗ {CLAUDE_SETTINGS} is not valid JSON — cannot edit safely")
+        return
+
+    cmd = str(REPO_ROOT / "hooks" / "claude2max_maxpat_content_gate.py")
+    post = settings.get("hooks", {}).get("PostToolUse", [])
+    changed, new_post = False, []
+    for block in post:
+        if block.get("matcher") == _HOOK_MATCHER:
+            original = block.get("hooks", [])
+            filtered = [h for h in original if cmd not in h.get("command", "")]
+            if len(filtered) != len(original):
+                changed = True
+            if filtered:
+                new_post.append({**block, "hooks": filtered})
+        else:
+            new_post.append(block)
+
+    if changed:
+        settings["hooks"]["PostToolUse"] = new_post
+        CLAUDE_SETTINGS.write_text(json.dumps(settings, indent=4))
+        print(f"  ✓ Content gate removed from {CLAUDE_SETTINGS}")
+    else:
+        print(f"  ✓ Content gate was not installed — nothing to remove")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description=__doc__,
@@ -110,6 +145,7 @@ def main() -> None:
     remove_mcp(dry)
     remove_skill(dry)
     remove_hook(dry)
+    remove_content_gate(dry)
 
     print()
     if dry:

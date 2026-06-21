@@ -44,10 +44,12 @@ from pathlib import Path
 try:
     sys.path.insert(0, str(Path(__file__).resolve().parent / "mcp_server"))
     from claude2max_verify import format_report as _verify_report
+    from claude2max_verify import verify_resolver_only as _verify_resolver_only
     from claude2max_verify import verify_spec as _verify_spec
 except Exception:  # pragma: no cover — checker is a convenience, never required
     _verify_spec = None
     _verify_report = None
+    _verify_resolver_only = None
 
 
 # Universal box attributes, inherited by every box from the jbox base class.
@@ -216,6 +218,35 @@ class _GateResolver:
         """
         return set(self._observed.get(name, set()))
 
+    def messages_for(self, name):
+        """Documented message (method) names for an object, from its refpage methodlist.
+
+        Returns (set, source) where set = the names in the refpage `<methodlist>`,
+        or (None, "no-refpage") when the object has no refpage. Mirrors the alias
+        resolution in resolve_object so operator abbreviations get their refpage
+        methods checked. NOTE: refpage methodlists are materially incomplete (more
+        so than attributelists), so callers should treat a miss as a SUSPICION
+        (warning), not a certainty — there is no jbox/observed backstop for
+        messages the way there is for attributes.
+        """
+        r = self._rp.lookup(name)
+        if r is None:
+            alias = self._aliases.get(name)
+            if alias:
+                r = self._rp.lookup(alias)
+        if r is None:
+            return None, "no-refpage"
+        return set(r.get("messages", {}).keys()), "c74-refpage"
+
+    def healthy(self):
+        """True if object resolution is actually working (a core C74 object resolves).
+
+        Used to distinguish "gate ran and found nothing" from "gate could not run"
+        (refpages missing / cache broken) — the latter must fail LOUD, not silent,
+        or the whole anti-guessing guarantee silently evaporates.
+        """
+        return self.resolve_object("metro") is not None
+
     def abstraction_exists(self, name):
         for d in self._dirs:
             try:
@@ -252,12 +283,43 @@ def _gate_spec(spec, allow_unverified=False, search_dirs=None, stream=sys.stderr
     connection) blocks unless allow_unverified is set. Warnings/style never block.
     """
     if _verify_spec is None:
-        return True  # checker unavailable — converter's own ValueErrors still apply
+        # The checker isn't importable at all — say so LOUDLY. A silent skip here
+        # means the anti-guessing guarantee has evaporated and nobody knows.
+        print(
+            "[verify] WARNING: anti-guessing checks are DISABLED — the "
+            "claude2max_verify library could not be imported. Object/attribute/"
+            "message names are NOT being verified; invented names will pass "
+            "through and fail silently in Max.",
+            file=stream,
+        )
+        return True  # converter's own ValueErrors still apply
     try:
         resolver = build_resolver(search_dirs)
+        if resolver is None or not resolver.healthy():
+            # Resolver couldn't initialise or can't resolve a core object (metro)
+            # → C74 refpages missing / cache broken. The structural rules still
+            # run, but the anti-guessing layer is blind. Fail LOUD, not silent.
+            why = ("the verify library is unavailable" if resolver is None
+                   else "C74 refpages were not found (resolve_object('metro') "
+                        "returned None) — check the Max install path")
+            print(
+                f"[verify] WARNING: anti-guessing object/attribute/message checks "
+                f"are DEGRADED because {why}. Names that don't exist in Max will "
+                f"NOT be caught here and will fail silently. Structural checks "
+                f"still apply.",
+                file=stream,
+            )
         result = _verify_spec(spec, resolver=resolver)
-    except Exception:
-        return True  # never let a checker bug block a legitimate build
+    except Exception as exc:
+        # A checker bug must never block a legitimate build — but it must not pass
+        # silently either, or a regression in the gate disables the gate invisibly.
+        print(
+            f"[verify] WARNING: the verifier raised {exc!r} and was skipped for "
+            f"this build. Anti-guessing checks did NOT run. This is a bug worth "
+            f"reporting; the patch was built UNVERIFIED.",
+            file=stream,
+        )
+        return True
     if result.get("violations"):
         print("[verify] " + _verify_report(result).replace("\n", "\n[verify] "),
               file=stream)
@@ -272,6 +334,150 @@ def _gate_spec(spec, allow_unverified=False, search_dirs=None, stream=sys.stderr
         )
         return False
     return True
+
+
+# ---------------------------------------------------------------------------
+# Native .maxpat content gate — anti-guessing over a HAND-EDITED patch file.
+#
+# The convert gate only covers patches produced THROUGH the converter. The most
+# tempting shortcut — open the .maxpat JSON and edit a box by hand — bypasses it
+# entirely. gate_maxpat_file() closes that hole: it reads a native .maxpat /
+# .maxhelp / .amxd, transforms each patcher scope into the spec shape the rule
+# library consumes, and runs the SAME anti-guessing resolver rules (object name +
+# attribute + message) the convert gate runs. Wired into a PostToolUse hook, it
+# tells Claude — in-session — when a hand-edit introduced an invented name.
+# ---------------------------------------------------------------------------
+
+# Box keys that are structural, not attributes (mirrors maxhelp/extract_observed_attrs).
+_MAXPAT_STRUCTURAL_KEYS = frozenset({
+    "id", "maxclass", "text", "numinlets", "numoutlets", "outlettype",
+    "patching_rect", "presentation_rect", "patcher", "saved_object_attributes",
+    "saved_attribute_attributes", "prototypename", "style",
+})
+
+
+def _load_maxpat_json(text):
+    """Parse a .maxpat/.maxhelp (plain JSON) or .amxd (ampf-prefixed JSON)."""
+    text = text.lstrip("﻿ \t\r\n")
+    if text.startswith("{"):
+        try:
+            return json.loads(text)
+        except json.JSONDecodeError:
+            pass
+    i = text.find("{")  # .amxd carries an 'ampf...' binary header before the JSON
+    if i >= 0:
+        try:
+            obj, _ = json.JSONDecoder().raw_decode(text[i:])
+            return obj
+        except json.JSONDecodeError:
+            return None
+    return None
+
+
+def _native_box_to_obj(box):
+    """A native .maxpat box → the {type, text, attrs} shape the rule library reads."""
+    mc = box.get("maxclass")
+    if not isinstance(mc, str) or not mc:
+        return None
+    obj = {"type": mc}
+    if box.get("text"):
+        obj["text"] = box["text"]  # needed for newobj class AND message selectors
+    keys = set(box.keys()) - _MAXPAT_STRUCTURAL_KEYS
+    soa = box.get("saved_object_attributes")
+    if isinstance(soa, dict):
+        keys |= set(soa.keys())
+    saa = box.get("saved_attribute_attributes")
+    if isinstance(saa, dict):
+        keys |= {k for k in saa if k != "valueof"}
+    if keys:
+        obj["attrs"] = {k: 1 for k in keys}  # rules check attr NAMES, not values
+    # carry an explicit unverified flag through if the author set one
+    if box.get("unverified"):
+        obj["unverified"] = box["unverified"]
+    return obj
+
+
+def _iter_patcher_scopes(patcher):
+    """Yield (objects, connections) for this patcher and every nested subpatcher.
+
+    Each scope is independent so box ids (which repeat across subpatchers) and the
+    connections that reference them stay consistent within their own scope.
+    """
+    objects, conns = {}, []
+    for entry in patcher.get("boxes", []) or []:
+        box = entry.get("box") if isinstance(entry, dict) else None
+        if not isinstance(box, dict):
+            continue
+        bid = box.get("id")
+        if bid in _SKIP_BOX_IDS:
+            continue  # our own infra boxes (spec embed, title) — not user content
+        # Spec-embed boxes vary by format (text.codebox @code, or an older
+        # newobj/comment @text); detect by the marker, as the extractor does.
+        if SPEC_MARKER_BEGIN in (box.get("code") or box.get("text") or ""):
+            continue
+        o = _native_box_to_obj(box)
+        if bid and o:
+            objects[bid] = o
+        sub = box.get("patcher")
+        if isinstance(sub, dict):
+            yield from _iter_patcher_scopes(sub)
+    for entry in patcher.get("lines", []) or []:
+        pl = entry.get("patchline") if isinstance(entry, dict) else None
+        if not isinstance(pl, dict):
+            continue
+        src, dst = pl.get("source"), pl.get("destination")
+        if (isinstance(src, list) and len(src) >= 2
+                and isinstance(dst, list) and len(dst) >= 2):
+            conns.append([src[0], src[1], dst[0], dst[1]])
+    yield objects, conns
+
+
+def gate_maxpat_file(path, stream=sys.stderr):
+    """Run the anti-guessing resolver rules over a native .maxpat/.maxhelp/.amxd file.
+
+    Returns a result dict: {checked, ok, counts, violations, summary, report,
+    [degraded], [error]}. `checked` is False when the file couldn't be parsed or
+    the resolver is unavailable (anti-guessing did NOT run — reported loudly).
+    """
+    p = Path(path)
+    blank = {"checked": False, "ok": True, "counts": {"error": 0, "warning": 0, "style": 0},
+             "violations": [], "summary": "", "report": ""}
+    if _verify_resolver_only is None:
+        print("[c2m-gate] WARNING: verify library unavailable — hand-edited "
+              ".maxpat NOT checked for invented names.", file=stream)
+        return {**blank, "error": "verify-lib-unavailable"}
+    try:
+        text = p.read_text(encoding="utf-8", errors="replace")
+    except OSError as exc:
+        return {**blank, "error": f"unreadable: {exc}"}
+    data = _load_maxpat_json(text)
+    if not isinstance(data, dict) or not isinstance(data.get("patcher"), dict):
+        return {**blank, "error": "not-a-patcher-file"}
+
+    resolver = build_resolver([str(p.parent)])
+    if resolver is None or not resolver.healthy():
+        why = ("verify library unavailable" if resolver is None
+               else "C74 refpages not found (resolve_object('metro') is None)")
+        print(f"[c2m-gate] WARNING: anti-guessing DEGRADED — {why}. "
+              f"'{p.name}' was NOT checked for invented names.", file=stream)
+        return {**blank, "degraded": True, "error": why}
+
+    all_v, counts = [], {"error": 0, "warning": 0, "style": 0}
+    for objects, conns in _iter_patcher_scopes(data["patcher"]):
+        if not objects:
+            continue
+        res = _verify_resolver_only({"objects": objects, "connections": conns}, resolver)
+        all_v.extend(res["violations"])
+        for k in counts:
+            counts[k] += res["counts"].get(k, 0)
+    ok = counts["error"] == 0 and counts["warning"] == 0
+    summary = (f"{counts['error']} error(s), {counts['warning']} warning(s) — "
+               f"invented names in {p.name}" if not ok
+               else f"clean — no invented names in {p.name}")
+    result = {"checked": True, "ok": ok, "counts": counts,
+              "violations": all_v, "summary": summary}
+    result["report"] = _verify_report(result) if all_v else summary
+    return result
 
 
 # ---------------------------------------------------------------------------

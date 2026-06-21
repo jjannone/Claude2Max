@@ -93,6 +93,11 @@ _CUSTOM_ATTR_OBJECTS = {
     "mxj", "mxj~",
     "gen~", "gen", "jit.gen", "jit.expr", "jit.gl.pix", "jit.gl.slab",
     "rnbo~",
+    # codebox-family content holders: their free-form `code` content attribute is
+    # real but not enumerated in the refpage attributelist (the converter's own
+    # hidden spec-embed box uses text.codebox @code).
+    "text.codebox", "dict.codebox", "coll.codebox", "osc.codebox",
+    "v8.codebox",
 }
 
 # Belt-and-suspenders supplement to the jbox base attrs the resolver unions in
@@ -105,6 +110,32 @@ _UNIVERSAL_BOX_ATTRS = {
     "comment", "varname", "hidden", "presentation", "presentation_rect",
     "patching_rect", "rect", "fontsize", "fontname", "fontface",
 }
+
+# Messages nearly every object accepts — never flag these as suspect. Kept small
+# and high-confidence: flagging a REAL message as fake is worse than missing one.
+_UNIVERSAL_MESSAGES = {
+    "bang", "int", "float", "list", "symbol", "set", "anything",
+}
+
+# Objects whose inlet-0 input is DATA being shaped / routed / matched, not a
+# method selector. A leading symbol in a message into one of these is content,
+# not a method call, so the message rule must NOT check it against their
+# methodlist. (zl.* handled by prefix.) Membership only SUPPRESSES a check, so a
+# generous list trades missed errors (acceptable) for zero false positives.
+_PASSTHROUGH_TARGETS = {
+    "prepend", "append", "message", "sprintf", "combine", "tosymbol",
+    "fromsymbol", "route", "routepass", "router", "select", "sel",
+    "gate", "ggate", "switch", "gswitch", "gswitch2", "swap",
+    "pack", "pak", "unpack", "vexpr", "expr", "if", "trigger", "t",
+    "bangbang", "b", "buddy", "bucket", "pipe", "delay", "deferlow",
+    "join", "spell", "atoi", "itoa", "regexp", "match", "change", "thresh",
+    "onebang", "speedlim", "qlim", "decode", "iter", "counter", "grab",
+}
+
+
+def _is_symbol_selector(s: str) -> bool:
+    """A leading-alphabetic token that reads as a method name (not a number / $1)."""
+    return bool(s) and s[0].isalpha() and all(c.isalnum() or c in "_." for c in s)
 
 
 def _is_unverified(obj) -> bool:
@@ -549,6 +580,9 @@ def rule_prefer_v8(ctx: SpecContext) -> list:
 #   attrs_for(name)             -> (set|None, source)
 #       set = object's own refpage attrs UNION the jbox base attrs it inherits;
 #       None = object has no refpage (can't enumerate the valid set)
+#   messages_for(name)          -> (set|None, source)   [optional]
+#       set = the names in the object's refpage methodlist; None = no refpage.
+#       Optional — rule_message_resolves no-ops if the resolver lacks it.
 #   abstraction_exists(name)    -> bool   (a <name>.maxpat on the search path)
 # ───────────────────────────────────────────────────────────────────────────
 
@@ -679,6 +713,70 @@ def rule_attribute_resolves(ctx: SpecContext, resolver) -> list:
     return out
 
 
+def rule_message_resolves(ctx: SpecContext, resolver) -> list:
+    """
+    Anti-guessing for MESSAGES (method selectors) — WARNING severity.
+
+    A `message` box's first token is a method selector sent to whatever its outlet
+    feeds at inlet 0. If that selector is absent from the target's documented
+    methodlist, it MAY be an invented message Max will silently ignore (the same
+    silent-failure mode as a bad attribute, on a surface nothing else checks).
+
+    WARNING, not ERROR, on purpose: refpage methodlists are materially incomplete
+    (much more than attributelists) and there is no jbox/observed backstop for
+    messages, so an absence is a SUSPICION worth surfacing, not a certainty worth
+    blocking the build. Firing is deliberately conservative — flag only when the
+    selector is symbolic, non-universal, and absent from EVERY *checkable*
+    dispatching target (resolves, has a non-empty methodlist, isn't a
+    data-passthrough/router or a custom-script object). That keeps false positives
+    near zero while still catching `chord`→metro-style invented messages.
+
+    (Promotion path to ERROR: mine an observed-messages corpus from the help
+    patches — message-box text traced to its target — to backstop the incomplete
+    methodlists, exactly as observed-attrs backstops the attribute rule.)
+    """
+    if resolver is None or not hasattr(resolver, "messages_for"):
+        return []
+    out = []
+    for oid, obj in ctx.objects.items():
+        if not isinstance(obj, dict) or ctx.maxclass(obj) != "message":
+            continue
+        toks = ctx.text(obj).split()
+        if not toks:
+            continue
+        sel = toks[0]
+        if sel in _UNIVERSAL_MESSAGES or not _is_symbol_selector(sel):
+            continue  # numeric / $-template / punctuation → not a named selector
+        checkable = []  # (target_class, methodset) for inlet-0 dispatching targets
+        for _i, conn in ctx.outgoing.get(oid, []):
+            if len(conn) < 4 or conn[3] != 0:
+                continue  # a selector is only interpreted at the left inlet (0)
+            tgt = ctx.objects.get(conn[2])
+            if not isinstance(tgt, dict):
+                continue
+            tcls = _classname(ctx, tgt)
+            if (not tcls or tcls in _PASSTHROUGH_TARGETS or tcls.startswith("zl")
+                    or tcls in _CUSTOM_ATTR_OBJECTS or _is_unverified(tgt)):
+                continue
+            msgs, _src = resolver.messages_for(tcls)
+            if not msgs:
+                continue  # no / empty methodlist → can't judge this target
+            checkable.append((tcls, msgs))
+        if not checkable or any(sel in msgs for _t, msgs in checkable):
+            continue
+        targets = sorted({t for t, _ in checkable})
+        out.append(Violation(
+            "message-unverified", WARNING, oid,
+            f"message '{sel}' is not in the documented methodlist of its "
+            f"target(s) [{', '.join(targets)}]. It may be an invented message Max "
+            f"will silently ignore — or a real-but-undocumented one. Check the "
+            f"object's messages with lookup_object('{targets[0]}') before relying "
+            f"on it.",
+            "CLAUDE.md > Never Write API Names From Memory",
+        ))
+    return out
+
+
 # ── registry — order is the report order ──────────────────────────────────────
 REGISTRY = [
     # errors
@@ -698,13 +796,40 @@ REGISTRY = [
     rule_prefer_v8,
 ]
 
-# Rules that need an authoritative resolver (object/attribute existence). Run
-# only when one is supplied. This is the anti-guessing layer.
+# Rules that need an authoritative resolver (object/attribute/message existence).
+# Run only when one is supplied. This is the anti-guessing layer — the same set
+# runs at convert time, via the verify_spec tool, AND via the post-edit .maxpat
+# content gate (run_resolver_rules), so all three agree on what's a guess.
 RESOLVER_REGISTRY = [
     rule_object_resolves,
     rule_attribute_resolves,
+    rule_message_resolves,
     rule_maxclass_resolves,
 ]
+
+
+def run_resolver_rules(spec: dict, resolver) -> list:
+    """Run ONLY the anti-guessing resolver rules (object / attribute / message).
+
+    Used by the post-edit .maxpat content gate, which wants the silent-failure
+    name checks without the spec-format principle warnings (presentation, labels,
+    debug marking) that don't map cleanly onto a hand-edited native patch. Returns
+    the same Violation objects the convert gate produces — one rule library, so
+    convert and the post-edit gate flag identically.
+    """
+    ctx = SpecContext(spec)
+    violations: list = []
+    for rule in RESOLVER_REGISTRY:
+        try:
+            violations.extend(rule(ctx, resolver) or [])
+        except Exception as exc:
+            violations.append(Violation(
+                "rule-crashed", STYLE, rule.__name__,
+                f"Internal: rule {rule.__name__} raised {exc!r}; skipped.",
+                "claude2max_verify",
+            ))
+    violations.sort(key=lambda v: (_SEV_ORDER.get(v.severity, 9), v.rule))
+    return violations
 
 
 def run_all(spec: dict, resolver=None) -> list:

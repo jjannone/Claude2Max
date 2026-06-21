@@ -14,11 +14,17 @@ Public API:
 """
 
 from .rules import ERROR, STYLE, WARNING, Violation
-from .verify import format_report, verify_spec, verify_spec_json
+from .verify import (
+    format_report,
+    verify_resolver_only,
+    verify_spec,
+    verify_spec_json,
+)
 
 __all__ = [
     "verify_spec",
     "verify_spec_json",
+    "verify_resolver_only",
     "format_report",
     "Violation",
     "ERROR",

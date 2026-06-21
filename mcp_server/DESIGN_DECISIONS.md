@@ -420,3 +420,85 @@ answers about the same attribute — which was the whole point of the gate.
 `spec2maxpat.build_resolver()` constructs it from the converter's existing
 `RefpageCache` + `PackageObjectsCache` + an on-disk abstraction check + a one-time
 scan of the refpage attribute universe. The MCP server passes the same resolver.
+
+---
+
+## (i) Making the gate authoritative — messages, hand-edits, fail-loud (2026-06-21)
+
+After an honest review of the gate's blast radius, three gaps were closed so the
+anti-guessing guarantee covers more surface and never switches off silently.
+
+**1. Message / method validation (`rule_message_resolves`, WARNING).** The gate
+checked object names and attributes but nothing about *messages* — the selector in
+a `[message foo …]` box sent to a downstream object. `RefpageCache` already parses
+the `<methodlist>`, so `_GateResolver.messages_for(name)` exposes it. The rule
+flags a message box's leading symbol when it's absent from every *checkable*
+inlet-0 target (resolves, has a non-empty methodlist, isn't a data-passthrough/
+router like `prepend`/`route`/`zl*` or a custom-script object). **Severity is
+WARNING, not ERROR, by deliberate decision**: refpage methodlists are materially
+more incomplete than attributelists, and there is no jbox/observed backstop for
+messages, so an absence is a *suspicion* (could be invented OR real-but-
+undocumented), not a certainty worth blocking the build. Firing is conservative
+(symbolic selector, non-universal, absent from all checkable targets) to keep false
+positives near zero — `chord`→`metro` flags, `chord`→`kslider` (real) does not.
+*Promotion path to ERROR:* mine an observed-messages corpus from the help patches
+(message-box text traced to its target), exactly as observed-attrs backstops the
+attribute rule. Runs in all three entry points (convert, `verify_spec`, post-edit).
+
+**2. The hand-edit hole — a PostToolUse content gate.** The convert gate only
+covers patches built *through* the converter; editing a `.maxpat`'s JSON by hand
+(the most tempting shortcut for an overconfident model) bypassed it entirely.
+`spec2maxpat.gate_maxpat_file(path)` reads a native `.maxpat`/`.maxhelp`/`.amxd`,
+transforms each patcher scope into the spec shape, and runs the SAME resolver
+rules via `claude2max_verify.run_resolver_rules` / `verify_resolver_only` — one
+rule library, so the hand-edit gate flags exactly what the convert gate flags.
+`hooks/claude2max_maxpat_content_gate.py` (PostToolUse, matcher `Edit|Write`)
+runs it after a patch edit and feeds invented names back to Claude as
+`hookSpecificOutput.additionalContext` (the documented PostToolUse feedback
+channel; exit 0). **Non-blocking by necessity** — the edit already happened and
+PostToolUse can't undo it — so it informs rather than blocks, and is bulletproof
+(any error → exit 0, no output, never disrupts the session). Registered both in
+the repo `.claude/settings.json` (in-repo + ships to cloners) and via
+`install_global.py` (cross-project; `__file__` locates the clone even when the
+edited patch lives in another project). Native-format specifics: spec-embed boxes
+are skipped by id AND by the `--- CLAUDE2MAX SPEC ---` content marker (older
+patches stored the embed in a `newobj`, not `text.codebox`); codebox-family
+classes are exempted from attribute checks (their `code` content attr is real but
+unlisted); message-box `text` is carried through (not just `newobj` text).
+
+**3. Fail loud, never silent, when the gate can't run.** `_gate_spec` previously
+returned `True` (proceed) silently when the verify lib was missing, the resolver
+was `None`, or any exception fired — so a broken refpage cache disabled the whole
+anti-guessing layer with nobody told. Now each of those paths prints a `[verify]
+WARNING … DISABLED/DEGRADED` line to stderr first. `_GateResolver.healthy()`
+(probes `resolve_object('metro')`) distinguishes "ran, found nothing" from "could
+not run — C74 refpages not found". The build still proceeds (fail-open is the
+right call for not frustrating a legitimate build on a broken install) but the
+operator now SEES that verification didn't happen.
+
+**Still WARNING-only / unverified (honest scope):** principle checks
+(presentation, labels, hide-plumbing) remain warnings, not blocks; creation-arg
+*semantics* aren't validated; the message rule is a suspicion, not a block until
+an observed-messages corpus exists. See § (j) suggestions.
+
+## (j) Suggestions for promoting principle checks (not yet implemented)
+
+Candidates for making the *patching-principle* layer more authoritative, ranked by
+value-to-noise:
+- **Make `presentation-required` block (ERROR) when a patch has ≥N interactive
+  controls and no presentation view at all.** This is unambiguous and high-value —
+  a UI patch with zero presentation is never intentional. Keep label/plumbing
+  checks as warnings (they have legitimate exceptions).
+- **An unmissable convert summary line** even when only warnings fire — e.g.
+  `[verify] 3 warnings (presentation, 2 unlabelled controls) — not blocking` as a
+  single highlighted line, so warnings aren't lost in stderr scroll.
+- **Promote `message-unverified` to ERROR** once the observed-messages corpus
+  exists (see § (i).1) — the corpus removes the false-positive risk that forces
+  WARNING today.
+- **Validate creation-arg arity** against the refpage `<objarglist>` (e.g.
+  `metro` takes 0-1 args; `counter` 0-3) — catches `counter 0 3 5` style mistakes
+  the attribute rule can't see. Medium value, low false-positive risk.
+- **A repo-wide `verify_repo_invariants.py`** (already proposed in the
+  Repo-as-Total-Scope task) that runs `gate_maxpat_file` over every `patches/*.maxpat`
+  at commit time, so the known `locked_bgcolor`-class no-ops can't silently
+  re-accumulate.
