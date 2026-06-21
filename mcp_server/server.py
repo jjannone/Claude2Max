@@ -1086,16 +1086,80 @@ def search_packages(term: str, limit: int = 5) -> dict:
 # lookup_attribute() + list_attributes() — Step 4.
 # ---------------------------------------------------------------------------
 
+# Cached authoritative resolver — the SAME one spec2maxpat.py convert and the
+# verify_spec tool use. Sharing it is what guarantees lookup_attribute /
+# list_attributes give identical verdicts to the convert gate: an attribute the
+# gate accepts can never be reported "invalid" here, and vice versa.
+_resolver_obj = None
+_resolver_built = False
+
+
+def _resolver():
+    """Build (once) and cache the gate resolver; None if the verify lib is absent."""
+    global _resolver_obj, _resolver_built
+    if not _resolver_built:
+        try:
+            _resolver_obj = _build_resolver()
+        except Exception:
+            _resolver_obj = None
+        _resolver_built = True
+    return _resolver_obj
+
+
+def _jbox_attrs() -> dict:
+    """jbox base-class attribute metadata dict (rich), or {} if jbox refpage absent."""
+    jb = _refpage.lookup("jbox")
+    return jb["attributes"] if jb is not None else {}
+
+
 def _attrs_for(object_name: str) -> tuple[dict | None, str]:
     """
-    Return (attributes_dict, source_label) for object_name.
-    attributes_dict is None when the object has no refpage (can't verify).
+    Return (refpage_attributes_dict, source_label) for object_name.
+    The dict is the object's own refpage attrs (rich metadata) — None when the
+    object has no refpage. This is the RICH-METADATA source only; full VALIDITY
+    (refpage ∪ jbox ∪ observed-in-help) is decided via the shared resolver in the
+    tools below, so the tools agree with the convert gate.
     source_label: "c74-refpage" | "no-refpage".
     """
     c74 = _refpage.lookup(object_name)
     if c74 is not None:
         return c74["attributes"], "c74-refpage"
     return None, "no-refpage"
+
+
+def _classify_attr(object_name: str, attr: str):
+    """
+    Decide an attribute's validity and provenance the SAME way the convert gate does.
+
+    Returns (status, bucket) where:
+      status ∈ {"valid", "invalid", "cannot-verify"}
+      bucket ∈ {"refpage", "jbox-base", "observed-in-help", ""}
+
+    - valid / refpage          — object-specific attr listed in the C74 refpage
+    - valid / jbox-base        — universal box attr inherited from jbox
+    - valid / observed-in-help — attr seen on ≥3 shipped help patches (corpus)
+    - invalid                  — object HAS a refpage and attr is in none of the
+                                 three sources (matches a gate ERROR)
+    - cannot-verify            — object has NO refpage and attr not in the
+                                 positive observed allowlist (full attr space unknown)
+    """
+    refpage_attrs, _ = _attrs_for(object_name)
+    if refpage_attrs is not None and attr in refpage_attrs:
+        return "valid", "refpage"
+
+    r = _resolver()
+    if r is not None:
+        if attr in r.base_attrs():
+            # jbox-base counts only for objects that ARE boxes (have a refpage);
+            # for no-refpage externals we can't assume jbox inheritance applies.
+            if refpage_attrs is not None:
+                return "valid", "jbox-base"
+        if attr in r.observed_attrs(object_name):
+            return "valid", "observed-in-help"
+
+    if refpage_attrs is not None:
+        return "invalid", ""          # full attr space known, attr not in it
+    return "cannot-verify", ""        # no refpage, no positive observed signal
 
 
 @mcp.tool()
@@ -1115,99 +1179,123 @@ def lookup_attribute(object_name: str, attr: str) -> dict:
     object_name  — the Max object class (e.g. "live.gain~", "metro", "jit.matrix")
     attr         — the attribute name to check (e.g. "bgcolor", "coldcolor")
 
+    Validity matches the convert gate exactly — an attribute is valid if it is in
+    the object's own refpage, OR a universal box attr inherited from jbox
+    (textcolor, hidden, presentation, …), OR observed on ≥3 shipped help patches.
+    So `verify_spec`/convert and this tool never disagree.
+
     Return keys
     -----------
     valid           — bool. False means the attribute does NOT exist on this object.
     value_type      — str — declared type ("int", "float", "symbol", "list", etc.)
-    size            — int or str — number of values (may be "variable")
+                      ("" when known-valid only via jbox/help, no refpage metadata)
+    size            — int or str — number of values (may be "variable"); "" if no metadata
     default         — str — default value as declared in the refpage
     readable        — bool — can be queried with `getattr`
     writable        — bool — can be set with `@attr` or `setattr`
     inspector_label — str — how the attribute appears in Max's Inspector UI
     valid_values    — list[str] — always [] in v1 (Max refpages don't embed enum
                       values in XML; `enumvals` fields are present but null)
-    source          — "c74-refpage" | "no-refpage"
+    source          — where validity was established: "c74-refpage" | "jbox-base"
+                      (universal box attr) | "observed-in-help" (corpus) |
+                      "no-refpage" (couldn't verify / object not found)
     summary         — str — human-readable result block
 
     Smoke tests
     -----------
-    lookup_attribute("live.gain~", "bgcolor")   → valid=False
-    lookup_attribute("live.gain~", "coldcolor") → valid=True
+    lookup_attribute("live.gain~", "bgcolor")   → valid=False (in none of the three)
+    lookup_attribute("live.gain~", "coldcolor") → valid=True, source c74-refpage
+    lookup_attribute("toggle", "hidden")        → valid=True, source jbox-base
     """
     object_name = object_name.strip()
     attr        = attr.strip()
 
-    attrs, source = _attrs_for(object_name)
+    status, bucket = _classify_attr(object_name, attr)
 
-    if attrs is None:
-        # Object has no C74 refpage — can't verify attributes
-        # (Check whether the object exists at all for a better error message.)
-        obj_found = _refpage.lookup(object_name) is not None or object_name in _pkg_idx()
-        if obj_found:
-            msg = (
-                f"CANNOT VERIFY: '{object_name}' is a known package external "
-                f"but has no C74 refpage, so attribute names cannot be "
-                f"checked programmatically. Consult the package documentation "
-                f"before writing any attribute."
-            )
-        else:
-            msg = (
-                f"OBJECT NOT FOUND: '{object_name}' is not in C74 refpages "
-                f"or the package library. Resolve the object name first with "
-                f"lookup_object() before checking attributes."
-            )
+    # Pull rich refpage metadata when the attr is a refpage or jbox attr (jbox
+    # entries carry their own metadata in the jbox refpage).
+    entry = None
+    refpage_attrs, _ = _attrs_for(object_name)
+    if bucket == "refpage" and refpage_attrs is not None:
+        entry = refpage_attrs.get(attr)
+    elif bucket == "jbox-base":
+        entry = _jbox_attrs().get(attr)
+
+    if status == "valid":
+        if entry is not None:
+            inspector_label = entry.get("label", "") or ""
+            size = entry["size"]
+            summary_lines = [
+                f"VALID ({bucket}): {object_name} @{attr}",
+                f"  type={entry['type']}  size={size}  default={entry['default']!r}",
+                f"  readable={entry['get']}  writable={entry['set']}",
+            ]
+            if bucket == "jbox-base":
+                summary_lines.append("  (universal box attribute inherited from jbox)")
+            if inspector_label:
+                summary_lines.append(f"  inspector label: {inspector_label}")
+            return {
+                "valid":           True,
+                "value_type":      entry["type"],
+                "size":            size,
+                "default":         entry["default"],
+                "readable":        entry["get"],
+                "writable":        entry["set"],
+                "inspector_label": inspector_label,
+                "valid_values":    [],
+                "source":          "c74-refpage" if bucket == "refpage" else "jbox-base",
+                "summary":         "\n".join(summary_lines),
+            }
+        # Valid via the help corpus (no refpage metadata available).
         return {
-            "valid":           False,
+            "valid":           True,
             "value_type":      "",
-            "size":            0,
+            "size":            "",
             "default":         "",
-            "readable":        False,
-            "writable":        False,
+            "readable":        True,
+            "writable":        True,
             "inspector_label": "",
             "valid_values":    [],
-            "source":          source,
-            "summary":         msg,
-        }
-
-    entry = attrs.get(attr)
-    if entry is None:
-        return {
-            "valid":           False,
-            "value_type":      "",
-            "size":            0,
-            "default":         "",
-            "readable":        False,
-            "writable":        False,
-            "inspector_label": "",
-            "valid_values":    [],
-            "source":          source,
+            "source":          "observed-in-help",
             "summary": (
-                f"INVALID: '{attr}' is NOT a valid attribute of '{object_name}'. "
-                f"Max will silently accept and ignore it. "
-                f"Call list_attributes('{object_name}') to see all valid attrs."
+                f"VALID (observed-in-help): '{attr}' is used on '{object_name}' "
+                f"in shipped Max help patches (≥3 occurrences), but the object has "
+                f"no enumerable refpage, so type/default metadata isn't available. "
+                f"The name is real; consult the package docs for its value range."
             ),
         }
 
-    inspector_label = entry.get("label", "") or ""
-    size = entry["size"]
-    summary_lines = [
-        f"VALID: {object_name} @{attr}",
-        f"  type={entry['type']}  size={size}  default={entry['default']!r}",
-        f"  readable={entry['get']}  writable={entry['set']}",
-    ]
-    if inspector_label:
-        summary_lines.append(f"  inspector label: {inspector_label}")
+    if status == "cannot-verify":
+        obj_found = _refpage.lookup(object_name) is not None or object_name in _pkg_idx()
+        if obj_found:
+            msg = (
+                f"CANNOT VERIFY: '{object_name}' is a known package external with "
+                f"no C74 refpage, and '{attr}' is not in the help-corpus observed "
+                f"set for it. Can't confirm or deny — consult the package docs."
+            )
+        else:
+            msg = (
+                f"OBJECT NOT FOUND: '{object_name}' is not in C74 refpages or the "
+                f"package library. Resolve the object name first with "
+                f"lookup_object() before checking attributes."
+            )
+        return {
+            "valid": False, "value_type": "", "size": 0, "default": "",
+            "readable": False, "writable": False, "inspector_label": "",
+            "valid_values": [], "source": "no-refpage", "summary": msg,
+        }
+
+    # status == "invalid": object's full attr space is known and attr isn't in it.
     return {
-        "valid":           True,
-        "value_type":      entry["type"],
-        "size":            size,
-        "default":         entry["default"],
-        "readable":        entry["get"],
-        "writable":        entry["set"],
-        "inspector_label": inspector_label,
-        "valid_values":    [],
-        "source":          source,
-        "summary":         "\n".join(summary_lines),
+        "valid": False, "value_type": "", "size": 0, "default": "",
+        "readable": False, "writable": False, "inspector_label": "",
+        "valid_values": [], "source": "c74-refpage",
+        "summary": (
+            f"INVALID: '{attr}' is NOT a valid attribute of '{object_name}' "
+            f"(not in its refpage, the jbox base attrs, or the help corpus). "
+            f"Max will silently accept and ignore it. "
+            f"Call list_attributes('{object_name}') to see all valid attrs."
+        ),
     }
 
 
@@ -1225,55 +1313,90 @@ def list_attributes(object_name: str) -> dict:
 
     Return keys
     -----------
-    found        — bool. False if the object has no refpage (attributes unknown).
-    source       — "c74-refpage" | "no-refpage"
-    count        — int — number of valid attributes
-    attributes   — list[str] — attribute names, alphabetically sorted
-    writable     — list[str] — subset that are writable (settable)
-    summary      — str — formatted block for easy pasting into reasoning
+    found              — bool. False only if the object has neither a refpage nor
+                          any help-corpus observed attrs.
+    source             — "c74-refpage(+jbox+help)" | "observed-in-help" | "no-refpage"
+    count              — int — total number of valid attributes
+    attributes         — list[str] — the FULL valid set (refpage ∪ jbox ∪ observed),
+                          alphabetically sorted. This is exactly what the convert
+                          gate accepts.
+    writable           — list[str] — subset settable with `@attr` / `setattr`
+    refpage_attributes — list[str] — object-SPECIFIC attrs from the refpage
+    base_attributes    — list[str] — universal box attrs inherited from jbox
+    observed_only      — list[str] — attrs seen in help patches but NOT in the
+                          refpage or jbox (corpus-only knowledge)
+    summary            — str — formatted block for easy pasting into reasoning
 
     Smoke tests
     -----------
-    list_attributes("live.gain~")  → includes "coldcolor", NOT "bgcolor"
+    list_attributes("live.gain~")  → attributes includes "coldcolor" + "hidden",
+                                     NOT "bgcolor"; base_attributes includes "hidden"
     list_attributes("metro")       → includes "active", "interval"
+    list_attributes("bach.roll")   → found=True via observed-in-help (no refpage)
     """
     object_name = object_name.strip()
-    attrs, source = _attrs_for(object_name)
+    refpage_attrs, _ = _attrs_for(object_name)
+    r = _resolver()
+    base = r.base_attrs() if r is not None else set()
+    observed = r.observed_attrs(object_name) if r is not None else set()
 
-    if attrs is None:
+    if refpage_attrs is None:
+        # No refpage. The help corpus is a positive allowlist — if it has attrs
+        # for this object, report them; otherwise we genuinely can't enumerate.
+        if observed:
+            obs_sorted = sorted(observed)
+            summary = (
+                f"{object_name}: {len(obs_sorted)} attribute(s) observed-in-help "
+                f"(no C74 refpage; corpus is a positive allowlist, may be incomplete)\n"
+                f"  observed: {', '.join(obs_sorted)}"
+            )
+            return {
+                "found": True, "source": "observed-in-help",
+                "count": len(obs_sorted), "attributes": obs_sorted,
+                "writable": obs_sorted, "refpage_attributes": [],
+                "base_attributes": [], "observed_only": obs_sorted,
+                "summary": summary,
+            }
         obj_found = _refpage.lookup(object_name) is not None or object_name in _pkg_idx()
-        if obj_found:
-            msg = (
-                f"CANNOT LIST: '{object_name}' is a known package external "
-                f"but has no C74 refpage. Attribute list unavailable."
-            )
-        else:
-            msg = (
-                f"OBJECT NOT FOUND: '{object_name}'. Resolve with lookup_object() first."
-            )
+        msg = (
+            f"CANNOT LIST: '{object_name}' is a known package external but has no "
+            f"C74 refpage and no help-corpus observed attrs. Consult package docs."
+            if obj_found else
+            f"OBJECT NOT FOUND: '{object_name}'. Resolve with lookup_object() first."
+        )
         return {
-            "found":      False,
-            "source":     source,
-            "count":      0,
-            "attributes": [],
-            "writable":   [],
-            "summary":    msg,
+            "found": False, "source": "no-refpage", "count": 0, "attributes": [],
+            "writable": [], "refpage_attributes": [], "base_attributes": [],
+            "observed_only": [], "summary": msg,
         }
 
-    all_attrs    = sorted(attrs.keys())
-    writable     = sorted(n for n, e in attrs.items() if e["set"])
-    summary      = (
-        f"{object_name}: {len(all_attrs)} attributes ({source})\n"
-        f"  all:      {', '.join(all_attrs)}\n"
-        f"  writable: {', '.join(writable)}"
+    own = set(refpage_attrs.keys())
+    jbox_meta = _jbox_attrs()
+    full = own | base | observed
+    all_attrs = sorted(full)
+    refpage_only = sorted(own)
+    base_sorted = sorted(base)
+    observed_only = sorted(observed - own - base)
+
+    # writable: refpage-writable ∪ jbox-writable ∪ observed (set in real patches).
+    writable = sorted(
+        {n for n, e in refpage_attrs.items() if e["set"]}
+        | {n for n, e in jbox_meta.items() if n in base and e.get("set")}
+        | observed
+    )
+    summary = (
+        f"{object_name}: {len(all_attrs)} valid attributes "
+        f"(refpage {len(refpage_only)} + jbox {len(base_sorted)} + "
+        f"help-only {len(observed_only)})\n"
+        f"  object-specific: {', '.join(refpage_only)}\n"
+        f"  universal (jbox): {', '.join(base_sorted)}"
+        + (f"\n  help-corpus only: {', '.join(observed_only)}" if observed_only else "")
     )
     return {
-        "found":      True,
-        "source":     source,
-        "count":      len(all_attrs),
-        "attributes": all_attrs,
-        "writable":   writable,
-        "summary":    summary,
+        "found": True, "source": "c74-refpage(+jbox+help)",
+        "count": len(all_attrs), "attributes": all_attrs, "writable": writable,
+        "refpage_attributes": refpage_only, "base_attributes": base_sorted,
+        "observed_only": observed_only, "summary": summary,
     }
 
 
@@ -1324,7 +1447,7 @@ def verify_spec(spec_json: str) -> dict:
     verify_spec('{"objects":{"x":{"type":"newobj","text":"oscparse"}},"connections":[]}')
         → error: object-unresolved ('oscparse' is not a real Max object)
     """
-    resolver = _build_resolver()  # authoritative: refpages + package library
+    resolver = _resolver()  # cached; SAME resolver lookup_attribute/list_attributes use
     result = _verify_spec_json(spec_json, resolver=resolver)
     result["report"] = _verify_report(result)
     return result

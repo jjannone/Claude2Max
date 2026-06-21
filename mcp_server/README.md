@@ -102,8 +102,8 @@ restart Claude Code to pick up the newly registered MCP server.
 |---|---|
 | `lookup_object(name)` | Authoritative object existence + I/O: found, source, numinlets, numoutlets, digest, use_when. Call before adding any `newobj`. |
 | `search_packages(term, limit=5)` | Search the 2,795-object package library. Call before composing any chain of 3+ native objects. |
-| `lookup_attribute(object_name, attr)` | Attribute validity: valid bool, value_type, size, default, inspector_label. Call before writing any attribute. |
-| `list_attributes(object_name)` | All valid attribute names for an object, split into all / writable. |
+| `lookup_attribute(object_name, attr)` | Attribute validity, decided the **same way the convert gate decides it** — valid if in the object's refpage, the jbox base attrs (universal box attrs like `hidden`/`presentation`/`textcolor`), OR observed on ≥3 shipped help patches. `source` names which. Works even on no-refpage externals (positive-confirms an attr seen in help). Call before writing any attribute. |
+| `list_attributes(object_name)` | The **full** valid set (refpage ∪ jbox ∪ help-corpus), partitioned into `refpage_attributes` / `base_attributes` / `observed_only`, plus the `writable` subset. Same set the gate accepts — so the tool and `verify_spec`/convert never disagree. |
 
 ### Safety net — check the whole spec before converting (Phase iii)
 

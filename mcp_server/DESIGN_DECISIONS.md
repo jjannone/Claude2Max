@@ -385,6 +385,29 @@ select, `s`→send, `r`→receive, `b`→bangbang, `del`→delay, `j`→join) fr
 map in `spec2maxpat._VERIFIED_WORD_ALIASES`, each verified to resolve. Without
 these, every `t i i` / `+ 1` in a real patch would false-positive.
 
+**Extension — valid set is now `own refpage ∪ jbox ∪ observed-in-help`
+(2026-06-21).** The `.maxhelp` corpus crawl (deliverable (a)) produced a
+`maxclass → observed-attrs` map (`maxhelp/maxhelp_observed_attrs.json`): every
+attribute set on each class across ~12K shipped help/abstraction/M4L patches,
+filtered to a ≥3-box floor and with `rnbo*`/`frozen*` export artifacts dropped.
+`_GateResolver._load_observed_attrs()` unions this into `attrs_for()`, so a
+refpage-under-documented-but-real attr no longer false-positives. For **no-refpage**
+objects the observed set is a **positive allowlist only** — `attrs_for()` still
+returns `None` (full space unknown), so the gate never flags an attr absent from
+it, but the set can positively confirm one. This is what lets the tools verify
+high-vocab externals (`bach.roll` 95, `imubu` 127 attrs) that have no enumerable
+refpage.
+
+**Extension — the MCP attribute tools share this resolver (2026-06-21).**
+`lookup_attribute` / `list_attributes` were originally refpage-only, so they were
+*stricter than the gate* — reporting universal jbox attrs (`hidden`,
+`presentation`, …) INVALID while convert accepted them. They now decide validity
+through the SAME cached `_GateResolver` (`mcp_server.server._resolver()`; two
+public accessors `base_attrs()` / `observed_attrs()` added for provenance
+labelling), and `verify_spec` uses the cached instance too. Verified: **0
+tool-vs-gate disagreements**. The single server can no longer give two different
+answers about the same attribute — which was the whole point of the gate.
+
 **Escape hatches (all explicit, none silent):**
 - `"unverified": true` on an object → downgrades its unresolved error to a STYLE
   note (a deliberate, auditable "I confirmed this abstraction exists" assertion).

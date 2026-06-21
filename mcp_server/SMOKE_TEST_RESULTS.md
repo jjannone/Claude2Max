@@ -450,3 +450,41 @@ in <file>]` pointer.
 which needs the `mcp` SDK), so per the repo split they live here in
 SMOKE_TEST_RESULTS.md — `mcp_server/tests/test_verify.py` stays stdlib-only because
 it tests the `claude2max_verify` library, which has no `mcp` dependency.
+
+---
+---
+
+# Claude2Max MCP — Attribute Tools Unified With the Convert Gate (2026-06-21)
+
+**Bug fixed.** `lookup_attribute` / `list_attributes` were **refpage-only**, but the
+convert gate (which `verify_spec` invokes) validates against `refpage ∪ jbox ∪
+observed-in-help`. The same server therefore gave contradictory answers: it would
+call universal box attrs (`hidden`, `presentation`, `textcolor`, …) **INVALID** via
+`lookup_attribute` while `verify_spec`/convert accepted them. The query tools were
+*stricter than the gate* — exactly the kind of silent inconsistency this project
+exists to remove.
+
+**Fix.** Both tools now decide validity through the SAME cached `_GateResolver`
+the gate uses (`_resolver()` in server.py; `verify_spec` switched to it too).
+Two clean public accessors added to `_GateResolver` (`base_attrs()`,
+`observed_attrs(name)`) so the server labels provenance without duplicating the
+load or reaching into internals. New `_classify_attr()` returns
+`(status, bucket)` with `bucket ∈ {refpage, jbox-base, observed-in-help}`.
+
+**Results (all pass):**
+
+| Check | Outcome |
+|---|---|
+| `live.gain~ @bgcolor` | INVALID (canonical trap preserved — absent from all three sources) |
+| `live.gain~ @coldcolor` | VALID, source `c74-refpage` |
+| `live.gain~ @hidden`, `toggle @hidden`, `toggle @presentation` | VALID, source `jbox-base` (**was wrongly INVALID before**) |
+| `toggle @nonsenseattr` | INVALID |
+| **Tool-vs-gate agreement** | **0 disagreements** across live.gain~, toggle, metro, number, panel, multislider, jit.matrix — incl. the 4 known silent-no-op attrs (`panel/locked_bgcolor`, `multislider/contrast`, …) which BOTH now reject |
+| `bach.roll`, `imubu` (no refpage) | `list_attributes` found=True via `observed-in-help` (95 / 127 attrs); `lookup_attribute` positive-confirms a help-observed attr — **was "CANNOT VERIFY" before** |
+| `list_attributes("live.gain~")` partition | 54 total = 32 refpage + 21 jbox + 2 observed-only; `hidden` in `base_attributes` |
+| Regression | 38/38 verify tests pass; convert still blocks `oscparse`; `attrs_for` unaffected |
+
+**New return fields.** `lookup_attribute.source` now ∈ `{c74-refpage, jbox-base,
+observed-in-help, no-refpage}`. `list_attributes` adds `refpage_attributes`,
+`base_attributes`, `observed_only` (and `attributes` is now the full gate-accepted
+union, not refpage-only).

@@ -197,6 +197,25 @@ class _GateResolver:
         observed = self._observed.get(name, set())
         return own | self._base_attrs | observed, "c74-refpage"
 
+    def base_attrs(self):
+        """The jbox base-class attribute set every box inherits (read-only copy).
+
+        Public accessor so consumers (e.g. the MCP attribute tools) can label an
+        attribute's provenance — "this is a universal box attr, not object-specific"
+        — using the SAME set the gate validates against, with no duplicated load.
+        """
+        return set(self._base_attrs)
+
+    def observed_attrs(self, name):
+        """Help-corpus observed attrs for one object (≥3-box floor, filtered).
+
+        Empty set when the object isn't in the corpus. For no-refpage objects this
+        is a POSITIVE allowlist only — a non-empty return confirms an attr is real
+        (seen in shipped help patches); it never licenses flagging an attr absent
+        from it, since the object's full attr space is unknown.
+        """
+        return set(self._observed.get(name, set()))
+
     def abstraction_exists(self, name):
         for d in self._dirs:
             try:
