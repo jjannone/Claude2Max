@@ -9,18 +9,27 @@
 //                                        current attribute caps (no patcher walk
 //                                        in v1)
 //
-// Supported kinds (v1):
+// Supported kinds:
 //   dict          — synchronous via Dict.stringify()
 //   buffer~       — synchronous via Buffer.peek()
 //   jit.matrix    — synchronous via JitterMatrix.getcell() (capped)
+//   coll          — async: trigger `write <file>`, read+parse the file
+//   table         — async: trigger `write <file>`, read+parse the file
 //
-// Not supported in v1: coll, table, multislider, pattr, jit.cellblock.
-//   These need either a v8 wrapper class (which Max doesn't provide) or
-//   user-side wiring (e.g. `[receive <NAME>_INSPECT] → [coll <NAME>]`).
-//   `messnamed` does not route to coll/table boxes — it only delivers to
-//   `[receive]` objects bound to global symbols. Until a wired-mode is
-//   built into the abstraction, the inspector returns an explanatory
-//   error for these kinds.
+// coll/table have NO v8 wrapper class, and `messnamed` only delivers to
+// [receive] objects — never to a bare `coll NAME` / `table NAME`. So the
+// dumper reaches them by one of two documented-correct paths, tried in
+// order (see reachNamedWrite):
+//   (a) getnamed — this.patcher.getnamed(NAME).message("write", file).
+//       Zero wiring, but the object must have its Scripting Name (@varname)
+//       == NAME and live in the SAME patcher as [c2m.inspect].
+//   (b) messnamed relay — messnamed("NAME_INSPECT", "write", file), which
+//       requires a `[receive NAME_INSPECT] → [coll/table NAME]` wire. Works
+//       across patcher boundaries.
+// If neither path lands data in the file within @asyncdelay ms, the result
+// is a structured error naming both setup options.
+//
+// Still unsupported (no reliable v8 reach): multislider, pattr, jit.cellblock.
 //
 // Attributes (set on the v8 box with @attr value, or as messages):
 //   @cellcap <int>        max cells dumped per jit.matrix (default 10000, 0 = unlimited)
@@ -39,6 +48,10 @@ var cellcap     = 10000;
 var samplecap   = 4096;
 var tmpdir      = "/tmp";
 var asyncdelay  = 200;
+
+var SUPPORTED_KINDS = ["dict", "buffer~", "jit.matrix", "coll", "table"];
+var SENTINEL        = "__C2M_PENDING__";  // written before an async coll/table
+                                          // write so a no-op write is detectable
 
 declareattribute("cellcap",    null, "setcellcap");
 declareattribute("samplecap",  null, "setsamplecap");
@@ -61,6 +74,17 @@ function writejson(path, obj) {
         return false;
     }
     f.writestring(json);
+    f.close();
+    return true;
+}
+
+function writetext(path, str) {
+    var f = new File(path, "write");
+    if (!f.isopen) {
+        post("c2m.inspect: cannot open for write: " + path + "\n");
+        return false;
+    }
+    f.writestring(str);
     f.close();
     return true;
 }
@@ -99,11 +123,12 @@ function scan() {
     writejson(path, {
         ok:    true,
         ts:    Date.now(),
-        kinds_supported:   ["dict", "buffer~", "jit.matrix"],
-        kinds_unsupported: ["coll", "table"],
+        kinds_supported:   SUPPORTED_KINDS,
+        kinds_unsupported: ["multislider", "pattr", "jit.cellblock"],
         caps:  { cellcap: cellcap, samplecap: samplecap },
-        note:  "v1 takes <name> via OSC arg; no patcher walk yet. " +
-               "coll/table need v2 wired-mode."
+        note:  "dict/buffer~/jit.matrix are read directly via v8 wrapper " +
+               "classes. coll/table are reached via getnamed (same patcher, " +
+               "object's @varname == name) or a [receive NAME_INSPECT] wire."
     });
     outlet(0, "scan", path);
 }
@@ -114,26 +139,25 @@ function dump(tag, kind, name) {
         return;
     }
     var outpath = tmpdir + "/c2m_inspect_" + tag + ".json";
+    var k = String(kind);
+
+    // coll/table have no v8 wrapper, so they're asynchronous: trigger a
+    // `write <file>` on the named object, then read the file back after
+    // @asyncdelay ms. These dumpers finalize() themselves — return early so
+    // we don't double-finalize. Capture this.patcher HERE (dump is a Max
+    // message handler, so `this` is the jsthis wrapper) for the getnamed path.
+    if (k === "coll")  { dumpCollAsync(tag, name, outpath, this.patcher);  return; }
+    if (k === "table") { dumpTableAsync(tag, name, outpath, this.patcher); return; }
+
     var result;
     try {
-        switch (String(kind)) {
+        switch (k) {
             case "dict":       result = dumpDict(name);   break;
             case "buffer~":    result = dumpBuffer(name); break;
             case "jit.matrix": result = dumpMatrix(name); break;
-            case "coll":
-            case "table":
-                result = {
-                    error: kind + " is not supported in v1",
-                    reason: "v8's messnamed() only routes to [receive] objects, " +
-                            "not to coll/table boxes; v8 has no direct API wrapper " +
-                            "for these types. Workaround: use a dict for the same data, " +
-                            "or wait for v2 wired-mode (a [receive <NAME>_INSPECT] box).",
-                    supported_now: ["dict", "buffer~", "jit.matrix"]
-                };
-                break;
             default:
                 result = { error: "unsupported kind: " + kind,
-                           supported_now: ["dict", "buffer~", "jit.matrix"] };
+                           supported_now: SUPPORTED_KINDS };
         }
     } catch (e) {
         result = { error: String(e) };
@@ -230,36 +254,76 @@ function dumpMatrix(name) {
     };
 }
 
-// --- async dumpers (coll, table use messnamed write + parse file) -----------
+// --- async dumpers (coll, table: trigger `write <file>`, read it back) -------
 
-function dumpCollAsync(tag, name, outpath) {
+// Trigger a `write <file>` on the named coll/table and report which path
+// reached it. Tries the scripting-name path first (getnamed in the same
+// patcher — zero wiring), then the [receive NAME_INSPECT] relay (messnamed,
+// which only ever reaches [receive] objects). Both names verified against
+// bundled v8 examples (Maxobj.message) and the scripting userguide (getnamed).
+function reachNamedWrite(pat, name, file) {
+    var obj = null;
+    try { obj = pat ? pat.getnamed(name) : null; } catch (e) { obj = null; }
+    if (obj) {
+        try { obj.message("write", file); return "getnamed:" + name; }
+        catch (e2) { /* fall through to the messnamed relay */ }
+    }
+    messnamed(name + "_INSPECT", "write", file);
+    return "messnamed:" + name + "_INSPECT";
+}
+
+// A no-op write leaves the pre-seeded SENTINEL untouched. Detect that so the
+// "object not reached" case becomes a clear setup error instead of a stale read.
+function notReached(content) {
+    return content === null || content.indexOf(SENTINEL) === 0;
+}
+
+function collTableSetupError(kind, name, file, method) {
+    return {
+        error: kind + " '" + name + "' could not be reached " +
+               "(no data written to " + file + " within " + asyncdelay + "ms)",
+        attempted: method,
+        setup_options: [
+            "Set the " + kind + "'s Scripting Name (@varname) to '" + name +
+            "' and keep [c2m.inspect] in the SAME patcher — no wiring needed.",
+            "OR wire [receive " + name + "_INSPECT] -> [" + kind + " " + name +
+            "] so messnamed can deliver the write command across patchers."
+        ],
+        note: "coll/table have no v8 wrapper class; v8 reaches them only via " +
+              "getnamed (same patcher, by scripting name) or a [receive] relay."
+    };
+}
+
+function dumpCollAsync(tag, name, outpath, pat) {
     var collFile = tmpdir + "/c2m_inspect_" + tag + ".coll";
-    messnamed(name, "write", collFile);
+    writetext(collFile, SENTINEL);
+    var method = reachNamedWrite(pat, name, collFile);
     var t = new Task(function() {
         var content = readfile(collFile);
         var result;
-        if (content === null) {
-            result = { error: "could not read " + collFile +
-                              " (write may have failed or coll " + name + " not found)" };
+        if (notReached(content)) {
+            result = collTableSetupError("coll", name, collFile, method);
         } else {
-            result = { coll_file: collFile, contents: parseCollText(content) };
+            result = { reach_method: method, coll_file: collFile,
+                       contents: parseCollText(content) };
         }
         finalize(outpath, tag, "coll", name, result);
     });
     t.schedule(asyncdelay);
 }
 
-function dumpTableAsync(tag, name, outpath) {
+function dumpTableAsync(tag, name, outpath, pat) {
     var tabFile = tmpdir + "/c2m_inspect_" + tag + ".txt";
-    messnamed(name, "write", tabFile);
+    writetext(tabFile, SENTINEL);
+    var method = reachNamedWrite(pat, name, tabFile);
     var t = new Task(function() {
         var content = readfile(tabFile);
         var result;
-        if (content === null) {
-            result = { error: "could not read " + tabFile +
-                              " (write may have failed or table " + name + " not found)" };
+        if (notReached(content)) {
+            result = collTableSetupError("table", name, tabFile, method);
         } else {
-            result = { table_file: tabFile, contents: parseTableText(content) };
+            result = { reach_method: method, table_file: tabFile,
+                       contents: parseTableText(content) };
         }
         finalize(outpath, tag, "table", name, result);
     });

@@ -51,17 +51,26 @@ Lists supported kinds and the current cell / sample caps so you know whether you
 
 **IMPORTANT:** all `--*` flags must precede the subcommand. `c2m_inspect_send.py --timeout 5 dump …` is correct; `c2m_inspect_send.py dump … --timeout 5` is not.
 
-## What each kind returns (v1)
+## What each kind returns
 
 | Kind | How | JSON shape |
 |------|-----|------------|
 | `dict` | direct `Dict.stringify()` | `{contents: <parsed JSON>}` |
 | `buffer~` | `Buffer.peek()` per channel | `{framecount, channelcount, length_ms, samples_returned, samples_truncated, channels: [[…],[…]]}` |
 | `jit.matrix` | `JitterMatrix.getcell()` per cell | `{dim, planecount, type, total_cells, cells_returned, cells_truncated, cells: [{pos, value},…]}` (1D + 2D only) |
+| `coll` | trigger `write <file>`, parse it back | `{reach_method, coll_file, contents: {key: value, …}}` |
+| `table` | trigger `write <file>`, parse it back | `{reach_method, table_file, contents: [v0, v1, …]}` |
 
 All dumps include `tag`, `kind`, `name`, `ts` (unix ms).
 
-Passing `coll` or `table` returns a structured error explaining the v1 gap (see Limitations).
+### coll / table need one of two setup steps
+
+`coll`/`table` have no v8 wrapper class, so the dumper reaches them by triggering a `write <file>` on the named object, then reading the file. For that write to land, set up **one** of these (the dump result's `reach_method` field tells you which path succeeded):
+
+1. **Scripting Name (zero wiring).** Set the coll/table's **Scripting Name** (`@varname`) equal to the `<name>` you pass, and keep `[c2m.inspect]` in the **same patcher**. The dumper uses `this.patcher.getnamed(name).message("write", file)`.
+2. **`[receive]` relay (cross-patcher).** Wire `[receive <NAME>_INSPECT] → [coll <NAME>]` (or `[table <NAME>]`). The dumper falls back to `messnamed("<NAME>_INSPECT", "write", file)`, which only ever reaches `[receive]` objects.
+
+If neither is set up, the result is a structured error naming both options — not a silent empty dump. `messnamed` against a bare `coll NAME` does **not** work (verified — it only delivers to `[receive]` objects); that's why one of the two setups above is required.
 
 ## Caps (truncation)
 
@@ -74,11 +83,12 @@ Override by sending attribute messages to the `[v8 c2m_inspect.js]` box: `cellca
 
 `cells_truncated: true` / `samples_truncated: true` in the result flag when the cap kicked in.
 
-## Limitations (v1)
+## Limitations
 
-- `multislider`, `pattr`, `jit.cellblock` not yet covered — they need scripting-name lookup which v1 doesn't do. Coverage may extend in v2.
+- `multislider`, `pattr`, `jit.cellblock` not yet covered — no reliable v8 reach.
 - `jit.matrix` higher-than-2D not yet supported.
-- The OSC pathway is one-way ping (Max writes to disk, sender polls disk). No UDP reply.
+- `coll`/`table` need one of the two setup steps above (Scripting Name, or a `[receive NAME_INSPECT]` wire). The `table` write-file format parser is best-effort; if a dump returns `{error, raw}`, the table wrote a format the parser didn't recognize — inspect the referenced `table_file` directly.
+- The OSC pathway is one-way (Max writes to disk, sender polls disk). No UDP reply — read-only inspection, no message injection. (A two-way "send a message and read a specific response" mode is the planned v2 — see `TASK_QUEUE.md`.)
 - One c2m.inspect instance per Max session — port 7474 is hardcoded. If the user is already using UDP 7474 for something else, change the `udpreceive` argument in the abstraction (and pass `--port` to the sender).
 
 ## Self-checking pattern

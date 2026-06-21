@@ -469,6 +469,48 @@ Tasks requiring deep analysis, architecture decisions, or sustained judgment. Pr
 
 Tasks that are primarily implementation, file editing, or verification — no deep architectural judgment required.
 
+- [in progress] **c2m.inspect coll/table support — live-verify the round-trip** — *In progress, 2026-06-21: code written and syntax-checked; awaiting live verification in Max.* The coll/table dumpers in `patching/abstractions/c2m_inspect.js` are now wired into the `dump()` dispatch (previously they returned a "v1 gap" error). Implementation:
+  - `dump()` routes `coll`/`table` to `dumpCollAsync`/`dumpTableAsync`, passing `this.patcher` (captured in the message handler where `this` is the jsthis wrapper).
+  - `reachNamedWrite(pat, name, file)` tries path (a) `pat.getnamed(name).message("write", file)` — zero-wiring, needs the object's Scripting Name (`@varname`) == `name` in the same patcher — then falls back to path (b) `messnamed(name + "_INSPECT", "write", file)` — needs a `[receive NAME_INSPECT] → [coll NAME]` wire. Both API names verified (Maxobj.message against bundled v8 examples; getnamed against the scripting userguide; messnamed→receive-only is the repo's 2026-05-28 verified pitfall).
+  - A `SENTINEL` (`__C2M_PENDING__`) is written to the temp file before the trigger; `notReached()` detects a no-op write (sentinel untouched) and returns `collTableSetupError` naming both setup options, instead of reading stale data. Result carries `reach_method` so the user sees which path landed.
+  - Docs synced: `c2m_inspect.js` header, `scan()` kinds, `.claude/skills/c2m-inspect/SKILL.md`, `CLAUDE.md` (§ Debugging Data Structures Live + the inspect-discipline cross-ref), `patching/MAX_PATCHING.md` (messnamed pitfall now notes the implementation).
+
+  **Remaining (the actual verification owed):**
+  1. Open `patching/abstractions/c2m_inspect_test.maxpat` in Max (it has `coll TEST_COLL` + `table TEST_TABLE @size 16` already). For path (a) set their Scripting Name to `TEST_COLL`/`TEST_TABLE` in the inspector; OR for path (b) add `[receive TEST_COLL_INSPECT] → [coll TEST_COLL]` and `[receive TEST_TABLE_INSPECT] → [table TEST_TABLE]` (sync→edit-spec→convert — do NOT hand-edit the .maxpat).
+  2. `python3 tools/c2m_inspect_send.py --timeout 5 dump c TEST_COLL coll` and `… dump t TEST_TABLE table`; confirm real contents + correct `reach_method`.
+  3. **Verify the `table` write-file format** specifically — `parseTableText` expects `data N v0 v1 …;`. If `table write` emits a different (or binary) format, the parser returns `{error, raw}`; fix `parseTableText` against the actual file. This is the one parser in the chain that was never exercised against real output.
+  4. Remember the abstraction cache: close every patch holding `[c2m.inspect]` before reopening to pick up the new JS (or rely on `autowatch=1`, which is set).
+
+  **Why this matters:** coll/table are the two most common Max data structures after dict; the inspector advertised them (the Python sender lists them as valid `kind` choices) but silently errored. This closes that gap — pending the one live confirmation that the write-file round-trip actually fires.
+
+- [pending] **c2m.inspect v2 — two-way live message injection + targeted readback** — v1/v1.5 is *read-only inspection of named data structures*: it dumps `dict`/`buffer~`/`jit.matrix`/`coll`/`table` but cannot send a message into the patch or read back an arbitrary value (a number box's display, a `live.dial`, a `pattr`, a `value`). v2 adds a real debugging loop: **Claude sends a specific message to a specific place in the running patch and reads a specific response.** Design (planned 2026-06-21, John):
+
+  **Transport.** Keep the proven one-way-over-disk return path (Max writes JSON to `/tmp`, Python polls mtime — no UDP reply dependency, survives headless). Add two OSC-in verbs to the existing `[udpreceive 7474] → [route]` chain:
+  - `/inspect/send  <dest> <msg...>` — inject a message. `<dest>` is a Scripting Name (resolved via `this.patcher.getnamed`) or a `send`/`receive` symbol (resolved via `messnamed`). The v8 routes the remaining atoms to that destination's inlet. This is the "send realtime specific messages" half.
+  - `/inspect/watch <tag> <dest> [<attr-or-outlet>]` — read back a specific live value. Implemented as: getnamed the object, then read via the appropriate accessor (`Maxobj` getters for box attrs; for outlet values, a v2 helper patch fragment that taps the outlet into a `[receive]` the v8 can read). Writes `/tmp/c2m_inspect_<tag>.json` like the dump path. This is the "receive specific realtime feedback" half.
+
+  **Readback strategy (the hard part — needs a design spike).** Three candidate mechanisms, pick per target type:
+  1. **Attribute getters via getnamed** — for any boxed object with queryable attrs (UI objects, `live.*`), `pat.getnamed(name)` then read attr; no patch wiring. Verify which attrs are JS-readable vs write-only.
+  2. **`pattr`/`autopattr` tap** — for state already under a `pattr`, query it directly (pattr has a JS-reachable value). Cleanest for "what's the current value of X" when X is parameterized (which the repo already requires — "Always parameterize variables").
+  3. **Wired probe convention** — for raw outlet values with no attr/pattr, a documented `[<source> → send <NAME>_PROBE]` wire (mirror of the v1.5 `_INSPECT` convention) that the v8 reads via a managed `[receive NAME_PROBE]`. Intrusive but universal.
+
+  **Safety / scope guards.**
+  - Injection into a live performance patch is destructive by nature — gate v2 send/watch behind an explicit `@allowinject 1` attribute on `[c2m.inspect]` (default 0), so a patch with the abstraction can't be poked unless the operator opted in.
+  - All v2 additions stay debug-scaffolding (magenta marking, `debug_additions`, never in presentation) per the binding rule.
+  - Keep v2 strictly additive: v1.5 dump/ping/scan verbs unchanged.
+
+  **Open design questions for the spike:**
+  - Outlet-value readback has no clean JS API — does the wired-probe convention scale, or should v2 lean on requiring `pattr` coverage (which the parameterize-everything rule already nudges toward)?
+  - Should `/inspect/send` support a reply-await (send message, read the resulting state change in one round-trip) or stay fire-and-forget with a separate `/inspect/watch`?
+  - Port reuse: v2 shares UDP 7474; confirm `route` can fan the two new addresses without disturbing the existing three.
+  - Does this overlap enough with the multi-user-template's existing Max↔phone message surface to share code, or is it a separate concern?
+
+  **Deliverables when built:** new verbs in `c2m_inspect.js`; matching `send`/`watch` subcommands in `tools/c2m_inspect_send.py`; `@allowinject` attr; skill doc update; a v2 section in `c2m_inspect_test.maxpat`; live verification. **Prereq:** finish + live-verify v1.5 coll/table first (above) so the dump path is trusted before layering injection on top.
+
+  **Why this matters:** this is the difference between "inspect what the patch stored" and "drive the patch and observe it" — the latter is what makes c2m a genuine live-debugging harness (the question that prompted this: "should this be built into every patch so you can test live patches by sending messages and receiving responses?"). Note: the answer to "every patch" is still no — it stays opt-in debug scaffolding, removed before release; v2 just makes the opt-in far more capable.
+
+  **Source:** 2026-06-21, John — "plan a live v2 that would allow c2m to send realtime specific messages and receive specific realtime feedback as needed for debugging."
+
 - [pending] **Refine the student/user setup process and the Description→Plan→Instructor-Review→First-Draft workflow** — first pass landed 2026-05-22 in `CLAUDE.md` ("Local-Folder Use Is Fully Supported", "Suggested Student Workflow", gated New User Setup, "State-File Location for External Projects") and `README.md` ("Two Operating Modes", optional-Setup note). These are a starting point — they describe the intent but have not yet been tested against a real student-from-scratch onboarding. Open questions to resolve on the next pass:
 
   1. **Onboarding script.** Should there be a top-level `setup.sh` (or `python3 setup.py`) that runs the conditional flow — detect git vs local-only, ask the student where their Max project lives, write a `.c2m-current-project` pointer if external, offer to remove `origin`, install the optional git diff filter only if wanted? Right now this is all manual prose in CLAUDE.md and depends on Claude noticing each branch at session start.

@@ -931,7 +931,7 @@ The mechanics:
 
 This is the *first* tool to reach for in Max-runtime debugging, not the last. Most "why isn't this working?" questions in patches built on `dict` / `buffer~` / `jit.matrix` are answered in one round-trip by the dump.
 
-For coll/table (v1 gap), the same discipline applies but the workaround is different — see the v8 `messnamed` pitfall in `patching/MAX_PATCHING.md > Common Pitfalls`.
+For coll/table the same discipline applies, but the reach is indirect: the inspector triggers a `write <file>` and parses it back, and the named object must be reachable by Scripting Name (same patcher) or via a `[receive <NAME>_INSPECT]` wire — see the v8 `messnamed` pitfall in `patching/MAX_PATCHING.md > Common Pitfalls` and the coll/table setup note in the `/c2m-inspect` skill.
 
 ## Clearly Mark Debug Additions to a User's Patch — Binding Rule
 
@@ -955,13 +955,15 @@ The recognition signal during patch authoring: if I'm about to add a box that ex
 
 When a patch is running and the question is *"what's actually inside this data structure right now?"*, drop the `[c2m.inspect]` abstraction (`patching/abstractions/c2m.inspect.maxpat`) into it. The abstraction listens on UDP 7474 for OSC; `tools/c2m_inspect_send.py` (stdlib-only, no python-osc dependency) talks to it and reads the dump back. Wrapped end-to-end by the `/c2m-inspect` skill.
 
-v1 supported kinds — those with a direct v8 wrapper class:
+Supported kinds with a direct v8 wrapper class (synchronous):
 
 - `dict` — via `Dict.stringify()`
 - `buffer~` — via `Buffer.peek()` (capped at `@samplecap`, default 4096 per channel)
 - `jit.matrix` — via `JitterMatrix.getcell()` (capped at `@cellcap`, default 10000)
 
-Not supported in v1: `coll`, `table`, `multislider`, `pattr`, `jit.cellblock`. These have no v8 wrapper and `messnamed` doesn't route to them. The graceful error response documents the workaround.
+`coll` and `table` (no v8 wrapper, asynchronous): the dumper triggers a `write <file>` on the named object and reads the file back after `@asyncdelay` ms. Because `messnamed` only reaches `[receive]` objects — never a bare `coll NAME` — the user must enable one of two reach paths: (a) set the object's **Scripting Name** (`@varname`) equal to `<name>` and keep `[c2m.inspect]` in the same patcher (the dumper uses `getnamed().message("write", …)`), or (b) wire `[receive <NAME>_INSPECT] → [coll <NAME>]` (the dumper falls back to `messnamed("<NAME>_INSPECT", …)`). If neither is set up, the result is a structured error naming both options. The dump's `reach_method` field reports which path succeeded.
+
+Still unsupported (no reliable v8 reach): `multislider`, `pattr`, `jit.cellblock`.
 
 The OSC pathway is one-way: Max writes JSON to disk, the Python sender polls disk for the updated mtime. Reads, then prints. No UDP reply, so no return-path dependency.
 
