@@ -152,8 +152,14 @@ Source files read by the server:
 - (Steps 3-4) `packages/package_objects.json` — installed package externals
 - (Phase ii) `patching/MAX_PATCHING.md`, `CLAUDE.md`, `SPEC_REFERENCE.md` — binding rules
 
-Caching: read once at startup, mtime-watched on each call (re-read only when
-the source file has changed). Source files are small and change rarely.
+Caching: every disk-backed cache is an `_FileCache` (package library, object-name
+index, the gate resolver, rule sections, pitfall corpus). It reads its source
+file(s) once and rebuilds only when a watched file's mtime changes — one `stat`
+per source per call, source files are small. Because the MCP host keeps the
+server alive for the whole session, this is what lets an edit to a binding-rule
+doc / insight file / `package_objects.json` take effect immediately instead of
+serving the startup snapshot until restart. (The Max-install refpage XML isn't
+watched — it doesn't change during patch work.)
 
 ---
 

@@ -64,36 +64,80 @@ from claude2max_verify import verify_spec_json as _verify_spec_json  # noqa: E40
 
 _refpage = RefpageCache()
 
+
+# ── mtime-watched file cache ──────────────────────────────────────────────────
+# The MCP host keeps this server alive for the whole session, so any cache that
+# read its source file once at startup would serve a stale snapshot after the
+# user edits that file (a binding-rule doc, an insight file, the package JSON).
+# This honours the README's "read once + watch mtimes" contract: a cached value
+# is rebuilt only when a watched source file's mtime changes — cheap (a stat per
+# source per call) and the source files are small.
+def _mtime_sig(paths) -> tuple:
+    """Combined mtime signature for watched files; a missing file contributes -1."""
+    out = []
+    for p in paths:
+        try:
+            out.append(p.stat().st_mtime_ns)
+        except OSError:
+            out.append(-1)
+    return tuple(out)
+
+
+class _FileCache:
+    """Lazy value rebuilt when any watched source file's mtime changes."""
+    __slots__ = ("_paths", "_builder", "_value", "_sig")
+
+    def __init__(self, paths, builder):
+        self._paths = [Path(p) for p in paths]
+        self._builder = builder
+        self._value = None
+        self._sig = None
+
+    def get(self):
+        sig = _mtime_sig(self._paths)
+        if self._value is None or sig != self._sig:
+            self._value = self._builder()
+            self._sig = sig
+        return self._value
+
+    def invalidate(self):
+        self._value = None
+        self._sig = None
+
+
 # ── package library ───────────────────────────────────────────────────────────
 _PACKAGES_PATH = _REPO_ROOT / "packages" / "package_objects.json"
-_packages_raw: dict | None = None   # {pkg_name: {obj_name: record}}
-_packages_idx: dict | None = None   # {obj_name: (pkg_name, record)}  first-wins
+
+
+def _load_pkg_raw() -> dict:
+    if _PACKAGES_PATH.exists():
+        try:
+            with _PACKAGES_PATH.open() as f:
+                return json.load(f)
+        except (json.JSONDecodeError, OSError):
+            return {}
+    return {}
+
+
+def _build_pkg_idx() -> dict:
+    idx = {}                                    # {obj_name: (pkg_name, record)} first-wins
+    for pkg, objs in _pkg_raw().items():
+        for name, rec in objs.items():
+            if name not in idx:
+                idx[name] = (pkg, rec)
+    return idx
+
+
+_pkg_raw_cache = _FileCache([_PACKAGES_PATH], _load_pkg_raw)
+_pkg_idx_cache = _FileCache([_PACKAGES_PATH], _build_pkg_idx)
 
 
 def _pkg_raw() -> dict:
-    global _packages_raw
-    if _packages_raw is None:
-        if _PACKAGES_PATH.exists():
-            try:
-                with _PACKAGES_PATH.open() as f:
-                    _packages_raw = json.load(f)
-            except (json.JSONDecodeError, OSError):
-                _packages_raw = {}
-        else:
-            _packages_raw = {}
-    return _packages_raw
+    return _pkg_raw_cache.get()
 
 
 def _pkg_idx() -> dict:
-    global _packages_idx
-    if _packages_idx is None:
-        idx = {}
-        for pkg, objs in _pkg_raw().items():
-            for name, rec in objs.items():
-                if name not in idx:
-                    idx[name] = (pkg, rec)
-        _packages_idx = idx
-    return _packages_idx
+    return _pkg_idx_cache.get()
 
 
 mcp = FastMCP("claude2max")
@@ -696,7 +740,21 @@ def load(domains: list) -> str:
 
 import difflib  # noqa: E402 — used only by the did-you-mean path
 
-_all_names_cache: list | None = None
+def _build_all_object_names() -> list:
+    names = set(_pkg_idx().keys())
+    c74 = getattr(_refpage, "_c74", None)
+    if c74 is not None:
+        for domain in RefpageCache._STD_DOMAINS:
+            d = c74 / "docs/refpages" / domain
+            if d.exists():
+                for p in d.glob("*.maxref.xml"):
+                    names.add(p.name[:-len(".maxref.xml")])
+    return sorted(names)
+
+
+# Watches the package JSON (the editable half); the refpage XML dir is a Max
+# install and isn't edited during a session, so it isn't watched.
+_all_names_cache = _FileCache([_PACKAGES_PATH], _build_all_object_names)
 
 
 def _all_object_names() -> list:
@@ -705,18 +763,7 @@ def _all_object_names() -> list:
     installed package externals. Cached. Grounds did-you-mean candidates in
     objects that actually exist, so a typo can be matched by string similarity.
     """
-    global _all_names_cache
-    if _all_names_cache is None:
-        names = set(_pkg_idx().keys())
-        c74 = getattr(_refpage, "_c74", None)
-        if c74 is not None:
-            for domain in RefpageCache._STD_DOMAINS:
-                d = c74 / "docs/refpages" / domain
-                if d.exists():
-                    for p in d.glob("*.maxref.xml"):
-                        names.add(p.name[:-len(".maxref.xml")])
-        _all_names_cache = sorted(names)
-    return _all_names_cache
+    return _all_names_cache.get()
 
 
 def _suggest_objects(bad_name: str, k: int = 3) -> list:
@@ -1090,20 +1137,28 @@ def search_packages(term: str, limit: int = 5) -> dict:
 # verify_spec tool use. Sharing it is what guarantees lookup_attribute /
 # list_attributes give identical verdicts to the convert gate: an attribute the
 # gate accepts can never be reported "invalid" here, and vice versa.
-_resolver_obj = None
-_resolver_built = False
+#
+# Watched sources are the repo-authored files the resolver's valid-attr set is
+# built from and that a session might edit: the package library and the
+# help-corpus observed-attrs map. (The jbox refpage XML lives in the Max install
+# and is not edited during patch work, so it isn't watched.)
+_OBSERVED_ATTRS_PATH = _REPO_ROOT / "maxhelp" / "maxhelp_observed_attrs.json"
+
+
+def _build_resolver_safe():
+    try:
+        return _build_resolver()
+    except Exception:
+        return None
+
+
+_resolver_cache = _FileCache([_PACKAGES_PATH, _OBSERVED_ATTRS_PATH], _build_resolver_safe)
 
 
 def _resolver():
-    """Build (once) and cache the gate resolver; None if the verify lib is absent."""
-    global _resolver_obj, _resolver_built
-    if not _resolver_built:
-        try:
-            _resolver_obj = _build_resolver()
-        except Exception:
-            _resolver_obj = None
-        _resolver_built = True
-    return _resolver_obj
+    """The cached gate resolver, rebuilt when its source files change; None if the
+    verify lib is absent."""
+    return _resolver_cache.get()
 
 
 def _jbox_attrs() -> dict:
@@ -1475,10 +1530,6 @@ _RULE_DOCS: list[Path] = [
 _PITFALL_FORUM = _REPO_ROOT / "c74-forum" / "forum_insights.md"
 _PITFALL_COOKBOOK = _REPO_ROOT / "cookbook" / "cookbook_insights.md"
 
-_rule_sections_cache: list | None = None
-_pitfall_chunks_cache: list | None = None
-
-
 def _split_sections(text: str, source: str) -> list:
     """Split markdown into `## ` sections → [{name, body, source}] (body incl. `### `)."""
     sections: list = []
@@ -1501,16 +1552,20 @@ def _split_sections(text: str, source: str) -> list:
     return sections
 
 
+def _build_rule_sections() -> list:
+    out: list = []
+    for path in _RULE_DOCS:
+        if path.exists():
+            out.extend(_split_sections(_read_md(path), path.name))
+    return out
+
+
+_rule_sections_cache = _FileCache(_RULE_DOCS, _build_rule_sections)
+
+
 def _rule_sections() -> list:
     """All `## ` rule sections across the rule docs, cached. [{name, body, source}]."""
-    global _rule_sections_cache
-    if _rule_sections_cache is None:
-        out: list = []
-        for path in _RULE_DOCS:
-            if path.exists():
-                out.extend(_split_sections(_read_md(path), path.name))
-        _rule_sections_cache = out
-    return _rule_sections_cache
+    return _rule_sections_cache.get()
 
 
 def _split_blockquote_entries(text: str, source: str) -> list:
@@ -1539,6 +1594,42 @@ def _split_blockquote_entries(text: str, source: str) -> list:
     return entries
 
 
+def _build_pitfall_chunks() -> list:
+    out: list = []
+
+    # Common Pitfalls — one entry per top-level `- ` bullet.
+    mp = _PATCHING_DIR / "MAX_PATCHING.md"
+    if mp.exists():
+        section_txt = _extract_section(_read_md(mp), "## Common Pitfalls")
+        cur: list[str] = []
+        for line in section_txt.splitlines():
+            if line.startswith("- "):
+                if cur:
+                    out.append({"text": " ".join(cur).strip(),
+                                "source": "Common Pitfalls",
+                                "section": "Common Pitfalls"})
+                cur = [line[2:]]
+            elif cur and line.strip() and not line.startswith("## "):
+                cur.append(line.strip())   # continuation of current bullet
+        if cur:
+            out.append({"text": " ".join(cur).strip(),
+                        "source": "Common Pitfalls",
+                        "section": "Common Pitfalls"})
+
+    if _PITFALL_FORUM.exists():
+        out.extend(_split_blockquote_entries(_read_md(_PITFALL_FORUM), "forum"))
+    if _PITFALL_COOKBOOK.exists():
+        out.extend(_split_blockquote_entries(_read_md(_PITFALL_COOKBOOK), "cookbook"))
+
+    return out
+
+
+_pitfall_chunks_cache = _FileCache(
+    [_PATCHING_DIR / "MAX_PATCHING.md", _PITFALL_FORUM, _PITFALL_COOKBOOK],
+    _build_pitfall_chunks,
+)
+
+
 def _pitfall_chunks() -> list:
     """
     All searchable pitfall/insight entries, cached. [{text, source, section}].
@@ -1546,36 +1637,7 @@ def _pitfall_chunks() -> list:
     Sources: the `## Common Pitfalls` bullet list in MAX_PATCHING.md, plus every
     `> `-block entry in the forum and cookbook insight files.
     """
-    global _pitfall_chunks_cache
-    if _pitfall_chunks_cache is None:
-        out: list = []
-
-        # Common Pitfalls — one entry per top-level `- ` bullet.
-        mp = _PATCHING_DIR / "MAX_PATCHING.md"
-        if mp.exists():
-            section_txt = _extract_section(_read_md(mp), "## Common Pitfalls")
-            cur: list[str] = []
-            for line in section_txt.splitlines():
-                if line.startswith("- "):
-                    if cur:
-                        out.append({"text": " ".join(cur).strip(),
-                                    "source": "Common Pitfalls",
-                                    "section": "Common Pitfalls"})
-                    cur = [line[2:]]
-                elif cur and line.strip() and not line.startswith("## "):
-                    cur.append(line.strip())   # continuation of current bullet
-            if cur:
-                out.append({"text": " ".join(cur).strip(),
-                            "source": "Common Pitfalls",
-                            "section": "Common Pitfalls"})
-
-        if _PITFALL_FORUM.exists():
-            out.extend(_split_blockquote_entries(_read_md(_PITFALL_FORUM), "forum"))
-        if _PITFALL_COOKBOOK.exists():
-            out.extend(_split_blockquote_entries(_read_md(_PITFALL_COOKBOOK), "cookbook"))
-
-        _pitfall_chunks_cache = out
-    return _pitfall_chunks_cache
+    return _pitfall_chunks_cache.get()
 
 
 def _query_tokens(query: str) -> list:
