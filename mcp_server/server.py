@@ -32,6 +32,7 @@ See mcp_server/SMOKE_TEST_RESULTS.md for Phase (i) end-to-end test results.
 """
 
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -106,17 +107,31 @@ _DOMAIN_DESCRIPTIONS: dict[str, str] = {
     "spec":       "Spec format for spec2maxpat.py — object types, connections, layout fields",
 }
 
+# Keyword lists deliberately include BOTH Max jargon (gen~, jit.gl, buffer~)
+# AND the plain-English vocabulary a beginner actually types ("sound",
+# "granulate", "webcam"). The audience is students, not experts — keying
+# only on object names misses the task the way they describe it. Bare words
+# prone to false positives across domains (e.g. "osc" — matches both the OSC
+# protocol and "oscillator") are deliberately excluded in favour of the
+# unambiguous longer form.
 _DOMAIN_KEYWORDS: dict[str, list[str]] = {
-    "gen":        ["gen~", "codebox", "[gen]", "gen box"],
+    "gen":        ["gen~", "codebox", "[gen]", "gen box", "per-sample",
+                   "single sample", "per sample"],
     "jitter":     ["jit.", "jitter", "gl.", "jit.gen", "jit.gl", "jit.world",
-                   "jit.grab", "jit.pwindow", "jit.matrix", "videoplane", "matrix"],
+                   "jit.grab", "jit.pwindow", "jit.matrix", "videoplane", "matrix",
+                   "video", "webcam", "camera", "image", "movie", "pixel",
+                   "opengl", "render", "texture", "shader", "graphics", "visual"],
     "m4l":        ["m4l", "max for live", "live.", ".amxd", "amxd", "lom",
                    "live object model", "ableton"],
     "networking": ["node.script", "websocket", "wss://", "ws://", "phone",
-                   "multi-user", "server.js", "udpreceive", "udpsend", "performer"],
+                   "multi-user", "server.js", "udpreceive", "udpsend", "performer",
+                   "mobile", "tablet", "sensor", "accelerometer", "gyroscope",
+                   "audience", "remote performer"],
     "msp":        ["audio", "dsp", "signal", "buffer~", "groove~", "cycle~",
                    "adc~", "dac~", "gain~", "filter~", "reverb", "tapin~",
-                   "playlist~", "ezdac~"],
+                   "playlist~", "ezdac~", "sound", "buffer", "granular",
+                   "granulate", "synth", "oscillator", "record", "sampler",
+                   "playback", "echo", "waveform", "amplitude", "frequency"],
     "spec":       ["json spec", "from scratch", "write a spec", "spec file",
                    "spec2maxpat", "converter"],
 }
@@ -422,6 +437,109 @@ def essentials() -> str:
     return load(["core"])
 
 
+# ── module routing — Claude evaluates task intent ─────────────────────────────
+# Non-core modules Claude may select. "core" is always loaded by us, so the
+# model never has to ask for it.
+_SELECTABLE_DOMAINS = [d for d in _DOMAIN_DESCRIPTIONS if d != "core"]
+
+# Model used for every LLM-assisted tool (assess routing, did-you-mean,
+# semantic package search). Parameterized so a deployment can point it at a
+# different tier without editing code. Haiku is the default — these are fast,
+# cheap classification/ranking tasks, not reasoning-heavy ones.
+# CLAUDE2MAX_ASSESS_MODEL is still honored for backward compatibility.
+_LLM_MODEL = os.environ.get(
+    "CLAUDE2MAX_LLM_MODEL",
+    os.environ.get("CLAUDE2MAX_ASSESS_MODEL", "claude-haiku-4-5"),
+)
+
+
+def _llm_json(system: str, user: str, max_tokens: int = 1024) -> dict:
+    """
+    Shared one-shot LLM call returning parsed JSON.
+
+    Used by every LLM-assisted tool (assess, lookup_object did-you-mean,
+    search_packages semantic). Raises on any failure (missing key, network,
+    parse) so each caller can fall back to its deterministic path. Requires
+    ANTHROPIC_API_KEY in the server environment.
+    """
+    import anthropic  # lazy — server still starts if the package is absent
+
+    client = anthropic.Anthropic()  # reads ANTHROPIC_API_KEY from the environment
+    resp = client.messages.create(
+        model=_LLM_MODEL,
+        max_tokens=max_tokens,
+        system=system,
+        messages=[{"role": "user", "content": user}],
+    )
+    text = "".join(b.text for b in resp.content
+                   if getattr(b, "type", "") == "text").strip()
+    # Tolerate a stray markdown fence even though we ask for none.
+    if text.startswith("```"):
+        text = text.strip("`")
+        text = text[text.find("{"):text.rfind("}") + 1]
+    return json.loads(text)
+
+
+def _assess_system_prompt() -> str:
+    """Build the classifier system prompt from the live module catalog."""
+    catalog = "\n".join(f"- {d}: {desc}" for d, desc in _DOMAIN_DESCRIPTIONS.items()
+                        if d != "core")
+    return (
+        "You route a Max/MSP task description to the knowledge modules it needs.\n"
+        "Decide by the task's INTENT, not by keyword matching — a task that says\n"
+        "\"granulate a recorded sound\" needs the audio (msp) module even though it\n"
+        "names no `~` objects; a task about \"webcam visuals\" needs jitter even\n"
+        "though it never types `jit.`.\n\n"
+        "Selectable modules (the `core` module is always loaded, never select it):\n"
+        f"{catalog}\n\n"
+        "Select a module only when the task genuinely requires that body of\n"
+        "knowledge. Many tasks need none (return an empty selections list) — for\n"
+        "those, core alone is correct. When unsure whether a domain is truly\n"
+        "needed, leave it out; the caller can re-run assess() if scope grows.\n"
+        "Respond with ONLY a JSON object of the form:\n"
+        '{\"selections\": [{\"domain\": \"<one of the selectable modules>\", '
+        '\"why\": \"<short reason tied to the task>\"}]}\n'
+        "No prose, no markdown fences — JSON only."
+    )
+
+
+def _llm_assess(task_description: str) -> tuple[list[str], dict[str, str]]:
+    """
+    Ask Claude which non-core modules the task needs.
+
+    Returns (domains, reasoning) with "core" always first. Raises on any
+    failure (missing key, network, parse, no valid selections) so the caller
+    can fall back to keyword matching.
+    """
+    data = _llm_json(_assess_system_prompt(), task_description)
+
+    domains = ["core"]
+    reasoning: dict[str, str] = {
+        "core": "always loaded — binding rules, Common Pitfalls, preferred objects",
+    }
+    for sel in data.get("selections", []):
+        dom = sel.get("domain")
+        if dom in _SELECTABLE_DOMAINS and dom not in domains:   # validate — drop anything unknown
+            domains.append(dom)
+            reasoning[dom] = sel.get("why", "selected by intent analysis")
+    return domains, reasoning
+
+
+def _keyword_assess(task_description: str) -> tuple[list[str], dict[str, str]]:
+    """Substring-keyword fallback used when the LLM path is unavailable."""
+    desc = task_description.lower()
+    domains = ["core"]
+    reasoning: dict[str, str] = {
+        "core": "always loaded — binding rules, Common Pitfalls, preferred objects",
+    }
+    for domain, keywords in _DOMAIN_KEYWORDS.items():
+        matched = [kw for kw in keywords if kw in desc]
+        if matched:
+            domains.append(domain)
+            reasoning[domain] = f"matched: {', '.join(matched)}"
+    return domains, reasoning
+
+
 @mcp.tool()
 def assess(task_description: str) -> dict:
     """
@@ -432,6 +550,13 @@ def assess(task_description: str) -> dict:
 
         modules = assess("build a step sequencer with audio output")
         knowledge = load(modules["domains"])
+
+    The routing is done by Claude reading the task's INTENT — not by matching
+    literal words in the description — so plain-English descriptions route
+    correctly even when they name no Max objects ("granulate a recorded sound"
+    → core + msp). Requires ANTHROPIC_API_KEY in the server's environment; if
+    it is unavailable the tool falls back to substring-keyword matching and
+    reports `method: "keyword-fallback"`.
 
     If the task evolves mid-session (e.g. Jitter appears in a patch that
     started as audio-only), call assess() again with the new context and
@@ -445,25 +570,23 @@ def assess(task_description: str) -> dict:
     -----------
     domains       — list[str] — recommended modules to load (always includes "core")
     reasoning     — dict[str, str] — why each domain was selected
+    method        — "llm" (intent analysis) | "keyword-fallback" (no API key / API error)
     next_step     — str — the load() call to make next
     available     — dict[str, str] — all available modules with descriptions
     """
-    desc = task_description.lower()
-    recommended = ["core"]
-    reasoning: dict[str, str] = {
-        "core": "always loaded — binding rules, Common Pitfalls, preferred objects",
-    }
-
-    for domain, keywords in _DOMAIN_KEYWORDS.items():
-        matched = [kw for kw in keywords if kw in desc]
-        if matched:
-            recommended.append(domain)
-            reasoning[domain] = f"matched: {', '.join(matched)}"
+    try:
+        domains, reasoning = _llm_assess(task_description)
+        method = "llm"
+    except Exception as exc:   # missing key, network, parse — degrade, never hard-fail
+        domains, reasoning = _keyword_assess(task_description)
+        method = "keyword-fallback"
+        reasoning["_fallback"] = f"LLM routing unavailable ({type(exc).__name__}); used keyword matching."
 
     return {
-        "domains":   recommended,
+        "domains":   domains,
         "reasoning": reasoning,
-        "next_step": f"Call load({recommended!r}) to load these knowledge modules.",
+        "method":    method,
+        "next_step": f"Call load({domains!r}) to load these knowledge modules.",
         "available": _DOMAIN_DESCRIPTIONS,
     }
 
@@ -526,6 +649,82 @@ def load(domains: list) -> str:
         f"<!-- If the task evolves to include additional domains, call load([new_domain]) -->\n\n"
     )
     return header + "\n\n---\n\n".join(sections)
+
+
+# ---------------------------------------------------------------------------
+# did-you-mean — LLM suggestion for a name that wasn't found, validated
+# against the real index so only objects that actually exist are returned.
+# ---------------------------------------------------------------------------
+
+import difflib  # noqa: E402 — used only by the did-you-mean path
+
+_all_names_cache: list | None = None
+
+
+def _all_object_names() -> list:
+    """
+    Every known Max object name: C74 built-ins (std-domain refpage stems) +
+    installed package externals. Cached. Grounds did-you-mean candidates in
+    objects that actually exist, so a typo can be matched by string similarity.
+    """
+    global _all_names_cache
+    if _all_names_cache is None:
+        names = set(_pkg_idx().keys())
+        c74 = getattr(_refpage, "_c74", None)
+        if c74 is not None:
+            for domain in RefpageCache._STD_DOMAINS:
+                d = c74 / "docs/refpages" / domain
+                if d.exists():
+                    for p in d.glob("*.maxref.xml"):
+                        names.add(p.name[:-len(".maxref.xml")])
+        _all_names_cache = sorted(names)
+    return _all_names_cache
+
+
+def _suggest_objects(bad_name: str, k: int = 3) -> list:
+    """
+    LLM did-you-mean for a name that wasn't found.
+
+    Covers two failure classes: a typo / near-miss (fixed against the
+    string-similar pool) and a wrong-name-for-the-concept (the invented name
+    describes what a real object actually does). GUARDRAIL: every suggestion
+    is re-checked against the real index — names that don't resolve are
+    dropped, so the returned list contains ONLY objects that exist. Raises on
+    LLM failure so the caller can degrade to no suggestions.
+    """
+    pool = difflib.get_close_matches(bad_name, _all_object_names(), n=10, cutoff=0.5)
+    system = (
+        "A Max/MSP user tried to use an object name that does NOT exist in Max.\n"
+        "Suggest the real Max objects they most likely meant. Consider two cases:\n"
+        "1. Typo / near-miss — correct the spelling to a real object.\n"
+        "2. Wrong name for the concept — the invented name describes what an\n"
+        "   existing object (built-in or common package external) actually does\n"
+        "   (e.g. someone writes `oscparse` meaning OSC address routing, which is\n"
+        "   `o.route` from CNMAT, or native `udpreceive` + `route`).\n"
+        "Only suggest objects you are confident exist in Max; prefer built-ins and\n"
+        "well-known package externals. Return ONLY JSON of the form\n"
+        '{"suggestions": [{"name": "<real object>", "why": "<short reason>"}]}.\n'
+        "No prose, no markdown fences."
+    )
+    user = f"Invented name: {bad_name}\n"
+    if pool:
+        user += "String-similar real object names (possible typo targets): " \
+                + ", ".join(pool) + "\n"
+    user += "Suggest the most likely real objects."
+    data = _llm_json(system, user, max_tokens=512)
+
+    out, seen = [], set()
+    for s in data.get("suggestions", []):
+        nm = (s.get("name") or "").strip()
+        if not nm or nm in seen:
+            continue
+        # GUARDRAIL — keep only names that actually resolve in the real index.
+        if _refpage.lookup(nm) is not None or nm in _pkg_idx():
+            out.append({"name": nm, "why": s.get("why", "")})
+            seen.add(nm)
+        if len(out) >= k:
+            break
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -630,7 +829,24 @@ def lookup_object(name: str) -> dict:
             "summary": "\n".join(summary_lines),
         }
 
-    # 3 — Not found
+    # 3 — Not found. Offer LLM did-you-mean suggestions (each validated to be a
+    # real object). This is the canonical correction moment: a guessed name
+    # missed, and the most useful next thing is the real object that was meant.
+    try:
+        did_you_mean = _suggest_objects(name)
+    except Exception:   # no API key, network, parse — degrade to no suggestions
+        did_you_mean = []
+
+    summary = (
+        f"NOT FOUND: '{name}' does not appear in C74 refpages or the "
+        f"package library. Do NOT write this name into a patch. "
+        f"Max will accept it silently and display a red missing-object box."
+    )
+    if did_you_mean:
+        sugg = "; ".join(f"{s['name']} ({s['why']})" if s['why'] else s['name']
+                         for s in did_you_mean)
+        summary += f"\n  Did you mean: {sugg}"
+
     return {
         "found": False,
         "source": "unknown",
@@ -640,88 +856,191 @@ def lookup_object(name: str) -> dict:
         "digest": "",
         "use_when": "",
         "deprecated_by": "",
-        "summary": (
-            f"NOT FOUND: '{name}' does not appear in C74 refpages or the "
-            f"package library. Do NOT write this name into a patch. "
-            f"Max will accept it silently and display a red missing-object box."
-        ),
+        "did_you_mean": did_you_mean,   # [] when no key / no confident suggestion
+        "summary": summary,
     }
 
 
 # ---------------------------------------------------------------------------
-# search_packages() — Step 3.
+# search_packages() — Step 3, with LLM semantic search (expansion + rerank).
 # ---------------------------------------------------------------------------
 
-@mcp.tool()
-def search_packages(term: str, limit: int = 5) -> dict:
+_RELEVANCE_LABEL = {3: "use_when", 2: "digest", 1: "name"}
+
+
+def _substring_matches(terms: list, cap: int = 0) -> list:
     """
-    Search the Claude2Max package library (2,795 installed externals) by term.
+    Scan the package library for any of `terms` (case-insensitive substring).
 
-    Call this before composing any chain of 3+ native Max objects — there is
-    often a single package external that covers the whole chain.
-
-    Scoring: use_when match (highest) > digest match > name match.
-    Results are sorted highest-relevance first, then alphabetically.
-
-    Parameters
-    ----------
-    term  — search term (case-insensitive substring match)
-    limit — max results to return (default 5; pass 0 for no cap)
-
-    Return
-    ------
-    Dict with:
-      results  — list of matching objects, each with:
-                   name, package, digest, use_when, relevance
-      count    — int — number of results returned
-      message  — str — human-readable summary (always present, including no-match case)
+    Returns candidate dicts {name, package, digest, use_when, score} where
+    score = best field hit across all terms (use_when 3 > digest 2 > name 1),
+    deduped by object name (first wins), sorted by score then name. `cap`
+    bounds the result count (0 = no cap). This is the deterministic core used
+    both as the LLM path's candidate gatherer and as the no-key fallback.
     """
-    term_lower = term.lower().strip()
-    matches = []
+    lowered = [t.lower().strip() for t in terms if t and t.strip()]
+    by_name: dict = {}
     for pkg, objs in _pkg_raw().items():
         for name, rec in objs.items():
             digest   = rec.get("digest", "") or ""
             use_when = rec.get("use_when", "") or ""
             score = 0
-            if term_lower in use_when.lower():
-                score = 3
-            elif term_lower in digest.lower():
-                score = 2
-            elif term_lower in name.lower():
-                score = 1
-            if score:
-                matches.append((score, pkg, name, digest, use_when))
+            for t in lowered:
+                if t in use_when.lower():
+                    score = max(score, 3)
+                elif t in digest.lower():
+                    score = max(score, 2)
+                elif t in name.lower():
+                    score = max(score, 1)
+            if score and name not in by_name:
+                by_name[name] = {
+                    "name": name, "package": pkg, "digest": digest,
+                    "use_when": use_when, "score": score,
+                }
+    out = sorted(by_name.values(), key=lambda m: (-m["score"], m["name"]))
+    return out[:cap] if cap and cap > 0 else out
 
-    matches.sort(key=lambda m: (-m[0], m[1], m[2]))
-    if limit and limit > 0:
-        matches = matches[:limit]
 
+def _expand_terms(term: str) -> list:
+    """LLM query expansion: term → related Max-domain search terms. Raises on failure."""
+    system = (
+        "Expand a Max/MSP package-search query into related search terms so a "
+        "substring search finds objects that don't contain the literal query "
+        "words. Include synonyms, the technique's formal name, and common Max "
+        "phrasings. Example: \"convolution reverb\" → impulse response, IR, "
+        "convolution, reverberation. Return ONLY JSON: "
+        '{"terms": ["...", "..."]}. 4-8 short terms, no prose, no markdown.'
+    )
+    data = _llm_json(system, term, max_tokens=256)
+    return [t for t in data.get("terms", []) if isinstance(t, str) and t.strip()]
+
+
+def _rerank_packages(term: str, candidates: list, k: int) -> list:
+    """
+    LLM rerank candidates by intent fit for `term`.
+
+    GUARDRAIL: returns only candidate dicts whose name the model selected and
+    that exist in the candidate set — the model reorders, it never invents
+    names. Raises on failure so the caller can fall back to substring order.
+    """
+    by_name = {c["name"]: c for c in candidates}
+    listing = "\n".join(
+        f"- {c['name']}: {(c['digest'] or '')[:120]}"
+        f"{' | use_when: ' + c['use_when'][:200] if c['use_when'] else ''}"
+        for c in candidates
+    )
+    system = (
+        "Rank Max/MSP package objects by how well each fits the user's need. "
+        "Choose only from the provided list; do not invent names. Order best "
+        "fit first; omit poor fits. Return ONLY JSON: "
+        '{"ranked": [{"name": "<exact name from the list>", "why": "<short>"}]}. '
+        "No prose, no markdown."
+    )
+    user = f"Need: {term}\n\nCandidates:\n{listing}"
+    data = _llm_json(system, user, max_tokens=1024)
+
+    out, seen = [], set()
+    for r in data.get("ranked", []):
+        nm = (r.get("name") or "").strip()
+        if nm in by_name and nm not in seen:   # GUARDRAIL — must be a real candidate
+            c = dict(by_name[nm])
+            c["why"] = r.get("why", "")
+            out.append(c)
+            seen.add(nm)
+        if k and len(out) >= k:
+            break
+    return out
+
+
+def _fmt_results(cands: list, relevance: str) -> list:
+    """Shape candidate dicts into the public result schema."""
+    results = []
+    for c in cands:
+        results.append({
+            "name":      c["name"],
+            "package":   c["package"],
+            "digest":    c["digest"],
+            "use_when":  c["use_when"],
+            "relevance": relevance if relevance else _RELEVANCE_LABEL.get(c.get("score", 0), ""),
+            **({"why": c["why"]} if c.get("why") else {}),
+        })
+    return results
+
+
+@mcp.tool()
+def search_packages(term: str, limit: int = 5) -> dict:
+    """
+    Search the Claude2Max package library (2,795 installed externals) by intent.
+
+    Call this before composing any chain of 3+ native Max objects — there is
+    often a single package external that covers the whole chain.
+
+    When ANTHROPIC_API_KEY is set, the search is semantic: Claude expands the
+    query into related terms (so "convolution reverb" finds an object whose
+    description says "impulse-response reverberation"), then reranks the
+    candidates by intent. Without a key it falls back to plain substring
+    scoring (use_when > digest > name) and reports `method: "substring"`.
+    Either way, every result is a real library record — the LLM only expands
+    and reorders, it never invents object names.
+
+    Parameters
+    ----------
+    term  — what you need, in plain language
+    limit — max results to return (default 5; pass 0 for no cap)
+
+    Return
+    ------
+    Dict with:
+      results  — list of {name, package, digest, use_when, relevance, why?}
+      count    — int — number of results returned
+      method   — "llm-semantic" | "substring"
+      message  — str — human-readable summary (always present, incl. no-match)
+    """
+    k = limit if (limit and limit > 0) else 0
+
+    # ── semantic path ────────────────────────────────────────────────────────
+    try:
+        expanded = _expand_terms(term)
+        # Seed with literal full-query matches FIRST so the obvious answer
+        # (e.g. hirt.convolutionreverb~ for "convolution reverb") always
+        # survives the cap, then fill with semantic-expansion matches.
+        primary = _substring_matches([term])
+        seen = {c["name"] for c in primary}
+        extra = [c for c in _substring_matches(expanded) if c["name"] not in seen]
+        candidates = (primary + extra)[:40]   # bound the rerank prompt
+        terms = [term] + expanded
+        if candidates:
+            ranked = _rerank_packages(term, candidates, k)
+            if ranked:
+                return {
+                    "results": _fmt_results(ranked, "semantic"),
+                    "count":   len(ranked),
+                    "method":  "llm-semantic",
+                    "message": f"{len(ranked)} result(s) for '{term}' "
+                               f"(semantic; expanded terms: {', '.join(terms[1:]) or 'none'}).",
+                }
+        # expansion succeeded but found nothing → fall through to substring/no-match
+    except Exception:
+        pass   # no key, network, parse — degrade to substring scoring below
+
+    # ── substring fallback (also the no-API-key path) ─────────────────────────
+    matches = _substring_matches([term], cap=k)
     if not matches:
         return {
             "results": [],
             "count": 0,
+            "method": "substring",
             "message": (
                 f"No packages matched '{term}'. "
                 f"Try a shorter or broader term (e.g. 'reverb' instead of "
                 f"'convolution reverb with IR'), or build with native Max objects."
             ),
         }
-
-    relevance_label = {3: "use_when", 2: "digest", 1: "name"}
-    results = [
-        {
-            "name":      name,
-            "package":   pkg,
-            "digest":    digest,
-            "use_when":  use_when,
-            "relevance": relevance_label[score],
-        }
-        for score, pkg, name, digest, use_when in matches
-    ]
     return {
-        "results": results,
-        "count":   len(results),
-        "message": f"{len(results)} result(s) for '{term}'.",
+        "results": _fmt_results(matches, ""),
+        "count":   len(matches),
+        "method":  "substring",
+        "message": f"{len(matches)} result(s) for '{term}'.",
     }
 
 

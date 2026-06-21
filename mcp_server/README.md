@@ -19,9 +19,10 @@ enforces PEP 668):
 ```bash
 cd /path/to/Claude2Max
 python3 -m venv mcp_server/.venv
-mcp_server/.venv/bin/pip install "mcp[cli]>=1.27.0"
+mcp_server/.venv/bin/pip install -r mcp_server/requirements.txt
 ```
 
+This installs `mcp` (the MCP SDK) and `anthropic` (used by `assess()` — see below).
 The `.venv/` directory is in `.gitignore` and does not need to be committed.
 Python ≥ 3.10 required.
 
@@ -30,7 +31,8 @@ Python ≥ 3.10 required.
 User scope makes the server reachable from **any** cwd — required for global enforcement.
 
 ```bash
-claude mcp add --scope user claude2max -- \
+claude mcp add --scope user claude2max \
+  --env ANTHROPIC_API_KEY=sk-ant-... -- \
   /absolute/path/to/Claude2Max/mcp_server/.venv/bin/python3 \
   /absolute/path/to/Claude2Max/mcp_server/server.py
 ```
@@ -38,6 +40,22 @@ claude mcp add --scope user claude2max -- \
 Replace `/absolute/path/to/Claude2Max` with the actual clone path on your machine.
 Use the **venv python** (`.venv/bin/python3`), not the system `python3`, so the
 `mcp` package installed in step 1 is on the path.
+
+`--env ANTHROPIC_API_KEY=...` powers the three **LLM-assisted** tools, each a
+separate billed Anthropic API call (`claude-haiku-4-5` — cheap, fast):
+
+- `assess()` routes a task to knowledge modules by **reading its intent** (not
+  keyword matching).
+- `lookup_object()` returns **did-you-mean** suggestions when a name isn't found
+  (e.g. `oscparse` → `o.route`), each validated to be a real object.
+- `search_packages()` runs a **semantic** search — expands the query into related
+  terms, then reranks candidates by intent.
+
+Without the key the server still runs; each tool degrades to its deterministic
+path and says so (`method: "keyword-fallback"` / `"substring"`, empty
+`did_you_mean`). Override the model for all three with
+`--env CLAUDE2MAX_LLM_MODEL=...` (the older `CLAUDE2MAX_ASSESS_MODEL` is still
+honored for backward compatibility).
 
 Verify the registration was written:
 

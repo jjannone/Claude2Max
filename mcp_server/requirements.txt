@@ -2,3 +2,8 @@
 # See mcp_server/DESIGN_DECISIONS.md (a) for the rationale and pin policy.
 # Official Anthropic Python MCP SDK; FastMCP is bundled. Python >=3.10 required.
 mcp>=1.27.0
+
+# Anthropic SDK — assess() calls Claude to route a task description to knowledge
+# modules by intent (not keyword matching). Requires ANTHROPIC_API_KEY in the
+# server's environment; assess() falls back to keyword matching without it.
+anthropic>=0.40.0

@@ -60,6 +60,10 @@ Before composing a chain of 3+ native objects:
 
 - The server must be registered in Claude Code's MCP config pointing at `mcp_server/server.py`
   in the Claude2Max clone. Run `python3 install_global.py` (Phase iv deliverable, not yet built).
+- `assess()` routes by task **intent** via a Claude API call (`claude-haiku-4-5`), so the server
+  must be registered with `--env ANTHROPIC_API_KEY=...`. Without it, `assess()` degrades to
+  substring-keyword matching and reports `method: "keyword-fallback"`. Override the routing model
+  with `CLAUDE2MAX_ASSESS_MODEL`. See `README.md` § Register.
 - If the server is unreachable, Claude falls back to reading the prose files directly.
 - `essentials()` is kept as a backward-compat alias for `load(["core"])` — old snippets still work.
 - The enforcement hook (PreToolUse — blocks `.maxpat` edits until `load()` has been called) is
