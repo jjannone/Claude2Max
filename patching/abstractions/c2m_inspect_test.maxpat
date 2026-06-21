@@ -48,7 +48,7 @@
           "patching_rect": [
             20.0,
             16.0,
-            840.0,
+            839.0,
             22.0
           ],
           "text": "c2m.inspect test harness \u2014 every route has a button; run dumps from Max OR from `python3 tools/c2m_inspect_send.py \u2026`"
@@ -901,7 +901,7 @@
           "patching_rect": [
             40.0,
             760.0,
-            400.0,
+            188.0,
             22.0
           ],
           "text": "c2m.inspect test harness",
@@ -925,7 +925,7 @@
           "patching_rect": [
             40.0,
             790.0,
-            600.0,
+            412.0,
             22.0
           ],
           "text": "TEST_COLL \u00b7 TEST_DICT \u00b7 TEST_TABLE \u00b7 TEST_BUF \u00b7 TEST_MAT",
@@ -936,6 +936,59 @@
             600.0,
             22.0
           ]
+        }
+      },
+      {
+        "box": {
+          "id": "obj-46",
+          "maxclass": "newobj",
+          "numinlets": 1,
+          "numoutlets": 1,
+          "outlettype": [
+            ""
+          ],
+          "patching_rect": [
+            210.0,
+            310.0,
+            195.0,
+            22.0
+          ],
+          "text": "receive TEST_COLL_INSPECT"
+        }
+      },
+      {
+        "box": {
+          "id": "obj-47",
+          "maxclass": "newobj",
+          "numinlets": 1,
+          "numoutlets": 1,
+          "outlettype": [
+            ""
+          ],
+          "patching_rect": [
+            690.0,
+            310.0,
+            202.0,
+            22.0
+          ],
+          "text": "receive TEST_TABLE_INSPECT"
+        }
+      },
+      {
+        "box": {
+          "id": "obj-48",
+          "maxclass": "comment",
+          "numinlets": 1,
+          "numoutlets": 0,
+          "outlettype": [],
+          "patching_rect": [
+            210.0,
+            340.0,
+            300.0,
+            40.0
+          ],
+          "text": "\u2191 relays enable coll/table dumps:\nc2m.inspect sends 'write <file>' here",
+          "linecount": 2
         }
       },
       {
@@ -953,7 +1006,7 @@
             500.0,
             300.0
           ],
-          "code": "--- CLAUDE2MAX SPEC ---\n{\n  \"name\": \"c2m_inspect_test\",\n  \"width\": 900,\n  \"height\": 760,\n  \"openinpresentation\": 1,\n  \"objects\": {\n    \"title\": {\n      \"type\": \"comment\",\n      \"text\": \"c2m.inspect test harness \\u2014 every route has a button; run dumps from Max OR from `python3 tools/c2m_inspect_send.py \\u2026`\",\n      \"pos\": [\n        20,\n        16\n      ],\n      \"size\": [\n        840,\n        22\n      ]\n    },\n    \"abs\": {\n      \"type\": \"newobj\",\n      \"text\": \"c2m.inspect\",\n      \"pos\": [\n        40,\n        90\n      ]\n    },\n    \"abs_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"\\u2191 OSC listener abstraction (UDP 7474). Also accepts direct messages on inlet 0.\",\n      \"pos\": [\n        200,\n        90\n      ],\n      \"size\": [\n        560,\n        20\n      ]\n    },\n    \"abs_print\": {\n      \"type\": \"newobj\",\n      \"text\": \"print c2m.test\",\n      \"pos\": [\n        40,\n        130\n      ]\n    },\n    \"data_section_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"TEST DATA  \\u2014 loadbang populates each below with known values\",\n      \"pos\": [\n        40,\n        180\n      ],\n      \"size\": [\n        500,\n        20\n      ]\n    },\n    \"loadbang_box\": {\n      \"type\": \"newobj\",\n      \"text\": \"loadbang\",\n      \"pos\": [\n        40,\n        210\n      ]\n    },\n    \"init_coll_msg\": {\n      \"type\": \"message\",\n      \"text\": \"clear, store 1 alpha, store 2 beta, store 3 gamma, store 4 delta\",\n      \"pos\": [\n        40,\n        250\n      ]\n    },\n    \"test_coll\": {\n      \"type\": \"newobj\",\n      \"text\": \"coll TEST_COLL\",\n      \"pos\": [\n        40,\n        310\n      ]\n    },\n    \"test_coll_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"coll TEST_COLL\",\n      \"pos\": [\n        40,\n        290\n      ],\n      \"size\": [\n        160,\n        18\n      ]\n    },\n    \"init_dict_msg\": {\n      \"type\": \"message\",\n      \"text\": \"clear, set tempo 120, set key Cmajor, set steps 1 2 3 4\",\n      \"pos\": [\n        280,\n        250\n      ]\n    },\n    \"test_dict\": {\n      \"type\": \"newobj\",\n      \"text\": \"dict TEST_DICT\",\n      \"pos\": [\n        280,\n        310\n      ]\n    },\n    \"test_dict_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"dict TEST_DICT\",\n      \"pos\": [\n        280,\n        290\n      ],\n      \"size\": [\n        160,\n        18\n      ]\n    },\n    \"init_table_msg\": {\n      \"type\": \"message\",\n      \"text\": \"clear, set 0 100, set 1 200, set 2 300, set 3 400, set 4 500, set 5 600, set 6 700, set 7 800\",\n      \"pos\": [\n        520,\n        250\n      ]\n    },\n    \"test_table\": {\n      \"type\": \"newobj\",\n      \"text\": \"table TEST_TABLE @size 16\",\n      \"pos\": [\n        520,\n        310\n      ]\n    },\n    \"test_table_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"table TEST_TABLE (size 16)\",\n      \"pos\": [\n        520,\n        290\n      ],\n      \"size\": [\n        220,\n        18\n      ]\n    },\n    \"test_buffer\": {\n      \"type\": \"newobj\",\n      \"text\": \"buffer~ TEST_BUF 250\",\n      \"pos\": [\n        40,\n        380\n      ]\n    },\n    \"test_buffer_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"buffer~ TEST_BUF (250 ms, empty samples)\",\n      \"pos\": [\n        40,\n        360\n      ],\n      \"size\": [\n        300,\n        18\n      ]\n    },\n    \"init_matrix_msg\": {\n      \"type\": \"message\",\n      \"text\": \"setall 99\",\n      \"pos\": [\n        340,\n        360\n      ]\n    },\n    \"test_matrix\": {\n      \"type\": \"newobj\",\n      \"text\": \"jit.matrix TEST_MAT 3 char 4 4\",\n      \"pos\": [\n        340,\n        410\n      ]\n    },\n    \"test_matrix_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"jit.matrix TEST_MAT (3 char 4x4, all cells = 99)\",\n      \"pos\": [\n        340,\n        390\n      ],\n      \"size\": [\n        320,\n        18\n      ]\n    },\n    \"btn_section_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"DIRECT TEST BUTTONS \\u2014 fire each route locally (bypasses OSC, exercises v8 dumper)\",\n      \"pos\": [\n        40,\n        470\n      ],\n      \"size\": [\n        620,\n        20\n      ]\n    },\n    \"btn_ping\": {\n      \"type\": \"button\",\n      \"pos\": [\n        40,\n        500\n      ],\n      \"presentation\": [\n        12,\n        60,\n        24,\n        24\n      ]\n    },\n    \"btn_ping_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"ping\",\n      \"pos\": [\n        40,\n        530\n      ],\n      \"size\": [\n        40,\n        18\n      ],\n      \"presentation\": [\n        40,\n        60,\n        40,\n        18\n      ]\n    },\n    \"msg_ping\": {\n      \"type\": \"message\",\n      \"text\": \"ping\",\n      \"pos\": [\n        40,\n        555\n      ],\n      \"attrs\": {\n        \"hidden\": 1\n      }\n    },\n    \"btn_scan\": {\n      \"type\": \"button\",\n      \"pos\": [\n        110,\n        500\n      ],\n      \"presentation\": [\n        92,\n        60,\n        24,\n        24\n      ]\n    },\n    \"btn_scan_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"scan\",\n      \"pos\": [\n        110,\n        530\n      ],\n      \"size\": [\n        40,\n        18\n      ],\n      \"presentation\": [\n        120,\n        60,\n        40,\n        18\n      ]\n    },\n    \"msg_scan\": {\n      \"type\": \"message\",\n      \"text\": \"scan\",\n      \"pos\": [\n        110,\n        555\n      ],\n      \"attrs\": {\n        \"hidden\": 1\n      }\n    },\n    \"btn_dict\": {\n      \"type\": \"button\",\n      \"pos\": [\n        200,\n        500\n      ],\n      \"presentation\": [\n        172,\n        60,\n        24,\n        24\n      ]\n    },\n    \"btn_dict_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"dump dict\",\n      \"pos\": [\n        200,\n        530\n      ],\n      \"size\": [\n        70,\n        18\n      ],\n      \"presentation\": [\n        200,\n        60,\n        80,\n        18\n      ]\n    },\n    \"msg_dict\": {\n      \"type\": \"message\",\n      \"text\": \"dump d dict TEST_DICT\",\n      \"pos\": [\n        200,\n        555\n      ],\n      \"attrs\": {\n        \"hidden\": 1\n      }\n    },\n    \"btn_coll\": {\n      \"type\": \"button\",\n      \"pos\": [\n        310,\n        500\n      ],\n      \"presentation\": [\n        284,\n        60,\n        24,\n        24\n      ]\n    },\n    \"btn_coll_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"dump coll\",\n      \"pos\": [\n        310,\n        530\n      ],\n      \"size\": [\n        70,\n        18\n      ],\n      \"presentation\": [\n        312,\n        60,\n        80,\n        18\n      ]\n    },\n    \"msg_coll\": {\n      \"type\": \"message\",\n      \"text\": \"dump c coll TEST_COLL\",\n      \"pos\": [\n        310,\n        555\n      ],\n      \"attrs\": {\n        \"hidden\": 1\n      }\n    },\n    \"btn_table\": {\n      \"type\": \"button\",\n      \"pos\": [\n        420,\n        500\n      ],\n      \"presentation\": [\n        396,\n        60,\n        24,\n        24\n      ]\n    },\n    \"btn_table_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"dump table\",\n      \"pos\": [\n        420,\n        530\n      ],\n      \"size\": [\n        80,\n        18\n      ],\n      \"presentation\": [\n        424,\n        60,\n        80,\n        18\n      ]\n    },\n    \"msg_table\": {\n      \"type\": \"message\",\n      \"text\": \"dump u table TEST_TABLE\",\n      \"pos\": [\n        420,\n        555\n      ],\n      \"attrs\": {\n        \"hidden\": 1\n      }\n    },\n    \"btn_buffer\": {\n      \"type\": \"button\",\n      \"pos\": [\n        530,\n        500\n      ],\n      \"presentation\": [\n        508,\n        60,\n        24,\n        24\n      ]\n    },\n    \"btn_buffer_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"dump buffer~\",\n      \"pos\": [\n        530,\n        530\n      ],\n      \"size\": [\n        90,\n        18\n      ],\n      \"presentation\": [\n        536,\n        60,\n        100,\n        18\n      ]\n    },\n    \"msg_buffer\": {\n      \"type\": \"message\",\n      \"text\": \"dump b buffer~ TEST_BUF\",\n      \"pos\": [\n        530,\n        555\n      ],\n      \"attrs\": {\n        \"hidden\": 1\n      }\n    },\n    \"btn_matrix\": {\n      \"type\": \"button\",\n      \"pos\": [\n        660,\n        500\n      ],\n      \"presentation\": [\n        640,\n        60,\n        24,\n        24\n      ]\n    },\n    \"btn_matrix_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"dump jit.matrix\",\n      \"pos\": [\n        660,\n        530\n      ],\n      \"size\": [\n        110,\n        18\n      ],\n      \"presentation\": [\n        668,\n        60,\n        120,\n        18\n      ]\n    },\n    \"msg_matrix\": {\n      \"type\": \"message\",\n      \"text\": \"dump m jit.matrix TEST_MAT\",\n      \"pos\": [\n        660,\n        555\n      ],\n      \"attrs\": {\n        \"hidden\": 1\n      }\n    },\n    \"osc_section_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"OSC TEST \\u2014 from the repo root:\\n  python3 tools/c2m_inspect_send.py --timeout 2 ping\\n  python3 tools/c2m_inspect_send.py --timeout 2 scan\\n  python3 tools/c2m_inspect_send.py --timeout 2 dump d dict       TEST_DICT\\n  python3 tools/c2m_inspect_send.py --timeout 2 dump c coll       TEST_COLL\\n  python3 tools/c2m_inspect_send.py --timeout 2 dump u table      TEST_TABLE\\n  python3 tools/c2m_inspect_send.py --timeout 2 dump b buffer~    TEST_BUF\\n  python3 tools/c2m_inspect_send.py --timeout 2 dump m jit.matrix TEST_MAT\",\n      \"pos\": [\n        40,\n        620\n      ],\n      \"size\": [\n        820,\n        130\n      ],\n      \"presentation\": [\n        12,\n        100,\n        820,\n        130\n      ]\n    },\n    \"ui_title\": {\n      \"type\": \"comment\",\n      \"text\": \"c2m.inspect test harness\",\n      \"pos\": [\n        40,\n        760\n      ],\n      \"size\": [\n        400,\n        22\n      ],\n      \"presentation\": [\n        10,\n        8,\n        400,\n        22\n      ],\n      \"attrs\": {\n        \"fontsize\": 14.0\n      }\n    },\n    \"ui_subtitle\": {\n      \"type\": \"comment\",\n      \"text\": \"TEST_COLL \\u00b7 TEST_DICT \\u00b7 TEST_TABLE \\u00b7 TEST_BUF \\u00b7 TEST_MAT\",\n      \"pos\": [\n        40,\n        790\n      ],\n      \"size\": [\n        600,\n        22\n      ],\n      \"presentation\": [\n        10,\n        34,\n        600,\n        22\n      ]\n    }\n  },\n  \"connections\": [\n    [\n      \"loadbang_box\",\n      0,\n      \"init_coll_msg\",\n      0\n    ],\n    [\n      \"loadbang_box\",\n      0,\n      \"init_dict_msg\",\n      0\n    ],\n    [\n      \"loadbang_box\",\n      0,\n      \"init_table_msg\",\n      0\n    ],\n    [\n      \"loadbang_box\",\n      0,\n      \"init_matrix_msg\",\n      0\n    ],\n    [\n      \"init_coll_msg\",\n      0,\n      \"test_coll\",\n      0\n    ],\n    [\n      \"init_dict_msg\",\n      0,\n      \"test_dict\",\n      0\n    ],\n    [\n      \"init_table_msg\",\n      0,\n      \"test_table\",\n      0\n    ],\n    [\n      \"init_matrix_msg\",\n      0,\n      \"test_matrix\",\n      0\n    ],\n    [\n      \"btn_ping\",\n      0,\n      \"msg_ping\",\n      0\n    ],\n    [\n      \"btn_scan\",\n      0,\n      \"msg_scan\",\n      0\n    ],\n    [\n      \"btn_dict\",\n      0,\n      \"msg_dict\",\n      0\n    ],\n    [\n      \"btn_coll\",\n      0,\n      \"msg_coll\",\n      0\n    ],\n    [\n      \"btn_table\",\n      0,\n      \"msg_table\",\n      0\n    ],\n    [\n      \"btn_buffer\",\n      0,\n      \"msg_buffer\",\n      0\n    ],\n    [\n      \"btn_matrix\",\n      0,\n      \"msg_matrix\",\n      0\n    ],\n    [\n      \"msg_ping\",\n      0,\n      \"abs\",\n      0\n    ],\n    [\n      \"msg_scan\",\n      0,\n      \"abs\",\n      0\n    ],\n    [\n      \"msg_dict\",\n      0,\n      \"abs\",\n      0\n    ],\n    [\n      \"msg_coll\",\n      0,\n      \"abs\",\n      0\n    ],\n    [\n      \"msg_table\",\n      0,\n      \"abs\",\n      0\n    ],\n    [\n      \"msg_buffer\",\n      0,\n      \"abs\",\n      0\n    ],\n    [\n      \"msg_matrix\",\n      0,\n      \"abs\",\n      0\n    ],\n    [\n      \"abs\",\n      0,\n      \"abs_print\",\n      0\n    ]\n  ]\n}\n--- END SPEC ---",
+          "code": "--- CLAUDE2MAX SPEC ---\n{\n  \"name\": \"c2m_inspect_test\",\n  \"width\": 900,\n  \"height\": 760,\n  \"openinpresentation\": 1,\n  \"objects\": {\n    \"title\": {\n      \"type\": \"comment\",\n      \"text\": \"c2m.inspect test harness \\u2014 every route has a button; run dumps from Max OR from `python3 tools/c2m_inspect_send.py \\u2026`\",\n      \"pos\": [\n        20,\n        16\n      ]\n    },\n    \"abs\": {\n      \"type\": \"newobj\",\n      \"text\": \"c2m.inspect\",\n      \"pos\": [\n        40,\n        90\n      ]\n    },\n    \"abs_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"\\u2191 OSC listener abstraction (UDP 7474). Also accepts direct messages on inlet 0.\",\n      \"pos\": [\n        200,\n        90\n      ],\n      \"size\": [\n        560,\n        20\n      ]\n    },\n    \"abs_print\": {\n      \"type\": \"newobj\",\n      \"text\": \"print c2m.test\",\n      \"pos\": [\n        40,\n        130\n      ]\n    },\n    \"data_section_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"TEST DATA  \\u2014 loadbang populates each below with known values\",\n      \"pos\": [\n        40,\n        180\n      ],\n      \"size\": [\n        500,\n        20\n      ]\n    },\n    \"loadbang_box\": {\n      \"type\": \"newobj\",\n      \"text\": \"loadbang\",\n      \"pos\": [\n        40,\n        210\n      ]\n    },\n    \"init_coll_msg\": {\n      \"type\": \"message\",\n      \"text\": \"clear, store 1 alpha, store 2 beta, store 3 gamma, store 4 delta\",\n      \"pos\": [\n        40,\n        250\n      ]\n    },\n    \"test_coll\": {\n      \"type\": \"newobj\",\n      \"text\": \"coll TEST_COLL\",\n      \"pos\": [\n        40,\n        310\n      ]\n    },\n    \"test_coll_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"coll TEST_COLL\",\n      \"pos\": [\n        40,\n        290\n      ],\n      \"size\": [\n        160,\n        18\n      ]\n    },\n    \"init_dict_msg\": {\n      \"type\": \"message\",\n      \"text\": \"clear, set tempo 120, set key Cmajor, set steps 1 2 3 4\",\n      \"pos\": [\n        280,\n        250\n      ]\n    },\n    \"test_dict\": {\n      \"type\": \"newobj\",\n      \"text\": \"dict TEST_DICT\",\n      \"pos\": [\n        280,\n        310\n      ]\n    },\n    \"test_dict_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"dict TEST_DICT\",\n      \"pos\": [\n        280,\n        290\n      ],\n      \"size\": [\n        160,\n        18\n      ]\n    },\n    \"init_table_msg\": {\n      \"type\": \"message\",\n      \"text\": \"clear, set 0 100, set 1 200, set 2 300, set 3 400, set 4 500, set 5 600, set 6 700, set 7 800\",\n      \"pos\": [\n        520,\n        250\n      ]\n    },\n    \"test_table\": {\n      \"type\": \"newobj\",\n      \"text\": \"table TEST_TABLE @size 16\",\n      \"pos\": [\n        520,\n        310\n      ]\n    },\n    \"test_table_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"table TEST_TABLE (size 16)\",\n      \"pos\": [\n        520,\n        290\n      ],\n      \"size\": [\n        220,\n        18\n      ]\n    },\n    \"test_buffer\": {\n      \"type\": \"newobj\",\n      \"text\": \"buffer~ TEST_BUF 250\",\n      \"pos\": [\n        40,\n        380\n      ]\n    },\n    \"test_buffer_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"buffer~ TEST_BUF (250 ms, empty samples)\",\n      \"pos\": [\n        40,\n        360\n      ],\n      \"size\": [\n        300,\n        18\n      ]\n    },\n    \"init_matrix_msg\": {\n      \"type\": \"message\",\n      \"text\": \"setall 99\",\n      \"pos\": [\n        340,\n        360\n      ]\n    },\n    \"test_matrix\": {\n      \"type\": \"newobj\",\n      \"text\": \"jit.matrix TEST_MAT 3 char 4 4\",\n      \"pos\": [\n        340,\n        410\n      ]\n    },\n    \"test_matrix_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"jit.matrix TEST_MAT (3 char 4x4, all cells = 99)\",\n      \"pos\": [\n        340,\n        390\n      ],\n      \"size\": [\n        320,\n        18\n      ]\n    },\n    \"btn_section_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"DIRECT TEST BUTTONS \\u2014 fire each route locally (bypasses OSC, exercises v8 dumper)\",\n      \"pos\": [\n        40,\n        470\n      ],\n      \"size\": [\n        620,\n        20\n      ]\n    },\n    \"btn_ping\": {\n      \"type\": \"button\",\n      \"pos\": [\n        40,\n        500\n      ],\n      \"presentation\": [\n        12,\n        60,\n        24,\n        24\n      ]\n    },\n    \"btn_ping_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"ping\",\n      \"pos\": [\n        40,\n        530\n      ],\n      \"size\": [\n        40,\n        18\n      ],\n      \"presentation\": [\n        40,\n        60,\n        40,\n        18\n      ]\n    },\n    \"msg_ping\": {\n      \"type\": \"message\",\n      \"text\": \"ping\",\n      \"pos\": [\n        40,\n        555\n      ],\n      \"attrs\": {\n        \"hidden\": 1\n      }\n    },\n    \"btn_scan\": {\n      \"type\": \"button\",\n      \"pos\": [\n        110,\n        500\n      ],\n      \"presentation\": [\n        92,\n        60,\n        24,\n        24\n      ]\n    },\n    \"btn_scan_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"scan\",\n      \"pos\": [\n        110,\n        530\n      ],\n      \"size\": [\n        40,\n        18\n      ],\n      \"presentation\": [\n        120,\n        60,\n        40,\n        18\n      ]\n    },\n    \"msg_scan\": {\n      \"type\": \"message\",\n      \"text\": \"scan\",\n      \"pos\": [\n        110,\n        555\n      ],\n      \"attrs\": {\n        \"hidden\": 1\n      }\n    },\n    \"btn_dict\": {\n      \"type\": \"button\",\n      \"pos\": [\n        200,\n        500\n      ],\n      \"presentation\": [\n        172,\n        60,\n        24,\n        24\n      ]\n    },\n    \"btn_dict_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"dump dict\",\n      \"pos\": [\n        200,\n        530\n      ],\n      \"size\": [\n        70,\n        18\n      ],\n      \"presentation\": [\n        200,\n        60,\n        80,\n        18\n      ]\n    },\n    \"msg_dict\": {\n      \"type\": \"message\",\n      \"text\": \"dump d dict TEST_DICT\",\n      \"pos\": [\n        200,\n        555\n      ],\n      \"attrs\": {\n        \"hidden\": 1\n      }\n    },\n    \"btn_coll\": {\n      \"type\": \"button\",\n      \"pos\": [\n        310,\n        500\n      ],\n      \"presentation\": [\n        284,\n        60,\n        24,\n        24\n      ]\n    },\n    \"btn_coll_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"dump coll\",\n      \"pos\": [\n        310,\n        530\n      ],\n      \"size\": [\n        70,\n        18\n      ],\n      \"presentation\": [\n        312,\n        60,\n        80,\n        18\n      ]\n    },\n    \"msg_coll\": {\n      \"type\": \"message\",\n      \"text\": \"dump c coll TEST_COLL\",\n      \"pos\": [\n        310,\n        555\n      ],\n      \"attrs\": {\n        \"hidden\": 1\n      }\n    },\n    \"btn_table\": {\n      \"type\": \"button\",\n      \"pos\": [\n        420,\n        500\n      ],\n      \"presentation\": [\n        396,\n        60,\n        24,\n        24\n      ]\n    },\n    \"btn_table_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"dump table\",\n      \"pos\": [\n        420,\n        530\n      ],\n      \"size\": [\n        80,\n        18\n      ],\n      \"presentation\": [\n        424,\n        60,\n        80,\n        18\n      ]\n    },\n    \"msg_table\": {\n      \"type\": \"message\",\n      \"text\": \"dump u table TEST_TABLE\",\n      \"pos\": [\n        420,\n        555\n      ],\n      \"attrs\": {\n        \"hidden\": 1\n      }\n    },\n    \"btn_buffer\": {\n      \"type\": \"button\",\n      \"pos\": [\n        530,\n        500\n      ],\n      \"presentation\": [\n        508,\n        60,\n        24,\n        24\n      ]\n    },\n    \"btn_buffer_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"dump buffer~\",\n      \"pos\": [\n        530,\n        530\n      ],\n      \"size\": [\n        90,\n        18\n      ],\n      \"presentation\": [\n        536,\n        60,\n        100,\n        18\n      ]\n    },\n    \"msg_buffer\": {\n      \"type\": \"message\",\n      \"text\": \"dump b buffer~ TEST_BUF\",\n      \"pos\": [\n        530,\n        555\n      ],\n      \"attrs\": {\n        \"hidden\": 1\n      }\n    },\n    \"btn_matrix\": {\n      \"type\": \"button\",\n      \"pos\": [\n        660,\n        500\n      ],\n      \"presentation\": [\n        640,\n        60,\n        24,\n        24\n      ]\n    },\n    \"btn_matrix_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"dump jit.matrix\",\n      \"pos\": [\n        660,\n        530\n      ],\n      \"size\": [\n        110,\n        18\n      ],\n      \"presentation\": [\n        668,\n        60,\n        120,\n        18\n      ]\n    },\n    \"msg_matrix\": {\n      \"type\": \"message\",\n      \"text\": \"dump m jit.matrix TEST_MAT\",\n      \"pos\": [\n        660,\n        555\n      ],\n      \"attrs\": {\n        \"hidden\": 1\n      }\n    },\n    \"osc_section_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"OSC TEST \\u2014 from the repo root:\\n  python3 tools/c2m_inspect_send.py --timeout 2 ping\\n  python3 tools/c2m_inspect_send.py --timeout 2 scan\\n  python3 tools/c2m_inspect_send.py --timeout 2 dump d dict       TEST_DICT\\n  python3 tools/c2m_inspect_send.py --timeout 2 dump c coll       TEST_COLL\\n  python3 tools/c2m_inspect_send.py --timeout 2 dump u table      TEST_TABLE\\n  python3 tools/c2m_inspect_send.py --timeout 2 dump b buffer~    TEST_BUF\\n  python3 tools/c2m_inspect_send.py --timeout 2 dump m jit.matrix TEST_MAT\",\n      \"pos\": [\n        40,\n        620\n      ],\n      \"size\": [\n        820,\n        130\n      ],\n      \"presentation\": [\n        12,\n        100,\n        820,\n        130\n      ]\n    },\n    \"ui_title\": {\n      \"type\": \"comment\",\n      \"text\": \"c2m.inspect test harness\",\n      \"pos\": [\n        40,\n        760\n      ],\n      \"presentation\": [\n        10,\n        8,\n        400,\n        22\n      ],\n      \"attrs\": {\n        \"fontsize\": 14.0\n      }\n    },\n    \"ui_subtitle\": {\n      \"type\": \"comment\",\n      \"text\": \"TEST_COLL \\u00b7 TEST_DICT \\u00b7 TEST_TABLE \\u00b7 TEST_BUF \\u00b7 TEST_MAT\",\n      \"pos\": [\n        40,\n        790\n      ],\n      \"presentation\": [\n        10,\n        34,\n        600,\n        22\n      ]\n    },\n    \"recv_coll_inspect\": {\n      \"type\": \"newobj\",\n      \"text\": \"receive TEST_COLL_INSPECT\",\n      \"pos\": [\n        210,\n        310\n      ]\n    },\n    \"recv_table_inspect\": {\n      \"type\": \"newobj\",\n      \"text\": \"receive TEST_TABLE_INSPECT\",\n      \"pos\": [\n        690,\n        310\n      ]\n    },\n    \"inspect_relay_lbl\": {\n      \"type\": \"comment\",\n      \"text\": \"\\u2191 relays enable coll/table dumps:\\nc2m.inspect sends 'write <file>' here\",\n      \"pos\": [\n        210,\n        340\n      ],\n      \"size\": [\n        300,\n        40\n      ]\n    }\n  },\n  \"connections\": [\n    [\n      \"loadbang_box\",\n      0,\n      \"init_coll_msg\",\n      0\n    ],\n    [\n      \"loadbang_box\",\n      0,\n      \"init_dict_msg\",\n      0\n    ],\n    [\n      \"loadbang_box\",\n      0,\n      \"init_table_msg\",\n      0\n    ],\n    [\n      \"loadbang_box\",\n      0,\n      \"init_matrix_msg\",\n      0\n    ],\n    [\n      \"init_coll_msg\",\n      0,\n      \"test_coll\",\n      0\n    ],\n    [\n      \"init_dict_msg\",\n      0,\n      \"test_dict\",\n      0\n    ],\n    [\n      \"init_table_msg\",\n      0,\n      \"test_table\",\n      0\n    ],\n    [\n      \"init_matrix_msg\",\n      0,\n      \"test_matrix\",\n      0\n    ],\n    [\n      \"btn_ping\",\n      0,\n      \"msg_ping\",\n      0\n    ],\n    [\n      \"btn_scan\",\n      0,\n      \"msg_scan\",\n      0\n    ],\n    [\n      \"btn_dict\",\n      0,\n      \"msg_dict\",\n      0\n    ],\n    [\n      \"btn_coll\",\n      0,\n      \"msg_coll\",\n      0\n    ],\n    [\n      \"btn_table\",\n      0,\n      \"msg_table\",\n      0\n    ],\n    [\n      \"btn_buffer\",\n      0,\n      \"msg_buffer\",\n      0\n    ],\n    [\n      \"btn_matrix\",\n      0,\n      \"msg_matrix\",\n      0\n    ],\n    [\n      \"msg_ping\",\n      0,\n      \"abs\",\n      0\n    ],\n    [\n      \"msg_scan\",\n      0,\n      \"abs\",\n      0\n    ],\n    [\n      \"msg_dict\",\n      0,\n      \"abs\",\n      0\n    ],\n    [\n      \"msg_coll\",\n      0,\n      \"abs\",\n      0\n    ],\n    [\n      \"msg_table\",\n      0,\n      \"abs\",\n      0\n    ],\n    [\n      \"msg_buffer\",\n      0,\n      \"abs\",\n      0\n    ],\n    [\n      \"msg_matrix\",\n      0,\n      \"abs\",\n      0\n    ],\n    [\n      \"abs\",\n      0,\n      \"abs_print\",\n      0\n    ],\n    [\n      \"recv_coll_inspect\",\n      0,\n      \"test_coll\",\n      0\n    ],\n    [\n      \"recv_table_inspect\",\n      0,\n      \"test_table\",\n      0\n    ]\n  ]\n}\n--- END SPEC ---",
           "fontsize": 9.0,
           "hidden": 1
         }
@@ -1065,8 +1118,7 @@
           "source": [
             "obj-22",
             0
-          ],
-          "hidden": 1
+          ]
         }
       },
       {
@@ -1078,8 +1130,7 @@
           "source": [
             "obj-25",
             0
-          ],
-          "hidden": 1
+          ]
         }
       },
       {
@@ -1091,8 +1142,7 @@
           "source": [
             "obj-28",
             0
-          ],
-          "hidden": 1
+          ]
         }
       },
       {
@@ -1104,8 +1154,7 @@
           "source": [
             "obj-31",
             0
-          ],
-          "hidden": 1
+          ]
         }
       },
       {
@@ -1117,8 +1166,7 @@
           "source": [
             "obj-34",
             0
-          ],
-          "hidden": 1
+          ]
         }
       },
       {
@@ -1130,8 +1178,7 @@
           "source": [
             "obj-37",
             0
-          ],
-          "hidden": 1
+          ]
         }
       },
       {
@@ -1143,8 +1190,7 @@
           "source": [
             "obj-40",
             0
-          ],
-          "hidden": 1
+          ]
         }
       },
       {
@@ -1156,8 +1202,7 @@
           "source": [
             "obj-24",
             0
-          ],
-          "hidden": 1
+          ]
         }
       },
       {
@@ -1169,8 +1214,7 @@
           "source": [
             "obj-27",
             0
-          ],
-          "hidden": 1
+          ]
         }
       },
       {
@@ -1182,8 +1226,7 @@
           "source": [
             "obj-30",
             0
-          ],
-          "hidden": 1
+          ]
         }
       },
       {
@@ -1195,8 +1238,7 @@
           "source": [
             "obj-33",
             0
-          ],
-          "hidden": 1
+          ]
         }
       },
       {
@@ -1208,8 +1250,7 @@
           "source": [
             "obj-36",
             0
-          ],
-          "hidden": 1
+          ]
         }
       },
       {
@@ -1221,8 +1262,7 @@
           "source": [
             "obj-39",
             0
-          ],
-          "hidden": 1
+          ]
         }
       },
       {
@@ -1234,8 +1274,7 @@
           "source": [
             "obj-42",
             0
-          ],
-          "hidden": 1
+          ]
         }
       },
       {
@@ -1246,6 +1285,30 @@
           ],
           "source": [
             "obj-2",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "destination": [
+            "obj-8",
+            0
+          ],
+          "source": [
+            "obj-46",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "destination": [
+            "obj-14",
+            0
+          ],
+          "source": [
+            "obj-47",
             0
           ]
         }

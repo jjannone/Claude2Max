@@ -65,28 +65,29 @@ function setasyncdelay(v) { asyncdelay = +v; }
 
 // --- file I/O helper --------------------------------------------------------
 
-function writejson(path, obj) {
-    var json = JSON.stringify(obj, null, 2);
+// Max's File "write" mode overwrites from offset 0 but does NOT truncate, so a
+// shorter write leaves a tail of the previous (longer) file's bytes — which
+// corrupts the JSON every reader downstream sees. Truncate explicitly to the
+// bytes just written via the File `eof` property (set to current `position`).
+function writefile(path, str, openFailOutlet) {
     var f = new File(path, "write");
     if (!f.isopen) {
         post("c2m.inspect: cannot open for write: " + path + "\n");
-        outlet(0, "error", "open_failed", path);
+        if (openFailOutlet) outlet(0, "error", "open_failed", path);
         return false;
     }
-    f.writestring(json);
+    f.writestring(str);
+    f.eof = f.position;   // truncate any stale trailing bytes
     f.close();
     return true;
 }
 
+function writejson(path, obj) {
+    return writefile(path, JSON.stringify(obj, null, 2), true);
+}
+
 function writetext(path, str) {
-    var f = new File(path, "write");
-    if (!f.isopen) {
-        post("c2m.inspect: cannot open for write: " + path + "\n");
-        return false;
-    }
-    f.writestring(str);
-    f.close();
-    return true;
+    return writefile(path, str, false);
 }
 
 function readfile(path) {
@@ -358,19 +359,19 @@ function parseCollText(text) {
 }
 
 function parseTableText(text) {
-    // Max's table write format:
-    //   table {
-    //     flags 0 0;
-    //     data N v0 v1 v2 ... ;
-    //   }
-    var m = text.match(/data\s+\d+([^;]+);/);
-    if (!m) return { error: "no data section in table file", raw: text };
-    var parts = m[1].replace(/^\s+|\s+$/g, "").split(/\s+/);
+    // Verified against live `table write` output (Max 9): a single flat line
+    //   table v0 v1 v2 ... v(size-1)
+    // (the literal label "table", then every cell value incl. trailing zeros;
+    // no flags/data wrapper). Strip any ; { } punctuation, drop the "table"
+    // label, collect every numeric token.
+    var toks = text.replace(/[;{}]/g, " ").split(/\s+/);
     var out = [];
-    for (var i = 0; i < parts.length; i++) {
-        if (parts[i] === "") continue;
-        var n = Number(parts[i]);
+    for (var i = 0; i < toks.length; i++) {
+        var t = toks[i];
+        if (t === "" || t === "table") continue;
+        var n = Number(t);
         if (!isNaN(n)) out.push(n);
     }
+    if (out.length === 0) return { error: "no numeric data in table file", raw: text };
     return out;
 }
