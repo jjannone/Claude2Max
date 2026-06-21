@@ -197,6 +197,11 @@ These principles represent the preferred aesthetic and UX approach for Max prese
 ### Action prominence hierarchy
 Size communicates priority — the most-used controls must be the largest, most visually dominant elements. Secondary controls are smaller and subordinate. Never give all controls equal visual weight; the user's eye should land on the most important control first without scanning.
 
+### Prefer a labeled message box over a button + comment for one-shot actions
+For an operator-facing action the user clicks (save, load, clear, reset, recall, trigger), use a **`message` box whose text is the action's label** rather than a `button` paired with a separate `comment`. The message box combines both jobs — it is the clickable affordance AND it reads as a word ("save", "load"), so it self-documents and takes one object instead of two. A bare `button` is a blank bang with no indication of what it does; labelling it then requires an adjacent comment, which is two objects to place, align, and keep in sync for what a single message box does cleanly.
+
+If the downstream consumer needs a bare `bang` rather than the message's symbol, route the message through `[t b]` (trigger bang) — that conversion is hidden plumbing; the operator still sees and clicks the labelled message. Reserve a `button` for cases where the *blinking bang indicator* itself is the point (monitoring traffic on a cord) — there the button is a display, not a labelled action. (Derived from the Zendrum bank UI: `save`/`load` message boxes replaced button+comment pairs.)
+
 ### Panel-based grouping
 Use dark rounded panels (`panel` objects with rounded corners and a dark fill) to cluster related controls. The panel boundary is the group label — controls inside share a purpose. Do not mix unrelated controls inside one panel. Leave consistent padding (≈15 px) between panel edge and contents.
 

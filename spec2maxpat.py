@@ -90,6 +90,7 @@ class _GateResolver:
         self._dirs = [Path(d) for d in search_dirs if d]
         self._aliases = self._build_alias_map()
         self._base_attrs = self._build_base_attrs()  # jbox: inherited by every box
+        self._observed = self._load_observed_attrs()  # help-corpus attr ground truth
 
     def _build_base_attrs(self):
         """Attributes every box inherits from the jbox base class.
@@ -105,6 +106,36 @@ class _GateResolver:
             return set(r.get("attributes", {}).keys())
         # jbox refpage absent (no Max install): fall back to the verified core set
         return set(_JBOX_FALLBACK_ATTRS)
+
+    def _load_observed_attrs(self):
+        """Load the maxhelp corpus observed-attrs map, pre-filtered.
+
+        Applies the three integration cautions from maxhelp/maxhelp_insights.md:
+        - Drop rnbo*/frozen* artifact keys (RNBO-export / freeze metadata, not user attrs)
+        - Apply ≥3-box frequency floor (drops one-off noise / version cruft)
+        - For no-refpage objects the observed set is a positive allowlist only;
+          attrs_for() still returns None for those — the caller must not use the
+          observed set to flag attrs on objects whose full attr space is unknown.
+        """
+        import json as _json
+        observed_path = Path(__file__).resolve().parent / "maxhelp" / "maxhelp_observed_attrs.json"
+        try:
+            raw = _json.loads(observed_path.read_text())
+            objects = raw.get("objects", {})
+            result = {}
+            for obj_name, data in objects.items():
+                if obj_name.startswith("_"):
+                    continue
+                attrs = data.get("attrs", {}) if isinstance(data, dict) else {}
+                filtered = {
+                    k for k, v in attrs.items()
+                    if v >= 3 and not k.startswith(("rnbo", "frozen"))
+                }
+                if filtered:
+                    result[obj_name] = filtered
+            return result
+        except (OSError, KeyError, TypeError, _json.JSONDecodeError):
+            return {}
 
     @staticmethod
     def _build_alias_map():
@@ -141,13 +172,30 @@ class _GateResolver:
         return None
 
     def attrs_for(self, name):
-        """Complete valid-attribute set for an object: its own refpage attrs
-        UNION the jbox base attrs it inherits. Returns (set, source) or
-        (None, …) when the object has no refpage (can't enumerate)."""
+        """Complete valid-attribute set for an object.
+
+        Returns (set, source) where set = own refpage attrs ∪ jbox base attrs
+        ∪ help-corpus observed attrs (≥3-box floor, rnbo/frozen filtered).
+        Returns (None, "no-refpage") when the object has no refpage — callers
+        must treat None as "can't enumerate" and NOT use the observed set to
+        flag attrs on such objects (positive allowlist only for no-refpage objects).
+
+        Mirrors the alias resolution from resolve_object() so operator abbreviations
+        (`t`, `+`, `sel`, …) get their refpage attrs checked rather than skipping.
+        """
         r = self._rp.lookup(name)
         if r is None:
+            alias = self._aliases.get(name)
+            if alias:
+                r = self._rp.lookup(alias)
+        if r is None:
             return None, "no-refpage"
-        return set(r.get("attributes", {}).keys()) | self._base_attrs, "c74-refpage"
+        own = set(r.get("attributes", {}).keys())
+        # Union the help-corpus observed set; keyed by the box text token (the
+        # same name the spec uses), so a direct lookup on `name` is correct even
+        # after alias resolution — the corpus sees the abbreviated form.
+        observed = self._observed.get(name, set())
+        return own | self._base_attrs | observed, "c74-refpage"
 
     def abstraction_exists(self, name):
         for d in self._dirs:

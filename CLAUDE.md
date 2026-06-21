@@ -305,6 +305,29 @@ When writing a `v8`/`js`/`jsui` object — or any new object that is **not** hig
 
 This pairs with **Never Regress Functionality When Changing Modality** (a reimplementation arrives at least as capable) and **Never Write API Names From Memory** (verify the inherited object's real messages/attributes against its refpage before mirroring them). Note for verification: a custom object has no C74 refpage, so the `verify_spec` gate can't check its attributes — shipping a `<name>.maxref.xml` (and a `<name>.maxhelp`) for any reusable object you create lets the gate and other tooling validate it like a built-in.
 
+## Attribute Labels Must Begin With the Attribute's Own Word — Binding Rule
+
+The goal is a list a human can scan: `attrui` and the Inspector list an object's attributes **alphabetically by their human-readable `label`, not by the attribute name.** So when you give an attribute a `label` (the `label:` field in `declareattribute`, or any equivalent), the label **must begin with the same word the attribute name begins with.** Then someone who knows the attribute is `@slidermode` can find it by scanning the list for "Slider…"; if the label leads with some other word, the entry is effectively unfindable — the reader has to open and read every line. Lead with the attribute's own leading word, then add clarifying words or a parenthetical.
+
+For instance: `@slidermode` → `"Slider Mode (per key)"`, **not** `"Per-key Slider Mode"`; `@offset` → `"Offset (low MIDI key)"`, **not** `"Low MIDI Key"`; `@range` → `"Range (number of keys)"`, **not** `"Number of Keys"`.
+
+**Cycling '74's own objects routinely break this rule** — `kslider`'s `offset` is labeled "Octave offset", its `range` is "Number of keys to display" — so do not use C74 labels as the model here. This is one of the deliberate places our objects are *better* than the built-ins, not bug-compatible with them. The recognition signal: any time you write a `label:`, check that its first word matches the attribute name's first word before moving on — it is a per-attribute check, like verifying the API name itself.
+
+## Help Files Must Demonstrate Functionality Visibly — Binding Rule
+
+A `.maxhelp` exists so someone can **see the object work**, not merely read a list of its messages. Every demo in a help file must be wired and parameterized so its effect is **visible on screen the instant the user clicks it.** The recurring silent failure: a demo that fires perfectly correctly but displays nothing, because its data lands outside whatever the object is currently showing — so the user concludes "the message does nothing" when in fact it worked off-screen.
+
+Concretely, when building or reviewing a help file:
+
+- **Demo input must target the object's visible state.** For a keyboard / `kslider`-like object displaying MIDI 60–72, the demo messages must use notes in 60–72; a `chord 36 …` or `setdots 1 36 …` on that object fires but lands on keys that aren't drawn and reads as a dead message. Either match the demo data to the displayed range, or set the object's range/offset to include the demo data. The general form: any "show this" demo must reference state the object is actually rendering.
+- **Expose the key attributes with `attrui`** — one `attrui` per attribute, wired to the object's inlet — so the user can flip each one live and watch it take effect. This is the only practical way to test attributes, and it doubles as documentation of what's tunable.
+- **Make outputs visible** (number boxes, comments, `print`) so the user sees what the object emits, not just what it receives.
+- **Label and lay out the demos clearly** — section headers, no overlapping controls — so the functionality reads at a glance.
+
+The acceptance test is behavioral, not structural: open the help file, click every demo and flip every attrui, and confirm each produces a **visible change**. A click that changes nothing on screen is a broken demo even if the message it sends is "correct."
+
+For instance: `zkeyboard.maxhelp` looked complete — every message box present and wired — but displayed MIDI 36–48 while every demo (`chord 60 …`, `set 62`, `setdots 1 60 …`, `setval 62 …`) targeted 60–67, so nothing ever appeared and the object read as broken. The fix was to set the demo keyboards' `offset` so the displayed range covered the demo notes, plus a column of `attrui`s for live attribute testing. This rule is symmetric with **Never Render an Empty Container** and the presentation aesthetic rules: visible-but-wrong is recoverable; silent-and-blank trains the user to distrust the object.
+
 ## Model Selection — When to Use Opus vs Sonnet
 
 Claude Sonnet is the default and handles most tasks. **Do not proceed silently on Sonnet when Opus is warranted** — pause and prompt the user first. Use the exact phrasing below so the prompt is unambiguous.
@@ -884,6 +907,18 @@ These skills ship with the repo in `.claude/skills/` — cloners get slash comma
 
 **In-repo skill manifests vs. upstream-publishable manifests.** Files at `.claude/skills/<name>/SKILL.md` are the in-repo manifests that Claude Code auto-discovers as slash commands when this repo is the cwd. Files named `<tool>/UPSTREAM-SKILL.md` (currently `c2m-themes/UPSTREAM-SKILL.md` and `c2m-explain/UPSTREAM-SKILL.md`) are snapshot manifests intended to be copied to a separate distribution repo (e.g. `Claude2Max-design`) so the skill is usable outside this codebase. The two are not interchangeable — `.claude/skills/<name>/SKILL.md` is the source of truth for slash-command invocation here; `UPSTREAM-SKILL.md` is the bundleable export.
 
+**Global enforcement skill (`max-patching`) — user-level, installed by `install_global.py`**
+
+The source skill lives at `skills/max-patching/SKILL.md` in the repo. Running `python3 install_global.py` copies it to `~/.claude/skills/max-patching/SKILL.md`, where Claude Code discovers it from *any* cwd. It is NOT listed in the in-repo slash-command table above — it fires globally, not just when this repo is the cwd.
+
+The skill calls `mcp__claude2max__assess()` + `mcp__claude2max__load()` to front-load Max knowledge at session start, then writes a sentinel file that the companion enforcement hook (`hooks/claude2max_max_edit_gate.py`) checks before allowing any `.maxpat`/`.maxhelp`/`.amxd` edit. Together they make Max knowledge mandatory rather than advisory.
+
+```bash
+python3 install_global.py [--env ANTHROPIC_API_KEY=sk-…]   # install
+python3 install_global.py --verify                          # post-install check
+python3 uninstall_global.py                                 # remove
+```
+
 ## Always Inspect, Never Guess — Reach for `/c2m-inspect` During Patch Debugging
 
 When debugging a running Max patch, any question whose answer hinges on the runtime contents of a named data structure (`dict`, `buffer~`, `jit.matrix`) gets answered by *dumping it*, not by reasoning from the upstream wiring. Wiring tells you what *should* happen; the dump tells you what *did* happen. Guessing from upstream logic is the failure mode this rule exists to prevent — the recognition signal is any sentence in your reasoning that begins "the dict probably contains…" or "the buffer should have…" or "the matrix is presumably…" — that's the moment to stop and run the dump instead.
@@ -1028,6 +1063,12 @@ This rule supersedes any older Claude2Max instruction that gated consultation on
 
 Confirm the result with the student in plain language: "Added a Claude2Max pointer to your global CLAUDE.md. From now on, any Claude session on this machine — in any project — will know to consult this repo when Max work comes up."
 
+**Also in Step 3 — offer to run `install_global.py`**
+
+After the pointer is confirmed, say: "I can also wire up the Max knowledge enforcement layer — it makes Claude2Max knowledge mandatory (not just advisory) for any Max-file edit in any session on this machine. This installs the `max-patching` global skill, an MCP server with fast object-lookup tools, and a PreToolUse hook that blocks `.maxpat` edits until knowledge is loaded. Run `python3 install_global.py` from this repo to install all three, or I can run it for you now. Want me to?"
+
+If yes, run `python3 install_global.py` from the repo root, then `python3 install_global.py --verify`. If either step fails, show the output and troubleshoot before moving on.
+
 ### Step 4 — Is `gh` available and authenticated?
 
 ```bash
@@ -1124,6 +1165,24 @@ When a student is using Claude2Max as a tool against an external project folder 
 - The Claude2Max repo's own `WORK_HISTORY.md` is reserved for changes to the toolkit itself (converter, skills, docs).
 
 At session start, if the student has told Claude that they are working on a project at a specific path, treat that path as the home for these files. If the student has not pointed at an external folder, default to this repo as today. Ask once when it's ambiguous and remember the answer for the rest of the session.
+
+**Pointer file — `.c2m-current-project`**
+
+When a student opens Claude2Max but their actual work lives elsewhere, they can create a one-line `.c2m-current-project` file at the repo root pointing at the external path:
+
+```
+/Users/alice/Documents/max-pieces/spring-concert
+```
+
+At session start, if this file exists and the path is valid, Claude reads it and treats that folder as the project home for all state files (`WORK_HISTORY.md`, `TASK_QUEUE.md`, `insights.md`). This is more reliable than asking every session — the pointer persists across conversations and across machines if the repo is on Dropbox.
+
+Create the file with:
+
+```bash
+python3 -c "import sys; open('.c2m-current-project','w').write(sys.argv[1])" "/absolute/path/to/your/project"
+```
+
+To stop using the pointer, delete the file or leave it blank.
 
 ## Work History {!pre-commit}
 
