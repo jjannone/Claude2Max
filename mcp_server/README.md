@@ -111,12 +111,16 @@ restart Claude Code to pick up the newly registered MCP server.
 |---|---|
 | `verify_spec(spec_json)` | Static check on a full spec — **including the anti-guessing layer**: every object name and every attribute is resolved against C74 refpages + the package library. Attribute validity uses the object's own refpage attrs **∪ the jbox base-class attrs** every box inherits, so inherited attrs (textcolor, background, …) pass while invented names (`oscparse`) and family-resemblance attrs (`bgcolor` on `live.gain~`) are caught. Returns `{ok, counts, violations, summary, report}`. The **same** library (`claude2max_verify/`) runs inside `spec2maxpat.py convert`, which **blocks the build** on any error. Run before `convert`; fix anything it flags. |
 
-### Later phases (planned)
+### Knowledge search — find the rule or pitfall by name/term
 
 | Tool | Description |
 |---|---|
-| `search_pitfalls(term)` | Search Common Pitfalls + forum/cookbook insights for matches. |
-| `lookup_rule(name_fragment)` | Find binding rules by name fragment. |
+| `search_pitfalls(term)` | Search the silent-failure corpus — `## Common Pitfalls` (MAX_PATCHING.md) + forum + cookbook insights — ranked by token match. Reach for it on a "fires but does nothing" / "value arrives wrong" / "renders blank" symptom. Honest no-match message (curated, not exhaustive). |
+| `lookup_rule(name_fragment)` | Find a binding rule by a fragment of its name across CLAUDE.md, SPEC_REFERENCE.md, MAX_PATCHING.md. Header matches rank above body matches; returns the full rule text so you apply it verbatim instead of paraphrasing. |
+
+The server now exposes **10 tools**. Both of the above are deterministic
+corpus searches (no LLM call, no API-key dependency) — exact/token matching over
+a small hand-written corpus is reliable where fuzzy intent-matching isn't needed.
 
 **`verify_spec` severities** — `error` **(blocks `convert`)**: unresolved object
 name, invalid attribute (not in the object's refpage ∪ jbox base), bad connection

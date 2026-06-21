@@ -19,6 +19,8 @@ search_packages()   Search 2,795-object package library by term.
 lookup_attribute()  Attribute validity check for a specific attr.
 list_attributes()   All valid attrs for an object (bulk verification).
 verify_spec()       Static binding-rule check on a spec before converting.
+search_pitfalls()   Search Common Pitfalls + forum/cookbook insights by term.
+lookup_rule()       Find a binding rule by a fragment of its name.
 essentials()        Backward-compat alias for load(["core"]).
 
 The verify_spec() rule library lives in mcp_server/claude2max_verify/ and is
@@ -1326,6 +1328,289 @@ def verify_spec(spec_json: str) -> dict:
     result = _verify_spec_json(spec_json, resolver=resolver)
     result["report"] = _verify_report(result)
     return result
+
+
+# ---------------------------------------------------------------------------
+# search_pitfalls() + lookup_rule() — knowledge-corpus search.
+#
+# Both are deterministic substring/token searches over curated repo docs. No
+# LLM call: unlike assess()/search_packages (fuzzy intent matching over open
+# vocabulary), these search a small, hand-written corpus where exact and token
+# matches are reliable — and keeping them deterministic means zero per-call
+# cost and no dependency on the API key.
+# ---------------------------------------------------------------------------
+
+# Docs that carry named binding rules as `## ` headers.
+_RULE_DOCS: list[Path] = [
+    _REPO_ROOT / "CLAUDE.md",
+    _REPO_ROOT / "SPEC_REFERENCE.md",
+    _PATCHING_DIR / "MAX_PATCHING.md",
+]
+
+# Pitfall / insight corpora: the Common Pitfalls bullet list plus the two
+# community-knowledge insight files.
+_PITFALL_FORUM = _REPO_ROOT / "c74-forum" / "forum_insights.md"
+_PITFALL_COOKBOOK = _REPO_ROOT / "cookbook" / "cookbook_insights.md"
+
+_rule_sections_cache: list | None = None
+_pitfall_chunks_cache: list | None = None
+
+
+def _split_sections(text: str, source: str) -> list:
+    """Split markdown into `## ` sections → [{name, body, source}] (body incl. `### `)."""
+    sections: list = []
+    cur_name: str | None = None
+    cur_body: list[str] = []
+    for line in text.splitlines():
+        if line.startswith("## "):
+            if cur_name is not None:
+                sections.append({"name": cur_name,
+                                 "body": "\n".join(cur_body).strip(),
+                                 "source": source})
+            cur_name = line[3:].strip()
+            cur_body = []
+        elif cur_name is not None:
+            cur_body.append(line)
+    if cur_name is not None:
+        sections.append({"name": cur_name,
+                         "body": "\n".join(cur_body).strip(),
+                         "source": source})
+    return sections
+
+
+def _rule_sections() -> list:
+    """All `## ` rule sections across the rule docs, cached. [{name, body, source}]."""
+    global _rule_sections_cache
+    if _rule_sections_cache is None:
+        out: list = []
+        for path in _RULE_DOCS:
+            if path.exists():
+                out.extend(_split_sections(_read_md(path), path.name))
+        _rule_sections_cache = out
+    return _rule_sections_cache
+
+
+def _split_blockquote_entries(text: str, source: str) -> list:
+    """Split insight files into `> `-block entries, tagged with their `## ` section."""
+    entries: list = []
+    section = ""
+    buf: list[str] = []
+
+    def flush():
+        if buf:
+            entries.append({"text": " ".join(buf).strip(),
+                            "source": source, "section": section})
+            buf.clear()
+
+    for line in text.splitlines():
+        if line.startswith("## "):
+            flush()
+            section = line[3:].strip()
+        elif line.startswith(">"):
+            stripped = line[1:].strip()
+            if stripped:                       # skip blank `>` separators
+                buf.append(stripped)
+        else:
+            flush()
+    flush()
+    return entries
+
+
+def _pitfall_chunks() -> list:
+    """
+    All searchable pitfall/insight entries, cached. [{text, source, section}].
+
+    Sources: the `## Common Pitfalls` bullet list in MAX_PATCHING.md, plus every
+    `> `-block entry in the forum and cookbook insight files.
+    """
+    global _pitfall_chunks_cache
+    if _pitfall_chunks_cache is None:
+        out: list = []
+
+        # Common Pitfalls — one entry per top-level `- ` bullet.
+        mp = _PATCHING_DIR / "MAX_PATCHING.md"
+        if mp.exists():
+            section_txt = _extract_section(_read_md(mp), "## Common Pitfalls")
+            cur: list[str] = []
+            for line in section_txt.splitlines():
+                if line.startswith("- "):
+                    if cur:
+                        out.append({"text": " ".join(cur).strip(),
+                                    "source": "Common Pitfalls",
+                                    "section": "Common Pitfalls"})
+                    cur = [line[2:]]
+                elif cur and line.strip() and not line.startswith("## "):
+                    cur.append(line.strip())   # continuation of current bullet
+            if cur:
+                out.append({"text": " ".join(cur).strip(),
+                            "source": "Common Pitfalls",
+                            "section": "Common Pitfalls"})
+
+        if _PITFALL_FORUM.exists():
+            out.extend(_split_blockquote_entries(_read_md(_PITFALL_FORUM), "forum"))
+        if _PITFALL_COOKBOOK.exists():
+            out.extend(_split_blockquote_entries(_read_md(_PITFALL_COOKBOOK), "cookbook"))
+
+        _pitfall_chunks_cache = out
+    return _pitfall_chunks_cache
+
+
+def _query_tokens(query: str) -> list:
+    """Lowercase, split, drop 1-char tokens — the shared tokeniser for both searches."""
+    return [t for t in query.lower().split() if len(t) > 1]
+
+
+def _truncate(text: str, cap: int) -> str:
+    return text if len(text) <= cap else text[:cap].rsplit(" ", 1)[0] + " …"
+
+
+@mcp.tool()
+def search_pitfalls(term: str, limit: int = 8) -> dict:
+    """
+    Search the silent-failure corpus — Common Pitfalls + forum/cookbook insights.
+
+    Use this when you hit (or want to pre-empt) surprising Max behaviour: an
+    object that "fires but does nothing", a value that arrives wrong downstream,
+    a UI element that renders blank. The corpus is the hard-won list of
+    behaviours Max accepts silently and then misbehaves on — exactly the class of
+    bug that does not surface as an error.
+
+    Searches three sources: the `## Common Pitfalls` bullets in
+    `patching/MAX_PATCHING.md`, every entry in `c74-forum/forum_insights.md`, and
+    every entry in `cookbook/cookbook_insights.md`. Deterministic token search —
+    ranks entries by how many of the query's words they contain (whole-phrase
+    matches score highest).
+
+    Parameters
+    ----------
+    term  — what you're looking for, e.g. "textedit output", "trigger order",
+            "jit.matrix inlet", "udpreceive osc".
+    limit — max entries to return (default 8).
+
+    Return keys
+    -----------
+    count    — number of matching entries returned
+    query    — the term searched
+    pitfalls — list of {snippet, source, section}; source ∈
+               {"Common Pitfalls", "forum", "cookbook"}
+    message  — human-readable headline (names the no-match case explicitly)
+
+    Smoke tests
+    -----------
+    search_pitfalls("textedit")  → the `text <symbol>` output-prefix trap
+    search_pitfalls("trigger order")  → trigger fires right-to-left
+    search_pitfalls("zzzznotathing")  → count 0, message says nothing matched
+    """
+    tokens = _query_tokens(term)
+    term_l = term.lower().strip()
+    scored: list = []
+    for entry in _pitfall_chunks():
+        text_l = entry["text"].lower()
+        score = 0
+        if term_l and term_l in text_l:           # whole-phrase match dominates
+            score += 50
+        for t in tokens:
+            if t in text_l:
+                score += 5
+        if score:
+            scored.append((score, entry))
+
+    scored.sort(key=lambda s: -s[0])
+    top = scored[:limit] if limit and limit > 0 else scored
+    pitfalls = [{"snippet": _truncate(e["text"], 700),
+                 "source": e["source"],
+                 "section": e["section"]} for _, e in top]
+
+    if pitfalls:
+        msg = f"{len(pitfalls)} pitfall(s) matched '{term}'."
+    else:
+        msg = (f"No pitfalls matched '{term}'. That is NOT a guarantee the "
+               f"behaviour is safe — the corpus is curated, not exhaustive. "
+               f"Verify object/attribute names with lookup_object / "
+               f"list_attributes before relying on them.")
+    return {"count": len(pitfalls), "query": term, "pitfalls": pitfalls, "message": msg}
+
+
+@mcp.tool()
+def lookup_rule(name_fragment: str, limit: int = 5) -> dict:
+    """
+    Find a Claude2Max binding rule by a fragment of its name.
+
+    The binding rules (Always Create a Presentation View, Always Hide Plumbing
+    Patchcords, Never Write API Names From Memory, Modify Don't Rebuild, …) are
+    `## ` sections across CLAUDE.md, SPEC_REFERENCE.md, and
+    patching/MAX_PATCHING.md. This returns the full rule text so you can apply it
+    verbatim instead of paraphrasing from memory.
+
+    Matching is deterministic: a fragment found in a rule's HEADER ranks above a
+    fragment found only in its BODY, so "presentation" surfaces the presentation
+    rule first even though dozens of rules mention the word.
+
+    Parameters
+    ----------
+    name_fragment — part of the rule name, e.g. "presentation", "hide plumbing",
+                    "textedit", "api names", "rebuild".
+    limit         — max rules to return (default 5).
+
+    Return keys
+    -----------
+    count   — number of rules returned
+    query   — the fragment searched
+    rules   — list of {rule_name, body, source_file, matched_in}; matched_in ∈
+              {"header", "body"}. Long bodies are truncated with a pointer to
+              the source file.
+    message — human-readable headline
+
+    Smoke tests
+    -----------
+    lookup_rule("presentation")  → "Always Create a Presentation View …"
+    lookup_rule("hide plumbing")  → "Always Hide Plumbing Patchcords …"
+    lookup_rule("zzzznotarule")  → count 0
+    """
+    frag_l = name_fragment.lower().strip()
+    tokens = _query_tokens(name_fragment)
+    scored: list = []
+    for sec in _rule_sections():
+        name_l = sec["name"].lower()
+        body_l = sec["body"].lower()
+        score = 0
+        matched_in = ""
+        if frag_l and frag_l in name_l:                 # phrase in header — strongest
+            score += 100
+            matched_in = "header"
+        else:
+            hdr_hits = sum(1 for t in tokens if t in name_l)
+            if hdr_hits:
+                score += 20 * hdr_hits
+                matched_in = "header"
+            elif frag_l and frag_l in body_l:           # phrase in body
+                score += 8
+                matched_in = "body"
+            else:
+                body_hits = sum(1 for t in tokens if t in body_l)
+                if body_hits:
+                    score += body_hits
+                    matched_in = "body"
+        if score:
+            scored.append((score, matched_in, sec))
+
+    scored.sort(key=lambda s: (-s[0], s[2]["name"]))
+    top = scored[:limit] if limit and limit > 0 else scored
+
+    rules = []
+    for _, matched_in, sec in top:
+        body = _truncate(sec["body"], 1800)
+        if body != sec["body"]:
+            body += f"\n\n[truncated — full rule in {sec['source']}]"
+        rules.append({"rule_name": sec["name"], "body": body,
+                      "source_file": sec["source"], "matched_in": matched_in})
+
+    if rules:
+        msg = f"{len(rules)} rule(s) matched '{name_fragment}'."
+    else:
+        msg = (f"No rule name matched '{name_fragment}'. Try a broader fragment, "
+               f"or load(['core']) for the full binding-rule set.")
+    return {"count": len(rules), "query": name_fragment, "rules": rules, "message": msg}
 
 
 if __name__ == "__main__":

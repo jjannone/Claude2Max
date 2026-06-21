@@ -320,7 +320,13 @@ The Phase (ii) `assess()` → `load()` architecture works end-to-end:
 
 **Resume item 1** (update `PROJECT_CLAUDE_SNIPPET.md` to `assess()`/`load()`) — done.
 **Resume item 2** (end-to-end test of the new architecture) — done here.
-**Verification owed**: live Haiku routing test once `ANTHROPIC_API_KEY` is available.
+**Verification owed → CLOSED**: the live Haiku routing test passed 2026-06-20 (table
+above) and was **re-confirmed live 2026-06-21** through the registered MCP server
+(`ANTHROPIC_API_KEY` present in `~/.claude.json`): three representative tasks all
+returned `method: "llm"` and routed correctly — the 6-domain case picked up all of
+`core, jitter, gen, networking, m4l, msp`; "granulate a recorded sound" inferred
+`core, msp` with no `~` object named; "fix the comment label alignment" stayed
+`core`-only. No `assess()` verification remains owed.
 **Next**: Phase (iii) — `verify_spec` + shared rule library; then skill + hook + installer.
 
 ---
@@ -393,3 +399,54 @@ fix, "convolution reverb" → `hirt.convolutionreverb~` as the top result.
   rate-limit-induced (helpers work in isolation), not logic errors — graceful
   degradation working as designed. Not a concern in real use (these tools are
   called occasionally, not in a hot loop).
+
+---
+---
+
+# Claude2Max MCP — Knowledge-Search Tools (2026-06-21)
+
+Two tools that were listed "planned" in the original task surface are now built:
+`search_pitfalls(term)` and `lookup_rule(name_fragment)`. Both are **deterministic**
+corpus searches — no LLM call, no API-key dependency. Rationale: unlike `assess()` /
+`search_packages()` (fuzzy intent-matching over open vocabulary), these search a
+small, hand-written corpus where exact/token matching is reliable, so an LLM would
+add cost and a failure mode without improving recall. The server now exposes **10
+tools**.
+
+## Corpus assembled (cached on first call)
+
+- `_rule_sections()` — **73** `## ` rule sections across CLAUDE.md, SPEC_REFERENCE.md,
+  patching/MAX_PATCHING.md.
+- `_pitfall_chunks()` — **170** entries: the `## Common Pitfalls` bullets
+  (MAX_PATCHING.md) + every `> `-block entry in forum_insights.md and
+  cookbook_insights.md, each tagged with its source and `## ` section.
+
+## `search_pitfalls()` — smoke results (all pass)
+
+| Query | Result |
+|---|---|
+| `"textedit"` | 1 hit — the `text <symbol>` output-prefix trap (source: Common Pitfalls) |
+| `"trigger order"` | top hit = the trigger right-to-left sequencing entry |
+| `"zzzznotathing"` | count 0; message states the corpus is curated-not-exhaustive and points back at `lookup_object` / `list_attributes` |
+
+Whole-phrase matches score +50; each query token present scores +5; results ranked
+by total. Snippets capped at 700 chars, tagged `{snippet, source, section}`.
+
+## `lookup_rule()` — smoke results (all pass)
+
+| Query | Top hit (matched_in) |
+|---|---|
+| `"presentation"` | "Always Create a Presentation View — Binding Rule" (header) → then SPEC_REFERENCE + MAX_PATCHING presentation sections |
+| `"hide plumbing"` | "Always Hide Plumbing Patchcords — Binding Rule" (header) |
+| `"api names"` | "Never Write API Names From Memory" (header) |
+| `"zzzznotarule"` | count 0; message suggests a broader fragment or `load(['core'])` |
+
+Header phrase-match scores +100; header token hits +20 each; body phrase +8; body
+token hits +1 each — so a rule whose *name* matches always outranks one that only
+*mentions* the fragment. Bodies capped at 1800 chars with a `[truncated — full rule
+in <file>]` pointer.
+
+**Note on test location.** These are server-tool tests (they import `server.py`,
+which needs the `mcp` SDK), so per the repo split they live here in
+SMOKE_TEST_RESULTS.md — `mcp_server/tests/test_verify.py` stays stdlib-only because
+it tests the `claude2max_verify` library, which has no `mcp` dependency.
