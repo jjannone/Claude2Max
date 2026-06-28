@@ -102,6 +102,26 @@ left unconnected in the scaffold — wire it into your own skeleton drawing
 (`jit.gl.sketch`, `lcd`), contact-driven audio, etc. Everything upstream of
 that outlet (routing, framing, contact display) is done for you.
 
+## Install troubleshooting (verified)
+
+Hit while installing the OpenMMLab stack on CPU-only Linux (Python 3.11):
+
+- **Pin `numpy<2`.** torch 2.1.x and the OpenMMLab packages are compiled against
+  NumPy 1.x; NumPy 2 triggers `Failed to initialize NumPy: _ARRAY_API not found`
+  and crashes torch. Several `mim`/`pip` steps silently re-upgrade numpy, so pin
+  it in the *same* command: `pip install mmdet mmpose "numpy==1.26.4"`.
+- **Prefer prebuilt `mmcv` wheels** via `mim install mmcv` (pulls from
+  `download.openmmlab.com`). Only fall back to a source build
+  (`MMCV_WITH_OPS=1 pip install mmcv==2.1.0 --no-binary mmcv --no-build-isolation`)
+  if those wheels are unreachable — it needs gcc/g++, ninja, and the Python dev
+  headers.
+- **Source build on Debian/Ubuntu may fail with `AttributeError: install_layout`.**
+  That's the *system* (Debian-patched) setuptools. Install a clean one from PyPI
+  first: `pip install --ignore-installed "setuptools==69.5.1"`.
+- **Model weights download at first run** from `download.openmmlab.com` — the
+  machine running the bridge needs outbound access to that host (or a
+  pre-populated `~/.cache/torch/hub/checkpoints/`).
+
 ## Smoke-test the OSC wiring without MMPose
 
 `smoke_test.py` sends one synthetic frame through the exact OSC schema to a
