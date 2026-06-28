@@ -135,10 +135,13 @@ noise. Emits `maxhelp_js_api.json` — an empirical ranking of the constructors
 `autowatch`/`inspector`). Names are extracted structurally and ranked by file
 count — nothing hardcoded from memory.
 
-### Prose-insight extraction — NOT STARTED
+### Prose-insight extraction — IN PROGRESS
 
 Chunk across sessions; ~50–100 files per session. Suggested order:
 core `help/` → bundled `packages/` → user `Packages/`; or by object family.
+
+- `help/max/` foundational objects — **DONE 2026-06-27** (pass 1, 20+ objects)
+- `help/msp/` audio objects — **DONE 2026-06-27** (pass 2, 16 objects)
 
 ## Resume point
 

@@ -507,6 +507,159 @@ with target file.*
   confirmed by the attr-tally: `format` appears 6,840× on `flonum` in the
   help corpus).
 
+---
+
+## MSP audio objects — wiring idioms & per-object gotchas
+
+*(Pass 2 — 2026-06-27 — core `help/msp/`)*
+
+### buffer~
+
+- **Creation arg = duration in ms.** `buffer~ NAME 1000` creates a 1-second mono buffer named `NAME`. Second arg is optional channel count (`buffer~ NAME 1000 2` = stereo).
+- **`fill` command family** — many ways to pre-load a buffer without a file:
+  - `fill sin N` — N cycles of a sine wave; `fill cos N` — cosine; `fill sinc N` — sinc with N zero-crossings.
+  - `fill 0.5` — constant value; `clear` — zero all samples.
+  - `apply hamming` / `apply triangle` / `apply gain 0.9` — post-process the buffer contents. Cumulative — can chain: `fill 1, apply triangle half, apply gain -1, apply offset 1`.
+- **`normalize 1.`** — scale all samples so the maximum value is 1. Destructive.
+- **`sizeinsamps 1024`** — resize the buffer to exactly N samples (useful when building a wavetable for `cycle~`).
+- **`resize N`** — resize to N ms (alternative to `sizeinsamps`).
+- **`peek~` / `poke~`** — the signal-rate equivalents of `index~`/`record~`; `peek~` reads from a named buffer by sample index at signal rate. Used internally in the help patch to hand-generate a wavetable.
+
+### groove~
+
+- **Drive with a `sig~ 1` into inlet 1** — groove~'s right inlet is playback speed as a signal. `sig~ 1` = normal forward speed. `sig~ 0` = freeze. `sig~ -1` = reverse (when `@loop 1`).
+- **`@loop 1` attribute** — enables looping. Without it, groove~ plays once and stops.
+- **`@timestretch 1`** — enables timestretching (pitch stays constant while playback speed changes). Adds CPU cost.
+- **`@followglobaltempo 1`** — syncs the loop to Max's global transport tempo. Combine with `@loop 1`. Send `originallength <ticks>` to tell groove~ the loop's original duration (e.g. `originallength 1.0.0` = 1 bar).
+- **`phase <value>`** — offset the loop start phase. Accepts metrical time format (`phase 8n`).
+- **`replace <filename>`** — load a new audio file into the associated `buffer~` by name. Convenient for swapping files without clicking `waveform~`.
+- **`waveform~`** — the companion display object; shows the buffer content. Double-clicking opens the editor. Sends start/end selection positions out its outlets.
+
+### record~
+
+- **Inlet 0 = start/stop toggle, inlet 1 = audio input.** Send `1` to start recording, `0` to stop — not `bang`.
+- **`@append 1`** — append-mode: new recordings add after existing content rather than overwriting from the start.
+- **`@loop 1`** — loop recording: wraps around when the buffer fills.
+- **`set <name>`** — switch to a different buffer~ by name without recreating the object.
+- **Sync outlet (outlet 1)** — emits a ramp from 0. to 1. tracking progress through the buffer. Useful for syncing a display or a groove~ reader.
+- **After recording, play back** with `play~ BUFNAME` or `groove~ BUFNAME`.
+
+### wave~
+
+- **`wave~` requires a `phasor~` driver** — wave~ reads from a named buffer~ using a 0.–1. phase signal as its position. Wire `phasor~` frequency outlet into wave~ inlet 0, then `freq` signal into phasor~ for pitch.
+- **Start/end points** — inlet 1 = start offset (ms), inlet 2 = end offset (ms). Can be signals or floats. Default: full buffer.
+- **vs `groove~`:** groove~ is self-clocking (speed signal); wave~ is externally-clocked (phase signal). Use groove~ for sample playback; use wave~ for wavetable synthesis where phasor~ frequency IS the pitch.
+- **`set <name>`** — switch buffer by name.
+
+### line~
+
+- **Standard ramp idiom: `<initial>, <target> <duration_ms>`** — send a message like `0, 1 2000` to ramp from 0 to 1 over 2 seconds. The comma makes it a single message with an initial value set immediately followed by a list.
+- **Multi-segment:** `0, 1 1000 0 500` = ramp to 1 over 1s, then to 0 over 500ms. Up to 128 value-time pairs.
+- **`stop`** — halts the ramp at the current value.
+- **`pause` / `resume`** — suspend and resume mid-ramp.
+- **`@activeout 1`** — adds a second signal outlet that outputs `1` while the ramp is running, `0` when idle. Useful for gating downstream when line~ is busy.
+- **`@maxpoints N`** (default 129) — increase for multi-segment ramps with more than 129 breakpoints.
+- **Metrical time format works:** `0, 1 2n 0 2.0.0` ramps to 1 over 2 beats then back to 0 over 2 bars. Requires global transport running.
+
+### adsr~
+
+- **Designed for use inside `poly~`** — adsr~ is the standard envelope for polyphonic synths. It handles voice stealing, anti-click retriggering, and DSP-on/off switching per voice. Using it outside poly~ is possible but misses most of its value.
+- **Inlets: 0=gate, 1=attack ms, 2=decay ms, 3=sustain level (0–1), 4=release ms.**
+- **Send `1` to start (note on), `0` to release (note off).**
+- **`@retrigger N`** — sets retriggering time in ms (default 5ms). When a new note-on arrives before release, adsr~ ramps to 0 quickly, allowing parameter changes, then triggers the new attack.
+- **`legato 1`** — when retriggering, skips the ramp-to-0 phase (envelope continues from its current level). Useful for legato phrasing.
+- **`target 0`** from outside poly~ broadcasts to all voices simultaneously. Use `target N` for voice-specific control.
+- **Metrical time args** — attack/decay/release times accept tempo-relative formats: `adsr~ 4n 4n 0.3 4n`. Requires global transport.
+
+### phasor~
+
+- **Right inlet = frequency; right inlet with a signal = phase-reset trigger.** A non-zero signal sample resets the phase to 0 at that sample. `edge~` output fed into phasor~'s right inlet makes a sync-to-zero on a rising edge.
+- **`@syncupdate 1`** — frequency only updates at the beginning of each cycle (when phasor wraps to 0). Prevents pitch glitches when changing frequency mid-cycle — especially useful when driving `wave~` for wavetable synthesis.
+- **`@jitter <amount>` + `@limit <amount>`** — introduce randomized per-cycle frequency deviation. Creates natural ensemble spread. Change `limit` to increase/decrease divergence. Combined with `mc.phasor~` and `mc.wave~` for multi-voice chorus.
+- **Oscillator sync:** connect one phasor~'s output into another phasor~'s right inlet via `<~ 0` + `delta~` to create hard sync effects (the slave resets on the master's negative edge).
+- **vs `saw~`:** phasor~ is a pure mathematical ramp — use for LFOs, wavetable position, sync sources. Use `saw~` for audio-rate oscillators (bandlimited, no aliasing).
+
+### saw~ / tri~ / rect~
+
+- **All three are bandlimited** — they apply anti-aliasing internally. Never use `phasor~` as an audio oscillator; use `saw~` instead.
+- **Oscillator sync:** all three accept a `phasor~` signal in their right inlet (same reset-signal mechanism as `phasor~`). Creates hard sync effects.
+- **`rect~` second arg = duty cycle** (0.–1., default 0.5 = square). Change with a signal or message: `rect~ 440. 0.25`.
+- **`tri~` has a moveable peak:** second arg or signal = symmetry point (0.=ramp-down, 0.5=symmetric triangle, 1.=ramp-up). Can make a sawtooth-style shape from tri~ by setting to 0 or 1.
+- **Pitch control:** inlet 0 = frequency in Hz. Wire `mtof` output here for MIDI-to-frequency conversion.
+
+### noise~ / rand~
+
+- **`noise~`** outputs white noise (all frequencies, full amplitude). No arguments, no inlets. Just wire it.
+- **`rand~`** outputs a band-limited random signal that generates new random values at a given rate (arg = Hz). The output ramps between values — useful as a slow random LFO. **Not white noise** — use for randomly ramping control-rate signals at audio rate. For true randomness, use `noise~`.
+
+### tapin~ / tapout~
+
+- **`tapin~` arg = maximum delay time in ms.** This sets the buffer size — cannot change after instantiation. Typical: `tapin~ 5000` = 5 seconds max delay.
+- **`tapout~` args = delay times (ms), one per outlet.** Multiple tapout~ delay times give multiple delay taps off a single tapin~. All tapout~s connected to the same tapin~ share its buffer.
+- **`tapin~ → tapout~` is the standard delay idiom.** Do not use `delay~` — tapin~/tapout~ is the canonical pair (see CLAUDE.md preferred objects table).
+- **Minimum delay = signal vector size.** The shortest delay available is one vector (typically 64 or 256 samples depending on audio settings). Trying to set shorter causes audio artifacts. The help patch notes this explicitly.
+- **Continuously variable delay time** — send a signal into tapout~'s right inlet for smooth delay time modulation. For click-free changes, crossfade the output through a `line~`-controlled VCA: fade to 0 → change delay time → fade back to 1. Help patch shows this exact pattern with `pipe 25` for a 25ms fade time.
+- **`clear`** — wipes the delay buffer content (fills with zeros). Useful to remove old material when changing delay time drastically.
+- **Feedback:** connect tapout~ output back to tapin~ input through a gain stage. Minimum feedback delay is limited by vector size.
+
+### biquad~
+
+- **`biquad~` takes five coefficients: a1, a2, b0, b1, b2.** It is a direct-form II biquad filter; the standard "just works" interface is to wire `filtergraph~`'s coefficient outlet into biquad~'s left inlet.
+- **`filtergraph~` → `biquad~` is the canonical filter pair** for interactive filter design. `filtergraph~` outputs a list of coefficients; `biquad~` accepts them as a list via inlet 0.
+- **`clear`** — resets filter state (delay memory to zero). Use when the filter "blows up" due to unstable coefficients.
+- **[PROMOTION-CANDIDATE → MAX_PATCHING.md Common Pitfalls]** The `biquad~` stoke message: `stoke a1 a2 b1 b2` artificially initializes the filter's internal memory — used to create a self-sustaining oscillation from feedback alone (no input signal), by seeding the delay line with an appropriate phase. Rare but exists.
+- **`filterdesign`** (separate object) — generates filter designs from parameters (order, topology). Use when you need Butterworth / Chebyshev filter designs programmatically. Its output connects to `biquad~`.
+
+### filtergraph~
+
+- **`filtergraph~` is the visual editor** — drag the curve handle to set frequency, Q, and gain. Its left outlet emits the biquad~ coefficients.
+- **`query <freq>`** — returns amplitude and phase at the specified frequency (no drag needed). Outlets 1 and 2.
+- **`dbdisplay 1, numdisplay 1`** — enable dB and frequency labels in the display.
+- **Display mode** — `filtergraph~` can show any custom filter shape by sending it `displaydot <x>` and plotting arbitrary coefficient lists via the `cascade` message (up to 24 biquad stages). Useful for visualizing algorithmic filters.
+- **`cascade` message** — accepts up to 24 groups of 5 biquad coefficients; displays the product response. Useful for parametric EQ chains.
+
+### lores~ / svf~
+
+- **`lores~`** is a low-resonance (non-self-oscillating) lowpass filter. Args: `lores~ <cutoff_hz> <resonance>`. Resonance 0–1 (1 = maximum, no self-oscillation). The companion to `reson~` which self-oscillates.
+- **`svf~`** is a state-variable filter — provides lowpass, highpass, bandpass, and bandstop simultaneously from four outlets. Args: `svf~ <cutoff> <Q>`.
+  - **Three frequency input modes** (set as creation arg or message): `Hz` (default, direct Hz), `linear` (0–1 → 0 to sr/4), `radians` (0–1 mapped as quarter-cycle sine → more perceptually uniform). The `radians` mode is slightly more CPU-efficient and has better perceptual response — prefer it for LFO-swept filters.
+  - **[PROMOTION-CANDIDATE → CLAUDE.md preferred objects]** For a general-purpose filter the outlet order of svf~ is: outlet 0 = lowpass, 1 = highpass, 2 = bandpass, 3 = bandstop. One object, four filter types.
+  - Maximum cutoff frequency = `samplerate / 4` (not `samplerate / 2`). At sr=44100, max is 11025 Hz.
+
+### gain~
+
+- **gain~ is a logarithmically-scaled volume control with interpolation.** Internal scale: 0=silence, 157≈+18dB; 10 units ≈ 6 dB.
+- **`scale <value>`** — set gain value (0–157 range). For a "set volume" message, send `scale $1`.
+- **`inc <value>`** — increment the gain by value (positive or negative). Useful for "up/down" nudge buttons.
+- **`@interp <ms>`** (default 20ms) — smoothing time. Increase to taste for slow fades; decrease for snappier response.
+- **vs `*~`:** gain~ is the preferred alternative to a raw `*~` multiplier for user-facing volume controls — it provides logarithmic scaling (matching human loudness perception) and built-in smoothing.
+
+### meter~
+
+- **Displays signal level as an LED strip.** Takes a signal input; outputs nothing.
+- **LED counts configurable:** number of leds, hot leds, warm leds, tepid leds — via Inspector or messages. No standard message to change these at runtime; set via attributes.
+- **`mc.meter~`** auto-adapts to the number of channels of a multichannel signal (no extra configuration needed).
+- **Horizontal or vertical orientation:** Inspector `@style` attribute. No runtime message to switch.
+
+### scope~
+
+- **Two-channel X-Y mode:** when both inlets are connected, scope~ plots inlet 0 (X) vs inlet 1 (Y). Creates Lissajous figures. Good for phase analysis between two signals.
+- **`bufsize <N>`** (8–256, default 128) — number of points in the display buffer. More points = finer time resolution.
+- **`calccount <N>`** (2–8092, default 128) — samples collected per display point. Lower = faster update, more CPU.
+- **`-1 1` / `-10 10`** — min/max display range messages. Send as a list to outlet's right inlet.
+- **`@automatic`** mode — automatic DC offset removal.
+
+### peakamp~
+
+- **Reports peak amplitude over a window.** Arg = window size in ms. Outputs current peak every window.
+- **`mc.peakamp~`** outputs a list with one peak value per channel.
+
+### slide~
+
+- **Exponential smoothing filter** (not a biquad). Args: `slide~ <up_time_samples> <down_time_samples>`. Separate smoothing times for rising vs falling signals. Specified in **samples**, not ms.
+- **Use for:** pitch glide (portamento), control-signal smoothing, envelope followers (asymmetric attack/release). More CPU-efficient than `line~` for smoothing incoming streams.
+- **For ms-based smoothing**, convert: samples = ms * samplerate / 1000.
+
 ## Log
 
 - 2026-06-27: Prose-insight extraction pass 1 — core `help/max/` foundational
