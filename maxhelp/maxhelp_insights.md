@@ -170,11 +170,353 @@ mirrors observed convention rather than guessing.
 
 ## Wiring idioms & per-object gotchas
 
-*(Prose extraction not started — populate from core `help/max/` next session.
-Mark canonical idioms [PROMOTION-CANDIDATE → patching/MAX_PATCHING.md] and
-package-usage notes [PROMOTION-CANDIDATE → packages/package_objects.json].)*
+*Extracted from core `help/max/` (2026-06-27). Each entry is confirmed from
+the `.maxhelp` text; nothing written from memory. Mark promotion candidates
+with target file.*
+
+---
+
+### Timing & clock
+
+**`metro` — transport sync and musical time**
+
+- `metro 4n @active 1` — ties the metro to the global transport and fires in
+  quarter notes. All Max time-format strings (`4n`, `1.2.12`, `0:0:2.500`)
+  work as the interval argument. Passing `@active 1` makes it start
+  automatically when the transport starts without a separate `start` message.
+- `metro @defer 1` — pushes metro bangs to the low-priority queue, avoiding
+  audio-scheduler conflicts. `qmetro` is NOT a separate class; it is exactly
+  `metro @defer 1` and the help patch says so. Always use `qmetro` in code
+  documentation or comments where you'd say "low-priority metro" — never say
+  "the qmetro class" as if it differs from metro.
+
+**`clocker` — elapsed time output companion to metro**
+
+- `clocker 1000` — driven by the same transport or by `bang`, outputs elapsed
+  ms since last `reset`. The interval arg sets the meter denominator.
+  `reset` resets the counter only (doesn't stop); `stop` stops output.
+- Float arg form: `clocker 4n` — tempo-relative, same time-format as metro.
+  Works alongside `bbus`-based timing.
+
+**`delay` vs `pipe`**
+
+- `delay` — delays a single bang by N ms; input in the right inlet sets the
+  time. Accepts tempo-relative time strings when transport is running.
+- `pipe` — delays full lists (and any message type). Separate right inlet for
+  each list slot plus a time inlet. Key distinction: `pipe` can delay
+  heterogeneous lists (`pak 0 0. s` → `pipe 500`); `delay` only delays bangs.
+- **`pipe` + `coll` for arbitrary-data delay** (from help patch "DelayAnythingWithAnyLength"):
+  send data to `coll` indexed by a counter; delay only the counter index
+  through `pipe`; on the delayed bang, retrieve from `coll` by that index.
+  This pattern handles variable-length lists or any data type that `pipe`
+  can't accept natively.
+- `pipe @quantize 4n` — quantizes pipe's output to the next beat boundary.
+
+**`defer` / `deferlow`**
+
+- `defer` — moves a message from the audio-rate scheduler to the main
+  low-priority thread. This reverses output ordering: if you `trigger b b`
+  and only the left outlet goes through `defer`, the deferred branch fires
+  AFTER the un-deferred branch even though `trigger` fires left-to-right.
+  Use `defer` anywhere a buffer or audio operation (like `waveform~`) must
+  receive a message from an audio-thread callback.
+- `deferlow` — very low priority; fires after ALL pending low-priority events
+  (including `defer`). Use when order-of-operations with multiple deferred
+  sources matters. The help patch shows: a `uzi 64 → t l l → deferlow` pair
+  — both arms fire but `deferlow`'s arm always arrives after all 64 triggers'
+  left-arm output.
+
+---
+
+### Fan-out & sequencing
+
+**`trigger` — right-to-left fire order, constant injection**
+
+- Outlets fire **right-to-left**: the rightmost argument outputs first.
+  Reading `t b l` left-to-right, the LAST symbol fires first. This is the
+  single most commonly misunderstood rule in Max. When you need "do A then B",
+  A's outlet goes RIGHTMOST. Example: clear a menu then fill it: `t l b` —
+  outlet 1 (`b`, rightmost, fires first) → clear; outlet 0 (`l`) → fill.
+  **[PROMOTION-CANDIDATE → patching/MAX_PATCHING.md Common Pitfalls — already present; reinforce with the menu example]**
+- Constant values in trigger arguments inject that constant into the output
+  chain: `t b -0.125` outputs bang (right, first) then the constant `-0.125`
+  (left, second). Used to inject offsets, seeds, or state-resets mid-chain
+  without extra message boxes.
+- `bangbang` / `bb` — trigger with all-bang outlets. `b 3` = three bang
+  outlets. Cleaner than `t b b b` when only bangs are needed.
+
+**`gate` vs `switch`**
+
+- `gate N` — one inlet routes to one of N outlets. `gate N 2` sets outlet 2
+  open at load (2-indexed from 1). Sending `0` closes all outlets. Passes
+  ALL message types, not just bangs. Right-most-always idiom: the "outlet
+  select" message arrives at the left inlet; data at the right.
+- `switch N` — opposite of gate: selects ONE of N data inlets and routes it
+  to the single outlet. Use switch when you have N sources and want to monitor
+  or route one at a time; use gate when you have one source and want to
+  distribute it conditionally.
+- **[PROMOTION-CANDIDATE → patching/MAX_PATCHING.md preferred-objects table]**:
+  explicitly distinguish gate and switch — their names are confusing (gate =
+  distributor, switch = selector) and beginners often reach for the wrong one.
+
+---
+
+### Routing
+
+**`route` — type dispatch and `set`-message stripping**
+
+- `route int float list` — dispatches by **message type**, not value. Useful
+  for making an object handle ints, floats, and lists through different
+  signal chains without explicit `zl.len`/`type-check` logic.
+- `route set` — strips the `set` selector from a `set N` message and outputs
+  just the bare int/float. Pattern: UI sends `set 42` to update a number box
+  without triggering output; `route set` can intercept and re-emit the value.
+- Multiple matches are possible when mixing type names and symbol names.
+- `routepass` variant: unmatched messages pass through to ALL outlets
+  (including match outlets), not just the rightmost "else" outlet. Use when
+  you want both a specific branch AND pass-through.
+- Shorthand: `sel` = `select`; these are different from `route`:
+  `select`/`sel` matches on value (int or float or symbol); `route` matches
+  on the leading selector symbol or message type.
+
+**`select` — float fuzzy matching**
+
+- `@fuzzy 0.001` attribute — essential when the input comes from a UI object
+  (dial, slider) that outputs long floating-point values like `0.14999999`.
+  Without `@fuzzy`, `select 0.15` misses those inputs. The help patch calls
+  out this exact failure. Always add `@fuzzy 0.001` when using `select` with
+  float values from UI sources.
+- `@matchfloat` attribute also affects float-matching behavior.
+- Right inlet sets the match value at runtime (same as `set` message).
+
+---
+
+### List construction & manipulation
+
+**`pack` / `unpack` — inlet-type conversion rules**
+
+- Each inlet's type is set by its **creation argument**, not by what arrives.
+  An `int` inlet silently **truncates floats** to int. A `float` inlet
+  promotes ints to float. A `symbol` inlet only passes symbols.
+- `set` message updates the FIRST element without triggering output. Use this
+  with `trigger` to update and then fire: `t i i → [set $1] → pack`.
+- `nth $1` message — outputs only the Nth element from the assembled list.
+  Useful for extracting a single slot without unpacking the whole list.
+- Right inlets store values; ONLY the left inlet also causes output.
+- **Conversion cheat-sheet** (from help patch): int inlet: float→truncated,
+  symbol→blank; float inlet: int→promoted, symbol→blank; symbol inlet: int
+  and float→blank, only symbols pass through.
+
+**`iter` and `uzi`**
+
+- `iter` — explodes a list into individual items fired synchronously.
+  "Can be used to play chords from lists" — each item goes downstream in
+  sequence within the same scheduler tick.
+- `uzi N` — fires N bangs synchronously (like iter but for bangs). Second
+  arg sets the base index of the counter outlet. `break` pauses mid-run;
+  `resume` continues. Carry outlet fires when the last bang fires.
+
+**`append` / `prepend`**
+
+- `append` adds words at the END of the incoming message; `prepend` adds at
+  the START. Both use `set` to change their word(s) at runtime.
+- `prepend` is the canonical way to build selector-prefixed messages from
+  UI output: `prepend setport` turns an int into `setport N`. This is the
+  main plumbing pattern for driving `[node.script]` and similar objects.
+
+**`sprintf`**
+
+- `symout` as the first argument makes `sprintf` output a single symbol
+  instead of a parsed list: `sprintf symout %s%i` joins a symbol and int
+  into one concatenated symbol. Critical for file paths and OSC addresses
+  where spaces would split the output into a list.
+- Use `%ld` for integers (not `%d`) — Max's sprintf is C-style; `%d` may
+  produce unexpected results on 64-bit.
+- `%c` converts ASCII codes to characters: `76 79 86 69` → `LOVE`.
+- For building file paths: chain `sprintf symout %s%s`, then `prepend open`
+  to produce `open MyHD:/Folder/file.aiff`. Don't try to build the path in a
+  message box with a `$1` — use sprintf to assemble it first.
+- **[PROMOTION-CANDIDATE → patching/MAX_PATCHING.md Common Pitfalls]**: When
+  building selector-prefixed paths (e.g. `open <path>`), use `sprintf symout`
+  to produce a single symbol, then `prepend open`. Using a message box
+  `open $1` works only if the path is a single symbol with no spaces.
+
+**`tosymbol` / `fromsymbol`**
+
+- `tosymbol` — concatenates a list into a single symbol. Default separator is
+  none (items glued together). `separator /` attr inserts `/` between items;
+  `separator` with no args removes all spaces; `separator " "` restores
+  space as separator. Use for building OSC address strings from multiple path
+  segments.
+- `fromsymbol` — splits a symbol at the separator character (default: space).
+  `@separator /` splits paths: `/my_device/param/42` → list. Use to parse
+  incoming OSC addresses or colon-separated identifiers like MAC addresses
+  (`separator :`).
+
+---
+
+### Data storage
+
+**`coll` — core patterns**
+
+- `refer <name>` — redirects the coll to a differently-named coll. All
+  subsequent read/write operations apply to the new name. Pattern: share
+  data between multiple coll objects by giving them the same name, or switch
+  between datasets by `refer`-ing.
+- Symbol association: `assoc <symbol> <index>` binds a symbol to a numeric
+  index; `symbol <sym>` then retrieves as if you sent the integer. `deassoc`
+  removes the binding. `subsym <old> <new>` replaces one symbol alias with
+  another. These are the only ways to use non-numeric keys in a coll.
+- `swap 1 2` — exchanges data at two indices without temp storage.
+- `renumber` — renumbers from 1 sequentially; `renumber N` starts from N.
+  Use after gaps in the index space accumulate.
+- `sort 1` — sorts entries by first element of their value list.
+- File I/O: `read`/`readagain`/`write`/`writeagain`. Named colls (creation
+  arg) that set `@savemode 1` are saved with the patcher. Colls backed by
+  a file can be edited in Max's external text editor (Inspector → "Open in
+  Text Editor" affordance).
+- `open` opens the built-in coll editor window (like double-clicking).
+
+**`dict` — nested access and embedding**
+
+- `::` double-colon for nested key access: `get wheels::front::spokecount`.
+  Arbitrary depth. No whitespace in key strings.
+- `[N]` for array elements: `get drivetrain::cassette::cogs[2]`. Indexing
+  starts at 0. Set with `set drivetrain::cassette::cogs[9] 25`.
+- `gettype <key>` — returns the type of the value at a key (`integer`,
+  `float`, `symbol`, `list`, `dictionary`).
+- `getsize <key>` — returns the number of elements at a key (array length
+  or 1 for scalars).
+- `@embed 1` — dict content is saved with the patcher (not in a separate
+  file). **[PROMOTION-CANDIDATE → SPEC_REFERENCE.md dict attrs]**: `@embed`
+  is the primary way to ship initial data with a patch.
+- Setting a nested dict from another named dict: `set wheels::bob dictionary nouns`
+  — inserts the dict named "nouns" as a sub-dict under `wheels::bob`.
+- Complex structures (arrays of dicts) are better accessed in `[v8]`/`[js]`
+  than in a patcher: the help patch says "Accessing complex structures such as
+  arrays of dictionaries is best done using the js object."
+- `combine` — merges two dicts; `@triggers 0 2` controls which inlets trigger
+  output. The argument convention is "outlet triggers on inlet N" — read the
+  refpage before using, as the numbering is not obvious.
+
+**`table` — traversal messages and second outlet**
+
+- `prev` / `next` — retrieve the previous or next value without sending an
+  explicit index. Companion to `goto N` which sets the current index.
+- `goto 0` + repeated `next` bangs = sequential dump without using `dump`.
+- `inv $1` — inverse lookup: returns the FIRST index whose value is greater
+  than the argument. Use for threshold-crossing detection.
+- `dump` — outputs all values as a sequence of ints (index not included).
+  `length` outputs the table size; `sum` outputs the sum of all values.
+- **Second outlet** — bangs whenever the user changes a value in the table's
+  editor window. Wire this to a `print` or save-trigger so UI edits don't
+  silently fail to propagate.
+- Named tables share data (two `table myTable` objects see the same values).
+  `refer` redirects at runtime.
+
+**`value` / `pv` — scoped shared state**
+
+- `value` / `v` — global (patch-wide) shared scalar storage. All `value foo`
+  objects in the entire Max environment share the same value. Ints, floats,
+  lists, and symbols. Creation arg initializes: `value foo 60 70 80` initializes
+  to the list `60 70 80`. Bang recalls current value.
+- `pv` — patcher-scoped: `pv public` crosses to parent/sibling patchers;
+  `pv private` stays inside the current patcher. Same storage model as value,
+  but scoped. Creation args initialize; `status` message reports all linked
+  objects. Use `pv` over `value` whenever the scope should NOT be global.
+- **[PROMOTION-CANDIDATE → preferred-objects table in CLAUDE.md]**: add `pv`
+  as the preferred choice over `value` when sharing state within a subpatcher;
+  use `value` only when truly global state is needed.
+
+---
+
+### Initialization
+
+**`loadbang` and `loadmess`**
+
+- `loadbang` — fires at patcher load. Double-clicking (or banging) also fires.
+  Shift-Cmd (Mac) / Shift-Ctrl (PC) disables loadbang firing at load — useful
+  for testing patches without triggering initialization.
+- `loadmess <value>` — outputs a message at load. `loadmess 42` outputs the
+  int 42; `loadmess 3.14 22` outputs the list; `loadmess cycling 74 9` outputs
+  the symbol-headed list. Bang also triggers output (same as double-click).
+  Use `loadmess` over `[loadbang] → [message <val>]` chains — one object.
+
+**`change` — value filtering and direction**
+
+- `change` — only passes a value when it DIFFERS from the previous one.
+  Second outlet fires on nonzero→zero transition; third on zero→nonzero.
+- `change 0.` (float arg) — enables float change detection.
+- `change +` / `change -` — directional modes. `+` outputs 1 when increasing;
+  `-` outputs -1 when decreasing. Wire to `sel 1` / `sel -1` for rise/fall
+  edge detection.
+- `set N` — stores N without output, setting the baseline for comparison.
+
+**`onebang` — first-pass gate**
+
+- Passes only the FIRST bang after a right-inlet reset. Subsequent bangs go to
+  the right outlet until a reset arrives. Right outlet fires when a non-first
+  bang arrives with no pending reset.
+- `onebang 1` — auto-resets after each pass (effectively the same as `change`
+  for bangs but with an explicit blocking output).
+- Canonical use: "detect the first time middle C is played; ignore subsequent
+  occurrences until reset" — the help patch shows exactly this.
+
+---
+
+### Output & debugging
+
+**`print`**
+
+- Label arg distinguishes outputs in the Max console: `print label` prefixes
+  every line with `label:`. Essential for multi-print patches.
+- `@popup 1` — opens a local floating window instead of the console. Use for
+  debugging inside a presentation where the console isn't visible.
+- `@time 1` — prepends the scheduler time to each line.
+- `@deltatime 1` — prepends time elapsed since the last message. Use for
+  timing profiling.
+- `@floatprecision N` — sets the float precision for display.
+- **[PROMOTION-CANDIDATE → patching/MAX_PATCHING.md]**: `@popup 1` is the
+  debug idiom for patches where the console isn't accessible. Suggest it
+  as the first debug step in any presentation-mode context.
+
+---
+
+### Send / receive scope
+
+**`send` / `receive` and dynamic naming**
+
+- `r` / `s` — shorthand aliases for receive/receive. Both are unambiguous.
+- `receive` without a creation arg grows an **inlet** that accepts a `set <name>`
+  message at runtime to change which sender it's listening to. Same for `send`.
+  Pattern: `[umenu] → [prepend set] → [receive]` to dynamically switch
+  which send/receive bus a receiver monitors.
+- `send` / `receive` are patcher-global (visible to all patchers in the same
+  Max environment); they do NOT scope to the containing subpatcher.
+
+---
+
+### Number box (`number`)
+
+- `min N` / `max N` — set bounds; `min` / `max` (no args) removes them.
+- `set N` — stores value without output (no bang from the right outlet).
+- Tab outlet — fires when the user presses Tab while the number box is
+  selected. Wire to `select` objects to chain tab focus across number boxes.
+- Format inspector options: Decimal (int/float), Roland Octal — set in the
+  Inspector, not via messages. The `@format` attribute controls this (also
+  confirmed by the attr-tally: `format` appears 6,840× on `flonum` in the
+  help corpus).
 
 ## Log
+
+- 2026-06-27: Prose-insight extraction pass 1 — core `help/max/` foundational
+  objects. Read and extracted from 20+ help patches: metro/qmetro/clocker,
+  delay/pipe/defer/deferlow, trigger/bangbang/gate/switch, route/select,
+  pack/unpack/iter/uzi/append/prepend/sprintf/tosymbol/fromsymbol,
+  coll/dict/table/value/pv, loadbang/loadmess/change/onebang, print, number,
+  send/receive. Wrote structured per-object notes with PROMOTION-CANDIDATE tags
+  for entries that belong in MAX_PATCHING.md or CLAUDE.md. crawl_state not
+  yet updated (pending commit).
 
 - 2026-06-21: Built `extract_observed_attrs.py`; ran the mechanical attr-tally
   over the whole corpus (5,264 files). Wrote `maxhelp_observed_attrs.json` +

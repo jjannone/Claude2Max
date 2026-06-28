@@ -142,22 +142,42 @@ core `help/` → bundled `packages/` → user `Packages/`; or by object family.
 
 ## Resume point
 
-**Next session:** begin prose-insight extraction on **core `help/max/`** —
-the foundational Max objects (timing, list, routing, data). Read each help
-patch's wiring and comments; write idioms + gotchas to `maxhelp_insights.md`;
-promote files to `analyzed` in the state JSON as you go. Start with the
-highest-traffic objects from the attr-tally summary (`metro`, `route`, `zl.*`,
-`trigger`, `pack/unpack`, `gate/switch`) since their idioms recur everywhere.
+**Pass 1 DONE (2026-06-27):** prose-insight extraction for core `help/max/`
+foundational objects complete. 20+ objects read and documented in
+`maxhelp_insights.md § Wiring idioms & per-object gotchas`:
+metro/qmetro/clocker, delay/pipe, defer/deferlow, trigger/bangbang,
+gate/switch, route/select, pack/unpack, iter/uzi, append/prepend, sprintf,
+tosymbol/fromsymbol, coll, dict, table, value/pv, loadbang/loadmess,
+change/onebang, print, number, send/receive.
 
-**Also pending (integration, can be done independently):** wire
-`maxhelp_observed_attrs.json` into `spec2maxpat.build_resolver` per the
-cautions in `maxhelp_insights.md` § "Resolver-integration notes". This closes
-payoff #1 and is the reason the mechanical pass ran first.
+Four PROMOTION-CANDIDATEs enshrined to reference docs (user-confirmed):
+gate-vs-switch clarification (MAX_PATCHING.md + CLAUDE.md table), `select
+@fuzzy` pitfall (MAX_PATCHING.md), `sprintf symout` pitfall (MAX_PATCHING.md),
+`qmetro = metro @defer 1` note (CLAUDE.md table).
+
+**Next session:** continue prose extraction — pick one of:
+
+1. **`help/max/` remaining objects** — zl.*, array.*, dict.*, accum, coll
+   advanced features, bpatcher, pattr/autopattr, poly~, thispatcher,
+   scripting objects (thispatcher, getattr/setattr family).
+2. **`help/msp/` audio objects** — buffer~/groove~/record~, line~/ramp~,
+   filters (biquad~, svf~), synthesis (saw~/tri~/rect~, noise~), tapin~/tapout~.
+3. **`help/jit/` Jitter** — jit.matrix, jit.gl.*, jit.grab, jit.world pipeline.
+
+Recommend option 2 (MSP) — audio idioms are the highest-value gap in the
+current reference docs; most pitfall bullets in MAX_PATCHING.md are control-
+rate today.
+
+**Also pending (integration):** wire `maxhelp_observed_attrs.json` into
+`spec2maxpat.build_resolver` per the cautions in `maxhelp_insights.md §
+Resolver-integration notes`. Independent of prose extraction; can be done
+any session.
 
 ## Queue / candidate chunks
 
-- core `help/max/` foundational objects (timing/list/routing) — **next**
-- core `help/msp/` audio objects (filters, synthesis, buffer/groove idioms)
+- core `help/max/` foundational objects (timing/list/routing) — **DONE 2026-06-27** (pass 1)
+- core `help/max/` remaining (zl.*, array.*, pattr, poly~, thispatcher, scripting)
+- core `help/msp/` audio objects (filters, synthesis, buffer/groove idioms) — **next recommended**
 - core `help/jit/` Jitter (matrix wiring, GL pipeline demos)
 - core `help/m4l/` `live.*` UI objects (parameter system, color attrs)
 - bundled `packages/` — BEAP, vizzie, gen demos
