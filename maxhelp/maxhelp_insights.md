@@ -660,6 +660,142 @@ with target file.*
 - **Use for:** pitch glide (portamento), control-signal smoothing, envelope followers (asymmetric attack/release). More CPU-efficient than `line~` for smoothing incoming streams.
 - **For ms-based smoothing**, convert: samples = ms * samplerate / 1000.
 
+---
+
+## Jitter objects — wiring idioms & per-object gotchas
+
+*(Pass 3 — 2026-06-27 — core `help/jitter/`)*
+
+### jit.matrix
+
+- **Creation syntax: `jit.matrix <planecount> <type> <dim0> <dim1>`** — e.g. `jit.matrix 4 char 320 240` = 4-plane, 8-bit RGBA, 320×240. All four args are optional. Named matrices share data — any object using the same name accesses the same buffer.
+- **`setcell2d <x> <y> <v0> [v1 v2 v3]`** — set one cell's values. Number of values = planecount.
+- **`fillplane <plane_idx> <value>`** — fill a single plane with a constant. Faster than `setall` when only one plane needs updating.
+- **`setall <value>`** — fill ALL planes. `clear` = `setall 0`.
+- **`plane <idx>`** — set which plane a downstream `jit.pwindow` displays. `plane -1` = all planes.
+- **`importmovie <filename>`** — load an image or video file into the matrix. Works with stills (jpg, png, tiff). Bang afterward to output.
+- **`exportimage <filename> <type>`** — save matrix to file. Types: `jpeg`, `png`, `tiff`.
+- **`write` / `read`** — save/load in Jitter's binary format (`.jxf`). Fast, lossless, preserves type and plane info.
+- **Type conversion:** connecting a `jit.matrix 4 char` to a `jit.matrix 1 float32` and banging converts automatically — use this to convert between formats without extra objects.
+- **`@planemap`** — reorder/select planes on output. `@planemap 1 1 2 3` = copy green channel into red, keep G, B, A. Applied at output time.
+
+### jit.pwindow
+
+- **The standard Jitter display object.** Receives a matrix and renders it. Send a matrix to inlet 0.
+- **Mouse output:** outlet 0 emits mouse events — list of 11 values including x, y, button state. Use `route mouse mouseidle` to separate click from hover; `unpack 0 0 0 0 0 0 0 0 0 0 0` to destructure.
+- **Texture display:** can directly display `jit.gl.texture` outputs from `jit.world @visible 0 @enable 1 @output_texture 1`. Acts as an in-patcher preview without a separate window. Note: when displaying textures, `jit.pwindow` is always topmost in the patch.
+
+### jit.world
+
+- **`jit.world` is the preferred modern GL render destination** — replaces `jit.gl.render` + `jit.window` in new patches. Manages context, window, and render loop in one object.
+- **Context name:** first creation arg (e.g. `jit.world my-world`). All `jit.gl.*` objects sharing this name render into it.
+- **`@fps N`** — auto-renders at N fps (no qmetro needed). `@fps 0` = render only on demand (bang).
+- **`@visible 0 @enable 1 @output_texture 1`** — headless mode: renders to a texture without a window. Wire into `jit.pwindow` for preview.
+- **`@fsaa 1`** — full-screen anti-aliasing. Set at creation time.
+- **`worldbox <x> <y> <w> <h>`** — set window position/size. `getworldbox` — query current values.
+- **`reset`** — clear the render context.
+
+### jit.grab
+
+- **`open` to start, `close` to stop** — explicit messages, not a toggle. Wire a toggle to `route open close` → the respective messages.
+- **Bang or qmetro drives output** — `qmetro 30` for ~30 fps capture.
+- **`getvdevlist`** — list available video devices (via `route vdevlist`). `vdevice <name>` selects one.
+- **`getformatlist`** — list capture formats. `format <name>` or `format -1` for auto.
+- **Creation args `<width> <height>`** — default capture resolution; actual resolution depends on the device.
+
+### jit.playlist
+
+- **Multi-clip video player** — equivalent to `playlist~` for audio.
+- **`setclip <idx> <attr> <value>`** — per-clip control. E.g. `setclip 2 loop 1`, `setclip 2 rate 0.5`.
+- **`selection <idx> <start_norm> <end_norm>`** — in/out points as normalized (0–1). `selectionms` uses milliseconds.
+- **Outlet 1 emits notifications** — `done`, `loop`, `start`, `stop` and (with `@reportprogress 1`) progress floats. Use `route done` to auto-advance.
+- **Preset/pattr compatible** — `pattrstorage` can save/recall the full playlist state.
+
+### jit.gl.videoplane
+
+- **The primary texture-to-screen object.** Wire `jit.world` → `jit.gl.videoplane` for basic video display.
+- **`jit.gl.layer`** is an alias for `jit.gl.videoplane` with sensible layering defaults: `preserve_aspect 1`, `blend_enable 1`, `depth_enable 0`. Prefer `jit.gl.layer` when compositing multiple video planes.
+- **`@layer N`** — render order (lower = behind). `@preserve_aspect 1` — letterbox/pillarbox source.
+- **[PROMOTION-CANDIDATE → CLAUDE.md preferred objects]** Add note: `jit.gl.layer` is the preferred alias when stacking; it sets blend/depth/aspect defaults automatically.
+
+### jit.gl.render (legacy)
+
+- **Pre-`jit.world` pipeline:** `jit.gl.render` + `jit.window`, driven by `qmetro 33 → t b erase`. `erase` clears the frame, bang triggers drawing.
+- **Prefer `jit.world` for new patches** — it handles context, window, and render loop in one object.
+- **`drawto <ctx>`** — redirect output to another context. `fullscreen 1/0` — toggle fullscreen.
+
+### jit.gl.gridshape
+
+- **Creates a 3D primitive** in the GL context. **`@shape` values:** `cube`, `sphere`, `cylinder`, `torus`, `plane`, `tetrahedron`, `octahedron`, `circle`, `cone`, `open_cylinder`, `ring`.
+- **Standard OB3D attributes** (shared by all `jit.gl.*` objects): `@scale`, `@position`, `@rotate`, `@color`, `@lighting_enable`, `@smooth_shading`, `@depth_enable`, `@poly_mode`.
+- Can output geometry as a matrix → feed into `jit.gl.mesh` for further manipulation.
+
+### jit.gl.texture
+
+- **Holds image data on the GPU.** Load with a matrix; reference by `@name` in downstream GL objects.
+- **Two-texture swap:** maintain two named textures and alternate source/destination to avoid read/write conflicts on the same texture.
+- **`@usedstdim 1` + `dstdimstart / dstdimend`** — sub-texture placement: render into a specific region.
+- **Texture readback (GPU→CPU):** wire into `jit.matrix`. For non-blocking readback, use `jit.gl.asyncread`.
+- **`jit.gl.slab`** outputs texture name as `jit_gl_texture <name>` message — wire directly into `jit.matrix` or other `jit.gl.*` objects.
+
+### jit.gl.sketch
+
+- **Immediate-mode drawing** — send drawing commands as messages. Commands append to a list re-executed every frame.
+- **Primitives:** `moveto x y z`, `lineto x y z`, `sphere r`, `cube s`, `torus r1 r2`, `plane s`, `glcolor r g b a`, etc.
+- **`reset`** — clear command list. Edit list: `cmd_delete`, `cmd_enable`, `cmd_insert`, `cmd_replace`, `getcmdlist`.
+- **`drawobject <name>`** — include another named `jit.gl.*` object as a drawing step.
+- **Use for:** generative geometry, drawing overlays, custom shapes. Prefer `jit.gl.gridshape` for standard primitives.
+
+### jit.op
+
+- **Per-cell math.** `@op <operator>` sets the operation; inlet 1 = right operand (matrix or scalar via `@val`).
+- **Key operators:** `*`, `/`, `+`, `-`, `%`, `min`, `max`, `abs`, `avg`, `absdiff`. Float: `sin`, `cos`, `sqrt`, `pow`, `hypot`, `floor`, `ceil`. Bitwise: `&`, `|`, `^`. Logical: `==`, `!=`, `>`, `<`. **Pass operators:** `>p`, `<p`, `==p` — pass left value where condition true, 0 otherwise (masking).
+- **`prepend op`** → `jit.op` — change operator dynamically: send `op *` as a message.
+- **First reach for `jit.op`** before `jit.expr` for simple single-operator per-cell math — faster and simpler.
+
+### jit.expr
+
+- **Expression language for per-cell computation.** More flexible than `jit.op`; set via `@expr "..."` or `expr <string>`.
+- **Variables:** `in[0]`/`in[1]` (matrix inlets), `cell[0]`/`cell[1]` (coords), `norm[0]`/`norm[1]` (0.–1.), `snorm[0]`/`snorm[1]` (−1.–1.), `dim[0]`/`dim[1]` (matrix size).
+- **Constants:** `PI`, `TWOPI`, `HALFPI`, `E`, `DEGTORAD`, `SQRT2`, etc.
+- **Functions:** standard C math + `jit.noise()`, `jit.clip(in[0], @min 0. @max 1.)`, `noise.gradient(...)`, BFG functions.
+- **Caching:** expressions with no matrix inputs are cached by default. Add `@cache 0` for `jit.noise()` and anything that must re-evaluate per-call.
+- **Escape commas** in expressions with `\,` — bare commas are Max message separators.
+- **vs `jit.op`:** use `jit.op` for one operation; use `jit.expr` for multi-step formulas or position-dependent calculations. Use `jit.gen`/`jit.gl.pix` for GPU performance or complex control flow.
+
+### jit.cellblock
+
+- **`jit.cellblock` help lives in `help/max/`** not `help/jitter/`.
+- **Drive with `cell <col> <row> <value>`** — `cell 0 0 hello` sets column 0, row 0.
+- **`insert <row> <v0> [v1 ...]`** — insert a full row. `clear` — remove all content.
+- **`refer <collname>`** — connect to a `coll` and display its contents (read-only; modify the coll to change content).
+- **Per-column/row formatting:** `col <idx> width <px>`, `row <idx> height <px>`, `col <idx> just <0|1|2>`, `col <idx> frgb <r> <g> <b>`.
+- **Per-cell formatting:** `cell <c> <r> label <text>`, `cell <c> <r> frgb/brgb <r> <g> <b>`, `cell <c> <r> readonly 1`, `cell <c> <r> precision <N>`.
+
+### jit.noise
+
+- **Outputs a matrix of random values on each bang.** Args: `jit.noise <planecount> <type> <dim0> <dim1>`. Use `float32` for 0.–1. range.
+- **Wire `qmetro`** for continuous updates.
+- **`jit.3m`** — companion that outputs mean, min, max of a matrix (useful for inspecting jit.noise output).
+
+### jit.rota
+
+- **2D affine transform (rotate/zoom/translate)** applied per-cell. Attributes: `@theta` (radians), `@zoom_x`/`@zoom_y`, `@offset_x`/`@offset_y`, `@anchor_x`/`@anchor_y`.
+- **`@boundmode`:** 0=ignore/wrap (default), 1=clear, 2=wrap, 3=clip, 4=fold.
+- **CPU-intensive at high resolution** — consider `jit.gl.pix` for GPU-accelerated rotation.
+
+### jit.alphablend
+
+- **Composite two matrices using alpha.** Inlet 0 = background, inlet 1 = foreground with alpha. Output = blended result.
+- **Mask from a grayscale source:** use `jit.op @op !pass pass pass pass` to replace the alpha channel of a 4-plane matrix with a separate grayscale mask. The `!pass` operator copies the right-inlet plane into the left-inlet's output; `pass` passes other planes unchanged.
+- **`@planemap` on `jit.matrix`** maps a 1-plane grayscale into one plane of a 4-plane matrix (e.g. as alpha): `jit.matrix 4 char 320 240 @planemap 2 1 2 3`.
+
+### jit.chromakey
+
+- **Replace a color range with transparency.** Inlet 0 = source video. Output = RGBA with keyed-color made transparent.
+- **Select key color** by clicking in the associated `jit.pwindow` (outputs an RGBA float list), or send programmatically: `pak 0. 1. 0. 0.` (green screen).
+- **Works best on `float32` matrices** for better color precision.
+
 ## Log
 
 - 2026-06-27: Prose-insight extraction pass 1 — core `help/max/` foundational

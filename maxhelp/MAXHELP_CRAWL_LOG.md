@@ -142,6 +142,7 @@ core `help/` → bundled `packages/` → user `Packages/`; or by object family.
 
 - `help/max/` foundational objects — **DONE 2026-06-27** (pass 1, 20+ objects)
 - `help/msp/` audio objects — **DONE 2026-06-27** (pass 2, 16 objects)
+- `help/jitter/` Jitter objects — **DONE 2026-06-27** (pass 3, 14 objects)
 
 ## Resume point
 
