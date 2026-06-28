@@ -313,20 +313,41 @@ For instance: `@slidermode` → `"Slider Mode (per key)"`, **not** `"Per-key Sli
 
 **Cycling '74's own objects routinely break this rule** — `kslider`'s `offset` is labeled "Octave offset", its `range` is "Number of keys to display" — so do not use C74 labels as the model here. This is one of the deliberate places our objects are *better* than the built-ins, not bug-compatible with them. The recognition signal: any time you write a `label:`, check that its first word matches the attribute name's first word before moving on — it is a per-attribute check, like verifying the API name itself.
 
-## Help Files Must Demonstrate Functionality Visibly — Binding Rule
+## Match the Generated Control to the Attribute's Value Space — Binding Rule
 
-A `.maxhelp` exists so someone can **see the object work**, not merely read a list of its messages. Every demo in a help file must be wired and parameterized so its effect is **visible on screen the instant the user clicks it.** The recurring silent failure: a demo that fires perfectly correctly but displays nothing, because its data lands outside whatever the object is currently showing — so the user concludes "the message does nothing" when in fact it worked off-screen.
+When you declare an attribute on a custom object (`declareattribute`, or any equivalent), its **`style:`** is not optional polish — it is what makes the auto-generated control (`attrui`, the Inspector row, any bound UI) *match the kind of value the attribute holds*. Omit it and Max falls back to a bare number field for everything: a true/false attribute becomes a number box the operator must know to type `0`/`1` into, a one-of-N choice becomes a number with no hint of the options, and a color becomes four mystery floats. The control silently misrepresents the value space — the same failure class as a mislabeled attribute (the information needed to use it correctly is missing from the surface), and like that one it fails silently, never as an error.
 
-Concretely, when building or reviewing a help file:
+Lead with the value space; pick the style that fits it:
 
-- **Demo input must target the object's visible state.** For a keyboard / `kslider`-like object displaying MIDI 60–72, the demo messages must use notes in 60–72; a `chord 36 …` or `setdots 1 36 …` on that object fires but lands on keys that aren't drawn and reads as a dead message. Either match the demo data to the displayed range, or set the object's range/offset to include the demo data. The general form: any "show this" demo must reference state the object is actually rendering.
-- **Expose the key attributes with `attrui`** — one `attrui` per attribute, wired to the object's inlet — so the user can flip each one live and watch it take effect. This is the only practical way to test attributes, and it doubles as documentation of what's tunable.
-- **Make outputs visible** (number boxes, comments, `print`) so the user sees what the object emits, not just what it receives.
-- **Label and lay out the demos clearly** — section headers, no overlapping controls — so the functionality reads at a glance.
+- **Binary / on-off** (`min:0 max:1`) → `style:"onoff"` — renders a **checkbox**, the unambiguous on/off affordance. Any attribute that is conceptually "this state or that one" belongs here even when the two aren't literally "enabled/disabled" — label it so the checked state is clear (e.g. `@displaymode` → "Displaymode (off keys / on sliders)").
+- **One of a small finite set** → `style:"enum"` (symbol values) or `style:"enumindex"` (integer index, symbols shown in the menu) — renders a **dropdown** that surfaces the choices.
+- **Color (rgba)** → `style:"rgba"` — renders a **swatch + picker**, and pairs with `paint:1` so the object repaints when the color changes.
 
-The acceptance test is behavioral, not structural: open the help file, click every demo and flip every attrui, and confirm each produces a **visible change**. A click that changes nothing on screen is a broken demo even if the message it sends is "correct."
+For instance: `@displaymode` was first a plain `int 0/1`, so its `attrui` was a number box — the operator had to *know* `1` meant "slider face." Re-declared `style:"onoff"`, it is a labeled checkbox that reads itself. The recognition signal mirrors the attribute-label check: every time you write a `declareattribute`, decide its `style:` from its value space before moving on — a per-attribute check, like the label and the API name.
 
-For instance: `zkeyboard.maxhelp` looked complete — every message box present and wired — but displayed MIDI 36–48 while every demo (`chord 60 …`, `set 62`, `setdots 1 60 …`, `setval 62 …`) targeted 60–67, so nothing ever appeared and the object read as broken. The fix was to set the demo keyboards' `offset` so the displayed range covered the demo notes, plus a column of `attrui`s for live attribute testing. This rule is symmetric with **Never Render an Empty Container** and the presentation aesthetic rules: visible-but-wrong is recoverable; silent-and-blank trains the user to distrust the object.
+## Group Bound Controls by Function, With Headers — Binding Rule
+
+A column of `attrui` / `number` / `toggle` controls dumped in declaration order is a wall the operator must read end-to-end to find anything. Controls that act on the same facet of the object belong **together, in a labeled cluster** — the same "what does this touch?" grouping that governs object placement (see `patching/MAX_PATCHING.md` > spatial clustering), applied to the control surface. Give each cluster a short header comment naming the facet; within a cluster, order the controls the way the operator thinks about them, not the order you happened to declare the attributes.
+
+This applies anywhere bound controls are laid out: help files, test/comparison benches, and presentation views. The grouping *is* documentation — it tells the operator which knobs are related without them having to flip each one to find out.
+
+For instance: the `zkeyboard` bench first packed all 32 `attrui`s in declaration order; regrouped into labeled bands — *kslider attrs · display · slider values · slider display · slider colors · dots* — the same controls became scannable, and "which attributes affect the slider face?" is answered by reading one header instead of testing every box. Pair this with the demo-visibility rule below: a grouped, labeled control surface where every control also produces visible change is a patch the operator can learn by clicking.
+
+## Demos, Help Files, and Test Patches Must Demonstrate Functionality Visibly — Binding Rule
+
+A help file, a test bench, a comparison patch — any patch whose purpose is to *show an object working* — exists so someone can **see the object work**, not merely read a list of its messages. Every demo control must be wired and parameterized so its effect is **visible on screen the instant the user clicks it.** The recurring silent failure: a demo that fires perfectly correctly but displays nothing, because its data lands outside whatever the object is currently showing — so the user concludes "the message does nothing" when in fact it worked off-screen.
+
+Concretely, when building or reviewing any such patch:
+
+- **Every demo input must address currently-visible state — no exceptions.** For a keyboard / `kslider`-like object displaying MIDI 60–72, the demo messages must use notes in 60–72; a `chord 36 …` or `setdots 1 36 …` on that object fires but lands on keys that aren't drawn and reads as a dead message. Either match the demo data to the displayed range, or set the object's range/offset to include the demo data. The general form: any "show this" demo must reference state the object is actually rendering — and this holds for benches and comparison patches exactly as much as for `.maxhelp`. When an attribute changes what's visible (range, offset, min/max, a value type), pick demo data valid for the *displayed* configuration, and prefer values in a canonical test range (e.g. slider values in `0.–1.`) so they read cleanly whatever the bounds.
+- **If a message takes arguments, supply them.** A bare `chord` / `setdots` / `setval` / `list` message box demonstrates nothing — give it representative arguments (that also satisfy the visible-state rule above) so one click shows the real effect.
+- **Expose the key attributes with `attrui`** — one `attrui` per attribute, wired to the object's inlet — so the user can flip each one live and watch it take effect. This is the only practical way to test attributes, and it doubles as documentation of what's tunable. (Style and grouping per the two rules above.)
+- **Make outputs visible** (number boxes, comments, `print`, or a `prepend set` → message box that captures lists/symbols) so the user sees what the object emits, not just what it receives.
+- **Label and lay out the demos clearly** — section headers, feeders above / outputs below, no overlapping controls — so the functionality reads at a glance.
+
+The acceptance test is behavioral, not structural: open the patch, click every demo and flip every attrui, and confirm each produces a **visible change**. A click that changes nothing on screen is a broken demo even if the message it sends is "correct."
+
+For instance: the `zkeyboard` comparison bench placed `kslider` and `zkeyboard` showing MIDI 48–60, but several demos targeted notes outside that range (`chord 60 …`, `set 62`, `setval 62 …`) and the slider-face messages set values against an integer 0–127 range — so the keys lit nothing visible and the slider bars barely moved. The fix: every demo note pulled into 48–60, every arg-taking message given representative args, and slider-face values cast as `0.–1.` floats (with a `setminmax -1. 1.` bipolar example). Earlier the same failure hit `zkeyboard.maxhelp` (displayed 36–48 while demos targeted 60–67). This rule is symmetric with **Never Render an Empty Container** and the presentation aesthetic rules: visible-but-wrong is recoverable; silent-and-blank trains the user to distrust the object.
 
 ## Model Selection — When to Use Opus vs Sonnet
 
