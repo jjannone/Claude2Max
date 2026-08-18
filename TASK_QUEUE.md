@@ -155,7 +155,7 @@ Tasks requiring deep analysis, architecture decisions, or sustained judgment. Pr
 
   **Working in the c2m repo**: yes, the MCP server can live entirely in the Claude2Max repo. `mcp_server/` as a new top-level directory. The server is invoked by Claude Code's MCP host pointing at `mcp_server/server.py`; the host manages the long-lived process. No external infrastructure needed. The server reads the existing source-of-truth files on disk. The installer wires Claude Code's MCP config to point at the server's path on the user's machine (resolved from the same Claude2Max-clone path the existing global pointer references).
 
-  **Fits into the larger system**: this is the architecturally complete answer to "how do we ensure Claude has the Max knowledge it needs?" The strengthened global pointer (2026-05-28) closed what could be closed with prose. This task closes the remaining gap with mechanics: knowledge becomes tools, tool invocation becomes mandatory at Max-touching moments. Pairs with the Community Knowledge Pipeline task — incoming PRs from forks can include not just prose insights but also test cases that get added to `verify_spec`'s rule library, growing the MCP's coverage over time. Pairs with the Repo-as-Total-Scope Enforcement task — that task addresses the same persuasion-vs-enforcement gap from the *inside-the-repo* direction; this task addresses it from the *outside-the-repo* direction. Together they close the loop on "Claude2Max defines the operating environment whenever Max is involved, wherever the cwd happens to be." **Supersedes** the proposed `/c2m-refpage` skill (was subtask 5 of the Plugin/skills polish pass, now struck) — MCP's `lookup_object(name)` does what that skill would have done, but as a first-class tool with authoritative-result semantics rather than skill-printed text. **Soft prerequisite**: running the Promotion-candidate review pass first improves the launch quality of `essentials()` by ensuring any insights still flagged `[PROMOTION-CANDIDATE]` in `forum_insights.md` / `cookbook_insights.md` have landed in the canonical docs the MCP reads from. Not a blocker, but cheap and worth doing in the session before Step 2.
+  **Fits into the larger system**: this is the architecturally complete answer to "how do we ensure Claude has the Max knowledge it needs?" The strengthened global pointer (2026-05-28) closed what could be closed with prose. This task closes the remaining gap with mechanics: knowledge becomes tools, tool invocation becomes mandatory at Max-touching moments. Pairs with the Community Knowledge Pipeline task — incoming PRs from forks can include not just prose insights but also test cases that get added to `verify_spec`'s rule library, growing the MCP's coverage over time. **Supersedes** the proposed `/c2m-refpage` skill (was subtask 5 of the Plugin/skills polish pass, now struck) — MCP's `lookup_object(name)` does what that skill would have done, but as a first-class tool with authoritative-result semantics rather than skill-printed text. **Soft prerequisite**: running the Promotion-candidate review pass first improves the launch quality of `essentials()` by ensuring any insights still flagged `[PROMOTION-CANDIDATE]` in `forum_insights.md` / `cookbook_insights.md` have landed in the canonical docs the MCP reads from. Not a blocker, but cheap and worth doing in the session before Step 2.
 
   **Timeline note**: scoped during May 2026 with no students until September — sufficient runway to design the architecture properly, build all three layers, test against multiple project topologies, and verify behavior on a fresh machine before students arrive. Suggested phasing: (i) MCP server with `essentials()` + `lookup_object` + `lookup_attribute` shipping first as the foundation; (ii) `verify_spec` + the shared rule library second; (iii) skill + hook + installer third, gated on MCP being functional; (iv) integration with `spec2maxpat.py convert` last. Each phase independently testable.
 
@@ -209,63 +209,42 @@ Tasks requiring deep analysis, architecture decisions, or sustained judgment. Pr
 
   **Fits into the larger system**: closes the knowledge loop. Currently every Claude2Max convention propagates downstream (upstream → fork → session). With this pipeline, real-world friction propagates upstream (session → fork → PR → upstream knowledge files), so the next student inherits everyone else's lessons. Pairs naturally with the existing promotion-candidate review pass.
 
-- [pending] **Repo-as-Total-Scope Enforcement System** — Design and implement a system that makes the Claude2Max repo's rules, guidelines, workflows, and resource libraries *the entire operating environment* for any Claude session whose cwd is this repo. The goal is that "in this repo" means: the repo defines the work scope, the procedures, the thought-process, the resource libraries, and the action vocabulary. There is no independent thought except as it relates to the repo — improvements to the repo can be *proposed*, but until they are implemented, behavior conforms exactly to the repo as currently written.
+- [pending] **Rule enforcement moves into the MCP server — one library, thin callers** — Make `mcp_server/` the single home for every mechanically-checkable and post-hoc-verifiable rule in the repo, and reduce `hooks/` to thin callers into it. Today the rule corpus lives as prose in six `*.md` files and is enforced (partially) by five independent hook scripts plus a gate inside `spec2maxpat.py`. This task ends the split: knowledge and checking logic live in one importable library; every entry point — MCP tool, hook, converter, CLI — calls that library rather than reimplementing it.
 
-  **Why this matters**: rules and guidelines that are written but not enforced are decorative. The repo currently has hundreds of lines of rules in CLAUDE.md, patching/MAX_PATCHING.md, SPEC_REFERENCE.md, TUTORIAL_GUIDELINES.md, PRE_EDIT_CHECKLIST.md, and others. The rules are correct, but compliance depends on the model noticing the rule applies and choosing to follow it. The "Partial Answers Are Not Consent" violation on 2026-05-02 is a recent example: the rule existed, the rule was visible in CLAUDE.md, the rule did not fire because action mode overrode noticing. Any rule that depends on noticing has a failure mode. The repo means something only if the rules are mechanically guaranteed.
+  **Why this matters**: rules that are written but not mechanically checked are decorative, and rules checked in two places drift apart. The repo has already been bitten by the second failure: before 2026-06-21, `lookup_attribute`/`list_attributes` were refpage-only while the convert gate validated against `refpage ∪ jbox ∪ observed-in-help`, so the same server reported universal jbox attrs INVALID while convert accepted them — the query tools were *stricter than the gate*. That was fixed by routing both through one cached `_GateResolver`. This task applies the same fix to the whole rule corpus, before the drift recurs somewhere less visible.
 
-  **Design space — what to investigate**:
+  **The architectural constraint that shapes everything below**: an MCP server cannot block a tool call. It exposes tools Claude chooses to call. The only mechanism that can stop an action is a PreToolUse hook returning `permissionDecision: "deny"` (see `hooks/claude2max_max_edit_gate.py`). So "MCP does the work" means the *logic* lives in the server package; a thin hook layer remains, because it is the only thing that can be mandatory.
 
-  1. **Categorize every existing rule by enforcement class**:
-     - **Mechanical** — can be enforced by a hook or script (path conventions, ALL CAPS naming, sync-before-edit, embedded-spec presence, hidden-codebox marker, no `.json` specs in project root, no `cd` in Bash commands).
-     - **Verifiable post-hoc** — can be checked after the fact (every presented control has a comment label, every inlet/outlet has both inside and outside labels, every new attribute appears in the refpage XML).
-     - **Judgment-only** — no mechanical check possible, depends on model self-discipline (re-ask unanswered question parts, propose before enshrining, generalize before writing rules, observe-good-pattern preservation).
+  **Do NOT have hooks call the MCP server over the protocol.** Hooks are short-lived subprocesses; the MCP server is stdio-bound to a Claude Code session and may not be running, may belong to a different session, and cannot be depended on for a sub-second PreToolUse decision. The shim is a plain Python import of the shared library — exactly what `hooks/claude2max_maxpat_content_gate.py` already does with `spec2maxpat.gate_maxpat_file`. That file is the reference shape for every shim this task produces.
 
-  2. **Build the enforcement layer for the mechanical class**:
-     - Audit all existing hooks in `.claude/settings.json`. What's enforced? What isn't?
-     - For each mechanical rule, decide: PreToolUse hook (blocks the action), PostToolUse hook (validates after), or Bash wrapper (validates command before run).
-     - Add hooks to cover every mechanical rule. A rule with no enforcement is a rule that can be silently broken.
+  **The pattern already proven** (generalize this, do not invent a new one): `mcp_server/claude2max_verify/` is the anti-guessing rule library. It has three independent callers — `spec2maxpat.py convert` (blocks the build), the `verify_spec` MCP tool (reports), and the PostToolUse content-gate hook (feeds `additionalContext`). One library, three entry points, zero duplicated logic, no drift. Every work item below is "add a rule family to this library, then wire the callers."
 
-  3. **Build the verification layer for the post-hoc class**:
-     - A `verify_repo_invariants.py` script that walks the repo and validates every checkable invariant (every `.maxpat` has embedded spec, every presented box has comment label, etc.).
-     - Run automatically via hook at session end, or before every commit, or both. Block commits that fail invariants.
+  **Work items**:
 
-  4. **Build the discipline layer for the judgment-only class**:
-     - Self-audit prompts surfaced at the right moment. Existing PRE_EDIT_CHECKLIST.md is the prototype but it's flat — every item fires for every Edit, regardless of relevance.
-     - Investigate: trigger-tagged rules. Each rule declares its trigger condition (e.g. `trigger: prior_turn_ended_with_multi_part_question`). The hook injects only triggering rules.
-     - Investigate: forcing-function checklists at category transitions (about to commit → re-read commit-time rules; about to design UI → re-read presentation rules; about to start new session → re-read session-start rules).
+  1. **Inventory and classify the corpus.** 73 `## ` rule sections across `CLAUDE.md` / `SPEC_REFERENCE.md` / `patching/MAX_PATCHING.md` (the set `lookup_rule` already indexes), plus `TUTORIAL_GUIDELINES.md` and `PRE_EDIT_CHECKLIST.md`. Tag each: *mechanical* (checkable before/at the action), *post-hoc* (checkable against a finished artifact), *judgment* (no mechanical check). Output is a machine-readable index, not a prose doc — `lookup_rule` should be able to return a rule's enforcement class alongside its text.
 
-  5. **Rule registry / single source of truth**:
-     - Should rules live in one structured file (`RULES.yaml` with id, statement, trigger, enforcement-class, rationale) and the prose `*.md` files render from that? Pro: one canonical list, machine-iterable, prevents drift between files. Con: forces structure on prose that currently flows naturally.
-     - Or stay with prose `*.md` and add a `rule_index.py` that scrapes them into a structured form? Less invasive, more brittle.
-     - Decide.
+  2. **Extend `claude2max_verify` with the post-hoc rule families.** Currently it covers object-name resolution, attribute validity, and message selectors. Add the structural invariants that today depend entirely on Claude noticing: presentation-view required when the patch has UI; every presented control has an adjacent comment label; plumbing patchcords hidden; redundant message boxes hidden; inlet/outlet labeled inside *and* outside; embedded spec present with the `--- CLAUDE2MAX SPEC ---` markers; spec-object-count vs patch-box-count drift (the 1669-vs-135 orphan case); debug additions carry the magenta marking and appear in `debug_additions`. Decide per family whether it blocks convert or warns — the existing precedent is that principle checks warn and name-resolution errors block.
 
-  6. **Violation log and auto-improvement loop**:
-     - Every caught violation gets appended to `VIOLATIONS.md` (date, rule violated, what triggered the failure mode, what mitigation was added).
-     - Read at session start so the next session sees the failure pattern explicitly.
-     - The mitigation is *always* a repo change (hook, rule, checklist item) — never just "I'll try to remember." If the mitigation is "remember harder," the failure will recur.
+  3. **Add a `verify_patch(path)` MCP tool + a repo-wide CLI** over the same library, so the checks are reachable three ways: on demand by Claude, at convert time, and across `patches/*.maxpat` in one sweep. The CLI is what makes the known `locked_bgcolor`-class no-ops impossible to silently re-accumulate — already flagged as a wanted extension in `mcp_server/DESIGN_DECISIONS.md` § (j).
 
-  7. **The "no independent thought" frame**:
-     - Add an explicit declaration to CLAUDE.md: while in this repo, the repo's rule corpus is total. Behavior outside the corpus is either (a) a covered case I missed (find the rule and follow it), (b) a gap in the corpus (propose a rule extension; do not act until it's enshrined), or (c) a violation. There is no fourth option.
-     - This is the meta-rule that frames every other rule. Without it, every rule is opt-in.
+  4. **Move the judgment layer into a tool.** `PRE_EDIT_CHECKLIST.md` is a flat file injected in full on every Edit/Write by `hooks/inject_admonitions.py`, so every item fires regardless of relevance and the signal degrades. Replace with a `checklist(context)` MCP tool that returns only the items whose trigger matches, backed by trigger metadata in the rule index from item 1. `inject_admonitions.py` shrinks to a shim that asks the library for the triggering subset. The `{!pre-edit}` (5) and `{!pre-commit}` (6) heading tags stay as the trigger vocabulary — they already work; they are just too coarse.
 
-  8. **Scope boundary**:
-     - "In the repo" means cwd is the repo or a subdirectory of it. At session start, detect this and switch into total-scope mode. Outside the repo, normal Claude operation.
-     - What about external tools (web fetch, package search, refpage lookup)? These are *resources the repo declares*, so they're in-scope. Anything not declared is out of scope until added.
+  5. **Reduce the remaining hooks to shims.** After items 2–4, `hooks/*.py` (431 lines across 5 files) should hold argument parsing, the Claude Code JSON payload contract, and the exit-code/`permissionDecision` protocol — nothing else. Any Max or repo knowledge left in a hook after this task is a bug.
 
-  **What to deliver**:
-  - An `ENFORCEMENT.md` design doc enumerating every existing rule, its enforcement class, and its enforcement mechanism (existing or proposed).
-  - Hook implementations for all mechanical rules currently lacking enforcement.
-  - A `verify_repo_invariants.py` script for the post-hoc class.
-  - A trigger-tagged rule registry (or scraper) for the judgment-only class.
-  - A `VIOLATIONS.md` log seeded with the known failure modes from `WORK_HISTORY.md` (partial-answer-as-consent, family-resemblance attribute guessing, modify-don't-rebuild, observed-good-binding, etc.).
-  - A new top-level CLAUDE.md section ("**The Repo Is Total**") declaring the no-independent-thought principle and the propose-before-act gate.
+  6. **Violation log, if it earns its place.** The deleted predecessor task proposed `VIOLATIONS.md`. Only add it if item 1 shows judgment-class rules that genuinely cannot be moved into items 2–4 — a log nobody reads is worse than no log. Decide with the classification in hand, not in advance.
 
   **Prerequisites**:
-  - Read every `*.md` rule file in the repo to assemble the full rule inventory.
-  - Audit current `.claude/settings.json` hooks and `hooks/` scripts to know what's already enforced.
-  - Read `PRE_EDIT_CHECKLIST.md` and `hooks/inject_admonitions.py` carefully — the trigger-tagged-admonition pattern is the existing prototype for the judgment-layer mechanism.
+  - Read `mcp_server/DESIGN_DECISIONS.md` (especially § (h) tool/gate sharing and § (j) promotion suggestions) and `mcp_server/README.md` — the caching contract (`_FileCache`, mtime-gated) is what any new disk-backed rule source must use.
+  - Read `mcp_server/claude2max_verify/rules.py` (863 lines) — the rule-function shape every new family must match.
+  - Read `hooks/claude2max_maxpat_content_gate.py` — the reference shim.
+  - Audit `.claude/settings.json` (repo) and the hook registration in `install_global.py` / `uninstall_global.py` — any hook signature change must land in all three.
 
-  **Fits into the larger system**: this is the spine that makes every other rule load-bearing. Without it, every other entry in TASK_QUEUE.md, every CLAUDE.md rule, every checklist item is advisory. With it, the repo defines a strict operating environment that any Claude instance — current or future, this user or another — is bound to.
+  **What NOT to do**:
+  - Do not build a parallel `RULES.yaml` that the prose renders from. The prose `*.md` files are the source of truth and `lookup_rule` already indexes them; the classification from item 1 is an index over that prose, not a replacement for it.
+  - Do not add a rule to the library without a test. `mcp_server/tests` is at 38 passing; every family added in item 2 ships with cases.
+  - Do not let a check block convert without first confirming it produces zero false positives on the existing `patches/` corpus — the 2026-06-21 jsui/v8ui false-positive (custom `declareattribute` names flagged as invalid, blocking convert) is the precedent.
+
+  **Fits into the larger system**: this is the direct continuation of the MCP server task, extending it from "knowledge as tools" to "rules as one library." It replaces the removed Repo-as-Total-Scope Enforcement System task (deleted 2026-08-18), which proposed the same enforcement outcome via a parallel system of standalone scripts, registries, and logs living outside the MCP layer. Same goal, one home instead of two.
 
 - [in progress] **Cycling '74 Projects Crawl** — Systematically crawl `https://cycling74.com/projects` (the community projects gallery), build a searchable database of user projects organized by topic/interest area, and read accompanying patches (`.maxpat` / `.maxproj`) where available to extract patching insights into the same knowledge corpus as the forum and cookbook crawls.
 
@@ -570,18 +549,14 @@ Triggered by adding the new top-priority Opus task ("Claude2Max MCP server + glo
 
 **Pairings noted in task bodies**:
 - *MCP server Phase (i) Step 5 (end-to-end real-world test)* ↔ *Refine the student/user setup process (Sonnet)*. Both want to validate a fresh-machine, fresh-project Claude session against a real onboarding flow. Running them in the same session window lets one fresh-machine setup exercise both. Cross-reference added to MCP Step 5.
-- *MCP server task* ↔ *Repo-as-Total-Scope Enforcement System*. Both address the persuasion-vs-enforcement gap, but from opposite directions — MCP for outside-the-repo, Repo-as-Total-Scope for inside-the-repo. They share infrastructure (hooks, rule registries, mechanical enforcement). Once MCP ships, Repo-as-Total-Scope can reuse the rule-extraction code. Cross-reference already in MCP task body.
 - *MCP server task* ↔ *Community Knowledge Pipeline*. Incoming PRs from forks can include not just prose insights but also test cases that get added to `verify_spec`'s rule library, growing MCP's coverage over time. Cross-reference already in MCP task body.
-
-**Not folded (considered and rejected)**:
-- *Repo-as-Total-Scope Enforcement* — significant overlap with MCP enforcement layer, but Repo-as-Total-Scope is broader (rule categorization, violation logs, "no independent thought" frame, in-repo behavior gating). Folding would dilute MCP's focus. Kept separate with explicit cross-references in both directions.
 
 **Not combined (considered and rejected)**:
 - *Forum Crawl + Cookbook Analysis + Cycling '74 Projects Crawl* — all `[in progress]` knowledge-corpus builds with shared session shape ("pick chunk → scrape → write insights → log resume point"). Each has its own state file and log; combining would mostly be cosmetic and could slow each by forcing context-switching. Left as-is.
 
 **No tasks marked stale or deleted.** Queue is in good shape modulo the one redundancy (subtask 5, now struck) and the one merge (Package Library). The `[in progress]` tasks are real ongoing work, not abandoned.
 
-**Position note**: the new MCP task is now top-priority *by position* (first under "Pending — Opus"). The two prior top-priority Opus tasks (Community Knowledge Pipeline, Repo-as-Total-Scope) are still very relevant and pair conceptually with MCP, but appear demoted in the list ordering. This is positional, not semantic — work on them in whatever sequence makes architectural sense, not strictly by list position.
+**Position note**: the new MCP task is now top-priority *by position* (first under "Pending — Opus"). The other top-priority Opus task (Community Knowledge Pipeline) is still very relevant and pairs conceptually with MCP, but appears demoted in the list ordering. This is positional, not semantic — work on them in whatever sequence makes architectural sense, not strictly by list position.
 
 **Tangential observations** (not action items now):
 - *TouchOSC mk2 Integration* and *Return to claude2max-design skill* are unrelated to the MCP push but both could *consume* MCP's `verify_spec` once it lands — TouchOSC's parallel converter wants the same spec validation; the design skill's layout output would benefit from rule-level checks alongside Phase 3 screenshot verification. Long-term integration story, not action items now.

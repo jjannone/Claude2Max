@@ -498,7 +498,6 @@ value-to-noise:
 - **Validate creation-arg arity** against the refpage `<objarglist>` (e.g.
   `metro` takes 0-1 args; `counter` 0-3) — catches `counter 0 3 5` style mistakes
   the attribute rule can't see. Medium value, low false-positive risk.
-- **A repo-wide `verify_repo_invariants.py`** (already proposed in the
-  Repo-as-Total-Scope task) that runs `gate_maxpat_file` over every `patches/*.maxpat`
+- **A repo-wide `verify_repo_invariants.py`** that runs `gate_maxpat_file` over every `patches/*.maxpat`
   at commit time, so the known `locked_bgcolor`-class no-ops can't silently
   re-accumulate.
