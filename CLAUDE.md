@@ -75,6 +75,20 @@ For example: don't say a repo is private because it looks like a personal projec
 
 This applies beyond GitHub to any external state that can change independently of the local working directory.
 
+**This repo's own tooling counts as state to verify.** The converter, the verifier, the MCP server, and the hooks change independently of the prose that describes them — `CLAUDE.md`, `WORK_HISTORY.md`, `TASK_QUEUE.md`, and the design docs record intent at the time of writing, and code drifts from it. So before scoping work against any of them, or claiming what one of them does or doesn't cover, determine the current behavior by importing and running it. A `grep` for the function definitions or a call to the entry point is seconds of work and removes the inference entirely.
+
+For instance: `WORK_HISTORY.md` accurately noted that the gate's "principle checks still warn-not-block." Read as prose, that supports the inference "those checks aren't built yet" — and a task was scoped around writing them. `grep "^def rule_" mcp_server/claude2max_verify/rules.py` shows 16 rule functions, 8 of them exactly those checks, already implemented and running at `WARNING`. The prose was correct; the inference from it was not. Running the code makes the inference unnecessary.
+
+Know which tier a claim falls in, because the verification differs and only the first is a plain execution:
+
+| Claim about… | How to verify |
+|---|---|
+| Repo Python tooling — converter, verifier, MCP server, hooks | Import and run it; read the output |
+| Max static facts — object names, attributes, messages | `lookup_object` / `list_attributes` / refpages / `package_objects.json` / the observed-attrs corpus |
+| Max runtime behavior — what a patch does when it executes | `c2m.inspect` against a running patch, which requires the user driving Max |
+
+Max itself cannot be executed from here — that limitation is why the second and third rows exist as separate lookup paths rather than collapsing into "just run it."
+
 ## Never Write API Names From Memory
 
 Never write a method name, property name, attribute name, function name, CSS property, shell flag, environment variable, or any other API identifier from memory. If the name didn't come from a documentation page, header file, refpage, autocomplete, or other authoritative source within the last few seconds, it is a guess — and a guess is forbidden. This applies across every language and every environment, not just Max.
