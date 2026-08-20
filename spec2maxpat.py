@@ -1413,7 +1413,13 @@ _SKIP_BOX_IDS = {"obj-spec-embed", "obj-title"}
 #   - identity: varname (scripting name — referenced by JS via patcher.getnamed())
 #   - visibility: hidden (panels/annotations start hidden; JS unhides current step)
 #   - z-order: background (panels render BEHIND highlighted objects, not on top)
-#   - panel chrome: bordercolor / border / rounded / locked_bgcolor
+#   - panel chrome: bordercolor / border / rounded
+#   - patcher-box chrome: locked_bgcolor  --  NOT a panel attr. Real only on `p`
+#     (826 boxes corpus-wide); absent from panel's refpage, from the jbox base
+#     set, and from all 12,920 panel boxes in the help corpus. Listed here
+#     because this whitelist is class-agnostic and `p` boxes legitimately carry
+#     it; the class-aware check is rule_attribute_resolves, which correctly
+#     flags it on panel. Do not read this list as "valid on the classes above".
 #   - styling: bgcolor / textcolor / color / fontsize / fontface / fontname
 #   - bubble comments: bubble / bubbleside / bubblepoint / bubbletextmargin
 _PRESERVE_ATTRS = {"bgcolor", "textcolor", "color", "fontsize", "fontface", "fontname",

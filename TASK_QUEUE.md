@@ -15,19 +15,17 @@ Format: `[pending]` = not started, `[complete]` = done (move to Done section), `
 
 Tasks requiring deep analysis, architecture decisions, or sustained judgment. Prompt the user to run `/model claude-opus-4-7` before starting any of these.
 
-- [pending] **Review the attribute conflicts the anti-guessing gate flags — why so few, how to uncover more, how to resolve them** — The 2026-06-21 anti-guessing convert gate (`claude2max_verify`, attribute validity = `own refpage ∪ jbox`) flags exactly **4** attrs across all production patches: `panel/locked_bgcolor`, `number/tribordercolor`, `multislider/contrast`, `multislider/bgfillcolor`. Each is absent from the object's refpage AND jbox AND every shipped Cycling '74 patch on that class — three signals they're real silent no-ops a prior session introduced. This task is a focused investigation in three parts:
+- [pending] **`extract_spec` picks the first marker-bearing box — a stray stub shadows the real embed; repair `4step-sequencer.maxpat`** — Found 2026-08-18 while cleaning the gate-flagged attrs. Two defects, one in the converter and one in a patch, that compound into a silently destructive `convert`.
 
-  1. **Why only these few?** Determine whether 4 is the true count or an artifact of limited coverage. The current check only flags an attr when the object HAS a refpage (so the valid set can be enumerated) AND the attr is object-specific-looking. Objects with no refpage are skipped entirely; `unverified`-flagged and abstraction objects are skipped; non-`attrs` mismatches (wrong message names, wrong creation args) aren't checked at all. Enumerate what the gate currently CANNOT see, so "only 4" is understood as "4 within the current detection envelope," not "4 total."
+  **Defect 1 — no discriminator on the embed scan.** `extract_spec()` in `spec2maxpat.py` walks `maxpat["patcher"]["boxes"]` and returns the first box whose `code` or `text` contains `--- CLAUDE2MAX SPEC ---`. It does not check the box id or maxclass. Any other box carrying the marker — a leftover from a prior cycle, a comment quoting the format, a tutorial box explaining it — wins if it sorts earlier. `_SKIP_BOX_IDS` already names `obj-spec-embed` as canonical scaffolding, so the discriminator exists; the extractor just doesn't use it. Fix: prefer `id == "obj-spec-embed"`, fall back to the first `text.codebox` match, and when more than one candidate carries the marker, say so rather than silently choosing.
 
-  2. **How to uncover more.** The detection envelope is narrow because refpage `<attributelist>` is incomplete and there's no authoritative complete attr set. The **`.maxhelp` Corpus Crawl** task (also queued) is the key enabler: a `maxclass → observed-attrs` map mined from help patches gives a far more complete valid set, which both (a) removes any remaining false positives and (b) lets the gate confidently flag MORE real no-ops it currently can't distinguish from refpage gaps. Other avenues: validate message names (not just attrs) against refpage `<methodlist>`; validate creation-arg counts; extend beyond UI color attrs to all attr families. Decide which are worth building.
+  **Defect 2 — `4step-sequencer.maxpat` carries both a decoy and a corrupt real embed.** `obj-22` is a `newobj` whose entire text is `--- CLAUDE2MAX SPEC ---\n{"name":"4-step-sequencer"}\n--- END SPEC ---` — a stub with no objects and no connections. Because it precedes `obj-spec-embed`, `extract_spec` returns it, so the patch reports `spec.objects = 0`. The real embed (`obj-spec-embed`, `code`, 4,403-char body) does not parse either: it truncates mid-string, and the truncation point shows why — the spec contains an object *named* `obj-spec-embed` whose `attrs.text` is itself a spec embed. A sync captured the spec-embed box as a spec object, producing self-reference. `_SKIP_BOX_IDS` should have prevented this, so either the spec predates that guard or a path bypasses it — determine which, because a live bypass would keep reproducing this.
 
-  3. **How to resolve the ones found.** For the current 4 (and any newly uncovered): confirm each is genuinely invalid (ideally by instantiating in Max and inspecting, or via the `.maxhelp` observed-attrs map), then clean them from the affected patches via sync → remove the attr from the embedded spec + boxes → convert. Until cleaned, `convert` blocks those patches (escape hatch: `--allow-unverified`). Capture the resolution workflow as a repeatable procedure (the gate will keep finding these as more patches are checked).
+  **Why this matters:** `convert` consumes whatever `extract_spec` returns. On this patch today that is a 27-character stub, so converting `4step-sequencer.maxpat` would emit an essentially empty patch and destroy all 24 boxes. The patch is currently intact and the gate reports it clean — the damage is latent, triggered by the next `convert`. Nothing warns.
 
-  **Why this matters:** the gate is only as strong as its detection envelope. "4 conflicts found" should not be read as "the patches are 99.9% clean" — it's the floor of what the current narrow check can prove. Understanding the envelope, widening it (chiefly via the `.maxhelp` observed-attrs map), and having a clean resolution procedure is what turns the gate from "catches the obvious" into "catches the class."
+  **Work**: (a) add the discriminator + a multi-candidate warning to `extract_spec`; (b) determine whether the `_SKIP_BOX_IDS` bypass is live by tracing which sync path wrote the self-referential object; (c) reconstruct `4step-sequencer.maxpat`'s spec from its 24 boxes via `sync` and delete the `obj-22` decoy; (d) add a rule to `claude2max_verify` for "more than one box carries the spec marker" and for "embed present but does not parse" — both are silent today. Item (d) overlaps the *embedded-spec presence* family already scoped in the MCP-enforcement task item 3; build it there if that task runs first.
 
-  **Prereqs / pairing:** strongly paired with the `.maxhelp` Corpus Crawl task (its observed-attrs extractor is the main lever for parts 2–3). Touches `mcp_server/claude2max_verify/rules.py` (`rule_attribute_resolves`), `spec2maxpat.py` (`_GateResolver`, `build_resolver`), and `DESIGN_DECISIONS.md` § (h).
-
-  **Source:** 2026-06-21, user — after the gate flagged the 4 attrs: "review this and see why only these few conflicts exist, how to uncover more, and how to resolve them."
+  **Model**: Sonnet — the diagnosis is done, the remaining work is a discriminator, a trace, and a patch repair against a known-good box list.
 
 - [in progress] **`.maxhelp` Corpus Crawl — extract canonical usage from Max's help patches** — Systematically read every `.maxhelp` file shipped with Max and installed packages, and extract canonical-usage knowledge into the corpus: which attributes/messages each object *actually uses*, real wiring idioms, default box sizes, and per-object gotchas. ~5,266 files total (~2,104 core: 973 in `help/` + 1,131 in bundled `packages/`; ~3,162 in user `~/Documents/Max 9/Packages/`). All are standard `.maxpat` JSON — parse with the existing box-walk approach (`json.load` → recurse `patcher.boxes`, including nested `patcher` subpatchers), no MCT decode needed; all local (no network / Cloudflare-WAF concerns).
 
@@ -243,7 +241,21 @@ Tasks requiring deep analysis, architecture decisions, or sustained judgment. Pr
 
   **Why this order**: item 1 is the instrument, item 2 is the measurement, item 3 is the change the measurement authorizes. Reversing 1–3 means promoting rules to blocking status on the evidence of 5 in-repo patches, which is how the jsui/v8ui regression happened. Item 4 is placed after the empirical work so the categories come from observed behavior; items 5–6 are downstream cleanup.
 
-  **Soft prerequisite (separate task)**: *"Review the attribute conflicts the anti-guessing gate flags."* The resolver rules currently report 44 errors across `patches/*.maxpat` — all the known `locked_bgcolor` / `tribordercolor` / `contrast` / `bgfillcolor` silent-no-op class. Those are noise in any sweep result; clearing them first gives items 2–3 a clean baseline. Not a blocker, but cheap and directly upstream.
+  **Model per item** — this task spans both tiers; it sits under "Pending — Opus" by its hardest parts, not uniformly. Items 2 and 3 are worth running as a model switch mid-session rather than picking one.
+
+  | Item | Model | Why |
+  |---|---|---|
+  | 1. Sweep CLI + `verify_patch` | Sonnet | Wiring over a library that already exists |
+  | 2. Corpus validation | Sonnet to run · **Opus** to read | Running the sweep is mechanical; deciding what the table means is not |
+  | 3. Promote warn→block | **Opus** decides · Sonnet writes | Promotion is a judgment call; the rule function and tests are typing |
+  | 4. Classify ~75 rule sections | **Opus** | ~2,680 lines of dense rule prose, judgment throughout |
+  | 5. `checklist(context)` tool | Sonnet | Implementation once item 4's metadata exists |
+  | 6. Hooks → shims | Sonnet | Mechanical refactor |
+  | 7. Violations log | Sonnet, or skip | Small and conditional |
+
+  The dividing line: **Opus wherever the call is "is this flag a real defect or just our house style?"** — that question is the whole of items 2–4. Sonnet for everything that is building to a settled spec.
+
+  **Soft prerequisite — DONE 2026-08-18.** *"Review the attribute conflicts the anti-guessing gate flags"* is complete: all 44 resolver errors across `patches/*.maxpat` were confirmed genuine and removed, so items 1–3 now start from a clean baseline (gate reports 0 errors on all 5 patches). That task also established the envelope figure items 1–2 build on: **66.5% of attribute occurrences are inspected**, with the no-refpage blind spot not yet biting because `patches/` contains no external-heavy patch. Expect that number to fall sharply once the sweep runs over the help corpus, where 3,180 objects have no enumerable refpage — quantifying that drop is exactly what item 2 is for.
 
 
   **Prerequisites**:
@@ -510,6 +522,25 @@ Tasks that are primarily implementation, file editing, or verification — no de
 ---
 
 ## Done
+
+- [complete] **Review the attribute conflicts the anti-guessing gate flags** — completed 2026-08-18. All three parts answered by measurement, and all 44 occurrences cleaned.
+
+  **Part 1 — why only 4.** Measured the envelope rather than assuming it was narrow: across `patches/*.maxpat`, **1,196 of 1,798 attribute occurrences (66.5%) are actually inspected**. The remainder is 507 universal-box attrs (always valid by construction), 80 attr-less boxes, and 15 on `text.codebox` (custom-script class, deliberately exempt). **Zero** were skipped for "no refpage" — the envelope hole the task hypothesised does not bite on this corpus, because these patches use only well-documented built-ins. So "4 distinct pairs / 44 occurrences" is close to the true count *for these patches*; the no-refpage blind spot would only appear in patches using externals (bach, FluCoMa, …), none of which are in `patches/`.
+
+  **Part 2 — the widening lever is already installed.** `_GateResolver.attrs_for()` in `spec2maxpat.py` already returns `own refpage ∪ jbox base ∪ help-corpus observed` (≥3-box floor, rnbo/frozen filtered). The `.maxhelp` observed-attrs map named as the key enabler was wired in on 2026-06-21. The 4 therefore survive the *widened* envelope, not the narrow one — three independent negatives each.
+
+  **Part 3 — all 4 confirmed invalid, and all 4 are family-resemblance traps.** Each attr is real, on a different class: `locked_bgcolor` is real only on `p` (826 boxes corpus-wide, 0 of 12,920 `panel` boxes); `tribordercolor` on `live.slider`/`live.gain~`/`live.dial` (0 of 13,097 `number`); `bgfillcolor` on `panel`/`umenu`/`message` (0 of 2,535 `multislider`); `contrast` only on `gridmeter~` (0 of 2,535 `multislider`). All 44 removals were provably zero-visual-change — `locked_bgcolor` held the integer `1` (never a color) on panels that already set `bgcolor`+`bordercolor`; `tribordercolor` and `bgfillcolor` duplicated `tricolor`/`bgcolor` at identical rgba; `contrast` has no analogue. Verified after cleaning: every file semantically identical modulo the 4 attrs, gate reports 0 errors on all 5 patches, 38/38 verify tests pass.
+
+  **Root cause found**: `_PRESERVE_ATTRS` in `spec2maxpat.py` documented `locked_bgcolor` under "panel chrome: bordercolor / border / rounded / locked_bgcolor" — reading as an assertion it is valid on `panel`. The list is class-agnostic (it is a sync whitelist of attr *names*), and `locked_bgcolor` is legitimately real on `p`, so the entry stays; the comment was corrected to say so explicitly.
+
+  **Repeatable resolution procedure** (the gate will keep finding these):
+  1. `S.gate_maxpat_file(path)` per patch → distinct `(class, attr)` pairs + occurrence counts.
+  2. For each pair, check all three sources: `resolver.attrs_for(cls)`, `resolver.base_attrs()`, `resolver.observed_attrs(cls)`, plus the RAW count in `maxhelp/maxhelp_observed_attrs.json` under `["objects"][cls]["attrs"]` (note: `_meta` / `objects` / `maxclass_counts` are the top-level keys — the class map is nested under `objects`).
+  3. Find where the attr IS real: scan the corpus for other classes using it. That names the family-resemblance source and usually the intended attr.
+  4. Read the actual values and siblings before deleting. Safe when the correct attr is already present with the same value, or when the value was never of the right type.
+  5. Remove from **both** the boxes and the embedded spec. The embed lives in `box["code"]` on `text.codebox` (id `obj-spec-embed`) — **not** `box["text"]`.
+  6. Do **not** `convert` to apply the fix. Edit in place, then verify semantically: parse old and new, strip the removed attrs from both, assert deep equality.
+  7. Re-run the gate + `python3 mcp_server/tests/test_verify.py`.
 
 - [complete] **c2m.inspect coll/table support** — completed 2026-06-21. Wired the async coll/table dumpers into `c2m_inspect.js`'s `dump()` via `reachNamedWrite()` (getnamed→`Maxobj.message("write",file)` first, then `messnamed("NAME_INSPECT",…)` relay fallback); `SENTINEL` pre-write + `notReached()` turns an unreached object into a structured setup error, not a stale read. **Live-verified end-to-end** in `c2m_inspect_test.maxpat` (relay wires `[receive TEST_COLL_INSPECT]→[coll TEST_COLL]` + table equiv. added via sync→edit→convert): coll→`{1:alpha,…}`, table→`[100,…,800,0×8]`, error path→structured setup error. Two bugs found+fixed live during verification: (a) `parseTableText` rewritten for the **real** flat `table v0 v1 …` write format (was assuming a `data N …;` block); (b) JS `File` "write" mode doesn't truncate — added `f.eof = f.position` in `writefile()` so shorter dumps don't leave a stale tail. Both enshrined as pitfalls in `patching/MAX_PATCHING.md`. Skill/CLAUDE docs synced. v2 (two-way send/watch) remains queued.
 
