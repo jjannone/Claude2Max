@@ -163,6 +163,10 @@ This governs the prose, not the rigor. Do not simplify the underlying work, drop
 
 The recognition signal: if a sentence needs a second read to find its subject, or stacks more than one dash-clause, rewrite it before sending. When in doubt, imagine restating it out loud to someone who just walked in.
 
+**A short sentence is not automatically a plain one.** The signal above catches sprawl. Compression fails the same way: a brief sentence that packs several ideas together, coins a compound noun on the spot, or points at something by category instead of naming it ("the same hazard the repo has a rule about") leaves the reader to supply what you left out. **Second signal: if a sentence assumes the reader can fill in a name, a definition, or a step you didn't state, rewrite it.** Name the file, name the rule, spell out the shorthand — or cut the reference.
+
+The principle underneath both signals is the same: the reader should not have to supply anything you didn't give them. Sprawl buries it; compression omits it.
+
 ## Describe Flow in the Target Environment's Own Directional Vocabulary — Binding Rule
 
 When describing how parts of a system connect, use the spatial and directional words that system itself uses. Vocabulary borrowed from an adjacent domain reads as non-native — and is actively wrong when the borrowed word already means something *else* in the target, because the reader applies the local meaning and understands the opposite of what was meant.

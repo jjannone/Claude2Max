@@ -678,6 +678,91 @@ Tasks that are primarily implementation, file editing, or verification — no de
 
 Cross-task relationships, soft prerequisites, supersession notes, and hygiene decisions discovered during periodic reviews. Read alongside the task entries above — this section is where the *relationships between* tasks live, vs. the per-task bodies which describe each task in isolation. Re-do the analysis when the queue contents above have drifted materially from the dates below.
 
+### Hygiene note — 2026-08-21 — dependency-ordered priority pass
+
+The prior dated note was 2026-06-21; the queue drifted materially since (the
+`extract_spec` task added 2026-08-18, rule-enforcement items 1/2/3/3b landed
+2026-08-20, `/c2m-propose` added 2026-08-21, `.maxhelp` deliverable (e) added
+2026-08-21). This pass re-derives the ordering from **dependency edges**, not
+from value ranking or list position. Six edges were previously unstated or
+backwards; those are marked **[CHANGED]**.
+
+**Pre-flight for any corpus sweep (not a blocker today).** The
+`CORPUS_SWEEP_RESULTS.md` reproducibility caveat records macOS denying reads
+under `~/Documents/Max 9/Packages` (TCC / Full Disk Access). **Verified
+2026-08-21: reads currently succeed — all 3,162 user-package `.maxhelp` files
+enumerate.** So this is not blocking now, but confirm it before every sweep:
+a silent denial drops 8,815 of 11,873 files (74% of the corpus) and the
+resulting totals still look plausible. One `find ~/Documents/"Max 9"/Packages
+-name "*.maxhelp" | wc -l` before starting is the whole check.
+
+#### Group A — spec-embed hazard. Strict internal order.
+
+Only item in the queue that can destroy work today: converting
+`4step-sequencer.maxpat` currently emits a 27-character stub and wipes 24 boxes,
+with no warning.
+
+1. **`extract_spec` discriminator** (task item a). Goes first — it is the change
+   that makes `convert` non-destructive. One function, small.
+2. **Trace the `_SKIP_BOX_IDS` bypass** (task item b). **[CHANGED]** — must
+   precede the repair, not accompany it. If a sync path still writes the
+   spec-embed box into the spec as an object, repairing `4step-sequencer` *via
+   sync* reproduces the self-referential spec the repair exists to remove.
+3. **Detection rules** — "more than one box carries the spec marker" and "embed
+   present but does not parse" (task item d ≡ MCP-enforcement **item 8**).
+   **[CHANGED]** — before the repair, not after. Today exactly one affected
+   patch is known and the blast radius is unmeasured; the rule is what measures
+   it. Build it in the rule library per the existing cross-reference; keep the
+   converter-side discriminator in step 1.
+4. **Repair `4step-sequencer` + anything step 3 surfaces** (task item c).
+
+#### Group B — corpus
+
+1. **Observed-MESSAGES corpus** (`.maxhelp` deliverable e). Run the pre-flight
+   above first.
+2. **Promote `message-unverified` WARNING → ERROR** (rule-enforcement
+   **item 11**). **[CHANGED]** — this downstream item was absent from the
+   informal priority list. Hard-blocked on B1 by the deliverable (e) body
+   ("do not attempt that promotion before this lands"), and it is the payoff
+   that justifies B1: `message-unverified` is the largest warning family in the
+   corpus sweep (4,717 hits / 964 files).
+3. **JS API census promotion** (deliverable d) and **4. `maxhelp/` index entry**
+   (deliverable c). Both independent — no prerequisites, nothing waits on them.
+   Slot into any short session.
+
+#### Group C — knowledge quality
+
+1. **`.maxhelp` prose-insight extraction** (deliverable b). **[CHANGED]** —
+   ahead of the package pass, because deliverable (b)'s own body names "feeds
+   `packages/package_objects.json` `use_when` judgments" as payoff 2.
+2. **Package library `use_when` quality pass** — after C1 has produced material.
+3. **`/c2m-propose`**. Soft-dependent on C2: what separates a proposal that is
+   *surprising* from one that is *generic* is the package library knowing what
+   is actually installed, which is exactly what the `use_when` pass sharpens.
+   Not blocked — it may jump to directly after Group A at some cost to
+   suggestion quality. Note it is **unblocked by item 3b** (2026-08-20): before
+   that fix the resolver was ~98% false-positive on the error tier, which would
+   have made a name-verifying creative tool unusable.
+
+#### Group D — student chain. **[CHANGED]** — this pair was ordered backwards.
+
+1. **Refine the student/user setup process**, then
+2. **Community Knowledge Pipeline**. The pipeline harvests insights from student
+   forks and PRs them upstream; that presupposes students *have* forks, which is
+   what the setup refinement fixes. Built in the reverse order, the pipeline is a
+   collection mechanism with nothing to collect.
+
+#### Unsequenced — no dependency edges in either direction
+
+- **Forum Crawl / Cookbook Analysis / C74 Projects Crawl** — feed C1 and C2, so
+  running them alongside Group C compounds; otherwise free-floating. The
+  2026-05-28 decision not to merge them still holds.
+- **`c2m.inspect` v2** — worth pulling forward if debugging sessions are
+  expected, since it lowers the cost of every subsequent one.
+- **Return to `c2m-design` + Phase 3** and **TouchOSC mk2** — both were noted
+  2026-05-28 as wanting `verify_spec`, which landed in Phase (iii). Unblocked;
+  nothing depends on either.
+
 ### Hygiene note — 2026-06-21 (session 2)
 
 Since the 2026-06-21 session 1 note: **MCP Phase (iv+) is fully complete** — global skill (`skills/max-patching/SKILL.md`), enforcement hook (`hooks/claude2max_max_edit_gate.py`), one-command installer/uninstaller (`install_global.py` / `uninstall_global.py`), and three CLAUDE.md additions (global skill docs, `.c2m-current-project` pointer, `install_global.py` offer in New User Setup Step 3) all shipped and committed. **`.maxhelp` deliverable (a) is complete** — `maxhelp_observed_attrs.json` wired into `_GateResolver` with alias fix, ≥3-box floor, `^rnbo`/`^frozen` filter. **`patches/4step-sequencer.maxpat`** committed (untracked file from prior session). TASK_QUEUE.md updated to reflect Phase (iv+) completion and deliverable (a) done. Queue structure otherwise unchanged — all pairings from 2026-06-20 remain valid. **Next Opus session**: review the 4 flagged attribute conflicts + `.maxhelp` prose-insight extraction (b) + JS census promotion (d).
