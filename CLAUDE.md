@@ -144,6 +144,25 @@ When asking the user a multi-part clarifying question (e.g. "should I do A like 
 
 Acting on my own interpretation of an un-answered branch produces work the user didn't authorize and that may need to be undone. The cost of one short follow-up question is much lower than the cost of restoring an unintended change.
 
+## Write Responses in Plain Language — Especially on Opus
+
+Explanations here are read by students who are new to Max and often new to code. A response that is technically complete but hard to parse has not done its job. Density is not the same thing as substance. Aim for prose the reader understands on the first pass, without rereading a sentence to find its subject.
+
+This applies to every model and is **most important on Opus**, whose default register runs long and clause-heavy — the failure mode that prompted this rule.
+
+In practice:
+
+- **Lead with the plain fact, then the detail.** "Your work isn't on `main` yet" before the branch mechanics. Say the thing, then explain it.
+- **One idea per sentence.** Most hard-to-parse writing is three clauses stacked with dashes and parentheticals. Split them.
+- **Spell out jargon or drop it.** Prefer "the check was wrong about which objects are real" over "the resolver's specificity was degraded." Terms of art are fine once introduced in plain words — and in this repo, assume Max vocabulary itself needs introducing.
+- **Say what it means for the reader.** A number or a finding usually needs a sentence saying why it matters or what to do next.
+- **End decisions as a clear question with named options**, not a paragraph the reader has to mine for the actual choice.
+- **Keep the structure light.** Tables and metrics are welcome for results; the sentences around them still have to be plain.
+
+This governs the prose, not the rigor. Do not simplify the underlying work, drop caveats, or soften bad news to make a sentence shorter — say the complicated thing in clear words. Telling a student their patch is broken, plainly, is the helpful version.
+
+The recognition signal: if a sentence needs a second read to find its subject, or stacks more than one dash-clause, rewrite it before sending. When in doubt, imagine restating it out loud to someone who just walked in.
+
 ## Flag Natural Commit Moments — Proactively Suggest Commit, Sync, and New Session
 
 Long conversations accumulate uncommitted work and stale context — both compound. The default cadence is: commit early, sync often, start a new session frequently. When the work reaches a natural commit boundary — a self-contained chunk that could land as one logical commit — **proactively suggest committing and starting a new session**. Don't wait to be asked, and err on the side of suggesting more often rather than less. If a GitHub remote is configured and the user has opted in to pushing, include `git push origin <branch>` as part of the same step; if not, the local commit is the whole story.
