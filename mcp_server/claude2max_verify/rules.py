@@ -109,7 +109,28 @@ _CUSTOM_ATTR_OBJECTS = {
 _UNIVERSAL_BOX_ATTRS = {
     "comment", "varname", "hidden", "presentation", "presentation_rect",
     "patching_rect", "rect", "fontsize", "fontname", "fontface",
+    # linecount: how many lines a box renders. Absent from jbox.maxref.xml and
+    # from every max-ref refpage, but observed in the C74 corpus on classes with
+    # nothing in common (trigger, folder, string.remove, jit.gl.layer,
+    # jit.time.perlin) — the signature of universal box metadata Max writes, not
+    # an object-specific attribute. Same class of key as the rest of this set.
+    "linecount",
 }
+
+# Attribute-name prefixes written onto boxes by Max's OWN tooling rather than by
+# a patch author. They are not user-settable attributes, appear in no refpage,
+# and flagging them says nothing about whether the author guessed a name — the
+# author never typed them. Measured on the 11,873-file C74 corpus these were
+# 98.6% of every attribute-invalid hit (21,185 of 21,487), which is what made
+# the ERROR tier unusable:
+#   rnbo*   — RNBO stamps rnbo_serial / rnbo_uniqueid / rnbo_classname /
+#             rnbo_extra_attributes / rnboinfo on boxes inside an rnbo~ patcher
+#   frozen* — patch/device freezing stores frozen_object_attributes and
+#             frozen_box_attributes
+# The resolver already filters these OUT of the observed-attrs allowlist
+# (see _GateResolver._load_observed_attrs); this is the matching suppression on
+# the reporting side, so the two halves agree.
+_TOOL_STAMPED_ATTR_PREFIXES = ("rnbo", "frozen")
 
 # Messages nearly every object accepts — never flag these as suspect. Kept small
 # and high-confidence: flagging a REAL message as fake is worse than missing one.
@@ -136,6 +157,20 @@ _PASSTHROUGH_TARGETS = {
 def _is_symbol_selector(s: str) -> bool:
     """A leading-alphabetic token that reads as a method name (not a number / $1)."""
     return bool(s) and s[0].isalpha() and all(c.isalnum() or c in "_." for c in s)
+
+
+def _is_numeric_literal(text: str) -> bool:
+    """True for an object-box text that is just a number (`5`, `-1`, `1.`).
+
+    Max instantiates a bare number in an object box as an int/float constant, so
+    such a box is valid and must not be reported as an unknown object name.
+    Observed throughout C74's own shipped patches, which do not ship broken boxes.
+    """
+    try:
+        float(text)
+        return True
+    except (TypeError, ValueError):
+        return False
 
 
 def _is_unverified(obj) -> bool:
@@ -614,6 +649,8 @@ def rule_object_resolves(ctx: SpecContext, resolver) -> list:
         name = _classname(ctx, obj)
         if not name or name in _STRUCTURAL_NEWOBJ or name.startswith(("#", "$")):
             continue
+        if _is_numeric_literal(name):
+            continue  # a bare number in an object box is an int/float constant
         if resolver.resolve_object(name) is not None:
             continue
         if resolver.abstraction_exists(name):
@@ -702,6 +739,8 @@ def rule_attribute_resolves(ctx: SpecContext, resolver) -> list:
         for a in attrs:
             if a in _UNIVERSAL_BOX_ATTRS or a in valid:
                 continue
+            if a.startswith(_TOOL_STAMPED_ATTR_PREFIXES):
+                continue  # written by Max's tooling, not by the patch author
             out.append(Violation(
                 "attribute-invalid", ERROR, oid,
                 f"'{a}' is not a valid attribute of '{cls}' (checked against its "

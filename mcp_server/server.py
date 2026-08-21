@@ -19,6 +19,8 @@ search_packages()   Search 2,795-object package library by term.
 lookup_attribute()  Attribute validity check for a specific attr.
 list_attributes()   All valid attrs for an object (bulk verification).
 verify_spec()       Static binding-rule check on a spec before converting.
+verify_patch()      Same checks, run directly against a .maxpat/.maxhelp/.amxd
+                    file on disk — single file or a directory sweep.
 search_pitfalls()   Search Common Pitfalls + forum/cookbook insights by term.
 lookup_rule()       Find a binding rule by a fragment of its name.
 essentials()        Backward-compat alias for load(["core"]).
@@ -56,6 +58,8 @@ sys.path.insert(0, str(_MCP_DIR))   # so claude2max_verify resolves when importe
 
 from spec2maxpat import RefpageCache  # noqa: E402 — path must be set first
 from spec2maxpat import build_resolver as _build_resolver  # noqa: E402
+from spec2maxpat import iter_verify_targets as _iter_verify_targets  # noqa: E402
+from spec2maxpat import verify_patch_file as _verify_patch_file  # noqa: E402
 
 # Shared rule library — also imported by spec2maxpat.py convert, so verification
 # fires both via this tool AND at convert time (single source of truth for rules).
@@ -914,7 +918,46 @@ def lookup_object(name: str) -> dict:
             "summary": "\n".join(summary_lines),
         }
 
-    # 3 — Not found. Offer LLM did-you-mean suggestions (each validated to be a
+    # 3 — Max's own object registry + the alias map, via the SAME resolver the
+    # convert gate uses. Without this the tool is STRICTER than the gate: `/`,
+    # `i`, `v`, `jit.gl.layer` and the jit.mo family would be reported as
+    # non-existent while convert happily builds them. That tool-vs-gate
+    # divergence is exactly the bug class fixed once already for
+    # lookup_attribute/list_attributes — one resolver, one answer.
+    _r = _resolver()
+    if _r is not None:
+        alias = getattr(_r, "_aliases", {}).get(name)
+        if alias:
+            a = _refpage.lookup(alias)
+            if a is not None:
+                lines = [
+                    f"FOUND (alias): '{name}' is Max shorthand for '{alias}'.",
+                    f"  {a['digest']}" if a["digest"] else "",
+                    f"  inlets={a['numinlets']}  outlets={a['numoutlets']}",
+                    f"  documented under '{alias}' — its refpage is authoritative.",
+                ]
+                return {
+                    "found": True, "source": "c74-refpage-alias", "alias_of": alias,
+                    "numinlets": a["numinlets"], "numoutlets": a["numoutlets"],
+                    "outlettype": a["outlettype"], "digest": a["digest"],
+                    "use_when": "", "deprecated_by": "",
+                    "summary": "\n".join(l for l in lines if l),
+                }
+        if _r.resolve_object(name) is not None:
+            return {
+                "found": True, "source": "max-object-db",
+                "numinlets": 0, "numoutlets": 0, "outlettype": [], "digest": "",
+                "use_when": "", "deprecated_by": "",
+                "summary": (
+                    f"FOUND in Max's object registry (interfaces/obj-qlookup.json): "
+                    f"'{name}' is a real object Max will instantiate, but it ships "
+                    f"no refpage, so inlet/outlet counts and documentation are not "
+                    f"available from here. Safe to use; declare inlets/outlets "
+                    f"explicitly in the spec."
+                ),
+            }
+
+    # 4 — Not found. Offer LLM did-you-mean suggestions (each validated to be a
     # real object). This is the canonical correction moment: a guessed name
     # missed, and the most useful next thing is the real object that was meant.
     try:
@@ -1505,6 +1548,92 @@ def verify_spec(spec_json: str) -> dict:
     resolver = _resolver()  # cached; SAME resolver lookup_attribute/list_attributes use
     result = _verify_spec_json(spec_json, resolver=resolver)
     result["report"] = _verify_report(result)
+    return result
+
+
+@mcp.tool()
+def verify_patch(path: str, sweep: bool = False, use_resolver: bool = True) -> dict:
+    """
+    Run the FULL binding-rule library against a .maxpat/.maxhelp/.amxd file ON DISK.
+
+    Unlike verify_spec() (which takes spec JSON you already have in hand),
+    this reads the file directly — the tool to reach for after a build, a
+    sync, or a hand-edit, when you want to know "is this patch clean?"
+    without re-extracting the spec yourself first.
+
+    Checks the embedded Claude2Max spec when present (full fidelity —
+    presentation/layout rules included). If the file has no embedded spec
+    (a native C74 patch, an un-synced hand-edit, a help file), it falls back
+    to checking every nested subpatcher scope directly against the same rule
+    library — this is what makes it usable for auditing patches Claude2Max
+    never touched, not just ones it built.
+
+    Parameters
+    ----------
+    path         — absolute or relative path to a .maxpat / .maxhelp / .amxd
+                   file, OR a directory (with sweep=True) to check every such
+                   file underneath it in one call.
+    sweep        — if True and path is a directory, checks every
+                   .maxpat/.maxhelp/.amxd file found recursively and returns
+                   an aggregate result instead of a single-file one.
+    use_resolver — if False, skip the anti-guessing resolver rules
+                   (object/attribute/message existence) and check only the
+                   structural principle rules (presentation, labels, hidden
+                   plumbing, etc). Useful when auditing patches you know
+                   weren't built with Claude2Max — resolver checks are exactly
+                   as meaningful there, but you may want a faster/lighter pass.
+
+    Return keys (single file)
+    --------------------------
+    checked        — False if the file couldn't be parsed or the verify
+                     library is unavailable (see `error`).
+    mode           — "embedded-spec" or "native-scopes".
+    scopes_checked — how many patcher scopes (main + subpatchers) were run.
+    ok, counts, violations, summary, report — same shape as verify_spec().
+
+    Return keys (sweep=True)
+    -------------------------
+    swept       — number of files found and checked.
+    files_with_errors / files_with_warnings — counts.
+    by_rule     — {rule_name: {count, severity, examples: [path:location, ...]}}
+    results     — per-file result dicts (as above, each with a `path` key).
+
+    Smoke tests
+    -----------
+    verify_patch("patches/some-patch.maxpat") → single-file result, mode
+    reflects whether an embedded spec was found.
+    verify_patch("/Applications/Max.app/.../help", sweep=True) → aggregate
+    result over every .maxpat/.maxhelp/.amxd under that directory.
+    """
+    resolver = _resolver() if use_resolver else None
+
+    if sweep:
+        targets = _iter_verify_targets([path])
+        results = []
+        for p in targets:
+            res = _verify_patch_file(str(p), resolver=resolver, use_resolver=use_resolver)
+            res["path"] = str(p)
+            results.append(res)
+        by_rule: dict = {}
+        for r in results:
+            for v in r.get("violations", []):
+                entry = by_rule.setdefault(
+                    v["rule"], {"count": 0, "severity": v["severity"], "examples": []})
+                entry["count"] += 1
+                if len(entry["examples"]) < 3:
+                    entry["examples"].append(f"{r['path']}:{v['location']}")
+        return {
+            "swept": len(results),
+            "files_with_errors": sum(
+                1 for r in results if r.get("checked") and r["counts"]["error"]),
+            "files_with_warnings": sum(
+                1 for r in results if r.get("checked") and r["counts"]["warning"]),
+            "by_rule": by_rule,
+            "results": results,
+        }
+
+    result = _verify_patch_file(path, resolver=resolver, use_resolver=use_resolver)
+    result["path"] = path
     return result
 
 

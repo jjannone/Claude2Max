@@ -7,6 +7,7 @@ Usage:
     python spec2maxpat.py extract -i patch.maxpat -o spec.json
     python spec2maxpat.py sync   -i patch.maxpat
     python spec2maxpat.py mct    -i patch.maxpat   # → Max Compressed Text for clipboard
+    python spec2maxpat.py verify patch.maxpat [dir ...] [--summary] [--json]
     cat spec.json | python spec2maxpat.py convert > patch.maxpat
 
 Spec format:
@@ -63,9 +64,12 @@ _JBOX_FALLBACK_ATTRS = {
     "textcolor", "textjustification", "valuepopup", "valuepopuplabel", "varname",
 }
 
-# Common Max object abbreviations that have no refpage under their own name.
-# Each target was verified to resolve to a real maxref.xml (see WORK_HISTORY).
-# Operators (+ - * == …) are handled separately via add_tutorial.REFPAGE_ALIAS.
+# Max object abbreviations that have no refpage under their own name AND that
+# nothing mechanical can discover — unlike operators (`/`, `&`, `>>`), which ARE
+# discoverable because their refpage declares the real name in the XML root's
+# `name` attribute and so are harvested by RefpageCache.name_aliases().
+# These shorthands appear in no `name` attribute anywhere, so they must be
+# listed. Each target was verified to resolve to a real maxref.xml.
 _VERIFIED_WORD_ALIASES = {
     "t": "trigger",
     "sel": "select",
@@ -74,6 +78,9 @@ _VERIFIED_WORD_ALIASES = {
     "b": "bangbang",
     "del": "delay",
     "j": "join",
+    "i": "int",      # int.maxref.xml — name="int"; `i` is Max shorthand
+    "f": "float",    # float.maxref.xml — name="float"; `f` is Max shorthand
+    "v": "value",    # value.maxref.xml; `v` is Max shorthand
 }
 
 
@@ -90,6 +97,8 @@ class _GateResolver:
         self._rp = refpage
         self._pkg = package_cache
         self._dirs = [Path(d) for d in search_dirs if d]
+        self._db_names, _db_aliases = refpage.object_db()  # Max's own object registry
+        self._bundled = None                          # lazy; _bundled_abstractions()
         self._aliases = self._build_alias_map()
         self._base_attrs = self._build_base_attrs()  # jbox: inherited by every box
         self._observed = self._load_observed_attrs()  # help-corpus attr ground truth
@@ -139,21 +148,28 @@ class _GateResolver:
         except (OSError, KeyError, TypeError, _json.JSONDecodeError):
             return {}
 
-    @staticmethod
-    def _build_alias_map():
+    def _build_alias_map(self):
         """Map short/operator object names to the refpage that documents them.
 
         Many valid objects have no refpage under their own name: operators
-        (`+` -> plus.maxref.xml) and common abbreviations (`t` -> trigger).
-        Operators come from add_tutorial.REFPAGE_ALIAS (already in the repo);
-        the word-aliases below were each verified to resolve to a real refpage.
+        (`/` -> div.maxref.xml) and common abbreviations (`t` -> trigger).
+
+        Operators are HARVESTED from the refpages' own `name` attribute rather
+        than hand-listed — see RefpageCache.name_aliases(). A hand-maintained
+        table is a drift hazard and was measurably incomplete: it carried 23
+        entries and was missing `/`, `&`, `|`, `>>`, `<<`, `!-`, `!/`, `/~` and
+        the whole `mc.*` operator family, which made the convert gate BLOCK
+        patches using division. Harvesting yields 56 with no collisions.
+
+        The word aliases below still need the hand-maintained table: `i`/`f`/`t`
+        and friends are Max shorthand with no refpage of their own AND no
+        `name` attribute pointing at them, so nothing mechanical can find them.
+        They come second so a harvested (authoritative) entry always wins.
         """
-        aliases = dict(_VERIFIED_WORD_ALIASES)
-        try:
-            from add_tutorial import REFPAGE_ALIAS  # lazy: avoids import cycle
-            aliases.update(REFPAGE_ALIAS)
-        except Exception:
-            pass
+        _db_names, db_aliases = self._rp.object_db()
+        aliases = dict(self._rp.name_aliases())
+        aliases.update(db_aliases)            # Max's own registry outranks globbing
+        aliases.update(_VERIFIED_WORD_ALIASES)
         return aliases
 
     def resolve_object(self, name):
@@ -171,6 +187,16 @@ class _GateResolver:
             if r is not None:
                 return {"source": "c74-refpage-alias", "numinlets": r["numinlets"],
                         "numoutlets": r["numoutlets"], "outlettype": r["outlettype"]}
+        # Max's own object registry (interfaces/obj-qlookup.json + package
+        # max.db.json). Authoritative for EXISTENCE even when no refpage
+        # documents the object — jit.gl.layer and the whole jit.mo family are
+        # real objects Max instantiates but ship no refpage of their own, and
+        # were being reported as invented names. I/O counts are unknown from
+        # this source, so they come back as 0 and the caller falls back to its
+        # own defaults; existence is the question this rule is asking.
+        if name in self._db_names:
+            return {"source": "max-object-db", "numinlets": 0,
+                    "numoutlets": 0, "outlettype": []}
         return None
 
     def attrs_for(self, name):
@@ -254,7 +280,36 @@ class _GateResolver:
                     return True
             except OSError:
                 continue
-        return False
+        # Abstractions shipped INSIDE the Max install (Max.app/.../patchers/**)
+        # are on Max's default search path, so a patch may reference them by bare
+        # name from anywhere — M4L.bal2~, pluggo.MiscCtrl, thru and ~700 others
+        # live there. Without this they read as invented names. Scanned once and
+        # cached, not per-lookup.
+        return name.lower() in self._bundled_abstractions()
+
+    def _bundled_abstractions(self):
+        """Lowercased names of .maxpat abstractions bundled in the Max install.
+
+        Case-folded because Max's object lookup is case-insensitive and patches
+        in the wild disagree with the file on disk (`pluggo.miscCtrl` in a patch
+        vs `pluggo.MiscCtrl.maxpat` on disk). Matching case-sensitively reported
+        those as invented names. Scanned once and cached, not per-lookup.
+        """
+        if self._bundled is not None:
+            return self._bundled
+        names = set()
+        c74 = getattr(self._rp, "_c74", None)
+        if c74 is not None:
+            for root in (c74 / "patchers", c74 / "packages"):
+                if not root.is_dir():
+                    continue
+                try:
+                    for f in root.rglob("*.maxpat"):
+                        names.add(f.stem.lower())
+                except OSError:
+                    pass
+        self._bundled = names
+        return names
 
 def build_resolver(search_dirs=None):
     """Construct the authoritative resolver for the anti-guessing checks.
@@ -348,6 +403,15 @@ def _gate_spec(spec, allow_unverified=False, search_dirs=None, stream=sys.stderr
 # tells Claude — in-session — when a hand-edit introduced an invented name.
 # ---------------------------------------------------------------------------
 
+# Object-box classes whose nested patcher holds code in a DIFFERENT language than
+# Max. Their contents must not be checked against Max's object set — see
+# _iter_patcher_scopes. gen/jit.gen share the gen language (GEN_PATCHING.md,
+# JIT_GEN_PATCHING.md); rnbo~ holds RNBO code.
+_FOREIGN_LANGUAGE_BOXES = frozenset({
+    "gen", "gen~", "jit.gen", "jit.pix", "jit.gl.pix", "jit.gl.slab", "jit.expr",
+    "rnbo~",
+})
+
 # Box keys that are structural, not attributes (mirrors maxhelp/extract_observed_attrs).
 _MAXPAT_STRUCTURAL_KEYS = frozenset({
     "id", "maxclass", "text", "numinlets", "numoutlets", "outlettype",
@@ -402,6 +466,15 @@ def _iter_patcher_scopes(patcher):
 
     Each scope is independent so box ids (which repeat across subpatchers) and the
     connections that reference them stay consistent within their own scope.
+
+    Subpatchers belonging to a NON-MAX LANGUAGE are not descended into. A `gen~`
+    / `gen` / `jit.gen` / `jit.gl.pix` box holds gen code, and `rnbo~` holds RNBO
+    code; both are separate languages with their own vocabularies (`history`,
+    `swiz`, `clamp`, `param~`, `setparam`, …) that are NOT Max objects. Walking
+    into them and checking their operators against Max's object set produced
+    ~15% of all object-unresolved errors on the C74 corpus — the checker was
+    reporting correct gen code as invented Max names. The boundary is the same
+    one CLAUDE.md draws when it sends gen work to GEN_PATCHING.md.
     """
     objects, conns = {}, []
     for entry in patcher.get("boxes", []) or []:
@@ -420,6 +493,10 @@ def _iter_patcher_scopes(patcher):
             objects[bid] = o
         sub = box.get("patcher")
         if isinstance(sub, dict):
+            text = (box.get("text") or "").strip()
+            cls = text.split()[0] if text else ""
+            if cls in _FOREIGN_LANGUAGE_BOXES:
+                continue  # gen / RNBO code — not Max objects; see docstring
             yield from _iter_patcher_scopes(sub)
     for entry in patcher.get("lines", []) or []:
         pl = entry.get("patchline") if isinstance(entry, dict) else None
@@ -478,6 +555,113 @@ def gate_maxpat_file(path, stream=sys.stderr):
               "violations": all_v, "summary": summary}
     result["report"] = _verify_report(result) if all_v else summary
     return result
+
+
+def verify_patch_file(path, resolver=None, use_resolver=True, stream=sys.stderr):
+    """Run the FULL binding-rule library against a .maxpat/.maxhelp/.amxd file on disk.
+
+    Unlike gate_maxpat_file (anti-guessing resolver rules only — deliberately
+    silent on principle checks like presentation/labels that don't map cleanly
+    onto an arbitrary native patch), this runs every rule in the library —
+    structural + anti-guessing — and is the general "how clean is this patch"
+    instrument behind the verify_patch MCP tool and the `verify` CLI command.
+
+    Prefers the embedded Claude2Max spec when present (single scope, full
+    fidelity — presentation/layout fields included). Falls back to a per-
+    nested-subpatcher native-to-spec conversion (_iter_patcher_scopes) when no
+    embed is found, which is the shape every C74 help patch, bundled-package
+    patch, and hand-edited file is in — this is what makes the corpus sweep
+    (validating rule false-positive rates against patches Claude2Max never
+    touched) possible.
+
+    resolver: pass a pre-built _GateResolver to reuse across many files in a
+    sweep (building one is not free). If omitted and use_resolver is True, one
+    is built fresh scoped to this file's directory. Pass use_resolver=False to
+    skip the anti-guessing layer entirely and check structural rules only.
+
+    Returns: {checked, ok, counts, violations, summary, report, mode,
+              scopes_checked, [degraded], [error]}
+    `mode` is "embedded-spec" or "native-scopes". `checked` is False when the
+    file couldn't be parsed or the verify library is unavailable.
+    """
+    p = Path(path)
+    blank = {"checked": False, "ok": True, "counts": {"error": 0, "warning": 0, "style": 0},
+             "violations": [], "summary": "", "report": "", "mode": None, "scopes_checked": 0}
+    if _verify_spec is None:
+        print(f"[verify] WARNING: claude2max_verify unavailable — '{p.name}' NOT checked.",
+              file=stream)
+        return {**blank, "error": "verify-lib-unavailable"}
+    try:
+        text = p.read_text(encoding="utf-8", errors="replace")
+    except OSError as exc:
+        return {**blank, "error": f"unreadable: {exc}"}
+    data = _load_maxpat_json(text)
+    if not isinstance(data, dict) or not isinstance(data.get("patcher"), dict):
+        return {**blank, "error": "not-a-patcher-file"}
+
+    active_resolver = resolver
+    degraded = False
+    if use_resolver and active_resolver is None:
+        active_resolver = build_resolver([str(p.parent)])
+    if use_resolver and (active_resolver is None or not active_resolver.healthy()):
+        why = ("verify library unavailable" if active_resolver is None
+               else "C74 refpages not found (resolve_object('metro') is None)")
+        print(f"[verify] WARNING: anti-guessing DEGRADED — {why}. "
+              f"'{p.name}' checked WITHOUT resolver rules.", file=stream)
+        active_resolver = None
+        degraded = True
+    if not use_resolver:
+        active_resolver = None
+
+    embedded = extract_spec(data)
+    if embedded is not None:
+        result = _verify_spec(embedded, resolver=active_resolver)
+        result["mode"] = "embedded-spec"
+        result["scopes_checked"] = 1
+        result["report"] = _verify_report(result)
+    else:
+        all_v, counts = [], {"error": 0, "warning": 0, "style": 0}
+        n_scopes = 0
+        for objects, conns in _iter_patcher_scopes(data["patcher"]):
+            if not objects:
+                continue
+            n_scopes += 1
+            res = _verify_spec({"objects": objects, "connections": conns},
+                                resolver=active_resolver)
+            all_v.extend(res["violations"])
+            for k in counts:
+                counts[k] += res["counts"].get(k, 0)
+        ok = counts["error"] == 0 and counts["warning"] == 0
+        summary = (f"{counts['error']} error(s), {counts['warning']} warning(s), "
+                   f"{counts['style']} style — {p.name} ({n_scopes} scope(s))")
+        result = {"ok": ok, "counts": counts, "violations": all_v, "summary": summary,
+                  "mode": "native-scopes", "scopes_checked": n_scopes}
+        result["report"] = _verify_report(result) if all_v else summary
+    result["checked"] = True
+    if degraded:
+        result["degraded"] = True
+    return result
+
+
+def iter_verify_targets(paths, kinds=("maxpat", "maxhelp", "amxd")):
+    """Expand a list of file/directory paths into a sorted list of files to verify.
+
+    A file path is included as-is (extension not checked — an explicit path is
+    an explicit request). A directory is walked recursively for `*.<kind>` per
+    the requested kinds, sorted for a deterministic sweep order.
+    """
+    ext_map = {"maxpat": ".maxpat", "maxhelp": ".maxhelp", "amxd": ".amxd"}
+    out = []
+    for raw in paths:
+        p = Path(raw)
+        if p.is_file():
+            out.append(p)
+        elif p.is_dir():
+            for kind in kinds:
+                ext = ext_map.get(kind)
+                if ext:
+                    out.extend(sorted(p.rglob(f"*{ext}")))
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -704,6 +888,100 @@ class RefpageCache:
     def __init__(self):
         self._cache  = {}          # name -> dict or None
         self._c74    = self._find_c74()
+        self._name_aliases = None  # lazy; see name_aliases()
+        self._objdb = None         # lazy; see object_db()
+
+    def object_db(self):
+        """Max's OWN object database — the most authoritative name source there is.
+
+        The Max install ships `interfaces/obj-qlookup.json`: every object Max
+        will instantiate, each optionally carrying an `alias` field naming the
+        object it is shorthand for (`v` -> value, `i` -> int, `t` -> trigger).
+        Packages ship the same file, plus `interfaces/max.db.json` whose
+        `maxdb.aliases` map registers package-level aliases (jit.mo.sin ->
+        jit.mo.func, jit.time -> jit.mo.time).
+
+        Why this beats refpages for existence checking: refpage coverage is
+        incomplete (jit.gl.layer and the whole jit.mo family have no refpage of
+        their own), whereas this database is what Max itself consults. Crucially
+        it also draws the language boundary correctly — gen/RNBO operators
+        (`history`, `swiz`, `clamp`) are absent from it, because they are NOT
+        Max objects, so using it as an allowlist does not blur gen into Max.
+
+        Returns (names:set, aliases:dict). Empty/absent files degrade to empty.
+        """
+        if self._objdb is not None:
+            return self._objdb
+        names, aliases = set(), {}
+        if self._c74 is not None:
+            qlookups = [self._c74 / "interfaces" / "obj-qlookup.json"]
+            dbs = [self._c74 / "interfaces" / "max.db.json"]
+            pkgs = self._c74 / "packages"
+            if pkgs.is_dir():
+                for pkg in sorted(pkgs.iterdir()):
+                    if pkg.is_dir():
+                        qlookups.append(pkg / "interfaces" / "obj-qlookup.json")
+                        dbs.append(pkg / "interfaces" / "max.db.json")
+            for p in qlookups:
+                try:
+                    data = json.loads(p.read_text())
+                except (OSError, json.JSONDecodeError):
+                    continue
+                if not isinstance(data, dict):
+                    continue
+                for name, rec in data.items():
+                    names.add(name)
+                    if isinstance(rec, dict) and rec.get("alias"):
+                        aliases[name] = rec["alias"]
+            for p in dbs:
+                try:
+                    data = json.loads(p.read_text())
+                except (OSError, json.JSONDecodeError):
+                    continue
+                amap = (data.get("maxdb") or {}).get("aliases") if isinstance(data, dict) else None
+                if isinstance(amap, dict):
+                    for name, target in amap.items():
+                        if isinstance(target, str):
+                            aliases[name] = target
+                            names.add(name)
+        self._objdb = (names, aliases)
+        return self._objdb
+
+    def name_aliases(self):
+        """Harvest {real object name -> refpage filename stem} from the refpages.
+
+        C74 cannot store a refpage for `/` or `&` under that filename, so it
+        names the FILE with a word (div.maxref.xml, bitand.maxref.xml) and
+        declares the object's real name in the XML root's `name` attribute
+        (`<c74object name="/">`). That attribute is therefore the authoritative
+        mapping, and harvesting it is strictly better than a hand-maintained
+        table: it cannot drift, it needs no per-entry verification, and it finds
+        aliases nobody would think to write down (`mc.*~` -> mc.times~,
+        `ggate` -> gswitch2, `swap` -> fswap).
+
+        Only entries where name != filename are returned — a refpage whose name
+        matches its filename resolves by the normal path and needs no alias.
+        Names containing a space are documentation "group" pages (e.g. "Jitter
+        Matrix Operators"), not objects, and are excluded.
+        """
+        if self._name_aliases is not None:
+            return self._name_aliases
+        aliases = {}
+        if self._c74 is not None:
+            for domain in self._STD_DOMAINS:
+                d = self._c74 / "docs/refpages" / domain
+                if not d.is_dir():
+                    continue
+                for f in d.glob("*.maxref.xml"):
+                    stem = f.name[: -len(".maxref.xml")]
+                    try:
+                        nm = ET.parse(f).getroot().get("name")
+                    except (ET.ParseError, OSError):
+                        continue
+                    if nm and nm != stem and " " not in nm:
+                        aliases[nm] = stem
+        self._name_aliases = aliases
+        return aliases
 
     def _find_c74(self):
         for loc in self._MAX_LOCATIONS:
@@ -731,6 +1009,20 @@ class RefpageCache:
                     p = pkg / sub / f"{name}.maxref.xml"
                     if p.exists():
                         return p
+                # Packages may nest refpages one level deeper under a domain dir
+                # the way the core install does — RNBO ships
+                # packages/RNBO/docs/refpages/max/rnbo~.maxref.xml, so a flat
+                # check of docs/refpages misses it and rnbo~ reads as invented.
+                refroot = pkg / "docs" / "refpages"
+                if refroot.is_dir():
+                    try:
+                        for domain in sorted(refroot.iterdir()):
+                            if domain.is_dir():
+                                p = domain / f"{name}.maxref.xml"
+                                if p.exists():
+                                    return p
+                    except OSError:
+                        pass
         return None
 
     @staticmethod
@@ -1985,6 +2277,28 @@ def main():
     )
     p_mct.add_argument("-i", "--input", required=True, help="Input .maxpat file")
 
+    # verify
+    p_verify = subparsers.add_parser(
+        "verify",
+        help="Run the binding-rule library against .maxpat/.maxhelp/.amxd file(s) or a directory sweep"
+    )
+    p_verify.add_argument("path", nargs="+",
+                          help="File(s) and/or director(y/ies) to check. A directory is walked "
+                               "recursively for the requested --kinds.")
+    p_verify.add_argument("--kinds", default="maxpat,maxhelp,amxd",
+                          help="Comma-separated file kinds to include when a path is a directory "
+                               "(default: maxpat,maxhelp,amxd)")
+    p_verify.add_argument("--no-resolver", action="store_true",
+                          help="Skip the anti-guessing resolver rules (object/attribute/message "
+                               "existence) — structural principle rules only")
+    p_verify.add_argument("--summary", action="store_true",
+                          help="Print an aggregate rule-hit table (rule x count x sample "
+                               "locations) instead of per-file reports")
+    p_verify.add_argument("--json", action="store_true",
+                          help="Emit machine-readable JSON instead of formatted text")
+    p_verify.add_argument("--limit", type=int, default=None,
+                          help="Stop after this many files (directory sweep)")
+
     args = parser.parse_args()
 
     if args.command is None:
@@ -2058,6 +2372,72 @@ def main():
               f"{len(spec.get('connections', []))} connections.", file=sys.stderr)
         print(f"Embedded in: {out_path}", file=sys.stderr)
         print(json.dumps(spec, indent=2))
+
+    elif args.command == "verify":
+        kinds = tuple(k.strip() for k in args.kinds.split(",") if k.strip())
+        targets = iter_verify_targets(args.path, kinds=kinds)
+        if args.limit:
+            targets = targets[:args.limit]
+        if not targets:
+            print("No matching files found.", file=sys.stderr)
+            sys.exit(1)
+
+        use_resolver = not args.no_resolver
+        # Build one resolver up front and reuse it across the whole sweep —
+        # building it per file is needless overhead at corpus scale (thousands
+        # of files) and unnecessary at single-file scale too.
+        resolver = build_resolver() if use_resolver else None
+        if use_resolver and (resolver is None or not resolver.healthy()):
+            print("[verify] WARNING: anti-guessing resolver unavailable/unhealthy — "
+                  "sweeping with structural rules only.", file=sys.stderr)
+            resolver = None
+
+        results = []
+        any_error = False
+        for path in targets:
+            res = verify_patch_file(str(path), resolver=resolver, use_resolver=use_resolver)
+            res["path"] = str(path)
+            results.append(res)
+            if res.get("checked") and res["counts"]["error"] > 0:
+                any_error = True
+            if not args.json and not args.summary:
+                if not res.get("checked"):
+                    print(f"{path}: NOT CHECKED — {res.get('error', 'unknown')}", file=sys.stderr)
+                elif res["violations"]:
+                    print(f"\n{path} [{res['mode']}]", file=sys.stderr)
+                    print(res["report"], file=sys.stderr)
+
+        if args.json:
+            print(json.dumps(results, indent=2))
+        elif args.summary:
+            # rule name -> {count, severity, examples: [location, ...]}
+            by_rule: dict = {}
+            n_checked = sum(1 for r in results if r.get("checked"))
+            n_unchecked = len(results) - n_checked
+            for r in results:
+                for v in r.get("violations", []):
+                    entry = by_rule.setdefault(
+                        v["rule"], {"count": 0, "severity": v["severity"], "examples": []})
+                    entry["count"] += 1
+                    if len(entry["examples"]) < 3:
+                        entry["examples"].append(f"{r['path']}:{v['location']}")
+            print(f"Swept {len(results)} file(s) — {n_checked} checked, "
+                  f"{n_unchecked} unchecked.")
+            print(f"{sum(1 for r in results if r.get('checked') and r['counts']['error'])} "
+                  f"file(s) with errors, "
+                  f"{sum(1 for r in results if r.get('checked') and r['counts']['warning'])} "
+                  f"with warnings.\n")
+            for rule, info in sorted(by_rule.items(), key=lambda kv: -kv[1]["count"]):
+                print(f"  {info['count']:5d}  [{info['severity']:7s}]  {rule}")
+                for ex in info["examples"]:
+                    print(f"                        e.g. {ex}")
+        else:
+            n_checked = sum(1 for r in results if r.get("checked"))
+            n_clean = sum(1 for r in results if r.get("checked") and r["ok"])
+            print(f"\n{n_checked}/{len(results)} checked, {n_clean} clean.", file=sys.stderr)
+
+        if any_error:
+            sys.exit(1)
 
 
 if __name__ == "__main__":

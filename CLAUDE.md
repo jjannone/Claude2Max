@@ -109,11 +109,22 @@ For instance: writing `[oscparse]` between `[udpreceive]` and `[route /user]` be
 
 **Practical check before adding any `newobj` text to a patch, regardless of source:**
 
-1. Search the refpage directory: `ls /Applications/Max.app/Contents/Resources/C74/docs/refpages/max-ref/ | grep -i <name-fragment>` — fast and authoritative for built-ins.
-2. For package externals, search the curated list: `python3 packages/query_packages.py search "<name>"` from the Claude2Max repo.
-3. If both come up empty, the object doesn't exist as named. Either the wrong name, the wrong package assumption, or the wrong workflow (e.g. needs `[v8 …]` instead of a built-in).
+1. Check Max's own object registry — `interfaces/obj-qlookup.json` in the Max install (see the rule below). It is the list Max itself consults, it covers objects that ship no refpage, and it records each object's `alias`. `mcp__claude2max__lookup_object` reads it for you.
+2. Search the refpage directory: `ls /Applications/Max.app/Contents/Resources/C74/docs/refpages/max-ref/ | grep -i <name-fragment>` — fast, and gives you the documentation, not just existence.
+3. For package externals, search the curated list: `python3 packages/query_packages.py search "<name>"` from the Claude2Max repo.
+4. If all three come up empty, the object doesn't exist as named. Either the wrong name, the wrong package assumption, or the wrong workflow (e.g. needs `[v8 …]` instead of a built-in).
 
-This is one extra `ls` per never-used object name — cheap insurance against the silent-failure mode the rest of this rule describes.
+This is one extra lookup per never-used object name — cheap insurance against the silent-failure mode the rest of this rule describes.
+
+## Prefer the Tool's Own Registry Over Reconstructing One
+
+When you need to know whether a name exists in an external system, look first for a **machine-readable registry that the system ships and consults itself** — before globbing its documentation, scraping its help files, or inferring from a corpus of its output. Documentation coverage is always incomplete, and inference blurs distinctions the registry already draws precisely. A derived list is a model of the truth; the registry *is* the truth, and it stays correct when the tool updates.
+
+The recognition signal: if you are about to build a lookup table by scanning docs, harvesting examples, or hand-maintaining a list of exceptions, stop and search the install for a `.json` / `.db` / index file first. Hand-maintained tables in particular are a standing drift hazard — they are correct on the day they are written and quietly wrong afterwards.
+
+For instance: Max object existence was being decided by refpage filename globbing plus two hand-maintained alias tables. That combination missed `/`, `&`, `|`, `>>`, `<<`, `!-`, `!/` and the whole `mc.*` operator family, so the convert gate **blocked patches using division** — while also missing real objects that ship no refpage at all (`jit.gl.layer`, the `jit.mo.*` family). The Max install already ships `Contents/Resources/C74/interfaces/obj-qlookup.json`: every instantiable object, each with an optional `alias` field (`v` → value, `i` → int, `t` → trigger), plus per-package `obj-qlookup.json` and `max.db.json` → `maxdb.aliases`. Consulting it cut false-positive object errors by 97% and attribute errors by 99.6% across 3,009 shipped C74 patches. It also draws a boundary no derived list would have: gen and RNBO operators (`history`, `swiz`, `clamp`) are absent from it *because they are not Max objects*, so the registry separates Max's vocabulary from adjacent languages for free — a distinction a corpus harvest would have erased.
+
+A second, narrower instance of the same principle: a refpage's real object name lives in the XML root's `name` attribute (`div.maxref.xml` declares `name="/"`), because a filename cannot contain `/`. Reading that attribute harvests the operator alias map mechanically — 56 entries with zero collisions — instead of maintaining 23 by hand.
 
 ## Parsers Must Tolerate the Schema's Full Value Space, Not Just the Sample You Tested Against
 

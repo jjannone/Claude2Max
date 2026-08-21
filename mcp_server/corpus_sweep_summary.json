@@ -1,0 +1,180 @@
+{
+  "total_files": 11873,
+  "elapsed_seconds": 10.84,
+  "resolver_healthy": true,
+  "by_tier": {
+    "core": {
+      "checked": 1015,
+      "unchecked": 0,
+      "error_files": 255,
+      "warning_files": 727,
+      "style_files": 17,
+      "clean_files": 16
+    },
+    "bundled-packages": {
+      "checked": 1994,
+      "unchecked": 1,
+      "error_files": 1335,
+      "warning_files": 604,
+      "style_files": 6,
+      "clean_files": 49
+    },
+    "user-packages": {
+      "checked": 8815,
+      "unchecked": 48,
+      "error_files": 3634,
+      "warning_files": 4037,
+      "style_files": 65,
+      "clean_files": 1079
+    }
+  },
+  "unchecked_reasons": {
+    "not-a-patcher-file": 49
+  },
+  "by_rule": {
+    "hidden-box-cord-visible": {
+      "count": 44854,
+      "severity": "warning",
+      "distinct_files": 4236,
+      "examples": [
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo.maxpat:connections[15]",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo.maxpat:connections[27]",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo.maxpat:connections[28]",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo.maxpat:connections[35]",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo.maxpat:connections[38]"
+      ]
+    },
+    "attribute-invalid": {
+      "count": 23708,
+      "severity": "error",
+      "distinct_files": 946,
+      "examples": [
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/jit.anim.drive.maxhelp:obj-20",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/jit.anim.node.maxhelp:obj-42",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/jit.anim.path.maxhelp:obj-20",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/jit.axis2quat.maxhelp:obj-42",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/jit.euler2quat.maxhelp:obj-42"
+      ]
+    },
+    "object-unresolved": {
+      "count": 23161,
+      "severity": "error",
+      "distinct_files": 5053,
+      "examples": [
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/jit.charmap.maxhelp:obj-10",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/jit.charmap.maxhelp:obj-9",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/jit.charmap.maxhelp:obj-9",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/jit.charmap.maxhelp:obj-9",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/jit.charmap.maxhelp:obj-9"
+      ]
+    },
+    "presentation-required": {
+      "count": 17767,
+      "severity": "warning",
+      "distinct_files": 8676,
+      "examples": [
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo.maxpat:patcher",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo.maxpat:patcher",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo.maxpat:patcher",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo.maxpat:patcher",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo2.maxpat:patcher"
+      ]
+    },
+    "message-unverified": {
+      "count": 16206,
+      "severity": "warning",
+      "distinct_files": 3405,
+      "examples": [
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo.maxpat:obj-23",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo.maxpat:obj-28",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo.maxpat:obj-34",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo.maxpat:obj-30",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo.maxpat:obj-18"
+      ]
+    },
+    "allcaps-name": {
+      "count": 14195,
+      "severity": "style",
+      "distinct_files": 2616,
+      "examples": [
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/jit.anim.drive.maxhelp:obj-16",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/jit.anim.drive.maxhelp:obj-24",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/jit.anim.path.maxhelp:obj-70",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/jit.anim.path.maxhelp:obj-54",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/jit.anim.path.maxhelp:obj-53"
+      ]
+    },
+    "subpatcher-label-missing": {
+      "count": 13211,
+      "severity": "warning",
+      "distinct_files": 3882,
+      "examples": [
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo.maxpat:obj-12",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo.maxpat:obj-4",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo.maxpat:obj-14",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo2.maxpat:obj-12",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo2.maxpat:obj-4"
+      ]
+    },
+    "redundant-message-box": {
+      "count": 12096,
+      "severity": "warning",
+      "distinct_files": 3099,
+      "examples": [
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo.maxpat:obj-23",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo.maxpat:obj-40",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo2.maxpat:obj-23",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo2.maxpat:obj-40",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/jit.altern.maxhelp:obj-22"
+      ]
+    },
+    "prefer-v8": {
+      "count": 2177,
+      "severity": "style",
+      "distinct_files": 2064,
+      "examples": [
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo.maxpat:obj-94",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo.maxpat:obj-117",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo2.maxpat:obj-94",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/demovideo2.maxpat:obj-117",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/jit.3m.maxhelp:obj-1"
+      ]
+    },
+    "empty-newobj": {
+      "count": 1345,
+      "severity": "warning",
+      "distinct_files": 689,
+      "examples": [
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/jit.anim.path.maxhelp:obj-63",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/jit.anim.path.maxhelp:obj-61",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/jit.anim.path.maxhelp:obj-59",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/jit.dx.grab.maxhelp:obj-45",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/jit.freeframe.maxhelp:obj-1"
+      ]
+    },
+    "maxclass-unresolved": {
+      "count": 776,
+      "severity": "warning",
+      "distinct_files": 361,
+      "examples": [
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/jit.gen.maxhelp:obj-3",
+        "/Applications/Max.app/Contents/Resources/C74/help/jitter/jit.gl.material.maxhelp:obj-10",
+        "/Applications/Max.app/Contents/Resources/C74/help/max/detonate.maxhelp:obj-1",
+        "/Applications/Max.app/Contents/Resources/C74/help/max/gen.maxhelp:obj-3",
+        "/Applications/Max.app/Contents/Resources/C74/help/max/gen.maxhelp:obj-3"
+      ]
+    },
+    "connection-missing-object": {
+      "count": 8,
+      "severity": "error",
+      "distinct_files": 7,
+      "examples": [
+        "/Users/johnjannone/Documents/Max 9/Packages/Max Hardware Library/examples/mhl.filter-scan.maxpat:connections[17]",
+        "/Users/johnjannone/Documents/Max 9/Packages/bach/help/bach.convertbase.maxhelp:connections[17]",
+        "/Users/johnjannone/Documents/Max 9/Packages/ears/help/ears.vamp~.maxhelp:connections[7]",
+        "/Users/johnjannone/Documents/Max 9/Packages/ejies/patchers/splay~.maxpat:connections[93]",
+        "/Users/johnjannone/Documents/Max 9/Packages/filter/help/filter.jit.bessel.maxhelp:connections[0]"
+      ]
+    }
+  }
+}
