@@ -163,6 +163,18 @@ This governs the prose, not the rigor. Do not simplify the underlying work, drop
 
 The recognition signal: if a sentence needs a second read to find its subject, or stacks more than one dash-clause, rewrite it before sending. When in doubt, imagine restating it out loud to someone who just walked in.
 
+## Describe Flow in the Target Environment's Own Directional Vocabulary — Binding Rule
+
+When describing how parts of a system connect, use the spatial and directional words that system itself uses. Vocabulary borrowed from an adjacent domain reads as non-native — and is actively wrong when the borrowed word already means something *else* in the target, because the reader applies the local meaning and understands the opposite of what was meant.
+
+**In Max, patches flow top→bottom and left→right.** Say one object sits **under** or **downstream of** another; say **connect A to B**; say **A feeds B** or **A drives B**.
+
+**Do not say "behind" or "in front of" to describe signal or data order.** That phrasing comes from guitar-pedal signal chains, and in Max the word is already taken: "behind" describes **z-order** — the `background` attribute that renders a panel behind other objects (see the tutorial panel conventions, which depend on exactly that meaning). So "put `[playlist~]` behind `[cv.jit.faces]`" reads as a layering instruction, not a wiring one. Say "have `[cv.jit.faces]` drive `[playlist~]`" instead.
+
+This governs every surface where the language reaches a reader — chat explanations, `comment` boxes in a patch, tutorial step descriptions, docs, and commit messages. Comment boxes and tutorial text matter most: those ship with the patch and outlive the conversation.
+
+The recognition signal: any time you reach for a positional word to describe a connection, check whether the environment has its own word for that relationship — and whether the one you picked already means something different there. The same trap recurs beyond Max with different words in each environment (z-order vs. render order vs. execution order), so apply the check, not just this instance's answer.
+
 ## Flag Natural Commit Moments — Proactively Suggest Commit, Sync, and New Session
 
 Long conversations accumulate uncommitted work and stale context — both compound. The default cadence is: commit early, sync often, start a new session frequently. When the work reaches a natural commit boundary — a self-contained chunk that could land as one logical commit — **proactively suggest committing and starting a new session**. Don't wait to be asked, and err on the side of suggesting more often rather than less. If a GitHub remote is configured and the user has opted in to pushing, include `git push origin <branch>` as part of the same step; if not, the local commit is the whole story.

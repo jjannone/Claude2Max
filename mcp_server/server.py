@@ -492,6 +492,25 @@ Does NOT apply to Max built-in names, object class names, or message selectors.
 
 ---
 
+## Describe flow in Max's own directional vocabulary
+
+Max patches flow **top→bottom, left→right**. Describe connections that way:
+- say one object sits **under** / **downstream of** another
+- say **connect A to B**, **A feeds B**, **A drives B**
+
+**Never say "behind" or "in front of" for signal/data order.** In Max that
+phrasing is already taken — it means **z-order** (the `background` attribute
+that renders a panel behind other objects), so it reads as a layering
+instruction, not a wiring one:
+- WRONG: "put `[playlist~]` behind `[cv.jit.faces]`"
+- RIGHT: "have `[cv.jit.faces]` drive `[playlist~]`"
+
+Applies to every surface the language reaches a reader — chat, `comment` boxes,
+tutorial step text, docs. Comment boxes and tutorial text matter most: they ship
+with the patch and outlive the conversation.
+
+---
+
 ## Never regress functionality
 
 When moving a working feature to a different modality (different UI object,
