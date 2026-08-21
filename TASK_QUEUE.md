@@ -520,6 +520,57 @@ Tasks requiring deep analysis, architecture decisions, or sustained judgment. Pr
 
 ---
 
+- [pending] **Creative proposal tool — `/c2m-propose`** — requested by John 2026-08-21. A skill that gets Claude2Max to *generate* rather than verify: to offer creative solutions, oblique angles, and interesting places to start. Everything else in this repo is built to stop Claude inventing things. This is the one tool whose job is to invent — which is exactly why it needs designing carefully rather than being left as "just ask Claude for ideas."
+
+  **Four modes**, from John's original framing:
+
+  | mode | input | output |
+  |---|---|---|
+  | **solve** | a stated problem ("the sequencer drifts out of time") | several genuinely different approaches, not variations of one |
+  | **respond** | a prompt or brief (an assignment, a piece concept, a constraint) | several distinct responses to it |
+  | **explore** | a seed idea, *or nothing at all* | interesting starting points for a new piece/patch |
+  | **oblique** | an existing patch / piece / problem | sideways moves — angles that are orthogonal to the obvious next step |
+
+  **The central design tension, and its resolution.** Claude2Max's entire architecture is anti-guessing: verify every name, block on invention, never write an API name from memory. A creative tool is in tension with that, and if the tension is left unresolved the tool fails in one of two ways — either the verification instinct neuters it into safe, boring suggestions, or it generates freely and names objects that don't exist, which is worse than useless because a student will try to build it. **The resolution: be generative about ideas, strict about names.** Propose freely at the concept level; every concrete Max object that appears in a proposal must still resolve through `lookup_object` / the package library before it ships. An exciting proposal built on `[oscparse]` is a trap, not an idea. Write this tension into the skill explicitly so a future session doesn't resolve it the wrong way by default.
+
+  **Why this belongs in Claude2Max and not in a generic chat.** A generic brainstorm draws on training data. This repo has assets a generic brainstorm does not, and they are what make a proposal *surprising rather than generic*:
+
+  - `packages/package_objects.json` — 2,795 installed objects with `use_when` judgments. **The single best source of creative surprise**, because students do not know what is already installed on their machine. "There is an object that already does this strange thing" is a better idea than any amount of free association.
+  - `c74-projects/c74_projects_database.md` — who has already built something adjacent, and what they did with it.
+  - `c74-forum/forum_insights.md`, `cookbook/cookbook_insights.md` — non-obvious techniques the docs do not teach.
+  - `maxhelp/maxhelp_insights.md` + the observed-attrs corpus — what C74's own patches actually do with an object, which is often stranger than its refpage suggests.
+  - For **oblique** mode: the patch itself, read via the `/c2m-explain` machinery, which already produces a stage-by-stage account of what a patch does. That is the correct input — proposing against a patch you have not read produces advice that ignores what is already working.
+
+  **The hard part is diversity, not generation.** The failure mode of every brainstorming tool is N proposals that are secretly the same proposal ("add an LFO", "add another LFO to the LFO"). Generating five ideas is easy; generating five *different* ideas is the actual engineering. Specify a mechanism rather than hoping — candidate approach: require each proposal to originate from a **different source or lens**, and name the lens in the output. For instance one from the package library (an object they don't know they have), one from a constraint flip (remove something the patch depends on; make the slowest thing fastest), one from a different domain entirely (physical, visual, textual, social), one from the community corpora (someone already did an adjacent thing), one from scale/time inversion. Whatever the final lens set, the invariant is: **a proposal must be able to say what makes it different from the others**, or it should be cut.
+
+  **Output contract per proposal** — the difference between a decorative idea and an actionable one:
+  1. a one-line hook,
+  2. what it actually does,
+  3. why it is interesting / how it differs from the obvious move,
+  4. the concrete Max objects involved — **verified**,
+  5. **the smallest possible first step.** Item 5 is load-bearing. "Explore granular textures" is not a proposal; "have `[cv.jit.faces]` drive `[playlist~]` so a face's position scrubs the file" is. (Note the phrasing — **describe flow in Max's own directional vocabulary**, never "behind"/"in front of"; see the rule in `CLAUDE.md`.)
+
+  Aim for **3–5 proposals, deliberately varied**, never a wall of twenty. A wall is a way of avoiding the judgment the tool exists to provide.
+
+  **Guards.**
+  - Proposals are **offers, not plans**. The tool proposes; the student chooses. It must not railroad, and it must not start building.
+  - For **oblique** mode on an existing patch, honor **Modify, Don't Rebuild** and the observed-good-patterns rule: say explicitly what survives the change. An oblique angle that quietly implies a rewrite discards work that took sessions to get right.
+  - `explore` with no seed must still produce something specific. "What are you interested in?" is a deflection, not a proposal — the mode exists precisely for the student who cannot answer that question yet.
+
+  **Where it fits the larger system.** Slots into the Suggested Student Workflow at steps 1–3 (describe → plan → refine), and answers the gap that workflow currently assumes away: it begins with "student describes the patch they want," and has nothing to offer a student who does not yet know. Complements the existing skill family — `/c2m-explain` says what a patch *is*, `/c2m-design` shapes how it *looks*, `/c2m-package-search` answers a *known* question; this one supplies the question. Also useful in the instructor-review loop (step 5) as a way to bring several framed options rather than one.
+
+  **Deliverable**: `.claude/skills/c2m-propose/SKILL.md`, following the in-repo manifest convention (see `CLAUDE.md` § "Plugin / Slash Commands", and the in-repo vs `UPSTREAM-SKILL.md` distinction). Add a row to that table when it lands. Consider whether it also warrants an `UPSTREAM-SKILL.md` export — it is arguably the most portable skill here, since the creative structure is not Max-specific even though its grounding sources are.
+
+  **Decided by John 2026-08-21** (these were the open questions; answers are binding):
+
+  - **Log the proposals — yes.** Keep a record of what was offered and, where known, what got built. Two payoffs: it feeds the Community Knowledge Pipeline task, and it is the only way to learn *which lenses actually pay off* — a lens that never produces anything anyone builds should be replaced. Decide the storage shape when building (a `proposals/` folder, or appended entries in `insights.md`); prefer whichever survives the fork/PR flow that pipeline already defines. Log the lens alongside the proposal, or the payoff is lost.
+  - **Be opinionated — but the tool is optional, not standard.** Two halves, both load-bearing. *Opinionated:* when invoked, lead with a recommendation and say which proposal you would pursue and why — not a neutral menu. *Optional:* unlike `/c2m-sync` (mandatory before editing any existing patch) or the anti-guessing gate (unskippable), this skill fires **only when deliberately invoked**. Do not offer proposals unprompted, do not auto-trigger on a student sounding stuck, and do not fold it into the standard workflow. It is a tool the user reaches for, not a stage everything passes through.
+  - **`oblique` may break the original concept — but never invites technical failure.** It is free to violate the piece's stated intent: invert the premise, discard the brief, propose the thing the student said they did not want. That is the mode's purpose and the prior art (Eno/Schmidt's Oblique Strategies) is deliberately willing to wreck the plan. What it may **not** do is propose something that cannot be built: conceptual risk yes, technical unsoundness no. This sharpens the generative/strict split above — *ideas* may be reckless, *names and wiring* stay verified. A proposal that abandons the concept and works is the point; one that keeps the concept and doesn't build is a bug.
+
+  **Model**: Opus. Creative synthesis, package judgment, and reading a patch for what it is *not* doing all sit squarely in the model-selection rule's Opus triggers.
+
+---
+
 ## Pending — Sonnet
 
 Tasks that are primarily implementation, file editing, or verification — no deep architectural judgment required.
