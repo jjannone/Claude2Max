@@ -613,7 +613,15 @@ def verify_patch_file(path, resolver=None, use_resolver=True, stream=sys.stderr)
     if not use_resolver:
         active_resolver = None
 
-    embedded = extract_spec(data)
+    try:
+        embedded = extract_spec(data, stream=stream)
+    except SpecEmbedError as exc:
+        # A corrupt embed must not abort the check — fall back to verifying the
+        # patch's own boxes, which is what the file actually contains.
+        print(f"[spec] WARNING: {exc} "
+              f"Verifying '{p.name}' from its boxes instead of its embedded spec.",
+              file=stream)
+        embedded = None
     if embedded is not None:
         result = _verify_spec(embedded, resolver=active_resolver)
         result["mode"] = "embedded-spec"
@@ -1676,19 +1684,103 @@ def build_spec_embed(spec, x, y):
     }
 
 
-def extract_spec(maxpat):
-    """Extract the Claude2Max spec from a .maxpat dict. Returns dict or None."""
-    boxes = maxpat.get("patcher", {}).get("boxes", [])
-    for box_wrapper in boxes:
-        box = box_wrapper.get("box", {})
-        # Check both 'code' (codebox) and 'text' (legacy comment) fields
-        text = box.get("code", "") or box.get("text", "")
+# The canonical spec-embed box: build_spec_embed() always writes this id and
+# this maxclass, and _SKIP_BOX_IDS already names the id as our own scaffolding.
+SPEC_EMBED_ID = "obj-spec-embed"
+SPEC_EMBED_MAXCLASS = "text.codebox"
+
+
+class SpecEmbedError(ValueError):
+    """The chosen spec-embed box carries the marker but its body is unusable.
+
+    Raised instead of returning a lesser candidate. A patch whose canonical
+    embed is corrupt must fail loudly: the alternative is handing a caller a
+    partial spec, and `convert` writes whatever spec it is given — so a decoy
+    that happens to parse would erase every box the real embed described.
+    """
+
+
+def _spec_embed_candidates(maxpat):
+    """Every top-level box carrying the spec marker, in file order.
+
+    Returns a list of (box_id, maxclass, text) triples. More than one is not an
+    error by itself — leftovers from prior convert cycles, comments quoting the
+    format, and half-finished hand edits all coexist in a long-lived boxes
+    array — but it does mean the caller must discriminate rather than take the
+    first hit.
+    """
+    out = []
+    for wrapper in maxpat.get("patcher", {}).get("boxes", []) or []:
+        box = wrapper.get("box", {}) if isinstance(wrapper, dict) else None
+        if not isinstance(box, dict):
+            continue
+        # Check both 'code' (codebox) and 'text' (legacy comment / newobj)
+        text = box.get("code", "") or box.get("text", "") or ""
         if SPEC_MARKER_BEGIN in text:
-            start = text.index(SPEC_MARKER_BEGIN) + len(SPEC_MARKER_BEGIN)
-            end = text.index(SPEC_MARKER_END)
-            spec_json = text[start:end].strip()
-            return json.loads(spec_json)
-    return None
+            out.append((box.get("id", ""), box.get("maxclass", ""), text))
+    return out
+
+
+def _choose_spec_embed(candidates):
+    """Pick the real embed from marker-bearing candidates. Most specific first."""
+    for cand in candidates:
+        if cand[0] == SPEC_EMBED_ID:
+            return cand
+    for cand in candidates:
+        if cand[1] == SPEC_EMBED_MAXCLASS:
+            return cand
+    return candidates[0]
+
+
+def _describe_candidate(cand):
+    bid, maxclass, _ = cand
+    return f"{bid or '<no id>'} ({maxclass or 'unknown maxclass'})"
+
+
+def extract_spec(maxpat, stream=sys.stderr):
+    """Extract the Claude2Max spec from a .maxpat dict. Returns dict or None.
+
+    Selection is by canonical id first, maxclass second, file order last — see
+    _choose_spec_embed. When more than one box carries the marker the losers are
+    named on `stream` rather than dropped silently. Pass stream=None to silence.
+
+    Raises SpecEmbedError if the chosen box's body is truncated or not JSON.
+    """
+    candidates = _spec_embed_candidates(maxpat)
+    if not candidates:
+        return None
+
+    chosen = _choose_spec_embed(candidates)
+    bid, maxclass, text = chosen
+
+    if len(candidates) > 1 and stream is not None:
+        others = ", ".join(_describe_candidate(c) for c in candidates if c is not chosen)
+        print(f"[spec] WARNING: {len(candidates)} boxes carry '{SPEC_MARKER_BEGIN}'. "
+              f"Using {_describe_candidate(chosen)}; ignoring {others}. "
+              f"Stale marker-bearing boxes should be deleted — before this "
+              f"discriminator existed, whichever one sorted first won.",
+              file=stream)
+
+    start = text.index(SPEC_MARKER_BEGIN) + len(SPEC_MARKER_BEGIN)
+    end = text.find(SPEC_MARKER_END, start)
+    if end == -1:
+        raise SpecEmbedError(
+            f"spec embed in box {_describe_candidate(chosen)} has no "
+            f"'{SPEC_MARKER_END}' terminator — the body is truncated. "
+            f"Repair or remove the box; do not convert from it."
+        )
+
+    spec_json = text[start:end].strip()
+    try:
+        return json.loads(spec_json)
+    except json.JSONDecodeError as exc:
+        raise SpecEmbedError(
+            f"spec embed in box {_describe_candidate(chosen)} is not valid JSON "
+            f"({exc.msg} — line {exc.lineno}, col {exc.colno}; "
+            f"{len(spec_json)} chars total). "
+            f"Repair it, or rebuild the spec from the patch's boxes with "
+            f"`sync` on a copy — do not convert from a partial spec."
+        ) from exc
 
 
 # ---------------------------------------------------------------------------
@@ -2337,7 +2429,11 @@ def main():
         with open(args.input, "r") as f:
             maxpat = json.load(f)
 
-        spec = extract_spec(maxpat)
+        try:
+            spec = extract_spec(maxpat)
+        except SpecEmbedError as exc:
+            print(f"Corrupt Claude2Max spec embed: {exc}", file=sys.stderr)
+            sys.exit(1)
         if spec is None:
             print("No Claude2Max spec found in this .maxpat file.", file=sys.stderr)
             sys.exit(1)
@@ -2359,8 +2455,16 @@ def main():
         with open(args.input, "r") as f:
             maxpat = json.load(f)
 
-        had_spec = extract_spec(maxpat) is not None
-        spec, updated_maxpat = sync_spec(maxpat)
+        try:
+            had_spec = extract_spec(maxpat) is not None
+            spec, updated_maxpat = sync_spec(maxpat)
+        except SpecEmbedError as exc:
+            # Refuse to touch the file. Reverse-engineering a replacement spec
+            # here would look like a successful sync while quietly discarding
+            # whatever the corrupt embed still held.
+            print(f"Corrupt Claude2Max spec embed: {exc} "
+                  f"Nothing written to '{args.input}'.", file=sys.stderr)
+            sys.exit(1)
 
         out_path = args.output or args.input
         with open(out_path, "w") as f:

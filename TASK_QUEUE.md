@@ -15,17 +15,21 @@ Format: `[pending]` = not started, `[complete]` = done (move to Done section), `
 
 Tasks requiring deep analysis, architecture decisions, or sustained judgment. Prompt the user to run `/model claude-opus-4-7` before starting any of these.
 
-- [pending] **`extract_spec` picks the first marker-bearing box — a stray stub shadows the real embed; repair `4step-sequencer.maxpat`** — Found 2026-08-18 while cleaning the gate-flagged attrs. Two defects, one in the converter and one in a patch, that compound into a silently destructive `convert`.
+- [in progress] **`extract_spec` picks the first marker-bearing box — a stray stub shadows the real embed; repair `4step-sequencer.maxpat`** — Found 2026-08-18 while cleaning the gate-flagged attrs. Two defects, one in the converter and one in a patch, that compound into a silently destructive `convert`.
 
-  **Defect 1 — no discriminator on the embed scan.** `extract_spec()` in `spec2maxpat.py` walks `maxpat["patcher"]["boxes"]` and returns the first box whose `code` or `text` contains `--- CLAUDE2MAX SPEC ---`. It does not check the box id or maxclass. Any other box carrying the marker — a leftover from a prior cycle, a comment quoting the format, a tutorial box explaining it — wins if it sorts earlier. `_SKIP_BOX_IDS` already names `obj-spec-embed` as canonical scaffolding, so the discriminator exists; the extractor just doesn't use it. Fix: prefer `id == "obj-spec-embed"`, fall back to the first `text.codebox` match, and when more than one candidate carries the marker, say so rather than silently choosing.
+  ***Item (a) COMPLETE 2026-08-21 — Group A step 1 done. Items (b), (c), (d) remain; do them in the Group A order below.***
+
+  **Defect 1 — no discriminator on the embed scan. FIXED 2026-08-21.** `extract_spec()` in `spec2maxpat.py` walks `maxpat["patcher"]["boxes"]` and returns the first box whose `code` or `text` contains `--- CLAUDE2MAX SPEC ---`. It does not check the box id or maxclass. Any other box carrying the marker — a leftover from a prior cycle, a comment quoting the format, a tutorial box explaining it — wins if it sorts earlier. `_SKIP_BOX_IDS` already names `obj-spec-embed` as canonical scaffolding, so the discriminator exists; the extractor just doesn't use it. Fix: prefer `id == "obj-spec-embed"`, fall back to the first `text.codebox` match, and when more than one candidate carries the marker, say so rather than silently choosing. **Shipped 2026-08-21** as `_spec_embed_candidates()` / `_choose_spec_embed()` / a rewritten `extract_spec(maxpat, stream=sys.stderr)`. Two decisions worth carrying forward: (i) a corrupt *chosen* embed raises the new `SpecEmbedError` instead of falling through to a candidate that happens to parse — falling through is exactly how the decoy would have won, and `convert` writes whatever spec it is handed; (ii) `verify_patch_file` catches that error, prints it, and re-checks the patch from its own boxes (`mode="native-scopes"`), so a corrupt embed degrades the gate loudly instead of crashing it. The `extract` and `sync` CLI branches exit 1 and write nothing. Regression tests: `tests/test_spec_embed_discriminator.py` (8 cases).
 
   **Defect 2 — `4step-sequencer.maxpat` carries both a decoy and a corrupt real embed.** `obj-22` is a `newobj` whose entire text is `--- CLAUDE2MAX SPEC ---\n{"name":"4-step-sequencer"}\n--- END SPEC ---` — a stub with no objects and no connections. Because it precedes `obj-spec-embed`, `extract_spec` returns it, so the patch reports `spec.objects = 0`. The real embed (`obj-spec-embed`, `code`, 4,403-char body) does not parse either: it truncates mid-string, and the truncation point shows why — the spec contains an object *named* `obj-spec-embed` whose `attrs.text` is itself a spec embed. A sync captured the spec-embed box as a spec object, producing self-reference. `_SKIP_BOX_IDS` should have prevented this, so either the spec predates that guard or a path bypasses it — determine which, because a live bypass would keep reproducing this.
 
   **Why this matters:** `convert` consumes whatever `extract_spec` returns. On this patch today that is a 27-character stub, so converting `4step-sequencer.maxpat` would emit an essentially empty patch and destroy all 24 boxes. The patch is currently intact and the gate reports it clean — the damage is latent, triggered by the next `convert`. Nothing warns.
 
-  **Work**: (a) add the discriminator + a multi-candidate warning to `extract_spec`; (b) determine whether the `_SKIP_BOX_IDS` bypass is live by tracing which sync path wrote the self-referential object; (c) reconstruct `4step-sequencer.maxpat`'s spec from its 24 boxes via `sync` and delete the `obj-22` decoy; (d) add a rule to `claude2max_verify` for "more than one box carries the spec marker" and for "embed present but does not parse" — both are silent today. Item (d) overlaps the *embedded-spec presence* family scoped in the MCP-enforcement task **item 8**; build the detection rule there if that task runs first, and keep the converter-side `extract_spec` discriminator here.
+  **Work**: (a) ~~add the discriminator + a multi-candidate warning to `extract_spec`~~ **DONE 2026-08-21**; (b) determine whether the `_SKIP_BOX_IDS` bypass is live by tracing which sync path wrote the self-referential object; (c) reconstruct `4step-sequencer.maxpat`'s spec from its 24 boxes via `sync` and delete the `obj-22` decoy; (d) add a rule to `claude2max_verify` for "more than one box carries the spec marker" and for "embed present but does not parse" — both are silent today. Item (d) overlaps the *embedded-spec presence* family scoped in the MCP-enforcement task **item 8**; build the detection rule there if that task runs first, and keep the converter-side `extract_spec` discriminator here.
 
-  **Model**: Sonnet — the diagnosis is done, the remaining work is a discriminator, a trace, and a patch repair against a known-good box list.
+  **Also noticed 2026-08-21 while doing (a)** — `add_tutorial.py` carries its own second copy of `extract_spec` (line ~198). It already discriminates correctly (matches on `id == "obj-spec-embed"`), so it is not exposed to the decoy defect, but it swallows `json.JSONDecodeError` and returns `None`. On a patch like `4step-sequencer.maxpat` that reads as "this patch has no spec" — the same silent-acceptance failure one level over. Fold it into item (c) or (d): either make it call the converter's `extract_spec` or make it raise. Two implementations of one scan is the underlying smell.
+
+  **Model**: Sonnet — the diagnosis is done, the remaining work is a trace, a detection rule, and a patch repair against a known-good box list.
 
 - [in progress] **`.maxhelp` Corpus Crawl — extract canonical usage from Max's help patches** — Systematically read every `.maxhelp` file shipped with Max and installed packages, and extract canonical-usage knowledge into the corpus: which attributes/messages each object *actually uses*, real wiring idioms, default box sizes, and per-object gotchas. ~5,266 files total (~2,104 core: 973 in `help/` + 1,131 in bundled `packages/`; ~3,162 in user `~/Documents/Max 9/Packages/`). All are standard `.maxpat` JSON — parse with the existing box-walk approach (`json.load` → recurse `patcher.boxes`, including nested `patcher` subpatchers), no MCT decode needed; all local (no network / Cloudflare-WAF concerns).
 
@@ -698,12 +702,17 @@ resulting totals still look plausible. One `find ~/Documents/"Max 9"/Packages
 
 #### Group A — spec-embed hazard. Strict internal order.
 
-Only item in the queue that can destroy work today: converting
-`4step-sequencer.maxpat` currently emits a 27-character stub and wipes 24 boxes,
-with no warning.
+Was the only item in the queue that could destroy work: converting
+`4step-sequencer.maxpat` emitted a 27-character stub and wiped 24 boxes, with no
+warning. **Step 1 shipped 2026-08-21, so that path is now closed** — the patch is
+still unrepaired, but every route into it fails loudly instead of quietly
+succeeding. The remaining steps are diagnosis, detection, and repair.
 
-1. **`extract_spec` discriminator** (task item a). Goes first — it is the change
-   that makes `convert` non-destructive. One function, small.
+1. ~~**`extract_spec` discriminator** (task item a)~~ — **DONE 2026-08-21.** It was
+   the change that makes `convert` non-destructive, and it is in. `extract` and
+   `sync` on `4step-sequencer.maxpat` now both exit 1 and write nothing, naming
+   the decoy (`obj-22`) and the truncation point (line 284 of a 4,403-char body).
+   Steps 2–4 below are unchanged and still pending.
 2. **Trace the `_SKIP_BOX_IDS` bypass** (task item b). **[CHANGED]** — must
    precede the repair, not accompany it. If a sync path still writes the
    spec-embed box into the spec as an object, repairing `4step-sequencer` *via
