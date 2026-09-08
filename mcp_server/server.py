@@ -530,6 +530,15 @@ Applies to every surface the language reaches a reader — chat, `comment` boxes
 tutorial step text, docs. Comment boxes and tutorial text matter most: they ship
 with the patch and outlive the conversation.
 
+**"Inside" / "outside" are fixed words for the two views of an encapsulated
+object.** *Inside* = viewing the contents of a `p` / `patcher`, `poly~`, `gen~`,
+`jit.gen`, `jit.gl.pix`, `rnbo~`: the `inlet` / `outlet` / `in` / `out` objects and
+the sub-graph. *Outside* = seeing that box in the parent patch: its ports, box
+text, hover tooltips. A label follows where it SHOWS, not where it is written:
+an `inlet` object's `comment` attribute is written inside and displays outside as
+the parent box's port tooltip; `setinletassist` in a `v8` writes that same
+outside tooltip from the script.
+
 ---
 
 ## Never regress functionality

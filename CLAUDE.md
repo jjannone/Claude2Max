@@ -197,6 +197,9 @@ When describing how parts of a system connect, use the spatial and directional w
 
 This governs every surface where the language reaches a reader — chat explanations, `comment` boxes in a patch, tutorial step descriptions, docs, and commit messages. Comment boxes and tutorial text matter most: those ship with the patch and outlive the conversation.
 
+**"Inside" and "outside" name the two views of an encapsulated object, and the words are fixed.** *Inside* is what you see when viewing the contents of a `patcher` / `p`, `poly~`, `gen~`, `jit.gen`, `jit.gl.pix`, `rnbo~`, or any other box that holds a sub-graph: the `inlet` / `outlet` / `in` / `out` objects, the sub-graph's own boxes and cords. *Outside* is what you see looking at that box from the parent patch: its ports, its box text, its hover tooltips. A label can be written in one view and shown in the other, and the words follow where it *shows*: the `comment` attribute on an `inlet` object is written inside and displays outside, as the parent box's port tooltip; `setinletassist` in a `v8` writes that same outside tooltip from the script. Use the words this way in chat, in `comment` boxes, and in the docs, and do not let "inside" drift to mean "in the script" or "outside" to mean "in the spec."
+
+
 The recognition signal: any time you reach for a positional word to describe a connection, check whether the environment has its own word for that relationship — and whether the one you picked already means something different there. The same trap recurs beyond Max with different words in each environment (z-order vs. render order vs. execution order), so apply the check, not just this instance's answer.
 
 ## Flag Natural Commit Moments — Proactively Suggest Commit, Sync, and New Session
