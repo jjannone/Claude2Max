@@ -171,6 +171,7 @@ These automatically get `parameter_enable` set:
 - The `.js` file lives in the same directory as the `.maxpat`.
 - Incoming messages are dispatched to JS functions by selector: `bang` → `function bang()`, `setmode 2` → `function setmode(val)`, etc.
 - Set inlet/outlet counts in JS with `inlets = N; outlets = N;` globals.
+- **Label every inlet and outlet in the script** with `setinletassist(n, "text")` / `setoutletassist(n, "text")` right after the counts. The text is the hover tooltip on the box in Max — the v8 equivalent of a subpatcher's inlet comment, and required by the same rule (`CLAUDE.md > What You Must Handle`). Index is zero-based from the left. Confirmed in C74's shipped `jitgltextureset.js`; Max's code editor declares the second parameter as a function, and a plain string works and is what C74 uses.
 - Output with `outlet(n, value)`. Send a bang with `outlet(n, "bang")`.
 - Use `v8` rather than `js` for new work (Chrome V8 is faster and more standards-compliant).
 - **Good candidates for v8**: date/time logic, string parsing, stateful comparisons, anything that would require a chain of `sprintf`, `fromsymbol`, `pack/unpack`, `match`, or `change` objects.

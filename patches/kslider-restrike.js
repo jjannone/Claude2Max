@@ -20,6 +20,11 @@ inlets = 1;
 outlets = 2;
 autowatch = 1;
 
+// Hover text for each inlet and outlet in Max, like a subpatcher's inlet comment.
+setinletassist(0, "pitch velocity from the kslider (via join 2); restrike; clear");
+setoutletassist(0, "to the kslider left inlet: flush, then chord p1 v1 p2 v2 ...");
+setoutletassist(1, "stored pitches as a list, or (none)");
+
 var HELD = new Map();          // pitch -> velocity of the note-on that lit it
 
 function list(pitch, velocity) {

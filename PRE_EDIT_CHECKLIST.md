@@ -34,7 +34,7 @@ You're about to write or edit a file. Scan this list — each item is "if X appl
 - If any comment sets both `bgcolor` and `textcolor`: do the two contrast on their own, regardless of the canvas or panel behind the comment? A shared label helper that stamps a background is the usual way this goes wrong.
 - If writing presentation view: is `openinpresentation: 1` set on the patcher, AND has each presented box had `presentation_rect` set during post-conversion?
 - If the spec contains an `inlet` or `outlet` object inside a subpatcher / abstraction / poly~: is it labeled in BOTH places — (a) `attrs.comment` on the inlet/outlet box AND an adjacent `comment` box inside, AND (b) `attrs.comment` on the parent `p`/`poly~` describing every inlet/outlet by index, type, and purpose?
-- If adding a `v8` or `js` object: are `inlets`, `outlets`, and `outlettype` specified explicitly in the spec? (v8/js aren't in the converter's lookup table.)
+- If adding a `v8` or `js` object: are `inlets`, `outlets`, and `outlettype` specified explicitly in the spec? (v8/js aren't in the converter's lookup table.) And does the script call `setinletassist` / `setoutletassist` for every index it declares, so the box shows what each inlet expects and each outlet emits on hover?
 - If adding a `jsui` object: is the JS file linked via `attrs.filename` (NOT via `type:newobj, text:"jsui X.js"`)? Without `attrs.filename` the object is non-functional.
 - If putting logic in a JS object: is it stateless string/date/list manipulation only? DSP and signal processing must not live inside JS.
 
