@@ -505,6 +505,16 @@ Hook commands, MCP registrations, launch configs, and anything else stored as a 
 
 **The sync-first rule applies to any source of edits — not just user GUI changes.** Any direct modification to a .maxpat — whether a user edit in Max's GUI or a programmatic post-processing script — is invisible to the embedded spec and will be silently overwritten on the next `convert`. Use `/c2m-sync` or run `python3 spec2maxpat.py sync -i <patch>` immediately after any direct .maxpat modification.
 
+### A patch that arrives from elsewhere is stale until the spec-vs-boxes check passes — Binding Rule
+
+The sync-first rule above says "before any work on an existing .maxpat." Analyzing, verifying, and committing a patch are work too. Any `.maxpat` that arrives from another session, another person, or an external source has an embedded spec that may describe an earlier version of the boxes, and every action taken on the file before that is checked acts on the wrong object: an analysis describes boxes the spec does not know about, `verify_patch` in embedded-spec mode judges a spec that does not match the boxes and reports it clean, and a commit enshrines the mismatch so the next `convert` silently reverts the other author's edits.
+
+So the check comes first, before reading the patch for meaning, before running the verifier, and before committing. Run `python3 spec2maxpat.py sync -i <patch>` (which is the check and the repair in one step), then the object-count comparison in the section below, then a content-level comparison: match spec entries to boxes by `(type, text)` — never by id, since spec ids are semantic names and box ids are Max's `obj-N` — and confirm nothing exists on only one side, the connection counts agree, and matched objects share a presentation rect.
+
+The recognition signal: **git shows the file modified, and this session did not modify it.** That is the moment the file is untrusted, whatever the task is.
+
+For instance: `patches/kslider-restrike.maxpat` was analyzed, verified clean, and committed on 2026-09-08 while its embedded spec still described the previous commit exactly. The boxes carried another session's `[s VST]` / `[r VST]` rework, a `[print v8]`, the loaded plug-in name on `vst~`, and two presentation rects Max had resized. None of it was in the spec. The verifier had checked the spec. One `sync` repaired it; the check that would have caught it is twenty-five lines and is queued to become part of `sync --check` and `verify_patch`.
+
 ### Sync preserves; it does not prune — verify object count before every convert
 
 `sync` is a one-way mirror from `.maxpat` into the embedded spec. It captures whatever it finds, including orphan boxes that no longer wire to anything. If a prior session (or an imported patch) accumulated duplicate orphans — most commonly via repeated sync→convert cycles where each round adds another copy of a control box — `sync` will faithfully preserve every one of them, and the next `convert` will re-emit them as visible boxes in the regenerated patch. The patch silently re-explodes.
