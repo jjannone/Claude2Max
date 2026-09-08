@@ -69,14 +69,14 @@ This pattern of reasoning applies broadly in Max patching:
 
 ---
 
-## Max .maxpat Internals
+## Max .maxpat Internals {!core}
 
 - **Z-order**: In the `boxes` array, earlier items render on top (in front). To put an object visually on top of others, place it first in the array. Background objects go last.
 - **@bubbleside** (comment bubble arrows): `0=top, 1=left, 2=bottom, 3=right`. The arrow appears on that side of the comment, pointing outward. Use `"bubble_bgcolor"` (not `"bgcolor"`) for bubble background color.
 
 ---
 
-## Max Patching Principles
+## Max Patching Principles {!core}
 
 Design-level principles derived from real patch evolution — patterns that recur across patches and should be applied proactively.
 
@@ -150,7 +150,7 @@ Any number box, toggle, or flonum added to a patch must have a `loadmess` (or `l
 
 ---
 
-## Patching Layout — Avoiding Cord Tangles
+## Patching Layout — Avoiding Cord Tangles {!layout}
 
 When an object fans out to multiple destinations — for instance, both a processing chain and a display box — check whether placing all destinations at the same y-position will cause cords to cross. If so, stagger the destinations vertically so each incoming cord has a clear path. This is a case-by-case judgment based on the specific layout.
 
@@ -235,7 +235,7 @@ The recognition signal: if a `message`/`number`/UI box that is an *input* to som
 
 ---
 
-## Common Pitfalls
+## Common Pitfalls {!core}
 
 - `multislider` `fetch N` outputs from **outlet 1** (right), not outlet 0. A single int sent to a `multislider` sets all sliders to that value.
 - **`gate` vs `switch` — names mean the opposite of what they sound like.** `gate N` is a *distributor*: one data inlet routed to one of N outlets. `switch N` is a *selector*: one of N data inlets routed to a single outlet. Use `gate` when you have ONE source and want to send it to different destinations; use `switch` when you have N sources and want to monitor/route one at a time. `gate N 2` sets outlet 2 open at load; `0` closes all outlets. Both pass all message types.
@@ -276,7 +276,7 @@ The recognition signal: if a `message`/`number`/UI box that is an *input* to som
 
 ---
 
-## Presentation View Design Principles
+## Presentation View Design Principles {!layout}
 
 These principles represent the preferred aesthetic and UX approach for Max presentation views. Read and treat as a checklist before starting any presentation layout.
 
@@ -356,13 +356,13 @@ Themes with `--c2m-frame-rail-show: 1`, a non-`none` `--c2m-frame-scanline`, or 
 
 ---
 
-## Output-Only UI Objects
+## Output-Only UI Objects {!core}
 
 When any UI object is used purely for display (not user input), disable interaction and remove interactive visual affordances so users don't accidentally edit displayed values. For a number box: set `@ignoreclick 1` to disable interaction and `@triangle 0` to remove the edit arrow. The specific attributes vary by object type — apply the equivalent for toggles, sliders, etc.
 
 ---
 
-## UI Layout — Label and Control Spacing
+## UI Layout — Label and Control Spacing {!layout}
 
 Label overflow into adjacent controls is the most common layout mistake. Follow these rules on every spec.
 

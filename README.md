@@ -23,6 +23,8 @@ python3 spec2maxpat.py convert -i /tmp/spec.json \
 
 The `.maxpat` is its own source of truth (the spec is embedded), so nothing else needs to be kept alongside it. `sync`, `extract`, and `mct` accept the same absolute paths.
 
+**Mode C — No repo, no terminal: a Claude.ai Project plus a generator that runs inside Max.** For people on the free Claude.ai plan (no Claude Code, no MCP server). Claude drafts the JSON spec in the chat; `patchgen.js` builds the patch inside Max. See [Using Claude2Max on the free Claude plan](#using-claude2max-on-the-free-claude-plan) below.
+
 The recommended workflow is to work in your **own GitHub fork** of Claude2Max — Claude sets this up for you on the first session, so you don't need to know `git` or the `gh` CLI. The fork keeps your patches, your insights, and your session history safe in your GitHub account, and lets useful discoveries flow back to the main repo as pull requests. A purely local clone with no remote also works as a fallback for students who don't want a GitHub account. See `CLAUDE.md` § *Default Workflow — Your Own GitHub Fork* for the full setup flow.
 
 ---
@@ -164,6 +166,12 @@ Capture manual edits before re-converting:
 python3 spec2maxpat.py sync -i patches/my-patch.maxpat
 ```
 
+Check whether a patch's embedded spec still matches its boxes, without writing anything (exit code 1 when it doesn't — a patch from another session, another person, or Max's own resave is stale until this passes):
+
+```
+python3 spec2maxpat.py sync -i patches/my-patch.maxpat --check
+```
+
 Produce an MCT block (paste into Max via **File > New From Clipboard**):
 
 ```
@@ -193,6 +201,35 @@ python3 spec2maxpat.py mct -i patches/my-patch.maxpat
 ```
 
 See [SPEC_REFERENCE.md](SPEC_REFERENCE.md) for the full format, including subpatchers, presentation mode, v8/JS objects, attribute syntax, and worked examples for common patterns.
+
+## Using Claude2Max on the free Claude plan
+
+You do not need Claude Code, Python, or a terminal for this path. Claude writes the spec in a chat; a small script builds the patch inside Max.
+
+**One-time setup**
+
+1. Download or clone this repository once, or just the `claude-project/` folder — it holds everything below.
+2. On claude.ai, create a **Project** (Projects → New project).
+3. Open `claude-project/CLAUDE_INSTRUCTIONS.md`, copy all of it, and paste it into the Project's **Instructions** field. This tells Claude the exact JSON format and the rules that keep a patch working.
+4. Upload the rest of `claude-project/` — `SPEC_REFERENCE.md` and the `examples/` specs — to the Project's **Files**. (`patchgen.js` and `patchgen-loader.maxpat` stay on your computer; you can upload them too, they are small.)
+5. Put `patchgen.js` and `patchgen-loader.maxpat` together in a folder Max can see (your `Documents/Max 9/Library` folder works).
+
+**Every patch**
+
+1. In the Project, describe the patch you want. Claude replies with one fenced JSON block.
+2. Save that JSON as `spec.json` (any text editor; the name can be anything ending in `.json`).
+3. In Max, open `patchgen-loader.maxpat`, click **LOAD** and pick the file. A new window opens with the patch built in it.
+4. Save that window as a `.maxpat`. The spec is stored inside it, so the repo's `sync` / `extract` tools can read it back later if you ever move to the full toolkit.
+
+If something is off, paste the Max console message back into the chat and ask Claude to revise; it returns the whole spec again and you repeat steps 2–4.
+
+**Without a Project.** Attach `CLAUDE_INSTRUCTIONS.md`, `SPEC_REFERENCE.md`, and one or two examples to a single conversation and say "follow the attached instructions." You will re-attach them for each new conversation; a Project remembers them.
+
+**Plan limits.** Free-plan Projects have a capped file size and message allowance, and those numbers change — `claude-project/` is kept under about 150 KB to fit, and the build script prints the total. Check the current limits at [support.claude.com](https://support.claude.com).
+
+**If you do have a terminal.** The Python converter needs no server either: save the JSON and run `python3 spec2maxpat.py convert -i spec.json -o my-patch.maxpat` from this repository. It checks every object and attribute name against Max's own documentation, which the in-Max generator cannot do.
+
+`claude-project/` is generated from canonical sources by `tools/build_claude_project.py`; do not edit it by hand.
 
 ## Setup
 

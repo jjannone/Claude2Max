@@ -63,17 +63,19 @@ def verify_resolver_only(spec: dict, resolver) -> dict:
     return _shape(run_resolver_rules(spec, resolver))
 
 
-def verify_spec(spec: dict, resolver=None) -> dict:
+def verify_spec(spec: dict, resolver=None, base_dir=None, native=False) -> dict:
     """Run every binding-rule check against a parsed spec dict.
 
     Pass ``resolver`` (see spec2maxpat.build_resolver) to also run the
     anti-guessing rules — object names and attributes checked against the
-    authoritative C74 refpages + package library.
+    authoritative C74 refpages + package library. Pass ``base_dir`` (the
+    directory the patch lives in) to let file-reading rules find sibling
+    scripts (the declareattribute / setinletassist scanner).
     """
-    return _shape(run_all(spec, resolver=resolver))
+    return _shape(run_all(spec, resolver=resolver, base_dir=base_dir, native=native))
 
 
-def verify_spec_json(spec_json: str, resolver=None) -> dict:
+def verify_spec_json(spec_json: str, resolver=None, base_dir=None) -> dict:
     """Parse a JSON spec string then verify it. JSON errors come back as a result."""
     try:
         spec = json.loads(spec_json)
@@ -104,7 +106,7 @@ def verify_spec_json(spec_json: str, resolver=None) -> dict:
             }],
             "summary": "Top-level spec is not an object.",
         }
-    return verify_spec(spec, resolver=resolver)
+    return verify_spec(spec, resolver=resolver, base_dir=base_dir)
 
 
 _SEV_GLYPH = {ERROR: "✗ ERROR  ", WARNING: "⚠ WARNING", STYLE: "· style  "}

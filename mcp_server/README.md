@@ -92,8 +92,8 @@ restart Claude Code to pick up the newly registered MCP server.
 
 | Tool | Description |
 |---|---|
-| `assess(task_description)` | Reads the task's intent and returns the knowledge modules it needs (`core`, `gen`, `jitter`, `m4l`, `networking`, `msp`, `spec`). |
-| `load(domains)` | Assembles and returns the full knowledge for those modules as markdown. Additive — call again as the task grows. |
+| `assess(task_description)` | Reads the task's intent and returns the knowledge modules it needs (`core`, `layout`, `gen`, `jitter`, `m4l`, `networking`, `msp`, `spec`). |
+| `load(domains)` | Assembles and returns the full knowledge for those modules as markdown. Additive — call again as the task grows. `core` is a short tool-facing preface plus every section of `CLAUDE.md` / `patching/MAX_PATCHING.md` / `SPEC_REFERENCE.md` whose heading is tagged `{!core}`, verbatim; `layout` is the `{!layout}` sections (patching-view cord discipline, presentation design, spacing); every other module appends its `{!<domain>}` sections to its file or literal. Tag a heading in the doc and it is in the module on the next call — no digest to maintain. |
 | `essentials()` | Backward-compat alias for `load(["core"])`. |
 
 ### Verification — use after knowledge is loaded (Phase i)
@@ -110,6 +110,7 @@ restart Claude Code to pick up the newly registered MCP server.
 | Tool | Description |
 |---|---|
 | `verify_spec(spec_json)` | Static check on a full spec — **including the anti-guessing layer**: every object name and every attribute is resolved against C74 refpages + the package library. Attribute validity uses the object's own refpage attrs **∪ the jbox base-class attrs** every box inherits, so inherited attrs (textcolor, background, …) pass while invented names (`oscparse`) and family-resemblance attrs (`bgcolor` on `live.gain~`) are caught. Returns `{ok, counts, violations, summary, report}`. The **same** library (`claude2max_verify/`) runs inside `spec2maxpat.py convert`, which **blocks the build** on any error. Run before `convert`; fix anything it flags. |
+| `verify_patch(path, sweep=False)` | Same rule library run against a `.maxpat` / `.maxhelp` / `.amxd` **on disk**. With an embedded spec it verifies that spec — and first runs `spec2maxpat.spec_matches_patch()`, a content-level comparison of spec entries to boxes by `(maxclass, text)`; a mismatch is reported as a `spec-stale` warning at the top of the list, because every finding after it judges the spec rather than the boxes. Without an embed it checks every nested patcher scope natively. `sweep=True` on a directory aggregates by rule. |
 
 ### Knowledge search — find the rule or pitfall by name/term
 
@@ -125,10 +126,24 @@ a small hand-written corpus is reliable where fuzzy intent-matching isn't needed
 **`verify_spec` severities** — `error` **(blocks `convert`)**: unresolved object
 name, invalid attribute (not in the object's refpage ∪ jbox base), bad connection
 refs, malformed connections, out-of-range declared outlet/inlet indices;
-`warning`: no presentation view despite UI, unlabelled presented controls, visible
-cords on hidden boxes, unhidden formatter message boxes, unlabelled subpatcher
-I/O, untracked debug scaffolding; `style`: ALL-CAPS user names, `[v8]` over
-`[js]`.
+`warning`: no presentation view despite UI, presented controls with no comment
+label within 40 px, hidden boxes or cords, unlabelled subpatcher I/O (outside
+comment attr AND an adjacent comment box inside), untracked debug scaffolding,
+presented boxes that overlap or sit outside every panel, unreadable comment
+contrast, a `$N` message fed on its right inlet, `textedit` into a template
+without `@outputmode 1`, `select` on UI floats without `@fuzzy`, `jsui` without
+`attrs.filename` / `v8` without declared I/O, an enable attribute without its
+bounds (`jit.world` without `@enable 1`), kslider demo messages off the displayed
+keys, two `jit_matrix` sources into one inlet, and — when the script file can be
+found beside the patch — `declareattribute` labels/styles and missing
+`setinletassist` / `setoutletassist`; `style`: ALL-CAPS user names, the
+preferred-objects table (`pack`/`pak`/`unpack` → `join`/`unjoin`, long-form
+`send`/`receive`, `adc~`/`dac~`, `delay~`, `js`), bare `print`, patching-view
+`size` on UI boxes, uninitialized controls, and the patching-view geometry
+family (cord through unrelated boxes, feeder below its target, fan-out out of
+firing order, cord too short, dead-end side-tap button). The full list with its
+2026-09-08 calibration table is the header comment of the second rule family
+in `claude2max_verify/rules.py`.
 
 **The convert gate.** `spec2maxpat.py convert` refuses to emit a `.maxpat` when
 verification finds an error — turning Max's silent acceptance of invented
@@ -150,7 +165,7 @@ Source files read by the server:
 - `mcp_server/server.py` — tool implementations
 - (Steps 3-4) `spec2maxpat.py` — `RefpageCache` for C74 object I/O
 - (Steps 3-4) `packages/package_objects.json` — installed package externals
-- (Phase ii) `patching/MAX_PATCHING.md`, `CLAUDE.md`, `SPEC_REFERENCE.md` — binding rules
+- (Phase ii) `patching/MAX_PATCHING.md`, `CLAUDE.md`, `SPEC_REFERENCE.md` — binding rules; the `{!core}` / `{!layout}` / `{!<domain>}` heading tags decide which sections each module carries
 
 Caching: every disk-backed cache is an `_FileCache` (package library, object-name
 index, the gate resolver, rule sections, pitfall corpus). It reads its source
@@ -185,7 +200,13 @@ mcp_server/
     rules.py               Hand-coded rule library + Violation/SpecContext
     verify.py              Entry points + result-dict shape + format_report
   tests/
-    test_verify.py         Golden specs with known violations (27 cases)
+    test_verify.py         Golden specs with known violations (44 cases, incl. the spec-vs-boxes fixture in tests/fixtures/)
+```
+
+Run the module tests (tag-driven core/layout assembly; needs the venv for `mcp`):
+
+```
+mcp_server/.venv/bin/python3 mcp_server/tests/test_modules.py
 ```
 
 Run the verify tests standalone (no pytest needed):

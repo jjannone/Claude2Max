@@ -41,6 +41,7 @@ See mcp_server/SMOKE_TEST_RESULTS.md for Phase (i) end-to-end test results.
 """
 
 import json
+import re
 import os
 import sys
 from pathlib import Path
@@ -161,7 +162,11 @@ _MODULE_FILES: dict[str, list[Path]] = {
 }
 
 _DOMAIN_DESCRIPTIONS: dict[str, str] = {
-    "core":       "Binding rules, Common Pitfalls, preferred objects, naming convention — always loaded",
+    "core":       "Binding rules, Common Pitfalls, preferred objects, naming convention, "
+                  "workflow (sync first, stale until checked) — always loaded; assembled from "
+                  "every doc section tagged {!core}",
+    "layout":     "Laying out a patch — patching-view cord discipline, presentation-view design "
+                  "principles, label/control spacing (MAX_PATCHING.md sections tagged {!layout})",
     "gen":        "gen~ / gen programming model (per-sample evaluation, gen-specific objects, idioms)",
     "jitter":     "Jitter matrix, jit.gen, jit.gl.pix, JS-driven JitterMatrix API",
     "m4l":        "Max for Live — LOM access, live.* objects, device lifecycle, .amxd packaging",
@@ -197,6 +202,10 @@ _DOMAIN_KEYWORDS: dict[str, list[str]] = {
                    "playback", "echo", "waveform", "amplitude", "frequency"],
     "spec":       ["json spec", "from scratch", "write a spec", "spec file",
                    "spec2maxpat", "converter"],
+    # No bare "ui" (a substring of "build") and no bare "cord" ("record").
+    "layout":     ["layout", "lay out", "presentation", "panel", "arrange", "spacing",
+                   "patchcord", "tangle", "build a patch", "build me", "make a patch",
+                   "new patch", "redesign", "interface", "ui design", "control surface"],
 }
 
 # Inline modules for domains without a dedicated file.
@@ -299,16 +308,121 @@ def _extract_section(text: str, header: str) -> str:
     return "\n".join(result)
 
 
+# ── tagged doc sections → modules ─────────────────────────────────────────────
+#
+# A heading in CLAUDE.md / MAX_PATCHING.md / SPEC_REFERENCE.md tagged `{!core}`
+# is part of the core module; `{!layout}` builds the layout module; any other
+# `{!<domain>}` appends to that domain's module. Same convention as the
+# `{!pre-edit}` / `{!pre-commit}` admonition tags (hooks/inject_admonitions.py):
+# the rule text lives once, in the doc, and a one-token tag says where it is
+# surfaced. This replaced a hand-written digest literal on 2026-09-08 — see
+# CLAUDE.md > Prefer the Tool's Own Registry for why a hand-maintained table
+# was the wrong shape.
+
+_TAG_RE = re.compile(r"\s*\{![a-z0-9-]+\}")
+_HEADING_RE = re.compile(r"^(#+)\s+(.*)$")
+
+_TAGGED_DOCS: list[Path] = [
+    _REPO_ROOT / "CLAUDE.md",
+    _PATCHING_DIR / "MAX_PATCHING.md",
+    _REPO_ROOT / "SPEC_REFERENCE.md",
+]
+
+
+def _strip_tags(heading: str) -> str:
+    """Remove every `{!tag}` from a heading (or heading line)."""
+    return _TAG_RE.sub("", heading).rstrip()
+
+
+def _extract_tagged_sections(text: str, tag: str) -> list[str]:
+    """Every section whose heading carries `{!tag}`, in file order.
+
+    A section runs from its heading to the next heading of the same or a
+    higher level, so a tagged `## ` carries its `### ` children and a tagged
+    `### ` stops at the next `### ` or `## `. The tag is stripped from the
+    rendered heading; other tags on the same heading are stripped too.
+    """
+    token = "{!" + tag + "}"
+    lines = text.splitlines()
+    out: list[str] = []
+    i = 0
+    while i < len(lines):
+        m = _HEADING_RE.match(lines[i])
+        if m and token in lines[i]:
+            level = len(m.group(1))
+            j = i + 1
+            while j < len(lines):
+                m2 = _HEADING_RE.match(lines[j])
+                if m2 and len(m2.group(1)) <= level:
+                    break
+                j += 1
+            body = [_strip_tags(lines[i])] + lines[i + 1:j]
+            out.append("\n".join(body).rstrip())
+            i = j
+        else:
+            i += 1
+    return out
+
+
+def _build_tagged(tag: str) -> str:
+    parts: list[str] = []
+    for path in _TAGGED_DOCS:
+        if not path.exists():
+            continue
+        secs = _extract_tagged_sections(_read_md(path), tag)
+        if secs:
+            parts.append(f"<!-- from {path.name} — sections tagged {{!{tag}}} -->\n\n"
+                         + "\n\n".join(secs))
+    return "\n\n---\n\n".join(parts)
+
+
+_tagged_caches: dict[str, _FileCache] = {}
+
+
+def _tagged_text(tag: str) -> str:
+    """Concatenated `{!tag}` sections across the rule docs, mtime-cached."""
+    cache = _tagged_caches.get(tag)
+    if cache is None:
+        cache = _FileCache(_TAGGED_DOCS, lambda tag=tag: _build_tagged(tag))
+        _tagged_caches[tag] = cache
+    return cache.get()
+
+
+def _tagged_headings(tag: str) -> list[str]:
+    """The (tag-stripped) heading text of every `{!tag}` section — for tests and audits."""
+    token = "{!" + tag + "}"
+    found: list[str] = []
+    for path in _TAGGED_DOCS:
+        if not path.exists():
+            continue
+        for line in _read_md(path).splitlines():
+            m = _HEADING_RE.match(line)
+            if m and token in line:
+                found.append(_strip_tags(m.group(2)))
+    return found
+
+
 def _build_module(domain: str) -> str:
-    """Return the markdown content for a knowledge module."""
+    """Return the markdown content for a knowledge module.
+
+    A module is its inline literal (msp, networking) or its files
+    (_MODULE_FILES), followed by every doc section tagged `{!<domain>}`.
+    A domain with neither a literal nor files but with tagged sections
+    (layout) is built from the tags alone.
+    """
+    parts: list[str] = []
     if domain == "msp":
-        return _MSP_MODULE
-    if domain == "networking":
-        return _NETWORKING_MODULE
-    paths = _MODULE_FILES.get(domain)
-    if not paths:
+        parts.append(_MSP_MODULE)
+    elif domain == "networking":
+        parts.append(_NETWORKING_MODULE)
+    else:
+        for path in _MODULE_FILES.get(domain, []):
+            parts.append(_read_md(path))
+    tagged = _tagged_text(domain)
+    if tagged:
+        parts.append(tagged)
+    if not parts:
         return f"[Unknown domain: {domain}]"
-    parts = [_read_md(p) for p in paths]
     return "\n\n---\n\n".join(parts)
 
 
@@ -325,6 +439,7 @@ Recognition signals:
 - `live.*` objects, M4L device, LOM access → `load(["m4l"])`
 - `node.script`, WebSocket, phone performers, OSC server → `load(["networking"])`
 - Writing a spec from scratch for spec2maxpat.py → `load(["spec"])`
+- Placing boxes, designing a presentation view, fixing cord tangles → `load(["layout"])`
 - Audio signal chain, `~` objects, DSP → `load(["msp"])`
 - Any object whose prefix or namespace you don't recognise → call `assess()` again
   with the new context before adding it to a patch
@@ -334,8 +449,12 @@ Recognition signals:
 # essentials() — now a backward-compat alias for load(["core"]).
 # ---------------------------------------------------------------------------
 
-_ESSENTIALS_MD = """\
-# Claude2Max — Max/MSP Binding Rules (essentials)
+_CORE_STANCE_MD = """\
+# Claude2Max — Core Module
+
+_The binding rules below arrive verbatim from the repo docs: every section of
+`CLAUDE.md` and `patching/MAX_PATCHING.md` tagged `{!core}`. This short preface is
+the only hand-written part — it says how to use the MCP tools those rules assume._
 
 ## Operating stance — you do not know Max from memory
 
@@ -364,20 +483,16 @@ object names, wrong inlet indices — all accepted without error, no warning.
 The patch loads and appears to work, then silently misbehaves. The gate above
 exists to turn that silent, out-of-session failure into a loud, in-session one.
 
----
-
 ## Before writing any object name (`newobj` text field)
 
 Call `lookup_object(name)` — it queries C74 refpages and the 2,795-object
-package library authoritatively.  Do NOT write an object name until
+package library authoritatively. Do NOT write an object name until
 `lookup_object` confirms it exists.
 
 **Canonical example of silent failure**: `oscparse` — not in Max 9, accepted as
 a missing-object red box. OSC address-routing requires `o.route` from CNMAT
 Externals. `lookup_object("oscparse")` returns `found: false`; the right call
 is `lookup_object("o.route")` which resolves via the package library.
-
----
 
 ## Before writing any attribute on an object
 
@@ -392,171 +507,14 @@ attributes — and those "attributes" don't exist, so writing them silently does
 If `list_attributes` returns 0 or very few attrs, look at the `creation args` field in
 `lookup_object` — that's where the configurable values live.
 
-`live.gain~` example — VALID color attrs:
-  `coldcolor warmcolor hotcolor overloadcolor slidercolor textcolor tricolor
-   trioncolor tribordercolor focusbordercolor modulationcolor
-   inactivecoldcolor inactivewarmcolor`
-NOT valid (silently accepted, do nothing): `bgcolor peakcolor knobcolor needlecolor`
-
----
-
-## Binding rules
-
-### Presentation view — required for any patch with UI
-- `openinpresentation: 1` at the patcher root
-- `presentation: 1` on every operator-visible object
-- `presentation_rect: [x, y, w, h]` on each (explicit, independent of patching position)
-- Comment label adjacent to every visible control
-- Internal logic objects (`route`, `prepend`, `print`, formatter message boxes) stay OUT of presentation — visible in the patching view, absent here
-- Exempt: utility subpatchers with no operator surface; pure-DSP patches with no UI
-
-### Never hide patchcords or boxes
-Never set `hidden: 1` on a cord or a box (2026-09-07 — this REVERSES the older
-"hide plumbing patchcords" / "hide redundant message boxes" rules):
-- The presentation view already decides what the operator sees; `hidden` only
-  affects the patching view, which belongs to whoever edits or learns the patch
-- Keep plumbing off the operator's screen by omitting `presentation: 1` — that
-  is the entire mechanism
-- Tangled patching view → fix the LAYOUT (spacing, right-to-left fan-out order),
-  never the visibility
-- Sole exception: the embedded spec codebox (`obj-spec-embed`), which is storage,
-  not graph
-
-### join / unjoin, not pack / pak / unpack
-Prefer the object that states its behavior in an attribute over the one that
-encodes it in its name:
-- `join @triggers -1` IS `pak` (refpage: -1 makes all inlets hot); `join` is `pack`
-- `unjoin` is `unpack` — and `unjoin <n>` has **n+1** outlets (the arg counts
-  groups; a remainder outlet is always present)
-- `join <n>`'s arg is the INLET COUNT, not initial values — unlike `pak 4000 8001`,
-  its slots start at 0, so move any meaningful default to a loadmess
-
-### Prefer an object's own attribute over an adapter chain
-Before adding a `scale` / `expr` / offset `+` downstream, check the source
-object's attributes:
-- `random @range 4000 8000` emits that range directly — no `scale`, no `+ min`
-  (`@range` takes TWO values; set it live with a `range <lo> <hi>` message)
-- Signal: multiple `s~` sharing a name SUM into the matching `r~` — a mix bus is
-  one `s~` per voice, no summing objects
-- Use `s` / `r` / `s~` / `r~` (short forms), and only where a cord would cross
-  the patch; short local connections stay cords
-- `button`, not `[t b]`, to convert a message to a bang — it blinks when it fires
-  and can be clicked to test
-
-### textedit is NOT for set-once configuration
-`textedit` has two fatal flaws for config values (URLs, identifiers, API keys):
-1. Output fires on Enter only, not on patch load → stale state after reopen
-2. Bang emits `text <content>` (multi-element list) not bare content → data corruption
-   downstream (e.g., `setcloudurl text wss://…` instead of `setcloudurl wss://…`)
-Use instead:
-- Hardcode in upstream source code (server.js, v8 script) — preferred for truly fixed values
-- `dialog` — bang to prompt; emits a clean symbol with no prefix
-- `umenu` — for a small finite set of choices
-- `pattr` + `autopattr @autorestore 1` — for values that need persistence + per-patch override
-`textedit` IS correct for free-form text the user types repeatedly during a show.
-
-### Never render an empty container when server-driven state hasn't arrived
-Distinguish three states: (1) haven't received state yet, (2) state received but empty,
-(3) state received with content. Rendering an empty div for cases 1 and 2 is
-indistinguishable from "this app is broken." Each not-yet state must surface a
-visible placeholder naming which not-yet it is.
-
-### Modify, don't rebuild
-When making a new version of an existing patch:
-- Default workflow: `sync → extract → edit spec → convert`
-- Rebuilding from scratch silently drops: alignment offsets, init defaults, wiring,
-  naming conventions, tutorial systems, every micro-decision from prior sessions
-- Rebuild only when <50% of structure is shared with the original
-- Any pattern noted as "what's working" in prior critique is binding — praise without
-  applying is the named failure mode
-
-### Sync before any edit
-Run `python3 spec2maxpat.py sync -i <patch>` before ANY edit to a .maxpat.
-`convert` regenerates from scratch and destroys manual edits not captured in the spec.
-
-### Spec embedding — required in every .maxpat
-Include a hidden `text.codebox` (`id: "obj-spec-embed"`, `hidden: 1`) with the
-full spec JSON wrapped in `--- CLAUDE2MAX SPEC ---` / `--- END SPEC ---` delimiters.
-
----
-
-## Preferred objects (key entries)
-
-| Task | Default | Avoid |
-|---|---|---|
-| Audio I/O | `ezadc~` / `ezdac~` (toggle-style) | `adc~` / `dac~` |
-| Sound file playback | `playlist~` (multi-file, crossfades) | rolling `sfplay~` + bank logic |
-| JS / scripting | `v8` (ES6+, faster) | `js` (use only for existing patches) |
-| Text input — config | `dialog` (bang → modal → clean symbol) | `textedit` |
-| Text input — live | `textedit` | `dialog` |
-| List manipulation | `v8` JavaScript (one line) | long `zl`/`pak`/`unpack` chains |
-| Range mapping | `scale` | `expr` |
-| Sequencer / clock | `metro` (send `1` to start, `0` to stop) | |
-| Multi-column display | `jit.cellblock` (`cell <col> <row> set <val>`) | |
-| OSC routing | `udpreceive` + `o.route` (CNMAT odot) | `oscparse` (doesn't exist) |
-| Reverb | `bp.Gigaverb` (BEAP, ships with Max) | |
-| Variable delay | `tapin~` / `tapout~` | `delay~` |
-
-**Before composing any chain of 3+ native objects**, call:
-`search_packages(term)` — the 2,795-object library often covers the whole chain in one external.
-
----
-
-## Naming convention
-
-ALL CAPS for all user-defined names:
-- send/receive: `send TEMPO`, `receive PITCH`
-- pv/v variables: `pv CURRENT_STATE`
-- buffer~/coll names: `buffer~ LOOPBUF`
-- JS variables: `var STEP_COUNT = 0`
-Does NOT apply to Max built-in names, object class names, or message selectors.
-
----
-
-## Describe flow in Max's own directional vocabulary
-
-Max patches flow **top→bottom, left→right**. Describe connections that way:
-- say one object sits **under** / **downstream of** another
-- say **connect A to B**, **A feeds B**, **A drives B**
-
-**Never say "behind" or "in front of" for signal/data order.** In Max that
-phrasing is already taken — it means **z-order** (the `background` attribute
-that renders a panel behind other objects), so it reads as a layering
-instruction, not a wiring one:
-- WRONG: "put `[playlist~]` behind `[cv.jit.faces]`"
-- RIGHT: "have `[cv.jit.faces]` drive `[playlist~]`"
-
-Applies to every surface the language reaches a reader — chat, `comment` boxes,
-tutorial step text, docs. Comment boxes and tutorial text matter most: they ship
-with the patch and outlive the conversation.
-
-**"Inside" / "outside" are fixed words for the two views of an encapsulated
-object.** *Inside* = viewing the contents of a `p` / `patcher`, `poly~`, `gen~`,
-`jit.gen`, `jit.gl.pix`, `rnbo~`: the `inlet` / `outlet` / `in` / `out` objects and
-the sub-graph. *Outside* = seeing that box in the parent patch: its ports, box
-text, hover tooltips. A label follows where it SHOWS, not where it is written:
-an `inlet` object's `comment` attribute is written inside and displays outside as
-the parent box's port tooltip; `setinletassist` in a `v8` writes that same
-outside tooltip from the script.
-
----
-
-## Never regress functionality
-
-When moving a working feature to a different modality (different UI object,
-different display, different data path):
-- Inventory every piece of information in the current format
-- Confirm ALL of it is present in the new one
-- A change of modality is not a reason to lose capability
-
----
-
 ## What to call next
 
 - `lookup_object(name)` — before adding any `newobj` to a patch
 - `search_packages(term)` — before composing a 3+ native-object chain
-- `lookup_attribute(object_name, attr)` — before writing any attribute (Step 4)
-- `list_attributes(object_name)` — to see all valid attrs for an object (Step 4)
+- `lookup_attribute(object_name, attr)` — before writing any attribute
+- `list_attributes(object_name)` — to see all valid attrs for an object
+- `verify_spec(spec_json)` — before `convert`; `verify_patch(path)` — after a build, a sync, or a hand-edit
+- `load(["layout"])` — before placing boxes or designing a presentation view
 """
 
 
@@ -743,7 +701,7 @@ def load(domains: list) -> str:
     Parameters
     ----------
     domains — list of domain names. "core" is always included even if omitted.
-              Available: "core", "gen", "jitter", "m4l", "networking", "msp", "spec"
+              Available: "core", "layout", "gen", "jitter", "m4l", "networking", "msp", "spec"
 
     Returns
     -------
@@ -762,16 +720,15 @@ def load(domains: list) -> str:
 
     for domain in ordered:
         if domain == "core":
-            # Core = binding rules + re-evaluation signal + Common Pitfalls.
-            mp_text = _read_md(_PATCHING_DIR / "MAX_PATCHING.md")
-            pitfalls = _extract_section(mp_text, "## Common Pitfalls")
+            # Core = tool-facing stance + re-evaluation signal + every doc
+            # section tagged {!core} (binding rules, Common Pitfalls, preferred
+            # objects, workflow), verbatim and mtime-fresh.
             sections.append(
-                f"# Claude2Max — Core Module\n\n"
-                f"{_ESSENTIALS_MD}\n\n"
+                f"{_CORE_STANCE_MD}\n\n"
                 f"---\n\n"
                 f"{_RE_EVAL_BLOCK}\n\n"
                 f"---\n\n"
-                f"{pitfalls}"
+                f"{_tagged_text('core')}"
             )
         else:
             desc = _DOMAIN_DESCRIPTIONS.get(domain, domain)
@@ -1731,7 +1688,7 @@ def _split_sections(text: str, source: str) -> list:
                 sections.append({"name": cur_name,
                                  "body": "\n".join(cur_body).strip(),
                                  "source": source})
-            cur_name = line[3:].strip()
+            cur_name = _strip_tags(line[3:].strip())   # `{!core}` etc. are not part of the name
             cur_body = []
         elif cur_name is not None:
             cur_body.append(line)

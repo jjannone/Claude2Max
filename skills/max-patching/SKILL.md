@@ -32,6 +32,9 @@ mcp__claude2max__load(domains=["core", ...])   ← use the list from assess()
 
 Read the returned markdown — it is your working knowledge for this session.
 It contains binding rules, Common Pitfalls, preferred objects, and domain guidance.
+`core` is every repo doc section tagged `{!core}`, verbatim. If the task will place boxes
+or design a presentation view, make sure `"layout"` is in the list — `assess()` adds it for
+build tasks; add it yourself if it is missing.
 
 If `assess()` returned only `["core"]`:
 

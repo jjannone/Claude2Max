@@ -66,6 +66,40 @@ _INTERACTIVE = {
     "scope~", "meter~",
 }
 
+# Nominal patching-view box sizes for UI classes — a MIRROR of
+# spec2maxpat.UI_SIZES (this module must not import the converter). A test in
+# tests/test_verify.py asserts the two tables agree, so drift is caught.
+_NOMINAL_UI_SIZES = {
+    "inlet":    (30, 30),
+    "outlet":   (30, 30),
+    "toggle":   (24, 24),
+    "button":   (24, 24),
+    "slider":   (20, 140),
+    "dial":     (40, 48),
+    "number":   (50, 22),
+    "flonum":   (50, 22),
+    "multislider": (120, 80),
+    "function": (200, 100),
+    "scope~":   (130, 130),
+    "jit.pwindow": (160, 120),
+    "preset":   (100, 40),
+    "live.dial": (44, 47),
+    "live.slider": (48, 100),
+    "live.toggle": (44, 20),
+    "live.numbox": (44, 20),
+    "live.menu": (100, 20),
+    "live.text": (44, 20),
+    "live.tab":  (100, 20),
+    "gain~":    (22, 140),
+    "ezdac~":   (45, 45),
+    "ezadc~":   (45, 45),
+    "meter~":   (12, 100),
+    "umenu":    (100, 22),
+    "radiogroup": (18, 90),
+    "matrixctrl": (100, 100),
+    "textedit": (200, 80),
+}
+
 # Objects whose first argument is a user-defined NAME that the ALL-CAPS naming
 # convention applies to.  Maps object-class → token index of the name argument.
 _NAMED_FIRST_ARG = {
@@ -198,8 +232,17 @@ def _truthy(v) -> bool:
 class SpecContext:
     """Pre-computed views over a spec so rules don't each re-walk it."""
 
-    def __init__(self, spec: dict):
+    def __init__(self, spec: dict, base_dir=None, native=False):
         self.spec = spec if isinstance(spec, dict) else {}
+        # Directory the patch lives in, when known (verify_patch_file supplies
+        # it). Rules that read a sibling file — the JS attribute scanner —
+        # resolve relative script names against it; None means "can't".
+        self.base_dir = base_dir
+        # True when the spec was derived from a native patch's boxes rather
+        # than authored (verify_patch_file's native-scopes mode). Rules about
+        # spec-authoring fields that the derivation does not carry — declared
+        # v8 I/O, jsui attrs.filename — cannot be judged there and no-op.
+        self.native = native
         objs = self.spec.get("objects", {})
         self.objects: dict[str, dict] = objs if isinstance(objs, dict) else {}
         conns = self.spec.get("connections", [])
@@ -248,6 +291,56 @@ class SpecContext:
     @staticmethod
     def conn_hidden(conn) -> bool:
         return len(conn) == 5 and isinstance(conn[4], dict) and _truthy(conn[4].get("hidden"))
+
+    # -- geometry (patching view) ------------------------------------------
+    @classmethod
+    def box_rect(cls, obj: dict):
+        """Patching-view rect [x, y, w, h] for an object, or None when it has
+        no explicit `pos` (auto-laid-out — never guess a position).
+
+        `size` is often absent: after a `sync`, reconcile_spec records it only
+        when the live height differs from 22. Fallbacks mirror the converter:
+        a UI class takes its nominal size (_NOMINAL_UI_SIZES); a text box is
+        22 px high and `len(text) * 7 + 20` wide (spec2maxpat.estimate_text_width).
+        """
+        if not isinstance(obj, dict):
+            return None
+        pos = obj.get("pos")
+        if not isinstance(pos, (list, tuple)) or len(pos) < 2:
+            return None
+        try:
+            x, y = float(pos[0]), float(pos[1])
+        except (TypeError, ValueError):
+            return None
+        size = obj.get("size")
+        if isinstance(size, (list, tuple)) and len(size) >= 2:
+            try:
+                return [x, y, float(size[0]), float(size[1])]
+            except (TypeError, ValueError):
+                pass
+        mc = cls.maxclass(obj)
+        if mc in _NOMINAL_UI_SIZES:
+            w, h = _NOMINAL_UI_SIZES[mc]
+            return [x, y, float(w), float(h)]
+        text = cls.text(obj)
+        w = max(len(text) * 7 + 20, 40) if text else 40
+        return [x, y, float(w), 22.0]
+
+    @staticmethod
+    def pres_rect(obj: dict):
+        """Presentation rect [x, y, w, h], or None. `presentation_rect` wins
+        over `presentation`; a 2-element `presentation` has no size and a dict
+        (grid hint) is not a rect — both return None."""
+        if not isinstance(obj, dict):
+            return None
+        for key in ("presentation_rect", "presentation"):
+            v = obj.get(key)
+            if isinstance(v, (list, tuple)) and len(v) >= 4:
+                try:
+                    return [float(c) for c in v[:4]]
+                except (TypeError, ValueError):
+                    return None
+        return None
 
 
 # ───────────────────────────────────────────────────────────────────────────
@@ -381,32 +474,72 @@ def rule_presentation_required(ctx: SpecContext) -> list:
     )]
 
 
+_LABEL_REACH_PX = 40.0   # edge-to-edge distance within which a comment counts as a control's label
+# Controls that render their own label: attrui shows the attribute name it is
+# bound to. Calibration 2026-09-08 on patches/: 48 per-control hits, 30 of
+# them attrui rows in reverb-shootout sitting 54–78 px from a section header.
+_SELF_LABELLED = {"attrui"}
+
+
+def _edge_distance(a, b) -> float:
+    """Shortest edge-to-edge distance between two [x, y, w, h] rects (0 if they touch/overlap)."""
+    dx = max(b[0] - (a[0] + a[2]), a[0] - (b[0] + b[2]), 0.0)
+    dy = max(b[1] - (a[1] + a[3]), a[1] - (b[1] + b[3]), 0.0)
+    return (dx * dx + dy * dy) ** 0.5
+
+
 def rule_presented_controls_need_labels(ctx: SpecContext) -> list:
     """
-    Binding rule: a control worth showing is worth labelling.  Coarse check —
-    if there are presented interactive controls but zero presented comment
-    boxes, the presentation has no labels at all.
+    Binding rule: a control worth showing is worth labelling. Two tiers:
+      1. coarse — presented interactive controls but NO presented comment at
+         all → one finding for the whole patch (not one per control).
+      2. per-control — each presented control needs a presented `comment`
+         within _LABEL_REACH_PX (edge to edge) in the presentation view.
+         Controls without a presentation rect (2-element `presentation`)
+         cannot be measured and are skipped.
+    `message` boxes are their own label (MAX_PATCHING.md > Prefer a labeled
+    message box over a button + comment) and are not interactive here.
+    Deliberately NO inverse check (a comment with no control near it) — John
+    discarded it 2026-09-08.
+    Calibration 2026-09-08: see docstring note in TASK_QUEUE item 13(s).
     """
     presented_controls = [
-        oid for oid, obj in ctx.objects.items()
+        (oid, obj) for oid, obj in ctx.objects.items()
         if isinstance(obj, dict) and ctx.has_presentation(obj)
         and is_interactive(ctx.maxclass(obj))
+        and ctx.maxclass(obj) not in _SELF_LABELLED
     ]
     if not presented_controls:
         return []
-    presented_comment = any(
-        isinstance(o, dict) and ctx.maxclass(o) == "comment" and ctx.has_presentation(o)
-        for o in ctx.objects.values()
-    )
-    if presented_comment:
-        return []
-    return [Violation(
-        "presented-controls-need-labels", WARNING, "patcher",
-        f"{len(presented_controls)} control(s) are in the presentation view but "
-        f"there are no presented comment labels. Every visible control needs a "
-        f"label.",
-        "CLAUDE.md > Always Create a Presentation View",
-    )]
+    comments = [
+        ctx.pres_rect(o) for o in ctx.objects.values()
+        if isinstance(o, dict) and ctx.maxclass(o) == "comment" and ctx.has_presentation(o)
+    ]
+    if not any(isinstance(o, dict) and ctx.maxclass(o) == "comment" and ctx.has_presentation(o)
+               for o in ctx.objects.values()):
+        return [Violation(
+            "presented-controls-need-labels", WARNING, "patcher",
+            f"{len(presented_controls)} control(s) are in the presentation view but "
+            f"there are no presented comment labels. Every visible control needs a "
+            f"label.",
+            "CLAUDE.md > Always Create a Presentation View",
+        )]
+    comment_rects = [r for r in comments if r]
+    out = []
+    for oid, obj in presented_controls:
+        r = ctx.pres_rect(obj)
+        if r is None or not comment_rects:
+            continue
+        nearest = min(_edge_distance(r, c) for c in comment_rects)
+        if nearest > _LABEL_REACH_PX:
+            out.append(Violation(
+                "control-unlabelled", WARNING, oid,
+                f"Presented control '{oid}' ({ctx.maxclass(obj)}) has no comment "
+                f"label within {_LABEL_REACH_PX:.0f} px in the presentation view "
+                f"(nearest is {nearest:.0f} px away). Put a comment beside it.",
+                "CLAUDE.md > Always Create a Presentation View",
+            ))
+    return out
 
 
 # Two legitimate uses of `hidden` survive the never-hide rule, and both are
@@ -473,8 +606,24 @@ def rule_no_hidden_elements(ctx: SpecContext) -> list:
     return out
 
 
+_IO_COMMENT_REACH_PX = 60.0
+
+
 def _check_io_labels(objects: dict, path: str, out: list) -> None:
-    """Recursive: inlet/outlet boxes inside a (sub)patcher need a comment attr."""
+    """Recursive: inlet/outlet boxes inside a (sub)patcher need BOTH a comment
+    attr (the outside tooltip) AND an adjacent `comment` box inside the scope.
+
+    Adjacency is edge-to-edge within _IO_COMMENT_REACH_PX in the patching view;
+    when a scope has no positions to measure, any comment in the scope counts.
+    """
+    comment_rects = []
+    any_comment = False
+    for o in objects.values():
+        if isinstance(o, dict) and o.get("type") == "comment":
+            any_comment = True
+            r = SpecContext.box_rect(o)
+            if r:
+                comment_rects.append(r)
     for oid, obj in objects.items():
         if not isinstance(obj, dict):
             continue
@@ -488,7 +637,20 @@ def _check_io_labels(objects: dict, path: str, out: list) -> None:
                     f"inside an encapsulation (purpose + type).",
                     "CLAUDE.md > subpatcher/abstraction inlet/outlet labeling",
                 ))
-        # recurse into nested patchers
+            r = SpecContext.box_rect(obj)
+            if r and comment_rects:
+                near = min(_edge_distance(r, c) for c in comment_rects) <= _IO_COMMENT_REACH_PX
+            else:
+                near = any_comment
+            if not near:
+                out.append(Violation(
+                    "io-comment-box-missing", WARNING, f"{path}{oid}",
+                    f"{mc} '{oid}' has no adjacent comment box inside the "
+                    f"encapsulation (within {_IO_COMMENT_REACH_PX:.0f} px). The "
+                    f"comment attr labels the port outside; a comment box beside "
+                    f"the {mc} labels it inside — both are required.",
+                    "CLAUDE.md > What You Must Handle > subpatcher inlet/outlet labeling",
+                ))
         sub = obj.get("patcher")
         if isinstance(sub, dict):
             nested = sub.get("objects", {})
@@ -568,6 +730,929 @@ def rule_debug_marking(ctx: SpecContext) -> list:
 
 
 # ───────────────────────────────────────────────────────────────────────────
+# WARNING rules, second family — presentation geometry and silent-failure
+# wiring (TASK_QUEUE item 13, 2026-09-08). Each docstring names the doc
+# section it enforces.
+#
+# Calibration, 2026-09-08 — hit counts with `spec2maxpat.py verify --summary
+# --no-resolver` over `patches/` (7 files, embedded specs) and the C74 help
+# corpus (1,015 files, native-scopes mode). A rule that fires on most of C74's
+# own patches measures a convention they never adopted; all of these hold at
+# WARNING / STYLE per the hold-all-promotion decision.
+#
+#   rule                          patches/   C74 help   note
+#   presentation-overlap               2          0     corpus specs carry no presentation rects
+#   comment-contrast                   0          0
+#   control-unlabelled                14          0     48 before exempting attrui (self-labelled)
+#   io-comment-box-missing             0          0
+#   template-on-right-inlet            0          0
+#   textedit-into-template             0          0
+#   select-float-needs-fuzzy           0          1
+#   script-filename-missing            0      3,332*    *native mode; now no-ops there (ctx.native)
+#   script-io-undeclared               4        968*    *same — derived specs never declare I/O
+#   attribute-group-incomplete         0          4
+#   attribute-required                 0         42     jit.world without @enable 1, as the doc warns
+#   kslider-demo-range                 0          0
+#   jit-matrix-fan-in                  —          —     resolver-gated; corpus run was --no-resolver
+#   cord-crosses-unrelated-box        95          0     panels excluded; attrui columns dominate
+#   feeder-below-target                0          0
+#   fanout-order                       2          0
+#   cord-too-short                   103          0     older repo layouts used 25–30 px rows
+#   button-side-tap                    4         69
+#   preferred-object                   6        549     plus prefer-v8 960 (js in C74 help)
+#   print-needs-name                   0         45
+#   patching-size-override            12          0     64 before allowing attrui (content-sized)
+#   control-init-on-load              19      2,514     C74 convention: uninitialized number boxes
+#   attr-* / script-io-unlabelled      4          0     JS scanner; needs base_dir
+#
+# Geometry and presentation rules read `pos` / presentation rects, which a
+# native-derived spec does not carry, so their corpus count is structurally 0.
+# ───────────────────────────────────────────────────────────────────────────
+
+_OVERLAP_TOLERANCE_PX = 1.0   # Max rounds rects on save; a 1 px kiss is not a collision
+
+
+def _rects_intersect(a, b, tol=_OVERLAP_TOLERANCE_PX):
+    """Overlap depth (min of x/y penetration) if a and b intersect by more than tol, else 0."""
+    ox = min(a[0] + a[2], b[0] + b[2]) - max(a[0], b[0])
+    oy = min(a[1] + a[3], b[1] + b[3]) - max(a[1], b[1])
+    if ox > tol and oy > tol:
+        return min(ox, oy)
+    return 0.0
+
+
+def _rect_inside(inner, outer) -> bool:
+    return (outer[0] <= inner[0] and outer[1] <= inner[1]
+            and inner[0] + inner[2] <= outer[0] + outer[2]
+            and inner[1] + inner[3] <= outer[1] + outer[3])
+
+
+def rule_presentation_overlap(ctx: SpecContext) -> list:
+    """(a) Presented boxes must not intersect, and must sit inside a panel.
+
+    Pairwise rectangle intersection over every presented non-panel box, then
+    containment: when at least one presented panel exists, every presented
+    non-panel box must lie inside some panel. Panels are excluded from the
+    pairwise pass (nested panels are legitimate). Boxes with no presentation
+    rect (2-element `presentation`) are skipped.
+    Source: MAX_PATCHING.md > Every presentation row needs its own vertical
+    budget ("treat any hit as a layout bug"). Motivating case: kslider-restrike,
+    where Max resized the kslider 576×70 → 560×83 on resave and the 9 px
+    overlap with the hint comment shipped.
+    """
+    presented = []
+    panels = []
+    for oid, obj in ctx.objects.items():
+        if not isinstance(obj, dict) or not ctx.has_presentation(obj):
+            continue
+        r = ctx.pres_rect(obj)
+        if r is None:
+            continue
+        if ctx.maxclass(obj) == "panel":
+            panels.append((oid, r))
+        else:
+            presented.append((oid, r))
+    out = []
+    for i in range(len(presented)):
+        for j in range(i + 1, len(presented)):
+            (a_id, a), (b_id, b) = presented[i], presented[j]
+            depth = _rects_intersect(a, b)
+            if depth:
+                out.append(Violation(
+                    "presentation-overlap", WARNING, f"{a_id} × {b_id}",
+                    f"Presented boxes '{a_id}' {[int(v) for v in a]} and '{b_id}' "
+                    f"{[int(v) for v in b]} overlap by {depth:.0f} px in the "
+                    f"presentation view. Re-flow the row — every presented control "
+                    f"needs its own vertical budget.",
+                    "MAX_PATCHING.md > Every presentation row needs its own vertical budget",
+                ))
+    if panels:
+        for oid, r in presented:
+            if not any(_rect_inside(r, pr) for _pid, pr in panels):
+                out.append(Violation(
+                    "presentation-outside-panel", WARNING, oid,
+                    f"Presented box '{oid}' {[int(v) for v in r]} lies inside no "
+                    f"presented panel. Grow the panel meant to hold it or move the box.",
+                    "MAX_PATCHING.md > Every presentation row needs its own vertical budget",
+                ))
+    return out
+
+
+def _srgb_to_linear(c: float) -> float:
+    c = max(0.0, min(1.0, c))
+    return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+
+
+def _luminance(rgba) -> float:
+    r, g, b = (_srgb_to_linear(float(rgba[i])) for i in range(3))
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+
+_CONTRAST_MIN = 3.0   # WCAG large-text minimum; calibrate before raising
+
+
+def rule_comment_contrast(ctx: SpecContext) -> list:
+    """(b) A comment's text must read against its own background.
+
+    Only comments that set BOTH `bgcolor` and `textcolor` are judged (one alone
+    pairs with Max's default, which is calibrated for the canvas). Background
+    alpha below 0.1 is effectively transparent and skipped. Ratio below
+    _CONTRAST_MIN fires. `bubble_bgcolor` is deliberately not considered.
+    Source: MAX_PATCHING.md > A comment's text must contrast with its own
+    background ("a one-line luminance diff over the spec is enough").
+    """
+    out = []
+    for oid, obj in ctx.objects.items():
+        if not isinstance(obj, dict) or ctx.maxclass(obj) != "comment":
+            continue
+        attrs = ctx.attrs(obj)
+        bg, fg = attrs.get("bgcolor"), attrs.get("textcolor")
+        if not (isinstance(bg, (list, tuple)) and isinstance(fg, (list, tuple))
+                and len(bg) >= 3 and len(fg) >= 3):
+            continue
+        try:
+            if len(bg) >= 4 and float(bg[3]) < 0.1:
+                continue
+            lb, lf = _luminance(bg), _luminance(fg)
+        except (TypeError, ValueError):
+            continue
+        hi, lo = max(lb, lf), min(lb, lf)
+        ratio = (hi + 0.05) / (lo + 0.05)
+        if ratio < _CONTRAST_MIN:
+            out.append(Violation(
+                "comment-contrast", WARNING, oid,
+                f"Comment '{oid}' has text/background contrast {ratio:.2f}:1 "
+                f"(below {_CONTRAST_MIN:.0f}:1) — textcolor {list(fg[:3])} on bgcolor "
+                f"{list(bg[:3])} is unreadable. Lighten the text or darken the panel.",
+                "MAX_PATCHING.md > A comment's text must contrast with its own background",
+            ))
+    return out
+
+
+_DOLLAR_RE = __import__("re").compile(r"\$\d")
+
+
+def _has_template(text: str) -> bool:
+    return bool(_DOLLAR_RE.search(text or ""))
+
+
+def rule_template_on_right_inlet(ctx: SpecContext) -> list:
+    """(h) A `$N` message box must be fed on its LEFT inlet.
+
+    The right inlet replaces the stored text without output — the template is
+    silently overwritten with the incoming value and the patch keeps running
+    with a mutated message box. No legitimate use is known.
+    Source: MAX_PATCHING.md > A message box's RIGHT inlet replaces the box's
+    stored text without triggering output.
+    """
+    out = []
+    for oid, obj in ctx.objects.items():
+        if not isinstance(obj, dict) or ctx.maxclass(obj) != "message":
+            continue
+        if not _has_template(ctx.text(obj)):
+            continue
+        for i, conn in ctx.incoming.get(oid, []):
+            if conn[3] == 1:
+                out.append(Violation(
+                    "template-on-right-inlet", WARNING, f"connections[{i}]",
+                    f"'{conn[0]}' feeds inlet 1 of message '{oid}' "
+                    f"(\"{ctx.text(obj)}\"). The right inlet REPLACES the stored text "
+                    f"and emits nothing — the $-template is silently overwritten. "
+                    f"Wire it to inlet 0.",
+                    "MAX_PATCHING.md > A message box's RIGHT inlet replaces the box's stored text",
+                ))
+    return out
+
+
+def _text_attr(obj: dict, name: str):
+    """An attribute from `attrs` or from an `@name value` token pair in `text`."""
+    attrs = SpecContext.attrs(obj)
+    if name in attrs:
+        return attrs[name]
+    toks = SpecContext.text(obj).split()
+    for i, tok in enumerate(toks):
+        if tok == "@" + name and i + 1 < len(toks):
+            return toks[i + 1]
+    return None
+
+
+def rule_textedit_into_template(ctx: SpecContext) -> list:
+    """(l) `textedit` outlet 0 carries a `text` prefix unless `@outputmode 1`.
+
+    Flag an outlet-0 cord from such a textedit into a `$N` message, `prepend`,
+    or `sprintf`. `[route text]` between them is the sanctioned fix and is not
+    flagged. Source: MAX_PATCHING.md > textedit outlet 0 emits `text <symbol>`
+    by default; CLAUDE.md > Don't Use textedit for Set-Once Configuration.
+    """
+    out = []
+    for oid, obj in ctx.objects.items():
+        if not isinstance(obj, dict) or ctx.maxclass(obj) != "textedit":
+            continue
+        mode = _text_attr(obj, "outputmode")
+        if mode is not None and str(mode) not in ("0", "0.0"):
+            continue
+        for i, conn in ctx.outgoing.get(oid, []):
+            if conn[1] != 0:
+                continue
+            tgt = ctx.objects.get(conn[2])
+            if not isinstance(tgt, dict):
+                continue
+            tmc, ttext = ctx.maxclass(tgt), ctx.text(tgt)
+            first = ttext.split()[0] if ttext.split() else ""
+            bad = ((tmc == "message" and _has_template(ttext))
+                   or (tmc == "newobj" and first in ("prepend", "sprintf")))
+            if bad:
+                out.append(Violation(
+                    "textedit-into-template", WARNING, f"connections[{i}]",
+                    f"textedit '{oid}' (outputmode 0) feeds '{conn[2]}' — its output "
+                    f"is `text <content>`, so the literal symbol `text` lands in the "
+                    f"template/format. Set `@outputmode 1`, insert `[route text]`, or "
+                    f"hardcode the value.",
+                    "MAX_PATCHING.md > textedit outlet 0 emits text <symbol> by default",
+                ))
+    return out
+
+
+_FLOAT_UI_SOURCES = {"dial", "slider", "rslider", "flonum", "multislider"}
+
+
+def rule_select_float_needs_fuzzy(ctx: SpecContext) -> list:
+    """(m) `select` against a float from a UI source needs `@fuzzy`.
+
+    UI floats arrive as 0.14999999…; `select 0.15` misses them silently.
+    Fires when a `select`/`sel` has a float literal arg, no `@fuzzy`, and any
+    incoming cord from a dial/slider/rslider/flonum/multislider/live.* control.
+    Source: MAX_PATCHING.md > select with float values from UI requires @fuzzy.
+    """
+    out = []
+    for oid, obj in ctx.objects.items():
+        if not isinstance(obj, dict) or ctx.maxclass(obj) != "newobj":
+            continue
+        toks = ctx.text(obj).split()
+        if not toks or toks[0] not in ("select", "sel"):
+            continue
+        if "@fuzzy" in toks:
+            continue
+        has_float = any("." in a and _is_numeric_literal(a) for a in toks[1:] if not a.startswith("@"))
+        if not has_float:
+            continue
+        for i, conn in ctx.incoming.get(oid, []):
+            src = ctx.objects.get(conn[0])
+            if not isinstance(src, dict):
+                continue
+            smc = ctx.maxclass(src)
+            if smc in _FLOAT_UI_SOURCES or (smc.startswith("live.") and is_interactive(smc)):
+                out.append(Violation(
+                    "select-float-needs-fuzzy", WARNING, oid,
+                    f"'{ctx.text(obj)}' compares floats but is fed by '{conn[0]}' "
+                    f"({smc}), whose values arrive as 0.1499999… and never match "
+                    f"exactly. Add `@fuzzy 0.001` (or compare on ints).",
+                    "MAX_PATCHING.md > select with float values from UI requires @fuzzy",
+                ))
+                break
+    return out
+
+
+def rule_script_object_declarations(ctx: SpecContext) -> list:
+    """(k) `jsui`/`v8ui` need `attrs.filename`; `v8`/`js` need declared I/O.
+
+    (1) A `jsui`/`v8ui` object without a non-empty `attrs.filename` is unlinked
+        and non-functional; `jsui foo.js` as a newobj is the same mistake.
+    (2) A `v8`/`js` newobj without `inlets`, `outlets`, and `outlettype` is
+        built on the converter's defaults, which are not the script's.
+    Source: SPEC_REFERENCE.md > v8 / JavaScript Objects (jsui objects; "always
+    override inlets, outlets, and outlettype").
+    """
+    if ctx.native:
+        return []   # a derived spec carries neither attrs.filename nor declared I/O
+    out = []
+    for oid, obj in ctx.objects.items():
+        if not isinstance(obj, dict):
+            continue
+        mc = ctx.maxclass(obj)
+        toks = ctx.text(obj).split()
+        if mc in ("jsui", "v8ui"):
+            fn = ctx.attrs(obj).get("filename")
+            if not (isinstance(fn, str) and fn.strip()):
+                out.append(Violation(
+                    "script-filename-missing", WARNING, oid,
+                    f"'{oid}' is a {mc} with no attrs.filename — the object is "
+                    f"unlinked and draws nothing. Set attrs: {{\"filename\": \"script.js\"}}.",
+                    "SPEC_REFERENCE.md > v8 / JavaScript Objects",
+                ))
+        elif mc == "newobj" and toks and toks[0] in ("jsui", "v8ui"):
+            out.append(Violation(
+                "script-filename-missing", WARNING, oid,
+                f"'{oid}' is written as newobj \"{ctx.text(obj)}\". Use type "
+                f"\"{toks[0]}\" with attrs.filename instead — the filename attribute is "
+                f"how Max links the script.",
+                "SPEC_REFERENCE.md > v8 / JavaScript Objects",
+            ))
+        elif mc == "newobj" and toks and toks[0] in ("v8", "js"):
+            missing = [k for k in ("inlets", "outlets", "outlettype") if k not in obj]
+            if missing:
+                out.append(Violation(
+                    "script-io-undeclared", WARNING, oid,
+                    f"'{oid}' ({ctx.text(obj)}) does not declare {', '.join(missing)}. "
+                    f"Script objects are not in the converter's I/O table — declare "
+                    f"all three to match the script's `inlets` / `outlets`.",
+                    "SPEC_REFERENCE.md > v8 / JavaScript Objects",
+                ))
+    return out
+
+
+# {class: [(toggle_attr, [required companions])]} — an enable switch without
+# its bounds is a no-op.
+_ATTR_GROUPS = {
+    "jit.matrix": [("usedstdim", ["dstdimstart", "dstdimend"]),
+                   ("usesrcdim", ["srcdimstart", "srcdimend"])],
+}
+# {class: [(attr, required_value)]} — creation attributes that must be present.
+_REQUIRED_ATTRS = {
+    "jit.world": [("enable", "1")],
+}
+
+
+def rule_attribute_group_incomplete(ctx: SpecContext) -> list:
+    """(o) A toggle attribute without its companions; `jit.world` without `@enable 1`.
+
+    Attributes are read from `attrs` and from `@name value` tokens in `text`.
+    Source: SPEC_REFERENCE.md > Attribute groups: an enable switch without its
+    bounds is a no-op; MAX_PATCHING.md > Max Patching Knowledge > jit.world
+    @enable defaults to 0.
+    """
+    out = []
+    for oid, obj in ctx.objects.items():
+        if not isinstance(obj, dict):
+            continue
+        cls = _classname(ctx, obj)
+        for toggle, companions in _ATTR_GROUPS.get(cls, []):
+            v = _text_attr(obj, toggle)
+            if v is None or str(v) in ("0", "0.0"):
+                continue
+            missing = [c for c in companions if _text_attr(obj, c) is None]
+            if missing:
+                out.append(Violation(
+                    "attribute-group-incomplete", WARNING, oid,
+                    f"'{oid}' sets @{toggle} without {', '.join('@' + c for c in missing)} "
+                    f"— the switch is on but its bounds are unset, so it does nothing.",
+                    "SPEC_REFERENCE.md > Attribute groups: an enable switch without its bounds is a no-op",
+                ))
+        for attr, want in _REQUIRED_ATTRS.get(cls, []):
+            v = _text_attr(obj, attr)
+            if v is None or str(v).rstrip("0").rstrip(".") != want:
+                out.append(Violation(
+                    "attribute-required", WARNING, oid,
+                    f"'{oid}' ({cls}) does not set @{attr} {want} as a creation "
+                    f"attribute — it defaults off and renders nothing until enabled.",
+                    "MAX_PATCHING.md > jit.world @enable defaults to 0",
+                ))
+    return out
+
+
+_KSLIDER_OFFSET_DEFAULT = 36
+_KSLIDER_RANGE_DEFAULT = 48
+
+
+def rule_kslider_demo_range(ctx: SpecContext) -> list:
+    """(v) Messages into a kslider must address keys it displays.
+
+    Displayed range is [offset, offset + range) from attrs (defaults 36 / 48,
+    SPEC_REFERENCE.md > kslider). For each `message` wired to inlet 0:
+    `chord p v p v …` → every p; `set n` → n; a bare int → itself. `$N`
+    templates cannot be evaluated and are skipped.
+    Source: CLAUDE.md > Demos, Help Files, and Test Patches Must Demonstrate
+    Functionality Visibly ("every demo input must address currently-visible state").
+    """
+    out = []
+    for oid, obj in ctx.objects.items():
+        if not isinstance(obj, dict) or ctx.maxclass(obj) != "kslider":
+            continue
+        try:
+            offset = int(float(_text_attr(obj, "offset") or _KSLIDER_OFFSET_DEFAULT))
+            rng = int(float(_text_attr(obj, "range") or _KSLIDER_RANGE_DEFAULT))
+        except (TypeError, ValueError):
+            continue
+        lo, hi = offset, offset + rng
+        for i, conn in ctx.incoming.get(oid, []):
+            if conn[3] != 0:
+                continue
+            src = ctx.objects.get(conn[0])
+            if not isinstance(src, dict) or ctx.maxclass(src) != "message":
+                continue
+            text = ctx.text(src)
+            if _has_template(text):
+                continue
+            toks = text.split()
+            notes = []
+            if toks and toks[0] == "chord":
+                notes = toks[1::2]
+            elif toks and toks[0] == "set" and len(toks) > 1:
+                notes = [toks[1]]
+            elif len(toks) == 1:
+                notes = toks
+            bad = []
+            for n in notes:
+                try:
+                    v = int(float(n))
+                except (TypeError, ValueError):
+                    continue
+                if not (lo <= v < hi):
+                    bad.append(v)
+            if bad:
+                out.append(Violation(
+                    "kslider-demo-range", WARNING, conn[0],
+                    f"message '{conn[0]}' (\"{text}\") sends note(s) {bad} to kslider "
+                    f"'{oid}', which displays {lo}–{hi - 1}. The message fires but "
+                    f"lands off-screen and reads as dead. Use notes in range, or set "
+                    f"@offset / @range to include them.",
+                    "CLAUDE.md > Demos, Help Files, and Test Patches Must Demonstrate Functionality Visibly",
+                ))
+    return out
+
+
+def rule_jit_matrix_fan_in(ctx: SpecContext, resolver) -> list:
+    """(n) Two jit_matrix sources fanned into one inlet is a structural conflict.
+
+    Resolver-gated: an outlet's type comes from the spec's own `outlettype`
+    override, else `resolver.resolve_object(name)["outlettype"]`. Groups
+    connections by (destination, inlet) and flags any group with two or more
+    distinct matrix sources. A resolver that returns no outlet types → no-op.
+    Source: MAX_PATCHING.md > Two jit_matrix sources fanned into one inlet is
+    a structural conflict.
+    """
+    if resolver is None:
+        return []
+    groups: dict = {}
+    for i, conn in enumerate(ctx.connections):
+        if not isinstance(conn, (list, tuple)) or len(conn) < 4:
+            continue
+        src = ctx.objects.get(conn[0])
+        if not isinstance(src, dict):
+            continue
+        types = src.get("outlettype")
+        if not isinstance(types, list):
+            info = resolver.resolve_object(_classname(ctx, src))
+            types = info.get("outlettype") if isinstance(info, dict) else None
+        if not isinstance(types, list):
+            continue
+        so = conn[1]
+        if not (isinstance(so, int) and 0 <= so < len(types)):
+            continue
+        if types[so] != "jit_matrix":
+            continue
+        groups.setdefault((conn[2], conn[3]), []).append((i, conn[0]))
+    out = []
+    for (dst, inlet), members in groups.items():
+        srcs = sorted({s for _i, s in members})
+        if len(srcs) >= 2:
+            out.append(Violation(
+                "jit-matrix-fan-in", WARNING, f"{dst}[{inlet}]",
+                f"{len(srcs)} jit_matrix sources ({', '.join(srcs)}) fan into inlet "
+                f"{inlet} of '{dst}'. Give each matrix source its own inlet and "
+                f"dispatch on `inlet` in JS.",
+                "MAX_PATCHING.md > Two jit_matrix sources fanned into one inlet is a structural conflict",
+            ))
+    return out
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# STYLE rules, second family — patching-view geometry (TASK_QUEUE item 13
+# (c)–(g)). All read pos/size via SpecContext.box_rect and skip any object
+# without an explicit `pos`.
+# ───────────────────────────────────────────────────────────────────────────
+
+_ROW_PX = 55.0            # one layout row (spec2maxpat Y_SPACING); cords shorter than this are "local"
+_CORD_WIDEN_PX = 3.0
+_CORD_MIN_OVERLAP_AREA = 20.0
+_CORD_TOO_SHORT_PX = 15.0
+
+
+def _port_x(rect, index, count) -> float:
+    """Approximate x of outlet/inlet `index` on a box with `count` ports."""
+    x, w = rect[0], rect[2]
+    if isinstance(count, int) and count > 0 and isinstance(index, int) and 0 <= index < count:
+        return x + (index + 0.5) * w / count
+    return x + w / 2.0
+
+
+def _cord_geometry(ctx: SpecContext, conn):
+    """(src_rect, dst_rect, cord_rect) for a positioned connection, else None."""
+    if not isinstance(conn, (list, tuple)) or len(conn) < 4:
+        return None
+    s, d = ctx.objects.get(conn[0]), ctx.objects.get(conn[2])
+    sr, dr = ctx.box_rect(s), ctx.box_rect(d)
+    if sr is None or dr is None:
+        return None
+    x0 = _port_x(sr, conn[1], s.get("outlets") if isinstance(s, dict) else None)
+    x1 = _port_x(dr, conn[3], d.get("inlets") if isinstance(d, dict) else None)
+    y0, y1 = sr[1] + sr[3], dr[1]
+    left, right = min(x0, x1) - _CORD_WIDEN_PX, max(x0, x1) + _CORD_WIDEN_PX
+    top, bottom = min(y0, y1), max(y0, y1)
+    return sr, dr, [left, top, right - left, bottom - top]
+
+
+def rule_cord_crosses_unrelated_box(ctx: SpecContext) -> list:
+    """(c) A cord that runs past boxes it does not connect should be an s/r pair.
+
+    The axis-aligned rectangle spanned by a cord's two endpoints (widened by a
+    few px) must not intersect any third box by more than a minimum area.
+    Cords with a vertical span under one row (~55 px) are local and skipped.
+    Crossing only a comment is reported but said to be milder.
+    Source: MAX_PATCHING.md > A cord that runs past objects it does not
+    connect becomes s / r (rule of thumb; STYLE).
+    """
+    out = []
+    rects = {oid: ctx.box_rect(o) for oid, o in ctx.objects.items()}
+    for i, conn in enumerate(ctx.connections):
+        g = _cord_geometry(ctx, conn)
+        if g is None:
+            continue
+        sr, dr, cord = g
+        if cord[3] < _ROW_PX:
+            continue
+        crossed, only_comments = [], True
+        for oid, r in rects.items():
+            if r is None or oid in (conn[0], conn[2]):
+                continue
+            if ctx.maxclass(ctx.objects[oid]) == "panel":
+                continue  # background z-order; cords run over panels by design
+            ox = min(cord[0] + cord[2], r[0] + r[2]) - max(cord[0], r[0])
+            oy = min(cord[1] + cord[3], r[1] + r[3]) - max(cord[1], r[1])
+            if ox > 0 and oy > 0 and ox * oy >= _CORD_MIN_OVERLAP_AREA:
+                crossed.append(oid)
+                if ctx.maxclass(ctx.objects[oid]) != "comment":
+                    only_comments = False
+        if crossed:
+            note = " (only comments — milder)" if only_comments else ""
+            out.append(Violation(
+                "cord-crosses-unrelated-box", STYLE, f"connections[{i}]",
+                f"Cord {conn[0]}:{conn[1]} → {conn[2]}:{conn[3]} runs through "
+                f"{', '.join(crossed)}{note}. Replace it with [s NAME] under "
+                f"'{conn[0]}' and [r NAME] above '{conn[2]}', or re-flow the layout.",
+                "MAX_PATCHING.md > A cord that runs past objects it does not connect becomes s / r",
+            ))
+    return out
+
+
+def rule_feeder_below_target(ctx: SpecContext) -> list:
+    """(d) An input (message box or UI control) sits above the object it feeds.
+
+    Flags a `message` or interactive source drawn below its destination, so the
+    cord runs upward and reads as broken. A two-box cycle (the destination also
+    feeds the source) is exempt — one of those cords must go up.
+    Source: MAX_PATCHING.md > Signal flow runs top-to-bottom — inputs above,
+    outputs below.
+    """
+    out = []
+    for i, conn in enumerate(ctx.connections):
+        if not isinstance(conn, (list, tuple)) or len(conn) < 4:
+            continue
+        s, d = ctx.objects.get(conn[0]), ctx.objects.get(conn[2])
+        if not isinstance(s, dict) or not isinstance(d, dict):
+            continue
+        smc = ctx.maxclass(s)
+        if not (smc == "message" or is_interactive(smc)):
+            continue
+        sr, dr = ctx.box_rect(s), ctx.box_rect(d)
+        if sr is None or dr is None or sr[1] <= dr[1]:
+            continue
+        if any(c[2] == conn[0] for _j, c in ctx.outgoing.get(conn[2], [])):
+            continue  # feedback pair
+        out.append(Violation(
+            "feeder-below-target", STYLE, f"connections[{i}]",
+            f"'{conn[0]}' ({smc}) at y={sr[1]:.0f} feeds '{conn[2]}' at y={dr[1]:.0f} "
+            f"— the cord runs upward. Move the feeder above its target.",
+            "MAX_PATCHING.md > Signal flow runs top-to-bottom — inputs above, outputs below",
+        ))
+    return out
+
+
+def rule_fanout_order(ctx: SpecContext) -> list:
+    """(e) Destinations of a multi-outlet fan-out sit in firing order.
+
+    Max fires outlets right to left, so the destination fed by a higher-index
+    outlet should sit further right. Equal x counts as satisfied; when one
+    outlet feeds several boxes, the leftmost is compared. `trigger`/`t` is
+    named in the message since order is its whole purpose.
+    Source: MAX_PATCHING.md > Lay fan-out destinations out right-to-left, in
+    execution order.
+    """
+    out = []
+    for oid, obj in ctx.objects.items():
+        if not isinstance(obj, dict):
+            continue
+        per_outlet: dict = {}
+        for _i, conn in ctx.outgoing.get(oid, []):
+            d = ctx.objects.get(conn[2])
+            dr = ctx.box_rect(d)
+            if dr is None or not isinstance(conn[1], int):
+                continue
+            cx = dr[0] + dr[2] / 2.0
+            cur = per_outlet.get(conn[1])
+            if cur is None or cx < cur[0]:
+                per_outlet[conn[1]] = (cx, conn[2])
+        if len(per_outlet) < 2:
+            continue
+        outlets = sorted(per_outlet)
+        for a in range(len(outlets)):
+            for b in range(a + 1, len(outlets)):
+                oa, ob = outlets[a], outlets[b]
+                xa, da = per_outlet[oa]
+                xb, db = per_outlet[ob]
+                if xa > xb:
+                    name = ctx.text(obj).split()[0] if ctx.text(obj).split() else ctx.maxclass(obj)
+                    is_t = name in ("trigger", "t")
+                    out.append(Violation(
+                        "fanout-order", STYLE, oid,
+                        f"'{oid}' ({name}) outlet {oa} → '{da}' sits RIGHT of outlet "
+                        f"{ob} → '{db}', but Max fires outlet {ob} first. Swap them so "
+                        f"destinations read right-to-left in execution order"
+                        f"{' — on a trigger the order is the whole point' if is_t else ''}.",
+                        "MAX_PATCHING.md > Lay fan-out destinations out right-to-left, in execution order",
+                    ))
+                    break
+    return out
+
+
+def rule_cord_too_short(ctx: SpecContext) -> list:
+    """(f) Leave room under a box for its cords to read as cords.
+
+    Vertical clearance `dst.y - (src.y + src.h)` that is positive but under
+    15 px is a cord too short to see or click; the doc recommends ~30 px.
+    Negative clearance is (d)'s or the overlap rule's territory.
+    Source: MAX_PATCHING.md > Leave enough vertical space under a box for its
+    cords to read as cords.
+    """
+    out = []
+    for i, conn in enumerate(ctx.connections):
+        if not isinstance(conn, (list, tuple)) or len(conn) < 4:
+            continue
+        sr = ctx.box_rect(ctx.objects.get(conn[0]))
+        dr = ctx.box_rect(ctx.objects.get(conn[2]))
+        if sr is None or dr is None:
+            continue
+        gap = dr[1] - (sr[1] + sr[3])
+        if 0 < gap < _CORD_TOO_SHORT_PX:
+            out.append(Violation(
+                "cord-too-short", STYLE, f"connections[{i}]",
+                f"Only {gap:.0f} px between the bottom of '{conn[0]}' and the top of "
+                f"'{conn[2]}' — the cord is barely visible. Leave ~30 px.",
+                "MAX_PATCHING.md > Leave enough vertical space under a box for its cords to read as cords",
+            ))
+    return out
+
+
+def rule_button_side_tap(ctx: SpecContext) -> list:
+    """(g) A pass-through indicator button belongs inline on the cord.
+
+    If two or more cords leave one outlet and one ends at a `button` with no
+    outgoing connections, that button is a side tap — wire it inline instead.
+    A presented button is an operator control and is exempt.
+    Source: MAX_PATCHING.md > Buttons used as pass-through indicators are
+    inline on the cord, not on a side tap.
+    """
+    out = []
+    for oid, obj in ctx.objects.items():
+        if not isinstance(obj, dict):
+            continue
+        by_outlet: dict = {}
+        for i, conn in ctx.outgoing.get(oid, []):
+            by_outlet.setdefault(conn[1], []).append((i, conn))
+        for outlet, cords in by_outlet.items():
+            if len(cords) < 2:
+                continue
+            for i, conn in cords:
+                d = ctx.objects.get(conn[2])
+                if (isinstance(d, dict) and ctx.maxclass(d) == "button"
+                        and not ctx.outgoing.get(conn[2]) and not ctx.has_presentation(d)):
+                    others = [c[2] for _j, c in cords if c is not conn]
+                    out.append(Violation(
+                        "button-side-tap", STYLE, f"connections[{i}]",
+                        f"button '{conn[2]}' dead-ends a side tap from '{oid}' outlet "
+                        f"{outlet}. Wire it inline instead: {oid} → {conn[2]} → "
+                        f"{', '.join(others)}.",
+                        "MAX_PATCHING.md > Buttons used as pass-through indicators are inline on the cord",
+                    ))
+    return out
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# STYLE rules, third family — preferred objects and initialization nudges
+# (TASK_QUEUE item 13 (j), (p), (q), (t)).
+# ───────────────────────────────────────────────────────────────────────────
+
+# first_token -> (replacement, rule id, source). One table, one mechanism;
+# the js row keeps its historical rule id.
+_PREFERRED_OBJECTS = {
+    "js":       ("v8", "prefer-v8",
+                 "CLAUDE.md > Preferred Objects (JS / scripting)"),
+    "pack":     ("join", "preferred-object",
+                 "CLAUDE.md > Prefer the Object That States Its Behavior in an Attribute"),
+    "pak":      ("join @triggers -1", "preferred-object",
+                 "CLAUDE.md > Prefer the Object That States Its Behavior in an Attribute"),
+    "unpack":   ("unjoin (n+1 outlets — the arg counts groups)", "preferred-object",
+                 "CLAUDE.md > Prefer the Object That States Its Behavior in an Attribute"),
+    "send":     ("s", "preferred-object", "MAX_PATCHING.md > Write send / receive in their short forms"),
+    "receive":  ("r", "preferred-object", "MAX_PATCHING.md > Write send / receive in their short forms"),
+    "send~":    ("s~", "preferred-object", "MAX_PATCHING.md > Write send / receive in their short forms"),
+    "receive~": ("r~", "preferred-object", "MAX_PATCHING.md > Write send / receive in their short forms"),
+    "adc~":     ("ezadc~", "preferred-object", "CLAUDE.md > Preferred Objects for Common Tasks"),
+    "dac~":     ("ezdac~", "preferred-object", "CLAUDE.md > Preferred Objects for Common Tasks"),
+    "delay~":   ("tapin~ / tapout~", "preferred-object", "CLAUDE.md > Preferred Objects for Common Tasks"),
+}
+# (upstream first token, downstream first token) -> replacement
+_PREFERRED_CHAINS = {
+    ("midiin", "midiparse"):    "notein / ctlin / bendin directly",
+    ("midiformat", "midiout"):  "noteout / ctlout directly",
+}
+
+
+def rule_preferred_object(ctx: SpecContext) -> list:
+    """(j) One table-driven nudge toward the preferred-objects table.
+
+    Rows: pack/pak/unpack → join/unjoin (binding), send/receive long forms →
+    s/r (binding), adc~/dac~ → ez*, delay~ → tapin~/tapout~, js → v8 (the old
+    rule_prefer_v8, folded in). Chains: midiin→midiparse, midiformat→midiout.
+    `midiformat → vst~` is correct and not flagged.
+    Source: CLAUDE.md > Preferred Objects for Common Tasks (and the rows' own sections).
+    """
+    out = []
+    first = {}
+    for oid, obj in ctx.objects.items():
+        if not isinstance(obj, dict) or ctx.maxclass(obj) != "newobj":
+            continue
+        toks = ctx.text(obj).split()
+        if not toks:
+            continue
+        first[oid] = toks[0]
+        row = _PREFERRED_OBJECTS.get(toks[0])
+        if row:
+            repl, rid, src = row
+            out.append(Violation(
+                rid, STYLE, oid,
+                f"'{oid}' uses [{toks[0]}]. Prefer [{repl}]"
+                + (" for new patches (ES6+, faster) unless modifying a patch that already uses js."
+                   if toks[0] == "js" else " — see the preferred-objects table."),
+                src,
+            ))
+    for i, conn in enumerate(ctx.connections):
+        if not isinstance(conn, (list, tuple)) or len(conn) < 4:
+            continue
+        key = (first.get(conn[0]), first.get(conn[2]))
+        repl = _PREFERRED_CHAINS.get(key)
+        if repl:
+            out.append(Violation(
+                "preferred-object", STYLE, f"connections[{i}]",
+                f"[{key[0]}] → [{key[1]}] chain — use {repl}.",
+                "CLAUDE.md > Preferred Objects for Common Tasks",
+            ))
+    return out
+
+
+def rule_print_needs_name(ctx: SpecContext) -> list:
+    """(p) A bare `print` labels nothing in the console.
+    Source: MAX_PATCHING.md > Do not grow an object's interface for monitoring
+    — monitor with print <descriptive-name>."""
+    out = []
+    for oid, obj in ctx.objects.items():
+        if isinstance(obj, dict) and ctx.maxclass(obj) == "newobj" \
+                and ctx.text(obj).strip() == "print":
+            out.append(Violation(
+                "print-needs-name", STYLE, oid,
+                f"'{oid}' is a bare [print]. Give it a name ([print HELD]) so its "
+                f"console lines are tellable apart from other prints.",
+                "MAX_PATCHING.md > Do not grow an object's interface for monitoring",
+            ))
+    return out
+
+
+# UI classes whose patching-view box is legitimately content-sized.
+_SIZE_ALLOWED = {
+    "comment", "message", "panel", "jsui", "v8ui", "jit.pwindow", "multislider", "attrui",
+    "textedit", "umenu", "jit.cellblock", "function", "filtergraph~", "kslider",
+    "live.text", "live.menu", "live.tab", "playlist~", "bpatcher", "scope~",
+    "spectroscope~", "matrixctrl", "pictslider", "itable", "nslider", "preset",
+}
+
+
+def rule_patching_size_override(ctx: SpecContext) -> list:
+    """(q) Do not resize UI boxes in the patching view without reason.
+
+    Flags `size` on an interactive / live.* class outside the content-sized
+    allowlist, unless it equals the class's nominal size (a synced default);
+    and any `size` at all on inlet/outlet (they are 30×30 and change shape).
+    Source: MAX_PATCHING.md > Preserve each object's default box size in the
+    patching view; SPEC_REFERENCE.md > Inlet and Outlet Object Sizes.
+    """
+    out = []
+    for oid, obj in ctx.objects.items():
+        if not isinstance(obj, dict):
+            continue
+        size = obj.get("size")
+        if not (isinstance(size, (list, tuple)) and len(size) >= 2):
+            continue
+        mc = ctx.maxclass(obj)
+        if mc in ("inlet", "outlet"):
+            out.append(Violation(
+                "io-box-resized", STYLE, oid,
+                f"{mc} '{oid}' has an explicit size {list(size[:2])}. Inlet and outlet "
+                f"boxes are 30×30; another size draws the wrong shape. Remove `size`.",
+                "SPEC_REFERENCE.md > Inlet and Outlet Object Sizes",
+            ))
+            continue
+        if mc in _SIZE_ALLOWED or not is_interactive(mc):
+            continue
+        nominal = _NOMINAL_UI_SIZES.get(mc)
+        try:
+            if nominal and (int(size[0]), int(size[1])) == tuple(nominal):
+                continue
+        except (TypeError, ValueError):
+            pass
+        out.append(Violation(
+            "patching-size-override", STYLE, oid,
+            f"'{oid}' ({mc}) sets a patching-view size {list(size[:2])}. Keep the "
+            f"default box size there; size for layout belongs in presentation_rect.",
+            "MAX_PATCHING.md > Preserve each object's default box size in the patching view",
+        ))
+    return out
+
+
+_INIT_CONTROLS = {"number", "flonum", "toggle", "dial", "slider", "umenu"}
+
+
+def rule_control_init_on_load(ctx: SpecContext) -> list:
+    """(t) A control with nothing feeding it has undefined state on load.
+
+    Weakest defensible form: any incoming cord (loadmess, loadbang → message,
+    a live data source) is assumed to initialize the control. Suppressed for
+    the whole scope when an `autopattr` is present (@autorestore); `live.*`
+    objects save their own value and are exempt.
+    Source: MAX_PATCHING.md > Every control must initialize to a known state
+    on patch load.
+    """
+    if any(isinstance(o, dict) and ctx.maxclass(o) == "newobj"
+           and ctx.text(o).split()[:1] == ["autopattr"] for o in ctx.objects.values()):
+        return []
+    out = []
+    for oid, obj in ctx.objects.items():
+        if not isinstance(obj, dict) or ctx.maxclass(obj) not in _INIT_CONTROLS:
+            continue
+        if ctx.incoming.get(oid):
+            continue
+        out.append(Violation(
+            "control-init-on-load", STYLE, oid,
+            f"'{oid}' ({ctx.maxclass(obj)}) has nothing feeding it, so its state on "
+            f"load is whatever the file saved — undefined for the operator. Feed it "
+            f"a [loadmess <default>] or a loadbang'd message, or put the scope under "
+            f"an [autopattr].",
+            "MAX_PATCHING.md > Every control must initialize to a known state on patch load",
+        ))
+    return out
+
+
+def rule_declareattribute_conventions(ctx: SpecContext) -> list:
+    """(u) JS-side check of declareattribute labels/styles and assist strings.
+
+    For every jsui / v8ui / v8 / js box whose script can be found (attrs.filename
+    or the second text token, resolved against ctx.base_dir), scan the file with
+    claude2max_verify.jsattrs and flag: a label whose first word is not the
+    attribute's first word; min 0 / max 1 with no style "onoff"; enumvals with no
+    enum/enumindex style; a 4-float default with no style "rgba"; and, for v8/js,
+    inlet/outlet indices with no setinletassist / setoutletassist. Silent when
+    the file is not found or base_dir is unknown.
+    Source: CLAUDE.md > Attribute Labels Must Begin With the Attribute's Own
+    Word; > Match the Generated Control to the Attribute's Value Space;
+    > What You Must Handle (v8/js inlet/outlet labeling).
+    """
+    if not ctx.base_dir:
+        return []
+    from . import jsattrs  # local import keeps rules importable without it at top level
+    out = []
+    for oid, obj in ctx.objects.items():
+        if not isinstance(obj, dict):
+            continue
+        mc = ctx.maxclass(obj)
+        toks = ctx.text(obj).split()
+        script = None
+        if mc in ("jsui", "v8ui"):
+            script = ctx.attrs(obj).get("filename")
+        elif mc == "newobj" and toks and toks[0] in ("v8", "js") and len(toks) > 1:
+            script = toks[1]
+        if not isinstance(script, str) or not script.strip():
+            continue
+        path = jsattrs.find_script(script, ctx.base_dir)
+        if path is None:
+            continue
+        for finding in jsattrs.check_script(path, want_assist=(mc == "newobj")):
+            out.append(Violation(
+                finding["rule"], WARNING, f"{oid} ({path.name})", finding["message"],
+                finding["source"],
+            ))
+    return out
+
+
+# ───────────────────────────────────────────────────────────────────────────
 # STYLE rules — convention nudges
 # ───────────────────────────────────────────────────────────────────────────
 
@@ -589,23 +1674,6 @@ def rule_allcaps_names(ctx: SpecContext) -> list:
                 f"'{toks[0]} {name}' — user-defined names use ALL CAPS by "
                 f"convention (e.g. '{toks[0]} {name.upper()}').",
                 "CLAUDE.md > Naming Convention",
-            ))
-    return out
-
-
-def rule_prefer_v8(ctx: SpecContext) -> list:
-    """Convention: use v8, not the older js object, for new patches."""
-    out = []
-    for oid, obj in ctx.objects.items():
-        if not isinstance(obj, dict) or ctx.maxclass(obj) != "newobj":
-            continue
-        toks = ctx.text(obj).split()
-        if toks and toks[0] == "js":
-            out.append(Violation(
-                "prefer-v8", STYLE, oid,
-                f"'{oid}' uses [js]. Prefer [v8] for new patches (ES6+, faster) "
-                f"unless modifying a patch that already uses js.",
-                "CLAUDE.md > Preferred Objects (JS / scripting)",
             ))
     return out
 
@@ -843,9 +1911,28 @@ REGISTRY = [
     rule_no_hidden_elements,
     rule_subpatcher_labels,
     rule_debug_marking,
+    # warnings — item 13 family (2026-09-08)
+    rule_presentation_overlap,
+    rule_comment_contrast,
+    rule_template_on_right_inlet,
+    rule_textedit_into_template,
+    rule_select_float_needs_fuzzy,
+    rule_script_object_declarations,
+    rule_attribute_group_incomplete,
+    rule_kslider_demo_range,
+    rule_declareattribute_conventions,
     # style
     rule_allcaps_names,
-    rule_prefer_v8,
+    rule_preferred_object,
+    rule_print_needs_name,
+    rule_patching_size_override,
+    rule_control_init_on_load,
+    # style — patching-view geometry
+    rule_cord_crosses_unrelated_box,
+    rule_feeder_below_target,
+    rule_fanout_order,
+    rule_cord_too_short,
+    rule_button_side_tap,
 ]
 
 # Rules that need an authoritative resolver (object/attribute/message existence).
@@ -857,6 +1944,7 @@ RESOLVER_REGISTRY = [
     rule_attribute_resolves,
     rule_message_resolves,
     rule_maxclass_resolves,
+    rule_jit_matrix_fan_in,
 ]
 
 
@@ -884,13 +1972,16 @@ def run_resolver_rules(spec: dict, resolver) -> list:
     return violations
 
 
-def run_all(spec: dict, resolver=None) -> list:
+def run_all(spec: dict, resolver=None, base_dir=None, native=False) -> list:
     """Run every registered rule, return violations sorted by severity.
 
     If ``resolver`` is supplied, the anti-guessing rules (object/attribute
     existence against C74 refpages + the package library) run too.
+    ``base_dir`` (the patch's directory) lets file-reading rules resolve
+    sibling scripts; None disables them. ``native`` marks a spec derived from
+    a native patch's boxes (see SpecContext.native).
     """
-    ctx = SpecContext(spec)
+    ctx = SpecContext(spec, base_dir=base_dir, native=native)
     violations: list = []
     for rule in REGISTRY:
         try:

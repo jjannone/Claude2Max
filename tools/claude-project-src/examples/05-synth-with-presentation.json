@@ -1,0 +1,255 @@
+{
+  "_comment": "An audio synth with a presentation view: a panel, labelled controls with presentation rects that do not overlap, initial values from loadmess, plumbing left out of the presentation, and a patching view laid out top to bottom.",
+  "name": "filtered-synth",
+  "width": 620,
+  "height": 420,
+  "objects": {
+    "panel": {
+      "type": "panel",
+      "pos": [
+        330,
+        200
+      ],
+      "size": [
+        260,
+        150
+      ],
+      "presentation": [
+        10,
+        10,
+        260,
+        150
+      ],
+      "attrs": {
+        "bgcolor": [
+          0.18,
+          0.18,
+          0.2,
+          1.0
+        ]
+      }
+    },
+    "init_freq": {
+      "type": "newobj",
+      "text": "loadmess 220.",
+      "pos": [
+        50,
+        20
+      ]
+    },
+    "init_cut": {
+      "type": "newobj",
+      "text": "loadmess 1000.",
+      "pos": [
+        200,
+        60
+      ]
+    },
+    "lbl_freq": {
+      "type": "comment",
+      "text": "frequency (Hz)",
+      "pos": [
+        110,
+        60
+      ],
+      "presentation": [
+        24,
+        20,
+        84,
+        18
+      ],
+      "attrs": {
+        "textcolor": [
+          0.92,
+          0.92,
+          0.92,
+          1.0
+        ]
+      }
+    },
+    "freq": {
+      "type": "flonum",
+      "pos": [
+        50,
+        60
+      ],
+      "presentation": [
+        24,
+        40,
+        60,
+        22
+      ]
+    },
+    "osc": {
+      "type": "newobj",
+      "text": "saw~ 220",
+      "pos": [
+        50,
+        110
+      ]
+    },
+    "lbl_cut": {
+      "type": "comment",
+      "text": "cutoff (Hz)",
+      "pos": [
+        260,
+        110
+      ],
+      "presentation": [
+        110,
+        20,
+        84,
+        18
+      ],
+      "attrs": {
+        "textcolor": [
+          0.92,
+          0.92,
+          0.92,
+          1.0
+        ]
+      }
+    },
+    "cutoff": {
+      "type": "flonum",
+      "pos": [
+        200,
+        110
+      ],
+      "presentation": [
+        110,
+        40,
+        60,
+        22
+      ]
+    },
+    "filter": {
+      "type": "newobj",
+      "text": "lores~ 1000 0.5",
+      "pos": [
+        50,
+        160
+      ]
+    },
+    "lbl_gain": {
+      "type": "comment",
+      "text": "gain",
+      "pos": [
+        85,
+        210
+      ],
+      "presentation": [
+        196,
+        20,
+        50,
+        18
+      ],
+      "attrs": {
+        "textcolor": [
+          0.92,
+          0.92,
+          0.92,
+          1.0
+        ]
+      }
+    },
+    "gain": {
+      "type": "gain~",
+      "pos": [
+        50,
+        210
+      ],
+      "presentation": [
+        196,
+        40,
+        22,
+        80
+      ]
+    },
+    "lbl_dac": {
+      "type": "comment",
+      "text": "audio on / off",
+      "pos": [
+        110,
+        370
+      ],
+      "presentation": [
+        24,
+        72,
+        100,
+        18
+      ],
+      "attrs": {
+        "textcolor": [
+          0.92,
+          0.92,
+          0.92,
+          1.0
+        ]
+      }
+    },
+    "dac": {
+      "type": "ezdac~",
+      "pos": [
+        50,
+        370
+      ],
+      "presentation": [
+        24,
+        92,
+        45,
+        45
+      ]
+    }
+  },
+  "connections": [
+    [
+      "init_freq",
+      0,
+      "freq",
+      0
+    ],
+    [
+      "init_cut",
+      0,
+      "cutoff",
+      0
+    ],
+    [
+      "freq",
+      0,
+      "osc",
+      0
+    ],
+    [
+      "osc",
+      0,
+      "filter",
+      0
+    ],
+    [
+      "cutoff",
+      0,
+      "filter",
+      1
+    ],
+    [
+      "filter",
+      0,
+      "gain",
+      0
+    ],
+    [
+      "gain",
+      0,
+      "dac",
+      0
+    ],
+    [
+      "gain",
+      0,
+      "dac",
+      1
+    ]
+  ]
+}

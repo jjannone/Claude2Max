@@ -1,0 +1,159 @@
+{
+  "_comment": "One outlet feeding several inlets, a trigger fanning out in right-to-left firing order (outlet 1 fires first and feeds the rightmost box), several sources into one inlet, and a readout message box fed on its RIGHT inlet.",
+  "name": "fanout",
+  "objects": {
+    "lbl_go": {
+      "type": "comment",
+      "text": "add a random number to the count",
+      "pos": [
+        85,
+        50
+      ],
+      "presentation": [
+        20,
+        20,
+        240,
+        18
+      ]
+    },
+    "go": {
+      "type": "button",
+      "pos": [
+        50,
+        50
+      ],
+      "presentation": [
+        20,
+        40,
+        24,
+        24
+      ]
+    },
+    "trig": {
+      "type": "newobj",
+      "text": "t b i",
+      "pos": [
+        50,
+        90
+      ]
+    },
+    "counter": {
+      "type": "newobj",
+      "text": "counter 0 7",
+      "pos": [
+        50,
+        140
+      ]
+    },
+    "seed": {
+      "type": "message",
+      "text": "42",
+      "pos": [
+        300,
+        90
+      ]
+    },
+    "rnd": {
+      "type": "newobj",
+      "text": "random @range 0 100",
+      "pos": [
+        200,
+        140
+      ]
+    },
+    "sum": {
+      "type": "newobj",
+      "text": "+",
+      "pos": [
+        50,
+        190
+      ]
+    },
+    "lbl_sum": {
+      "type": "comment",
+      "text": "last sum",
+      "pos": [
+        85,
+        230
+      ],
+      "presentation": [
+        20,
+        70,
+        80,
+        18
+      ]
+    },
+    "readout": {
+      "type": "message",
+      "text": "0",
+      "pos": [
+        50,
+        240
+      ],
+      "presentation": [
+        20,
+        90,
+        80,
+        22
+      ]
+    },
+    "print": {
+      "type": "newobj",
+      "text": "print SUM",
+      "pos": [
+        180,
+        240
+      ]
+    }
+  },
+  "connections": [
+    [
+      "go",
+      0,
+      "trig",
+      0
+    ],
+    [
+      "trig",
+      0,
+      "counter",
+      0
+    ],
+    [
+      "trig",
+      1,
+      "rnd",
+      0
+    ],
+    [
+      "seed",
+      0,
+      "rnd",
+      1
+    ],
+    [
+      "counter",
+      0,
+      "sum",
+      0
+    ],
+    [
+      "rnd",
+      0,
+      "sum",
+      1
+    ],
+    [
+      "sum",
+      0,
+      "readout",
+      1
+    ],
+    [
+      "sum",
+      0,
+      "print",
+      0
+    ]
+  ]
+}

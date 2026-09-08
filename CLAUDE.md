@@ -67,7 +67,7 @@ After fixing any error, derive a general rule that would have prevented it. Pres
 
 **Lead with intent, follow with example.** State what you're trying to achieve in plain terms first, then illustrate with a concrete case introduced as "for instance." This keeps the principle readable and applicable broadly, while still giving actionable guidance. Rules that lead with a specific method risk being read as recipes rather than principles.
 
-## Verify External State — Never Assert from Memory
+## Verify External State — Never Assert from Memory {!core}
 
 Before making any claim about the state of an external or shared system — GitHub repo visibility, remote branch status, CI results, whether a file exists on a remote, whether a service is available — verify it with the appropriate tool first. Memory, inference from local context, and reasonable assumptions are not sufficient. A wrong assertion is worse than a delayed one.
 
@@ -89,7 +89,7 @@ Know which tier a claim falls in, because the verification differs and only the 
 
 Max itself cannot be executed from here — that limitation is why the second and third rows exist as separate lookup paths rather than collapsing into "just run it."
 
-## Never Write API Names From Memory
+## Never Write API Names From Memory {!core}
 
 Never write a method name, property name, attribute name, function name, CSS property, shell flag, environment variable, or any other API identifier from memory. If the name didn't come from a documentation page, header file, refpage, autocomplete, or other authoritative source within the last few seconds, it is a guess — and a guess is forbidden. This applies across every language and every environment, not just Max.
 
@@ -187,7 +187,7 @@ The recognition signal: if a sentence needs a second read to find its subject, o
 
 The principle underneath both signals is the same: the reader should not have to supply anything you didn't give them. Sprawl buries it; compression omits it.
 
-## Describe Flow in the Target Environment's Own Directional Vocabulary — Binding Rule
+## Describe Flow in the Target Environment's Own Directional Vocabulary — Binding Rule {!core}
 
 When describing how parts of a system connect, use the spatial and directional words that system itself uses. Vocabulary borrowed from an adjacent domain reads as non-native — and is actively wrong when the borrowed word already means something *else* in the target, because the reader applies the local meaning and understands the opposite of what was meant.
 
@@ -222,7 +222,7 @@ Bad commit moments (do NOT suggest here): mid-debug, mid-iteration, after a part
 
 When the user does commit at one of these moments, the follow-up is: (a) confirm `WORK_HISTORY.md` has the session's summary; (b) verify any pending changes in the actual application before they start the next session — easier to iterate while context is warm than after a cold restart; (c) note any chips/follow-ups that should survive into the next session via files rather than memory.
 
-## Modify, Don't Rebuild — and Treat Observed-Good Patterns as Binding
+## Modify, Don't Rebuild — and Treat Observed-Good Patterns as Binding {!core}
 
 When the task is a new version of an existing patch, the default workflow is `extract → edit → convert`: pull the embedded spec, modify only what is changing, write back. Rebuilding the spec from scratch is the wrong default — it silently drops every working detail of the original that does not make it into the new build. Alignment offsets, init defaults, wiring patterns, sub-systems, naming conventions, and dozens of micro-decisions that took prior sessions to get right vanish without warning. Only build from scratch when the new version shares less than half its structure with the original.
 
@@ -236,13 +236,13 @@ For instance: writing in design critique that "the comment-padding compensation 
 
 2. **Critique creates checkpoints.** Anything noted as good during analysis is a checkpoint that must be revisited before declaring the implementation done. Did the new build preserve every observed-good pattern from the original? If no, either restore it or document why it was deliberately dropped.
 
-## When Building a New Version from an Existing Patch
+## When Building a New Version from an Existing Patch {!core}
 
 - **Retain all default values.** Any `loadbang → init` chain, `loadmess`, or hardcoded default in the JS must survive unchanged into the new version. Defaults represent deliberate configuration — they are not incidental and must not be silently dropped.
 
 - **Preserve wiring integrity when modifying patches programmatically.** Patchlines reference boxes by `id`, so renaming a box that has connections silently breaks all wiring to and from it. Keep original IDs intact; only assign new IDs to newly added boxes.
 
-## Always Create a Presentation View — Binding Rule
+## Always Create a Presentation View — Binding Rule {!core}
 
 Every patch that has a user interface gets a presentation view. "Has a user interface" means: it contains any object an operator will interact with at runtime — toggle, number, slider, dial, button, textedit, attrui, comment label, `jit.pwindow`, `jit.cellblock`, `live.*`, etc. The presentation is the patch's actual interface; the patching view is for editing the graph. Shipping a patch without a presentation forces the operator to navigate the editor view — friction even when the graph is well-organized.
 
@@ -258,7 +258,7 @@ The threshold is "any UI," not "lots of UI." A patch with four UI elements (a ST
 
 Exempt cases: utility subpatchers embedded inside a parent's presentation (the parent supplies the UI), and pure-DSP / pure-utility patches with no operator at all (codebox modules called from elsewhere).
 
-## Never Hide Patchcords or Boxes — Binding Rule
+## Never Hide Patchcords or Boxes — Binding Rule {!core}
 
 Do not set `"hidden": 1` on any patchcord or on any box. **The presentation view already decides what the operator sees** — a box without `presentation: 1` does not appear there, and patchcords never appear there at all. `hidden` is a second mechanism chasing the same goal, and it acts only on the *patching* view, which belongs to whoever is editing or learning the patch. Hiding things there takes information away from the only readers who have it, in exchange for a tidiness nobody ever sees.
 
@@ -282,7 +282,7 @@ The judgment the retired rules encoded is still right: plumbing should not clutt
 
 The general principle, which outlives this instance: **when an environment already gives you one mechanism that decides what a reader sees, do not run a second one alongside it.** Two mechanisms with overlapping scope have to be held in agreement by hand, and the one that operates invisibly is the one that quietly drifts wrong.
 
-## Prefer an Object's Own Attribute Over an Adapter Chain — Binding Rule
+## Prefer an Object's Own Attribute Over an Adapter Chain — Binding Rule {!core}
 
 Before wiring an object into another object that reshapes its output — a `scale`, an `expr`, an offset `+`, a `clip` — check whether the source object has an attribute or inlet that produces the value you want directly. A chain built to correct a source you could have configured is more objects to place, a second place the numbers can go stale, and one more index to get wrong.
 
@@ -294,7 +294,7 @@ For instance: `random 1000 → scale 0 999 4000 8000` was two objects doing what
 
 This is the small-scale sibling of *Consult Installed Packages Before Long Native Chains* — that rule asks whether one external replaces your chain, this one asks whether one attribute does. Both are checked against a source of truth, never from memory (see *Never Write API Names From Memory*).
 
-## Prefer the Object That States Its Behavior in an Attribute — Binding Rule
+## Prefer the Object That States Its Behavior in an Attribute — Binding Rule {!core}
 
 Where Max offers two objects for the same job and one carries its behavior in an **attribute** while the other encodes it in its **name or inlet layout**, use the one with the attribute. An attribute is readable in the box, greppable in the file, changeable at runtime, and checkable by the verifier against the refpage. Behavior encoded in a name is none of those — it is lore the reader has to already know, and a one-character difference that changes semantics silently.
 
@@ -312,7 +312,7 @@ Where Max offers two objects for the same job and one carries its behavior in an
 
 The general form of this rule, beyond lists: any time you are choosing between two objects that do the same thing, prefer the one whose behavior you can *read off the box*. Related but distinct from *Prefer an Object's Own Attribute Over an Adapter Chain* — that rule is about not adding an object, this one is about which object to add.
 
-## Don't Use `[textedit]` for Set-Once Configuration — Binding Rule
+## Don't Use `[textedit]` for Set-Once Configuration — Binding Rule {!core}
 
 `[textedit]` is the wrong object for any configuration value that is set once and then largely left alone (URLs, identifiers, file paths, hostnames, slugs, API keys, sample paths). It has three properties that make it brittle for this use case:
 
@@ -347,7 +347,7 @@ The `multi-user-template` patch shipped a Cloud URL `[textedit]` with `parameter
 
 Three rounds of patching, three layers of workaround, all because a set-once config value was bound to a `[textedit]`. The fix that closed the bug class: delete the textedit, set the URL as a const in `server.js`. Derived repos override the const, not a UI field.
 
-## Never Render an Empty Container When Server-Driven State Hasn't Arrived — Binding Rule
+## Never Render an Empty Container When Server-Driven State Hasn't Arrived — Binding Rule {!networking}
 
 A UI region whose content comes from a server (snapshot, roster, role list, sensor stream, anything pushed) must distinguish three states in the rendering, not collapse them into one empty `<div>`:
 
@@ -373,7 +373,7 @@ The five branches use the same UI region, but a confused user now knows whether 
 
 For instance: an empty role grid on the Join page initially looked indistinguishable for the user between (a) WebSocket still connecting, (b) connected to relay but no Max host registered, (c) Max host registered but no roles configured. Three different fixes; one rendering. Replaced with an explicit "Waiting:" banner that names which case is current.
 
-## Never Regress Functionality When Changing Modality
+## Never Regress Functionality When Changing Modality {!core}
 
 **General rule**: when any working feature — display, control, behavior, format — is moved, replaced, or reimplemented in a different modality, it must arrive at least as capable as it left. A change of modality is not a reason to lose functionality.
 
@@ -383,7 +383,7 @@ This applies to: switching UI objects, reformatting data for a new display, repl
 
 Before implementing any new display for existing data, inventory every piece of information in the current format and confirm all of it is present in the new one.
 
-## Building Reusable Objects — Generalize, and Mirror the Vocabulary You Inherit
+## Building Reusable Objects — Generalize, and Mirror the Vocabulary You Inherit {!core}
 
 When writing a `v8`/`js`/`jsui` object — or any new object that is **not** highly specific patch logic — the goal is a **reusable, drop-in building block**, not a one-off. A custom object is most valuable when it behaves like the Max objects it resembles, so anyone (including a future Claude) can wire it from existing knowledge without reading its source. Bespoke message/attribute names invented per-patch produce objects nobody can reuse and that silently break when wired like the object they look like. The discipline:
 
@@ -397,7 +397,7 @@ When writing a `v8`/`js`/`jsui` object — or any new object that is **not** hig
 
 This pairs with **Never Regress Functionality When Changing Modality** (a reimplementation arrives at least as capable) and **Never Write API Names From Memory** (verify the inherited object's real messages/attributes against its refpage before mirroring them). Note for verification: a custom object has no C74 refpage, so the `verify_spec` gate can't check its attributes — shipping a `<name>.maxref.xml` (and a `<name>.maxhelp`) for any reusable object you create lets the gate and other tooling validate it like a built-in.
 
-## Attribute Labels Must Begin With the Attribute's Own Word — Binding Rule
+## Attribute Labels Must Begin With the Attribute's Own Word — Binding Rule {!core}
 
 The goal is a list a human can scan: `attrui` and the Inspector list an object's attributes **alphabetically by their human-readable `label`, not by the attribute name.** So when you give an attribute a `label` (the `label:` field in `declareattribute`, or any equivalent), the label **must begin with the same word the attribute name begins with.** Then someone who knows the attribute is `@slidermode` can find it by scanning the list for "Slider…"; if the label leads with some other word, the entry is effectively unfindable — the reader has to open and read every line. Lead with the attribute's own leading word, then add clarifying words or a parenthetical.
 
@@ -405,7 +405,7 @@ For instance: `@slidermode` → `"Slider Mode (per key)"`, **not** `"Per-key Sli
 
 **Cycling '74's own objects routinely break this rule** — `kslider`'s `offset` is labeled "Octave offset", its `range` is "Number of keys to display" — so do not use C74 labels as the model here. This is one of the deliberate places our objects are *better* than the built-ins, not bug-compatible with them. The recognition signal: any time you write a `label:`, check that its first word matches the attribute name's first word before moving on — it is a per-attribute check, like verifying the API name itself.
 
-## Match the Generated Control to the Attribute's Value Space — Binding Rule
+## Match the Generated Control to the Attribute's Value Space — Binding Rule {!core}
 
 When you declare an attribute on a custom object (`declareattribute`, or any equivalent), its **`style:`** is not optional polish — it is what makes the auto-generated control (`attrui`, the Inspector row, any bound UI) *match the kind of value the attribute holds*. Omit it and Max falls back to a bare number field for everything: a true/false attribute becomes a number box the operator must know to type `0`/`1` into, a one-of-N choice becomes a number with no hint of the options, and a color becomes four mystery floats. The control silently misrepresents the value space — the same failure class as a mislabeled attribute (the information needed to use it correctly is missing from the surface), and like that one it fails silently, never as an error.
 
@@ -417,7 +417,7 @@ Lead with the value space; pick the style that fits it:
 
 For instance: `@displaymode` was first a plain `int 0/1`, so its `attrui` was a number box — the operator had to *know* `1` meant "slider face." Re-declared `style:"onoff"`, it is a labeled checkbox that reads itself. The recognition signal mirrors the attribute-label check: every time you write a `declareattribute`, decide its `style:` from its value space before moving on — a per-attribute check, like the label and the API name.
 
-## Group Bound Controls by Function, With Headers — Binding Rule
+## Group Bound Controls by Function, With Headers — Binding Rule {!core}
 
 A column of `attrui` / `number` / `toggle` controls dumped in declaration order is a wall the operator must read end-to-end to find anything. Controls that act on the same facet of the object belong **together, in a labeled cluster** — the same "what does this touch?" grouping that governs object placement (see `patching/MAX_PATCHING.md` > spatial clustering), applied to the control surface. Give each cluster a short header comment naming the facet; within a cluster, order the controls the way the operator thinks about them, not the order you happened to declare the attributes.
 
@@ -425,7 +425,7 @@ This applies anywhere bound controls are laid out: help files, test/comparison b
 
 For instance: the `zkeyboard` bench first packed all 32 `attrui`s in declaration order; regrouped into labeled bands — *kslider attrs · display · slider values · slider display · slider colors · dots* — the same controls became scannable, and "which attributes affect the slider face?" is answered by reading one header instead of testing every box. Pair this with the demo-visibility rule below: a grouped, labeled control surface where every control also produces visible change is a patch the operator can learn by clicking.
 
-## Demos, Help Files, and Test Patches Must Demonstrate Functionality Visibly — Binding Rule
+## Demos, Help Files, and Test Patches Must Demonstrate Functionality Visibly — Binding Rule {!core}
 
 A help file, a test bench, a comparison patch — any patch whose purpose is to *show an object working* — exists so someone can **see the object work**, not merely read a list of its messages. Every demo control must be wired and parameterized so its effect is **visible on screen the instant the user clicks it.** The recurring silent failure: a demo that fires perfectly correctly but displays nothing, because its data lands outside whatever the object is currently showing — so the user concludes "the message does nothing" when in fact it worked off-screen.
 
@@ -502,13 +502,13 @@ Hook commands, MCP registrations, launch configs, and anything else stored as a 
 
 ## Workflow
 
-### Working on an existing patch — sync first, always
+### Working on an existing patch — sync first, always {!core}
 
 **Before any work on an existing .maxpat**, run sync to capture manual edits the user made in Max. No exceptions — not even for small fixes. `convert` regenerates the .maxpat from scratch and will silently destroy moved objects, added/deleted objects, hidden objects, and hidden cords.
 
 **The sync-first rule applies to any source of edits — not just user GUI changes.** Any direct modification to a .maxpat — whether a user edit in Max's GUI or a programmatic post-processing script — is invisible to the embedded spec and will be silently overwritten on the next `convert`. Use `/c2m-sync` or run `python3 spec2maxpat.py sync -i <patch>` immediately after any direct .maxpat modification.
 
-### A patch that arrives from elsewhere is stale until the spec-vs-boxes check passes — Binding Rule
+### A patch that arrives from elsewhere is stale until the spec-vs-boxes check passes — Binding Rule {!core}
 
 The sync-first rule above says "before any work on an existing .maxpat." Analyzing, verifying, and committing a patch are work too. Any `.maxpat` that arrives from another session, another person, or an external source has an embedded spec that may describe an earlier version of the boxes, and every action taken on the file before that is checked acts on the wrong object: an analysis describes boxes the spec does not know about, `verify_patch` in embedded-spec mode judges a spec that does not match the boxes and reports it clean, and a commit enshrines the mismatch so the next `convert` silently reverts the other author's edits.
 
@@ -516,9 +516,9 @@ So the check comes first, before reading the patch for meaning, before running t
 
 The recognition signal: **git shows the file modified, and this session did not modify it.** That is the moment the file is untrusted, whatever the task is.
 
-For instance: `patches/kslider-restrike.maxpat` was analyzed, verified clean, and committed on 2026-09-08 while its embedded spec still described the previous commit exactly. The boxes carried another session's `[s VST]` / `[r VST]` rework, a `[print v8]`, the loaded plug-in name on `vst~`, and two presentation rects Max had resized. None of it was in the spec. The verifier had checked the spec. One `sync` repaired it; the check that would have caught it is twenty-five lines and is queued to become part of `sync --check` and `verify_patch`.
+For instance: `patches/kslider-restrike.maxpat` was analyzed, verified clean, and committed on 2026-09-08 while its embedded spec still described the previous commit exactly. The boxes carried another session's `[s VST]` / `[r VST]` rework, a `[print v8]`, the loaded plug-in name on `vst~`, and two presentation rects Max had resized. None of it was in the spec. The verifier had checked the spec. One `sync` repaired it; the check that would have caught it is `spec_matches_patch()` in `spec2maxpat.py` (added the same day): `python3 spec2maxpat.py sync -i <patch> --check` runs it and writes nothing, and `verify_patch` runs it in embedded-spec mode and reports a `spec-stale` warning *before* any other finding, because every other finding is then about the wrong object.
 
-### Sync preserves; it does not prune — verify object count before every convert
+### Sync preserves; it does not prune — verify object count before every convert {!core}
 
 `sync` is a one-way mirror from `.maxpat` into the embedded spec. It captures whatever it finds, including orphan boxes that no longer wire to anything. If a prior session (or an imported patch) accumulated duplicate orphans — most commonly via repeated sync→convert cycles where each round adds another copy of a control box — `sync` will faithfully preserve every one of them, and the next `convert` will re-emit them as visible boxes in the regenerated patch. The patch silently re-explodes.
 
@@ -564,7 +564,7 @@ This is the recommended path for building a new patch from scratch, especially i
 
 After the first draft, normal Claude2Max iteration applies — sync before any edit, observe what's working before changing it, and keep `WORK_HISTORY.md` and `insights.md` up to date.
 
-### Preferred Objects for Common Tasks
+### Preferred Objects for Common Tasks {!core}
 
 When planning a patch for a student, default to the objects in the table below for each task. These are the first-instinct choices — Max often has three or four ways to do anything, but the entries here are the ones that are simplest to wire, easiest to explain, and most likely to be what a beginner actually wants. Reach for an alternative only when there's a specific reason the default doesn't fit (e.g. the student has asked for something the default can't do, an external they're already using exposes a different interface, or the package library surfaces a single-object solution to an otherwise-long chain).
 
@@ -980,7 +980,7 @@ read:
   hardware) — those can still be wired alongside but the template is
   overkill if there are no phones in the loop.
 
-## Consult Installed Packages Before Long Native Chains
+## Consult Installed Packages Before Long Native Chains {!core}
 
 Check `packages/package_objects.json` before composing any 3+ native-object chain. The `use_when` field is the load-bearing entry — it tells you when and how to drive the object. Use `/c2m-package-search` or `python3 packages/query_packages.py search "<term>"`.
 
@@ -1007,7 +1007,7 @@ For instance: `live.*` objects were getting `parameter_enable: 1` and `saved_att
 
 **When adding any auto-generated attr to the converter, verify first by creating the object fresh in Max and inspecting its JSON — only inject what's absent but required for correct wiring, never what's absent because Max intentionally leaves it unset.**
 
-## What You Must Handle
+## What You Must Handle {!core}
 
 - **Object text, connections, layout** — write text exactly as you'd type it in Max. Get outlet/inlet indices right. Use explicit `pos`. See `SPEC_REFERENCE.md` and `patching/MAX_PATCHING.md` for all rules.
 - **Presentation** — see `patching/MAX_PATCHING.md` for all layout, spacing, and design rules. Key invariants: every presented control needs a comment label; set `openinpresentation: 1`; exclude infrastructure objects; use screenshots (computer-use MCP) to verify.
@@ -1016,7 +1016,7 @@ For instance: `live.*` objects were getting `parameter_enable: 1` and `saved_att
 - **Objects not in converter's tables** — supply `inlets`, `outlets`, `outlettype` in the spec.
 - **Always embed the spec** — every .maxpat produced via Claude2Max must include a hidden `text.codebox` (`id: "obj-spec-embed"`, `"hidden": 1`) below all other objects, with the full spec JSON wrapped in `--- CLAUDE2MAX SPEC ---` / `--- END SPEC ---` delimiters. This applies whether the output is from the converter or assembled manually.
 
-## Naming Convention
+## Naming Convention {!core}
 
 Use **ALL CAPS** for all user-defined names: `send TEMPO`, `receive PITCH`, `pv CURRENT_STATE`, `buffer~ LOOPBUF`, `var STEP_COUNT = 0;`. Applies to patcher names, send/receive names, pv/v variables, buffer~ names, coll names, JS variables. Does NOT apply to Max built-in names, object names, or message selectors.
 
@@ -1051,7 +1051,7 @@ python3 install_global.py --verify                          # post-install check
 python3 uninstall_global.py                                 # remove
 ```
 
-## Always Inspect, Never Guess — Reach for `/c2m-inspect` During Patch Debugging
+## Always Inspect, Never Guess — Reach for `/c2m-inspect` During Patch Debugging {!core}
 
 When debugging a running Max patch, any question whose answer hinges on the runtime contents of a named data structure (`dict`, `buffer~`, `jit.matrix`) gets answered by *dumping it*, not by reasoning from the upstream wiring. Wiring tells you what *should* happen; the dump tells you what *did* happen. Guessing from upstream logic is the failure mode this rule exists to prevent — the recognition signal is any sentence in your reasoning that begins "the dict probably contains…" or "the buffer should have…" or "the matrix is presumably…" — that's the moment to stop and run the dump instead.
 
@@ -1065,7 +1065,7 @@ This is the *first* tool to reach for in Max-runtime debugging, not the last. Mo
 
 For coll/table the same discipline applies, but the reach is indirect: the inspector triggers a `write <file>` and parses it back, and the named object must be reachable by Scripting Name (same patcher) or via a `[receive <NAME>_INSPECT]` wire — see the v8 `messnamed` pitfall in `patching/MAX_PATCHING.md > Common Pitfalls` and the coll/table setup note in the `/c2m-inspect` skill.
 
-## Clearly Mark Debug Additions to a User's Patch — Binding Rule
+## Clearly Mark Debug Additions to a User's Patch — Binding Rule {!core}
 
 Any object added to a user's patch for diagnostic purposes — `[c2m.inspect]`, extra `[print]` boxes, scope displays, value-watch comments, anything that is NOT part of the patch's intended functionality — must be visually unmistakable as debugging scaffolding. The user must be able to (a) see at a glance what Claude added vs. what's part of the patch, and (b) remove the scaffolding confidently when debugging is done, without second-guessing whether each box is "really part of the design."
 
@@ -1083,7 +1083,7 @@ When debugging is complete and the user has confirmed the patch is working, prop
 
 The recognition signal during patch authoring: if I'm about to add a box that exists only to help *me* understand the patch's state — and the operator wouldn't ever look at it — that box needs the magenta marking. If it's part of the patch's actual functionality, it doesn't.
 
-## Debugging Data Structures Live — `c2m.inspect`
+## Debugging Data Structures Live — `c2m.inspect` {!core}
 
 When a patch is running and the question is *"what's actually inside this data structure right now?"*, drop the `[c2m.inspect]` abstraction (`patching/abstractions/c2m.inspect.maxpat`) into it. The abstraction listens on UDP 7474 for OSC; `tools/c2m_inspect_send.py` (stdlib-only, no python-osc dependency) talks to it and reads the dump back. Wrapped end-to-end by the `/c2m-inspect` skill.
 
@@ -1102,6 +1102,8 @@ The OSC pathway is one-way: Max writes JSON to disk, the Python sender polls dis
 ## Admonition Tags
 
 Headings in any `*.md` at the repo root tagged `{!pre-edit}` or `{!pre-commit}` are re-surfaced by `hooks/inject_admonitions.py` as `additionalContext` at the matching moment — `pre-edit` fires on Edit/Write tool calls; `pre-commit` fires when a Bash command contains `git commit`. To add a new at-action-point reminder: append the tag to any heading. No Python changes needed.
+
+The same tag syntax also decides what the MCP server's knowledge modules carry. A heading in `CLAUDE.md`, `patching/MAX_PATCHING.md`, or `SPEC_REFERENCE.md` tagged `{!core}` is included, verbatim, in `load(["core"])` — the module every Max session loads first; `{!layout}` builds the `layout` module (box placement, presentation design, spacing); any other `{!<domain>}` (`{!networking}`, `{!msp}`, `{!jitter}`, …) appends the section to that domain's module. A tagged `## ` heading carries its `### ` children; tag a `### ` on its own when its parent is repo process rather than Max knowledge. The extractor is `_extract_tagged_sections` in `mcp_server/server.py`, mtime-cached, so a tag added to a doc is live on the next `load()` without a restart. Tag only Max knowledge — a Claude in another repo has no use for fork setup, commit cadence, or model selection. This replaced a hand-written digest literal on 2026-09-08; `mcp_server/tests/test_modules.py` asserts every tagged heading reaches its module.
 
 ## Keeping Docs in Sync {!pre-commit}
 

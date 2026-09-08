@@ -1,0 +1,147 @@
+{
+  "_comment": "A subpatcher (a newobj whose text starts with 'p ') with a nested spec. Every inlet/outlet is labelled twice: attrs.comment (the tooltip seen outside) and a comment box beside it (seen inside). The p box carries the summary.",
+  "name": "wrapped-counter",
+  "objects": {
+    "lbl_go": {
+      "type": "comment",
+      "text": "advance",
+      "pos": [
+        85,
+        50
+      ],
+      "presentation": [
+        20,
+        20,
+        80,
+        18
+      ]
+    },
+    "go": {
+      "type": "button",
+      "pos": [
+        50,
+        50
+      ],
+      "presentation": [
+        20,
+        40,
+        24,
+        24
+      ]
+    },
+    "counter": {
+      "type": "newobj",
+      "text": "p COUNTER",
+      "pos": [
+        50,
+        90
+      ],
+      "attrs": {
+        "comment": "in 0: bang \u2014 advance | out 0: int \u2014 count 0-15"
+      },
+      "patcher": {
+        "objects": {
+          "in": {
+            "type": "inlet",
+            "pos": [
+              50,
+              40
+            ],
+            "attrs": {
+              "comment": "in 0: bang \u2014 advance"
+            }
+          },
+          "lbl_in": {
+            "type": "comment",
+            "text": "bang: advance",
+            "pos": [
+              90,
+              44
+            ]
+          },
+          "count": {
+            "type": "newobj",
+            "text": "counter 0 15",
+            "pos": [
+              50,
+              100
+            ]
+          },
+          "out": {
+            "type": "outlet",
+            "pos": [
+              50,
+              160
+            ],
+            "attrs": {
+              "comment": "out 0: int \u2014 count"
+            }
+          },
+          "lbl_out": {
+            "type": "comment",
+            "text": "int: count 0-15",
+            "pos": [
+              90,
+              164
+            ]
+          }
+        },
+        "connections": [
+          [
+            "in",
+            0,
+            "count",
+            0
+          ],
+          [
+            "count",
+            0,
+            "out",
+            0
+          ]
+        ]
+      }
+    },
+    "lbl_display": {
+      "type": "comment",
+      "text": "count",
+      "pos": [
+        110,
+        140
+      ],
+      "presentation": [
+        20,
+        70,
+        80,
+        18
+      ]
+    },
+    "display": {
+      "type": "number",
+      "pos": [
+        50,
+        140
+      ],
+      "presentation": [
+        20,
+        90,
+        50,
+        22
+      ]
+    }
+  },
+  "connections": [
+    [
+      "go",
+      0,
+      "counter",
+      0
+    ],
+    [
+      "counter",
+      0,
+      "display",
+      0
+    ]
+  ]
+}

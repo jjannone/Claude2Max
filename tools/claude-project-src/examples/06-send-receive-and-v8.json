@@ -1,0 +1,252 @@
+{
+  "_comment": "s/r pairs instead of long cords, a kslider driving a v8 script (the person writes notes.js; inlets/outlets are declared to match it), a umenu, and select @fuzzy on a dial. Logic that would need many route/select boxes goes to v8.",
+  "name": "keys-to-logic",
+  "width": 700,
+  "height": 440,
+  "objects": {
+    "lbl_keys": {
+      "type": "comment",
+      "text": "play a key",
+      "pos": [
+        85,
+        40
+      ],
+      "presentation": [
+        24,
+        20,
+        100,
+        18
+      ]
+    },
+    "keys": {
+      "type": "kslider",
+      "pos": [
+        50,
+        60
+      ],
+      "presentation": [
+        24,
+        40,
+        400,
+        60
+      ]
+    },
+    "join": {
+      "type": "newobj",
+      "text": "join 2",
+      "pos": [
+        50,
+        150
+      ]
+    },
+    "s_note": {
+      "type": "newobj",
+      "text": "s NOTE",
+      "pos": [
+        50,
+        190
+      ]
+    },
+    "init_mode": {
+      "type": "newobj",
+      "text": "loadmess 0",
+      "pos": [
+        400,
+        20
+      ]
+    },
+    "lbl_mode": {
+      "type": "comment",
+      "text": "mode",
+      "pos": [
+        510,
+        60
+      ],
+      "presentation": [
+        440,
+        20,
+        60,
+        18
+      ]
+    },
+    "mode": {
+      "type": "umenu",
+      "pos": [
+        400,
+        60
+      ],
+      "presentation": [
+        440,
+        40,
+        100,
+        22
+      ],
+      "attrs": {
+        "items": [
+          "hold",
+          ",",
+          "retrigger",
+          ",",
+          "random"
+        ]
+      }
+    },
+    "s_mode": {
+      "type": "newobj",
+      "text": "s MODE",
+      "pos": [
+        400,
+        100
+      ]
+    },
+    "init_prob": {
+      "type": "newobj",
+      "text": "loadmess 0.5",
+      "pos": [
+        560,
+        20
+      ]
+    },
+    "lbl_prob": {
+      "type": "comment",
+      "text": "probability",
+      "pos": [
+        600,
+        60
+      ],
+      "presentation": [
+        560,
+        20,
+        90,
+        18
+      ]
+    },
+    "prob": {
+      "type": "dial",
+      "pos": [
+        560,
+        60
+      ],
+      "presentation": [
+        560,
+        40,
+        40,
+        48
+      ]
+    },
+    "half": {
+      "type": "newobj",
+      "text": "select 0.5 @fuzzy 0.01",
+      "pos": [
+        560,
+        150
+      ]
+    },
+    "r_note": {
+      "type": "newobj",
+      "text": "r NOTE",
+      "pos": [
+        50,
+        270
+      ]
+    },
+    "r_mode": {
+      "type": "newobj",
+      "text": "r MODE",
+      "pos": [
+        220,
+        270
+      ]
+    },
+    "logic": {
+      "type": "newobj",
+      "text": "v8 notes.js",
+      "pos": [
+        50,
+        310
+      ],
+      "inlets": 2,
+      "outlets": 2,
+      "outlettype": [
+        "",
+        ""
+      ]
+    },
+    "out": {
+      "type": "newobj",
+      "text": "noteout",
+      "pos": [
+        50,
+        360
+      ]
+    }
+  },
+  "connections": [
+    [
+      "keys",
+      0,
+      "join",
+      0
+    ],
+    [
+      "keys",
+      1,
+      "join",
+      1
+    ],
+    [
+      "join",
+      0,
+      "s_note",
+      0
+    ],
+    [
+      "init_mode",
+      0,
+      "mode",
+      0
+    ],
+    [
+      "mode",
+      0,
+      "s_mode",
+      0
+    ],
+    [
+      "init_prob",
+      0,
+      "prob",
+      0
+    ],
+    [
+      "prob",
+      0,
+      "half",
+      0
+    ],
+    [
+      "r_note",
+      0,
+      "logic",
+      0
+    ],
+    [
+      "r_mode",
+      0,
+      "logic",
+      1
+    ],
+    [
+      "logic",
+      0,
+      "out",
+      0
+    ],
+    [
+      "logic",
+      1,
+      "out",
+      1
+    ]
+  ]
+}

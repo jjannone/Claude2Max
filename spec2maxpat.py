@@ -623,9 +623,34 @@ def verify_patch_file(path, resolver=None, use_resolver=True, stream=sys.stderr)
               file=stream)
         embedded = None
     if embedded is not None:
-        result = _verify_spec(embedded, resolver=active_resolver)
+        result = _verify_spec(embedded, resolver=active_resolver, base_dir=str(p.parent))
         result["mode"] = "embedded-spec"
         result["scopes_checked"] = 1
+        # Preliminary finding: in embedded-spec mode every rule below judges
+        # the SPEC. If the spec does not match the boxes, every one of those
+        # findings is about the wrong object — so say that first.
+        match = spec_matches_patch(data, spec=embedded, stream=stream)
+        result["spec_matches_patch"] = match
+        if not match["matches"]:
+            stale = {
+                "rule": "spec-stale",
+                "severity": "warning",
+                "location": "(embedded spec)",
+                "message": (f"embedded spec does not match the patch's boxes — "
+                            f"{match['summary']}. Every finding below is about the "
+                            f"spec, not the boxes; run `spec2maxpat.py sync` first."),
+                "source": "CLAUDE.md > Workflow > A patch that arrives from elsewhere "
+                          "is stale until the spec-vs-boxes check passes",
+            }
+            result["violations"].insert(0, stale)
+            result["counts"]["warning"] = result["counts"].get("warning", 0) + 1
+            result["ok"] = False
+            c = result["counts"]
+            others = c.get("error", 0) + c.get("warning", 0) - 1 + c.get("style", 0)
+            result["summary"] = (
+                f"SPEC STALE — the embedded spec does not match the boxes; "
+                f"{others} other finding(s) below judge the spec, not the boxes. "
+                f"Run `sync` and verify again.")
         result["report"] = _verify_report(result)
     else:
         all_v, counts = [], {"error": 0, "warning": 0, "style": 0}
@@ -635,7 +660,7 @@ def verify_patch_file(path, resolver=None, use_resolver=True, stream=sys.stderr)
                 continue
             n_scopes += 1
             res = _verify_spec({"objects": objects, "connections": conns},
-                                resolver=active_resolver)
+                                resolver=active_resolver, native=True)
             all_v.extend(res["violations"])
             for k in counts:
                 counts[k] += res["counts"].get(k, 0)
@@ -1819,6 +1844,219 @@ def extract_spec(maxpat, stream=sys.stderr):
 
 
 # ---------------------------------------------------------------------------
+# Embedded spec vs. boxes — the staleness check
+# ---------------------------------------------------------------------------
+
+_TEXT_CLASSES = ("newobj", "message", "comment", "live.text")
+
+
+def _content_key(maxclass, text):
+    """The identity a spec entry and a box share: (maxclass, normalized text).
+
+    Ids cannot be used — spec ids are semantic names (`msg_flush`) and box ids
+    are Max's `obj-N` — so content is the only thing both sides agree on.
+    """
+    if maxclass in _TEXT_CLASSES and text:
+        text = " ".join(str(text).split())
+    else:
+        text = ""
+    return (maxclass or "newobj", text)
+
+
+def _spec_pres_rect(obj):
+    """Canonical 4-element presentation rect from a spec object, or None.
+
+    Mirrors build_box: `presentation_rect` wins; a 4-element `presentation`
+    is a rect; a 2-element `presentation` has no size and cannot be compared.
+    """
+    pr = obj.get("presentation_rect")
+    if isinstance(pr, (list, tuple)) and len(pr) >= 4:
+        return [float(v) for v in pr[:4]]
+    pres = obj.get("presentation")
+    if isinstance(pres, (list, tuple)) and len(pres) >= 4:
+        return [float(v) for v in pres[:4]]
+    return None
+
+
+def spec_matches_patch(maxpat, spec=None, scope="", stream=None):
+    """Compare a .maxpat's boxes against its embedded spec, by content.
+
+    A patch that arrives from another session, another person, or an external
+    source may carry a spec that describes an earlier version of its boxes.
+    Every action taken on such a file before this check — analyzing it,
+    verifying it, committing it, converting it — acts on the wrong object,
+    and `convert` silently reverts the other author's edits. This function is
+    the check; `sync` is the repair.
+
+    Matching is by `(maxclass, text)`, never by id, and treats duplicates on
+    either side as a group (multiset). Nested `p` subpatchers are compared
+    recursively when both sides have exactly one box with that content.
+
+    Returns a report dict:
+        has_spec            False when the file carries no embedded spec
+                            (then nothing else is filled in and `matches` is
+                            None — there is no spec to be stale).
+        matches             True iff no difference of any kind was found.
+        spec_objects        object count in the spec (this scope).
+        boxes               box count in the patch (this scope; embed and
+                            title box excluded, as `sync` excludes them).
+        only_in_spec        [{key, count}]  content present in the spec only.
+        only_in_patch       [{key, count}]  content present in the boxes only.
+        connection_diff     {"only_in_spec": [...], "only_in_patch": [...]}
+                            connections as [src_key, outlet, dst_key, inlet].
+        presentation_drift  [{key, spec, patch}] rect or presence differences
+                            on objects matched one-to-one.
+        nested              {key: sub-report} for recursed subpatchers.
+        summary             one line.
+
+    `spec` may be passed to skip re-extraction (e.g. a spec produced by
+    reconcile_spec before it is embedded). `scope` prefixes keys in
+    summaries for nested calls.
+    """
+    if spec is None:
+        spec = extract_spec(maxpat, stream=stream)
+    report = {
+        "has_spec": spec is not None, "matches": None, "scope": scope,
+        "spec_objects": 0, "boxes": 0,
+        "only_in_spec": [], "only_in_patch": [],
+        "connection_diff": {"only_in_spec": [], "only_in_patch": []},
+        "presentation_drift": [], "nested": {}, "summary": "",
+    }
+    if spec is None:
+        report["summary"] = "no embedded spec — nothing to compare"
+        return report
+
+    spec_objects = spec.get("objects", {}) or {}
+    boxes = _collect_boxes(maxpat)
+    report["spec_objects"] = len(spec_objects)
+    report["boxes"] = len(boxes)
+
+    # --- objects, as multisets of content keys ---------------------------------
+    spec_keys = {}
+    for sid, obj in spec_objects.items():
+        k = _content_key(obj.get("type", "newobj"), obj.get("text", ""))
+        spec_keys.setdefault(k, []).append(sid)
+    box_keys = {}
+    for bid, box in boxes.items():
+        k = _content_key(box.get("maxclass", "newobj"), box.get("text", ""))
+        box_keys.setdefault(k, []).append(bid)
+
+    def _fmt(k):
+        return f"{k[0]} {k[1]}".strip()
+
+    for k in sorted(set(spec_keys) | set(box_keys), key=_fmt):
+        ns, nb = len(spec_keys.get(k, [])), len(box_keys.get(k, []))
+        if ns > nb:
+            report["only_in_spec"].append({"key": _fmt(k), "count": ns - nb})
+        elif nb > ns:
+            report["only_in_patch"].append({"key": _fmt(k), "count": nb - ns})
+
+    # --- connections, expressed through content keys ---------------------------
+    sid_to_key = {sid: k for k, sids in spec_keys.items() for sid in sids}
+    bid_to_key = {bid: k for k, bids in box_keys.items() for bid in bids}
+
+    def _count(items):
+        out = {}
+        for it in items:
+            out[it] = out.get(it, 0) + 1
+        return out
+
+    spec_conns = []
+    for c in spec.get("connections", []) or []:
+        if len(c) < 4 or c[0] not in sid_to_key or c[2] not in sid_to_key:
+            continue
+        spec_conns.append((_fmt(sid_to_key[c[0]]), int(c[1]), _fmt(sid_to_key[c[2]]), int(c[3])))
+    patch_conns = []
+    for wrapper in maxpat.get("patcher", {}).get("lines", []) or []:
+        line = wrapper.get("patchline", {})
+        src, dst = line.get("source", [None, 0]), line.get("destination", [None, 0])
+        if src[0] not in bid_to_key or dst[0] not in bid_to_key:
+            continue
+        patch_conns.append((_fmt(bid_to_key[src[0]]), int(src[1]), _fmt(bid_to_key[dst[0]]), int(dst[1])))
+    sc, pc = _count(spec_conns), _count(patch_conns)
+    for conn in sorted(set(sc) | set(pc)):
+        d = sc.get(conn, 0) - pc.get(conn, 0)
+        if d > 0:
+            report["connection_diff"]["only_in_spec"].extend([list(conn)] * d)
+        elif d < 0:
+            report["connection_diff"]["only_in_patch"].extend([list(conn)] * (-d))
+
+    # --- presentation drift and nested scopes, on one-to-one matches -----------
+    for k, sids in spec_keys.items():
+        bids = box_keys.get(k, [])
+        if len(sids) != 1 or len(bids) != 1:
+            continue
+        sobj, box = spec_objects[sids[0]], boxes[bids[0]]
+        s_rect = _spec_pres_rect(sobj)
+        s_has = bool(sobj.get("presentation") or sobj.get("presentation_rect"))
+        b_has = bool(box.get("presentation"))
+        b_rect = box.get("presentation_rect")
+        b_rect = [float(v) for v in b_rect[:4]] if b_has and b_rect else None
+        if s_has != b_has:
+            report["presentation_drift"].append(
+                {"key": _fmt(k), "spec": s_rect if s_has else None, "patch": b_rect if b_has else None,
+                 "what": "presence"})
+        elif s_rect is not None and b_rect is not None and \
+                any(abs(a - b) > 0.5 for a, b in zip(s_rect, b_rect)):
+            report["presentation_drift"].append(
+                {"key": _fmt(k), "spec": s_rect, "patch": b_rect, "what": "rect"})
+        if isinstance(sobj.get("patcher"), dict) and isinstance(box.get("patcher"), dict):
+            sub = spec_matches_patch({"patcher": box["patcher"]}, spec=sobj["patcher"],
+                                     scope=(scope + "/" if scope else "") + _fmt(k), stream=stream)
+            if not sub["matches"]:
+                report["nested"][_fmt(k)] = sub
+
+    report["matches"] = not (
+        report["only_in_spec"] or report["only_in_patch"]
+        or report["connection_diff"]["only_in_spec"] or report["connection_diff"]["only_in_patch"]
+        or report["presentation_drift"] or report["nested"]
+    )
+    where = f" in {scope}" if scope else ""
+    if report["matches"]:
+        report["summary"] = (f"spec matches boxes{where} — {report['spec_objects']} objects, "
+                             f"{len(spec_conns)} connections")
+    else:
+        parts = []
+        if report["only_in_spec"]:
+            parts.append(f"{sum(d['count'] for d in report['only_in_spec'])} object(s) only in spec")
+        if report["only_in_patch"]:
+            parts.append(f"{sum(d['count'] for d in report['only_in_patch'])} object(s) only in patch")
+        cd = report["connection_diff"]
+        if cd["only_in_spec"] or cd["only_in_patch"]:
+            parts.append(f"connections differ (+{len(cd['only_in_patch'])} / -{len(cd['only_in_spec'])})")
+        if report["presentation_drift"]:
+            parts.append(f"{len(report['presentation_drift'])} presentation rect(s) drifted")
+        if report["nested"]:
+            parts.append(f"{len(report['nested'])} subpatcher(s) differ")
+        report["summary"] = (f"spec is STALE{where} — {report['spec_objects']} spec objects vs "
+                             f"{report['boxes']} boxes: " + "; ".join(parts))
+    return report
+
+
+def format_spec_match_report(report, indent="  "):
+    """Render a spec_matches_patch report as readable lines."""
+    lines = [report["summary"]]
+    for d in report["only_in_spec"]:
+        lines.append(f"{indent}only in spec:  [{d['key']}] ×{d['count']}")
+    for d in report["only_in_patch"]:
+        lines.append(f"{indent}only in patch: [{d['key']}] ×{d['count']}")
+    for c in report["connection_diff"]["only_in_spec"]:
+        lines.append(f"{indent}cord only in spec:  [{c[0]}]:{c[1]} → [{c[2]}]:{c[3]}")
+    for c in report["connection_diff"]["only_in_patch"]:
+        lines.append(f"{indent}cord only in patch: [{c[0]}]:{c[1]} → [{c[2]}]:{c[3]}")
+    for d in report["presentation_drift"]:
+        lines.append(f"{indent}presentation {d['what']} drift on [{d['key']}]: "
+                     f"spec {d['spec']} vs patch {d['patch']}")
+    for key, sub in report["nested"].items():
+        lines.append(f"{indent}subpatcher [{key}]:")
+        lines.extend(format_spec_match_report(sub, indent + "  ").splitlines()[1:])
+    if not report["matches"] and report["has_spec"]:
+        lines.append(f"{indent}→ run `spec2maxpat.py sync -i <patch>` before analyzing, "
+                     f"verifying, converting, or committing this file.")
+    return "\n".join(lines)
+
+
+# ---------------------------------------------------------------------------
 # .maxpat → spec  (reverse conversion)
 # ---------------------------------------------------------------------------
 
@@ -1846,7 +2084,15 @@ _PRESERVE_ATTRS = {"bgcolor", "textcolor", "color", "fontsize", "fontface", "fon
                    "rounded", "locked_bgcolor",
                    "bubble", "bubbleside", "bubblepoint", "bubbletextmargin",
                    "bubble_bgcolor",   # bubble comments use this, NOT plain bgcolor
-                   "items", "prefix"}   # umenu menu items + auto-prefix
+                   "items", "prefix",
+    # Script-loading UI objects: jsui / v8ui link their script through the
+    # `filename` box key and pass creation args via `jsarguments`. Dropping
+    # either on sync makes the next convert emit an unlinked, blank object —
+    # the exact failure SPEC_REFERENCE.md > jsui objects describes. Found
+    # 2026-09-08 when the script-filename-missing rule fired 3,332 times on
+    # C74's own help files in native mode.
+    "filename", "jsarguments",
+}   # umenu menu items + auto-prefix
 
 
 def _collect_boxes(maxpat):
@@ -1858,8 +2104,10 @@ def _collect_boxes(maxpat):
         # Skip internal scaffolding by ID
         if bid in _SKIP_BOX_IDS:
             continue
-        # Skip spec embed regardless of ID (catches hand-edited patches)
-        code = box.get("code", "") or ""
+        # Skip spec embed regardless of ID (catches hand-edited patches and
+        # the in-Max generator's comment-based embed, which carries the marker
+        # in `text` — the same two keys _spec_embed_candidates reads).
+        code = box.get("code", "") or box.get("text", "") or ""
         if SPEC_MARKER_BEGIN in code:
             continue
         result[bid] = box
@@ -2396,6 +2644,9 @@ def main():
     )
     p_sync.add_argument("-i", "--input", required=True, help="Input .maxpat file")
     p_sync.add_argument("-o", "--output", help="Output .maxpat file (default: overwrite input)")
+    p_sync.add_argument("--check", action="store_true",
+                        help="Report whether the embedded spec matches the boxes; write nothing. "
+                             "Exit 1 when it does not (or when there is no spec).")
 
     # mct
     p_mct = subparsers.add_parser(
@@ -2489,6 +2740,15 @@ def main():
     elif args.command == "sync":
         with open(args.input, "r") as f:
             maxpat = json.load(f)
+
+        if args.check:
+            try:
+                report = spec_matches_patch(maxpat)
+            except SpecEmbedError as exc:
+                print(f"Corrupt Claude2Max spec embed: {exc}", file=sys.stderr)
+                sys.exit(1)
+            print(format_spec_match_report(report))
+            sys.exit(0 if report["matches"] else 1)
 
         try:
             had_spec = extract_spec(maxpat) is not None

@@ -1,0 +1,111 @@
+{
+  "_comment": "Minimal patch: a toggle starts a metro that plays random MIDI notes. Shows the required parts \u2014 objects with text and pos, connections \u2014 plus the two things every patch with a control needs: an initial value (loadmess) and a presentation view with a label.",
+  "name": "random-notes",
+  "objects": {
+    "init": {
+      "type": "newobj",
+      "text": "loadmess 0",
+      "pos": [
+        50,
+        20
+      ]
+    },
+    "lbl_on": {
+      "type": "comment",
+      "text": "start / stop",
+      "pos": [
+        85,
+        60
+      ],
+      "presentation": [
+        20,
+        20,
+        100,
+        18
+      ]
+    },
+    "onoff": {
+      "type": "toggle",
+      "pos": [
+        50,
+        60
+      ],
+      "presentation": [
+        20,
+        40,
+        24,
+        24
+      ]
+    },
+    "metro": {
+      "type": "newobj",
+      "text": "metro 250",
+      "pos": [
+        50,
+        100
+      ]
+    },
+    "pitch": {
+      "type": "newobj",
+      "text": "random @range 48 84",
+      "pos": [
+        50,
+        140
+      ]
+    },
+    "makenote": {
+      "type": "newobj",
+      "text": "makenote 100 200",
+      "pos": [
+        50,
+        180
+      ]
+    },
+    "noteout": {
+      "type": "newobj",
+      "text": "noteout",
+      "pos": [
+        50,
+        220
+      ]
+    }
+  },
+  "connections": [
+    [
+      "init",
+      0,
+      "onoff",
+      0
+    ],
+    [
+      "onoff",
+      0,
+      "metro",
+      0
+    ],
+    [
+      "metro",
+      0,
+      "pitch",
+      0
+    ],
+    [
+      "pitch",
+      0,
+      "makenote",
+      0
+    ],
+    [
+      "makenote",
+      0,
+      "noteout",
+      0
+    ],
+    [
+      "makenote",
+      1,
+      "noteout",
+      1
+    ]
+  ]
+}

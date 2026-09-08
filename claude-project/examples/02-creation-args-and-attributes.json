@@ -1,0 +1,171 @@
+{
+  "_comment": "Creation arguments and @attributes in object text, plus attrs on number boxes (minimum/maximum). A side control that feeds a right inlet sits on the same row as the object it passes, so its cord crosses nothing.",
+  "name": "args-and-attrs",
+  "objects": {
+    "init_hz": {
+      "type": "newobj",
+      "text": "loadmess 440.",
+      "pos": [
+        50,
+        20
+      ]
+    },
+    "init_amp": {
+      "type": "newobj",
+      "text": "loadmess 0.2",
+      "pos": [
+        250,
+        60
+      ]
+    },
+    "lbl_hz": {
+      "type": "comment",
+      "text": "frequency (Hz)",
+      "pos": [
+        110,
+        60
+      ],
+      "presentation": [
+        20,
+        20,
+        110,
+        18
+      ]
+    },
+    "hz": {
+      "type": "flonum",
+      "pos": [
+        50,
+        60
+      ],
+      "presentation": [
+        20,
+        40,
+        60,
+        22
+      ],
+      "attrs": {
+        "minimum": 20.0,
+        "maximum": 2000.0
+      }
+    },
+    "osc": {
+      "type": "newobj",
+      "text": "cycle~ 440 @phase 0.25",
+      "pos": [
+        50,
+        110
+      ]
+    },
+    "lbl_amp": {
+      "type": "comment",
+      "text": "amplitude 0-1",
+      "pos": [
+        310,
+        110
+      ],
+      "presentation": [
+        140,
+        20,
+        100,
+        18
+      ]
+    },
+    "amp": {
+      "type": "flonum",
+      "pos": [
+        250,
+        110
+      ],
+      "presentation": [
+        140,
+        40,
+        60,
+        22
+      ],
+      "attrs": {
+        "minimum": 0.0,
+        "maximum": 1.0
+      }
+    },
+    "vca": {
+      "type": "newobj",
+      "text": "*~ 0.2",
+      "pos": [
+        50,
+        160
+      ]
+    },
+    "lbl_dac": {
+      "type": "comment",
+      "text": "audio on / off",
+      "pos": [
+        110,
+        220
+      ],
+      "presentation": [
+        20,
+        70,
+        100,
+        18
+      ]
+    },
+    "dac": {
+      "type": "ezdac~",
+      "pos": [
+        50,
+        220
+      ],
+      "presentation": [
+        20,
+        90,
+        45,
+        45
+      ]
+    }
+  },
+  "connections": [
+    [
+      "init_hz",
+      0,
+      "hz",
+      0
+    ],
+    [
+      "init_amp",
+      0,
+      "amp",
+      0
+    ],
+    [
+      "hz",
+      0,
+      "osc",
+      0
+    ],
+    [
+      "osc",
+      0,
+      "vca",
+      0
+    ],
+    [
+      "amp",
+      0,
+      "vca",
+      1
+    ],
+    [
+      "vca",
+      0,
+      "dac",
+      0
+    ],
+    [
+      "vca",
+      0,
+      "dac",
+      1
+    ]
+  ]
+}

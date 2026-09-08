@@ -17,6 +17,7 @@ You're about to write or edit a file. Scan this list — each item is "if X appl
 
 ## Workflow integrity (round-trip safety)
 - If editing an existing .maxpat: did I run `python3 spec2maxpat.py sync -i patches/X.maxpat` before this edit? No exceptions — convert regenerates from scratch and silently destroys manual edits not captured in the embedded spec.
+- If the .maxpat came from another session, another person, or Max's own resave (git shows it modified and I did not modify it): did I run `python3 spec2maxpat.py sync -i patches/X.maxpat --check` before analyzing, verifying, or committing it? A stale spec makes every one of those actions act on the wrong object; `sync` (without `--check`) is the repair.
 - If creating a standalone spec .json file: am I writing it to /tmp/ rather than the project folder? The .maxpat is the single source of truth; spec files are temporary scratch.
 - If this edit produces a .maxpat: does it include a hidden `text.codebox` (`id: "obj-spec-embed"`, `hidden: 1`) with the full spec wrapped in `--- CLAUDE2MAX SPEC ---` / `--- END SPEC ---` delimiters?
 - If building a new version of an existing patch: am I defaulting to extract → edit → convert (preserving the original's working details), rather than rebuilding the spec from scratch?
@@ -26,6 +27,7 @@ You're about to write or edit a file. Scan this list — each item is "if X appl
 - If a working feature (display, control, behavior, format) is moving to a new modality: does it arrive at least as capable as it left? Inventory every piece of information in the old format and confirm it's all present in the new one.
 
 ## Patch construction
+- Before claiming a spec is clean: have I run `verify_spec` (MCP) or `python3 spec2maxpat.py verify <patch>`? Since 2026-09-08 the overlap, contrast, label-adjacency, cord-geometry, `$1`-inlet, textedit, `@fuzzy`, jsui/v8 declaration, and preferred-object checks below are mechanical — the checklist items are the reasoning, the verifier is the proof.
 - For any user-defined name (send/receive symbols, pv/v variables, buffer~/coll names, patcher names, JS variables): is it ALL CAPS, to distinguish from Max built-ins?
 - If I'm about to set a `size` on an object: is it needed for the patching view (content that needs width), or am I resizing for layout? Layout resizing belongs in `presentation_rect` — leave the patching-view box at its default size so the object stays findable.
 - Does any cord run vertically past boxes it does not connect? If so, replace it with `s NAME` / `r NAME` (short local cords stay cords).
