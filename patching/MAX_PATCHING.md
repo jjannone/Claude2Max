@@ -207,6 +207,18 @@ Two facts that make this work, both from the `send~` / `receive~` refpages: **mu
 
 Note the refpage caveat: `send~` / `receive~` can introduce a small, variable signal delay. Irrelevant for mixing independent voices; think twice inside a feedback path or anywhere phase between two branches matters.
 
+### A send/receive name is a channel, not a wire — repeat the sender instead of stretching a cord
+
+`s NAME` is not one endpoint of a connection; it is a publisher on a named channel, and a patch may hold **as many senders on that channel as it has sources**. So when a second part of the patch needs to put something on a channel that already exists, **put a new `s NAME` directly under that source** rather than running a cord across the screen to the existing one. The duplicate costs one small box in a place the reader is already looking. The long cord costs a line traversing unrelated regions of the patch, which every future reader has to trace to find out it was just going to a sender.
+
+The refpage is explicit that this is the intended model: "All send objects that share the same name will send data to any receive objects that share their name" — many-to-many, in any combination. It is idiomatic in C74's own material, too: `jit.anim.path.maxhelp` ships **nine** `send topath` objects in a single patch.
+
+For instance: `[select 0] → [0(` sits in the transport column on the far left, and the sounds column already has an `[s SOUNDS]` about 600px to its right. Wiring the `0` message to that existing sender drags a cord across the whole patch. A second `[s SOUNDS]` placed just under the `0` message says the same thing locally, and the transport column becomes readable on its own.
+
+The same reasoning covers `r NAME` (any number of receivers) and `s~` / `r~` — where multiple senders additionally **sum**, which is what makes a mix bus one `s~` pair per voice.
+
+**The one thing duplicate senders do not give you is order.** The refpage: "The order of reception by two or more receive objects is not deterministic." So use as many senders as the layout wants, but never rely on which `r NAME` fires first — when order matters, wire it explicitly with a `trigger` (and lay it out right-to-left, per the rule above).
+
 ### Write `send` / `receive` in their short forms
 
 Write `s`, `r`, `s~`, `r~` — never the long forms. They are the same objects (the short names are documented aliases, not slang), and the short box is narrower, which matters when a patch carries twenty of them. Name the destination in ALL CAPS as usual: `[s RUN]`, `[r NCLIPS]`, `[s~ MIX_L]`.

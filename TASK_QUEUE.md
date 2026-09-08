@@ -643,6 +643,8 @@ Tasks that are primarily implementation, file editing, or verification — no de
 
   2. **`join @triggers -1` → plain `join`.** `pak_range` is fed entirely by `unp_init` (`unjoin 3`, outlets 0 and 1, via `+ 1` on the MAX branch), so Max's right-to-left output already loads the cold inlet before the hot one fires. The attribute is unnecessary here and asserts something the reader then has to verify. Rule and reasoning: `CLAUDE.md > Prefer the Object That States Its Behavior in an Attribute` and `patching/MAX_PATCHING.md > @triggers -1 is only needed when the inputs arrive independently`.
 
+  3. **Add a second `s SOUNDS` under the stop cleanup instead of the cross-screen cord.** `msg_stop` (the `0` message) sits at `[30, 248]` in the transport column and is wired to `snd_sounds` at `[620, 290]` — a cord running roughly 590px across the patch to reach a sender that already exists. Place a new `[s SOUNDS]` directly under the `0` message and delete that cord. A send name is a channel, not a wire: the refpage states all same-named senders reach all same-named receivers, and C74's `jit.anim.path.maxhelp` ships nine `send topath` boxes in one patch. Rule: `patching/MAX_PATCHING.md > A send/receive name is a channel, not a wire`. While there, check the rest of the patch for the same shape — any cord whose only destination is an existing sender is a candidate.
+
   **Prerequisite, per the sync-first rule:** run `sync` before editing — the patch may have been opened in Max since 2026-09-07. Re-run `gate_maxpat_file` and the overlap audit afterwards. Note the patch has still never been visually verified in Max.
 
 ## Done
