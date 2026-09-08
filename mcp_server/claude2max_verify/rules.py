@@ -409,59 +409,66 @@ def rule_presented_controls_need_labels(ctx: SpecContext) -> list:
     )]
 
 
-def rule_hidden_box_cords_hidden(ctx: SpecContext) -> list:
-    """
-    Binding rule (symmetry): every patchcord touching a hidden box must itself
-    be hidden. A visible cord ending in a hidden box is worse than no cord.
-    """
-    out = []
-    for i, conn in enumerate(ctx.connections):
-        if not isinstance(conn, (list, tuple)) or len(conn) < 4:
-            continue
-        src, dst = conn[0], conn[2]
-        s_obj, d_obj = ctx.objects.get(src), ctx.objects.get(dst)
-        s_hidden = isinstance(s_obj, dict) and ctx.is_hidden(s_obj)
-        d_hidden = isinstance(d_obj, dict) and ctx.is_hidden(d_obj)
-        if (s_hidden or d_hidden) and not ctx.conn_hidden(conn):
-            which = src if s_hidden else dst
-            out.append(Violation(
-                "hidden-box-cord-visible", WARNING, f"connections[{i}]",
-                f"Connection {src}→{dst} touches hidden box '{which}' but is not "
-                f"itself hidden. Add a trailing {{\"hidden\": 1}} attrs dict to "
-                f"the connection.",
-                "CLAUDE.md > Always Hide Plumbing Patchcords",
-            ))
-    return out
+# Two legitimate uses of `hidden` survive the never-hide rule, and both are
+# exempt here. They share a property: neither is an authoring choice about
+# tidiness, which is what the rule forbids.
+#   1. The embedded spec codebox — storage in the shape of a box: no inlets, no
+#      outlets, no graph role.
+#   2. Boxes whose visibility is RUNTIME STATE driven by code. The tutorial
+#      system's highlight panels and bubble annotations start hidden and are
+#      unhidden one step at a time by the generated v8 controller via
+#      `patcher.getnamed()`; their contract is a `tut-panel-N` / `tut-ann-N`
+#      varname (TUTORIAL_GUIDELINES.md). Here `hidden` is an initial value a
+#      state machine owns, not a decision to keep something off a reader's
+#      screen.
+# Anything else hidden is a rule violation.
+_HIDDEN_EXEMPT_IDS = {"obj-spec-embed", "spec_embed", "spec-embed"}
+_HIDDEN_EXEMPT_VARNAME_PREFIXES = ("tut-panel-", "tut-ann-")
 
 
-def rule_redundant_message_box(ctx: SpecContext) -> list:
+def _hidden_is_runtime_state(obj: dict) -> bool:
+    """True when a box's `hidden` is an initial value that code toggles."""
+    attrs = obj.get("attrs")
+    varname = attrs.get("varname", "") if isinstance(attrs, dict) else ""
+    return isinstance(varname, str) and varname.startswith(
+        _HIDDEN_EXEMPT_VARNAME_PREFIXES
+    )
+
+
+def rule_no_hidden_elements(ctx: SpecContext) -> list:
     """
-    Binding rule: a message box that only reformats an upstream UI control's
-    output is plumbing — hide it (and its cords). Detected as: a VISIBLE
-    message box whose only inbound source is an interactive control and which
-    forwards downstream.
+    Binding rule: never hide a patchcord or a box. The presentation view already
+    decides what the operator sees; `hidden` acts only on the patching view,
+    which belongs to whoever edits or learns the patch. Hiding there removes
+    information from its only readership.
+
+    Replaced `rule_hidden_box_cords_hidden` and `rule_redundant_message_box`
+    (2026-09-07), which enforced the opposite default.
     """
     out = []
     for oid, obj in ctx.objects.items():
-        if not isinstance(obj, dict) or ctx.maxclass(obj) != "message":
+        if not isinstance(obj, dict) or oid in _HIDDEN_EXEMPT_IDS:
+            continue
+        if _hidden_is_runtime_state(obj):
             continue
         if ctx.is_hidden(obj):
-            continue
-        ins = ctx.incoming.get(oid, [])
-        outs = ctx.outgoing.get(oid, [])
-        if not ins or not outs:
-            continue
-        # Every inbound source is an interactive UI control?
-        srcs = [ctx.objects.get(c[0]) for _i, c in ins]
-        if srcs and all(
-            isinstance(s, dict) and is_interactive(ctx.maxclass(s)) for s in srcs
-        ):
             out.append(Violation(
-                "redundant-message-box", WARNING, oid,
-                f"Message box '{oid}' sits between a UI control and a consumer — "
-                f"it looks like a formatter (plumbing). Set hidden:1 on it and on "
-                f"its cords, unless the operator clicks it directly.",
-                "CLAUDE.md > Always Hide Redundant Message Boxes",
+                "hidden-box", WARNING, oid,
+                f"Box '{oid}' is marked hidden. Nothing in a patch is hidden — "
+                f"keep it visible in the patching view and simply leave it out "
+                f"of the presentation view (no presentation:1).",
+                "CLAUDE.md > Never Hide Patchcords or Boxes",
+            ))
+    for i, conn in enumerate(ctx.connections):
+        if not isinstance(conn, (list, tuple)) or len(conn) < 4:
+            continue
+        if ctx.conn_hidden(conn):
+            out.append(Violation(
+                "hidden-cord", WARNING, f"connections[{i}]",
+                f"Connection {conn[0]}→{conn[2]} is hidden. Drop the "
+                f"{{\"hidden\": 1}} attrs dict — every patchcord is visible. If "
+                f"the region looks tangled, fix the layout instead.",
+                "CLAUDE.md > Never Hide Patchcords or Boxes",
             ))
     return out
 
@@ -800,6 +807,13 @@ def rule_message_resolves(ctx: SpecContext, resolver) -> list:
             msgs, _src = resolver.messages_for(tcls)
             if not msgs:
                 continue  # no / empty methodlist → can't judge this target
+            if "anything" in msgs:
+                # The refpage documents an `anything` method: this object accepts
+                # ANY selector by definition (button: "When any message is
+                # received in the inlet…"). Not a guess — an authoritative
+                # wildcard, so nothing sent here can be an invented message.
+                checkable = []
+                break
             checkable.append((tcls, msgs))
         if not checkable or any(sel in msgs for _t, msgs in checkable):
             continue
@@ -826,8 +840,7 @@ REGISTRY = [
     rule_empty_newobj,
     rule_presentation_required,
     rule_presented_controls_need_labels,
-    rule_hidden_box_cords_hidden,
-    rule_redundant_message_box,
+    rule_no_hidden_elements,
     rule_subpatcher_labels,
     rule_debug_marking,
     # style

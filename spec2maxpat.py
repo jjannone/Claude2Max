@@ -1306,13 +1306,45 @@ DEFAULT_FONT_NAME = "Arial"
 # Helpers
 # ---------------------------------------------------------------------------
 
+def _positional_args(tokens):
+    """Creation args with @attribute declarations stripped out.
+
+    Attributes may appear anywhere after the object name and are never
+    positional, so an inlet/outlet count derived from arg POSITION must not see
+    them: `join @triggers -1` has zero positional args (2 inlets, the default),
+    not two. Everything from an `@name` token up to the next `@name` — or the
+    end — is attribute syntax, values included.
+    """
+    out, in_attr = [], False
+    for tok in tokens:
+        if tok.startswith("@"):
+            in_attr = True
+            continue
+        if not in_attr:
+            out.append(tok)
+    return out
+
+
+def _int_arg(args, index, default):
+    """args[index] as an int, or `default` when absent or non-numeric.
+
+    Creation args are text: an object whose first arg is normally a count can
+    still be given a symbol, and a count derived from one must degrade to the
+    object's default rather than raising on the way to a patch.
+    """
+    try:
+        return int(args[index])
+    except (IndexError, ValueError, TypeError):
+        return default
+
+
 def guess_newobj_io(text):
     """Guess inlet/outlet counts for a newobj from its text."""
     if not text:
         return None
     parts = text.split()
     obj_name = parts[0]
-    args = parts[1:]
+    args = _positional_args(parts[1:])
 
     # Direct lookup
     if obj_name in NEWOBJ_IO:
@@ -1346,40 +1378,43 @@ def guess_newobj_io(text):
             info["numoutlets"] = n + 1
             info["outlettype"] = [""] * (n + 1)
         elif obj_name in ("gate",):
-            n = int(args[0]) if args else 1
+            n = _int_arg(args, 0, 1)
             info["numinlets"] = 2
             info["numoutlets"] = n
             info["outlettype"] = [""] * n
         elif obj_name in ("switch",):
-            n = int(args[0]) if args else 2
+            n = _int_arg(args, 0, 2)
             info["numinlets"] = n + 1
             info["numoutlets"] = 1
         elif obj_name in ("spray",):
-            n = int(args[0]) if args else 2
+            n = _int_arg(args, 0, 2)
             info["numinlets"] = 2
             info["numoutlets"] = n
             info["outlettype"] = [""] * n
         elif obj_name in ("funnel",):
-            n = int(args[0]) if args else 2
+            n = _int_arg(args, 0, 2)
             info["numinlets"] = n
             info["numoutlets"] = 2
         elif obj_name in ("join",):
-            n = int(args[0]) if args else 2
+            n = _int_arg(args, 0, 2)
             info["numinlets"] = n
             info["numoutlets"] = 1
         elif obj_name in ("unjoin",):
-            n = int(args[0]) if args else 2
+            # Refpage objarg `outlets`: "Specifies the number of outlets (in
+            # addition to the rightmost outlet, which is always present)."
+            # So `unjoin 3` has FOUR outlets — three groups plus the remainder.
+            n = _int_arg(args, 0, 2)
             info["numinlets"] = 1
-            info["numoutlets"] = n
-            info["outlettype"] = [""] * n
+            info["numoutlets"] = n + 1
+            info["outlettype"] = [""] * (n + 1)
         elif obj_name in ("selector~",):
-            n = int(args[0]) if args else 2
+            n = _int_arg(args, 0, 2)
             info["numinlets"] = n + 1
             info["numoutlets"] = 1
             info["outlettype"] = ["signal"]
         elif obj_name in ("matrix~",):
-            n_in = int(args[0]) if len(args) > 0 else 2
-            n_out = int(args[1]) if len(args) > 1 else 2
+            n_in = _int_arg(args, 0, 2)
+            n_out = _int_arg(args, 1, 2)
             info["numinlets"] = n_in
             info["numoutlets"] = n_out
             info["outlettype"] = ["signal"] * n_out

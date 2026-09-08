@@ -115,7 +115,7 @@ Any number box, toggle, or flonum added to a patch must have a `loadmess` (or `l
 - When a source produces stereo output, preserve both channels through the entire chain to `dac~`/`ezdac~`. Don't merge to mono. `live.gain~` handles stereo natively (2 signal inlets, 2 signal outlets).
 - Set patcher `width` and `height` large enough to contain all objects without scrolling, including info comments. Leave margin below the lowest object.
 - `dialog` object (text-input prompt): `inlets=2, outlets=3`. Outlet 0 outputs the entered text as a symbol. Use `route symbol` after it to filter for the symbol type; then `prepend parsetarget` (or similar) to route to a v8 handler.
-- `playlist~`: `inlets=1, outlets=3` (sig audio, sig position, int state). Send `append` to open the file chooser; send integer `1` to play the first item.
+- **`playlist~` is a UI object, not a `newobj` — `maxclass: "playlist~"`, 1 inlet, 5 outlets.** In a spec write `"type": "playlist~"` with an explicit `size`; it is not in the converter's `MAXCLASS_DEFAULTS` or `UI_SIZES`, so also supply `inlets: 1, outlets: 5, outlettype: ["signal", "signal", "signal", "", "dictionary"]`. Outlets 0–1 are the two audio channels (stereo by default — `@channelcount` sets how many, and changing it clears the clip list), outlet 2 is a signal carrying the playback position (its integer part is the index of the playing clip), outlet 3 emits `start N <clipname>` / `done N <clipname>`, and outlet 4 emits a dictionary in response to `getcontent`. Because it is a UI object it draws a waveform per clip and **accepts dragged audio files directly** — put it in the presentation view so the operator can drop files on it. Messages: `append <path> [<slot>]` adds a file (a bare `append` with no args opens a file chooser when clicked in a locked patcher), `clear` removes every clip, `remove <n>` removes one, `next` plays the next clip. **`int` indexes clips from 1, and `0` stops playback** — so a random clip picker is `random <n>` → `+ 1`, and a stop affordance sends `0`. (Verified against `msp-ref/playlist~.maxref.xml` and 34 `playlist~` boxes across Max's shipped help patches, all unanimous on 1 inlet / 5 outlets. An earlier version of this bullet said `outlets=3 (sig audio, sig position, int state)`, and `SPEC_REFERENCE.md`'s commonly-wrong-outlet-count table listed 3 as correct with 5 as the mistake — both were backwards.)
 - `umenu` items in `.maxpat` format are stored as a flat token array with `","` as item separators: `["item", "one", ",", "item", "two"]`. Set via `attrs: {"items": [...]}` in the spec.
 - **Prefer `jit.world` over `jit.gl.render` + `jit.window` for video/GL display.** `jit.gl.render` + `jit.window` is semi-deprecated. Use `jit.world @floating 1` (or add `@title "..."` / size args) to create a self-contained render context and display window. Send a `jit_matrix` directly to `jit.world`'s inlet to display it — no `jit.gl.layer` or explicit render-trigger chain needed for simple matrix display. For GL compositing with `jit.gl.layer`, create the context by naming it: `jit.world ctx @floating 1`, then `jit.gl.layer ctx` will render into it automatically. Spec with `inlets: 1, outlets: 1, outlettype: ["bang"]`.
 - `jit.world` window size: send `getrect` to inlet 0; response `rect x1 y1 x2 y2` (two corners, not x/y/w/h) comes out the **rightmost outlet** (not outlet 0). Spec the object with 3 outlets (`outlettype: ["", "bang", ""]`); connect outlet 2 to a `route rect` to filter the response. Compute width = x2−x1, height = y2−y1.
@@ -153,6 +153,63 @@ Any number box, toggle, or flonum added to a patch must have a `loadmess` (or `l
 ## Patching Layout — Avoiding Cord Tangles
 
 When an object fans out to multiple destinations — for instance, both a processing chain and a display box — check whether placing all destinations at the same y-position will cause cords to cross. If so, stagger the destinations vertically so each incoming cord has a clear path. This is a case-by-case judgment based on the specific layout.
+
+### `join` / `unjoin`, not `pack` / `pak` / `unpack`
+
+`join @triggers -1` is `pak`: the refpage says `triggers` set to `-1` "will cause the object to trigger output for any inlet (all inlets will be 'hot')," and C74's `join.maxhelp` ships `join 3 @triggers -1`. `join` alone is `pack`. `unjoin` is `unpack`, and both take untyped items so no per-slot type declaration is needed. See the binding rule in `CLAUDE.md`.
+
+Two counts to get right:
+
+- **`unjoin <n>` has n+1 outlets.** The refpage's `outlets` arg "specifies the number of outlets (in addition to the rightmost outlet, which is always present)," so `unjoin 3` splits into three groups **plus** a remainder outlet. `@outsize` (default 1) sets the items per group. A spec that declares three outlets for `unjoin 3` is wrong; the converter now derives n+1 itself.
+- **`join <n>`'s arg is the inlet count, not initial values.** `pak 4000 8001` stored those numbers as its slots' starting values; `join` starts every slot at `int 0`. When the old `pak` args were carrying a meaningful default, move that default to a `loadmess` or to the downstream object's creation args — don't let it evaporate in the substitution.
+
+### `random`'s `@range` high value is exclusive
+
+`random @range <lo> <hi>` generates values from `lo` up to **`hi` minus one** for an int range, and arbitrarily close to but below `hi` for a float range. This is C74's own wording in `random.maxhelp`: "max of float range is arbtirarily close to range high value but for an int range it is one less than the high value," on a patch whose `random @range 25 50` is labelled "output for these objects will both be between 25 and 49."
+
+So any range that must **include** its top value is written with the top plus one. Picking one of N clips indexed from 1 is `random @range 1 <N+1>` — write the `+ 1` once where N is computed, not inside each consumer. Set the range at runtime with a `range <lo> <hi>` message to the left inlet (the refpage marks the attribute `set="1"`, and `range $1 $2` message boxes appear in C74's shipped patches).
+
+The general lesson, and the reason this bullet exists: **replacing an adapter chain with an attribute is not a mechanical substitution — the endpoints have to be re-verified.** The `scale 0 999 4000 8000` this replaced was itself off by one at the top, so the bug survived the rewrite until the help patch was read.
+
+### Leave enough vertical space under a box for its cords to read as cords
+
+A cord needs visible length. When a box sits almost flush under the one that feeds it, the cord between them collapses to a few pixels: you cannot see which outlet it leaves or which inlet it enters, you cannot click it to select or delete it, and a reader scanning the patch sees two stacked boxes with no visible relationship. The connection is technically drawn and practically invisible.
+
+**Leave roughly 30px of clear space between the bottom of a box and the top of the box it feeds** — the converter's own auto-layout uses a 55px row pitch, which is about 33px of gap for a standard 22px-tall box. Give more where several cords converge on one destination, where a cord crosses from one functional region to another, or where the source box is tall (a `live.gain~`, a `playlist~`, a `panel`), since a tall box makes a short gap look tighter than it is.
+
+For instance: `[live.gain~]` (30px tall) at y=728 with `[s~ MIX_L]` / `[s~ MIX_R]` at y=772 leaves 14px — the two cords out of the gain are barely visible as cords. Moving the `s~` row well below the gain's patching rect makes both readable at a glance.
+
+**This matters more now than it used to.** Under the retired hide-plumbing rule, a cramped region could be tidied by hiding its cords. Every cord is visible now, so the layout is the only tool left — spacing is not cosmetic, it is what makes the visible graph legible. See *Never Hide Patchcords or Boxes* in `CLAUDE.md`.
+
+### `@triggers -1` is only needed when the inputs arrive independently
+
+`join @triggers -1` (like `pak`) exists to solve one problem: inlets that receive their values at unrelated times, where waiting for the leftmost inlet to fire would leave the output stale. **When a single upstream multi-outlet object feeds every inlet, that problem does not exist** — Max outputs right to left, so the cold inlets are already loaded by the time the hot one fires, and a plain `join` is correct. The attribute then adds nothing but a claim the reader has to check.
+
+For instance: `[unjoin 3]` feeding `[join]`'s two inlets from its outlets 0 and 1 needs no `@triggers` — outlet 1 lands in the cold inlet first, outlet 0 fires the hot inlet second, and the output carries both. Reach for `@triggers -1` when the inlets are fed from genuinely separate sources (two `r` objects, two UI controls the operator touches independently).
+
+Note where the guarantee comes from: right-to-left output is Max's universal convention — `trigger`'s refpage documents it in so many words ("Outputs any input received in order from right to left") and Max files the object under a "Right-to-Left" category — but `unjoin`'s and `unpack`'s own refpages do not restate it. It is a language rule, not a per-object promise.
+
+### Lay fan-out destinations out right-to-left, in execution order
+
+Max fires a `trigger`'s outlets **right to left**, and likewise fires multiple cords leaving a single outlet right to left. Place the destinations so their left-to-right position on screen matches that order: **the destination that fires first sits furthest right.** Then the cords fan out without crossing, and the crossing pattern stops lying about the order.
+
+This is purely a readability rule — the patch behaves identically either way — but the failure it prevents is real. A reader who sees `[t i i]` with its right outlet cabled left and its left outlet cabled right has to trace two crossing cords to recover an ordering that a correct layout would have shown at a glance. Ordering is the entire reason `trigger` exists; a layout that obscures it defeats the object.
+
+For instance: `[toggle] → [t i i]` where outlet 1 broadcasts the run state and outlet 0 drives a `[select 0]` stop-cleanup. Outlet 1 fires first, so `[s RUN]` belongs on the **right** and `[select 0]` on the left. Wired the other way the cords cross, and the patch reads as though the cleanup happens before the broadcast.
+
+The recognition signal: **any time two cords leaving one object cross each other, that crossing is telling you the destinations are in the wrong horizontal order.** Swap them rather than routing around them.
+
+### Use `s~` / `r~` where a signal cord would cross the patch
+
+Signal connections follow the same judgment as control connections: a **short local cord stays a cord**, because seeing it is what tells the reader those two objects are one chain (`[playlist~] → [live.gain~]` sitting directly under it should be wired, not sent). A cord that would run across the patch — from one functional region to another, or from four scattered voices into one mixer — becomes `[s~ NAME]` / `[r~ NAME]`.
+
+Two facts that make this work, both from the `send~` / `receive~` refpages: **multiple `send~` objects sharing a name sum into the matching `receive~`** ("When two or more send~ objects are aimed at the same receive~ object, the signals add together"), so a four-voice stereo mix bus is one `s~` pair per voice and one `r~` pair at the master — no summing objects, no fan-in tangle. And the refpages state the short forms directly: `send~` "can be instantiated simply by typing into an object box the short-form letter `s~`", same for `r~`.
+
+Note the refpage caveat: `send~` / `receive~` can introduce a small, variable signal delay. Irrelevant for mixing independent voices; think twice inside a feedback path or anywhere phase between two branches matters.
+
+### Write `send` / `receive` in their short forms
+
+Write `s`, `r`, `s~`, `r~` — never the long forms. They are the same objects (the short names are documented aliases, not slang), and the short box is narrower, which matters when a patch carries twenty of them. Name the destination in ALL CAPS as usual: `[s RUN]`, `[r NCLIPS]`, `[s~ MIX_L]`.
 
 ### Signal flow runs top-to-bottom — inputs above, outputs below
 
@@ -211,7 +268,7 @@ Size communicates priority — the most-used controls must be the largest, most 
 ### Prefer a labeled message box over a button + comment for one-shot actions
 For an operator-facing action the user clicks (save, load, clear, reset, recall, trigger), use a **`message` box whose text is the action's label** rather than a `button` paired with a separate `comment`. The message box combines both jobs — it is the clickable affordance AND it reads as a word ("save", "load"), so it self-documents and takes one object instead of two. A bare `button` is a blank bang with no indication of what it does; labelling it then requires an adjacent comment, which is two objects to place, align, and keep in sync for what a single message box does cleanly.
 
-If the downstream consumer needs a bare `bang` rather than the message's symbol, route the message through `[t b]` (trigger bang) — that conversion is hidden plumbing; the operator still sees and clicks the labelled message. Reserve a `button` for cases where the *blinking bang indicator* itself is the point (monitoring traffic on a cord) — there the button is a display, not a labelled action. (Derived from the Zendrum bank UI: `save`/`load` message boxes replaced button+comment pairs.)
+If the downstream consumer needs a bare `bang` rather than the message's symbol, route the message through a **`button`** — not `[t b]`. Both convert anything to a bang, but the `button` blinks when it fires (so the patching view shows you the action actually happened) and can be clicked directly to fire the chain while testing. `[t b]` gives you the same bang with neither. The operator still sees and clicks the labelled message; the button sits below it in the patching view as a visible confirmation light. (Derived from the Zendrum bank UI: `save`/`load` message boxes replaced button+comment pairs.)
 
 ### Panel-based grouping
 Use dark rounded panels (`panel` objects with rounded corners and a dark fill) to cluster related controls. The panel boundary is the group label — controls inside share a purpose. Do not mix unrelated controls inside one panel. Leave consistent padding (≈15 px) between panel edge and contents.
@@ -241,9 +298,9 @@ Max `comment` objects have internal left padding: the text starts a few pixels r
 
 Max `comment` objects auto-wrap text based on the box's width (`patching_rect[2]`). Height (`patching_rect[3]`) is computed automatically by Max from the width and the wrapped content — it is **not** an independent dimension.
 
-**In a spec:** set only `size[0]` (width). Do not record or hard-code a height. If a comment overflows its layout area, narrow `size[0]` — do not add explicit `\n` line breaks, since auto-wrap is the correct mechanism.
+**In a spec:** `size` must be a two-element `[width, height]` list. `build_box` unpacks it as `w, h = obj_spec["size"]`, so a one-element `[width]` raises `ValueError` and the conversion fails — an earlier version of this paragraph said to set only `size[0]`, which does not work. Width is the dimension you actually choose; treat the height you write as nominal and derive it from the number of wrapped lines you expect (roughly `14 * lines + 6` at fontsize 10). If a comment overflows its layout area, narrow `size[0]` — do not add explicit `\n` line breaks, since auto-wrap is the correct mechanism.
 
-**Sync caveat:** `sync_spec` in `spec2maxpat.py` currently captures `pos` from the live `patching_rect` but does **not** capture `size` (width/height). This means if a user narrows a comment in Max, that width change is silently dropped on the next sync, and the next `convert` writes the old wide width back. Until this is fixed, manually update `size[0]` in the spec after syncing if a comment width was changed in Max.
+**Sync caveat:** `sync_spec` in `spec2maxpat.py` does capture the live `patching_rect` width and height back into `size` (see the "Patching size" block in `reconcile_spec`), so a resize made in Max survives the next `convert`. One gap remains: for an object with no `UI_SIZES` default, sync only records `size` when the live height differs from 22. A one-line comment narrowed in Max keeps height 22, so its **width change is dropped** and the next `convert` writes the old width back. After narrowing a single-line comment in Max, set `size` in the spec by hand.
 
 ### Reset affordances co-located
 Place reset buttons **inside** the panel they affect, near the bottom of the group. Never put a global reset in a utility area separate from the controls it resets.

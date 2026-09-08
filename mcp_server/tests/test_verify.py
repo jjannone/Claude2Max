@@ -146,50 +146,49 @@ def test_presented_controls_need_labels():
     assert "presented-controls-need-labels" in rules
 
 
-def test_hidden_box_cord_must_be_hidden():
-    spec = {
-        "objects": {
-            "n": {"type": "number"},
-            "msg": {"type": "message", "text": "setport $1", "attrs": {"hidden": 1}},
-        },
-        "connections": [["n", 0, "msg", 0]],  # visible cord into hidden box
-    }
-    assert "hidden-box-cord-visible" in _rules(verify_spec(spec))
-
-
-def test_hidden_box_cord_ok_when_hidden():
-    spec = {
-        "objects": {
-            "n": {"type": "number"},
-            "msg": {"type": "message", "text": "setport $1", "attrs": {"hidden": 1}},
-        },
-        "connections": [["n", 0, "msg", 0, {"hidden": 1}]],
-    }
-    assert "hidden-box-cord-visible" not in _rules(verify_spec(spec))
-
-
-def test_redundant_message_box():
+def test_hidden_cord_flagged():
     spec = {
         "objects": {
             "n": {"type": "number"},
             "msg": {"type": "message", "text": "setport $1"},
-            "node": {"type": "newobj", "text": "node.script server.js"},
         },
-        "connections": [["n", 0, "msg", 0], ["msg", 0, "node", 0]],
+        "connections": [["n", 0, "msg", 0, {"hidden": 1}]],
     }
-    assert "redundant-message-box" in _rules(verify_spec(spec))
+    assert "hidden-cord" in _rules(verify_spec(spec))
 
 
-def test_preset_message_not_flagged_redundant():
-    # Operator-clickable preset (no UI control upstream) — must NOT flag.
+def test_hidden_box_flagged():
     spec = {
         "objects": {
-            "preset": {"type": "message", "text": "setduration 30"},
-            "node": {"type": "newobj", "text": "node.script server.js"},
+            "n": {"type": "number"},
+            "msg": {"type": "message", "text": "setport $1", "attrs": {"hidden": 1}},
         },
-        "connections": [["preset", 0, "node", 0]],
+        "connections": [["n", 0, "msg", 0]],
     }
-    assert "redundant-message-box" not in _rules(verify_spec(spec))
+    assert "hidden-box" in _rules(verify_spec(spec))
+
+
+def test_visible_cords_and_boxes_ok():
+    spec = {
+        "objects": {
+            "n": {"type": "number"},
+            "msg": {"type": "message", "text": "setport $1"},
+        },
+        "connections": [["n", 0, "msg", 0]],
+    }
+    rules = _rules(verify_spec(spec))
+    assert "hidden-cord" not in rules and "hidden-box" not in rules
+
+
+def test_spec_embed_box_exempt_from_hidden_rule():
+    spec = {
+        "objects": {
+            "n": {"type": "number"},
+            "obj-spec-embed": {"type": "text.codebox", "attrs": {"hidden": 1}},
+        },
+        "connections": [],
+    }
+    assert "hidden-box" not in _rules(verify_spec(spec))
 
 
 def test_subpatcher_label_missing():

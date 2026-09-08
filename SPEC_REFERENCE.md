@@ -70,7 +70,7 @@ The object ID (e.g. `"my_metro"`) is only used within the spec for wiring connec
 | `type` | yes | The Max object class (see supported types below) |
 | `text` | depends | Object text — required for `newobj`, `message`, `comment` |
 | `pos` | no | Explicit position as `[x, y]` — overrides auto-layout |
-| `size` | no | Explicit **patching-view** size as `[width, height]`, overriding the object's default box size. Set only when the content needs it (wide `message`/`comment`, clipped routing text). Resizing for layout belongs in `presentation_rect`, not here — see *Preserve each object's default box size in the patching view* in `patching/MAX_PATCHING.md` § Common Pitfalls. |
+| `size` | no | Explicit **patching-view** size as `[width, height]` — always two elements; the converter unpacks it as `w, h` and a one-element list raises. Overrides the object's default box size. Set only when the content needs it (wide `message`/`comment`, clipped routing text). Resizing for layout belongs in `presentation_rect`, not here — see *Preserve each object's default box size in the patching view* in `patching/MAX_PATCHING.md` § Common Pitfalls. |
 | `inlets` | no | Override number of inlets |
 | `outlets` | no | Override number of outlets |
 | `outlettype` | no | Override outlet types array |
@@ -240,7 +240,7 @@ Most Max objects only trigger output from inlet 0 (hot). These objects have two 
 
 | Object | Correct outlets | Common mistake |
 |--------|----------------|----------------|
-| `playlist~` | 3 (audio, position, state) | Assumed 5 |
+| `playlist~` | 5 (audio L, audio R, position, start/done list, dictionary) | Assumed 3 — and this table said so until 2026-08-21. It is also a **UI maxclass**, not a `newobj`, and is absent from `MAXCLASS_DEFAULTS` / `UI_SIZES`, so a spec must supply `inlets` / `outlets` / `outlettype` / `size`. See `patching/MAX_PATCHING.md`. |
 | `adsr~` | 4 (envelope~, trigger~, mute, dump) | Assumed 1–2 |
 | `live.gain~` | 5 (sig L, sig R, param value, raw 0–1, dB list) | Assumed 2 |
 | `dict` | 5 (dict, value, keys list, names list, status) | Assumed 2–3 |
@@ -413,52 +413,17 @@ Connections are an array of 4-element arrays:
 
 One source can connect to multiple destinations. Multiple sources can connect to the same inlet.
 
-### Always hide redundant message boxes — this is binding
+### Never hide patchcords or boxes — this is binding
 
-A message box (or `prepend` / `sprintf` / `pak` / similar formatter) that sits directly downstream of a UI control (button, number, slider, dial, toggle, textedit, attrui, live.*) and exists only to reformat or dispatch that control's output is **plumbing**. Hide it with `"hidden": 1`, and hide every cord touching it.
+Never emit `{"hidden": 1}` as the fifth element of a connection array, and never set `"hidden": 1` on a box's `attrs`. The presentation view already controls what the operator sees: a box without `presentation: 1` is absent from it, and patchcords are never drawn there at all. `hidden` only affects the **patching** view — the view belonging to whoever edits or learns the patch — so hiding a cord or a box removes information from its only readership.
 
-In a spec, set `"hidden": 1` on the box's `attrs` (or `box` overrides) and apply `{"hidden": 1}` to each connection involving it.
+This replaces two earlier binding sections here ("Always hide redundant message boxes" and "Always hide plumbing patchcords"), retired 2026-09-07. See `CLAUDE.md > Never Hide Patchcords or Boxes` for the reasoning and the general principle.
 
-The pattern looks like `[UI control] → [message word $1] → [some receiver]`. The UI control is the operator-facing affordance. The message box only exists because the downstream receiver expects a specific symbolic prefix. Showing the message box in the locked view duplicates the UI's value AND invites the operator to click the message as if it were an action button — neither is what you want.
+**What to do instead.** Keep plumbing — `prepend`, `sprintf`, formatter message boxes, `route`, `select` — out of the **presentation** view by not setting `presentation: 1` on it. It stays fully visible in the patching view, wired to visible cords, where a reader can follow it.
 
-**Hide:**
+**Two exceptions:** the embedded spec codebox (`id: "obj-spec-embed"`), which carries no inlets, no outlets, and no graph role — storage in the shape of a box; and boxes whose visibility is runtime state owned by code, which today means the tutorial system's `tut-panel-N` / `tut-ann-N` boxes that the generated v8 controller unhides one step at a time. Nothing else in a spec is hidden. The separating test: if code changes it while the patch runs it is state; if it was authored that way to tidy the view it is a violation.
 
-- `[number] → [setport $1] → [node.script]` — `[setport $1]` is plumbing.
-- `[button] → [start] → [node.script]` — the message box just converts the bang into a symbol.
-- `[textedit] → [prepend setpassword] → [node.script]` — the prepend is a formatter.
-- `[live.numbox] → [setbpm $1] → [transport]` — same shape.
-
-**Don't hide:**
-
-- A free-standing `[bang]` button or `[message]` box the operator clicks directly to fire a one-shot action.
-- A preset `[message setduration 30]` that recalls a specific stored value (no UI control upstream).
-- An `[init defaults]` message wired off a `[loadbang]` that is intentionally visible as a recall affordance.
-
-**The test:** mentally remove the message box. Does the operator still have a way to invoke the same action? If yes, the box is redundant — hide it. If no, keep it visible.
-
-### Always hide plumbing patchcords — this is binding
-
-A patchcord whose sole job is to satisfy the graph (carrying a value between objects without itself communicating anything to the operator) must be hidden in the locked / presentation view. Visible cords should mean something to the reader; everything else is noise on stage.
-
-In a spec, mark a connection as hidden with a fifth element on the connection array — `{"hidden": 1}` — or in raw `.maxpat` JSON set `"hidden": 1` on the patchline object next to `source` / `destination`.
-
-**Cords that must be hidden:**
-
-- **Formatter cords.** Any cord into a `prepend`, `sprintf`, `tosymbol`, `fromsymbol`, `pak`, `pack`, `unpack`, `zl` (when used purely as a list shaper), or a `message` box that exists only to reformat a value coming from an upstream UI element.
-- **Cords feeding a display-only UI element.** Any cord whose destination is a `comment` (when used as a status display), `number` / `flonum` (when used as a readout), `live.toggle` / `live.numbox` used as indicators, `jit.cellblock`, `multislider`, `jit.pwindow`, or similar. The UI element IS the surface; the cord into it is plumbing.
-- **Cords into `node.script` / `js` / `v8` from preset message boxes.** When the message box is the operator-facing affordance and the JS receiver is internal logic, the cord between them is plumbing.
-- **Cords between hidden boxes.** Any cord whose source OR destination is itself `"hidden": 1`.
-
-**Cords that stay visible:**
-
-- The main data router lines (e.g. `[node.script] → [route ...]`) — visible because they communicate the data path to anyone reading the patch.
-- Connections between user-facing UI controls (e.g. `[live.gain~] → [ezdac~]`) where seeing the chain helps the operator reason about what's happening.
-- Cords going into a `print` object (debug visibility is the *point*).
-- Cords inside a section that the patch author deliberately wants to display as a wiring diagram for pedagogical or debugging reasons.
-
-For instance: `[number] → [setport $1] → [node.script]` — the message box `[setport $1]` is a formatter that exists only because Node-for-Max can't read a raw int. Hide both incoming AND outgoing cords on `[setport $1]`, and hide the message box itself with `"hidden": 1`. The locked view shows only the number box; the operator twiddles it and the message + cords stay invisible.
-
-The rule is symmetric: when you hide a box for being plumbing, hide every cord touching it. A visible cord that terminates in nothing is worse than no cord at all.
+**If a patching view looks cluttered with every cord visible, fix the layout, not the visibility** — stagger fan-out destinations, widen the spacing, and order destinations right-to-left so cords stop crossing (see `patching/MAX_PATCHING.md > Patching Layout`).
 
 ## Subpatchers
 
@@ -556,7 +521,7 @@ Concretely:
 - **Set `presentation: 1`** on every UI object the operator needs to see or interact with.
 - **Set `presentation_rect: [x, y, w, h]`** on each such object so it has an explicit position in the presentation layout. The presentation positions are independent of patching positions — optimize each view for its own purpose.
 - **Include comment labels** for every visible control. A control worth showing is worth labelling.
-- **Omit internal logic objects** (route, prepend, sprintf, hidden message boxes used for routing, debug print, etc.). They live only in the patching view.
+- **Omit internal logic objects** (route, prepend, sprintf, message boxes used for routing, debug print, etc.). They live only in the patching view — omit them here rather than marking them `hidden` anywhere.
 
 The only exempt cases are: utility subpatchers that are themselves embedded inside a parent's presentation (the parent supplies the UI), and pure-DSP / pure-utility patches that have no operator at all (codebox modules called from elsewhere).
 

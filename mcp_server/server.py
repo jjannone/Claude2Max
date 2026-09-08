@@ -407,20 +407,41 @@ NOT valid (silently accepted, do nothing): `bgcolor peakcolor knobcolor needleco
 - `presentation: 1` on every operator-visible object
 - `presentation_rect: [x, y, w, h]` on each (explicit, independent of patching position)
 - Comment label adjacent to every visible control
-- Internal logic objects (`route`, `prepend`, `print`, hidden message boxes) stay OUT of presentation
+- Internal logic objects (`route`, `prepend`, `print`, formatter message boxes) stay OUT of presentation — visible in the patching view, absent here
 - Exempt: utility subpatchers with no operator surface; pure-DSP patches with no UI
 
-### Hide plumbing patchcords
-Cords that only move data without communicating to readers must have `hidden: 1`:
-- Formatter cords on `prepend`, `sprintf`, `pack/unpack`, message-box reformatters
-- Cords to display-only elements (`comment` as readout, `jit.cellblock`, `jit.pwindow`)
-- Any cord touching a hidden box → must also be hidden
+### Never hide patchcords or boxes
+Never set `hidden: 1` on a cord or a box (2026-09-07 — this REVERSES the older
+"hide plumbing patchcords" / "hide redundant message boxes" rules):
+- The presentation view already decides what the operator sees; `hidden` only
+  affects the patching view, which belongs to whoever edits or learns the patch
+- Keep plumbing off the operator's screen by omitting `presentation: 1` — that
+  is the entire mechanism
+- Tangled patching view → fix the LAYOUT (spacing, right-to-left fan-out order),
+  never the visibility
+- Sole exception: the embedded spec codebox (`obj-spec-embed`), which is storage,
+  not graph
 
-### Hide redundant message boxes
-A message box that only reformats upstream UI output must have `hidden: 1` (and both cords):
-- `[number] → [setport $1] → [node.script]`: the message box is plumbing — hide it.
-- Test: "Remove the box mentally. Does the operator still have a way to invoke the action?"
-  If YES → hide it. If NO → keep it visible.
+### join / unjoin, not pack / pak / unpack
+Prefer the object that states its behavior in an attribute over the one that
+encodes it in its name:
+- `join @triggers -1` IS `pak` (refpage: -1 makes all inlets hot); `join` is `pack`
+- `unjoin` is `unpack` — and `unjoin <n>` has **n+1** outlets (the arg counts
+  groups; a remainder outlet is always present)
+- `join <n>`'s arg is the INLET COUNT, not initial values — unlike `pak 4000 8001`,
+  its slots start at 0, so move any meaningful default to a loadmess
+
+### Prefer an object's own attribute over an adapter chain
+Before adding a `scale` / `expr` / offset `+` downstream, check the source
+object's attributes:
+- `random @range 4000 8000` emits that range directly — no `scale`, no `+ min`
+  (`@range` takes TWO values; set it live with a `range <lo> <hi>` message)
+- Signal: multiple `s~` sharing a name SUM into the matching `r~` — a mix bus is
+  one `s~` per voice, no summing objects
+- Use `s` / `r` / `s~` / `r~` (short forms), and only where a cord would cross
+  the patch; short local connections stay cords
+- `button`, not `[t b]`, to convert a message to a bang — it blinks when it fires
+  and can be clicked to test
 
 ### textedit is NOT for set-once configuration
 `textedit` has two fatal flaws for config values (URLs, identifiers, API keys):
@@ -1538,9 +1559,9 @@ def verify_spec(spec_json: str) -> dict:
                 non-existent object, malformed connection shape, outlet/inlet
                 index past a declared count.
       warning — binding-rule violations: no presentation view despite UI
-                controls, presented controls with no labels, visible cords
-                touching hidden boxes, redundant (unhidden) formatter message
-                boxes, unlabelled subpatcher inlets/outlets, untracked debug
+                controls, presented controls with no labels, hidden cords or
+                hidden boxes (nothing is hidden except the spec embed),
+                unlabelled subpatcher inlets/outlets, untracked debug
                 scaffolding.
       style   — convention nudges: non-ALL-CAPS user names, [js] instead of [v8].
 
@@ -1869,8 +1890,8 @@ def lookup_rule(name_fragment: str, limit: int = 5) -> dict:
     """
     Find a Claude2Max binding rule by a fragment of its name.
 
-    The binding rules (Always Create a Presentation View, Always Hide Plumbing
-    Patchcords, Never Write API Names From Memory, Modify Don't Rebuild, …) are
+    The binding rules (Always Create a Presentation View, Never Hide Patchcords
+    or Boxes, Never Write API Names From Memory, Modify Don't Rebuild, …) are
     `## ` sections across CLAUDE.md, SPEC_REFERENCE.md, and
     patching/MAX_PATCHING.md. This returns the full rule text so you can apply it
     verbatim instead of paraphrasing from memory.
@@ -1881,7 +1902,7 @@ def lookup_rule(name_fragment: str, limit: int = 5) -> dict:
 
     Parameters
     ----------
-    name_fragment — part of the rule name, e.g. "presentation", "hide plumbing",
+    name_fragment — part of the rule name, e.g. "presentation", "hide",
                     "textedit", "api names", "rebuild".
     limit         — max rules to return (default 5).
 
@@ -1897,7 +1918,7 @@ def lookup_rule(name_fragment: str, limit: int = 5) -> dict:
     Smoke tests
     -----------
     lookup_rule("presentation")  → "Always Create a Presentation View …"
-    lookup_rule("hide plumbing")  → "Always Hide Plumbing Patchcords …"
+    lookup_rule("hide")  → "Never Hide Patchcords or Boxes …"
     lookup_rule("zzzznotarule")  → count 0
     """
     frag_l = name_fragment.lower().strip()

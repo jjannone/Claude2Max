@@ -10,7 +10,7 @@ You arrived because your global CLAUDE.md told you to consult this repo before d
 
 **The minimum reading before any tool call that produces Max content is three files, in this order:**
 
-1. The rest of this file — `Claude2Max/CLAUDE.md`. Workflow, binding rules (always create a presentation view, always hide plumbing patchcords, never write API names from memory), the `c2m.inspect` debugging convention, the preferred-objects table, the multi-user-template if mobile is involved.
+1. The rest of this file — `Claude2Max/CLAUDE.md`. Workflow, binding rules (always create a presentation view, never hide patchcords or boxes, never write API names from memory), the `c2m.inspect` debugging convention, the preferred-objects table, the multi-user-template if mobile is involved.
 2. `Claude2Max/SPEC_REFERENCE.md`. The spec format the converter consumes; object types and correctness notes; presentation layout specifics; jit.cellblock conventions; the v8 / JavaScript section.
 3. `Claude2Max/patching/MAX_PATCHING.md`. Common Pitfalls (the load-bearing section for silent-failure modes — read every bullet), presentation aesthetic checklist, per-object guidance.
 
@@ -132,6 +132,8 @@ When parsing third-party data (XML, JSON, configs, refpages), don't coerce a fie
 
 For instance: a Max refpage attribute's `size` is usually an integer, but `"variable"` is also valid. `int(attr.get("size", 1))` crashes the parser the first time it meets such a refpage; a `try int → fall back to the original string` pattern preserves both numeric and sentinel cases without losing information.
 
+A second instance, in this repo's own converter (2026-09-07): `guess_newobj_io` derived inlet counts with `int(args[0])`, which is right for `join 3` and raises `ValueError` on `join @triggers -1` — a **valid** object whose first token after the name is an attribute, not a count. Two fixes, both general rather than per-object: strip `@name value…` runs before counting anything positional (attributes are never positional, and may appear anywhere after the object name), and read counts through a helper that falls back to the object's documented default instead of raising. Eight object families shared the bug; only `join` had been exercised.
+
 ## Reference Instances Illustrate Principles — They Don't Constitute Them
 
 When a rule, checklist, or repair procedure refers to "what correct looks like," enshrine the **structural contract** (the attributes, invariants, shape) — not a specific file as the source of truth. Specific files are illustrations introduced as "for instance," and they may be renamed, edited, or deleted without the rule needing to change. A rule pinned to a file becomes wrong the moment that file moves; a rule pinned to the contract stays correct as long as the contract holds.
@@ -229,56 +231,65 @@ The mechanics:
 - Set `presentation: 1` on every UI object the operator should see.
 - Set `presentation_rect: [x, y, w, h]` on each such object so it has an explicit position in the presentation layout. Presentation positions are independent of patching positions — optimize each view for its own purpose.
 - Include comment labels for every visible control. A control worth showing is worth labelling.
-- Omit internal logic objects from the presentation (`route`, `prepend`, `sprintf`, hidden message boxes used as routers, `print`, etc.). They live only in the patching view.
+- Omit internal logic objects from the presentation (`route`, `prepend`, `sprintf`, message boxes used as routers, `print`, etc.). They live only in the patching view — visible there, absent here. Omitting them from the presentation is the whole mechanism; never also mark them `hidden` (see *Never Hide Patchcords or Boxes*).
 
 The threshold is "any UI," not "lots of UI." A patch with four UI elements (a START button, a status comment, a port number box, a `jit.cellblock` monitor) still gets a presentation — those four are the operator's interface and the rest is editing scaffolding. See `SPEC_REFERENCE.md > Presentation View` for layout specifics, and `patching/MAX_PATCHING.md > Presentation Aesthetic` for the visual checklist (panel grouping, monospace labels, color semantics, action prominence hierarchy).
 
 Exempt cases: utility subpatchers embedded inside a parent's presentation (the parent supplies the UI), and pure-DSP / pure-utility patches with no operator at all (codebox modules called from elsewhere).
 
-## Always Hide Redundant Message Boxes — Binding Rule
+## Never Hide Patchcords or Boxes — Binding Rule
 
-When a UI control (button, number, slider, dial, toggle, textedit, attrui, live.*) sits directly upstream of a message box that exists only to format / dispatch the UI's output to its consumer, **the message box is plumbing.** Set `"hidden": 1` on the message box AND on every patchcord touching it.
+Do not set `"hidden": 1` on any patchcord or on any box. **The presentation view already decides what the operator sees** — a box without `presentation: 1` does not appear there, and patchcords never appear there at all. `hidden` is a second mechanism chasing the same goal, and it acts only on the *patching* view, which belongs to whoever is editing or learning the patch. Hiding things there takes information away from the only readers who have it, in exchange for a tidiness nobody ever sees.
 
-The pattern: `[UI control] → [message word $1] → [some receiver]`. The UI control is the operator-facing affordance. The message box is a formatter that the graph requires but the operator doesn't. Showing it clutters the locked view with a copy of the value the operator just set — and worse, invites the operator to click it as if it were an action button.
+This reverses two earlier binding rules — *Always Hide Plumbing Patchcords* and *Always Hide Redundant Message Boxes* — retired 2026-09-07 at John's direction. What retired them: the tidiness they bought was already free from the presentation view, while the cost fell entirely on the student trying to follow the patching view, where boxes wired to nothing and cords vanishing into empty space are the normal result.
 
-Examples that must be hidden:
+**In practice:**
 
-- `[number] → [setport $1] → [node.script]` — the message box reformats the int as a `setport <n>` command. Hide it.
-- `[button] → [start] → [node.script]` — the message box converts the bang into a `start` symbol. Hide it.
-- `[textedit] → [prepend setpassword] → [node.script]` — the prepend (functionally a message-shaped formatter) reshapes the textedit value. Hide it.
-- `[live.toggle] → [if $1 == 1 then play else stop] → [transport]` — only the toggle is the operator surface; the conditional message is plumbing.
+- Never emit a `{"hidden": 1}` attrs dict on a connection. Every cord in a spec is visible.
+- Never set `"hidden": 1` on a box. Every box in a spec is visible in the patching view.
+- Keep plumbing (`prepend`, `sprintf`, formatter message boxes, `route`, `select`) off the operator's screen by **not giving it `presentation: 1`**. That is the entire mechanism, and it needs no second half.
+- If a region of the patching view looks like a mess once its cords are visible, **the layout is the problem** — space the objects out, stagger the fan-outs, and honor the right-to-left ordering rule in `patching/MAX_PATCHING.md`. Do not reach for `hidden` to tidy up a tangle.
 
-Examples that stay visible (NOT redundant — operator-clickable):
+**Two things stay exempt**, and they share a property: neither is an authoring choice about tidiness, which is the only thing the rule forbids.
 
-- A `[bang]` button or message box that the operator hits directly to fire a one-shot action.
-- A preset `[message setduration 30]` that the operator clicks to recall a specific value (no UI control upstream).
-- An `[init defaults]` message wired off a `[loadbang]` and intended to be visible as a recall affordance.
+1. **The embedded spec codebox** (`id: "obj-spec-embed"`) keeps `"hidden": 1`. It is not part of the patch's graph at all — storage in the shape of a box, with no inlets, no outlets, and nothing to read.
+2. **Boxes whose visibility is runtime state owned by code.** The tutorial system's highlight panels and bubble annotations start hidden and are unhidden one step at a time by the generated v8 controller through `patcher.getnamed()` (contract: a `tut-panel-N` / `tut-ann-N` varname, see `TUTORIAL_GUIDELINES.md`). There `hidden` is a state machine's initial value, not a decision about what a reader gets to see.
 
-The test: **remove the message box mentally. Does the operator still have a way to invoke the same action?** If yes (because the upstream UI control IS the action), the message box is redundant — hide it. If no (because the message box is itself the only way to fire the action), keep it visible.
+The test that separates them from a violation: **who changes it?** If the answer is "nobody, it was authored that way to keep the view tidy," it is a violation. If the answer is "code, while the patch runs," it is state.
 
-The rule is symmetric with [Always Hide Plumbing Patchcords](#always-hide-plumbing-patchcords--binding-rule): hiding the message box creates an obligation to hide every cord touching it. A visible cord ending in a hidden box (or a visible box receiving from a hidden cord) is worse than no cord at all.
+The judgment the retired rules encoded is still right: plumbing should not clutter the operator's screen. Only the mechanism changed — omission from the presentation view, not invisibility in the patching view.
 
-## Always Hide Plumbing Patchcords — Binding Rule
+The general principle, which outlives this instance: **when an environment already gives you one mechanism that decides what a reader sees, do not run a second one alongside it.** Two mechanisms with overlapping scope have to be held in agreement by hand, and the one that operates invisibly is the one that quietly drifts wrong.
 
-A patchcord whose sole job is to satisfy the graph — carrying a value between objects without itself communicating anything to a reader — must be hidden. Visible cords should mean something to the reader; everything else is noise on stage.
+## Prefer an Object's Own Attribute Over an Adapter Chain — Binding Rule
 
-**Cords that must be hidden** (`"hidden": 1` on the patchline):
+Before wiring an object into another object that reshapes its output — a `scale`, an `expr`, an offset `+`, a `clip` — check whether the source object has an attribute or inlet that produces the value you want directly. A chain built to correct a source you could have configured is more objects to place, a second place the numbers can go stale, and one more index to get wrong.
 
-- Formatter cords — incoming and outgoing on any `prepend`, `sprintf`, `tosymbol`, `fromsymbol`, `pak/pack/unpack`, `zl` (when shaping), or message box that only reformats an upstream UI value.
-- Cords feeding a display-only UI element — `comment` used as a status display, `number`/`flonum` used as a readout, `live.toggle` / `live.numbox` used as indicators, `jit.cellblock`, `multislider`, `jit.pwindow`, similar.
-- Cords from operator-facing preset messages into internal logic (`node.script`, `js`, `v8`). The message box is the surface; the cord is plumbing.
-- Cords between hidden boxes. If a box has `"hidden": 1`, every cord touching it must also be hidden.
+The recognition signal: **any time the object immediately downstream exists only to move the upstream object's output into the range you actually wanted**, stop and read the upstream object's refpage attribute list first.
 
-**Cords that stay visible:**
+For instance: `random 1000 → scale 0 999 4000 8000` was two objects doing what `random @range 4000 8000` does in one — the refpage states the range "can be any two numerical values, including negative values," so `random` emits the final range itself and the `scale` was pure adapter. Set such a range live by sending a `range <lo> <hi>` message to the left inlet; the refpage marks the attribute `set="1"`, and `range $1 $2` message boxes appear in C74's own patches.
 
-- The main data router lines (e.g. `[node.script] → [route ...]`) — visible because they communicate the data path to anyone reading the patch.
-- Connections between user-facing UI controls (e.g. `[live.gain~] → [ezdac~]`) where seeing the chain helps the operator reason about behavior.
-- Cords going into a `print` object — debug visibility is the *point*.
-- Cords inside a section deliberately presented as a wiring diagram for pedagogical reasons.
+**Watch the bound, though — `random`'s high value is exclusive.** C74's `random.maxhelp` states it outright: "for an int range it is one less than the high value," and labels its own `random @range 25 50` demo "output will be between 25 and 49." So a range meant to *include* its top needs the high value plus one. This is the kind of detail that makes the adapter chain look safer than it is — the chain was wrong too, just wrong in a way nobody had checked. Replacing a chain with an attribute means re-verifying the endpoints, not assuming they carry over.
 
-The rule is symmetric: hiding a box for being plumbing creates an obligation to hide every cord touching it. A visible cord that terminates in nothing is worse than no cord at all.
+This is the small-scale sibling of *Consult Installed Packages Before Long Native Chains* — that rule asks whether one external replaces your chain, this one asks whether one attribute does. Both are checked against a source of truth, never from memory (see *Never Write API Names From Memory*).
 
-For instance: `[number] → [setport $1] → [node.script]`. The `[setport $1]` message box exists only because Node-for-Max can't read a raw int. Hide both incoming and outgoing cords on `[setport $1]`, and hide the message box itself. The locked view shows only the number box; the operator twiddles it and the message + cords stay invisible.
+## Prefer the Object That States Its Behavior in an Attribute — Binding Rule
+
+Where Max offers two objects for the same job and one carries its behavior in an **attribute** while the other encodes it in its **name or inlet layout**, use the one with the attribute. An attribute is readable in the box, greppable in the file, changeable at runtime, and checkable by the verifier against the refpage. Behavior encoded in a name is none of those — it is lore the reader has to already know, and a one-character difference that changes semantics silently.
+
+**In practice, for list packing and unpacking: use `join` and `unjoin`, not `pack` / `pak` / `unpack`.**
+
+- **`join @triggers -1` replaces `pak`.** The refpage: setting `triggers` to `-1` "will cause the object to trigger output for any inlet (all inlets will be 'hot')" — which is exactly what `pak` means, except stated instead of spelled. C74's own `join.maxhelp` ships `join 3 @triggers -1`. The attribute also does what the name cannot: `@triggers 1 3` makes *some* inlets hot, a case `pack`/`pak` cannot express at all.
+- **`join` replaces `pack`** (no `triggers` — left inlet hot, the default).
+- **Reach for `@triggers -1` only when the inlets are fed independently.** If one upstream multi-outlet object feeds every inlet, Max's right-to-left output already loads the cold inlets before the hot one fires, and a plain `join` is correct — `[unjoin 3]` into `[join]` needs no attribute. Use it when the sources are genuinely separate (two `r` objects, two controls the operator touches at unrelated times). Details in `patching/MAX_PATCHING.md`.
+- **`unjoin` replaces `unpack`.** Both take untyped items, so neither needs the per-slot type declarations `unpack 0 0 0` carries.
+
+**Two details to get right when substituting** (verified against the refpages, and the reason this is a substitution rather than a rename):
+
+1. **`unjoin`'s creation arg is not the outlet count.** The refpage's `outlets` argument "specifies the number of outlets (in addition to the rightmost outlet, which is always present)" — so `unjoin 3` has **four** outlets: three groups plus a remainder. `@outsize` (default 1) sets how many items go to each.
+2. **`join`'s creation arg is the inlet count, so it cannot carry initial values the way `pak 4000 8001` does.** `join` starts its slots at `int 0`. If a stored default mattered, it now has to live somewhere else — a `loadmess`, or the downstream object's own creation args.
+
+The general form of this rule, beyond lists: any time you are choosing between two objects that do the same thing, prefer the one whose behavior you can *read off the box*. Related but distinct from *Prefer an Object's Own Attribute Over an Adapter Chain* — that rule is about not adding an object, this one is about which object to add.
 
 ## Don't Use `[textedit]` for Set-Once Configuration — Binding Rule
 
@@ -542,13 +553,14 @@ When planning a patch for a student, default to the objects in the table below f
 | Distribute one source to one of N outputs | `gate N` | `gate` is a *distributor*: data arrives at one inlet and exits through whichever of N outlets is currently selected. Send `1`–`N` to open that outlet; `0` closes all. Second creation arg sets the initially-open outlet (`gate 3 2` = 3 outlets, outlet 2 open at load). Passes all message types. |
 | Select one of N input sources | `switch N` | `switch` is a *selector*: one of N data inlets is routed to a single outlet based on the selection int. Use when you have multiple sources and want to monitor or route one at a time. (Note: `gate` and `switch` have inverted names relative to intuition — gate distributes, switch selects.) |
 | Filter | `svf~` (preferred) or `lores~` or `biquad~` + `filtergraph~` | `svf~` gives lowpass/highpass/bandpass/bandstop simultaneously from four outlets (0=LP, 1=HP, 2=BP, 3=BS) — prefer it when you need multiple filter types at once. Max cutoff = samplerate/4 (not samplerate/2). For interactive visual design, wire `filtergraph~` → `biquad~`. Use `lores~` for a simple low-resonance lowpass with no self-oscillation. |
-| Random / probability | `random` with attributes | Use creation argument or `@range` / `@seed` attributes — don't roll your own with `expr`. |
+| Random / probability | `random` with attributes | `@range` takes **two** values — `random @range 4000 8000` emits 4000–8000 directly, so no downstream `scale` and no offset `+`. Change it live with a `range <lo> <hi>` message to the left inlet. `@seed` for reproducibility. Don't roll your own with `expr`. |
 | Scale / map a number range | `scale` | `scale <in_lo> <in_hi> <out_lo> <out_hi>` — one object, no math. Don't reach for `expr` for simple range mapping. |
 | Comparing / routing values | `v8` JavaScript | Branching logic with multiple conditions is far cleaner expressed as a few lines of JS than as a tree of `if` / `select` / `route` boxes. Use `v8`, not `js`. |
 | Single button / toggle / dial / slider | Varies by context | `button` for momentary, `toggle` for on/off state, `dial` or `live.dial` for continuous, `slider` or `multislider` for linear ranges. Pick the affordance that matches the operator's mental model for that control. |
 | Number readout (display only, no input) | `message` box with input to right inlet, OR `comment` with `set <value>` message | Send `flonum → sprintf "%.2f" → (right inlet of message)` for a clean float readout. The message displays the value but doesn't fire. Alternative: `flonum → sprintf "set %.2f" → comment` if you want the styling of a comment rather than a message. |
 | Text input from the user | `dialog` | A modal popup — bang to prompt, the entered text comes out the outlet. Avoid `textedit` for set-once configuration values (see the binding rule "Don't Use `[textedit]` for Set-Once Configuration"). |
-| List manipulation | `v8` JavaScript | Filtering, reshaping, mapping, sorting a list is one line of JS. Don't chain `zl` / `pak` / `unpack` / `vexpr` for anything beyond the trivial cases. |
+| List manipulation | `v8` JavaScript | Filtering, reshaping, mapping, sorting a list is one line of JS. Don't chain `zl` / `join` / `unjoin` / `vexpr` for anything beyond the trivial cases. |
+| Combine values into a list / split one apart | `join` / `unjoin` | **Not `pack` / `pak` / `unpack`** — see *Prefer the Object That States Its Behavior in an Attribute*. `join @triggers -1` is `pak` (all inlets hot) with the behavior stated rather than spelled. `unjoin <n>` has **n+1** outlets — the arg counts groups, and a remainder outlet is always present. |
 | Long-term storage | `dict` (default) | Key/value storage with nested structures, JSON-compatible. Other choices apply when the data shape calls for them: `coll` for indexed lists, `text` for plain-text bodies, `pattr` + `autopattr` when the values must persist with the patch. |
 | Jitter — load an image | `jit.matrix` + `importmovie <path>` message | One matrix, one message — the image lives in the matrix. From there, send it through any Jitter chain or `jit.gl.videoplane`. |
 | Jitter — display a matrix | `jit.world` + `jit.gl.videoplane` (sometimes called `jit.gl.layer` — an alias prototype with attributes pre-set) | Two-stage render: a first `jit.world` runs your scene, captured to a texture; a second `jit.world` reads that texture via `jit.gl.videoplane`, optionally routed through `jit.gl.cornerpin` for projector keystone correction. |
@@ -556,7 +568,7 @@ When planning a patch for a student, default to the objects in the table below f
 | GL drawing | No strong preference | Pick the `jit.gl.*` object that matches the primitive you need — `jit.gl.gridshape`, `jit.gl.mesh`, `jit.gl.sketch`, `jit.gl.text`, etc. |
 | OSC | `udpreceive` + CNMAT odot `o.route` | Use `o.route` rather than the native `OSC-route` when CNMAT odot is installed — `o.route` has cleaner semantics and is what the rest of the OSC community converged on. Install via Package Manager → CNMAT Externals. |
 | Networking / WebSocket | `node.script` + the multi-user-template | When the patch needs to talk to phones, browsers, or the cloud, build on `multi-user-template` (see the dedicated section above) — don't roll a Node-for-Max LAN server from scratch. |
-| Send / receive between distant parts of a patch | `send` / `receive` for messages, `value` for shared scalar state, `pv` / `v` for patcher-scoped variables, `send~` / `receive~` for signal | Pick by lifetime and scope. `send`/`receive` for cross-patch broadcast of messages; `value` when two boxes need to read the same shared scalar; `pv`/`v` when the scope should not leak past the parent patcher; the `~` variants for signal-rate. |
+| Send / receive between distant parts of a patch | `s` / `r` for messages, `value` for shared scalar state, `pv` / `v` for patcher-scoped variables, `s~` / `r~` for signal | Pick by lifetime and scope. `s`/`r` for cross-patch broadcast of messages; `value` when two boxes need to read the same shared scalar; `pv`/`v` when the scope should not leak past the parent patcher; the `~` variants for signal-rate. **Write the abbreviations** (`s`, `r`, `s~`, `r~`), not the long forms. Use them where a cord would cross the patch — a short local connection stays a cord, because seeing it is what tells the reader the two objects are one chain. Multiple `s~` sharing a name **sum** into the matching `r~`, which is what makes a mix bus one object per voice. |
 | JS / scripting | `v8` (default) | Modern JavaScript engine — ES6+, faster, better-supported. Use the older `js` object only when you have a specific reason (e.g. you're modifying an existing patch that already uses it). |
 
 When in doubt — or before composing any chain of 3+ native objects — run `python3 packages/query_packages.py search "<term>"` to see whether an installed package handles the whole task in a single object. The package library (2,795+ entries) often shortcuts a long chain into one well-named external.
@@ -1021,7 +1033,7 @@ For coll/table the same discipline applies, but the reach is indirect: the inspe
 
 Any object added to a user's patch for diagnostic purposes — `[c2m.inspect]`, extra `[print]` boxes, scope displays, value-watch comments, anything that is NOT part of the patch's intended functionality — must be visually unmistakable as debugging scaffolding. The user must be able to (a) see at a glance what Claude added vs. what's part of the patch, and (b) remove the scaffolding confidently when debugging is done, without second-guessing whether each box is "really part of the design."
 
-The rule is symmetric with **Always Hide Plumbing Patchcords**: visibility matches intent. Plumbing hides because it doesn't communicate to the reader; debug additions stand out because they MUST communicate "this is temporary."
+This is the counterpart to *Never Hide Patchcords or Boxes*: since nothing in a patch is ever invisible, a debug addition cannot be marked by hiding it — it is marked by standing out. Everything in the patching view is visible; debug scaffolding is visible **and unmistakable**, because it MUST communicate "this is temporary."
 
 Conventions for every debug addition:
 
@@ -1131,7 +1143,7 @@ The pointer block to append (substitute `<CLAUDE2MAX_PATH>` with the absolute pa
 
 **Before any tool call that produces Max content** — editing an existing `.maxpat` by hand, writing a spec for the converter, building anything that ends up wired in Max, even short "just fix this small thing" requests — read these in order:
 
-1. `Claude2Max/CLAUDE.md` — workflow, binding rules (always create a presentation view, always hide plumbing patchcords, never write API names from memory, etc.), the `c2m.inspect` debugging convention, the preferred-objects table.
+1. `Claude2Max/CLAUDE.md` — workflow, binding rules (always create a presentation view, never hide patchcords or boxes, never write API names from memory, etc.), the `c2m.inspect` debugging convention, the preferred-objects table.
 2. `Claude2Max/SPEC_REFERENCE.md` — spec format the converter consumes; object correctness notes; presentation layout specifics; the v8 / JavaScript section.
 3. `Claude2Max/patching/MAX_PATCHING.md` — **Common Pitfalls** (the load-bearing section for silent-failure modes — read every bullet), presentation aesthetic checklist, per-object guidance.
 

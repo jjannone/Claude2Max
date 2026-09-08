@@ -46,7 +46,7 @@ Ten reference themes:
 
 ## Step 3 — Design the layout
 
-Apply the presentation aesthetic checklist in `patching/MAX_PATCHING.md` and the binding rules in `CLAUDE.md` (always presentation, hide plumbing patchcords/messages, ALL CAPS user-defined names, mono-first typography with tabular numerals, comment-label every control, `presentation_rect` is `[x, y, w, h]`, comment width ~7 px/char for default / ~8.5 px/char for Courier, +4 px label-control alignment padding, multislider width = step_count × 40–50 px).
+Apply the presentation aesthetic checklist in `patching/MAX_PATCHING.md` and the binding rules in `CLAUDE.md` (always presentation, never hide patchcords or boxes, ALL CAPS user-defined names, mono-first typography with tabular numerals, comment-label every control, `presentation_rect` is `[x, y, w, h]`, comment width ~7 px/char for default / ~8.5 px/char for Courier, +4 px label-control alignment padding, multislider width = step_count × 40–50 px).
 
 Plan the graphic elements **before** placing controls — they consume real space. For instance, a soviet layout needs vertical space reserved for the masthead title slab and horizontal red dividers between sections; an lcars layout needs ~70 px reserved for the left rail.
 
