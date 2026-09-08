@@ -29,6 +29,8 @@ You're about to write or edit a file. Scan this list — each item is "if X appl
 - For any user-defined name (send/receive symbols, pv/v variables, buffer~/coll names, patcher names, JS variables): is it ALL CAPS, to distinguish from Max built-ins?
 - If I'm about to set a `size` on an object: is it needed for the patching view (content that needs width), or am I resizing for layout? Layout resizing belongs in `presentation_rect` — leave the patching-view box at its default size so the object stays findable.
 - If writing presentation view: does every presented control have an adjacent comment label?
+- If writing presentation view: have I computed each row's y from the previous row's bottom plus a gap (labels are boxes, not overlays), and run a rectangle-overlap check over the presented boxes after converting?
+- If any comment sets both `bgcolor` and `textcolor`: do the two contrast on their own, regardless of the canvas or panel behind the comment? A shared label helper that stamps a background is the usual way this goes wrong.
 - If writing presentation view: is `openinpresentation: 1` set on the patcher, AND has each presented box had `presentation_rect` set during post-conversion?
 - If the spec contains an `inlet` or `outlet` object inside a subpatcher / abstraction / poly~: is it labeled in BOTH places — (a) `attrs.comment` on the inlet/outlet box AND an adjacent `comment` box inside, AND (b) `attrs.comment` on the parent `p`/`poly~` describing every inlet/outlet by index, type, and purpose?
 - If adding a `v8` or `js` object: are `inlets`, `outlets`, and `outlettype` specified explicitly in the spec? (v8/js aren't in the converter's lookup table.)

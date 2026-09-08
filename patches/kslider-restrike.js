@@ -3,17 +3,21 @@
 //
 // inlet 0  : "<pitch> <velocity>" lists from the kslider (via [join 2]).
 //            velocity > 0 stores the pitch; velocity 0 (note-off) removes it.
-//            "restrike" — flush the kslider, then re-send every stored pitch.
+//            "restrike" — send "flush" to the kslider, then one "chord" message
+//                         carrying every stored pitch/velocity pair.
 //            "clear"    — forget every stored note without touching the kslider.
-// outlet 0 : to the kslider LEFT inlet — "flush", then each pitch as an int
-// outlet 1 : to the kslider RIGHT inlet — the velocity to use for the next pitch
-// outlet 2 : the currently stored pitches as a list (for the readout)
+// outlet 0 : to the kslider LEFT inlet — exactly two messages per restrike,
+//            in this order: "flush", then "chord p1 v1 p2 v2 ...".
+//            Nothing else is ever sent here.
+// outlet 1 : the currently stored pitches as a list (for the readout),
+//            or the symbol "(none)" when nothing is stored.
 //
-// Order matters inside restrike(): kslider wants its velocity on the right inlet
-// BEFORE the pitch arrives on the left inlet, so outlet 1 fires before outlet 0.
+// kslider's "chord" message (polyphonic mode) displays AND outputs the notes,
+// so the restruck notes flow back through [join 2] into this object and are
+// stored again, and on to midiformat → vst~ where they sound.
 
 inlets = 1;
-outlets = 3;
+outlets = 2;
 autowatch = 1;
 
 var HELD = new Map();          // pitch -> velocity of the note-on that lit it
@@ -29,14 +33,15 @@ function list(pitch, velocity) {
 
 function restrike() {
     // Snapshot first: the flush below makes the kslider emit note-offs, which
-    // come straight back into list() and empty HELD before we get to replay.
-    var SNAPSHOT = Array.from(HELD.entries());
-    outlet(0, "flush");
-    SNAPSHOT.forEach(function (entry) {
-        var pitch = entry[0], velocity = entry[1];
-        outlet(1, velocity);   // right inlet: velocity for the next pitch
-        outlet(0, pitch);      // left inlet: pitch → kslider lights it and outputs
+    // come straight back into list() and empty HELD before the chord goes out.
+    var PAIRS = [];
+    HELD.forEach(function (velocity, pitch) {
+        if (velocity > 0) { PAIRS.push(pitch, velocity); }
     });
+    outlet(0, "flush");
+    if (PAIRS.length > 0) {
+        outlet(0, "chord", ...PAIRS);
+    }
     report();
 }
 
@@ -48,8 +53,8 @@ function clear() {
 function report() {
     var PITCHES = Array.from(HELD.keys()).sort(function (a, b) { return a - b; });
     if (PITCHES.length === 0) {
-        outlet(2, "(none)");
+        outlet(1, "(none)");
     } else {
-        outlet(2, PITCHES);
+        outlet(1, ...PITCHES);
     }
 }

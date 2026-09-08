@@ -475,6 +475,10 @@ The Bash tool's working directory persists across calls within a session. A sing
 
 The defensive pattern: use absolute paths in every Bash command. When a tool genuinely needs a specific base directory (e.g. a Claude Code hook pointing at `$CLAUDE_PROJECT_DIR/...`), use the documented env var rather than `cd`. Do not use `cd` to set up an environment for subsequent calls — each call should be self-contained with absolute or env-var-anchored paths.
 
+## Any Path Handed to a Shell Must Be Shell-Quoted — Binding Rule
+
+Hook commands, MCP registrations, launch configs, and anything else stored as a `command` string are parsed by a shell, not passed as arguments. A path with a space works on the author's machine and fails on the first clone under `Documents/My Projects/`, and the failure surfaces as a blocked tool call rather than an error at install time. Build such strings with `shlex.quote()` and test them by running the exact stored string through `sh -c` before calling the install done. For instance: `install_global.py` wrote `python3 /…/john jannone/…/gate.py` unquoted, Python exited 2, and Claude Code treated that as a hard block on every Edit and Write on the machine until the path was quoted.
+
 ## Workflow
 
 ### Working on an existing patch — sync first, always

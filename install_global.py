@@ -18,6 +18,7 @@ Usage:
 import argparse
 import json
 import os
+import shlex
 import shutil
 import subprocess
 import sys
@@ -55,7 +56,12 @@ def install_mcp(env_pairs: list, dry: bool) -> bool:
     cmd = ["claude", "mcp", "add", "--scope", "user"]
     for kv in env_pairs:
         cmd += ["--env", kv]
-    cmd += [MCP_NAME, "--", "python3", str(MCP_SERVER)]
+    # Prefer the server's own venv interpreter (README step 1); a bare `python3`
+    # can resolve to Apple's 3.9, below the MCP SDK's 3.10 floor, and the
+    # registration then silently fails to connect.
+    venv_py = REPO_ROOT / "mcp_server" / ".venv" / "bin" / "python3"
+    interpreter = str(venv_py) if venv_py.exists() else sys.executable
+    cmd += [MCP_NAME, "--", interpreter, str(MCP_SERVER)]
 
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode == 0:
@@ -92,7 +98,10 @@ def install_skill(dry: bool) -> bool:
 def _hook_entry() -> dict:
     return {
         "type": "command",
-        "command": f"python3 {HOOK_SCRIPT}",
+        # Hook commands run through a shell, so the path must be quoted —
+        # a clone under a folder with spaces (e.g. "john jannone") would
+        # otherwise split and exit 2, which BLOCKS every Edit/Write.
+        "command": f"python3 {shlex.quote(str(HOOK_SCRIPT))}",
         "statusMessage": "Checking Claude2Max knowledge sentinel...",
     }
 
@@ -150,7 +159,7 @@ def install_hook(dry: bool) -> bool:
 def _content_gate_entry() -> dict:
     return {
         "type": "command",
-        "command": f"python3 {CONTENT_GATE_SCRIPT}",
+        "command": f"python3 {shlex.quote(str(CONTENT_GATE_SCRIPT))}",
         "statusMessage": "Checking patch for invented names...",
     }
 
