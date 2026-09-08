@@ -28,6 +28,7 @@ You're about to write or edit a file. Scan this list — each item is "if X appl
 ## Patch construction
 - For any user-defined name (send/receive symbols, pv/v variables, buffer~/coll names, patcher names, JS variables): is it ALL CAPS, to distinguish from Max built-ins?
 - If I'm about to set a `size` on an object: is it needed for the patching view (content that needs width), or am I resizing for layout? Layout resizing belongs in `presentation_rect` — leave the patching-view box at its default size so the object stays findable.
+- Does any cord run vertically past boxes it does not connect? If so, replace it with `s NAME` / `r NAME` (short local cords stay cords).
 - If writing presentation view: does every presented control have an adjacent comment label?
 - If writing presentation view: have I computed each row's y from the previous row's bottom plus a gap (labels are boxes, not overlays), and run a rectangle-overlap check over the presented boxes after converting?
 - If any comment sets both `bgcolor` and `textcolor`: do the two contrast on their own, regardless of the canvas or panel behind the comment? A shared label helper that stamps a background is the usual way this goes wrong.
