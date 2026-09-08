@@ -302,6 +302,332 @@ Tasks requiring deep analysis, architecture decisions, or sustained judgment. Pr
 
       **Start at STYLE**, consistent with item 3's hold-all-promotion decision. Lives in `mcp_server/claude2max_verify/rules.py` (registered in `REGISTRY` — no resolver needed), so it reaches `verify_patch`, the `verify` CLI, and convert at once. Ships with golden tests including a **negative** test asserting correct z-order phrasing is NOT flagged.
 
+  13. **Rules-to-code queue — enshrined in prose, absent from `rules.py`.** Audit run 2026-09-08 of `CLAUDE.md`, `SPEC_REFERENCE.md`, `patching/MAX_PATCHING.md`, and `PRE_EDIT_CHECKLIST.md` against `REGISTRY` / `RESOLVER_REGISTRY` (15 rule functions at the time: connection shape/refs, io-index range, empty newobj, presentation required, presented-controls-need-labels, no hidden elements, subpatcher labels, debug marking, allcaps names, prefer v8, and the four resolver rules). Every entry below is a rule the docs state as binding or as a named pitfall, that is mechanically checkable from the spec or the `.maxpat`, and that no rule function implements. Items 8a, 8b, 10, and 12 above are the same kind of thing and are not repeated here.
+
+      **Why this queue exists.** The repo's own rule *Verify External State — Never Assert from Memory* says the tooling counts as state to verify. This audit is the first time the prose rule corpus was checked line by line against the rule library, and the gap is the whole list below. A rule that exists only as a checklist step runs when someone remembers it; a rule in `rules.py` runs on every `verify_patch`, every `spec2maxpat.py verify`, and every `convert`. The motivating case is entry (a): `patches/kslider-restrike.maxpat` was laid out with the manual overlap check, was clean at commit, and then Max resaved the `kslider` from 576×70 to 560×83 on the next open. The 9 px overlap with the hint comment below it shipped because nothing re-ran the check after the resave.
+
+      **Conventions for every entry, so they do not have to be repeated 22 times:**
+      - **Where**: a new `rule_<name>(ctx)` function in `mcp_server/claude2max_verify/rules.py`, registered in `REGISTRY` in the severity band it belongs to, unless marked *resolver-gated* (then `rule_<name>(ctx, resolver)` in `RESOLVER_REGISTRY`). The module stays dependency-free — no import of `spec2maxpat` or `mcp` — so anything a rule needs from the converter (default box sizes, outlet types) is either read from the spec or passed in via the resolver duck type.
+      - **Severity**: WARNING or STYLE, per item 3's hold-all-promotion decision. No new rule blocks `convert`. Revisit only when a Claude2Max-authored corpus exists to measure against.
+      - **Tests**: each rule ships with golden cases in `mcp_server/tests/test_verify.py` (38 passing today, run with `mcp_server/.venv/bin/python3 mcp_server/tests/test_verify.py`): at least one spec that fires the rule, one that is clean, and — for every rule with a stated exemption — one negative case proving the exemption holds.
+      - **Calibration**: before choosing a final severity, run `python3 spec2maxpat.py verify patches/ --summary` and the 3,009-file `/Applications/Max.app` corpus slice (see item 2 for the driver) and record the hit count in the rule's docstring. A rule that fires on most of C74's own patches is measuring a convention they never adopted, which is fine at STYLE and not fine at WARNING.
+      - **Geometry inputs**: patching-view rules read `pos` (`[x, y]`) and `size` (`[w, h]`). `size` is often absent; after a `sync`, `reconcile_spec` records it only when the live height differs from 22 (see `MAX_PATCHING.md > Comment width is user-set`). So a geometry rule must fall back: height 22 when `size` is absent; width from the text-length estimate in `MAX_PATCHING.md > Label width estimation` (~7.5 px per character + 14 px) for `newobj` / `message` / `comment`, and a documented nominal for UI classes. Skip any object with no `pos` at all (auto-layout) rather than guessing. Presentation-view rules read `presentation` (canonical 4-element `[x, y, w, h]` after sync) or `presentation_rect`; a 2-element `presentation` has no size and the box is skipped.
+      - **Each rule's `Violation.source`** names the doc section quoted in its entry, so a reader can go check the rule itself.
+
+      ---
+
+      **(a) `presentation-overlap` — presented boxes must not intersect, and must sit inside a panel.** *The overlap task.*
+
+      *What to build.* Two checks in one rule. First, pairwise rectangle intersection over every box that has a presentation rect and is not a `panel`: two rects intersect when `ax < bx + bw and bx < ax + aw and ay < by + bh and by < ay + ah`. Report each intersecting pair once, naming both ids and both rects, with the overlap depth in px so the reader can see whether it is a 1 px rounding artifact or a real collision. Second, containment: when the presentation contains at least one presented `panel`, every presented non-panel box must lie entirely inside at least one panel's rect (`px <= x and py <= y and x + w <= px + pw and y + h <= py + ph`). Report boxes that are inside no panel.
+
+      *Why.* `MAX_PATCHING.md > Every presentation row needs its own vertical budget` says, in so many words: "After converting, do not trust the eye — run a rectangle-intersection test over every presented non-panel box and treat any hit as a layout bug; also confirm each presented box lies inside the panel meant to hold it." `PRE_EDIT_CHECKLIST.md > Patch construction` repeats it as a checklist step. Neither is code. The failure this catches is invisible in the patching view and only visible to the operator, which is the audience least able to fix it.
+
+      *Severity.* WARNING. The doc's own wording is "treat any hit as a layout bug".
+
+      *False-positive notes.* Comments deliberately laid over a panel's top edge as section headers are inside the panel and do not intersect other controls, so they pass. Two presented panels overlapping each other is not checked (panels are excluded from the pairwise pass) — nested panels are a legitimate design. A tolerance of 1 px is reasonable for the intersection test because Max rounds rects on save; make it a module constant and document it. Boxes with a 2-element `presentation` are skipped (no size).
+
+      *Tests.* (1) the kslider-restrike geometry: kslider `[22,104,560,83]` against comment `[22,178,560,20]` fires with a 9 px depth; (2) the same with the kslider at `[22,104,576,70]` is clean; (3) a presented `number` outside every panel fires the containment half; (4) a patch with no panels at all does not fire containment; (5) two overlapping panels are not reported.
+
+      *Fits.* First entry to build: the doc already promises the check, the algorithm is ten lines, and `verify_patch` on the current `patches/kslider-restrike.maxpat` working tree is the live regression case.
+
+      ---
+
+      **(b) `comment-contrast` — a comment's text must read against its own background.**
+
+      *What to build.* For every `comment` whose `attrs` set both `bgcolor` and `textcolor` (4-element RGBA lists, 0.–1.), compute the WCAG relative luminance of each (`0.2126 R + 0.7152 G + 0.0722 B` after the sRGB linearization) and the contrast ratio `(L1 + 0.05) / (L2 + 0.05)`. Flag when the ratio is below a threshold; start at 3.0 (WCAG's large-text minimum) and calibrate. Ignore comments that set only one of the two (the other is Max's default, calibrated for the canvas). Ignore alpha below 0.1 on the background (effectively transparent).
+
+      *Why.* `MAX_PATCHING.md > A comment's text must contrast with its own background` — the kslider-restrike session shipped a dark-on-dark note because a shared label helper stamped the panel background onto every comment and the caller overrode only the text color. The doc ends: "a one-line luminance diff over the spec is enough" — this is that line, run every time.
+
+      *Severity.* WARNING.
+
+      *False-positive notes.* `bubble_bgcolor` is a different attribute and is not the background behind the text in the same way; leave it out of the first version. Comments hidden as tutorial runtime state (`tut-ann-*` varnames) still count — they are shown eventually.
+
+      *Tests.* dark `[0.13,0.13,0.15]` text on the same background fires; `[0.92,0.92,0.92]` text on it is clean; a comment with only `textcolor` set is skipped.
+
+      ---
+
+      **(s) `per-control-label` — every presented control has a comment near it.** *(Tightens an existing rule.)*
+
+      *What to build.* Replace the body of `rule_presented_controls_need_labels`. Today it fires only when there are presented interactive controls and zero presented comments anywhere — one label for twenty controls passes. New check: for each presented interactive control (`is_interactive`), look for a presented `comment` whose rect is within N px of the control's rect (edge-to-edge distance, not center; start N at 40 and calibrate). Report each control without one. Keep the old zero-comments case as the first, coarser message so a patch with no labels at all gets one line instead of twenty.
+
+      *Why.* `CLAUDE.md > Always Create a Presentation View`: "Include comment labels for every visible control. A control worth showing is worth labelling." The existing rule was written as a coarse first pass (its own docstring says so) and never tightened.
+
+      *Severity.* WARNING, same as the rule it replaces.
+
+      *False-positive notes.* A `message` box used as a labeled action ("save", "flush") is its own label per `MAX_PATCHING.md > Prefer a labeled message box over a button + comment`; `message` is not in `_INTERACTIVE`, so it is not checked — correct. `kslider`, `jit.pwindow`, `multislider` are large and often self-explanatory; do not exempt them in the first version — measure first. **Do not add the inverse check** (a presented comment with no control near it): John considered it on 2026-09-08 and discarded it.
+
+      *Tests.* control with a comment 10 px above it: clean; control with the nearest comment 200 px away: fires; patch with controls and no comments: fires the coarse message once.
+
+      ---
+
+      **(c) `cord-crosses-unrelated-box` — a cord that runs past boxes it does not connect should be an `s` / `r` pair.**
+
+      *What to build.* For each connection with both endpoints positioned, take the source box's bottom-center and the destination box's top-center (approximate the outlet/inlet positions: `x = box.x + (index + 0.5) * box.w / count` when the count is known, else box center) and form the axis-aligned rectangle spanning the two points, widened by a few px. Flag when that rectangle intersects the rect of any third box that is neither endpoint. Report the connection, the crossed box ids, and the suggested fix (`[s NAME]` under the source, `[r NAME]` above the destination). Skip connections whose vertical span is under one row (~55 px) — those are the "short local cord" the doc keeps.
+
+      *Why.* `MAX_PATCHING.md > A cord that runs past objects it does not connect becomes s / r`: "The check is geometric and can be done from the spec: for each connection, does the rectangle spanned by its two endpoints overlap any third box? If yes, that cord is a candidate." Written 2026-09-08 with the kslider-restrike `plug` / `open` → `vst~` cords as the instance. `PRE_EDIT_CHECKLIST.md` carries it as a manual step.
+
+      *Severity.* STYLE. The doc calls it a rule of thumb.
+
+      *False-positive notes.* A cord that passes a box's corner by a pixel is technically a hit; the widening margin and a minimum-overlap area (say 20 px²) keep those out. A cord that crosses only a `comment` is less of a problem than one crossing logic; report it but say so. Cords between boxes that are horizontally adjacent (same row) span little vertically and will rarely fire.
+
+      *Tests.* the kslider-restrike HEAD layout (before the s/r rework) fires on the `plug` → `vst~` cord; the working-tree layout with `s VST` / `r VST` is clean; a two-box chain with a comment beside the cord is clean.
+
+      ---
+
+      **(d) `feeder-below-target` — an input sits above the object it feeds.**
+
+      *What to build.* For each connection whose source is a `message` box or an interactive UI class (`is_interactive`, plus `number` / `flonum` / `toggle` / `button` which are in `_INTERACTIVE`), flag when the source's `y` is greater than the destination's `y` (source drawn below its target, cord runs upward). Skip when either lacks `pos`.
+
+      *Why.* `MAX_PATCHING.md > Signal flow runs top-to-bottom — inputs above, outputs below`: "Never place a feeder message box below the object it feeds — that forces the cord to run upward, which reads as broken." The recognition signal in the doc is exactly this comparison.
+
+      *Severity.* STYLE.
+
+      *False-positive notes.* Genuine feedback paths fire — kslider-restrike's `v8` → `kslider` is one, but its source is a `newobj`, which this rule does not check; a `message` box in a feedback loop would. The doc allows no exemption, so report and let the reader judge. Consider exempting sources whose destination also feeds them (a two-box cycle), since the cord must go up somewhere.
+
+      *Tests.* `message` at y 300 into `metro` at y 200: fires; reversed: clean; `newobj` source below its target: not checked.
+
+      ---
+
+      **(e) `fanout-order` — destinations of a multi-outlet fan-out sit in firing order.**
+
+      *What to build.* For each box with cords leaving two or more distinct outlets, collect (outlet index, destination x-center). Max fires outlets right to left, so the destination fed by the higher-index outlet should sit to the right: flag when any pair has `outlet_i < outlet_j` but `dest_x_i > dest_x_j`. Apply to every multi-outlet source, with `trigger` / `t` called out in the message since that is where order is the object's whole purpose.
+
+      *Why.* `MAX_PATCHING.md > Lay fan-out destinations out right-to-left, in execution order`: "the destination that fires first sits furthest right … any time two cords leaving one object cross each other, that crossing is telling you the destinations are in the wrong horizontal order."
+
+      *Severity.* STYLE.
+
+      *False-positive notes.* Outlets fanning to the same destination (e.g. `unjoin` outlets 0 and 1 into `join` inlets 0 and 1) have equal destination x; treat equal as satisfied. When one outlet feeds several destinations, use the leftmost for the comparison.
+
+      *Tests.* `t i i` with outlet 1 → box at x 100 and outlet 0 → box at x 300: fires; swapped: clean; `unjoin 2` into one `join`: clean.
+
+      ---
+
+      **(f) `cord-too-short` — leave room under a box for its cords to read as cords.**
+
+      *What to build.* For each connection with both boxes positioned, compute the vertical clearance `dest.y - (src.y + src.h)`. Flag when it is positive but under 15 px (a cord drawn but too short to see or click). Negative clearance (destination above or overlapping the source) is (d)'s territory or a patching-view overlap; do not double-report.
+
+      *Why.* `MAX_PATCHING.md > Leave enough vertical space under a box for its cords to read as cords`: "roughly 30 px of clear space … `[live.gain~]` at y=728 with `[s~ MIX_L]` at y=772 leaves 14 px — the two cords out of the gain are barely visible as cords." The threshold 15 px is the doc's own example of too little; 30 px is its recommendation. Flag under 15, mention 30 in the message.
+
+      *Severity.* STYLE.
+
+      *False-positive notes.* Depends on knowing the source's height; UI classes without `size` need the nominal-height fallback from the conventions above, and a wrong nominal makes this rule noisy. Calibrate on `patches/` before trusting it.
+
+      *Tests.* boxes 8 px apart: fires; 40 px apart: clean; source with no `size` and default height 22: uses the fallback.
+
+      ---
+
+      **(g) `button-side-tap` — a pass-through indicator button belongs inline.**
+
+      *What to build.* For each outlet with two or more outgoing cords, if one of them ends at a `button` that has no outgoing connections, flag it: the button is a side tap and should be wired inline (`upstream → button → downstream`).
+
+      *Why.* `MAX_PATCHING.md > Buttons used as pass-through indicators are inline on the cord, not on a side tap`: "if two cords leave the same outlet and one terminates only at a `button`, that button belongs inline on the other cord instead."
+
+      *Severity.* STYLE.
+
+      *False-positive notes.* A `button` that is a presented operator control (has `presentation`) and merely happens to be dead-ended is a different thing; exempt presented buttons.
+
+      *Tests.* `metro` outlet 0 → `counter` and → dead-end `button`: fires; `metro` → `button` → `counter`: clean; presented dead-end button: clean.
+
+      ---
+
+      **(h) `template-on-right-inlet` — a `$N` message box must be fed on its left inlet.**
+
+      *What to build.* For each `message` whose text contains a `$` followed by a digit, flag any incoming connection with inlet index 1.
+
+      *Why.* `MAX_PATCHING.md > A message box's RIGHT inlet replaces the box's stored text without triggering output`: the right inlet silently overwrites the template with the incoming value and emits nothing; the patch keeps running with a mutated message box. "The fix is per-cord: any `int → message($1-template)` wiring belongs on inlet 0."
+
+      *Severity.* WARNING. This is a silent data-corruption bug, not a style point.
+
+      *False-positive notes.* None known — a `$N` template has no legitimate use of its right inlet.
+
+      *Tests.* `[t b i]` outlet 1 → `[dim 1 $1]` inlet 1: fires; the same into inlet 0: clean; a plain `[dim 1 5]` fed on inlet 1 (a readout): clean.
+
+      ---
+
+      **(i) `prepend-set-readout` — do not adapt a readout with `prepend set`.**
+
+      *What to build.* Flag any `newobj` whose text is exactly `prepend set` and whose outlet 0 feeds a `message` box at inlet 0. Suggest wiring the source straight to the message's right inlet.
+
+      *Why.* `MAX_PATCHING.md > A readout message box takes its value on the RIGHT inlet — never add prepend set in front of it`: "`v8 → [prepend set] → message(left inlet)`; `v8 → message(right inlet)` is the whole job." Written from the kslider-restrike readout.
+
+      *Severity.* STYLE.
+
+      *False-positive notes.* `prepend set` into a `message` that then feeds something else (the message is a relay, not a display) is the legitimate case the doc names ("Keep `set` for cases where a `message` needs to receive it as a message"); exempt when the target message has outgoing connections.
+
+      *Tests.* `v8` → `prepend set` → dead-end `message`: fires; the same with the message wired onward: clean.
+
+      ---
+
+      **(l) `textedit-into-template` — `textedit` output carries a `text` prefix unless `@outputmode 1`.**
+
+      *What to build.* For each `textedit` whose `attrs.outputmode` is absent or 0 (also parse a `@outputmode` token in `text`, if any), flag an outlet-0 connection into a `message` containing `$N`, or into a `prepend` / `sprintf`. Suggest `@outputmode 1`, `[route text]`, or hardcoding the value.
+
+      *Why.* `MAX_PATCHING.md > textedit outlet 0 emits text <symbol> by default`: a downstream `[setfoo $1]` captures the literal symbol `text`. `CLAUDE.md > Don't Use textedit for Set-Once Configuration` documents three rounds of workarounds that this one check would have skipped.
+
+      *Severity.* WARNING.
+
+      *False-positive notes.* `[route text]` between the textedit and the consumer is the sanctioned fix; a `route` target is not flagged.
+
+      *Tests.* `textedit` → `[setcloudurl $1]`: fires; `textedit @outputmode 1` → the same: clean; `textedit` → `route text` → `[setcloudurl $1]`: clean.
+
+      ---
+
+      **(m) `select-float-needs-fuzzy` — `select` against a float from a UI source needs `@fuzzy`.**
+
+      *What to build.* For each `newobj` `select` / `sel` whose creation args include a float literal (contains `.`) and whose text has no `@fuzzy`, flag when any incoming cord's source is `dial` / `slider` / `rslider` / `flonum` / `multislider` / any `live.*` control.
+
+      *Why.* `MAX_PATCHING.md > select with float values from UI requires @fuzzy`: UI floats arrive as `0.14999999…` and `select 0.15` misses them silently. Confirmed by `select.maxhelp`.
+
+      *Severity.* WARNING.
+
+      *False-positive notes.* A `select` fed from a `message` or `loadmess` with an exact literal is fine and is not in the source list.
+
+      *Tests.* `dial` → `select 0.5`: fires; `dial` → `select 0.5 @fuzzy 0.001`: clean; `message 0.5` → `select 0.5`: clean.
+
+      ---
+
+      **(n) `jit-matrix-fan-in` — two matrix sources into one inlet.** *Resolver-gated.*
+
+      *What to build.* Using `resolver.resolve_object(name)["outlettype"]` (or the spec's own `outlettype` override), find connections whose source outlet type is `jit_matrix`. Group by `(destination, inlet)`; flag any group with two or more distinct sources. Suggest one inlet per matrix source and dispatch on `inlet` in JS.
+
+      *Why.* `MAX_PATCHING.md > Two jit_matrix sources fanned into one inlet is a structural conflict`: "any time two patchcords carry `jit_matrix` outputs to the same `destination[N]` index, something is wrong."
+
+      *Severity.* WARNING.
+
+      *False-positive notes.* `jit.gl.*` objects that accept several matrices on one inlet as sequential texture sets are rare; if the corpus shows them, exempt by class.
+
+      *Tests.* two `jit.noise` → `v8` inlet 0: fires; the same into inlets 0 and 1: clean; a resolver returning no outlet types: rule no-ops.
+
+      ---
+
+      **(o) `attribute-group-incomplete` — a toggle attribute without its companions, and `jit.world` without `@enable 1`.**
+
+      *What to build.* A small table `{class: [(toggle_attr, [required companions])]}` seeded with `jit.matrix`: `usedstdim → dstdimstart, dstdimend`; `usesrcdim → srcdimstart, srcdimend`; and a second table of required creation attributes seeded with `jit.world → enable 1`. Read attributes from both `attrs` and `@name value` tokens in `text`. Flag a toggle set to 1 without every companion, and a required attribute absent or 0.
+
+      *Why.* `SPEC_REFERENCE.md > Attribute groups: an enable switch without its bounds is a no-op`; `MAX_PATCHING.md > jit.world @enable defaults to 0 — set @enable 1 as a creation attribute` ("looks fine but renders nothing").
+
+      *Severity.* WARNING.
+
+      *False-positive notes.* A `jit.world` driven by a `toggle` on its left inlet is the doc's sanctioned runtime override, but the doc still wants `@enable 1` in the box; do not exempt.
+
+      *Tests.* `jit.matrix 4 char 640 360 @usedstdim 1`: fires; with both bounds: clean; `jit.world`: fires; `jit.world @enable 1`: clean.
+
+      ---
+
+      **(v) `kslider-demo-range` — messages into a kslider must address keys it displays.**
+
+      *What to build.* For each `kslider`, compute the displayed range `[offset, offset + range)` from `attrs` (defaults 36 and 48 per `SPEC_REFERENCE.md > kslider`). For each `message` wired to its inlet 0: `chord p v p v …` → every `p`; `set n` → `n`; a bare int → itself. Flag any note outside the range.
+
+      *Why.* `CLAUDE.md > Demos, Help Files, and Test Patches Must Demonstrate Functionality Visibly`: "Every demo input must address currently-visible state — no exceptions." The rule is binding and the check is arithmetic. The Zendrum bench and `zkeyboard.maxhelp` both shipped this bug.
+
+      *Severity.* WARNING.
+
+      *False-positive notes.* `$N` templates cannot be evaluated; skip them. `offset` semantics are flagged in `SPEC_REFERENCE.md` for in-Max confirmation; the rule inherits that uncertainty at non-default offsets.
+
+      *Tests.* `chord 60 100` into a kslider showing 36–84: clean; `chord 100 100`: fires; `set $1`: skipped.
+
+      ---
+
+      **(k) `script-object-declarations` — `jsui` / `v8ui` need `attrs.filename`; `v8` / `js` need declared I/O.**
+
+      *What to build.* Two checks. (1) Any object with `type` `jsui` or `v8ui` and no non-empty `attrs.filename` — flag. (2) Any `newobj` whose first token is `v8` or `js` and that lacks `inlets`, `outlets`, or `outlettype` in the spec — flag, listing which are missing.
+
+      *Why.* `SPEC_REFERENCE.md > jsui objects`: "omitting it leaves the object unlinked and non-functional." `SPEC_REFERENCE.md > JavaScript Objects`: v8/js "are not in the converter's lookup table — always override `inlets`, `outlets`, and `outlettype`." Both are also checklist items.
+
+      *Severity.* (1) is an ERROR-class defect by the doc's wording but lands at WARNING per the hold; (2) WARNING.
+
+      *False-positive notes.* A `jsui` with the filename given as a creation arg in `text` (`jsui foo.js`) is the exact anti-pattern the doc names; flag it too, with the fix.
+
+      *Tests.* `jsui` with `attrs.filename`: clean; without: fires; `v8 x.js` with all three overrides: clean; missing `outlettype`: fires naming it.
+
+      ---
+
+      **(q) `patching-size-override` — do not resize UI boxes in the patching view without reason.**
+
+      *What to build.* Flag `size` on any object whose class is in `_INTERACTIVE` or `live.*`, except a content-sized allowlist: `comment`, `message`, `panel`, `jsui`, `v8ui`, `jit.pwindow`, `multislider`, `textedit`, `umenu`, `jit.cellblock`, `function`, `filtergraph~`, `kslider`-style keyboards when `range` is set. Separately flag any `size` at all on `inlet` / `outlet`.
+
+      *Why.* `MAX_PATCHING.md > Preserve each object's default box size in the patching view` — resizing for layout belongs in `presentation_rect`; `SPEC_REFERENCE.md > Inlet and Outlet Object Sizes` — inlet/outlet are 30×30 and "setting a different size will produce the wrong shape."
+
+      *Severity.* STYLE.
+
+      *False-positive notes.* After a `sync`, `size` is recorded whenever the live height differs from 22, so a UI object the user resized in Max will carry `size` and fire. That is arguably correct (the doc says leave it at default) but it will be noisy on synced patches; calibrate on `patches/` and consider exempting objects whose `size` equals the converter's `UI_SIZES` default — which needs that table passed in, since `rules.py` cannot import it.
+
+      *Tests.* `toggle` with `size`: fires; `comment` with `size`: clean; `inlet` with `size`: fires.
+
+      ---
+
+      **(r) `io-inside-comment-box` — inlets and outlets inside an encapsulation also need an adjacent comment box.** *(Extends an existing rule.)*
+
+      *What to build.* Extend `_check_io_labels`: for each `inlet` / `outlet` box inside a nested `patcher`, in addition to the existing `attrs.comment` check, require a `comment` object in the same nested scope within N px (start 60) of it. Report which of the two halves is missing.
+
+      *Why.* `CLAUDE.md > What You Must Handle > Subpatcher, abstraction, and poly~ inlet/outlet labeling`: "(2) inside — `attrs: {"comment": "..."}` on each inlet/outlet spec entry AND an adjacent `comment` box." The rule enforces the first half only.
+
+      *Severity.* WARNING, same as the rule it extends.
+
+      *False-positive notes.* Nested scopes without `pos` cannot measure adjacency; fall back to "any comment exists in the scope".
+
+      *Tests.* inlet with attrs.comment and an adjacent comment box: clean; with attrs.comment only: fires naming the missing box; with neither: two findings.
+
+      ---
+
+      **(t) `control-init-on-load` — a control with nothing feeding it has undefined state on load.**
+
+      *What to build.* Flag any `number` / `flonum` / `toggle` / `dial` / `slider` / `umenu` with zero incoming connections. This is the weakest defensible form: any upstream cord (a `loadmess`, a `loadbang → message`, or a live data source) is assumed to initialize it.
+
+      *Why.* `MAX_PATCHING.md > Every control must initialize to a known state on patch load`: "A control without a default is a source of undefined state that reproduces inconsistently and is hard to debug."
+
+      *Severity.* STYLE, and calibrate before anything stronger — many legitimate operator controls (a `toggle` that starts audio) are deliberately uninitialized.
+
+      *False-positive notes.* `pattr` / `autopattr` with `@autorestore 1` initializes controls without a cord; if the scope contains an `autopattr`, suppress the rule for that scope. `live.*` objects save their own value; exempt them.
+
+      *Tests.* bare `number` with no cords: fires; `loadmess 5` → `number`: clean; scope with `autopattr`: suppressed; `live.dial` with no cords: clean.
+
+      ---
+
+      **(j) `preferred-object` — one table-driven STYLE nudge beside `rule_prefer_v8`.**
+
+      *What to build.* A table `{first_token: (replacement, source_section)}` and one rule that flags any `newobj` whose first token is in it. Seed: `pack` / `pak` / `unpack` → `join` / `unjoin` (`CLAUDE.md > Prefer the Object That States Its Behavior in an Attribute`, binding); `send` / `receive` / `send~` / `receive~` → `s` / `r` / `s~` / `r~` (`MAX_PATCHING.md > Write send / receive in their short forms`, binding); `adc~` / `dac~` → `ezadc~` / `ezdac~`; `delay~` → `tapin~` / `tapout~`; plus two chain patterns checked on connections: `midiin` → `midiparse` and `midiformat` → `midiout` → the direct objects (`CLAUDE.md > Preferred Objects for Common Tasks`). Fold `rule_prefer_v8` into the same table so there is one mechanism.
+
+      *Why.* The preferred-objects table is the first thing a student's Claude consults, and two of its rows are binding rules; today only the `js` row is enforced.
+
+      *Severity.* STYLE. These are preferences and substitutions, and the doc allows reasons to deviate.
+
+      *False-positive notes.* `midiformat` → `vst~` (as in kslider-restrike, mirroring C74's own vst~ help) is correct and is not the chain flagged. `pack` with typed slots in an externally-sourced patch being modified is the user's choice; the rule still nudges.
+
+      *Tests.* one case per table row firing; `join 2` clean; `midiformat → vst~` clean; `midiformat → midiout` fires.
+
+      ---
+
+      **(p) `print-needs-name` — a bare `print` labels nothing in the console.**
+
+      *What to build.* Flag any `newobj` whose text is exactly `print` (no argument). Suggest `print <descriptive-name>`.
+
+      *Why.* `MAX_PATCHING.md > Do not grow an object's interface for monitoring — monitor with print <descriptive-name>`: "the argument labels every line in the Max Console, so several prints stay tellable apart." kslider-restrike's working tree has `print v8`, which is named but not descriptively; the mechanical rule can only catch the bare case.
+
+      *Severity.* STYLE.
+
+      *Tests.* `print`: fires; `print HELD`: clean.
+
+      ---
+
+      **(u) `declareattribute-conventions` — JS-side check of attribute labels and styles.** *Separate scanner, not a spec rule.*
+
+      *What to build.* A module `claude2max_verify/jsattrs.py` that, given a `.js` path, finds every `declareattribute("name", {...})` call (a tolerant regex over the object literal is enough; do not parse JavaScript) and returns `(name, label, style, min, max)` tuples. A rule in `rules.py` that, for every `jsui` / `v8ui` / `v8` / `js` box with a resolvable script path (from `attrs.filename` or the second text token, resolved relative to a `ctx.base_dir` the caller supplies — `verify_patch_file` knows the patch's directory), scans the file and flags: a label whose first word (case-insensitive, punctuation stripped) is not the attribute name's first word; an attribute with `min:0 max:1` and no `style:"onoff"`; an attribute whose `enumvals` are present with no `style:"enum"` / `"enumindex"`; a 4-element float default with no `style:"rgba"`. Skip silently when the file is not found.
+
+      *Why.* `CLAUDE.md > Attribute Labels Must Begin With the Attribute's Own Word` and `> Match the Generated Control to the Attribute's Value Space` — both binding, both "a per-attribute check, like verifying the API name itself," and both currently unenforced because they live in a file the spec only points at. `zkeyboard`'s `@slidermode` / `@displaymode` are the instances.
+
+      *Severity.* WARNING.
+
+      *False-positive notes.* C74's own labels break the label rule routinely (`kslider offset` → "Octave offset"); the rule scans only scripts the patch references, so shipped C74 scripts are never checked unless a patch loads one.
+
+      *Tests.* a fixture `.js` with a compliant and a non-compliant declaration; a box pointing at a missing file: no finding.
+
+      ---
+
+      **Considered and left out** as judgment-class — they belong in item 4's classification and a `checklist(context)` tool (item 5), not in `rules.py`: `textedit` for set-once configuration in general (which values are "set once" is not in the spec); output-only UI objects needing `@ignoreclick` (which are output-only is intent); label placement side (`SPEC_REFERENCE.md` says above, `MAX_PATCHING.md` says right — reconcile the docs first); action-prominence sizing; panel grouping by function; externally-sourced-patch highlight colors (requires knowing what changed); title-comment redundancy; signal-outlet-into-control-inlet compatibility (refpages do not state inlet signal acceptance reliably enough to avoid false positives).
+
+      **Order to build.** (a) first — the doc promises it and the regression case is on disk. Then (h), (l), (m), (k) — the WARNING-tier silent-failure wiring checks, all cheap and low-noise. Then (b), (s), (r), (o), (v), (n). The patching-view geometry family (c)–(g) together, since they share the size-fallback helper. (j), (p), (q), (t) last, as nudges. (u) whenever someone touches `zkeyboard` next. Each is a small self-contained session; none depends on another except the geometry family sharing a helper.
+
   **Deferred, not lost** — `DESIGN_DECISIONS.md` § (j)'s first suggestion (make `presentation-required` an ERROR when a patch has ≥N interactive controls and no presentation view at all) is a narrower proposal than the blanket promotion item 3 evaluated, and item 3's "hold until a Claude2Max-authored corpus exists" decision covers it. Re-evaluate it *with* that corpus, not before: the sweep showed the rule firing on 2,131 C74 files, which measures convention mismatch rather than defect, and cannot settle the narrower question either way.
 
   **Why this order**: item 1 is the instrument, item 2 is the measurement, item 3 is the change the measurement authorizes. Reversing 1–3 means promoting rules to blocking status on the evidence of 5 in-repo patches, which is how the jsui/v8ui regression happened. Item 4 is placed after the empirical work so the categories come from observed behavior; items 5–6 are downstream cleanup. Item 8 is independent of 1–7 — it can run at any point, including first.

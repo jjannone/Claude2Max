@@ -1,1023 +1,636 @@
 {
-  "patcher": {
-    "fileversion": 1,
-    "appversion": {
-      "major": 9,
-      "minor": 0,
-      "revision": 0,
-      "architecture": "x64",
-      "modernui": 1
-    },
-    "classnamespace": "box",
-    "rect": [
-      100.0,
-      100.0,
-      760.0,
-      660.0
-    ],
-    "gridsize": [
-      15.0,
-      15.0
-    ],
-    "boxes": [
-      {
-        "box": {
-          "id": "obj-1",
-          "maxclass": "message",
-          "numinlets": 2,
-          "numoutlets": 1,
-          "outlettype": [
-            ""
-          ],
-          "patching_rect": [
-            30.0,
-            60.0,
-            48.0,
-            22.0
-          ],
-          "text": "plug",
-          "presentation": 1,
-          "presentation_rect": [
-            22.0,
-            34.0,
-            50.0,
-            22.0
-          ]
-        }
-      },
-      {
-        "box": {
-          "id": "obj-2",
-          "maxclass": "message",
-          "numinlets": 2,
-          "numoutlets": 1,
-          "outlettype": [
-            ""
-          ],
-          "patching_rect": [
-            90.0,
-            60.0,
-            48.0,
-            22.0
-          ],
-          "text": "open",
-          "presentation": 1,
-          "presentation_rect": [
-            80.0,
-            34.0,
-            50.0,
-            22.0
-          ]
-        }
-      },
-      {
-        "box": {
-          "id": "obj-3",
-          "maxclass": "comment",
-          "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            150.0,
-            60.0,
-            300.0,
-            20.0
-          ],
-          "text": "load a plug-in  /  open its editor window",
-          "presentation": 1,
-          "presentation_rect": [
-            140.0,
-            36.0,
-            440.0,
-            20.0
-          ],
-          "fontname": "Monaco",
-          "fontsize": 11,
-          "textcolor": [
-            0.92,
-            0.92,
-            0.92,
-            1.0
-          ],
-          "bgcolor": [
-            0.13,
-            0.13,
-            0.15,
-            1.0
-          ]
-        }
-      },
-      {
-        "box": {
-          "id": "obj-4",
-          "maxclass": "message",
-          "numinlets": 2,
-          "numoutlets": 1,
-          "outlettype": [
-            ""
-          ],
-          "patching_rect": [
-            30.0,
-            130.0,
-            55.0,
-            22.0
-          ],
-          "text": "flush",
-          "presentation": 1,
-          "presentation_rect": [
-            22.0,
-            206.0,
-            60.0,
-            22.0
-          ]
-        }
-      },
-      {
-        "box": {
-          "id": "obj-5",
-          "maxclass": "comment",
-          "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            90.0,
-            130.0,
-            260.0,
-            20.0
-          ],
-          "text": "send note-offs for every held note",
-          "presentation": 1,
-          "presentation_rect": [
-            92.0,
-            208.0,
-            400.0,
-            20.0
-          ],
-          "fontname": "Monaco",
-          "fontsize": 11,
-          "textcolor": [
-            0.92,
-            0.92,
-            0.92,
-            1.0
-          ],
-          "bgcolor": [
-            0.13,
-            0.13,
-            0.15,
-            1.0
-          ]
-        }
-      },
-      {
-        "box": {
-          "id": "obj-6",
-          "maxclass": "kslider",
-          "numinlets": 2,
-          "numoutlets": 2,
-          "outlettype": [
-            "",
-            ""
-          ],
-          "patching_rect": [
-            30.0,
-            190.0,
-            336.0,
-            53.0
-          ],
-          "presentation": 1,
-          "presentation_rect": [
-            22.0,
-            104.0,
-            576.0,
-            70.0
-          ],
-          "mode": 1
-        }
-      },
-      {
-        "box": {
-          "id": "obj-7",
-          "maxclass": "comment",
-          "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            30.0,
-            250.0,
-            420.0,
-            20.0
-          ],
-          "text": "polyphonic: click a key once for note-on, again for note-off",
-          "presentation": 1,
-          "presentation_rect": [
-            22.0,
-            178.0,
-            560.0,
-            20.0
-          ],
-          "fontname": "Monaco",
-          "fontsize": 11,
-          "textcolor": [
-            0.92,
-            0.92,
-            0.92,
-            1.0
-          ],
-          "bgcolor": [
-            0.13,
-            0.13,
-            0.15,
-            1.0
-          ]
-        }
-      },
-      {
-        "box": {
-          "id": "obj-8",
-          "maxclass": "newobj",
-          "numinlets": 2,
-          "numoutlets": 1,
-          "outlettype": [
-            ""
-          ],
-          "patching_rect": [
-            30.0,
-            300.0,
-            62.0,
-            22.0
-          ],
-          "text": "join 2"
-        }
-      },
-      {
-        "box": {
-          "id": "obj-9",
-          "maxclass": "message",
-          "numinlets": 2,
-          "numoutlets": 1,
-          "outlettype": [
-            ""
-          ],
-          "patching_rect": [
-            470.0,
-            130.0,
-            76.0,
-            22.0
-          ],
-          "text": "restrike",
-          "presentation": 1,
-          "presentation_rect": [
-            22.0,
-            238.0,
-            74.0,
-            22.0
-          ]
-        }
-      },
-      {
-        "box": {
-          "id": "obj-10",
-          "maxclass": "comment",
-          "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            550.0,
-            130.0,
-            340.0,
-            20.0
-          ],
-          "text": "flush the keyboard, then replay the stored notes",
-          "presentation": 1,
-          "presentation_rect": [
-            106.0,
-            240.0,
-            480.0,
-            20.0
-          ],
-          "fontname": "Monaco",
-          "fontsize": 11,
-          "textcolor": [
-            0.92,
-            0.92,
-            0.92,
-            1.0
-          ],
-          "bgcolor": [
-            0.13,
-            0.13,
-            0.15,
-            1.0
-          ]
-        }
-      },
-      {
-        "box": {
-          "id": "obj-11",
-          "maxclass": "newobj",
-          "numinlets": 1,
-          "numoutlets": 2,
-          "outlettype": [
-            "",
-            ""
-          ],
-          "patching_rect": [
-            470.0,
-            300.0,
-            174.0,
-            22.0
-          ],
-          "text": "v8 kslider-restrike.js"
-        }
-      },
-      {
-        "box": {
-          "id": "obj-12",
-          "maxclass": "comment",
-          "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            470.0,
-            340.0,
-            270.0,
-            20.0
-          ],
-          "text": "out 0 feeds back UP into the kslider: flush, then one chord message",
-          "fontname": "Monaco",
-          "fontsize": 11
-        }
-      },
-      {
-        "box": {
-          "id": "obj-13",
-          "maxclass": "newobj",
-          "numinlets": 1,
-          "numoutlets": 1,
-          "outlettype": [
-            ""
-          ],
-          "patching_rect": [
-            470.0,
-            400.0,
-            97.0,
-            22.0
-          ],
-          "text": "prepend set"
-        }
-      },
-      {
-        "box": {
-          "id": "obj-14",
-          "maxclass": "message",
-          "numinlets": 2,
-          "numoutlets": 1,
-          "outlettype": [
-            ""
-          ],
-          "patching_rect": [
-            470.0,
-            450.0,
-            62.0,
-            22.0
-          ],
-          "text": "(none)",
-          "presentation": 1,
-          "presentation_rect": [
-            22.0,
-            270.0,
-            420.0,
-            22.0
-          ]
-        }
-      },
-      {
-        "box": {
-          "id": "obj-15",
-          "maxclass": "comment",
-          "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            680.0,
-            450.0,
-            110.0,
-            20.0
-          ],
-          "text": "stored pitches",
-          "presentation": 1,
-          "presentation_rect": [
-            450.0,
-            272.0,
-            140.0,
-            20.0
-          ],
-          "fontname": "Monaco",
-          "fontsize": 11,
-          "textcolor": [
-            0.92,
-            0.92,
-            0.92,
-            1.0
-          ],
-          "bgcolor": [
-            0.13,
-            0.13,
-            0.15,
-            1.0
-          ]
-        }
-      },
-      {
-        "box": {
-          "id": "obj-16",
-          "maxclass": "newobj",
-          "numinlets": 7,
-          "numoutlets": 1,
-          "outlettype": [
-            "int"
-          ],
-          "patching_rect": [
-            30.0,
-            360.0,
-            90.0,
-            22.0
-          ],
-          "text": "midiformat"
-        }
-      },
-      {
-        "box": {
-          "id": "obj-17",
-          "maxclass": "newobj",
-          "numinlets": 2,
-          "numoutlets": 8,
-          "outlettype": [
-            "signal",
-            "signal",
-            "signal",
-            "signal",
-            "signal",
-            "signal",
-            "signal",
-            "signal"
-          ],
-          "patching_rect": [
-            30.0,
-            420.0,
-            48.0,
-            22.0
-          ],
-          "text": "vst~"
-        }
-      },
-      {
-        "box": {
-          "id": "obj-18",
-          "maxclass": "live.gain~",
-          "numinlets": 2,
-          "numoutlets": 5,
-          "outlettype": [
-            "signal",
-            "signal",
-            "",
-            "float",
-            "list"
-          ],
-          "patching_rect": [
-            30.0,
-            490.0,
-            136.0,
-            39.0
-          ],
-          "presentation": 1,
-          "presentation_rect": [
-            22.0,
-            330.0,
-            200.0,
-            39.0
-          ],
-          "orientation": 1
-        }
-      },
-      {
-        "box": {
-          "id": "obj-19",
-          "maxclass": "comment",
-          "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            180.0,
-            500.0,
-            90.0,
-            20.0
-          ],
-          "text": "volume (dB)",
-          "presentation": 1,
-          "presentation_rect": [
-            230.0,
-            340.0,
-            100.0,
-            20.0
-          ],
-          "fontname": "Monaco",
-          "fontsize": 11,
-          "textcolor": [
-            0.92,
-            0.92,
-            0.92,
-            1.0
-          ],
-          "bgcolor": [
-            0.13,
-            0.13,
-            0.15,
-            1.0
-          ]
-        }
-      },
-      {
-        "box": {
-          "id": "obj-20",
-          "maxclass": "ezdac~",
-          "numinlets": 2,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            30.0,
-            580.0,
-            45.0,
-            45.0
-          ],
-          "presentation": 1,
-          "presentation_rect": [
-            340.0,
-            327.0,
-            45.0,
-            45.0
-          ]
-        }
-      },
-      {
-        "box": {
-          "id": "obj-21",
-          "maxclass": "comment",
-          "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            90.0,
-            592.0,
-            100.0,
-            20.0
-          ],
-          "text": "audio on/off",
-          "presentation": 1,
-          "presentation_rect": [
-            395.0,
-            340.0,
-            120.0,
-            20.0
-          ],
-          "fontname": "Monaco",
-          "fontsize": 11,
-          "textcolor": [
-            0.92,
-            0.92,
-            0.92,
-            1.0
-          ],
-          "bgcolor": [
-            0.13,
-            0.13,
-            0.15,
-            1.0
-          ]
-        }
-      },
-      {
-        "box": {
-          "id": "obj-22",
-          "maxclass": "comment",
-          "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            600.0,
-            20.0,
-            70.0,
-            20.0
-          ],
-          "text": "plug-in",
-          "presentation": 1,
-          "presentation_rect": [
-            22.0,
-            14.0,
-            100.0,
-            20.0
-          ],
-          "fontname": "Monaco",
-          "fontsize": 11,
-          "textcolor": [
-            1.0,
-            0.55,
-            0.0,
-            1.0
-          ],
-          "bgcolor": [
-            0.13,
-            0.13,
-            0.15,
-            1.0
-          ]
-        }
-      },
-      {
-        "box": {
-          "id": "obj-23",
-          "maxclass": "comment",
-          "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            600.0,
-            44.0,
-            70.0,
-            20.0
-          ],
-          "text": "keyboard",
-          "presentation": 1,
-          "presentation_rect": [
-            22.0,
-            84.0,
-            100.0,
-            20.0
-          ],
-          "fontname": "Monaco",
-          "fontsize": 11,
-          "textcolor": [
-            1.0,
-            0.55,
-            0.0,
-            1.0
-          ],
-          "bgcolor": [
-            0.13,
-            0.13,
-            0.15,
-            1.0
-          ]
-        }
-      },
-      {
-        "box": {
-          "id": "obj-24",
-          "maxclass": "comment",
-          "numinlets": 1,
-          "numoutlets": 0,
-          "outlettype": [],
-          "patching_rect": [
-            600.0,
-            68.0,
-            70.0,
-            20.0
-          ],
-          "text": "output",
-          "presentation": 1,
-          "presentation_rect": [
-            22.0,
-            310.0,
-            100.0,
-            20.0
-          ],
-          "fontname": "Monaco",
-          "fontsize": 11,
-          "textcolor": [
-            1.0,
-            0.55,
-            0.0,
-            1.0
-          ],
-          "bgcolor": [
-            0.13,
-            0.13,
-            0.15,
-            1.0
-          ]
-        }
-      },
-      {
-        "box": {
-          "id": "obj-25",
-          "maxclass": "panel",
-          "numinlets": 1,
-          "numoutlets": 1,
-          "outlettype": [
-            ""
-          ],
-          "patching_rect": [
-            680.0,
-            20.0,
-            60.0,
-            20.0
-          ],
-          "presentation": 1,
-          "presentation_rect": [
-            10.0,
-            10.0,
-            600.0,
-            60.0
-          ],
-          "bgfillcolor": [
-            0.13,
-            0.13,
-            0.15,
-            1.0
-          ],
-          "rounded": 8
-        }
-      },
-      {
-        "box": {
-          "id": "obj-26",
-          "maxclass": "panel",
-          "numinlets": 1,
-          "numoutlets": 1,
-          "outlettype": [
-            ""
-          ],
-          "patching_rect": [
-            680.0,
-            44.0,
-            60.0,
-            20.0
-          ],
-          "presentation": 1,
-          "presentation_rect": [
-            10.0,
-            80.0,
-            600.0,
-            218.0
-          ],
-          "bgfillcolor": [
-            0.13,
-            0.13,
-            0.15,
-            1.0
-          ],
-          "rounded": 8
-        }
-      },
-      {
-        "box": {
-          "id": "obj-27",
-          "maxclass": "panel",
-          "numinlets": 1,
-          "numoutlets": 1,
-          "outlettype": [
-            ""
-          ],
-          "patching_rect": [
-            680.0,
-            68.0,
-            60.0,
-            20.0
-          ],
-          "presentation": 1,
-          "presentation_rect": [
-            10.0,
-            306.0,
-            600.0,
-            80.0
-          ],
-          "bgfillcolor": [
-            0.13,
-            0.13,
-            0.15,
-            1.0
-          ],
-          "rounded": 8
-        }
-      },
-      {
-        "box": {
-          "id": "obj-spec-embed",
-          "maxclass": "text.codebox",
-          "numinlets": 1,
-          "numoutlets": 1,
-          "outlettype": [
-            ""
-          ],
-          "patching_rect": [
-            50.0,
-            665.0,
-            500.0,
-            300.0
-          ],
-          "code": "--- CLAUDE2MAX SPEC ---\n{\n  \"width\": 760,\n  \"height\": 660,\n  \"objects\": {\n    \"msg_plug\": {\n      \"type\": \"message\",\n      \"text\": \"plug\",\n      \"pos\": [\n        30,\n        60\n      ],\n      \"presentation\": [\n        22,\n        34,\n        50,\n        22\n      ]\n    },\n    \"msg_open\": {\n      \"type\": \"message\",\n      \"text\": \"open\",\n      \"pos\": [\n        90,\n        60\n      ],\n      \"presentation\": [\n        80,\n        34,\n        50,\n        22\n      ]\n    },\n    \"lbl_plug\": {\n      \"type\": \"comment\",\n      \"text\": \"load a plug-in  /  open its editor window\",\n      \"pos\": [\n        150,\n        60\n      ],\n      \"size\": [\n        300,\n        20\n      ],\n      \"presentation\": [\n        140,\n        36,\n        440,\n        20\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 11,\n        \"textcolor\": [\n          0.92,\n          0.92,\n          0.92,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ]\n      }\n    },\n    \"msg_flush\": {\n      \"type\": \"message\",\n      \"text\": \"flush\",\n      \"pos\": [\n        30,\n        130\n      ],\n      \"presentation\": [\n        22,\n        206,\n        60,\n        22\n      ]\n    },\n    \"lbl_flush\": {\n      \"type\": \"comment\",\n      \"text\": \"send note-offs for every held note\",\n      \"pos\": [\n        90,\n        130\n      ],\n      \"size\": [\n        260,\n        20\n      ],\n      \"presentation\": [\n        92,\n        208,\n        400,\n        20\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 11,\n        \"textcolor\": [\n          0.92,\n          0.92,\n          0.92,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ]\n      }\n    },\n    \"kslider\": {\n      \"type\": \"kslider\",\n      \"pos\": [\n        30,\n        190\n      ],\n      \"size\": [\n        336,\n        53\n      ],\n      \"attrs\": {\n        \"mode\": 1\n      },\n      \"presentation\": [\n        22,\n        104,\n        576,\n        70\n      ]\n    },\n    \"lbl_keys\": {\n      \"type\": \"comment\",\n      \"text\": \"polyphonic: click a key once for note-on, again for note-off\",\n      \"pos\": [\n        30,\n        250\n      ],\n      \"size\": [\n        420,\n        20\n      ],\n      \"presentation\": [\n        22,\n        178,\n        560,\n        20\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 11,\n        \"textcolor\": [\n          0.92,\n          0.92,\n          0.92,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ]\n      }\n    },\n    \"join\": {\n      \"type\": \"newobj\",\n      \"text\": \"join 2\",\n      \"pos\": [\n        30,\n        300\n      ]\n    },\n    \"msg_restrike\": {\n      \"type\": \"message\",\n      \"text\": \"restrike\",\n      \"pos\": [\n        470,\n        130\n      ],\n      \"presentation\": [\n        22,\n        238,\n        74,\n        22\n      ]\n    },\n    \"lbl_restrike\": {\n      \"type\": \"comment\",\n      \"text\": \"flush the keyboard, then replay the stored notes\",\n      \"pos\": [\n        550,\n        130\n      ],\n      \"size\": [\n        340,\n        20\n      ],\n      \"presentation\": [\n        106,\n        240,\n        480,\n        20\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 11,\n        \"textcolor\": [\n          0.92,\n          0.92,\n          0.92,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ]\n      }\n    },\n    \"v8\": {\n      \"type\": \"newobj\",\n      \"text\": \"v8 kslider-restrike.js\",\n      \"pos\": [\n        470,\n        300\n      ],\n      \"inlets\": 1,\n      \"outlets\": 2,\n      \"outlettype\": [\n        \"\",\n        \"\"\n      ]\n    },\n    \"lbl_v8\": {\n      \"type\": \"comment\",\n      \"text\": \"out 0 feeds back UP into the kslider: flush, then one chord message\",\n      \"pos\": [\n        470,\n        340\n      ],\n      \"size\": [\n        270,\n        20\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 11\n      }\n    },\n    \"prepend_set\": {\n      \"type\": \"newobj\",\n      \"text\": \"prepend set\",\n      \"pos\": [\n        470,\n        400\n      ]\n    },\n    \"msg_stored\": {\n      \"type\": \"message\",\n      \"text\": \"(none)\",\n      \"pos\": [\n        470,\n        450\n      ],\n      \"presentation\": [\n        22,\n        270,\n        420,\n        22\n      ]\n    },\n    \"lbl_stored\": {\n      \"type\": \"comment\",\n      \"text\": \"stored pitches\",\n      \"pos\": [\n        680,\n        450\n      ],\n      \"size\": [\n        110,\n        20\n      ],\n      \"presentation\": [\n        450,\n        272,\n        140,\n        20\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 11,\n        \"textcolor\": [\n          0.92,\n          0.92,\n          0.92,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ]\n      }\n    },\n    \"midiformat\": {\n      \"type\": \"newobj\",\n      \"text\": \"midiformat\",\n      \"pos\": [\n        30,\n        360\n      ]\n    },\n    \"vst\": {\n      \"type\": \"newobj\",\n      \"text\": \"vst~\",\n      \"pos\": [\n        30,\n        420\n      ]\n    },\n    \"gain\": {\n      \"type\": \"live.gain~\",\n      \"pos\": [\n        30,\n        490\n      ],\n      \"size\": [\n        136,\n        39\n      ],\n      \"attrs\": {\n        \"orientation\": 1\n      },\n      \"presentation\": [\n        22,\n        330,\n        200,\n        39\n      ]\n    },\n    \"lbl_gain\": {\n      \"type\": \"comment\",\n      \"text\": \"volume (dB)\",\n      \"pos\": [\n        180,\n        500\n      ],\n      \"size\": [\n        90,\n        20\n      ],\n      \"presentation\": [\n        230,\n        340,\n        100,\n        20\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 11,\n        \"textcolor\": [\n          0.92,\n          0.92,\n          0.92,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ]\n      }\n    },\n    \"dac\": {\n      \"type\": \"ezdac~\",\n      \"pos\": [\n        30,\n        580\n      ],\n      \"presentation\": [\n        340,\n        327,\n        45,\n        45\n      ]\n    },\n    \"lbl_dac\": {\n      \"type\": \"comment\",\n      \"text\": \"audio on/off\",\n      \"pos\": [\n        90,\n        592\n      ],\n      \"size\": [\n        100,\n        20\n      ],\n      \"presentation\": [\n        395,\n        340,\n        120,\n        20\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 11,\n        \"textcolor\": [\n          0.92,\n          0.92,\n          0.92,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ]\n      }\n    },\n    \"hdr_plug\": {\n      \"type\": \"comment\",\n      \"text\": \"plug-in\",\n      \"pos\": [\n        600,\n        20\n      ],\n      \"size\": [\n        70,\n        20\n      ],\n      \"presentation\": [\n        22,\n        14,\n        100,\n        20\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 11,\n        \"textcolor\": [\n          1.0,\n          0.55,\n          0.0,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ]\n      }\n    },\n    \"hdr_keys\": {\n      \"type\": \"comment\",\n      \"text\": \"keyboard\",\n      \"pos\": [\n        600,\n        44\n      ],\n      \"size\": [\n        70,\n        20\n      ],\n      \"presentation\": [\n        22,\n        84,\n        100,\n        20\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 11,\n        \"textcolor\": [\n          1.0,\n          0.55,\n          0.0,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ]\n      }\n    },\n    \"hdr_out\": {\n      \"type\": \"comment\",\n      \"text\": \"output\",\n      \"pos\": [\n        600,\n        68\n      ],\n      \"size\": [\n        70,\n        20\n      ],\n      \"presentation\": [\n        22,\n        310,\n        100,\n        20\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 11,\n        \"textcolor\": [\n          1.0,\n          0.55,\n          0.0,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ]\n      }\n    },\n    \"panel_plug\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        680,\n        20\n      ],\n      \"size\": [\n        60,\n        20\n      ],\n      \"presentation\": [\n        10,\n        10,\n        600,\n        60\n      ],\n      \"attrs\": {\n        \"bgfillcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ],\n        \"rounded\": 8\n      }\n    },\n    \"panel_keys\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        680,\n        44\n      ],\n      \"size\": [\n        60,\n        20\n      ],\n      \"presentation\": [\n        10,\n        80,\n        600,\n        218\n      ],\n      \"attrs\": {\n        \"bgfillcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ],\n        \"rounded\": 8\n      }\n    },\n    \"panel_out\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        680,\n        68\n      ],\n      \"size\": [\n        60,\n        20\n      ],\n      \"presentation\": [\n        10,\n        306,\n        600,\n        80\n      ],\n      \"attrs\": {\n        \"bgfillcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ],\n        \"rounded\": 8\n      }\n    }\n  },\n  \"connections\": [\n    [\n      \"msg_plug\",\n      0,\n      \"vst\",\n      0\n    ],\n    [\n      \"msg_open\",\n      0,\n      \"vst\",\n      0\n    ],\n    [\n      \"msg_flush\",\n      0,\n      \"kslider\",\n      0\n    ],\n    [\n      \"kslider\",\n      0,\n      \"join\",\n      0\n    ],\n    [\n      \"kslider\",\n      1,\n      \"join\",\n      1\n    ],\n    [\n      \"join\",\n      0,\n      \"midiformat\",\n      0\n    ],\n    [\n      \"join\",\n      0,\n      \"v8\",\n      0\n    ],\n    [\n      \"msg_restrike\",\n      0,\n      \"v8\",\n      0\n    ],\n    [\n      \"v8\",\n      0,\n      \"kslider\",\n      0\n    ],\n    [\n      \"prepend_set\",\n      0,\n      \"msg_stored\",\n      0\n    ],\n    [\n      \"midiformat\",\n      1,\n      \"vst\",\n      0\n    ],\n    [\n      \"vst\",\n      0,\n      \"gain\",\n      0\n    ],\n    [\n      \"vst\",\n      1,\n      \"gain\",\n      1\n    ],\n    [\n      \"gain\",\n      0,\n      \"dac\",\n      0\n    ],\n    [\n      \"gain\",\n      1,\n      \"dac\",\n      1\n    ],\n    [\n      \"v8\",\n      1,\n      \"prepend_set\",\n      0\n    ]\n  ]\n}\n--- END SPEC ---",
-          "fontsize": 9.0,
-          "hidden": 1
-        }
-      }
-    ],
-    "lines": [
-      {
-        "patchline": {
-          "destination": [
-            "obj-17",
-            0
-          ],
-          "source": [
-            "obj-1",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "destination": [
-            "obj-17",
-            0
-          ],
-          "source": [
-            "obj-2",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "destination": [
-            "obj-6",
-            0
-          ],
-          "source": [
-            "obj-4",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "destination": [
-            "obj-8",
-            0
-          ],
-          "source": [
-            "obj-6",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "destination": [
-            "obj-8",
-            1
-          ],
-          "source": [
-            "obj-6",
-            1
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "destination": [
-            "obj-16",
-            0
-          ],
-          "source": [
-            "obj-8",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "destination": [
-            "obj-11",
-            0
-          ],
-          "source": [
-            "obj-8",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "destination": [
-            "obj-11",
-            0
-          ],
-          "source": [
-            "obj-9",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "destination": [
-            "obj-6",
-            0
-          ],
-          "source": [
-            "obj-11",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "destination": [
-            "obj-14",
-            0
-          ],
-          "source": [
-            "obj-13",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "destination": [
-            "obj-17",
-            0
-          ],
-          "source": [
-            "obj-16",
-            1
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "destination": [
-            "obj-18",
-            0
-          ],
-          "source": [
-            "obj-17",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "destination": [
-            "obj-18",
-            1
-          ],
-          "source": [
-            "obj-17",
-            1
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "destination": [
-            "obj-20",
-            0
-          ],
-          "source": [
-            "obj-18",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "destination": [
-            "obj-20",
-            1
-          ],
-          "source": [
-            "obj-18",
-            1
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "destination": [
-            "obj-13",
-            0
-          ],
-          "source": [
-            "obj-11",
-            1
-          ]
-        }
-      }
-    ],
-    "default_fontsize": 12.0,
-    "default_fontname": "Arial",
-    "openinpresentation": 1
-  }
+    "patcher": {
+        "fileversion": 1,
+        "appversion": {
+            "major": 9,
+            "minor": 1,
+            "revision": 5,
+            "architecture": "x64",
+            "modernui": 1
+        },
+        "classnamespace": "box",
+        "rect": [ -807.0, -1336.0, 1098.0, 1084.0 ],
+        "openinpresentation": 1,
+        "boxes": [
+            {
+                "box": {
+                    "id": "obj-29",
+                    "maxclass": "newobj",
+                    "numinlets": 0,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 141.0, 360.0, 60.0, 22.0 ],
+                    "text": "r VST"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-28",
+                    "maxclass": "newobj",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 32.0, 103.0, 60.0, 22.0 ],
+                    "text": "s VST"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-37",
+                    "maxclass": "newobj",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 359.0, 427.5, 100.0, 22.0 ],
+                    "text": "print v8"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-1",
+                    "maxclass": "message",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 30.0, 60.0, 48.0, 22.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 22.0, 34.0, 50.0, 22.0 ],
+                    "text": "plug"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-2",
+                    "maxclass": "message",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 90.0, 60.0, 48.0, 22.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 80.0, 34.0, 50.0, 22.0 ],
+                    "text": "open"
+                }
+            },
+            {
+                "box": {
+                    "bgcolor": [ 0.13, 0.13, 0.15, 1.0 ],
+                    "fontname": "Monaco",
+                    "fontsize": 11.0,
+                    "id": "obj-3",
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 150.0, 60.0, 300.0, 20.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 140.0, 36.0, 440.0, 20.0 ],
+                    "text": "load a plug-in  /  open its editor window",
+                    "textcolor": [ 0.92, 0.92, 0.92, 1.0 ]
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-4",
+                    "maxclass": "message",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 30.0, 130.0, 55.0, 22.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 22.0, 206.0, 60.0, 22.0 ],
+                    "text": "flush"
+                }
+            },
+            {
+                "box": {
+                    "bgcolor": [ 0.13, 0.13, 0.15, 1.0 ],
+                    "fontname": "Monaco",
+                    "fontsize": 11.0,
+                    "id": "obj-5",
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 90.0, 130.0, 260.0, 20.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 92.0, 208.0, 400.0, 20.0 ],
+                    "text": "send note-offs for every held note",
+                    "textcolor": [ 0.92, 0.92, 0.92, 1.0 ]
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-6",
+                    "maxclass": "kslider",
+                    "mode": 1,
+                    "numinlets": 2,
+                    "numoutlets": 2,
+                    "outlettype": [ "int", "int" ],
+                    "parameter_enable": 0,
+                    "patching_rect": [ 30.0, 190.0, 336.0, 53.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 22.0, 104.0, 560.0, 83.0 ]
+                }
+            },
+            {
+                "box": {
+                    "bgcolor": [ 0.13, 0.13, 0.15, 1.0 ],
+                    "fontname": "Monaco",
+                    "fontsize": 11.0,
+                    "id": "obj-7",
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 30.0, 250.0, 420.0, 20.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 22.0, 178.0, 560.0, 20.0 ],
+                    "text": "polyphonic: click a key once for note-on, again for note-off",
+                    "textcolor": [ 0.92, 0.92, 0.92, 1.0 ]
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-8",
+                    "maxclass": "newobj",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 30.0, 300.0, 62.0, 22.0 ],
+                    "text": "join 2"
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-9",
+                    "maxclass": "message",
+                    "numinlets": 2,
+                    "numoutlets": 1,
+                    "outlettype": [ "" ],
+                    "patching_rect": [ 469.0, 264.0, 76.0, 22.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 22.0, 238.0, 74.0, 22.0 ],
+                    "text": "restrike"
+                }
+            },
+            {
+                "box": {
+                    "bgcolor": [ 0.13, 0.13, 0.15, 1.0 ],
+                    "fontname": "Monaco",
+                    "fontsize": 11.0,
+                    "id": "obj-10",
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 549.0, 264.0, 340.0, 20.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 106.0, 240.0, 480.0, 20.0 ],
+                    "text": "flush the keyboard, then replay the stored notes",
+                    "textcolor": [ 0.92, 0.92, 0.92, 1.0 ]
+                }
+            },
+            {
+                "box": {
+                    "filename": "kslider-restrike.js",
+                    "id": "obj-11",
+                    "maxclass": "newobj",
+                    "numinlets": 1,
+                    "numoutlets": 2,
+                    "outlettype": [ "", "" ],
+                    "patching_rect": [ 470.0, 300.0, 174.0, 22.0 ],
+                    "saved_object_attributes": {
+                        "parameter_enable": 0
+                    },
+                    "text": "v8 kslider-restrike.js",
+                    "textfile": {
+                        "filename": "kslider-restrike.js",
+                        "flags": 0,
+                        "embed": 0,
+                        "autowatch": 1
+                    }
+                }
+            },
+            {
+                "box": {
+                    "fontname": "Monaco",
+                    "fontsize": 11.0,
+                    "id": "obj-12",
+                    "linecount": 2,
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 470.0, 340.0, 270.0, 34.0 ],
+                    "text": "out 0 feeds back UP into the kslider: flush, then one chord message"
+                }
+            },
+            {
+                "box": {
+                    "bgcolor": [ 0.13, 0.13, 0.15, 1.0 ],
+                    "fontname": "Monaco",
+                    "fontsize": 11.0,
+                    "id": "obj-15",
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 680.0, 450.0, 110.0, 20.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 450.0, 272.0, 140.0, 20.0 ],
+                    "text": "stored pitches",
+                    "textcolor": [ 0.92, 0.92, 0.92, 1.0 ]
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-16",
+                    "maxclass": "newobj",
+                    "numinlets": 7,
+                    "numoutlets": 2,
+                    "outlettype": [ "int", "" ],
+                    "patching_rect": [ 30.0, 360.0, 90.0, 22.0 ],
+                    "text": "midiformat"
+                }
+            },
+            {
+                "box": {
+                    "autosave": 1,
+                    "bgmode": 0,
+                    "border": 0,
+                    "clickthrough": 0,
+                    "id": "obj-17",
+                    "maxclass": "newobj",
+                    "numinlets": 2,
+                    "numoutlets": 8,
+                    "offset": [ 0.0, 0.0 ],
+                    "outlettype": [ "signal", "signal", "", "list", "int", "", "", "" ],
+                    "patching_rect": [ 30.0, 420.0, 274.0, 37.0 ],
+                    "save": [ "#N", "vst~", "loaduniqueid", 0, "C74_VST3:/Podolski", ";" ],
+                    "saved_attribute_attributes": {
+                        "valueof": {
+                            "parameter_invisible": 1,
+                            "parameter_longname": "vst~[14]",
+                            "parameter_modmode": 0,
+                            "parameter_shortname": "vst~[4]",
+                            "parameter_type": 3
+                        }
+                    },
+                    "saved_object_attributes": {
+                        "parameter_enable": 1,
+                        "parameter_mappable": 0
+                    },
+                    "snapshot": {
+                        "filetype": "C74Snapshot",
+                        "version": 2,
+                        "minorversion": 0,
+                        "name": "snapshotlist",
+                        "origin": "vst~",
+                        "type": "list",
+                        "subtype": "Undefined",
+                        "embed": 1,
+                        "snapshot": {
+                            "pluginname": "Podolski.vst3info",
+                            "plugindisplayname": "Podolski",
+                            "pluginsavedname": "",
+                            "pluginsaveduniqueid": 2130977815,
+                            "version": 1,
+                            "isbank": 0,
+                            "isbase64": 1,
+                            "sliderorder": [],
+                            "slidervisibility": [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+                            "blob": "9503.VMjLgXQI...O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.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.0ct4RUvPiUYgCRC0DctLDSJIGUYQSSvfkbvLES14RZKYmKoIDUvnGU30jUOYmatTUSQQjX5AyPLQmKCwjRtTjV4UkUOAiKosjctjlPPcVLh0TSqIVZvLUSJ4RQZkGLDEkcQc0SyQzTLQmKCwjRpoVXwjELgIGLSsjdPk1R14RZBM0ZWE1c5MjS1MiPLYma1UETMslXoAyTLojXEQEQAczX3nmPMg2LBwjctYVU5giQQgCSowDctLDSJwDdXMGLoU0PYQDSJAUUjYGLCwjRLQ0X5ASZMo2LBwjctYFUq0zUOgmKosjctjlPDkTaigiKosjctjlPFACULgCRowDctLDSJgkdTcmdSwDLtYVTMkzTOEyLBwjctYVTSkzTOcGVoIzRUYEYS0jQggCRC4DctLDSJQjZQ0DLowjcyHDS14lcPI2bV8jcyHDS14lcHkFLV8jUMQET24lKTcFMV8jcyHDS14lYUU2cV8DLtj1R14RZBYUSTAENDklPMgiQYMURxfENTklPMgiQYQTPGMFNTMDSz4xPLojKUgEcMslXoAyPLoDS3g0bvjGTtkjLhoDSTkEcQc0S4AUZKYmKoIzTAcUVpAyTMY2LBwjct4RT1E0QZgiZC4DcTMDSJgEUYsVRT8zclk1R14RZB0zZFQFNhMESzQ0PLoDS3g0bvLTTxs1ULoDSqEVZ2Q0S54lcTQWSrQENDMTSJgEUYsVRT8jdHk1R14RZBMTRxHlPvLES5MiPLYmaPM0amc0S3YVZKYmKoIjRtYlPJ4lcKUmK3Q0ZMYzXugCagYFVwDFdAI0XscmUjYFSwD1bA0lXq0jLhsVTFgDZqwVXmkzUjYFTTgkdEwlP0ciPHQDNpMUaPUDRTgCUUMzYDgDUmQkTS8lYBoFTBkjZDMjS3YVZBshXFkUaMYUVzUEaXUCUVg0YEYEVmUjUXUCQVg0YIYEVmUjUXUCQVg0YEYkVmEkQhUCVVkEaYYUVp0jUXUCVFkkaYESVtMFaXUiYwfkaUESVvMVLgUia1kEamYTVogSLY81aCkUZmYEVmUjUXc1aSg0YEYEVmUjUYc1aSg0YuMUVo81TYg1aSk0YuMTVm81TZc1a4g0YukmVm81Tgc1a4E1YuMEVq8VZXc1a4gkRtzlSpUEaNcVSr4zYqwlSmACaNgVUr4DZqwlSnACaNkVUr4TZqwlSoACaNkFMr4TZ3vlSpslUHcWSWAkL5QUVyMlQh0VTwjEZiYUXMUkZScTUFEVaYwlPt8lQZoVQpwjdDMkX3UjdMASVxL1LqcET5wzThgWQ50zcD0lXAM1PhAWPxnkc2YjXyETagYGNFIlcEQEVngCUXo1bTgEaEESVmclQTc1aVgUbEYTXQ8FTXQWQwD1YAczTnkDaXkVRFkkTIwVVnMFaX4VSqgEbIEiVncmQUgFMrgUcIYjXG0DaXkVSwfkZUACVr0TLYk1YrUUZuECVw0jQgc0YUYUSUQTVnEULXoDTFkkSQwVVpMlQY41aUI1REQES1oGaX81aVEUPEIiXAM1PZw1Yvj0aiwVVAkzTMcGQsEUPEMDSvjkLiMyZWA0ctjWS20zUPgGV4wzcIcETxn1ZLETSoIDdP0FYAUzPQcGQTwjQQQET2YFQQETQSIEQEQESJEEUhEDNTAELPcET4AUajETQCE0cDQESFEEUPcmYDEUPEMkTDUDULoTRx.UPEMzTCUDULcTSTA0ctAUTCUDULQTSTA0cXYEVCUDUL0VQw.UPEMjVm0DUPcGV5AUPEMkVu0DUPcmaVg0PEQESvsVLPETQCI0PEQESwsVLPETQCE1YMQET2YmUZMTQTwTRMQETJQzTg8VSTA0cyXEVCUDULQ2Zw.UPEklTCUDULU2Zw.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.0ct4RUvPiUYgCRC0DctLDSJIGUYQSSvfkbvLES14RZKYmKoIDUvnGU30jUOYmatTUSQQjX5AyPLQmKCwjRtTjV4UkUOAiKosjctjlPPcVLh0TSqIVZvLUSJ4RQZkGLDEkcQc0SyQzTLQmKCwjRpoVXwjELgIGLSsjdPk1R14RZBM0ZWE1c5MjS1MiPLYma1UETMslXoAyTLojXEQEQAczX3nmPMg2LBwjctYVU5giQQgCSowDctLDSJwDdXMGLoU0PYQDSJAUUjYGLCwjRLQ0X5ASZMo2LBwjctYFUq0zUOgmKosjctjlPDkTaigiKosjctjlPFACULgCRowDctLDSJgkdTcmdSwDLtYVTMkzTOEyLBwjctYVTSkzTOcGVoIzRUYEYS0jQggCRC4DctLDSJQjZQ0DLowjcyHDS14lcPI2bV8jcyHDS14lcHkFLV8jUMQET24lKTcFMV8jcyHDS14lYUU2cV8DLtj1R14RZBYUSTAENDklPMgiQYMURxfENTklPMgiQYQTPGMFNTMDSz4xPLojKUgEcMslXoAyPLoDS3g0bvjGTtkjLhoDSTkEcQc0S4AUZKYmKoIzTAcUVpAyTMY2LBwjct4RT1E0QZgiZC4DcTMDSJgEUYsVRT8zclk1R14RZB0zZFQFNhMESzQ0PLoDS3g0bvLTTxs1ULoDSqEVZ2Q0S54lcTQWSrQENDMTSJgEUYsVRT8jdHk1R14RZBMTRxHlPvLES5MiPLYmaPM0amc0S3YVZKYmKoIjRtYlPJ4lcKUmK3Q0ZMYzXugCagYFVwDFdAI0XscmUjYFSwD1bA0lXq0jLhsVTFgDZqwVXmkzUjYFTTgkdEwlP0ciPHQDNpMUaPUDRTgCUUMzYDgDUmQkTS8lYBoFTBkjZDMjS3YVZBshXFkUaMYUVzUEaXUCUVg0YEYEVmUjUXUCQVg0YIYEVmUjUXUCQVg0YEYkVmEkQhUCVVkEaYYUVp0jUXUCVFkkaYESVtMFaXUiYwfkaUESVvMVLgUia1kEamYTVogSLY81aCkUZmYEVmUjUXc1aSg0YEYEVmUjUYc1aSg0YuMUVo81TYg1aSk0YuMTVm81TZc1a4g0YukmVm81Tgc1a4E1YuMEVq8VZXc1a4gkRtzlSpUEaNcVSr4zYqwlSmACaNgVUr4DZqwlSnACaNkVUr4TZqwlSoACaNkFMr4TZ3vlSpslUHcWSWAkL5QUVyMlQh0VTwjEZiYUXMUkZScTUFEVaYwlPt8lQZoVQpwjdDMkX3UjdMASVxL1LqcET5wzThgWQ50zcD0lXAM1PhAWPxnkc2YjXyETagYGNFIlcEQEVngCUXo1bTgEaEESVmclQTc1aVgUbEYTXQ8FTXQWQwD1YAczTnkDaXkVRFkkTIwVVnMFaX4VSqgEbIEiVncmQUgFMrgUcIYjXG0DaXkVSwfkZUACVr0TLYk1YrUUZuECVw0jQgc0YUYUSUQTVnEULXoDTFkkSQwVVpMlQY41aUI1REQES1oGaX81aVEUPEIiXAM1PZw1Yvj0aiwVVAkzTMcGQsEUPEMDSvjkLiMyZWA0ctjWS20zUPgGV4wzcIcETxn1ZLETSoIDdP0FYAUzPQcGQTwjQQQET2YFQQETQSIEQEQESJEEUhEDNTAELPcET4AUajETQCE0cDQESFEEUPcmYDEUPEMkTDUDULoTRx.UPEMzTCUDULcTSTA0ctAUTCUDULQTSTA0cXYEVCUDUL0VQw.UPEMjVm0DUPcGV5AUPEMkVu0DUPcmaVg0PEQESvsVLPETQCI0PEQESwsVLPETQCE1YMQET2YmUZMTQTwTRMQETJQzTg8VSTA0cyXEVCUDULQ2Zw.UPEklTCUDULU2Zw.UPEMjXm0DUPcmKWo0PEoFSBUDULsTRTA0ctrFTAUzTTITQTwDSIQET2gzZPETQ4QkPEQESTkjZBETQ4EkPEQESUkDUPcGVqAUPEkWUBUDULUTRTA0cynFTAUTZVITQTwjZvvFTAUzPQITQTwzZUwFTAUzTY8VRTA0cTYUXBUDULwVQrAUPEkVVqkDUPcmalk0aIQET2gkUgITQTwTaEwFTAUTdYsVRTA0chYkVBUDUL0FLrAUPEMjVmkDUPcmYVkkPEQEStsFaPETQCo0bIQET2gkZPETQSoUZIQET2olUYITQTwjRpESVBUDUL81ZrAUPEMkVwkDUPcmZVElPEQESugCaPETQoo0YIQET24VLXITQTwDbUwFTAUTZZ0VRTA0ctYkVBUDULA2brAUPEklVykDUPcmawDlPEolP2YlZPETQ4oUZIQET2ImUYITQTwTbiwFTAUTdZ8VRTA0cxEiVBUDULEGLrAUPEkmV0kDUPcmcVgkPEQESx0DaPETQCE1ZIQET2YWLYITQTwjbqwFTA8FTLI2brAUPEMTXykDUPcmcwDlPEQESIkDUPcmdwfkPEQESyUEaPETQSEVaIQET2omUZITQTwzbywFTAUzTgMWRTA0c5ESXBUDULQWQrAUPEkVXokDUPoDQoE1ZIQET2MSLYITQTwDcqwFTAUTZgEWRTA0cyXUXBUDULQGNrAUPEklTBUDULUWSrAUPEkWXqkDUPc2MwjkPEQES0sFaPETQ4EVbIQET2ciUgITQpIzc2DSXBUDULYWQrAUPEMjXokDUPcmKWkkPEQES1MFaPETQCI1aIQET24hLZITQTwjcvvFTAUzPhUWRT8zLDkVSvHVZB4hKtvyKIUDYoQ2Pu4Fcx8FarUlb9vyKVMEUy.Ea0cVZtMEcgQWY9.."
+                        },
+                        "snapshotlist": {
+                            "current_snapshot": 0,
+                            "entries": [
+                                {
+                                    "filetype": "C74Snapshot",
+                                    "version": 2,
+                                    "minorversion": 0,
+                                    "name": "Podolski",
+                                    "origin": "Podolski.vst3info",
+                                    "type": "VST3",
+                                    "subtype": "Instrument",
+                                    "embed": 0,
+                                    "snapshot": {
+                                        "pluginname": "Podolski.vst3info",
+                                        "plugindisplayname": "Podolski",
+                                        "pluginsavedname": "",
+                                        "pluginsaveduniqueid": 2130977815,
+                                        "version": 1,
+                                        "isbank": 0,
+                                        "isbase64": 1,
+                                        "sliderorder": [],
+                                        "slidervisibility": [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+                                        "blob": "9503.VMjLgXQI...O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.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.0ct4RUvPiUYgCRC0DctLDSJIGUYQSSvfkbvLES14RZKYmKoIDUvnGU30jUOYmatTUSQQjX5AyPLQmKCwjRtTjV4UkUOAiKosjctjlPPcVLh0TSqIVZvLUSJ4RQZkGLDEkcQc0SyQzTLQmKCwjRpoVXwjELgIGLSsjdPk1R14RZBM0ZWE1c5MjS1MiPLYma1UETMslXoAyTLojXEQEQAczX3nmPMg2LBwjctYVU5giQQgCSowDctLDSJwDdXMGLoU0PYQDSJAUUjYGLCwjRLQ0X5ASZMo2LBwjctYFUq0zUOgmKosjctjlPDkTaigiKosjctjlPFACULgCRowDctLDSJgkdTcmdSwDLtYVTMkzTOEyLBwjctYVTSkzTOcGVoIzRUYEYS0jQggCRC4DctLDSJQjZQ0DLowjcyHDS14lcPI2bV8jcyHDS14lcHkFLV8jUMQET24lKTcFMV8jcyHDS14lYUU2cV8DLtj1R14RZBYUSTAENDklPMgiQYMURxfENTklPMgiQYQTPGMFNTMDSz4xPLojKUgEcMslXoAyPLoDS3g0bvjGTtkjLhoDSTkEcQc0S4AUZKYmKoIzTAcUVpAyTMY2LBwjct4RT1E0QZgiZC4DcTMDSJgEUYsVRT8zclk1R14RZB0zZFQFNhMESzQ0PLoDS3g0bvLTTxs1ULoDSqEVZ2Q0S54lcTQWSrQENDMTSJgEUYsVRT8jdHk1R14RZBMTRxHlPvLES5MiPLYmaPM0amc0S3YVZKYmKoIjRtYlPJ4lcKUmK3Q0ZMYzXugCagYFVwDFdAI0XscmUjYFSwD1bA0lXq0jLhsVTFgDZqwVXmkzUjYFTTgkdEwlP0ciPHQDNpMUaPUDRTgCUUMzYDgDUmQkTS8lYBoFTBkjZDMjS3YVZBshXFkUaMYUVzUEaXUCUVg0YEYEVmUjUXUCQVg0YIYEVmUjUXUCQVg0YEYkVmEkQhUCVVkEaYYUVp0jUXUCVFkkaYESVtMFaXUiYwfkaUESVvMVLgUia1kEamYTVogSLY81aCkUZmYEVmUjUXc1aSg0YEYEVmUjUYc1aSg0YuMUVo81TYg1aSk0YuMTVm81TZc1a4g0YukmVm81Tgc1a4E1YuMEVq8VZXc1a4gkRtzlSpUEaNcVSr4zYqwlSmACaNgVUr4DZqwlSnACaNkVUr4TZqwlSoACaNkFMr4TZ3vlSpslUHcWSWAkL5QUVyMlQh0VTwjEZiYUXMUkZScTUFEVaYwlPt8lQZoVQpwjdDMkX3UjdMASVxL1LqcET5wzThgWQ50zcD0lXAM1PhAWPxnkc2YjXyETagYGNFIlcEQEVngCUXo1bTgEaEESVmclQTc1aVgUbEYTXQ8FTXQWQwD1YAczTnkDaXkVRFkkTIwVVnMFaX4VSqgEbIEiVncmQUgFMrgUcIYjXG0DaXkVSwfkZUACVr0TLYk1YrUUZuECVw0jQgc0YUYUSUQTVnEULXoDTFkkSQwVVpMlQY41aUI1REQES1oGaX81aVEUPEIiXAM1PZw1Yvj0aiwVVAkzTMcGQsEUPEMDSvjkLiMyZWA0ctjWS20zUPgGV4wzcIcETxn1ZLETSoIDdP0FYAUzPQcGQTwjQQQET2YFQQETQSIEQEQESJEEUhEDNTAELPcET4AUajETQCE0cDQESFEEUPcmYDEUPEMkTDUDULoTRx.UPEMzTCUDULcTSTA0ctAUTCUDULQTSTA0cXYEVCUDUL0VQw.UPEMjVm0DUPcGV5AUPEMkVu0DUPcmaVg0PEQESvsVLPETQCI0PEQESwsVLPETQCE1YMQET2YmUZMTQTwTRMQETJQzTg8VSTA0cyXEVCUDULQ2Zw.UPEklTCUDULU2Zw.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.0ct4RUvPiUYgCRC0DctLDSJIGUYQSSvfkbvLES14RZKYmKoIDUvnGU30jUOYmatTUSQQjX5AyPLQmKCwjRtTjV4UkUOAiKosjctjlPPcVLh0TSqIVZvLUSJ4RQZkGLDEkcQc0SyQzTLQmKCwjRpoVXwjELgIGLSsjdPk1R14RZBM0ZWE1c5MjS1MiPLYma1UETMslXoAyTLojXEQEQAczX3nmPMg2LBwjctYVU5giQQgCSowDctLDSJwDdXMGLoU0PYQDSJAUUjYGLCwjRLQ0X5ASZMo2LBwjctYFUq0zUOgmKosjctjlPDkTaigiKosjctjlPFACULgCRowDctLDSJgkdTcmdSwDLtYVTMkzTOEyLBwjctYVTSkzTOcGVoIzRUYEYS0jQggCRC4DctLDSJQjZQ0DLowjcyHDS14lcPI2bV8jcyHDS14lcHkFLV8jUMQET24lKTcFMV8jcyHDS14lYUU2cV8DLtj1R14RZBYUSTAENDklPMgiQYMURxfENTklPMgiQYQTPGMFNTMDSz4xPLojKUgEcMslXoAyPLoDS3g0bvjGTtkjLhoDSTkEcQc0S4AUZKYmKoIzTAcUVpAyTMY2LBwjct4RT1E0QZgiZC4DcTMDSJgEUYsVRT8zclk1R14RZB0zZFQFNhMESzQ0PLoDS3g0bvLTTxs1ULoDSqEVZ2Q0S54lcTQWSrQENDMTSJgEUYsVRT8jdHk1R14RZBMTRxHlPvLES5MiPLYmaPM0amc0S3YVZKYmKoIjRtYlPJ4lcKUmK3Q0ZMYzXugCagYFVwDFdAI0XscmUjYFSwD1bA0lXq0jLhsVTFgDZqwVXmkzUjYFTTgkdEwlP0ciPHQDNpMUaPUDRTgCUUMzYDgDUmQkTS8lYBoFTBkjZDMjS3YVZBshXFkUaMYUVzUEaXUCUVg0YEYEVmUjUXUCQVg0YIYEVmUjUXUCQVg0YEYkVmEkQhUCVVkEaYYUVp0jUXUCVFkkaYESVtMFaXUiYwfkaUESVvMVLgUia1kEamYTVogSLY81aCkUZmYEVmUjUXc1aSg0YEYEVmUjUYc1aSg0YuMUVo81TYg1aSk0YuMTVm81TZc1a4g0YukmVm81Tgc1a4E1YuMEVq8VZXc1a4gkRtzlSpUEaNcVSr4zYqwlSmACaNgVUr4DZqwlSnACaNkVUr4TZqwlSoACaNkFMr4TZ3vlSpslUHcWSWAkL5QUVyMlQh0VTwjEZiYUXMUkZScTUFEVaYwlPt8lQZoVQpwjdDMkX3UjdMASVxL1LqcET5wzThgWQ50zcD0lXAM1PhAWPxnkc2YjXyETagYGNFIlcEQEVngCUXo1bTgEaEESVmclQTc1aVgUbEYTXQ8FTXQWQwD1YAczTnkDaXkVRFkkTIwVVnMFaX4VSqgEbIEiVncmQUgFMrgUcIYjXG0DaXkVSwfkZUACVr0TLYk1YrUUZuECVw0jQgc0YUYUSUQTVnEULXoDTFkkSQwVVpMlQY41aUI1REQES1oGaX81aVEUPEIiXAM1PZw1Yvj0aiwVVAkzTMcGQsEUPEMDSvjkLiMyZWA0ctjWS20zUPgGV4wzcIcETxn1ZLETSoIDdP0FYAUzPQcGQTwjQQQET2YFQQETQSIEQEQESJEEUhEDNTAELPcET4AUajETQCE0cDQESFEEUPcmYDEUPEMkTDUDULoTRx.UPEMzTCUDULcTSTA0ctAUTCUDULQTSTA0cXYEVCUDUL0VQw.UPEMjVm0DUPcGV5AUPEMkVu0DUPcmaVg0PEQESvsVLPETQCI0PEQESwsVLPETQCE1YMQET2YmUZMTQTwTRMQETJQzTg8VSTA0cyXEVCUDULQ2Zw.UPEklTCUDULU2Zw.UPEMjXm0DUPcmKWo0PEoFSBUDULsTRTA0ctrFTAUzTTITQTwDSIQET2gzZPETQ4QkPEQESTkjZBETQ4EkPEQESUkDUPcGVqAUPEkWUBUDULUTRTA0cynFTAUTZVITQTwjZvvFTAUzPQITQTwzZUwFTAUzTY8VRTA0cTYUXBUDULwVQrAUPEkVVqkDUPcmalk0aIQET2gkUgITQTwTaEwFTAUTdYsVRTA0chYkVBUDUL0FLrAUPEMjVmkDUPcmYVkkPEQEStsFaPETQCo0bIQET2gkZPETQSoUZIQET2olUYITQTwjRpESVBUDUL81ZrAUPEMkVwkDUPcmZVElPEQESugCaPETQoo0YIQET24VLXITQTwDbUwFTAUTZZ0VRTA0ctYkVBUDULA2brAUPEklVykDUPcmawDlPEolP2YlZPETQ4oUZIQET2ImUYITQTwTbiwFTAUTdZ8VRTA0cxEiVBUDULEGLrAUPEkmV0kDUPcmcVgkPEQESx0DaPETQCE1ZIQET2YWLYITQTwjbqwFTA8FTLI2brAUPEMTXykDUPcmcwDlPEQESIkDUPcmdwfkPEQESyUEaPETQSEVaIQET2omUZITQTwzbywFTAUzTgMWRTA0c5ESXBUDULQWQrAUPEkVXokDUPoDQoE1ZIQET2MSLYITQTwDcqwFTAUTZgEWRTA0cyXUXBUDULQGNrAUPEklTBUDULUWSrAUPEkWXqkDUPc2MwjkPEQES0sFaPETQ4EVbIQET2ciUgITQpIzc2DSXBUDULYWQrAUPEMjXokDUPcmKWkkPEQES1MFaPETQCI1aIQET24hLZITQTwjcvvFTAUzPhUWRT8zLDkVSvHVZB4hKtvyKIUDYoQ2Pu4Fcx8FarUlb9vyKVMEUy.Ea0cVZtMEcgQWY9.."
+                                    },
+                                    "fileref": {
+                                        "name": "Podolski",
+                                        "filename": "Podolski_20260907.maxsnap",
+                                        "filepath": "~/Documents/Max 9/Snapshots",
+                                        "filepos": -1,
+                                        "snapshotfileid": "1a92fdbbac8e3a8ffb2272aa462331e9"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "text": "vst~ C74_VST3:/Podolski",
+                    "varname": "vst~",
+                    "viewvisibility": 1
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-18",
+                    "lastchannelcount": 0,
+                    "maxclass": "live.gain~",
+                    "numinlets": 2,
+                    "numoutlets": 5,
+                    "orientation": 1,
+                    "outlettype": [ "signal", "signal", "", "float", "list" ],
+                    "parameter_enable": 1,
+                    "patching_rect": [ 30.0, 490.0, 136.0, 47.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 22.0, 330.0, 200.0, 47.0 ],
+                    "saved_attribute_attributes": {
+                        "valueof": {
+                            "parameter_longname": "live.gain~",
+                            "parameter_mmax": 6.0,
+                            "parameter_mmin": -70.0,
+                            "parameter_modmode": 3,
+                            "parameter_shortname": "live.gain~",
+                            "parameter_type": 0,
+                            "parameter_unitstyle": 4
+                        }
+                    },
+                    "varname": "live.gain~"
+                }
+            },
+            {
+                "box": {
+                    "bgcolor": [ 0.13, 0.13, 0.15, 1.0 ],
+                    "fontname": "Monaco",
+                    "fontsize": 11.0,
+                    "id": "obj-19",
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 180.0, 500.0, 90.0, 20.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 230.0, 340.0, 100.0, 20.0 ],
+                    "text": "volume (dB)",
+                    "textcolor": [ 0.92, 0.92, 0.92, 1.0 ]
+                }
+            },
+            {
+                "box": {
+                    "id": "obj-20",
+                    "maxclass": "ezdac~",
+                    "numinlets": 2,
+                    "numoutlets": 0,
+                    "patching_rect": [ 30.0, 580.0, 45.0, 45.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 340.0, 327.0, 45.0, 45.0 ]
+                }
+            },
+            {
+                "box": {
+                    "bgcolor": [ 0.13, 0.13, 0.15, 1.0 ],
+                    "fontname": "Monaco",
+                    "fontsize": 11.0,
+                    "id": "obj-21",
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 90.0, 592.0, 100.0, 20.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 395.0, 340.0, 120.0, 20.0 ],
+                    "text": "audio on/off",
+                    "textcolor": [ 0.92, 0.92, 0.92, 1.0 ]
+                }
+            },
+            {
+                "box": {
+                    "bgcolor": [ 0.13, 0.13, 0.15, 1.0 ],
+                    "fontname": "Monaco",
+                    "fontsize": 11.0,
+                    "id": "obj-22",
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 600.0, 20.0, 70.0, 20.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 22.0, 14.0, 100.0, 20.0 ],
+                    "text": "plug-in",
+                    "textcolor": [ 1.0, 0.55, 0.0, 1.0 ]
+                }
+            },
+            {
+                "box": {
+                    "bgcolor": [ 0.13, 0.13, 0.15, 1.0 ],
+                    "fontname": "Monaco",
+                    "fontsize": 11.0,
+                    "id": "obj-23",
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 600.0, 44.0, 70.0, 20.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 22.0, 84.0, 100.0, 20.0 ],
+                    "text": "keyboard",
+                    "textcolor": [ 1.0, 0.55, 0.0, 1.0 ]
+                }
+            },
+            {
+                "box": {
+                    "bgcolor": [ 0.13, 0.13, 0.15, 1.0 ],
+                    "fontname": "Monaco",
+                    "fontsize": 11.0,
+                    "id": "obj-24",
+                    "maxclass": "comment",
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 600.0, 68.0, 70.0, 20.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 22.0, 310.0, 100.0, 20.0 ],
+                    "text": "output",
+                    "textcolor": [ 1.0, 0.55, 0.0, 1.0 ]
+                }
+            },
+            {
+                "box": {
+                    "angle": 270.0,
+                    "bgcolor": [ 0.13, 0.13, 0.15, 1.0 ],
+                    "id": "obj-25",
+                    "maxclass": "panel",
+                    "mode": 0,
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 680.0, 20.0, 60.0, 20.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 10.0, 10.0, 600.0, 60.0 ],
+                    "proportion": 0.39
+                }
+            },
+            {
+                "box": {
+                    "angle": 270.0,
+                    "bgcolor": [ 0.13, 0.13, 0.15, 1.0 ],
+                    "id": "obj-26",
+                    "maxclass": "panel",
+                    "mode": 0,
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 680.0, 44.0, 60.0, 20.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 10.0, 80.0, 600.0, 218.0 ],
+                    "proportion": 0.39
+                }
+            },
+            {
+                "box": {
+                    "angle": 270.0,
+                    "bgcolor": [ 0.13, 0.13, 0.15, 1.0 ],
+                    "id": "obj-27",
+                    "maxclass": "panel",
+                    "mode": 0,
+                    "numinlets": 1,
+                    "numoutlets": 0,
+                    "patching_rect": [ 680.0, 68.0, 60.0, 20.0 ],
+                    "presentation": 1,
+                    "presentation_rect": [ 10.0, 306.0, 600.0, 80.0 ],
+                    "proportion": 0.39
+                }
+            },
+            {
+                "box": {
+                    "code": "--- CLAUDE2MAX SPEC ---\n{\n  \"width\": 760,\n  \"height\": 660,\n  \"objects\": {\n    \"msg_plug\": {\n      \"type\": \"message\",\n      \"text\": \"plug\",\n      \"pos\": [\n        30,\n        60\n      ],\n      \"presentation\": [\n        22,\n        34,\n        50,\n        22\n      ]\n    },\n    \"msg_open\": {\n      \"type\": \"message\",\n      \"text\": \"open\",\n      \"pos\": [\n        90,\n        60\n      ],\n      \"presentation\": [\n        80,\n        34,\n        50,\n        22\n      ]\n    },\n    \"lbl_plug\": {\n      \"type\": \"comment\",\n      \"text\": \"load a plug-in  /  open its editor window\",\n      \"pos\": [\n        150,\n        60\n      ],\n      \"size\": [\n        300,\n        20\n      ],\n      \"presentation\": [\n        140,\n        36,\n        440,\n        20\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 11,\n        \"textcolor\": [\n          0.92,\n          0.92,\n          0.92,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ]\n      }\n    },\n    \"msg_flush\": {\n      \"type\": \"message\",\n      \"text\": \"flush\",\n      \"pos\": [\n        30,\n        130\n      ],\n      \"presentation\": [\n        22,\n        206,\n        60,\n        22\n      ]\n    },\n    \"lbl_flush\": {\n      \"type\": \"comment\",\n      \"text\": \"send note-offs for every held note\",\n      \"pos\": [\n        90,\n        130\n      ],\n      \"size\": [\n        260,\n        20\n      ],\n      \"presentation\": [\n        92,\n        208,\n        400,\n        20\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 11,\n        \"textcolor\": [\n          0.92,\n          0.92,\n          0.92,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ]\n      }\n    },\n    \"kslider\": {\n      \"type\": \"kslider\",\n      \"pos\": [\n        30,\n        190\n      ],\n      \"size\": [\n        336,\n        53\n      ],\n      \"attrs\": {\n        \"mode\": 1\n      },\n      \"presentation\": [\n        22,\n        104,\n        576,\n        70\n      ]\n    },\n    \"lbl_keys\": {\n      \"type\": \"comment\",\n      \"text\": \"polyphonic: click a key once for note-on, again for note-off\",\n      \"pos\": [\n        30,\n        250\n      ],\n      \"size\": [\n        420,\n        20\n      ],\n      \"presentation\": [\n        22,\n        178,\n        560,\n        20\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 11,\n        \"textcolor\": [\n          0.92,\n          0.92,\n          0.92,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ]\n      }\n    },\n    \"join\": {\n      \"type\": \"newobj\",\n      \"text\": \"join 2\",\n      \"pos\": [\n        30,\n        300\n      ]\n    },\n    \"msg_restrike\": {\n      \"type\": \"message\",\n      \"text\": \"restrike\",\n      \"pos\": [\n        470,\n        130\n      ],\n      \"presentation\": [\n        22,\n        238,\n        74,\n        22\n      ]\n    },\n    \"lbl_restrike\": {\n      \"type\": \"comment\",\n      \"text\": \"flush the keyboard, then replay the stored notes\",\n      \"pos\": [\n        550,\n        130\n      ],\n      \"size\": [\n        340,\n        20\n      ],\n      \"presentation\": [\n        106,\n        240,\n        480,\n        20\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 11,\n        \"textcolor\": [\n          0.92,\n          0.92,\n          0.92,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ]\n      }\n    },\n    \"v8\": {\n      \"type\": \"newobj\",\n      \"text\": \"v8 kslider-restrike.js\",\n      \"pos\": [\n        470,\n        300\n      ],\n      \"inlets\": 1,\n      \"outlets\": 2,\n      \"outlettype\": [\n        \"\",\n        \"\"\n      ]\n    },\n    \"lbl_v8\": {\n      \"type\": \"comment\",\n      \"text\": \"out 0 feeds back UP into the kslider: flush, then one chord message\",\n      \"pos\": [\n        470,\n        340\n      ],\n      \"size\": [\n        270,\n        20\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 11\n      }\n    },\n    \"prepend_set\": {\n      \"type\": \"newobj\",\n      \"text\": \"prepend set\",\n      \"pos\": [\n        470,\n        400\n      ]\n    },\n    \"msg_stored\": {\n      \"type\": \"message\",\n      \"text\": \"(none)\",\n      \"pos\": [\n        470,\n        450\n      ],\n      \"presentation\": [\n        22,\n        270,\n        420,\n        22\n      ]\n    },\n    \"lbl_stored\": {\n      \"type\": \"comment\",\n      \"text\": \"stored pitches\",\n      \"pos\": [\n        680,\n        450\n      ],\n      \"size\": [\n        110,\n        20\n      ],\n      \"presentation\": [\n        450,\n        272,\n        140,\n        20\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 11,\n        \"textcolor\": [\n          0.92,\n          0.92,\n          0.92,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ]\n      }\n    },\n    \"midiformat\": {\n      \"type\": \"newobj\",\n      \"text\": \"midiformat\",\n      \"pos\": [\n        30,\n        360\n      ]\n    },\n    \"vst\": {\n      \"type\": \"newobj\",\n      \"text\": \"vst~\",\n      \"pos\": [\n        30,\n        420\n      ]\n    },\n    \"gain\": {\n      \"type\": \"live.gain~\",\n      \"pos\": [\n        30,\n        490\n      ],\n      \"size\": [\n        136,\n        39\n      ],\n      \"attrs\": {\n        \"orientation\": 1\n      },\n      \"presentation\": [\n        22,\n        330,\n        200,\n        39\n      ]\n    },\n    \"lbl_gain\": {\n      \"type\": \"comment\",\n      \"text\": \"volume (dB)\",\n      \"pos\": [\n        180,\n        500\n      ],\n      \"size\": [\n        90,\n        20\n      ],\n      \"presentation\": [\n        230,\n        340,\n        100,\n        20\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 11,\n        \"textcolor\": [\n          0.92,\n          0.92,\n          0.92,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ]\n      }\n    },\n    \"dac\": {\n      \"type\": \"ezdac~\",\n      \"pos\": [\n        30,\n        580\n      ],\n      \"presentation\": [\n        340,\n        327,\n        45,\n        45\n      ]\n    },\n    \"lbl_dac\": {\n      \"type\": \"comment\",\n      \"text\": \"audio on/off\",\n      \"pos\": [\n        90,\n        592\n      ],\n      \"size\": [\n        100,\n        20\n      ],\n      \"presentation\": [\n        395,\n        340,\n        120,\n        20\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 11,\n        \"textcolor\": [\n          0.92,\n          0.92,\n          0.92,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ]\n      }\n    },\n    \"hdr_plug\": {\n      \"type\": \"comment\",\n      \"text\": \"plug-in\",\n      \"pos\": [\n        600,\n        20\n      ],\n      \"size\": [\n        70,\n        20\n      ],\n      \"presentation\": [\n        22,\n        14,\n        100,\n        20\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 11,\n        \"textcolor\": [\n          1.0,\n          0.55,\n          0.0,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ]\n      }\n    },\n    \"hdr_keys\": {\n      \"type\": \"comment\",\n      \"text\": \"keyboard\",\n      \"pos\": [\n        600,\n        44\n      ],\n      \"size\": [\n        70,\n        20\n      ],\n      \"presentation\": [\n        22,\n        84,\n        100,\n        20\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 11,\n        \"textcolor\": [\n          1.0,\n          0.55,\n          0.0,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ]\n      }\n    },\n    \"hdr_out\": {\n      \"type\": \"comment\",\n      \"text\": \"output\",\n      \"pos\": [\n        600,\n        68\n      ],\n      \"size\": [\n        70,\n        20\n      ],\n      \"presentation\": [\n        22,\n        310,\n        100,\n        20\n      ],\n      \"attrs\": {\n        \"fontname\": \"Monaco\",\n        \"fontsize\": 11,\n        \"textcolor\": [\n          1.0,\n          0.55,\n          0.0,\n          1.0\n        ],\n        \"bgcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ]\n      }\n    },\n    \"panel_plug\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        680,\n        20\n      ],\n      \"size\": [\n        60,\n        20\n      ],\n      \"presentation\": [\n        10,\n        10,\n        600,\n        60\n      ],\n      \"attrs\": {\n        \"bgfillcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ],\n        \"rounded\": 8\n      }\n    },\n    \"panel_keys\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        680,\n        44\n      ],\n      \"size\": [\n        60,\n        20\n      ],\n      \"presentation\": [\n        10,\n        80,\n        600,\n        218\n      ],\n      \"attrs\": {\n        \"bgfillcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ],\n        \"rounded\": 8\n      }\n    },\n    \"panel_out\": {\n      \"type\": \"panel\",\n      \"pos\": [\n        680,\n        68\n      ],\n      \"size\": [\n        60,\n        20\n      ],\n      \"presentation\": [\n        10,\n        306,\n        600,\n        80\n      ],\n      \"attrs\": {\n        \"bgfillcolor\": [\n          0.13,\n          0.13,\n          0.15,\n          1.0\n        ],\n        \"rounded\": 8\n      }\n    }\n  },\n  \"connections\": [\n    [\n      \"msg_plug\",\n      0,\n      \"vst\",\n      0\n    ],\n    [\n      \"msg_open\",\n      0,\n      \"vst\",\n      0\n    ],\n    [\n      \"msg_flush\",\n      0,\n      \"kslider\",\n      0\n    ],\n    [\n      \"kslider\",\n      0,\n      \"join\",\n      0\n    ],\n    [\n      \"kslider\",\n      1,\n      \"join\",\n      1\n    ],\n    [\n      \"join\",\n      0,\n      \"midiformat\",\n      0\n    ],\n    [\n      \"join\",\n      0,\n      \"v8\",\n      0\n    ],\n    [\n      \"msg_restrike\",\n      0,\n      \"v8\",\n      0\n    ],\n    [\n      \"v8\",\n      0,\n      \"kslider\",\n      0\n    ],\n    [\n      \"prepend_set\",\n      0,\n      \"msg_stored\",\n      0\n    ],\n    [\n      \"midiformat\",\n      1,\n      \"vst\",\n      0\n    ],\n    [\n      \"vst\",\n      0,\n      \"gain\",\n      0\n    ],\n    [\n      \"vst\",\n      1,\n      \"gain\",\n      1\n    ],\n    [\n      \"gain\",\n      0,\n      \"dac\",\n      0\n    ],\n    [\n      \"gain\",\n      1,\n      \"dac\",\n      1\n    ],\n    [\n      \"v8\",\n      1,\n      \"prepend_set\",\n      0\n    ]\n  ]\n}\n--- END SPEC ---",
+                    "fontface": 0,
+                    "fontname": "<Monospaced>",
+                    "fontsize": 9.0,
+                    "hidden": 1,
+                    "id": "obj-spec-embed",
+                    "maxclass": "text.codebox",
+                    "numinlets": 2,
+                    "numoutlets": 3,
+                    "outlettype": [ "", "", "" ],
+                    "patching_rect": [ 50.0, 665.0, 500.0, 300.0 ],
+                    "saved_object_attributes": {
+                        "parameter_enable": 0,
+                        "parameter_mappable": 0
+                    }
+                }
+            }
+        ],
+        "lines": [
+            {
+                "patchline": {
+                    "destination": [ "obj-28", 0 ],
+                    "source": [ "obj-1", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-37", 0 ],
+                    "order": 0,
+                    "source": [ "obj-11", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-6", 0 ],
+                    "order": 1,
+                    "source": [ "obj-11", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-17", 0 ],
+                    "source": [ "obj-16", 1 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-18", 1 ],
+                    "source": [ "obj-17", 1 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-18", 0 ],
+                    "source": [ "obj-17", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-20", 1 ],
+                    "source": [ "obj-18", 1 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-20", 0 ],
+                    "source": [ "obj-18", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-28", 0 ],
+                    "source": [ "obj-2", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-17", 0 ],
+                    "source": [ "obj-29", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-6", 0 ],
+                    "source": [ "obj-4", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-8", 1 ],
+                    "source": [ "obj-6", 1 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-8", 0 ],
+                    "source": [ "obj-6", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-11", 0 ],
+                    "order": 0,
+                    "source": [ "obj-8", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-16", 0 ],
+                    "order": 1,
+                    "source": [ "obj-8", 0 ]
+                }
+            },
+            {
+                "patchline": {
+                    "destination": [ "obj-11", 0 ],
+                    "source": [ "obj-9", 0 ]
+                }
+            }
+        ],
+        "parameters": {
+            "obj-17": [ "vst~[14]", "vst~[4]", 0 ],
+            "obj-18": [ "live.gain~", "live.gain~", 0 ],
+            "parameterbanks": {
+                "0": {
+                    "index": 0,
+                    "name": "",
+                    "parameters": [ "-", "-", "-", "-", "-", "-", "-", "-" ],
+                    "buttons": [ "-", "-", "-", "-", "-", "-", "-", "-" ]
+                }
+            },
+            "inherited_shortname": 1
+        },
+        "autosave": 0
+    }
 }
