@@ -1040,11 +1040,18 @@ def _substring_matches(terms: list, cap: int = 0) -> list:
     """
     Scan the package library for any of `terms` (case-insensitive substring).
 
-    Returns candidate dicts {name, package, digest, use_when, score} where
-    score = best field hit across all terms (use_when 3 > digest 2 > name 1),
-    deduped by object name (first wins), sorted by score then name. `cap`
+    Returns candidate dicts {name, package, digest, use_when, score, hits}
+    where score = best field hit across all terms (use_when 3 > digest 2 >
+    name 1) and hits = how many of `terms` matched the record at all. Deduped
+    by object name (first wins), sorted by hits, then score, then name. `cap`
     bounds the result count (0 = no cap). This is the deterministic core used
     both as the LLM path's candidate gatherer and as the no-key fallback.
+
+    Sorting by hits first matters when `terms` is an LLM expansion: one short
+    term ("IR") can substring-match hundreds of unrelated records, and if
+    those tie on score with the genuine multi-term hits, a name-order
+    tie-break fills the candidate cap with alphabetical noise and the real
+    answer never reaches the reranker.
     """
     lowered = [t.lower().strip() for t in terms if t and t.strip()]
     by_name: dict = {}
@@ -1052,20 +1059,20 @@ def _substring_matches(terms: list, cap: int = 0) -> list:
         for name, rec in objs.items():
             digest   = rec.get("digest", "") or ""
             use_when = rec.get("use_when", "") or ""
-            score = 0
+            score, hits = 0, 0
             for t in lowered:
                 if t in use_when.lower():
-                    score = max(score, 3)
+                    score = max(score, 3); hits += 1
                 elif t in digest.lower():
-                    score = max(score, 2)
+                    score = max(score, 2); hits += 1
                 elif t in name.lower():
-                    score = max(score, 1)
+                    score = max(score, 1); hits += 1
             if score and name not in by_name:
                 by_name[name] = {
                     "name": name, "package": pkg, "digest": digest,
-                    "use_when": use_when, "score": score,
+                    "use_when": use_when, "score": score, "hits": hits,
                 }
-    out = sorted(by_name.values(), key=lambda m: (-m["score"], m["name"]))
+    out = sorted(by_name.values(), key=lambda m: (-m["hits"], -m["score"], m["name"]))
     return out[:cap] if cap and cap > 0 else out
 
 
@@ -1167,6 +1174,7 @@ def search_packages(term: str, limit: int = 5) -> dict:
     k = limit if (limit and limit > 0) else 0
 
     # ── semantic path ────────────────────────────────────────────────────────
+    fallback_note = ""
     try:
         expanded = _expand_terms(term)
         # Seed with literal full-query matches FIRST so the obvious answer
@@ -1188,8 +1196,12 @@ def search_packages(term: str, limit: int = 5) -> dict:
                                f"(semantic; expanded terms: {', '.join(terms[1:]) or 'none'}).",
                 }
         # expansion succeeded but found nothing → fall through to substring/no-match
-    except Exception:
-        pass   # no key, network, parse — degrade to substring scoring below
+        fallback_note = (f" (semantic path found no fit among {len(candidates)} "
+                         f"candidates; expanded terms: {', '.join(expanded) or 'none'})")
+    except Exception as exc:
+        # no key, network, parse — degrade to substring scoring below, but say
+        # why: a silent fallback is indistinguishable from a genuine no-match.
+        fallback_note = f" (semantic search unavailable: {type(exc).__name__})"
 
     # ── substring fallback (also the no-API-key path) ─────────────────────────
     matches = _substring_matches([term], cap=k)
@@ -1199,7 +1211,7 @@ def search_packages(term: str, limit: int = 5) -> dict:
             "count": 0,
             "method": "substring",
             "message": (
-                f"No packages matched '{term}'. "
+                f"No packages matched '{term}'{fallback_note}. "
                 f"Try a shorter or broader term (e.g. 'reverb' instead of "
                 f"'convolution reverb with IR'), or build with native Max objects."
             ),
@@ -1208,7 +1220,7 @@ def search_packages(term: str, limit: int = 5) -> dict:
         "results": _fmt_results(matches, ""),
         "count":   len(matches),
         "method":  "substring",
-        "message": f"{len(matches)} result(s) for '{term}'.",
+        "message": f"{len(matches)} result(s) for '{term}'{fallback_note}.",
     }
 
 

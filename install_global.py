@@ -53,7 +53,12 @@ def install_mcp(env_pairs: list, dry: bool) -> bool:
             print(f"  --env {kv}")
         return True
 
-    cmd = ["claude", "mcp", "add", "--scope", "user"]
+    # Argument order matters: `--env` is variadic (`-e, --env <env...>`), so
+    # anything after it that isn't another option — including the server
+    # name — is swallowed as an env pair and the command fails with
+    # "Invalid environment variable format: claude2max". Put the positional
+    # name FIRST, then options, then `--` to terminate before the command.
+    cmd = ["claude", "mcp", "add", MCP_NAME, "--scope", "user"]
     for kv in env_pairs:
         cmd += ["--env", kv]
     # Prefer the server's own venv interpreter (README step 1); a bare `python3`
@@ -61,7 +66,7 @@ def install_mcp(env_pairs: list, dry: bool) -> bool:
     # registration then silently fails to connect.
     venv_py = REPO_ROOT / "mcp_server" / ".venv" / "bin" / "python3"
     interpreter = str(venv_py) if venv_py.exists() else sys.executable
-    cmd += [MCP_NAME, "--", interpreter, str(MCP_SERVER)]
+    cmd += ["--", interpreter, str(MCP_SERVER)]
 
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode == 0:
@@ -69,8 +74,23 @@ def install_mcp(env_pairs: list, dry: bool) -> bool:
         return True
     combined = (result.stderr + result.stdout).lower()
     if "already" in combined or "exists" in combined:
-        print(f"  ✓ MCP server already registered ('{MCP_NAME}') — skipping")
-        return True
+        if not env_pairs:
+            print(f"  ✓ MCP server already registered ('{MCP_NAME}') — skipping")
+            return True
+        # `claude mcp add` refuses to touch an existing entry, so an --env
+        # passed on a re-run would otherwise be silently dropped. Replace
+        # the registration: remove, then add again with the new env.
+        print(f"  · MCP server already registered ('{MCP_NAME}') — replacing to apply --env")
+        rm = subprocess.run(["claude", "mcp", "remove", "--scope", "user", MCP_NAME],
+                            capture_output=True, text=True)
+        if rm.returncode != 0:
+            print(f"  ✗ Could not remove existing registration: {(rm.stderr or rm.stdout).strip()}")
+            return False
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        if result.returncode == 0:
+            print(f"  ✓ MCP server re-registered ('{MCP_NAME}') with env: "
+                  + ", ".join(kv.split("=", 1)[0] for kv in env_pairs))
+            return True
     print(f"  ✗ MCP registration failed: {(result.stderr or result.stdout).strip()}")
     print("    Tip: is `claude` on your PATH? Run `which claude` to check.")
     return False

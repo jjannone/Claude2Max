@@ -134,6 +134,24 @@ For instance: a Max refpage attribute's `size` is usually an integer, but `"vari
 
 A second instance, in this repo's own converter (2026-09-07): `guess_newobj_io` derived inlet counts with `int(args[0])`, which is right for `join 3` and raises `ValueError` on `join @triggers -1` — a **valid** object whose first token after the name is an attribute, not a count. Two fixes, both general rather than per-object: strip `@name value…` runs before counting anything positional (attributes are never positional, and may appear anywhere after the object name), and read counts through a helper that falls back to the object's documented default instead of raising. Eight object families shared the bug; only `join` had been exercised.
 
+## A Silent Fallback Is Indistinguishable From a Genuine No-Match — Binding Rule
+
+Any tool that degrades to a simpler path when its preferred path fails — an LLM call replaced by keyword matching, a semantic search replaced by substring scoring, a cache miss served from a slower source — must **say so in its output, with the cause.** An `except Exception: pass` that quietly takes the fallback produces a result that looks exactly like the preferred path finding nothing, and the reader debugs the wrong thing: they broaden the query, re-check the data, or conclude the answer does not exist, when the real problem was a missing key, a network error, or a bug upstream of the fallback.
+
+The recognition signal: any `except` whose body is `pass`, or any branch that returns a "no results" shape without recording which path produced it. Capture the exception type (not the secret-bearing message) and put it in the result the caller sees. For instance: `assess()` in the MCP server reported `method: keyword-fallback` and a `_fallback` reason, so a missing API key was diagnosable in one call. `search_packages()` swallowed its exception, and a candidate-ordering bug hid for as long as it took someone to step through the semantic path by hand.
+
+## Rank by Breadth of Match Before Applying a Candidate Cap — Binding Rule
+
+When several search terms feed one substring scan and a cap bounds how many candidates go forward (to a reranker, a prompt, a display), order the candidates by **how many terms hit each record** before any other key. One short term can match hundreds of records by accident — "IR" matches every name or description containing "ir" — and if those ties break on something relevance-blind, such as name order, the cap fills with alphabetical noise and the genuine multi-term hits never reach the next stage. The stage after the cap then correctly reports nothing, and the failure looks like a no-match (see the rule above).
+
+Keep any per-field score for labeling; add a hit count for ordering. For instance: `_substring_matches` in `mcp_server/server.py` now sorts by hits, then field score, then name, so "convolution reverb with a real impulse response" reaches the reranker with `hirt.convolutionreverb~` in the candidate set instead of `2threshattack~`, `@`, `anti-bis`.
+
+## An Installer's "Already Exists" Is Not Success When the Step Carries New Configuration — Binding Rule
+
+Setup steps that look idempotent — register a server, add a hook, merge a config block — must compare what already exists against what was requested. Skip only when they match; replace when they differ. Treating "already exists" as success means a re-run that carries new settings quietly leaves the old ones in place, and the user believes the change landed. For instance: `install_global.py --env ANTHROPIC_API_KEY=…` on a machine whose MCP server was already registered hit `claude mcp add`'s refusal to touch an existing entry, reported "already registered — skipping", and the key never reached the server. The fix removes and re-adds the registration when `--env` is passed.
+
+A companion rule for building CLI invocations programmatically: **put positional arguments before any variadic option, and test the exact assembled command against the real tool**, not against the help text's example. `claude mcp add`'s `--env <env...>` is variadic, so a server name placed after it was consumed as an env pair and the command failed with "Invalid environment variable format: claude2max".
+
 ## Reference Instances Illustrate Principles — They Don't Constitute Them
 
 When a rule, checklist, or repair procedure refers to "what correct looks like," enshrine the **structural contract** (the attributes, invariants, shape) — not a specific file as the source of truth. Specific files are illustrations introduced as "for instance," and they may be renamed, edited, or deleted without the rule needing to change. A rule pinned to a file becomes wrong the moment that file moves; a rule pinned to the contract stays correct as long as the contract holds.
