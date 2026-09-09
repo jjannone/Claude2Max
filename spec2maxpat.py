@@ -2023,7 +2023,13 @@ def extract_spec(maxpat, stream=sys.stderr):
               file=stream)
 
     start = text.index(SPEC_MARKER_BEGIN) + len(SPEC_MARKER_BEGIN)
-    end = text.find(SPEC_MARKER_END, start)
+    # The LAST terminator closes the embed. A box whose own text carries the
+    # markers (a stale stub, a comment quoting them) is captured into the spec
+    # as a JSON string, so an inner terminator can sit inside the body; the
+    # first-occurrence split cut 4step-sequencer's spec mid-string (2026-09-09).
+    end = text.rfind(SPEC_MARKER_END)
+    if end < start:
+        end = -1
     if end == -1:
         raise SpecEmbedError(
             f"spec embed in box {_describe_candidate(chosen)} has no "
