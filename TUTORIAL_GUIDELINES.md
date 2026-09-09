@@ -13,7 +13,7 @@ A tutorial is functional when **every box and patchline below is present with ev
 2. **Panel attrs (every `tut-panel-*` box)**
    - `hidden: 1` — panels start invisible; the JS unhides only the current step's panel
    - `background: 1` — render BEHIND highlighted objects, not on top of them
-   - `locked_bgcolor: 1` — panel is locked so it can't be dragged/resized while editing the rest of the patch
+   - and `bglocked: 1` on the **patcher** (a root key, not a panel attr) — Max's *View > Lock Background*, so no panel can be selected or dragged while editing the rest of the patch. `locked_bgcolor`, which earlier versions wrote here, is a `p`-box attribute that a panel silently ignores.
    - Highlight visual: `bgcolor` (translucent fill), `bordercolor`, `border` (border width), `rounded` (corner radius)
 3. **Annotation comment attrs (every `tut-ann-*` box)**
    - `hidden: 1`
@@ -61,7 +61,7 @@ This pattern means a tutorial can be added to any patch without permanently disp
 
 ## Panels (Highlight Rectangles)
 
-- Panels go on the **background layer** (`"background": 1`) and must have **locked background** (`"locked_bgcolor": 1`) so they don't interfere with users editing the patch.
+- Panels go on the **background layer** (`"background": 1`), and the patcher carries `"bglocked": 1` (*View > Lock Background*) so they can't be selected while users edit the patch. Same rule as any presentation panel — `patching/MAX_PATCHING.md` > *Presentation panels live in the background layer*.
 - Panels are inserted at the END of the boxes list (painted behind everything in Max).
 
 ## Step Grouping Rules
@@ -99,7 +99,7 @@ The tutorial only works when every one of these properties is intact in the `.ma
 | `varname` | `tut-panel-N` (matches `PANEL_IDS[N]` in the JS) | `patcher.getnamed()` finds boxes by scripting name (`varname`), not `id`. Without it, the JS can't show/hide the panel. |
 | `hidden` | `1` | Panels start hidden; the JS unhides only the current step's panel. Without it, all panels are visible at once and the patching view is unreadable. |
 | `background` | `1` | Panels render BEHIND highlighted objects, not on top. Without it, the panel obscures the very objects it's meant to highlight. |
-| `locked_bgcolor` | `1` | Panel is locked so users editing the patch don't accidentally drag or resize it. |
+| *(patcher)* `bglocked` | `1` | Set on the **patcher**, not the panel: locks the background layer so users editing the patch can't select or drag a panel. `locked_bgcolor` is a `p`-box attribute — on a panel Max silently ignores it. |
 | `bgcolor`, `bordercolor`, `border`, `rounded` | (see `add_tutorial.py`) | Visual style of the highlight box. |
 
 ### On every annotation comment (`tut-ann-N`)
@@ -167,7 +167,7 @@ If any panel/annotation count is below the expected step count, or if `hidden`/`
 - **Bounding box limits prevent runaway merges** — without them, a chain of connected objects can absorb half the patch into one step. Cap merged groups at ~400px wide, ~250px tall, <=4 objects.
 - **Multi-pass merging** — a single merge pass can miss opportunities created by earlier merges. Loop until stable.
 - **Max comment `bgcolor` vs `bubble_bgcolor`** — plain `bgcolor` on a comment does not work when `bubble` is enabled. Use `bubble_bgcolor` instead.
-- **`ignoreclick` is not `locked_bgcolor`** — the user specifically wants `locked_bgcolor` (the Max attribute for locking background objects), not `ignoreclick`.
+- **`ignoreclick` is not the lock** — the user wants panels that can't be selected while editing, which is the patcher's `bglocked` key (*View > Lock Background*), not `ignoreclick`. `locked_bgcolor`, the name earlier versions of this file used, is a `p`-box attribute that a panel silently ignores.
 - **Test on multiple patches** — always run on at least 2-3 patches of different complexity to catch edge cases (empty groups, single-object steps, very wide patches).
 - **Max z-order is FIRST = on top** — earlier items in the `boxes` array render in front. This is the opposite of many GUI frameworks. Annotations must be FIRST in the array, panels LAST. Previous attempts that put annotations last resulted in them being hidden behind other objects.
 - **@bubbleside values: 0=top, 1=left, 2=bottom, 3=right** — these refer to which side of the comment the arrow appears on. The arrow points outward from that side toward the described group. Previous code incorrectly assumed 0=left; confirmed by user testing that 0=top.

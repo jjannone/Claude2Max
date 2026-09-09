@@ -1,29 +1,30 @@
 // kslider-restrike.js — remembers which notes a polyphonic kslider is holding,
 // and on "restrike" flushes the keyboard and plays the same notes again.
 //
-// inlet 0  : "<pitch> <velocity>" lists from the kslider (via [join 2]).
+// inlet 0  : "<pitch> <velocity>" lists.
 //            velocity > 0 stores the pitch; velocity 0 (note-off) removes it.
-//            "restrike" — send "flush" to the kslider, then one "chord" message
-//                         carrying every stored pitch/velocity pair.
-//            "clear"    — forget every stored note without touching the kslider.
-// outlet 0 : to the kslider LEFT inlet — exactly two messages per restrike,
-//            in this order: "flush", then "chord p1 v1 p2 v2 ...".
-//            Nothing else is ever sent here.
-// outlet 1 : the currently stored pitches as a list (for the readout),
-//            or the symbol "(none)" when nothing is stored.
+//            "restrike" — emit "flush", then one "chord" message carrying
+//                         every stored pitch/velocity pair.
+//            "clear"    — forget every stored note without emitting anything.
+// outlet 0 : messages for a kslider — exactly two per restrike, in this
+//            order: "flush", then "chord p1 v1 p2 v2 ...". Nothing else is
+//            ever sent here.
+// outlet 1 : the currently stored pitches as a list, or the symbol "(none)"
+//            when nothing is stored.
 //
 // kslider's "chord" message (polyphonic mode) displays AND outputs the notes,
-// so the restruck notes flow back through [join 2] into this object and are
-// stored again, and on to midiformat → vst~ where they sound.
+// so a kslider driven by outlet 0 emits the restruck notes again; if those
+// come back to inlet 0 they are simply stored again.
 
 inlets = 1;
 outlets = 2;
 autowatch = 1;
 
-// Hover text for each inlet and outlet in Max, like a subpatcher's inlet comment.
-setinletassist(0, "pitch velocity from the kslider (via join 2); restrike; clear");
-setoutletassist(0, "to the kslider left inlet: flush, then chord p1 v1 p2 v2 ...");
-setoutletassist(1, "stored pitches as a list, or (none)");
+// Hover text for each inlet and outlet in Max. Describes what the port accepts or
+// emits — never the objects it happens to be wired to in a particular patch.
+setinletassist(0, "pitch velocity (list): velocity > 0 stores, 0 forgets; restrike; clear");
+setoutletassist(0, "kslider messages: flush, then chord p1 v1 p2 v2 ...");
+setoutletassist(1, "stored pitches (list), or (none)");
 
 var HELD = new Map();          // pitch -> velocity of the note-on that lit it
 

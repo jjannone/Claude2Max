@@ -780,7 +780,7 @@ def strip_tutorial(maxpat):
     ]
 
 
-def add_tutorial_to_patch(maxpat, steps, annotation_ids, panel_ids, js_filename):
+def add_tutorial_to_patch(maxpat, steps, annotation_ids, panel_ids, js_filename, js_source=None):
     """Append tutorial UI objects and wiring to the patcher (in-place).
 
     Layout:
@@ -849,9 +849,17 @@ def add_tutorial_to_patch(maxpat, steps, annotation_ids, panel_ids, js_filename)
             "id": "tut-v8", "maxclass": "newobj",
             "numinlets": 1, "numoutlets": 0, "outlettype": [],
             "patching_rect": [nav_x, nav_y + 27.0, 240.0, 22.0],
-            "text": f"v8 {js_filename}",
+            # @embed 1 + textfile: the patch carries the controller's source, so
+            # the tutorial still runs when the .js does not travel with it
+            # (CLAUDE.md > Embed the Script in Every v8 Box). Same block Max
+            # writes on save; the source is filled in below when the file exists.
+            "text": f"v8 {js_filename} @embed 1",
+            "filename": js_filename,
+            "textfile": {"filename": js_filename, "flags": 0, "embed": 1, "autowatch": 1},
         }},
     ]
+    if js_source is not None:
+        new_boxes[-1]["box"]["textfile"]["text"] = js_source
 
     # Panels: one per step, hidden, background layer, locked
     panel_boxes = []
@@ -867,9 +875,8 @@ def add_tutorial_to_patch(maxpat, steps, annotation_ids, panel_ids, js_filename)
             "bordercolor": [0.1, 0.4, 0.85, 0.75],
             "border": 2,
             "rounded": 8,
-            "background": 1,
-            "locked_bgcolor": 1,
-            "hidden": 1,
+            "background": 1,   # Arrange > Include in Background
+            "hidden": 1,       # runtime state: the v8 controller unhides the current step
         }})
 
     # --- Compute annotation placement ---
@@ -980,6 +987,11 @@ def add_tutorial_to_patch(maxpat, steps, annotation_ids, panel_ids, js_filename)
     new_patch_w = max(float(patch_w), max_ann_right + 30.0)
     rect[2] = new_patch_w
     patcher["rect"] = rect
+    # View > Lock Background: background objects (the highlight panels) can't be
+    # selected while someone edits the patch. A PATCHER key, not a panel attr —
+    # `locked_bgcolor`, which earlier versions wrote on each panel, is a `p`-box
+    # attribute that a panel silently ignores.
+    patcher["bglocked"] = 1
 
     new_lines = [
         {"patchline": {"source": ["tut-umenu",    0], "destination": ["tut-v8", 0]}},
@@ -1087,8 +1099,10 @@ def main():
     js_path   = os.path.join(out_dir, js_name)
 
     write_tutorial_js(steps, js_path, annotation_ids, panel_ids)
+    with open(js_path, "r", encoding="utf-8") as f:
+        js_source = f.read()
 
-    add_tutorial_to_patch(maxpat, steps, annotation_ids, panel_ids, js_name)
+    add_tutorial_to_patch(maxpat, steps, annotation_ids, panel_ids, js_name, js_source=js_source)
 
     with open(out_path, "w") as f:
         json.dump(maxpat, f, indent=2)

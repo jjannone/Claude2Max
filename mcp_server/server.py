@@ -339,8 +339,10 @@ def _extract_tagged_sections(text: str, tag: str) -> list[str]:
 
     A section runs from its heading to the next heading of the same or a
     higher level, so a tagged `## ` carries its `### ` children and a tagged
-    `### ` stops at the next `### ` or `## `. The tag is stripped from the
-    rendered heading; other tags on the same heading are stripped too.
+    `### ` stops at the next `### ` or `## `. Tags are stripped from every
+    heading in the rendered section — the matched one and any child heading
+    that carries its own tag (a `### ` tagged `{!core}` inside a `## ` tagged
+    `{!layout}` reaches both modules, and neither shows the literal).
     """
     token = "{!" + tag + "}"
     lines = text.splitlines()
@@ -356,7 +358,7 @@ def _extract_tagged_sections(text: str, tag: str) -> list[str]:
                 if m2 and len(m2.group(1)) <= level:
                     break
                 j += 1
-            body = [_strip_tags(lines[i])] + lines[i + 1:j]
+            body = [_strip_tags(l) if _HEADING_RE.match(l) else l for l in lines[i:j]]
             out.append("\n".join(body).rstrip())
             i = j
         else:

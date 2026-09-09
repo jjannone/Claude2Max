@@ -149,6 +149,11 @@ _UNIVERSAL_BOX_ATTRS = {
     # jit.time.perlin) — the signature of universal box metadata Max writes, not
     # an object-specific attribute. Same class of key as the rest of this set.
     "linecount",
+    # presentation_linecount: the same metadata for the presentation view — Max
+    # writes it on any wrapped box (newobj / message / comment, 535 in the C74
+    # help corpus), and the converter sets it when a presented text box is
+    # narrower than its text.
+    "presentation_linecount",
 }
 
 # Attribute-name prefixes written onto boxes by Max's OWN tooling rather than by
@@ -165,6 +170,22 @@ _UNIVERSAL_BOX_ATTRS = {
 # (see _GateResolver._load_observed_attrs); this is the matching suppression on
 # the reporting side, so the two halves agree.
 _TOOL_STAMPED_ATTR_PREFIXES = ("rnbo", "frozen")
+
+# Two boxes whose left edges are this close are "in a column" for the
+# short-cord exemption in rule_cord_too_short.
+_COLUMN_ALIGN_PX = 4
+
+# Box keys Max treats as structure, not attributes: a parameter-enabled object
+# (live.tab, live.menu, live.dial, …) keeps its parameter block — initial value,
+# range, longname, unit style — under `saved_attribute_attributes`, and a box
+# holding a subpatcher keeps its description/tags under
+# `saved_object_attributes`. Neither appears in any refpage attribute list, and
+# both are valid on any box that carries them. They reach a spec's `attrs`
+# because that is the only channel the converter copies into a box (and sync
+# preserves them — spec2maxpat._PRESERVE_ATTRS), so the attribute rule must not
+# read them as invented names. The native gate already skips them
+# (spec2maxpat._MAXPAT_STRUCTURAL_KEYS); this keeps the two paths agreeing.
+_STRUCTURAL_BOX_KEYS = frozenset({"saved_attribute_attributes", "saved_object_attributes"})
 
 # Messages nearly every object accepts — never flag these as suspect. Kept small
 # and high-confidence: flagging a REAL message as fake is worse than missing one.
@@ -813,9 +834,24 @@ def rule_presentation_overlap(ctx: SpecContext) -> list:
         else:
             presented.append((oid, r))
     out = []
+
+    def _click_target(obj) -> bool:
+        # A button drawn fully transparent (bgcolor alpha 0) is a click target
+        # laid over something readable — a comment made clickable. Overlapping
+        # its label is its purpose, not a layout bug.
+        if ctx.maxclass(obj) != "button":
+            return False
+        attrs = obj.get("attrs") if isinstance(obj.get("attrs"), dict) else obj
+        bg = attrs.get("bgcolor")
+        return isinstance(bg, (list, tuple)) and len(bg) == 4 and float(bg[3]) == 0.0
+
     for i in range(len(presented)):
         for j in range(i + 1, len(presented)):
             (a_id, a), (b_id, b) = presented[i], presented[j]
+            oa, ob = ctx.objects[a_id], ctx.objects[b_id]
+            if (_click_target(oa) and ctx.maxclass(ob) == "comment") or \
+               (_click_target(ob) and ctx.maxclass(oa) == "comment"):
+                continue
             depth = _rects_intersect(a, b)
             if depth:
                 out.append(Violation(
@@ -835,6 +871,68 @@ def rule_presentation_overlap(ctx: SpecContext) -> list:
                     f"presented panel. Grow the panel meant to hold it or move the box.",
                     "MAX_PATCHING.md > Every presentation row needs its own vertical budget",
                 ))
+    return out
+
+
+def _is_presented(ctx: SpecContext, obj: dict) -> bool:
+    # Spec mode carries `presentation` / `presentation_rect` on the object; the
+    # native derivation carries only attr names, so `presentation` lands in attrs.
+    return ctx.has_presentation(obj) or _truthy(ctx.attrs(obj).get("presentation"))
+
+
+_PANEL_LAYER_SOURCE = "MAX_PATCHING.md > Presentation panels live in the background layer"
+
+
+def rule_panel_background_layer(ctx: SpecContext) -> list:
+    """Presentation panels live in the background layer.
+
+    A panel is scenery: it groups controls, it is never a control, and while
+    someone edits the patch it must not be selectable or in the way of a click.
+    Three settings make that true, and the converter supplies the third (it
+    emits every `panel` box after every non-panel box), so this rule checks the
+    two the author has to write:
+
+    (a) `panel-not-background` — a presented panel without `background: 1`
+        (Max's Arrange > Include in Background). Both modes.
+    (b) `panel-bglocked-missing` — a spec with presented panels whose root
+        lacks `bglocked: 1` (Max's View > Lock Background: "objects in the
+        background cannot be selected"). Spec mode only — the native
+        derivation carries no patcher-level keys, and no shipped C74 help file
+        locks its background (0 of 584 carrying the key), so a native warning
+        would be noise on files that are meant to be taken apart.
+
+    Motivating case: reverb-shootout (2026-09-08) declared one panel per
+    section next to that section's controls — every panel painted over the
+    controls declared before it and every panel was selectable while editing.
+    Ableton's own ABL Effect Modules set background: 1 on 83 of 85 panels.
+    """
+    out = []
+    presented_panels = []
+    for oid, obj in ctx.objects.items():
+        if not isinstance(obj, dict) or ctx.maxclass(obj) != "panel":
+            continue
+        if not _is_presented(ctx, obj):
+            continue
+        presented_panels.append(oid)
+        if not _truthy(ctx.attrs(obj).get("background")):
+            out.append(Violation(
+                "panel-not-background", WARNING, oid,
+                f"Presented panel '{oid}' is not on the background layer. Set "
+                f"attrs.background: 1 (Max's Arrange > Include in Background) so "
+                f"it paints behind every control and, with the background locked, "
+                f"cannot be selected while editing.",
+                _PANEL_LAYER_SOURCE,
+            ))
+    if presented_panels and not ctx.native and not _truthy(ctx.spec.get("bglocked")):
+        out.append(Violation(
+            "panel-bglocked-missing", WARNING, "(patcher)",
+            f"Patch has {len(presented_panels)} presented panel(s) but the spec "
+            f"root does not set bglocked: 1 (Max's View > Lock Background). "
+            f"Without it every panel is selectable and draggable while editing. "
+            f"Add \"bglocked\": 1 at the top level of the spec; the converter "
+            f"writes it to the patcher and sync carries it back.",
+            _PANEL_LAYER_SOURCE,
+        ))
     return out
 
 
@@ -1020,8 +1118,12 @@ def rule_script_object_declarations(ctx: SpecContext) -> list:
         and non-functional; `jsui foo.js` as a newobj is the same mistake.
     (2) A `v8`/`js` newobj without `inlets`, `outlets`, and `outlettype` is
         built on the converter's defaults, which are not the script's.
+    (3) A `v8`/`js` newobj that names a script but does not ask for `@embed 1`
+        (and carries no `attrs.textfile` with embed 1) runs only while the .js
+        sits next to the patch — a red box the moment the file does not travel.
     Source: SPEC_REFERENCE.md > v8 / JavaScript Objects (jsui objects; "always
-    override inlets, outlets, and outlettype").
+    override inlets, outlets, and outlettype"); CLAUDE.md > Embed the Script in
+    Every v8 Box.
     """
     if ctx.native:
         return []   # a derived spec carries neither attrs.filename nor declared I/O
@@ -1057,6 +1159,19 @@ def rule_script_object_declarations(ctx: SpecContext) -> list:
                     f"Script objects are not in the converter's I/O table — declare "
                     f"all three to match the script's `inlets` / `outlets`.",
                     "SPEC_REFERENCE.md > v8 / JavaScript Objects",
+                ))
+            script = next((t for t in toks[1:] if not t.startswith("@")), None)
+            embed_tok = "1" if "@embed" not in toks else toks[toks.index("@embed") + 1:][:1] or ["1"]
+            asks = "@embed" in toks and embed_tok[0] not in ("0", "0.")
+            tf = ctx.attrs(obj).get("textfile")
+            carried = isinstance(tf, dict) and tf.get("embed") == 1
+            if script and not asks and not carried:
+                out.append(Violation(
+                    "script-not-embedded", WARNING, oid,
+                    f"'{oid}' ({ctx.text(obj)}) loads {script} from disk only. Add "
+                    f"`@embed 1` to the box text so the converter stores the source in "
+                    f"the patch and the box still runs when the .js does not travel with it.",
+                    "CLAUDE.md > Embed the Script in Every v8 Box",
                 ))
     return out
 
@@ -1381,6 +1496,13 @@ def rule_cord_too_short(ctx: SpecContext) -> list:
     Vertical clearance `dst.y - (src.y + src.h)` that is positive but under
     15 px is a cord too short to see or click; the doc recommends ~30 px.
     Negative clearance is (d)'s or the overlap rule's territory.
+
+    Exempt: a straight vertical drop — source and destination left edges
+    within a few px — inside a column. A vertical cord between two stacked
+    boxes reads as "this feeds that" at any length; the clearance is needed
+    for cords that travel sideways. John's compact parameter columns
+    (2026-09-08: init message → flonum → parameter message, 8 px apart)
+    are the case.
     Source: MAX_PATCHING.md > Leave enough vertical space under a box for its
     cords to read as cords.
     """
@@ -1393,6 +1515,8 @@ def rule_cord_too_short(ctx: SpecContext) -> list:
         if sr is None or dr is None:
             continue
         gap = dr[1] - (sr[1] + sr[3])
+        if abs(dr[0] - sr[0]) <= _COLUMN_ALIGN_PX and conn[1] == 0 and conn[3] == 0:
+            continue  # a straight drop within a column: readable at any length
         if 0 < gap < _CORD_TOO_SHORT_PX:
             out.append(Violation(
                 "cord-too-short", STYLE, f"connections[{i}]",
@@ -1814,6 +1938,8 @@ def rule_attribute_resolves(ctx: SpecContext, resolver) -> list:
         for a in attrs:
             if a in _UNIVERSAL_BOX_ATTRS or a in valid:
                 continue
+            if a in _STRUCTURAL_BOX_KEYS:
+                continue  # parameter block / subpatcher metadata, not an attr
             if a.startswith(_TOOL_STAMPED_ATTR_PREFIXES):
                 continue  # written by Max's tooling, not by the patch author
             out.append(Violation(
@@ -1913,6 +2039,7 @@ REGISTRY = [
     rule_debug_marking,
     # warnings — item 13 family (2026-09-08)
     rule_presentation_overlap,
+    rule_panel_background_layer,
     rule_comment_contrast,
     rule_template_on_right_inlet,
     rule_textedit_into_template,

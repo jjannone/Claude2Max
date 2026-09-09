@@ -55,7 +55,7 @@ Plan the graphic elements **before** placing controls — they consume real spac
 The output of this skill is either:
 
 1. **An HTML/CSS mock** for visual review (use `c2m-themes/tokens.css` + the chosen theme), OR
-2. **Patch deltas** — a list of presentation-mode `presentation_rect` values, `bgcolor` / `textcolor` / `bordercolor` / `tricolor` etc. attribute changes, and any new `panel`/`comment`/`fpic` boxes — applied via `extract → edit → convert` against the existing `.maxpat`.
+2. **Patch deltas** — a list of presentation-mode `presentation_rect` values, `bgcolor` / `textcolor` / `bordercolor` / `tricolor` etc. attribute changes, and any new `panel`/`comment`/`fpic` boxes — applied by editing the boxes in the existing `.maxpat` and syncing (convert only when a rebuild is specifically needed — CLAUDE.md > Never Use `convert` Unless It Is Specifically Needed).
 
 Per the **"Modify, Don't Rebuild"** rule in `CLAUDE.md`: never rebuild the spec from scratch when adding a theme to an existing patch. Always extract the embedded spec, apply only the deltas, convert back. The original's wiring, defaults, alignment offsets, and tutorial system must survive.
 

@@ -37,7 +37,7 @@ import spec2maxpat as s2m      # REFPAGE_CACHE (used indirectly via add_tutorial
 
 
 # Pattern matching the v8 tutorial controller emitted by add_tutorial.py
-_TUTORIAL_V8_RE = re.compile(r"^v8\s+(\S+-tutorial\.js)\s*$")
+_TUTORIAL_V8_RE = re.compile(r"^v8\s+(\S+-tutorial\.js)(?:\s+@\S.*)?\s*$")   # trailing @embed 1 allowed
 # Pattern matching the STEPS array literal inside that JS file
 _TUTORIAL_STEPS_RE = re.compile(r"var\s+STEPS\s*=\s*(\[.*?\]);", re.DOTALL)
 

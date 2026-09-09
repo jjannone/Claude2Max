@@ -67,6 +67,10 @@ After fixing any error, derive a general rule that would have prevented it. Pres
 
 **Lead with intent, follow with example.** State what you're trying to achieve in plain terms first, then illustrate with a concrete case introduced as "for instance." This keeps the principle readable and applicable broadly, while still giving actionable guidance. Rules that lead with a specific method risk being read as recipes rather than principles.
 
+## Ask Before Taking Control of the Computer — Binding Rule
+
+Never drive the user's screen, mouse, keyboard, or a running application (the computer-use tools, Max itself, a browser acting on the user's own sessions) without asking first and waiting for a yes, in that conversation, for that task. The user is at the machine and can check a running Max faster and more safely than an automated click can; a request to verify something in Max is a request for the user to look, unless they say otherwise. Loading the tool schemas is fine; calling `request_access` or any action tool is not. This is a per-task permission: a yes for one check does not carry over to the next. (John, 2026-09-09, after Claude reached for computer control to test a click in Max.)
+
 ## Verify External State — Never Assert from Memory {!core}
 
 Before making any claim about the state of an external or shared system — GitHub repo visibility, remote branch status, CI results, whether a file exists on a remote, whether a service is available — verify it with the appropriate tool first. Memory, inference from local context, and reasonable assumptions are not sufficient. A wrong assertion is worse than a delayed one.
@@ -222,9 +226,21 @@ Bad commit moments (do NOT suggest here): mid-debug, mid-iteration, after a part
 
 When the user does commit at one of these moments, the follow-up is: (a) confirm `WORK_HISTORY.md` has the session's summary; (b) verify any pending changes in the actual application before they start the next session — easier to iterate while context is warm than after a cold restart; (c) note any chips/follow-ups that should survive into the next session via files rather than memory.
 
+## Never Use `convert` Unless It Is Specifically Needed — Binding Rule {!core}
+
+Changes to a patch are edits and updates made by the user. They must be reflected in the spec, not removed. `convert` rebuilds the whole `.maxpat` from the spec, and the spec cannot describe everything Max saves: a plug-in loaded into a `vst~` box, `parameter_enable` flags, a panel's gradient settings, and whatever else Max writes on save. Convert drops all of it without a warning. The patch opens, the plug-in is gone, and nobody finds out until later.
+
+So the default for any change to an existing patch is: **edit the boxes in the `.maxpat` directly, then run `sync`** so the spec follows the patch. The patch is the source of truth; the spec is a description of it. `convert` is for building a new patch from a spec, or for a rebuild the user has specifically asked for. Before running it on any patch that has ever been saved from Max, say what it will lose and get the go-ahead.
+
+For instance: adding `@embed 1` to one `v8` box in `kslider-restrike` by sync → convert threw away the loaded Podolski plug-in. Editing that box in the file and syncing kept it, and the spec still matched the boxes afterwards.
+
+John's wording, 2026-09-09: "never use convert unless it's specifically needed — in general, changes to a patch are edits/updates made by the user, and they should be reflected in the spec, not removed."
+
+**If anything has changed that the spec cannot include, update the spec design.** A patch carrying state the spec has no field for is a gap in the spec format, not a reason to accept the loss. Add the field, teach `sync` to fill it from the file and `convert` to write it back, and add a test that round-trips it. The two pass-through fields that exist for this reason are `patcher_extras` at the root (Snapshots, the parameter registry) and `box_extras` on each object (a plug-in snapshot on `vst~`, `parameter_enable`, panel gradient keys, anything else Max writes on a box); `sync` also mirrors the saved `inlets` / `outlets` / `outlettype` into the spec's own fields. Both were added the day the loss was found. The recognition signal: any key in a `.maxpat` that a sync → convert round trip does not reproduce. The check is a few lines — diff the boxes of the file against the boxes of a convert of its synced spec — and it belongs in the repo's tests, not in memory.
+
 ## Modify, Don't Rebuild — and Treat Observed-Good Patterns as Binding {!core}
 
-When the task is a new version of an existing patch, the default workflow is `extract → edit → convert`: pull the embedded spec, modify only what is changing, write back. Rebuilding the spec from scratch is the wrong default — it silently drops every working detail of the original that does not make it into the new build. Alignment offsets, init defaults, wiring patterns, sub-systems, naming conventions, and dozens of micro-decisions that took prior sessions to get right vanish without warning. Only build from scratch when the new version shares less than half its structure with the original.
+When the task is a new version of an existing patch, the default workflow is `edit the .maxpat → sync`: change only the boxes that are changing, then let sync carry the change into the spec (see *Never Use `convert` Unless It Is Specifically Needed*). When a rebuild is specifically needed, it is `extract → edit → convert`: pull the embedded spec, modify only what is changing, write back. Rebuilding the spec from scratch is the wrong default — it silently drops every working detail of the original that does not make it into the new build. Alignment offsets, init defaults, wiring patterns, sub-systems, naming conventions, and dozens of micro-decisions that took prior sessions to get right vanish without warning. Only build from scratch when the new version shares less than half its structure with the original.
 
 **The companion rule: observed-good patterns are binding.** Any pattern noticed as "what's working" in analysis or critique creates an obligation to preserve that pattern in any subsequent implementation. Praising-without-applying is worse than not noticing at all — it proves the information was available and ignored. Marking something as good is an implicit commitment to keep it.
 
@@ -312,6 +328,14 @@ Where Max offers two objects for the same job and one carries its behavior in an
 
 The general form of this rule, beyond lists: any time you are choosing between two objects that do the same thing, prefer the one whose behavior you can *read off the box*. Related but distinct from *Prefer an Object's Own Attribute Over an Adapter Chain* — that rule is about not adding an object, this one is about which object to add.
 
+## Don't Add an Object That Duplicates What an Object Already in the Patch Does — Binding Rule {!core}
+
+Before adding any object, check whether an object already in the patch does that job on its own, through a creation argument, an attribute, a message it accepts, or its default behavior. An object added to do what a neighbor already does is one more box to read, one more cord to trace, and a second place the behavior is set, so the two can disagree later. The essential objects of a patch carry a great deal of built-in behavior, and a reader should learn that behavior from the object itself, not from a helper wired beside it.
+
+For instance, three additions removed from the MIDI teaching examples on 2026-09-08 at John's direction: a `[loadmess 12]` feeding a number box whose only destination was `[+ 12]`, when the argument already sets the starting value; a `[loadmess 0]` into a toggle, when a toggle starts off and sends nothing until it is clicked; and a `[flush]` object under a `[kslider]`, when `kslider` accepts a `flush` message itself in polyphonic mode.
+
+The recognition signal: the object I am about to add exists only to initialize, reset, convert, or clear something for one neighbor. That is the moment to read the neighbor's refpage for the argument, attribute, or message that does it directly. This is the third rule of a family. *Prefer an Object's Own Attribute Over an Adapter Chain* asks whether an attribute replaces a downstream object; *Prefer the Object That States Its Behavior in an Attribute* asks which of two objects to add; this rule asks whether to add one at all. It also bounds *Every control must initialize to a known state on patch load* in `patching/MAX_PATCHING.md`: an init object is owed only when the control's default state is not the intended one, or when a downstream object has no default of its own.
+
 ## Don't Use `[textedit]` for Set-Once Configuration — Binding Rule {!core}
 
 `[textedit]` is the wrong object for any configuration value that is set once and then largely left alone (URLs, identifiers, file paths, hostnames, slugs, API keys, sample paths). It has three properties that make it brittle for this use case:
@@ -397,6 +421,20 @@ When writing a `v8`/`js`/`jsui` object — or any new object that is **not** hig
 
 This pairs with **Never Regress Functionality When Changing Modality** (a reimplementation arrives at least as capable) and **Never Write API Names From Memory** (verify the inherited object's real messages/attributes against its refpage before mirroring them). Note for verification: a custom object has no C74 refpage, so the `verify_spec` gate can't check its attributes — shipping a `<name>.maxref.xml` (and a `<name>.maxhelp`) for any reusable object you create lets the gate and other tooling validate it like a built-in.
 
+## Embed the Script in Every v8 Box — Binding Rule {!core}
+
+A patch must carry everything it needs to run. When a box loads its code from a sibling file and the object offers a way to store that code inside the patch, use it — **even when the file is also saved on disk.** The file is the editing surface; the copy inside the patch is what survives transport. A patch that is mailed, copied to another machine, pasted from the clipboard, or committed without its sibling file otherwise opens with a dead box, and Max reports it only as a console line most operators never read.
+
+In practice, for `v8` / `js`: write `@embed 1` in the box text — `v8 mylogic.js @embed 1`, or `v8 fx-shootout-highlight.js 15 @embed 1` when the script takes arguments. That is the `embed` attribute the v8 refpage labels "Save Javascript with Patcher", and it is how C74's own `v8.maxhelp` writes its box (`v8 videotester @embed 1`). Keep the `.js` next to the patch anyway — that is where the script is edited, and `autowatch` reloads it from there. What each part of the toolkit does with it:
+
+- **The converter** reads the file at convert time and stores the source in the box's `textfile.text` (the block Max itself writes on save, alongside `filename`, `flags`, `embed`, `autowatch`). It looks in the output patch's folder, then the spec's folder, plus `code/` and `javascript/` subfolders. So convert with `-o` pointing next to the `.js`; if the file is not found and the spec holds no copy, convert prints a warning and the patch ships without the source.
+- **Sync** carries `textfile` back into the spec, so a patch that arrived *without* its `.js` still holds the code through the next convert. The file on disk wins whenever it is found.
+- **The verifier** warns (`script-not-embedded`) on any `v8` / `js` box that names a script without asking to embed it.
+
+The copy in the patch is refreshed only when the converter runs or Max saves. After editing a `.js`, re-convert (or save from Max) before the patch travels, or it carries the previous version. Which copy Max runs when the file *is* present has not been verified here; keeping the two identical by re-converting makes the question moot.
+
+The recognition signal: any box whose text names a file. That is the moment to read the object's refpage for an embed attribute before deciding the file alone is enough. `v8ui` documents the same `embed` attribute; the on-disk shape for a UI box has not been observed yet, so verify one saved from Max before relying on it. Embedded patchers are the same principle with a different mechanism — the spec's `maxpat` field on a `bpatcher` (see `SPEC_REFERENCE.md > Embedding an existing patcher verbatim`).
+
 ## Attribute Labels Must Begin With the Attribute's Own Word — Binding Rule {!core}
 
 The goal is a list a human can scan: `attrui` and the Inspector list an object's attributes **alphabetically by their human-readable `label`, not by the attribute name.** So when you give an attribute a `label` (the `label:` field in `declareattribute`, or any equivalent), the label **must begin with the same word the attribute name begins with.** Then someone who knows the attribute is `@slidermode` can find it by scanning the list for "Slider…"; if the label leads with some other word, the entry is effectively unfindable — the reader has to open and read every line. Lead with the attribute's own leading word, then add clarifying words or a parenthetical.
@@ -424,6 +462,16 @@ A column of `attrui` / `number` / `toggle` controls dumped in declaration order 
 This applies anywhere bound controls are laid out: help files, test/comparison benches, and presentation views. The grouping *is* documentation — it tells the operator which knobs are related without them having to flip each one to find out.
 
 For instance: the `zkeyboard` bench first packed all 32 `attrui`s in declaration order; regrouped into labeled bands — *kslider attrs · display · slider values · slider display · slider colors · dots* — the same controls became scannable, and "which attributes affect the slider face?" is answered by reading one header instead of testing every box. Pair this with the demo-visibility rule below: a grouped, labeled control surface where every control also produces visible change is a patch the operator can learn by clicking.
+
+## Every Copy of a List Shows the Same Order and the Same Numbering — Binding Rule {!core}
+
+A list of choices almost never lives in one place. The same set of options appears as `tab` items, as `umenu` entries, as section-header comments in the patching view, as labels in the presentation view, in a `coll` or `dict` that drives the routing, in a JS array, and in the `README` or tutorial text that describes them. The operator switches between those copies constantly: read the label, click the tab, count down the `selector~` inlets. Every copy must present the items **in the same order**, and if the list is numbered, **the number must appear on every copy** — the tab item, the menu entry, the header comment, the presentation label, the doc — not just on some of them. A numbered list where one copy carries the numbers and another does not is two different lists to the person reading them: "9 · Gigaverb" in the header and plain "Gigaverb" in the tab forces the operator to count tab items by hand to find out that the ninth one is the one the header means, and one miscount routes the wrong reverb.
+
+The numbering is a shared index, so it is owned by the whole set of copies, not by whichever one was edited last. **When an item is added, deleted, or moved, every copy is renumbered and reordered in the same edit.** Editing one copy and leaving the others is how a patch ends up with two "item 12"s, a tab that says "Prism" where the header says "Quartz", and a `selector~` inlet that matches neither. Before declaring the change done, walk every surface the list reaches and confirm the same sequence appears on each, with the same numbers in the same positions.
+
+This is a symmetry rule, like *Never Regress Functionality When Changing Modality*: a change to the list in one modality must land in all of them. The recognition signal is any edit that touches an item in *one* of these places — a `tabs` attribute, a `umenu` `items` list, a header comment, a JS array literal — without a matching edit elsewhere. That is the moment to grep for the other copies.
+
+For instance: `patches/shootouts/reverb-shootout.maxpat` numbers each reverb in its patching-view header comment ("9 · bp.Gigaverb — BEAP module, stereo in") and in its short presentation label ("9 · BEAP bp.Gigaverb"), because the number is the `selector~` inlet the reverb feeds. The `tab` that actually selects the reverb lists the same eighteen items in the same order but with no numbers at all ("DRY", "cverb~", "Live-Reverb", …). So the one surface the operator clicks is the one surface that does not show the index every other surface is keyed to. The fix is to number the tab items too, so all three copies read the same.
 
 ## Demos, Help Files, and Test Patches Must Demonstrate Functionality Visibly — Binding Rule {!core}
 
@@ -572,7 +620,7 @@ When planning a patch for a student, default to the objects in the table below f
 |---|---|---|
 | Play a sound file | `playlist~` | One object, multi-file with crossfades; vastly better than rolling `sfplay~` + bank logic by hand. |
 | Play video | `jit.playlist` | Same idea on the Jitter side — multi-clip playlist with crossfades. |
-| Audio I/O | `ezadc~` (input) / `ezdac~` (output) | The toggle-style I/O objects. Click the speaker icon to enable. Don't use `adc~` / `dac~` for student patches — the toggle UI is the point. |
+| Audio I/O | `ezadc~` (input) / `ezdac~` (output) | The toggle-style I/O objects. Click the speaker icon to enable. Don't use `adc~` / `dac~` for student patches — the toggle UI is the point. **A live input always gets its own mute toggle, loading muted** — `ezadc~`'s button is DSP on/off, not a mute (rule in `patching/MAX_PATCHING.md`). And never mix signals with `+~`: cords landing on one inlet sum by themselves. |
 | MIDI input | `notein` / `ctlin` / `bendin` directly | Skip `midiin` + `midiparse` — go straight to the object that emits the data you need. |
 | MIDI output | `noteout` / `ctlout` directly | Same as input — direct objects, no `midiformat` + `midiout` intermediate. |
 | Audio synthesis — basic oscillators | `saw~` / `tri~` / `rect~` | The trio of bandlimited classic waveforms. Pick the one whose harmonic content matches the timbre you want; layer two or more for richer tones. |
@@ -610,7 +658,7 @@ When in doubt — or before composing any chain of 3+ native objects — run `py
 
 ### Existing patch (externally sourced or manually edited)
 
-Run `/c2m-sync` first. Extract, edit, convert. All patches live in `patches/`.
+Run `/c2m-sync` first. Then edit the boxes in the `.maxpat` and sync again; use `convert` only when a rebuild is specifically needed (see *Never Use `convert` Unless It Is Specifically Needed*). All patches live in `patches/`.
 
 ## Max Compressed Text (MCT)
 
@@ -630,6 +678,7 @@ To decode MCT received in the conversation: `python3 -c "from spec2maxpat import
 - `patching/JIT_GEN_PATCHING.md` — jit.gen / jit.gl.pix programming model (per-cell / per-pixel), position primitives (`norm`, `cell`, `dim`), texture sampling, distance-field idioms. Read before any work inside a `jit.gen` / `jit.gl.pix` box.
 - `patching/JITTER_JS_PATCHING.md` — JitterMatrix API from `[js]` / `[v8]`: constructor forms (and the name-as-first-arg trap), `setall` / `setcell2d` / `getcell2d`, inlet/outlet declaration, the canonical "consume and emit" template, and when to reach for `jit.gen` / `jit.gl.pix` / `jit.expr` instead. Read before any JS-driven matrix work.
 - `patching/M4L_PATCHING.md` — Max for Live patterns: Live Object Model access chain, `live.thisdevice` init signal, `getpath` + `deferlow` race, Push 3 polyphonic pressure, `live.*` UI styling, `.amxd` packaging. Read before any M4L device work.
+- `tools/fx_shootout_builder.py` — first-draft builder for the `patches/shootouts/*-shootout.maxpat` effect comparisons (slot tables per category; shared `patches/shootouts/fx-shootout-highlight.js`). First draft only: once a shootout has been edited in Max, the `.maxpat` is the source of truth — edit the boxes and sync, never re-run the builder over it, and convert only when specifically needed.
 - `spec2maxpat.py` — The converter. I/O data from C74 maxref.xml via `RefpageCache`; no external database.
 - `TUTORIAL_GUIDELINES.md` — Tutorial structural contract, panel/annotation attrs, comment-pile pattern, breakage diagnostic.
 - `packages/package_objects.json` — Curated reference of installed Max package objects with `use_when` judgments.
@@ -1073,7 +1122,7 @@ This is the counterpart to *Never Hide Patchcords or Boxes*: since nothing in a 
 
 Conventions for every debug addition:
 
-- **Distinct bgcolor** — magenta `[1.0, 0.3, 0.8, 1.0]` reserved repo-wide for debug additions, with matching `bordercolor`. Not used elsewhere in Claude2Max's style guide.
+- **Distinct color** — magenta `[1.0, 0.3, 0.8, 1.0]` reserved repo-wide for debug additions. Not used elsewhere in Claude2Max's style guide. Which attribute carries it depends on the class, so check `list_attributes` per class: `bgcolor` on comments, messages, buttons, panels and most UI objects; `color` on plain object boxes (`r~`, `peakamp~`, `v8`, `jsui` have no `bgcolor`); a border attribute only where the class has one (`bordercolor` exists on `toggle`, `number`, `flonum`, `slider`, `attrui`, `panel`, not on `comment`, `message` or `button`). Verified against the refpage registry 2026-09-08 after the convert gate rejected 20 debug boxes that had been given `bgcolor` and `bordercolor` from memory.
 - **Adjacent comment label** — text `🔍 DEBUG (Claude) — remove when done`, same magenta bgcolor. One label per cluster, not per box.
 - **Spatially grouped** — place the cluster in the bottom-right corner of the patching view (or another corner the working graph doesn't occupy), physically separated from the patch's main flow so the operator's eye can ignore it.
 - **Tracked in the embedded spec** — add a top-level `debug_additions: ["<id1>", "<id2>", …]` array to the spec listing every debug object's ID. This lets a future cleanup pass find and remove all of them mechanically without parsing colors.
@@ -1103,7 +1152,7 @@ The OSC pathway is one-way: Max writes JSON to disk, the Python sender polls dis
 
 Headings in any `*.md` at the repo root tagged `{!pre-edit}` or `{!pre-commit}` are re-surfaced by `hooks/inject_admonitions.py` as `additionalContext` at the matching moment — `pre-edit` fires on Edit/Write tool calls; `pre-commit` fires when a Bash command contains `git commit`. To add a new at-action-point reminder: append the tag to any heading. No Python changes needed.
 
-The same tag syntax also decides what the MCP server's knowledge modules carry. A heading in `CLAUDE.md`, `patching/MAX_PATCHING.md`, or `SPEC_REFERENCE.md` tagged `{!core}` is included, verbatim, in `load(["core"])` — the module every Max session loads first; `{!layout}` builds the `layout` module (box placement, presentation design, spacing); any other `{!<domain>}` (`{!networking}`, `{!msp}`, `{!jitter}`, …) appends the section to that domain's module. A tagged `## ` heading carries its `### ` children; tag a `### ` on its own when its parent is repo process rather than Max knowledge. The extractor is `_extract_tagged_sections` in `mcp_server/server.py`, mtime-cached, so a tag added to a doc is live on the next `load()` without a restart. Tag only Max knowledge — a Claude in another repo has no use for fork setup, commit cadence, or model selection. This replaced a hand-written digest literal on 2026-09-08; `mcp_server/tests/test_modules.py` asserts every tagged heading reaches its module.
+The same tag syntax also decides what the MCP server's knowledge modules carry. A heading in `CLAUDE.md`, `patching/MAX_PATCHING.md`, or `SPEC_REFERENCE.md` tagged `{!core}` is included, verbatim, in `load(["core"])` — the module every Max session loads first; `{!layout}` builds the `layout` module (box placement, presentation design, spacing); any other `{!<domain>}` (`{!networking}`, `{!msp}`, `{!jitter}`, …) appends the section to that domain's module. A tagged `## ` heading carries its `### ` children; tag a `### ` on its own when its parent is repo process rather than Max knowledge, or when a subsection belongs in a second module as well (a `### ` tagged `{!core}` under a `## ` tagged `{!layout}` reaches both). Tags are stripped from every heading a module renders. The extractor is `_extract_tagged_sections` in `mcp_server/server.py`, mtime-cached, so a tag added to a doc is live on the next `load()` without a restart. Tag only Max knowledge — a Claude in another repo has no use for fork setup, commit cadence, or model selection. This replaced a hand-written digest literal on 2026-09-08; `mcp_server/tests/test_modules.py` asserts every tagged heading reaches its module.
 
 ## Keeping Docs in Sync {!pre-commit}
 

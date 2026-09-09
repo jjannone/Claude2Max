@@ -595,10 +595,103 @@ def test_presentation_no_panels_no_containment_check():
     assert "presentation-outside-panel" not in _rules(verify_spec(spec))
 
 
+def test_transparent_button_over_comment_is_a_click_target():
+    """A button with bgcolor alpha 0 laid exactly over a comment is deliberate
+    (a clickable title); the overlap rule must not report it."""
+    spec = {"objects": {
+        "pnl": {"type": "panel", "presentation": [0, 0, 300, 100], "attrs": {"background": 1}},
+        "btn": {"type": "button", "presentation": [10, 10, 160, 20],
+                "attrs": {"bgcolor": [0.0, 0.0, 0.0, 0.0], "outlinecolor": [0.0, 0.0, 0.0, 0.0]}},
+        "ttl": {"type": "comment", "text": "2 · Live-Reverb", "presentation": [10, 10, 160, 20]},
+    }, "connections": [], "bglocked": 1}
+    assert "presentation-overlap" not in _rules(verify_spec(spec))
+    # an opaque button over the same comment is still an overlap
+    spec["objects"]["btn"]["attrs"]["bgcolor"] = [0.2, 0.2, 0.2, 1.0]
+    assert "presentation-overlap" in _rules(verify_spec(spec))
+
+
 def test_two_overlapping_panels_not_reported():
     spec = {"objects": {"outer": _panel(0, 0, 400, 400), "inner": _panel(20, 20, 100, 100)},
             "connections": []}
     assert "presentation-overlap" not in _rules(verify_spec(spec))
+
+
+# (a2) panel-background-layer ------------------------------------------------
+def _bg_panel(x, y, w, h):
+    p = _panel(x, y, w, h)
+    p["attrs"] = {"background": 1}
+    return p
+
+
+def test_panel_not_background_warns():
+    spec = {"objects": {"panel": _panel(0, 0, 200, 100),
+                        "n": _pres("number", [10, 10, 50, 22])},
+            "connections": [], "bglocked": 1}
+    assert "panel-not-background" in _rules(verify_spec(spec))
+
+
+def test_panel_bglocked_missing_warns_once():
+    spec = {"objects": {"a": _bg_panel(0, 0, 200, 100), "b": _bg_panel(0, 110, 200, 100),
+                        "n": _pres("number", [10, 10, 50, 22])},
+            "connections": []}
+    r = verify_spec(spec)
+    hits = [v for v in r["violations"] if v["rule"] == "panel-bglocked-missing"]
+    assert len(hits) == 1 and hits[0]["location"] == "(patcher)"
+    assert "panel-not-background" not in _rules(r)
+
+
+def test_panel_layer_clean():
+    spec = {"objects": {"panel": _bg_panel(0, 0, 200, 100),
+                        "n": _pres("number", [10, 10, 50, 22])},
+            "connections": [], "bglocked": 1}
+    rules = _rules(verify_spec(spec))
+    assert "panel-not-background" not in rules and "panel-bglocked-missing" not in rules
+
+
+def test_panel_layer_ignores_patching_only_panels():
+    # a panel with no presentation is patching-view scenery; the rule is about the operator's view
+    spec = {"objects": {"panel": {"type": "panel", "pos": [0, 0]},
+                        "n": _pres("number", [10, 10, 50, 22])},
+            "connections": []}
+    rules = _rules(verify_spec(spec))
+    assert "panel-not-background" not in rules and "panel-bglocked-missing" not in rules
+
+
+def test_panel_layer_native_mode_checks_background_only():
+    # native derivation: attrs carry names only, no rects, no patcher keys
+    spec = {"objects": {"obj-1": {"type": "panel", "attrs": {"presentation": 1}},
+                        "obj-2": {"type": "panel", "attrs": {"presentation": 1, "background": 1}}},
+            "connections": []}
+    r = verify_spec(spec, native=True)
+    hits = [v for v in r["violations"] if v["rule"] == "panel-not-background"]
+    assert [v["location"] for v in hits] == ["obj-1"]
+    assert "panel-bglocked-missing" not in _rules(r)
+
+
+def test_saved_attribute_attributes_not_an_invented_attr():
+    res = FakeResolver({"live.tab"}, attrs={"live.tab": {"num_lines_patching", "mode"}})
+    spec = {"objects": {"lt": {"type": "live.tab", "attrs": {
+        "saved_attribute_attributes": {"valueof": {"parameter_longname": "live.tab"}}}}},
+        "connections": []}
+    assert "attribute-invalid" not in _rules(verify_spec(spec, resolver=res))
+    spec["objects"]["lt"]["attrs"]["bgcolour"] = [0, 0, 0, 1]
+    assert "attribute-invalid" in _rules(verify_spec(spec, resolver=res))
+
+
+# cord-too-short: a straight drop in a column is exempt ---------------------
+def test_short_vertical_drop_in_column_is_fine():
+    spec = {"objects": {"init": {"type": "message", "text": "0.72", "pos": [508, 2854]},
+                        "f": {"type": "flonum", "pos": [508, 2884]},
+                        "m": {"type": "message", "text": "\"Small/Large Mix\" $1", "pos": [508, 2914]}},
+            "connections": [["init", 0, "f", 0], ["f", 0, "m", 0]]}
+    assert "cord-too-short" not in _rules(verify_spec(spec))
+
+
+def test_short_sideways_cord_still_flagged():
+    spec = {"objects": {"a": {"type": "message", "text": "0", "pos": [100, 100]},
+                        "b": {"type": "flonum", "pos": [260, 130]}},
+            "connections": [["a", 0, "b", 0]]}
+    assert "cord-too-short" in _rules(verify_spec(spec))
 
 
 # (b) comment-contrast -------------------------------------------------------
@@ -696,6 +789,17 @@ def test_script_object_declarations():
     assert len(io) == 1 and "outlettype" in io[0]["message"]
     # native-derived specs carry neither field: rule is silent there
     assert "script-filename-missing" not in _rules(verify_spec(bad, native=True))
+    # (3) a script named without @embed 1 warns; @embed 1 in the text, or a
+    # synced textfile block with embed 1, satisfies it
+    assert "script-not-embedded" in _rules(verify_spec(ok))
+    io = {"inlets": 1, "outlets": 1, "outlettype": [""]}
+    for text, attrs in (("v8 x.js @embed 1", {}), ("v8 x.js 15 @embed 1", {}),
+                        ("v8 x.js", {"textfile": {"embed": 1, "text": "inlets=1;"}})):
+        spec = {"objects": {"v": {"type": "newobj", "text": text, "attrs": attrs, **io}}, "connections": []}
+        assert "script-not-embedded" not in _rules(verify_spec(spec)), text
+    off = {"objects": {"v": {"type": "newobj", "text": "v8 x.js @embed 0", **io}}, "connections": []}
+    assert "script-not-embedded" in _rules(verify_spec(off))
+    assert "script-not-embedded" not in _rules(verify_spec(ok, native=True))
 
 
 # (o) attribute-group-incomplete ----------------------------------------------
@@ -813,12 +917,13 @@ def test_fanout_order():
 
 # (f) cord-too-short ----------------------------------------------------------
 def test_cord_too_short():
-    def spec(gap):
+    def spec(gap, dx=60):   # dx: a sideways cord; dx=0 is an aligned drop (exempt)
         return {"objects": {"a": {"type": "newobj", "text": "metro 500", "pos": [100, 100]},
-                            "b": {"type": "newobj", "text": "counter", "pos": [100, 100 + 22 + gap]}},
+                            "b": {"type": "newobj", "text": "counter", "pos": [100 + dx, 100 + 22 + gap]}},
                 "connections": [["a", 0, "b", 0]]}
     assert "cord-too-short" in _rules(verify_spec(spec(8)))
     assert "cord-too-short" not in _rules(verify_spec(spec(40)))
+    assert "cord-too-short" not in _rules(verify_spec(spec(8, dx=0)))
 
 
 # (g) button-side-tap ---------------------------------------------------------

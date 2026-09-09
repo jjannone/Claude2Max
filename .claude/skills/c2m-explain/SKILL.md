@@ -79,7 +79,7 @@ If invoked without `$ARGUMENTS`, ask the user which `.maxpat` to explain — don
 
 ## When NOT to invoke
 
-- The user wants to **modify** the patch — use the normal extract → edit → convert workflow (or `/c2m-sync` first if needed).
+- The user wants to **modify** the patch — `/c2m-sync` first, then edit the boxes in the `.maxpat` and sync again; convert only when a rebuild is specifically needed (CLAUDE.md > Never Use `convert` Unless It Is Specifically Needed).
 - The user wants an **interactive** walkthrough they can step through inside Max — that's `/c2m-tutorial`, not this skill.
 - The user asks about a specific object's behavior in isolation — go straight to its refpage at `/Applications/Max.app/Contents/Resources/C74/docs/refpages/` or `/c2m-package-search <name>` for installed-package objects.
 

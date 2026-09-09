@@ -31,6 +31,7 @@ import argparse
 import collections
 import copy
 import json
+import math
 import os
 import re
 import sys
@@ -727,6 +728,14 @@ MAXCLASS_DEFAULTS = {
     "live.toggle": {"numinlets": 1, "numoutlets": 1, "outlettype": [""]},
     "live.numbox": {"numinlets": 1, "numoutlets": 2, "outlettype": ["", "float"]},
     "live.menu": {"numinlets": 1, "numoutlets": 3, "outlettype": ["", "", "float"]},
+    # tab / live.tab have three outlets: item index, item symbol, and (tab) the
+    # idle item index / (live.tab) the raw 0.-1. parameter value. Confirmed by
+    # the refpages and by the boxes in tab.maxhelp / live.tab.maxhelp as Max
+    # writes them. Both are UI classes (spec `type: "tab"`), so NEWOBJ_IO — which
+    # already carried them — never applied and a spec fell to the 1-outlet
+    # default (found building reverb-shootout, 2026-09-08).
+    "tab":      {"numinlets": 1, "numoutlets": 3, "outlettype": ["int", "", ""]},
+    "live.tab": {"numinlets": 1, "numoutlets": 3, "outlettype": ["", "", "float"]},
     "preset":   {"numinlets": 1, "numoutlets": 5, "outlettype": ["preset", "int", "preset", "int", ""]},
     "gswitch2": {"numinlets": 2, "numoutlets": 2, "outlettype": ["", ""]},
     "multislider": {"numinlets": 1, "numoutlets": 2, "outlettype": ["", ""]},
@@ -1472,6 +1481,44 @@ def estimate_text_width(text):
     return max(len(text) * 7 + 20, 40)
 
 
+# A box shows its whole text: narrower than the text, Max wraps it onto more
+# lines and the box gets taller. Measured on C74's shipped help patches
+# (535 wrapped boxes): 22 px for one line at the default 12 pt font, then
+# 14.5 px per extra line (37, 52, 66, 81, 96 for 2-6 lines), the same at 13 pt.
+_LINE_HEIGHT = 14.5
+_BOX_TEXT_PAD = 8      # left + right text margin inside a box
+
+
+def wrapped_lines(text, width, fontsize=None):
+    """How many lines Max wraps `text` onto in a box `width` px wide."""
+    if not text:
+        return 1
+    per_char = 7.0 * (float(fontsize or DEFAULT_FONT_SIZE) / DEFAULT_FONT_SIZE)
+    usable = max(float(width) - _BOX_TEXT_PAD, per_char)
+    return sum(max(1, math.ceil(len(seg) * per_char / usable)) for seg in text.split("\n"))
+
+
+def wrapped_height(lines, maxclass="message"):
+    """Box height Max gives `lines` lines of text at the default font.
+
+    message / comment: 22, 37, 52, 66, 81, 95 (C74 help corpus, 12-13 pt).
+    newobj: Max draws a two-line object box 35 px (corpus median at 12 pt,
+    and what it wrote back into reverb-shootout), then the same 14.5 per line.
+    """
+    if lines <= 1:
+        return 22.0
+    base = 35.0 if maxclass == "newobj" else 37.0
+    return float(int(base + _LINE_HEIGHT * (lines - 2) + 0.5))   # half-up, not banker's
+
+
+def comment_min_height(fontsize=None):
+    """Smallest presentation height Max keeps for a one-line comment: it
+    resaved 18 px Monaco-11 labels as 20 (reverb-shootout) and draws 13 pt
+    comments 21 px (C74 corpus) — about fontsize / 2 + 14.5."""
+    fs = float(fontsize or DEFAULT_FONT_SIZE)
+    return float(int(0.5 * fs + 14.5 + 0.5))
+
+
 # ---------------------------------------------------------------------------
 # Layout engine — patching view
 # ---------------------------------------------------------------------------
@@ -1630,8 +1677,105 @@ def presentation_layout(objects, layout_cfg=None):
 # Box builder
 # ---------------------------------------------------------------------------
 
-def build_box(user_id, obj_spec, index, x, y):
-    """Build a .maxpat box dict from a spec object."""
+def _raw_patcher_ports(raw):
+    """(numinlets, numoutlets) of a raw patcher dict, from its inlet/outlet boxes."""
+    n_in = n_out = 0
+    for w in raw.get("boxes", []) or []:
+        b = w.get("box", {}) if isinstance(w, dict) else {}
+        if b.get("maxclass") == "inlet":
+            n_in += 1
+        elif b.get("maxclass") == "outlet":
+            n_out += 1
+    return n_in, n_out
+
+
+# Script-loading object boxes: `v8 name.js …` / `js name.js …`. The script
+# name is the first token after the class that is not an `@attr` — creation
+# args and attributes may follow it (`v8 foo.js 15 @embed 1`).
+_SCRIPT_CLASSES = ("v8", "js")
+
+
+def script_ref(text):
+    """(script_name, embed_requested) for a `v8` / `js` box text, else (None, False).
+
+    `embed_requested` is True when the text carries `@embed 1` — the attribute
+    the v8 refpage documents as "Save Javascript with Patcher"; C74's own
+    v8.maxhelp writes it as `v8 videotester @embed 1`.
+    """
+    toks = text.split()
+    if not toks or toks[0] not in _SCRIPT_CLASSES:
+        return None, False
+    name = None
+    for t in toks[1:]:
+        if t.startswith("@"):
+            break
+        name = t
+        break
+    embed = False
+    for i, t in enumerate(toks):
+        if t == "@embed" and i + 1 < len(toks):
+            embed = toks[i + 1] not in ("0", "0.")
+    return name, embed
+
+
+def find_script_file(name, script_dirs):
+    """First existing `name` under any of script_dirs (also code/ and javascript/
+    subfolders, the places Max's own patches keep scripts), else None."""
+    if not name or not script_dirs:
+        return None
+    for d in script_dirs:
+        base = Path(d)
+        for cand in (base / name, base / "code" / name, base / "javascript" / name):
+            if cand.is_file():
+                return cand
+    return None
+
+
+def _embed_script(box, obj_spec, script_dirs):
+    """Write a v8 / js box's `textfile` block so the patch carries its script.
+
+    Max stores a script-loading box as top-level `filename` plus a `textfile`
+    dict {text, filename, flags, embed, autowatch}; with `embed: 1` the source
+    lives in `text` and the box runs without the .js on disk. Max only fills
+    `text` when *it* saves, so the converter does it here: the file on disk
+    wins when found (it is the editing surface), otherwise a copy the spec
+    already carries (synced from a Max save) is kept, otherwise a warning says
+    the patch will not carry the source. Shape verified against C74's
+    v8.maxhelp and jit-geom-voronoi.maxpat, 2026-09-09.
+    """
+    name, embed = script_ref(box.get("text", ""))
+    if name is None:
+        return
+    prior = box.get("textfile") if isinstance(box.get("textfile"), dict) else {}
+    if not embed and prior.get("embed") != 1:
+        return
+    tf = dict(prior)
+    tf.setdefault("filename", name)
+    tf.setdefault("flags", 0)
+    tf.setdefault("autowatch", 1)
+    tf["embed"] = 1
+    path = find_script_file(name, script_dirs)
+    if path is not None:
+        tf["text"] = path.read_text(encoding="utf-8")
+    elif not isinstance(tf.get("text"), str):
+        where = ", ".join(str(d) for d in (script_dirs or [])) or "no search dirs"
+        print(f"[convert] WARNING: '{box.get('text')}' asks to embed {name} but the "
+              f"file was not found ({where}) and the spec holds no copy — the patch "
+              f"will NOT carry the script. Convert with -o next to the .js, or add "
+              f"it to attrs.textfile.text.", file=sys.stderr)
+    box["filename"] = name
+    box["textfile"] = tf
+    # keep the spec that gets embedded in step with the box (see the
+    # presentation-rect note above): the next sync would do this anyway
+    obj_spec.setdefault("attrs", {})["textfile"] = copy.deepcopy(tf)
+
+
+def build_box(user_id, obj_spec, index, x, y, script_dirs=None):
+    """Build a .maxpat box dict from a spec object.
+
+    `script_dirs`: directories searched for a `v8` / `js` box's script when the
+    box asks for `@embed 1` (see _embed_script) — normally the spec's and the
+    output patch's folders."""
     maxclass = obj_spec.get("type", "newobj")
     text = obj_spec.get("text", "")
 
@@ -1700,16 +1844,73 @@ def build_box(user_id, obj_spec, index, x, y):
     for k, val in attrs.items():
         box["box"][k] = val
 
+    if maxclass == "newobj":
+        _embed_script(box["box"], obj_spec, script_dirs)
+
+    # Max-only box state (see _box_extras) goes back verbatim. Keys the spec
+    # authors elsewhere are not overridden: an authored value is a decision,
+    # a synced one is a mirror, and the mirror is refreshed on the next sync.
+    for k, val in (obj_spec.get("box_extras") or {}).items():
+        if k in _BOX_DERIVED_KEYS:
+            continue
+        box["box"].setdefault(k, copy.deepcopy(val))
+
+    # A presented text box narrower than its text wraps and grows: record the
+    # line count Max will use and budget the height, so the rect the author
+    # wrote is what Max draws and the overlap check sees the real box. Only
+    # multi-line boxes are touched — a one-line rect keeps its authored height.
+    # Rule: MAX_PATCHING.md > Object boxes keep their text.
+    prect = box["box"].get("presentation_rect")
+    if prect and text and maxclass in ("newobj", "message", "comment"):
+        lines = wrapped_lines(text, prect[2], box["box"].get("fontsize"))
+        need = None
+        if lines > 1:
+            box["box"].setdefault("presentation_linecount", lines)
+            need = wrapped_height(box["box"]["presentation_linecount"], maxclass)
+        elif maxclass == "comment":
+            need = comment_min_height(box["box"].get("fontsize"))   # Max won't draw it shorter
+        if need is not None and prect[3] < need:
+                box["box"]["presentation_rect"] = [prect[0], prect[1], prect[2], need]
+                # keep the spec that gets embedded in step with the box, so
+                # the spec-vs-boxes check stays clean after every convert
+                if isinstance(pres_rect_sibling, list) and len(pres_rect_sibling) >= 4:
+                    pres_rect_sibling[3] = need
+                elif isinstance(pres, list) and len(pres) >= 4:
+                    pres[3] = need
+
+    # Embedded patcher taken verbatim from an existing .maxpat — what pasting a
+    # clipping does. `maxpat` holds a raw patcher dict (the `patcher` value of a
+    # box in a saved file), not a spec; it is written back unchanged with
+    # embed: 1, and the port counts come from its inlet / outlet boxes unless
+    # the spec overrides them. Sync carries the live patcher back into the
+    # field (_box_to_spec_obj / reconcile_spec) so values changed inside the
+    # module in Max survive the next convert. Motivating case: BEAP clipping
+    # files are wrappers holding one embedded bpatcher — loading one by name
+    # gives a box whose ports and pattr paths are one level off.
+    raw = obj_spec.get("maxpat")
+    if isinstance(raw, dict):
+        box["box"]["patcher"] = copy.deepcopy(raw)
+        box["box"]["embed"] = 1
+        if "inlets" not in obj_spec or "outlets" not in obj_spec:
+            n_in, n_out = _raw_patcher_ports(raw)
+            if "inlets" not in obj_spec:
+                box["box"]["numinlets"] = n_in
+            if "outlets" not in obj_spec:
+                box["box"]["numoutlets"] = n_out
+                box["box"]["outlettype"] = obj_spec.get("outlettype", [""] * n_out)
+
     # Handle subpatcher
     if "patcher" in obj_spec:
-        sub_maxpat = convert_patcher(obj_spec["patcher"])
+        sub_maxpat = convert_patcher(obj_spec["patcher"], script_dirs=script_dirs)
         box["box"]["patcher"] = sub_maxpat
-        box["box"]["saved_object_attributes"] = {
+        # keep a description / tags the operator typed into the subpatcher's
+        # Inspector (synced into box_extras) over the blank defaults
+        box["box"].setdefault("saved_object_attributes", {
             "description": "",
             "digest": "",
             "globalpatchername": "",
             "tags": ""
-        }
+        })
 
     # Linecount for multiline comments
     if maxclass == "comment" and text:
@@ -2085,6 +2286,9 @@ _PRESERVE_ATTRS = {"bgcolor", "textcolor", "color", "fontsize", "fontface", "fon
                    "bubble", "bubbleside", "bubblepoint", "bubbletextmargin",
                    "bubble_bgcolor",   # bubble comments use this, NOT plain bgcolor
                    "items", "prefix",
+    # playlist~ / jit.playlist keep their loaded clips under `data` — content
+    # the operator drops in at runtime, the same class of state as umenu items.
+    "data",
     # Script-loading UI objects: jsui / v8ui link their script through the
     # `filename` box key and pass creation args via `jsarguments`. Dropping
     # either on sync makes the next convert emit an unlinked, blank object —
@@ -2092,6 +2296,25 @@ _PRESERVE_ATTRS = {"bgcolor", "textcolor", "color", "fontsize", "fontface", "fon
     # 2026-09-08 when the script-filename-missing rule fired 3,332 times on
     # C74's own help files in native mode.
     "filename", "jsarguments",
+    # bpatcher / amxd~ view state: whether the box shows its patcher inline
+    # (viewvisibility) and whether the patcher is embedded (embed).
+    "viewvisibility", "embed",
+    # how many lines Max wrapped a presented box's text onto (see build_box)
+    "presentation_linecount",
+    # Parameter-enabled objects (live.tab / live.menu / live.dial / …, and any
+    # box with parameter_enable) keep their parameter block — initial value,
+    # range, longname, unit style — under this key, which Max reads as a
+    # structural box key rather than an attribute. It lives in `attrs` on the
+    # spec side because that is the only channel build_box copies into a box;
+    # the verifier skips it by name (rules._STRUCTURAL_BOX_KEYS). Dropping it
+    # on sync would erase a device's saved parameter state on the next convert.
+    "saved_attribute_attributes",
+    # v8 / js keep the script they load under `textfile` — filename, autowatch,
+    # and, when `@embed 1` is set, the whole source in `textfile.text`. Sync
+    # carries it so a patch that arrived without its .js still holds the code
+    # through the next convert (build_box refreshes `text` from disk when the
+    # file is found). Rule: CLAUDE.md > Embed the Script in Every v8 Box.
+    "textfile",
 }   # umenu menu items + auto-prefix
 
 
@@ -2171,6 +2394,20 @@ def _box_to_spec_obj(box):
         attrs[k] = val
     if attrs:
         obj["attrs"] = attrs
+    _mirror_ports(obj, box)
+    extras = _box_extras(box)
+    if maxclass == "bpatcher" and box.get("embed"):
+        extras.pop("embed", None)   # carried by `maxpat` below
+    if extras:
+        obj["box_extras"] = extras
+
+    # A bpatcher with an embedded patcher (a pasted clipping, a BEAP module)
+    # carries that patcher verbatim as `maxpat` — see build_box.
+    if maxclass == "bpatcher" and box.get("embed") and isinstance(box.get("patcher"), dict):
+        obj["maxpat"] = copy.deepcopy(box["patcher"])
+        obj["inlets"] = box.get("numinlets", 0)
+        obj["outlets"] = box.get("numoutlets", 0)
+        obj["outlettype"] = list(box.get("outlettype", []))
 
     return obj
 
@@ -2187,6 +2424,60 @@ def _build_connections(lines, bid_to_spec):
         if src_bid in bid_to_spec and dst_bid in bid_to_spec:
             connections.append([bid_to_spec[src_bid], src_out, bid_to_spec[dst_bid], dst_in])
     return connections
+
+
+# Patcher-level state Max writes that is not a box: the Snapshots panel's
+# stored snapshots (`snapshot`, a C74Snapshot dict, values keyed by parameter
+# long name) and the parameter registry (`parameters`, box id → names, which
+# Max rebuilds on save). Neither is describable in a spec, so convert would
+# drop them and sync would never see them; they travel verbatim in the spec's
+# root `patcher_extras` dict instead. Found 2026-09-09 when John stored a
+# snapshot in delay-shootout.
+_PATCHER_PASSTHROUGH = ("snapshot", "parameters")
+
+
+def _patcher_extras(patcher):
+    return {k: patcher[k] for k in _PATCHER_PASSTHROUGH if k in patcher}
+
+
+# Box keys the converter derives from the spec itself, so sync never copies
+# them: identity, ports, geometry, text, the nested patcher, the codebox body,
+# and the line counts build_box computes.
+_BOX_DERIVED_KEYS = frozenset({
+    "id", "maxclass", "numinlets", "numoutlets", "outlettype", "patching_rect",
+    "presentation", "presentation_rect", "text", "patcher", "code",
+    "linecount", "presentation_linecount",
+})
+
+
+def _mirror_ports(obj, box):
+    """Copy the port counts and outlet types Max saved into the spec's own
+    `inlets` / `outlets` / `outlettype` fields. Max is the authority on what an
+    object's ports are; the converter's refpage guess disagreed with the saved
+    `kslider`, `midiformat`, `panel`, and `r` boxes in kslider-restrike, so a
+    convert after sync rewrote them. Mirroring makes the spec say what the
+    patch says. (2026-09-09)"""
+    if "numinlets" in box:
+        obj["inlets"] = int(box["numinlets"])
+    if "numoutlets" in box:
+        obj["outlets"] = int(box["numoutlets"])
+    if "outlettype" in box:
+        obj["outlettype"] = list(box["outlettype"])
+    elif int(box.get("numoutlets", 1)) == 0:
+        obj["outlettype"] = []   # Max omits the key on outlet-less boxes
+
+
+def _box_extras(box):
+    """Every key Max wrote on a box that the spec has no field for — a `vst~`
+    plug-in `snapshot` and `autosave`, `parameter_enable`, a panel's `angle` /
+    `mode` / `proportion`, `lastchannelcount` on `live.gain~` — carried
+    verbatim under the object's `box_extras`, the box-level twin of the root
+    `patcher_extras`. Keys the converter derives are excluded; keys in
+    _PRESERVE_ATTRS go to `attrs` instead. Rule: CLAUDE.md > Never Use
+    `convert` Unless It Is Specifically Needed ("update the spec design").
+    """
+    return {k: copy.deepcopy(v) for k, v in box.items()
+            if k not in _BOX_DERIVED_KEYS and k not in _PRESERVE_ATTRS}
 
 
 def maxpat_to_spec(maxpat):
@@ -2208,12 +2499,18 @@ def maxpat_to_spec(maxpat):
     objects = {id_map[bid]: _box_to_spec_obj(box) for bid, box in box_by_id.items()}
     connections = _build_connections(patcher.get("lines", []), id_map)
 
-    return {
+    spec = {
         "width": int(rect[2]) if len(rect) > 2 else 800,
         "height": int(rect[3]) if len(rect) > 3 else 600,
         "objects": objects,
         "connections": connections,
     }
+    if patcher.get("bglocked"):
+        spec["bglocked"] = 1   # View > Lock Background — see convert_patcher
+    extras = _patcher_extras(patcher)
+    if extras:
+        spec["patcher_extras"] = extras
+    return spec
 
 
 def reconcile_spec(existing_spec, maxpat):
@@ -2244,12 +2541,18 @@ def reconcile_spec(existing_spec, maxpat):
     spec_to_bid = {}
     matched_bids = set()
 
-    # Pass 1: position + type
+    # Pass 1: position + type. A box satisfies at most one spec object: without
+    # the matched_bids test, every stale spec entry sharing a position with one
+    # live box (54 tutorial annotations stacked at the same point, after the
+    # tutorial was stripped) matched that box and survived every sync, so the
+    # spec stayed 57 objects larger than the patch. Found 2026-09-09.
     for sid, sobj in spec_objects.items():
         pos = sobj.get("pos", [0, 0])
         key = (round(pos[0]), round(pos[1]))
         if key in pos_to_bid:
             candidate = pos_to_bid[key]
+            if candidate in matched_bids:
+                continue
             if box_by_id[candidate].get("maxclass") == sobj.get("type"):
                 spec_to_bid[sid] = candidate
                 matched_bids.add(candidate)
@@ -2326,6 +2629,11 @@ def reconcile_spec(existing_spec, maxpat):
         if "presentation_rect" in updated:
             del updated["presentation_rect"]
 
+        # An embedded patcher is live state (dial values inside a BEAP module
+        # change when the operator turns them): mirror it from the box.
+        if "maxpat" in updated and box.get("embed") and isinstance(box.get("patcher"), dict):
+            updated["maxpat"] = copy.deepcopy(box["patcher"])
+
         # Re-extract preserved attrs (varname, styling, hidden) from the live box
         # so manual edits in Max are captured. Merge into existing spec attrs;
         # box value wins on conflict because the live patch is the source of truth.
@@ -2348,6 +2656,16 @@ def reconcile_spec(existing_spec, maxpat):
             updated["attrs"] = merged_attrs
         elif "attrs" in updated:
             del updated["attrs"]
+        # Max-only box state mirrors the live box exactly: what Max wrote on the
+        # last save is what the next convert must write back.
+        _mirror_ports(updated, box)
+        extras = _box_extras(box)
+        if "maxpat" in updated:
+            extras.pop("embed", None)
+        if extras:
+            updated["box_extras"] = extras
+        else:
+            updated.pop("box_extras", None)
         updated_objects[sid] = updated
 
     # New boxes (no spec entry)
@@ -2362,6 +2680,18 @@ def reconcile_spec(existing_spec, maxpat):
     updated["connections"] = connections
     updated["width"] = int(rect[2]) if len(rect) > 2 else existing_spec.get("width", 800)
     updated["height"] = int(rect[3]) if len(rect) > 3 else existing_spec.get("height", 600)
+    # View > Lock Background is patcher state the operator toggles in Max; mirror
+    # it exactly (Max writes the key on every save, 0 or 1) so the next convert
+    # neither drops a lock set in Max nor re-locks one the operator released.
+    if patcher.get("bglocked"):
+        updated["bglocked"] = 1
+    else:
+        updated.pop("bglocked", None)
+    extras = _patcher_extras(patcher)
+    if extras:
+        updated["patcher_extras"] = extras
+    else:
+        updated.pop("patcher_extras", None)
     return updated
 
 
@@ -2399,8 +2729,9 @@ def sync_spec(maxpat):
 # Core conversion
 # ---------------------------------------------------------------------------
 
-def convert_patcher(spec):
-    """Convert a spec dict to a .maxpat patcher dict (no top-level wrapper)."""
+def convert_patcher(spec, script_dirs=None):
+    """Convert a spec dict to a .maxpat patcher dict (no top-level wrapper).
+    `script_dirs`: where `v8 … @embed 1` boxes look for their .js (build_box)."""
     objects = spec.get("objects", {})
     connections = spec.get("connections", [])
     width = spec.get("width", 800)
@@ -2435,13 +2766,22 @@ def convert_patcher(spec):
     id_map = {}  # user_id -> "obj-N"
     for index, (user_id, obj_spec) in enumerate(objects.items(), start=1):
         x, y = positions.get(user_id, (X_MARGIN, Y_MARGIN))
-        box = build_box(user_id, obj_spec, index, x, y)
+        box = build_box(user_id, obj_spec, index, x, y, script_dirs=script_dirs)
         # Apply computed presentation_rect for grid-placed objects
         if user_id in pres_rects and isinstance(obj_spec.get("presentation"), dict):
             box["box"]["presentation"]      = 1
             box["box"]["presentation_rect"] = pres_rects[user_id]
         boxes.append(box)
         id_map[user_id] = f"obj-{index}"
+
+    # Z-order: Max paints earlier boxes in front. A presentation panel is
+    # scenery, so every `panel` box goes after every non-panel box whatever the
+    # spec order — a spec that declares panels section by section would
+    # otherwise interleave them and paint each panel over the boxes declared
+    # before it. Ids were assigned above, so the reorder changes no wiring.
+    # Rule: MAX_PATCHING.md > Presentation panels live in the background layer.
+    boxes = ([b for b in boxes if b["box"].get("maxclass") != "panel"]
+             + [b for b in boxes if b["box"].get("maxclass") == "panel"])
 
     # Build patchlines
     lines = []
@@ -2486,6 +2826,17 @@ def convert_patcher(spec):
     if has_presentation:
         patcher["openinpresentation"] = 1
 
+    # View > Lock Background: background objects (presentation panels) can't be
+    # selected while editing. Written only when the spec asks — Max's own
+    # default is 0 and the converter never exceeds Max's defaults. `sync`
+    # captures the value back (maxpat_to_spec / reconcile_spec) so a lock set
+    # in Max survives the next convert.
+    if spec.get("bglocked"):
+        patcher["bglocked"] = 1
+    for k, v in (spec.get("patcher_extras") or {}).items():
+        if k in _PATCHER_PASSTHROUGH:
+            patcher[k] = copy.deepcopy(v)
+
     # Add name as title comment
     name = spec.get("name")
     if name:
@@ -2507,9 +2858,10 @@ def convert_patcher(spec):
     return patcher
 
 
-def convert_spec(spec):
-    """Convert a spec dict to a complete .maxpat dict with embedded spec."""
-    patcher = convert_patcher(spec)
+def convert_spec(spec, script_dirs=None):
+    """Convert a spec dict to a complete .maxpat dict with embedded spec.
+    `script_dirs`: where `v8 … @embed 1` boxes look for their .js (build_box)."""
+    patcher = convert_patcher(spec, script_dirs=script_dirs)
 
     # Embed the spec as a hidden comment
     max_y = 0.0
@@ -2692,16 +3044,17 @@ def main():
         else:
             spec = json.load(sys.stdin)
 
+        extra_dirs = [Path(args.input).resolve().parent] if args.input else []
+        if args.output:
+            extra_dirs.append(Path(args.output).resolve().parent)
         if not getattr(args, "no_verify", False):
-            extra_dirs = [Path(args.input).resolve().parent] if args.input else []
-            if args.output:
-                extra_dirs.append(Path(args.output).resolve().parent)
             if not _gate_spec(spec,
                               allow_unverified=getattr(args, "allow_unverified", False),
                               search_dirs=extra_dirs):
                 sys.exit(1)  # blocked — nothing written
 
-        maxpat = convert_spec(spec)
+        # the output folder first: that is where Max will look for the .js
+        maxpat = convert_spec(spec, script_dirs=list(reversed(extra_dirs)))
         output = json.dumps(maxpat, indent=2)
 
         if args.output:
