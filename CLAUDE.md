@@ -431,7 +431,14 @@ In practice, for `v8` / `js`: write `@embed 1` in the box text — `v8 mylogic.j
 - **Sync** carries `textfile` back into the spec, so a patch that arrived *without* its `.js` still holds the code through the next convert. The file on disk wins whenever it is found.
 - **The verifier** warns (`script-not-embedded`) on any `v8` / `js` box that names a script without asking to embed it.
 
-The copy in the patch is refreshed only when the converter runs or Max saves. After editing a `.js`, re-convert (or save from Max) before the patch travels, or it carries the previous version. Which copy Max runs when the file *is* present has not been verified here; keeping the two identical by re-converting makes the question moot.
+**Two copies, one editing surface.** The `.js` on disk is where the script is edited; the copy in the patch is what travels. A script-only change is made in the file, never in the embedded copy, and is followed by `sync` on the patch. `sync` is the meeting point, and it applies John's four rules (2026-09-10) to every embedded script:
+
+1. The two copies are identical: nothing to do.
+2. They differ and the file exists: the file wins. Sync rewrites the embedded copy and says so.
+3. The file is missing: sync writes it out from the embedded copy, restoring it, and says so.
+4. They differ and the patch is newer than the file: sync stops, writes nothing, and reports both, because the newer copy may be an edit made in Max's script editor. Resolve with `sync --script-from-disk` or `sync --script-from-patch`.
+
+`sync --check` reports script drift alongside spec drift. Which copy Max runs when both are present has not been verified here; keeping them identical through sync makes the question moot.
 
 The recognition signal: any box whose text names a file. That is the moment to read the object's refpage for an embed attribute before deciding the file alone is enough. `v8ui` documents the same `embed` attribute; the on-disk shape for a UI box has not been observed yet, so verify one saved from Max before relying on it. Embedded patchers are the same principle with a different mechanism — the spec's `maxpat` field on a `bpatcher` (see `SPEC_REFERENCE.md > Embedding an existing patcher verbatim`).
 

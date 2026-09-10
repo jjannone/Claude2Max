@@ -18,6 +18,7 @@ python3 spec2maxpat.py sync -i "$ARGUMENTS"
 
 Two cases:
 
+- **Embedded scripts** — before touching the spec, sync compares every `v8 … @embed 1` box's stored script with its `.js` on disk: identical → nothing; file newer or equal → stored copy refreshed; file missing → restored from the stored copy; patch newer and different → sync stops with `SCRIPT CONFLICT` and writes nothing (resolve with `--script-from-disk` or `--script-from-patch`). Rule: `CLAUDE.md > Embed the Script in Every v8 Box`.
 - **No embedded spec** — sync reverse-engineers a spec from the existing boxes and patchlines, embeds it as a hidden `text.codebox` (`id: "obj-spec-embed"`), and prints the new spec to stdout.
 - **Has embedded spec** — sync reconciles the existing spec with the current box positions, text, and wiring (picking up any manual edits), updates the embed in place, and prints the updated spec.
 

@@ -687,7 +687,7 @@ The `*.`, `+.` etc. variants are also valid float-mode objects, but prefer the f
 }
 ```
 
-**External JS files** — place `.js` files in the same directory as the `.maxpat`. Max resolves them relative to the patch file. **And still write `@embed 1`**: the converter stores the file's source in the box's `textfile.text`, sync preserves it, and the box runs even when the `.js` is missing. After editing the `.js`, re-convert so the stored copy is current. Rule and mechanics: `CLAUDE.md > Embed the Script in Every v8 Box`.
+**External JS files** — place `.js` files in the same directory as the `.maxpat`. Max resolves them relative to the patch file. **And still write `@embed 1`**: the converter stores the file's source in the box's `textfile.text`, sync preserves it, and the box runs even when the `.js` is missing. After editing the `.js`, run `sync` on the patch: sync refreshes the embedded copy from the file, restores a missing file from the embedded copy, and stops with a conflict when the patch is newer than the file and the two differ (`--script-from-disk` / `--script-from-patch` resolve it). Rule and mechanics: `CLAUDE.md > Embed the Script in Every v8 Box`.
 
 **jsui objects** — use `"type": "jsui"` with `attrs: {"filename": "script.js"}`, not `type: "newobj", text: "jsui script.js"`. The `filename` attribute is how Max natively associates a JS file with a jsui; omitting it leaves the object unlinked and non-functional. Always include it:
 

@@ -2718,6 +2718,84 @@ def embed_spec_in_maxpat(spec, maxpat):
     return maxpat
 
 
+def _script_boxes(patcher):
+    """Yield every v8 / js box (any nesting depth) with a textfile block that
+    asks for embedding — the boxes whose script has two copies to keep in step."""
+    for wrapper in patcher.get("boxes", []):
+        box = wrapper.get("box", {})
+        name, _ = script_ref(box.get("text", ""))
+        tf = box.get("textfile")
+        if name and isinstance(tf, dict) and tf.get("embed") == 1:
+            yield box, tf.get("filename") or name
+        sub = box.get("patcher")
+        if isinstance(sub, dict):
+            yield from _script_boxes(sub)
+
+
+def reconcile_scripts(maxpat, patch_path, prefer=None):
+    """Keep each embedded script and its `.js` on disk in step. John's rules,
+    2026-09-10, with the file on disk as the editing surface:
+
+      1. identical                       → nothing
+      2. differ, file exists             → the file wins; embedded copy rewritten
+      3. file missing                    → written out from the embedded copy
+      4. differ, patch newer than file   → stop and report both (an edit made in
+                                            Max's editor may be the newer one);
+                                            `prefer="patch"` writes the patch's
+                                            copy to disk, `prefer="disk"` forces 2
+
+    Mutates `maxpat` for rule 2. Returns [{"box", "file", "action", "detail"}]
+    with action in {"same", "patch-updated", "file-written", "conflict"}.
+    Caller writes the patch (and treats any "conflict" as a reason not to).
+    """
+    patch_path = Path(patch_path)
+    folder = patch_path.parent
+    try:
+        patch_mtime = patch_path.stat().st_mtime
+    except OSError:
+        patch_mtime = 0.0
+    out = []
+    for box, filename in _script_boxes(maxpat.get("patcher", {})):
+        tf = box["textfile"]
+        embedded = tf.get("text")
+        path = find_script_file(filename, [folder])
+        rec = {"box": box.get("text", ""), "file": str(path or (folder / filename))}
+        if path is None:
+            if isinstance(embedded, str):
+                (folder / filename).write_text(embedded, encoding="utf-8")
+                rec.update(action="file-written", detail="the .js was missing; restored from the embedded copy")
+            else:
+                rec.update(action="conflict", detail="no .js on disk and no embedded copy — the script is lost")
+            out.append(rec)
+            continue
+        disk = path.read_text(encoding="utf-8")
+        if disk == embedded:
+            rec.update(action="same", detail="")
+        elif prefer == "patch":
+            path.write_text(embedded if isinstance(embedded, str) else "", encoding="utf-8")
+            rec.update(action="file-written", detail="--script-from-patch: the patch's copy now on disk")
+        elif prefer != "disk" and isinstance(embedded, str) and patch_mtime > path.stat().st_mtime:
+            rec.update(action="conflict",
+                       detail="the patch is newer than the .js and the two differ — an edit made in "
+                              "Max's editor may be in the patch. Nothing written. Make them match by "
+                              "hand, or resolve with --script-from-disk / --script-from-patch.")
+        else:
+            tf["text"] = disk
+            rec.update(action="patch-updated", detail="the .js on disk is newer; embedded copy refreshed")
+        out.append(rec)
+    return out
+
+
+def format_script_report(records):
+    lines = []
+    for r in records:
+        if r["action"] == "same":
+            continue
+        tag = {"patch-updated": "script", "file-written": "script", "conflict": "SCRIPT CONFLICT"}[r["action"]]
+        lines.append(f"[{tag}] {r['box']} ↔ {r['file']}: {r['detail']}")
+    return "\n".join(lines)
+
+
 def sync_spec(maxpat):
     """
     Generate or reconcile the embedded spec for a .maxpat.
@@ -3003,8 +3081,13 @@ def main():
     p_sync.add_argument("-i", "--input", required=True, help="Input .maxpat file")
     p_sync.add_argument("-o", "--output", help="Output .maxpat file (default: overwrite input)")
     p_sync.add_argument("--check", action="store_true",
-                        help="Report whether the embedded spec matches the boxes; write nothing. "
-                             "Exit 1 when it does not (or when there is no spec).")
+                        help="Report whether the embedded spec matches the boxes and whether each "
+                             "embedded script matches its .js; write nothing. Exit 1 on any mismatch "
+                             "(or when there is no spec).")
+    p_sync.add_argument("--script-from-disk", action="store_true",
+                        help="Resolve an embedded-script conflict by taking the .js on disk")
+    p_sync.add_argument("--script-from-patch", action="store_true",
+                        help="Resolve an embedded-script conflict by writing the patch's copy to disk")
 
     # mct
     p_mct = subparsers.add_parser(
@@ -3107,7 +3190,23 @@ def main():
                 print(f"Corrupt Claude2Max spec embed: {exc}", file=sys.stderr)
                 sys.exit(1)
             print(format_spec_match_report(report))
-            sys.exit(0 if report["matches"] else 1)
+            drift = [r for r in reconcile_scripts(copy.deepcopy(maxpat), args.input)
+                     if r["action"] != "same"]
+            for r in drift:
+                print(f"script drift: {r['box']} ↔ {r['file']} ({r['action']})")
+            sys.exit(0 if report["matches"] and not drift else 1)
+
+        # Embedded scripts first (CLAUDE.md > Embed the Script in Every v8 Box):
+        # the .js on disk is the editing surface, so the spec below is built
+        # from a patch that already carries the current script.
+        prefer = "patch" if args.script_from_patch else ("disk" if args.script_from_disk else None)
+        script_records = reconcile_scripts(maxpat, args.input, prefer=prefer)
+        script_report = format_script_report(script_records)
+        if script_report:
+            print(script_report, file=sys.stderr)
+        if any(r["action"] == "conflict" for r in script_records):
+            print(f"Nothing written to '{args.input}'.", file=sys.stderr)
+            sys.exit(1)
 
         try:
             had_spec = extract_spec(maxpat) is not None
