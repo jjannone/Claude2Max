@@ -130,6 +130,12 @@ For instance: Max object existence was being decided by refpage filename globbin
 
 A second, narrower instance of the same principle: a refpage's real object name lives in the XML root's `name` attribute (`div.maxref.xml` declares `name="/"`), because a filename cannot contain `/`. Reading that attribute harvests the operator alias map mechanically — 56 entries with zero collisions — instead of maintaining 23 by hand.
 
+## The Closing Delimiter Is the Outermost One — Binding Rule
+
+When content is wrapped between a start marker and an end marker, the real end marker is the **last** one, not the first. The wrapped content may legitimately contain the marker text itself — a quoted example, a box whose text repeats it, a document that discusses the format — and a parser that stops at the first match returns a truncated body that fails in a way that looks like corruption. The same trap exists for any quoting, fencing, or wrapping scheme: code fences inside a document about code fences, a string delimiter inside a string, a comment terminator inside a comment.
+
+For instance: the Claude2Max spec is stored in a patch between `--- CLAUDE2MAX SPEC ---` and `--- END SPEC ---`. A stale stub box in `4step-sequencer.maxpat` carried those markers as its own text, sync copied that text into the spec, and `extract_spec` stopped at the inner end marker — half a spec, reported as invalid JSON. The fix was one call: `rfind` instead of `find`. Confirmed by John, 2026-09-10.
+
 ## Parsers Must Tolerate the Schema's Full Value Space, Not Just the Sample You Tested Against
 
 When parsing third-party data (XML, JSON, configs, refpages), don't coerce a field's type based on the values you happened to see in your test sample. The first input you didn't test against is the one that breaks. Fields that look numeric in examples may legitimately carry string sentinels like `"variable"`, `"auto"`, `"none"`, or `"all"`. Either confirm the documented schema's full value space before coercing, or accept the textual form and only coerce at the point of use, with a fallback for non-numeric values.
