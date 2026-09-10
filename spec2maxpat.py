@@ -1723,11 +1723,15 @@ def find_script_file(name, script_dirs):
     subfolders, the places Max's own patches keep scripts), else None."""
     if not name or not script_dirs:
         return None
+    # Max resolves `v8 videotester` to videotester.js (C74's v8.maxhelp names
+    # its embedded scripts without the extension; the filename key carries it)
+    names = [name] if "." in name else [name, name + ".js"]
     for d in script_dirs:
         base = Path(d)
-        for cand in (base / name, base / "code" / name, base / "javascript" / name):
-            if cand.is_file():
-                return cand
+        for n in names:
+            for cand in (base / n, base / "code" / n, base / "javascript" / n):
+                if cand.is_file():
+                    return cand
     return None
 
 
@@ -1750,11 +1754,11 @@ def _embed_script(box, obj_spec, script_dirs):
     if not embed and prior.get("embed") != 1:
         return
     tf = dict(prior)
-    tf.setdefault("filename", name)
+    path = find_script_file(name, script_dirs)
+    tf.setdefault("filename", path.name if path is not None else name)
     tf.setdefault("flags", 0)
     tf.setdefault("autowatch", 1)
     tf["embed"] = 1
-    path = find_script_file(name, script_dirs)
     if path is not None:
         tf["text"] = path.read_text(encoding="utf-8")
     elif not isinstance(tf.get("text"), str):
@@ -1763,7 +1767,7 @@ def _embed_script(box, obj_spec, script_dirs):
               f"file was not found ({where}) and the spec holds no copy — the patch "
               f"will NOT carry the script. Convert with -o next to the .js, or add "
               f"it to attrs.textfile.text.", file=sys.stderr)
-    box["filename"] = name
+    box["filename"] = tf["filename"]
     box["textfile"] = tf
     # keep the spec that gets embedded in step with the box (see the
     # presentation-rect note above): the next sync would do this anyway
@@ -2723,9 +2727,16 @@ def _script_boxes(patcher):
     asks for embedding — the boxes whose script has two copies to keep in step."""
     for wrapper in patcher.get("boxes", []):
         box = wrapper.get("box", {})
-        name, _ = script_ref(box.get("text", ""))
+        name, asks = script_ref(box.get("text", ""))
         tf = box.get("textfile")
-        if name and isinstance(tf, dict) and tf.get("embed") == 1:
+        if not isinstance(tf, dict):
+            tf = None
+        # Intent lives in the box text (`@embed 1`), not only in what Max last
+        # wrote: a Max save with the .js present writes embed 0 and drops the
+        # stored text (verified 2026-09-10), and sync must put it back.
+        if name and (asks or (tf and tf.get("embed") == 1)):
+            if tf is None:
+                tf = box["textfile"] = {"filename": name, "flags": 0, "embed": 1, "autowatch": 1}
             yield box, tf.get("filename") or name
         sub = box.get("patcher")
         if isinstance(sub, dict):
@@ -2781,7 +2792,10 @@ def reconcile_scripts(maxpat, patch_path, prefer=None):
                               "hand, or resolve with --script-from-disk / --script-from-patch.")
         else:
             tf["text"] = disk
-            rec.update(action="patch-updated", detail="the .js on disk is newer; embedded copy refreshed")
+            tf["embed"] = 1
+            why = ("the stored copy was missing (a Max save drops it while the .js is present)"
+                   if not isinstance(embedded, str) else "the .js on disk is newer")
+            rec.update(action="patch-updated", detail=f"{why}; embedded copy refreshed")
         out.append(rec)
     return out
 

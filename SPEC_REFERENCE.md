@@ -163,16 +163,22 @@ These automatically get `parameter_enable` set:
 
 ```json
 {
-  "type": "newobj",
-  "text": "v8 mylogic.js @embed 1",
-  "inlets": 1,
-  "outlets": 4,
-  "outlettype": ["", "", "bang", "int"]
+  "objects": {
+    "logic": {
+      "type": "newobj",
+      "text": "v8 mylogic.js @embed 1",
+      "inlets": 1,
+      "outlets": 4,
+      "outlettype": ["", "", "bang", "int"]
+    },
+    "logic_embed": { "type": "newobj", "text": "loadmess embed 1" }
+  },
+  "connections": [["logic_embed", 0, "logic", 0]]
 }
 ```
 
 - The `.js` file lives in the same directory as the `.maxpat`.
-- **Always add `@embed 1`** (`CLAUDE.md > Embed the Script in Every v8 Box`). The converter then reads the file and stores the source in the box, so the patch runs when the `.js` does not travel with it. On disk the box carries `filename` plus a `textfile` block `{text, filename, flags, embed, autowatch}` — the shape Max writes for `v8 videotester @embed 1` in its own `v8.maxhelp`. Creation arguments go between the filename and the attribute: `v8 highlight.js 15 @embed 1`. Convert with `-o` next to the `.js` (the converter searches the output folder, the spec folder, and their `code/` / `javascript/` subfolders); the verifier warns `script-not-embedded` when the attribute is missing.
+- **Always add `@embed 1` in the text AND a `[loadmess embed 1]` feeding the box** (`CLAUDE.md > Embed the Script in Every v8 Box`). The attribute makes Max use the stored copy when the `.js` is missing; the message makes Max keep the copy when it saves with the `.js` present (verified in Max 9, 2026-09-10 — the attribute alone is overridden on save). The converter reads the file and stores the source in the box, so the patch runs when the `.js` does not travel with it. On disk the box carries `filename` plus a `textfile` block `{text, filename, flags, embed, autowatch}` — the shape Max writes for `v8 videotester @embed 1` in its own `v8.maxhelp`. Creation arguments go between the filename and the attribute: `v8 highlight.js 15 @embed 1`. Convert with `-o` next to the `.js` (the converter searches the output folder, the spec folder, and their `code/` / `javascript/` subfolders); the verifier warns `script-not-embedded` when the attribute is missing.
 - Incoming messages are dispatched to JS functions by selector: `bang` → `function bang()`, `setmode 2` → `function setmode(val)`, etc.
 - Set inlet/outlet counts in JS with `inlets = N; outlets = N;` globals.
 - **Label every inlet and outlet in the script** with `setinletassist(n, "text")` / `setoutletassist(n, "text")` right after the counts. The text is the hover tooltip on the box in Max — the v8 equivalent of a subpatcher's inlet comment, and required by the same rule (`CLAUDE.md > What You Must Handle`). Index is zero-based from the left. Confirmed in C74's shipped `jitgltextureset.js`; Max's code editor declares the second parameter as a function, and a plain string works and is what C74 uses.
@@ -680,14 +686,20 @@ The `*.`, `+.` etc. variants are also valid float-mode objects, but prefer the f
 
 ```json
 {
-  "type": "newobj",
-  "text": "v8 onesound.js @embed 1",
-  "inlets": 1, "outlets": 6,
-  "outlettype": ["", "", "", "bang", "bang", "int"]
+  "objects": {
+    "sound": {
+      "type": "newobj",
+      "text": "v8 onesound.js @embed 1",
+      "inlets": 1, "outlets": 6,
+      "outlettype": ["", "", "", "bang", "bang", "int"]
+    },
+    "sound_embed": { "type": "newobj", "text": "loadmess embed 1" }
+  },
+  "connections": [["sound_embed", 0, "sound", 0]]
 }
 ```
 
-**External JS files** — place `.js` files in the same directory as the `.maxpat`. Max resolves them relative to the patch file. **And still write `@embed 1`**: the converter stores the file's source in the box's `textfile.text`, sync preserves it, and the box runs even when the `.js` is missing. After editing the `.js`, run `sync` on the patch: sync refreshes the embedded copy from the file, restores a missing file from the embedded copy, and stops with a conflict when the patch is newer than the file and the two differ (`--script-from-disk` / `--script-from-patch` resolve it). Rule and mechanics: `CLAUDE.md > Embed the Script in Every v8 Box`.
+**External JS files** — place `.js` files in the same directory as the `.maxpat`. Max resolves them relative to the patch file. **And still write `@embed 1`, with a `[loadmess embed 1]` feeding the box**: the converter stores the file's source in the box's `textfile.text`, the message makes Max keep it on save, sync repairs it if a save dropped it, and the box runs even when the `.js` is missing. After editing the `.js`, run `sync` on the patch: sync refreshes the embedded copy from the file, restores a missing file from the embedded copy, and stops with a conflict when the patch is newer than the file and the two differ (`--script-from-disk` / `--script-from-patch` resolve it). Rule and mechanics: `CLAUDE.md > Embed the Script in Every v8 Box`.
 
 **jsui objects** — use `"type": "jsui"` with `attrs: {"filename": "script.js"}`, not `type: "newobj", text: "jsui script.js"`. The `filename` attribute is how Max natively associates a JS file with a jsui; omitting it leaves the object unlinked and non-functional. Always include it:
 

@@ -800,6 +800,18 @@ def test_script_object_declarations():
     off = {"objects": {"v": {"type": "newobj", "text": "v8 x.js @embed 0", **io}}, "connections": []}
     assert "script-not-embedded" in _rules(verify_spec(off))
     assert "script-not-embedded" not in _rules(verify_spec(ok, native=True))
+    # (3b) the attribute alone does not survive a Max save with the .js present:
+    # a [loadmess embed 1] (or an `embed 1` message) must feed the box
+    alone = {"objects": {"v": {"type": "newobj", "text": "v8 x.js @embed 1", **io}}, "connections": []}
+    assert "script-embed-not-kept" in _rules(verify_spec(alone))
+    fed = {"objects": {"v": {"type": "newobj", "text": "v8 x.js @embed 1", **io},
+                       "lm": {"type": "newobj", "text": "loadmess embed 1"}},
+           "connections": [["lm", 0, "v", 0]]}
+    assert "script-embed-not-kept" not in _rules(verify_spec(fed))
+    fed_msg = {"objects": {"v": {"type": "newobj", "text": "v8 x.js @embed 1", **io},
+                           "m": {"type": "message", "text": "embed 1"}, "lb": {"type": "newobj", "text": "loadbang"}},
+               "connections": [["lb", 0, "m", 0], ["m", 0, "v", 0]]}
+    assert "script-embed-not-kept" not in _rules(verify_spec(fed_msg))
 
 
 # (o) attribute-group-incomplete ----------------------------------------------

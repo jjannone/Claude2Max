@@ -425,11 +425,30 @@ This pairs with **Never Regress Functionality When Changing Modality** (a reimpl
 
 A patch must carry everything it needs to run. When a box loads its code from a sibling file and the object offers a way to store that code inside the patch, use it — **even when the file is also saved on disk.** The file is the editing surface; the copy inside the patch is what survives transport. A patch that is mailed, copied to another machine, pasted from the clipboard, or committed without its sibling file otherwise opens with a dead box, and Max reports it only as a console line most operators never read.
 
-In practice, for `v8` / `js`: write `@embed 1` in the box text — `v8 mylogic.js @embed 1`, or `v8 fx-shootout-highlight.js 15 @embed 1` when the script takes arguments. That is the `embed` attribute the v8 refpage labels "Save Javascript with Patcher", and it is how C74's own `v8.maxhelp` writes its box (`v8 videotester @embed 1`). Keep the `.js` next to the patch anyway — that is where the script is edited, and `autowatch` reloads it from there. What each part of the toolkit does with it:
+In practice, for `v8` / `js`, the pattern has **two parts, and both are needed** (verified in Max 9 on 2026-09-10 with a twelve-box test John ran; the matrix is below):
 
-- **The converter** reads the file at convert time and stores the source in the box's `textfile.text` (the block Max itself writes on save, alongside `filename`, `flags`, `embed`, `autowatch`). It looks in the output patch's folder, then the spec's folder, plus `code/` and `javascript/` subfolders. So convert with `-o` pointing next to the `.js`; if the file is not found and the spec holds no copy, convert prints a warning and the patch ships without the source.
-- **Sync** carries `textfile` back into the spec, so a patch that arrived *without* its `.js` still holds the code through the next convert. The file on disk wins whenever it is found.
-- **The verifier** warns (`script-not-embedded`) on any `v8` / `js` box that names a script without asking to embed it.
+1. **`@embed 1` in the box text** — `v8 mylogic.js @embed 1`, or `v8 highlight.js 15 @embed 1` when the script takes arguments. This is what makes Max *use* the stored copy when the `.js` is missing. A box without it reports "can't find file" and stays dead even when the stored copy is present.
+2. **A `[loadmess embed 1]` object wired to the box's left inlet.** This is what makes Max *keep* the stored copy when it saves the patch while the `.js` is present. The creation attribute alone is overridden the moment the file loads: Max writes `embed 0` and drops the text. An `embed 1` message arriving after load sticks, and the Inspector's "Save Javascript with Patcher" tick does the same by hand.
+
+Keep the `.js` next to the patch anyway — that is where the script is edited, and `autowatch` reloads it from there. What each part of the toolkit does with the pattern:
+
+- **The converter** reads the file at convert time and stores the source in the box's `textfile.text` (the block Max itself writes on save, alongside `filename`, `flags`, `embed`, `autowatch`). It looks in the output patch's folder, then the spec's folder, plus `code/` and `javascript/` subfolders, and resolves `v8 name` to `name.js` the way Max does. If the file is not found and the spec holds no copy, convert prints a warning and the patch ships without the source.
+- **Sync** reads the intent from the box text, so a Max save that dropped the stored copy is repaired on the next sync (rules below). The file on disk wins whenever it is found.
+- **The verifier** warns `script-not-embedded` on a `v8` / `js` box that names a script without `@embed 1`, and `script-embed-not-kept` on one with no `loadmess embed 1` feeding it.
+
+**What Max actually does, observed** (file present means a `.js` beside the patch whose text differs from the stored copy):
+
+| box | file present | runs | Max save writes |
+|---|---|---|---|
+| `v8 a.js @embed 1` | no | stored copy | embed 1, text kept |
+| `v8 a.js @embed 1` | yes | the file | embed 0, text dropped |
+| `v8 a.js @embed 1 @autowatch 0` | yes | the file | embed 0, text dropped |
+| `v8 a.js` + `loadmess embed 1` | yes | the file | embed 1, the file's text stored |
+| `v8 a.js @embed 1` + `loadmess embed 1` | yes | the file | embed 1, the file's text stored |
+| `v8 a.js` with embed 1 and text stored, no `@embed 1` | no | nothing: "can't find file" | — |
+| `v8 a.js @embed 1` with text stored | no | stored copy | embed 1, text kept |
+
+`flags` in the textfile block made no difference (0 and 1 both ran); C74's own embedded boxes carry 1. Whether the box text names the script with or without `.js` made no difference either.
 
 **Two copies, one editing surface.** The `.js` on disk is where the script is edited; the copy in the patch is what travels. A script-only change is made in the file, never in the embedded copy, and is followed by `sync` on the patch. `sync` is the meeting point, and it applies John's four rules (2026-09-10) to every embedded script:
 

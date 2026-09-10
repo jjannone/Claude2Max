@@ -87,3 +87,19 @@ def test_rule_4_resolve_from_disk():
         assert _embedded(p) == SRC + "// disk\n"
         spec = s.extract_spec(json.loads(p.read_text()))
         assert spec["objects"]["v"]["attrs"]["textfile"]["text"] == SRC + "// disk\n"
+
+
+def test_max_save_that_dropped_the_copy_is_repaired_by_sync():
+    # Max 9 writes embed 0 and no text when it saves a box whose .js was present
+    with tempfile.TemporaryDirectory() as d:
+        p, js = _setup(d)
+        m = json.loads(p.read_text())
+        for w in m["patcher"]["boxes"]:
+            if w["box"].get("text", "").startswith("v8"):
+                w["box"]["textfile"] = {"filename": "foo.js", "flags": 0, "embed": 0, "autowatch": 1}
+        p.write_text(json.dumps(m))
+        r = _sync(p)
+        assert r.returncode == 0 and "stored copy was missing" in r.stderr
+        m = json.loads(p.read_text())
+        box = next(w["box"] for w in m["patcher"]["boxes"] if w["box"].get("text", "").startswith("v8"))
+        assert box["textfile"]["embed"] == 1 and box["textfile"]["text"] == SRC

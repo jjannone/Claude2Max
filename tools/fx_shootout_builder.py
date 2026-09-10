@@ -803,6 +803,8 @@ def build_patch(name, blurb, slots, transport=None):
     S.comment("c_hl", "index → slot number (one column, so index + 1) → s SEL; also lights TITLE_nn",
               1450, 330, 520)
     S.newobj("s_sel", "s SEL", 1140, 370)
+    S.newobj("lm_hl", "loadmess embed 1", 1140, 300)   # keeps the stored script through a Max save
+    S.con("lm_hl", 0, "hl_v8", 0)
     S.con("tab", 0, "hl_v8", 0)
     S.con("hl_v8", 0, "s_sel", 0)
 

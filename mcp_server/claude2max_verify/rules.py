@@ -1173,7 +1173,35 @@ def rule_script_object_declarations(ctx: SpecContext) -> list:
                     f"the patch and the box still runs when the .js does not travel with it.",
                     "CLAUDE.md > Embed the Script in Every v8 Box",
                 ))
+            elif script and not _has_embed_feeder(ctx, oid):
+                # Verified in Max 9 (2026-09-10): with the .js present, a save
+                # drops the stored copy unless `embed 1` reached the box as a
+                # message after load; the creation attribute alone is overridden.
+                out.append(Violation(
+                    "script-embed-not-kept", WARNING, oid,
+                    f"'{oid}' ({ctx.text(obj)}) has no [loadmess embed 1] feeding it. "
+                    f"Max drops the stored script on save while the .js is present unless "
+                    f"`embed 1` arrives as a message after load — add a [loadmess embed 1] "
+                    f"object wired to this box's left inlet.",
+                    "CLAUDE.md > Embed the Script in Every v8 Box",
+                ))
     return out
+
+
+def _has_embed_feeder(ctx: SpecContext, oid: str) -> bool:
+    """True when a [loadmess embed 1] or an `embed 1` message box feeds oid."""
+    for conn in ctx.spec.get("connections") or []:
+        if not (isinstance(conn, (list, tuple)) and len(conn) >= 4 and conn[2] == oid):
+            continue
+        src = ctx.objects.get(conn[0])
+        if not isinstance(src, dict):
+            continue
+        toks = ctx.text(src).split()
+        mc = ctx.maxclass(src)
+        if (mc == "newobj" and toks[:3] == ["loadmess", "embed", "1"]) or \
+           (mc == "message" and toks[:2] == ["embed", "1"]):
+            return True
+    return False
 
 
 # {class: [(toggle_attr, [required companions])]} — an enable switch without

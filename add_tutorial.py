@@ -857,9 +857,17 @@ def add_tutorial_to_patch(maxpat, steps, annotation_ids, panel_ids, js_filename,
             "filename": js_filename,
             "textfile": {"filename": js_filename, "flags": 0, "embed": 1, "autowatch": 1},
         }},
+        {"box": {
+            # keeps the stored copy through a Max save while the .js is present
+            # (the creation attribute alone is overridden — verified 2026-09-10)
+            "id": "tut-loadmess", "maxclass": "newobj",
+            "numinlets": 1, "numoutlets": 1, "outlettype": [""],
+            "patching_rect": [nav_x + 250.0, nav_y + 27.0, 110.0, 22.0],
+            "text": "loadmess embed 1",
+        }},
     ]
     if js_source is not None:
-        new_boxes[-1]["box"]["textfile"]["text"] = js_source
+        new_boxes[-2]["box"]["textfile"]["text"] = js_source
 
     # Panels: one per step, hidden, background layer, locked
     panel_boxes = []
@@ -994,6 +1002,7 @@ def add_tutorial_to_patch(maxpat, steps, annotation_ids, panel_ids, js_filename,
     patcher["bglocked"] = 1
 
     new_lines = [
+        {"patchline": {"source": ["tut-loadmess", 0], "destination": ["tut-v8", 0]}},
         {"patchline": {"source": ["tut-umenu",    0], "destination": ["tut-v8", 0]}},
         {"patchline": {"source": ["tut-prev",     0], "destination": ["tut-v8", 0]}},
         {"patchline": {"source": ["tut-next",     0], "destination": ["tut-v8", 0]}},
