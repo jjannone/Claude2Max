@@ -2468,6 +2468,12 @@ def _box_to_spec_obj(box):
         obj["inlets"] = box.get("numinlets", 0)
         obj["outlets"] = box.get("numoutlets", 0)
         obj["outlettype"] = list(box.get("outlettype", []))
+    # A `p` / `patcher` subpatcher is authored content: it becomes a nested
+    # `patcher` sub-spec, built the same way as the root, so a patch that
+    # arrives with subpatchers (or a tab edited in Max) is described all the
+    # way down. Before 2026-09-13 the nested boxes were dropped here.
+    elif maxclass != "bpatcher" and isinstance(box.get("patcher"), dict):
+        obj["patcher"] = maxpat_to_spec({"patcher": box["patcher"]})
 
     return obj
 
@@ -2693,6 +2699,18 @@ def reconcile_spec(existing_spec, maxpat):
         # change when the operator turns them): mirror it from the box.
         if "maxpat" in updated and box.get("embed") and isinstance(box.get("patcher"), dict):
             updated["maxpat"] = copy.deepcopy(box["patcher"])
+        # A `p` subpatcher's contents live in the spec's nested `patcher`:
+        # reconcile that sub-spec against the live nested patcher, recursively,
+        # so an edit made inside the subpatcher in Max is captured. Before
+        # 2026-09-13 `spec_matches_patch` reported such an edit as stale but
+        # sync kept the old sub-spec, and the next convert reverted the edit
+        # (John's `attrui` inside a tab of what_is_midi_for_max.maxpat).
+        elif maxclass_live != "bpatcher" and isinstance(box.get("patcher"), dict):
+            sub_existing = spec_objects[sid].get("patcher")
+            sub_maxpat = {"patcher": box["patcher"]}
+            updated["patcher"] = (reconcile_spec(sub_existing, sub_maxpat)
+                                  if isinstance(sub_existing, dict)
+                                  else maxpat_to_spec(sub_maxpat))
 
         # Re-extract preserved attrs (varname, styling, hidden) from the live box
         # so manual edits in Max are captured. Merge into existing spec attrs;
