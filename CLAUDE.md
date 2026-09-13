@@ -254,6 +254,14 @@ John's wording, 2026-09-09: "never use convert unless it's specifically needed �
 
 **If anything has changed that the spec cannot include, update the spec design.** A patch carrying state the spec has no field for is a gap in the spec format, not a reason to accept the loss. Add the field, teach `sync` to fill it from the file and `convert` to write it back, and add a test that round-trips it. The two pass-through fields that exist for this reason are `patcher_extras` at the root (Snapshots, the parameter registry) and `box_extras` on each object (a plug-in snapshot on `vst~`, `parameter_enable`, panel gradient keys, anything else Max writes on a box); `sync` also mirrors the saved `inlets` / `outlets` / `outlettype` into the spec's own fields. Both were added the day the loss was found. The recognition signal: any key in a `.maxpat` that a sync → convert round trip does not reproduce. The check is a few lines — diff the boxes of the file against the boxes of a convert of its synced spec — and it belongs in the repo's tests, not in memory.
 
+## Inside a Subpatcher Is Still Max — Binding Rule {!core}
+
+There is no difference between Max inside a patcher and Max outside it. A `p` box, a tab, a `poly~` voice, an abstraction: each holds ordinary boxes and cords, and every rule, tool, and check that applies to a patch applies at every depth of nesting, without exception. Sync captures an edit made inside a subpatcher exactly as it captures one at the root. The staleness check reports a nested difference. The verifier walks every nested scope. Script reconciliation finds a `v8` three levels down. Labeling, layout, presentation, display-in-the-path, attribute visibility: all of it binds inside as it binds outside, because the reader who opens the subpatcher is looking at Max.
+
+The failure this rule names is code or reasoning that handles the root and stops. It is easy to write, because the root is where a function starts, and it fails silently, because nothing inside a subpatcher complains about being ignored. For instance: until 2026-09-13 `sync` reconciled only the root's boxes, so an `attrui` John added inside a tab of the MIDI examples patch was reported by the staleness check and then quietly dropped by the next convert. The verifier, the staleness check, and the script reconciler already recursed; sync was the one that did not, and nothing about the root-level result said so.
+
+So when a capability is added to the toolkit, it is not done until it reaches nested patchers, and its test includes a nested case. When reading a patch, read inside the boxes. The recognition signal: a loop over `patcher["boxes"]` with no recursion into `box["patcher"]`, or a description of a patch that never mentions what its subpatchers contain.
+
 ## Modify, Don't Rebuild — and Treat Observed-Good Patterns as Binding {!core}
 
 When the task is a new version of an existing patch, the default workflow is `edit the .maxpat → sync`: change only the boxes that are changing, then let sync carry the change into the spec (see *Never Use `convert` Unless It Is Specifically Needed*). When a rebuild is specifically needed, it is `extract → edit → convert`: pull the embedded spec, modify only what is changing, write back. Rebuilding the spec from scratch is the wrong default — it silently drops every working detail of the original that does not make it into the new build. Alignment offsets, init defaults, wiring patterns, sub-systems, naming conventions, and dozens of micro-decisions that took prior sessions to get right vanish without warning. Only build from scratch when the new version shares less than half its structure with the original.
@@ -629,6 +637,8 @@ Hook commands, MCP registrations, launch configs, and anything else stored as a 
 ### Working on an existing patch — sync first, always {!core}
 
 **Before any work on an existing .maxpat**, run sync to capture manual edits the user made in Max. No exceptions — not even for small fixes. `convert` regenerates the .maxpat from scratch and will silently destroy moved objects, added/deleted objects, hidden objects, and hidden cords.
+
+**Sync reaches every nesting level.** An edit made inside a `p` subpatcher, a tab, or any nested patcher is captured the same way as one at the root (since 2026-09-13; see *Inside a Subpatcher Is Still Max*).
 
 **The sync-first rule applies to any source of edits — not just user GUI changes.** Any direct modification to a .maxpat — whether a user edit in Max's GUI or a programmatic post-processing script — is invisible to the embedded spec and will be silently overwritten on the next `convert`. Use `/c2m-sync` or run `python3 spec2maxpat.py sync -i <patch>` immediately after any direct .maxpat modification.
 
