@@ -439,6 +439,47 @@ def _load_maxpat_json(text):
     return None
 
 
+def read_patch_file(path):
+    """Load a .maxpat / .maxhelp / .amxd from disk. Returns (maxpat_dict, raw_bytes);
+    raw_bytes is what write_patch_file needs to put a .amxd's header back."""
+    raw = open(path, "rb").read()
+    obj = _load_maxpat_json(raw.decode("utf-8", "ignore"))
+    if obj is None:
+        raise ValueError(f"{path}: not a Max patch (no JSON object found)")
+    return obj, raw
+
+
+def _amxd_chunks(raw):
+    """Split a .amxd into its chunks: [(tag, payload), ...]. Measured on a device
+    Live saved (2026-09-13): 'ampf' + u32 len + 4-byte device type ('mmmm' = MIDI
+    effect), 'meta' + u32 len + payload, 'ptch' + u32 len + patcher JSON + NUL."""
+    import struct
+    chunks, i = [], 0
+    while i + 8 <= len(raw):
+        tag, ln = raw[i:i + 4], struct.unpack("<I", raw[i + 4:i + 8])[0]
+        chunks.append((tag, raw[i + 8:i + 8 + ln]))
+        i += 8 + ln
+    return chunks
+
+
+def write_patch_file(path, maxpat, raw=None):
+    """Write a patch back to disk. A .amxd keeps every header chunk from `raw`
+    (the bytes read_patch_file returned for the same file) and replaces only the
+    'ptch' payload; anything else is written as plain JSON."""
+    import struct
+    text = json.dumps(maxpat, indent=2) + "\n"
+    if raw is not None and raw.startswith(b"ampf"):
+        out = b""
+        for tag, payload in _amxd_chunks(raw):
+            if tag == b"ptch":
+                payload = text.encode("utf-8") + b"\0"
+            out += tag + struct.pack("<I", len(payload)) + payload
+        open(path, "wb").write(out)
+        return
+    with open(path, "w") as fh:
+        fh.write(text)
+
+
 def _native_box_to_obj(box):
     """A native .maxpat box → the {type, text, attrs} shape the rule library reads."""
     mc = box.get("maxclass")
@@ -1481,6 +1522,19 @@ def estimate_text_width(text):
     return max(len(text) * 7 + 20, 40)
 
 
+def _size_is_default(maxclass, text, w, h):
+    """True when a saved box's (w, h) is exactly what build_box writes with no
+    `size` in the spec — so sync can drop the field without changing what the
+    next convert produces, and must keep it otherwise. A box widened in Max, or
+    given a `size` in the spec for cord clearance, has a width the estimate does
+    not reproduce; dropping it silently narrowed the box on the next convert
+    (sample-key-mapper's 560 px v8 box, 2026-09-12)."""
+    default_wh = UI_SIZES.get(maxclass)
+    if default_wh:
+        return (int(w), int(h)) == tuple(default_wh)
+    return int(h) == 22 and int(w) == estimate_text_width(text or "")
+
+
 # A box shows its whole text: narrower than the text, Max wraps it onto more
 # lines and the box gets taller. Measured on C74's shipped help patches
 # (535 wrapped boxes): 22 px for one line at the default 12 pt font, then
@@ -2373,12 +2427,8 @@ def _box_to_spec_obj(box):
     if text and maxclass in ("newobj", "message", "comment", "live.text"):
         obj["text"] = text
 
-    # Size — include only when meaningfully non-default
-    default_wh = UI_SIZES.get(maxclass)
-    if default_wh:
-        if (int(w), int(h)) != default_wh:
-            obj["size"] = [int(w), int(h)]
-    elif int(h) != 22:
+    # Size — include only when it differs from what convert would write
+    if not _size_is_default(maxclass, text, int(w), int(h)):
         obj["size"] = [int(w), int(h)]
 
     # Presentation
@@ -2443,7 +2493,13 @@ def _build_connections(lines, bid_to_spec):
 # drop them and sync would never see them; they travel verbatim in the spec's
 # root `patcher_extras` dict instead. Found 2026-09-09 when John stored a
 # snapshot in delay-shootout.
-_PATCHER_PASSTHROUGH = ("snapshot", "parameters")
+# `showontab` / `showrootpatcherontab` are the patcher-window tab keys Max's
+# help files use: a `p` box whose inner patcher carries `showontab: 1` is shown
+# as a tab of the parent window, titled with the subpatcher's name, and the
+# parent's `showrootpatcherontab` decides whether the parent itself gets a tab
+# (`thispatcher setactivetab <name>` switches). Authored in a spec's
+# `patcher_extras` (root or sub-spec) and mirrored back by sync. 2026-09-12.
+_PATCHER_PASSTHROUGH = ("snapshot", "parameters", "showontab", "showrootpatcherontab")
 
 
 def _patcher_extras(patcher):
@@ -2611,16 +2667,10 @@ def reconcile_spec(existing_spec, maxpat):
         # specs stay clean of redundant size declarations.
         w_live, h_live = int(r[2]), int(r[3])
         maxclass_live = box.get("maxclass", spec_objects[sid].get("type", "newobj"))
-        default_wh = UI_SIZES.get(maxclass_live)
-        if default_wh:
-            if (w_live, h_live) != default_wh:
-                updated["size"] = [w_live, h_live]
-            elif "size" in updated:
-                del updated["size"]
-        elif h_live != 22:
+        if _size_is_default(maxclass_live, box.get("text", ""), w_live, h_live):
+            updated.pop("size", None)
+        else:
             updated["size"] = [w_live, h_live]
-        elif "size" in updated:
-            del updated["size"]
 
         # Presentation — fold live presentation_rect back into spec as the
         # canonical 4-element list form. A box dropped from presentation in
@@ -2662,6 +2712,14 @@ def reconcile_spec(existing_spec, maxpat):
                 merged_attrs.pop(k, None)
                 continue
             merged_attrs[k] = val
+        # Any attr the spec already names follows the box when the box carries a
+        # different value: an Inspector edit, a v8ui's declared attribute changed
+        # in Max (offset / range / keyaspect on zkeyboard, 2026-09-12), a saved
+        # parameter block. The patch is the source of truth; before this, sync
+        # kept the spec's stale value and the next convert wrote it back.
+        for k in list(merged_attrs):
+            if k in box and box[k] != merged_attrs[k]:
+                merged_attrs[k] = copy.deepcopy(box[k])
         if merged_attrs:
             updated["attrs"] = merged_attrs
         elif "attrs" in updated:
@@ -2769,7 +2827,12 @@ def reconcile_scripts(maxpat, patch_path, prefer=None):
     for box, filename in _script_boxes(maxpat.get("patcher", {})):
         tf = box["textfile"]
         embedded = tf.get("text")
-        path = find_script_file(filename, [folder])
+        # The patch's own folder first, then its parent: a Max package keeps a
+        # device in devices/ and its script in javascript/ beside it, and
+        # find_script_file already looks in <base>/javascript and <base>/code.
+        # Without the parent, a package device would get a second copy of its
+        # script written next to it (rule: one home on the search path).
+        path = find_script_file(filename, [folder, folder.parent])
         rec = {"box": box.get("text", ""), "file": str(path or (folder / filename))}
         if path is None:
             if isinstance(embedded, str):
@@ -3168,8 +3231,7 @@ def main():
             print(output)
 
     elif args.command == "extract":
-        with open(args.input, "r") as f:
-            maxpat = json.load(f)
+        maxpat, _raw = read_patch_file(args.input)
 
         try:
             spec = extract_spec(maxpat)
@@ -3194,8 +3256,7 @@ def main():
         print(mct_encode(content))
 
     elif args.command == "sync":
-        with open(args.input, "r") as f:
-            maxpat = json.load(f)
+        maxpat, raw_in = read_patch_file(args.input)
 
         if args.check:
             try:
@@ -3234,9 +3295,7 @@ def main():
             sys.exit(1)
 
         out_path = args.output or args.input
-        with open(out_path, "w") as f:
-            json.dump(updated_maxpat, f, indent=2)
-            f.write("\n")
+        write_patch_file(out_path, updated_maxpat, raw_in if out_path.endswith(".amxd") else None)
 
         action = "reconciled" if had_spec else "generated"
         print(f"Spec {action} — {len(spec.get('objects', {}))} objects, "

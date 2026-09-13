@@ -291,18 +291,32 @@ def _read_md(path: Path) -> str:
         return f"[Module file not found: {path.name}]"
 
 
+_HEADING_TAG_RE = re.compile(r"\s*\{![^}]*\}\s*$")
+
+
+def _heading_key(line: str) -> str:
+    """A heading line with any trailing `{!tag}` admonition removed, for
+    matching. `## Common Pitfalls {!core}` and `## Common Pitfalls` are the
+    same section; the tag only says which module surfaces it."""
+    return _HEADING_TAG_RE.sub("", line.strip())
+
+
 def _extract_section(text: str, header: str) -> str:
-    """Extract one `## Header` section from markdown (stops at next `## ` heading)."""
+    """Extract one `## Header` section from markdown (stops at next `## ` heading).
+    `header` is matched with its `{!tag}` stripped, so tagging a heading for a
+    module does not make it invisible here (2026-09-12: the Common Pitfalls
+    search returned nothing for four days after the heading gained `{!core}`)."""
     lines = text.splitlines()
+    want = _heading_key(header)
     capturing = False
     result: list[str] = []
     for line in lines:
-        if line.strip() == header:
+        if _heading_key(line) == want:
             capturing = True
             result.append(line)
             continue
         if capturing:
-            if line.startswith("## ") and line.strip() != header:
+            if line.startswith("## ") and _heading_key(line) != want:
                 break
             result.append(line)
     return "\n".join(result)

@@ -122,3 +122,14 @@ def _run():
 
 if __name__ == "__main__":
     sys.exit(0 if _run() else 1)
+
+
+def test_search_pitfalls_reaches_common_pitfalls_bullets():
+    """The Common Pitfalls heading carries a `{!core}` tag; the section extractor
+    must still find it, or search_pitfalls silently loses the whole section
+    (it did, 2026-09-08 to 2026-09-12)."""
+    chunks = server._build_pitfall_chunks()
+    common = [c for c in chunks if c["source"] == "Common Pitfalls"]
+    assert len(common) > 20
+    hit = server.search_pitfalls("textedit output", limit=3)
+    assert any(p["source"] == "Common Pitfalls" for p in hit["pitfalls"])

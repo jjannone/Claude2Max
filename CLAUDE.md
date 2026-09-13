@@ -67,6 +67,16 @@ After fixing any error, derive a general rule that would have prevented it. Pres
 
 **Lead with intent, follow with example.** State what you're trying to achieve in plain terms first, then illustrate with a concrete case introduced as "for instance." This keeps the principle readable and applicable broadly, while still giving actionable guidance. Rules that lead with a specific method risk being read as recipes rather than principles.
 
+**Examples are exemplars, not limits.** When writing a rule, name enough instances to make the principle recognizable and say so. When reading one, extrapolate from them; see *Examples in Rules Are Exemplars, Not Limits*.
+
+## Examples in Rules Are Exemplars, Not Limits — Binding Rule {!core}
+
+Every rule in this repo states a principle and then illustrates it, usually with "for instance." The illustration shows the shape of the principle at one point; it does not fence the principle in. A rule that names `live.dial` over `dial` covers `live.gain~` over `gain~` and every pair it did not name. A pitfall recorded for one object covers the next object with the same behavior. A layout rule shown on a three-column row covers a five-column row. Reading an example as the whole rule turns a general principle back into the single incident it was generalized from, which is the failure *Rules from Corrected Errors* exists to prevent.
+
+So when a situation resembles a rule's example without matching it, the rule applies. When it matches none of the examples but fits the principle, the rule applies. The examples are there to make the principle recognizable, and to show what counts as an instance. Extrapolate from them. If a case seems to fit the principle but you are unsure, apply the rule and say which principle you applied, rather than treating the absence of a matching example as permission.
+
+The recognition signal: the thought "the rule only mentions X, and this is Y." That is the moment to reread the rule's first sentence, which states the principle, and decide from that.
+
 ## Ask Before Taking Control of the Computer — Binding Rule
 
 Never drive the user's screen, mouse, keyboard, or a running application (the computer-use tools, Max itself, a browser acting on the user's own sessions) without asking first and waiting for a yes, in that conversation, for that task. The user is at the machine and can check a running Max faster and more safely than an automated click can; a request to verify something in Max is a request for the user to look, unless they say otherwise. Loading the tool schemas is fine; calling `request_access` or any action tool is not. This is a per-task permission: a yes for one check does not carry over to the next. (John, 2026-09-09, after Claude reached for computer control to test a click in Max.)
@@ -333,6 +343,40 @@ Where Max offers two objects for the same job and one carries its behavior in an
 2. **`join`'s creation arg is the inlet count, so it cannot carry initial values the way `pak 4000 8001` does.** `join` starts its slots at `int 0`. If a stored default mattered, it now has to live somewhere else — a `loadmess`, or the downstream object's own creation args.
 
 The general form of this rule, beyond lists: any time you are choosing between two objects that do the same thing, prefer the one whose behavior you can *read off the box*. Related but distinct from *Prefer an Object's Own Attribute Over an Adapter Chain* — that rule is about not adding an object, this one is about which object to add.
+
+## Prefer the Most Modern Member of an Object Family — Binding Rule {!core}
+
+When Max offers several objects for the same job, default to the newest and most capable one, not the one that appears first in the training data or the tutorials. The older objects still work, and that is exactly why they linger: they come to mind first, they are shorter to type, and nothing warns that a better one exists. The newer member carries what was learned since: a parameter block, styling, a value range that is set and read in the Inspector, a richer set of messages. Reach for the older member only when a specific limitation of the newer one is in the way, and say what it is.
+
+For instance, the pairs John named on 2026-09-12, newer first: `live.gain~` over `gain~`, `live.dial` over `dial`, `multislider` over `slider`. These are exemplars, not a list to match against. Any family with an older and a newer member falls under the rule, whether or not it appears here; extend the same judgment to every such pair you meet. The *Preferred Objects for Common Tasks* table records the same preference per task. The recognition signal: the object I am about to type has a `live.` twin or a multi-valued twin, and I have not checked which one the current Max ships as the intended choice. This is the sibling of *Prefer the Object That States Its Behavior in an Attribute*: that rule picks the object whose behavior can be read off the box; this one picks the object that carries the most behavior in the first place.
+
+## Several Views in One Window: Patcher Tabs, Not bpatchers — Binding Rule {!core}
+
+When one window has to hold several self-contained views, so that the operator switches between whole pages of controls or whole example patches, use Max's own patcher tabs. A `p` box whose inner patcher carries `showontab: 1` appears as a tab in the parent window, titled with the box's name, and the parent's `showrootpatcherontab` decides whether the parent itself gets a tab. This is how every Cycling '74 help file is built, and `thispatcher setactivetab <name>` switches tabs from a message. In a spec it is one line per page, `"patcher_extras": {"showontab": 1}` on the sub-spec (see `SPEC_REFERENCE.md` > `patcher_extras`).
+
+Do not build the same thing out of `bpatcher` boxes stacked on one presentation rect, hidden and shown by a script, or scrolled with `offset`. That construction needs a controller object, a varname per page, code that owns visibility state, and a layout in which ten pages occupy one rectangle, and each of those is a thing to read, keep in agreement, and debug. Patcher tabs need none of it: each page is an ordinary subpatcher with its own patching and presentation view, the tab bar is the whole switching mechanism, and nothing is hidden. For instance, the ten MIDI teaching examples for John's Brooklyn College course (2026-09-12) are ten `p "1 Key sends"` … `p "10 CC mapping"` boxes and nothing else; the first design, ten embedded bpatchers with a `v8` hiding nine of them, was discarded at John's direction.
+
+**This does not retire the `tab` / `live.tab` object.** Those are selectors inside one view: they choose which of several things one shared set of controls acts on, and drive routing, `selector~`, a highlight, a `umenu` of presets. The reverb-shootout's `live.tab` picks which of sixteen reverbs the master dry/wet listens to, and that is exactly a selector's job, not a page switch. The test is what changes when the operator clicks: if the answer is "which patch fills the window," use patcher tabs; if it is "which item the same controls address," use the object.
+
+## If You Mention an Attribute, Show It — Binding Rule {!core}
+
+When a comment, label, header, tutorial step, or document sentence names an attribute of an object, the patch must make that attribute visible at the object. For a plain object box the attribute belongs in the box text, as in `random @range 60 84`. For a UI object whose box shows no text, a `kslider`, a `live.dial`, a `multislider`, put an `attrui` for that attribute above the object, wired to its left inlet, the way Cycling '74's own `kslider.maxhelp` shows `mode`. An attribute set only in the Inspector is invisible: a reader told "mode 1 (polyphonic)" and shown nothing has to take it on faith or go looking, and the comment is describing something the patch does not display. The same premise as *Put the Display in the Path*: in Max the patch is its own documentation, so what the words claim, the boxes show.
+
+If showing it is not worth a box, do not mention it. A comment that names an attribute the reader cannot see is worse than one that describes the behaviour in plain words.
+
+For instance: John added an `attrui` for `mode` to the "Held keys" tab of the MIDI examples on 2026-09-13, whose header says "mode 1 (polyphonic)"; every `kslider` in the ten examples now carries one, and a readout comment that named `ignoreclick 1` was reworded to "display-only" rather than adding three more `attrui` boxes. The recognition signal: typing an attribute name into a comment for an object whose box does not already show it.
+
+`attrui` mechanics, verified against the help corpus (1,827 cords, every one to inlet 0): the attrui connects to the object's **left** inlet, never another one; its `attr` attribute names the attribute; `text_width` sets the label column. It reads the current value back from the object, so it is a display as well as a control.
+
+## Put the Display in the Path — Binding Rule {!core}
+
+In Max a UI object is not a view of data that lives somewhere else. It is a stage in the dataflow: the message that reaches its inlet is what it draws, and what it draws is what it sends on. There is no model behind the patch for the picture to be a view of; the messages on the cords are the only state there is, and every object that shows something shows what passed through it. So a UI object that can display a value belongs **in series**, between the source and whatever consumes the value, never in parallel beside the source. In series, the picture cannot disagree with the data, because they are the same message. In parallel, the object shows only what it was given directly, and what it shows and what actually flows drift apart the first time the two sources differ.
+
+The mistake this rule names is importing a model-and-view split from other environments, where a widget is a separate thing that has to be kept in sync with the real state. Max has no such split, and a patch built as if it did throws away visualization that Max gives for free.
+
+For instance, on 2026-09-12 the MIDI teaching examples had `notein` and a `kslider` both wired into the same downstream inlets, as two alternative sources. The keyboard lit only the keys that were clicked; a note played on hardware went past it unseen, and the two could show different things at once. The correction is `notein` → `kslider` → downstream, pitch to the left inlet and velocity to the right: the keyboard now lights every note that arrives, from either source, and is the only thing feeding the rest of the patch. The same for `ctlin` → `live.dial` → downstream, and the same principle anywhere a `number`, `flonum`, `multislider`, `live.gain~`, `button`, or `slider` can sit on a cord instead of beside it.
+
+More generally: do not make a structural choice that removes visualization Max already offers, or that lets two visible things about the same data disagree. The recognition signal: a UI object and a source both feeding the same inlet, or a UI object that only ever shows what the operator did to it. That is the moment to move it onto the cord.
 
 ## Don't Add an Object That Duplicates What an Object Already in the Patch Does — Binding Rule {!core}
 
@@ -671,7 +715,7 @@ When planning a patch for a student, default to the objects in the table below f
 | Random / probability | `random` with attributes | `@range` takes **two** values — `random @range 4000 8000` emits 4000–8000 directly, so no downstream `scale` and no offset `+`. Change it live with a `range <lo> <hi>` message to the left inlet. `@seed` for reproducibility. Don't roll your own with `expr`. |
 | Scale / map a number range | `scale` | `scale <in_lo> <in_hi> <out_lo> <out_hi>` — one object, no math. Don't reach for `expr` for simple range mapping. |
 | Comparing / routing values | `v8` JavaScript | Branching logic with multiple conditions is far cleaner expressed as a few lines of JS than as a tree of `if` / `select` / `route` boxes. Use `v8`, not `js`. |
-| Single button / toggle / dial / slider | Varies by context | `button` for momentary, `toggle` for on/off state, `dial` or `live.dial` for continuous, `slider` or `multislider` for linear ranges. Pick the affordance that matches the operator's mental model for that control. |
+| Single button / toggle / dial / slider | Varies by context | `button` for momentary, `toggle` for on/off state, `live.dial` for continuous (not `dial`), `multislider` for linear ranges (not `slider`), `live.gain~` for a level (not `gain~`). Pick the affordance that matches the operator's mental model for that control, and the newest member of its family (see *Prefer the Most Modern Member of an Object Family*). |
 | Number readout (display only, no input) | `message` box with input to right inlet, OR `comment` with `set <value>` message | Send `flonum → sprintf "%.2f" → (right inlet of message)` for a clean float readout. The message displays the value but doesn't fire. Alternative: `flonum → sprintf "set %.2f" → comment` if you want the styling of a comment rather than a message. |
 | Text input from the user | `dialog` | A modal popup — bang to prompt, the entered text comes out the outlet. Avoid `textedit` for set-once configuration values (see the binding rule "Don't Use `[textedit]` for Set-Once Configuration"). |
 | List manipulation | `v8` JavaScript | Filtering, reshaping, mapping, sorting a list is one line of JS. Don't chain `zl` / `join` / `unjoin` / `vexpr` for anything beyond the trivial cases. |
@@ -683,6 +727,7 @@ When planning a patch for a student, default to the objects in the table below f
 | GL drawing | No strong preference | Pick the `jit.gl.*` object that matches the primitive you need — `jit.gl.gridshape`, `jit.gl.mesh`, `jit.gl.sketch`, `jit.gl.text`, etc. |
 | OSC | `udpreceive` + CNMAT odot `o.route` | Use `o.route` rather than the native `OSC-route` when CNMAT odot is installed — `o.route` has cleaner semantics and is what the rest of the OSC community converged on. Install via Package Manager → CNMAT Externals. |
 | Networking / WebSocket | `node.script` + the multi-user-template | When the patch needs to talk to phones, browsers, or the cloud, build on `multi-user-template` (see the dedicated section above) — don't roll a Node-for-Max LAN server from scratch. |
+| Several pages or examples in one window | Patcher tabs: `p "<name>"` with `showontab: 1` | Max's help-file mechanism; every page keeps its own patching and presentation view, nothing is hidden, no controller object. Not for choosing among items one set of controls acts on: that is a `live.tab` / `tab` selector inside one view (see *Several Views in One Window: Patcher Tabs, Not bpatchers*). |
 | Send / receive between distant parts of a patch | `s` / `r` for messages, `value` for shared scalar state, `pv` / `v` for patcher-scoped variables, `s~` / `r~` for signal | Pick by lifetime and scope. `s`/`r` for cross-patch broadcast of messages; `value` when two boxes need to read the same shared scalar; `pv`/`v` when the scope should not leak past the parent patcher; the `~` variants for signal-rate. **Write the abbreviations** (`s`, `r`, `s~`, `r~`), not the long forms. Use them where a cord would cross the patch — a short local connection stays a cord, because seeing it is what tells the reader the two objects are one chain. **A name is a channel, not a wire: repeat the sender.** When a second source needs an existing channel, put a new `s NAME` under that source instead of running a cord to the existing one — the refpage states that all same-named senders reach all same-named receivers, and C74's `jit.anim.path.maxhelp` ships nine `send topath` boxes in one patch. The order two receivers fire in is explicitly *not* deterministic, so never lean on it. Multiple `s~` sharing a name **sum** into the matching `r~`, which is what makes a mix bus one object per voice. |
 | JS / scripting | `v8` (default) | Modern JavaScript engine — ES6+, faster, better-supported. Use the older `js` object only when you have a specific reason (e.g. you're modifying an existing patch that already uses it). |
 
@@ -1060,6 +1105,24 @@ read:
 - A patch using a fixed external controller (TouchOSC, MIDI keyboard
   hardware) — those can still be wired alongside but the template is
   overkill if there are no phones in the loop.
+
+## A Reusable Object Has One Home on the Search Path — Binding Rule {!core}
+
+Anything more than one patch loads by name — a `v8` / `v8ui` / `jsui` script, an abstraction, a `gen~` file, a `.jxs` shader — gets exactly one copy, in a package on Max's search path, and never a copy beside each patch that uses it. Max resolves files by name, so a second copy is not a convenience but a second source of truth: the moment one copy is edited, in Max's script editor or anywhere else, the other is silently stale, and which one a given patch runs depends on search order nobody is watching. The failure never surfaces as an error. It surfaces as a patch that behaves like last week's version.
+
+So when a script or abstraction is about to be copied next to a patch, stop and put it in the package instead (for John: Butter_Objects, below). Edit it there, commit it there, and restart Max, which caches scripts and abstractions for the session. The one exception is a patch that must travel self-contained, where `@embed 1` on a `v8` box stores the source *inside the patch* rather than beside it (see *Embed the Script in Every v8 Box*); that is a copy Max keeps in step through `sync`, not a loose file. For instance: `zkeyboard.js` was copied from Zendrum_Player into `patches/keymap/` on 2026-09-12 so the sample-key-mapper could load it. John caught it the same session, and the fix was a package, not a rule about copying carefully. (John, 2026-09-12.)
+
+## Butter_Objects — John's Own Max Package, One Home for Reusable Objects
+
+Reusable objects John writes (a `v8ui` script, a `v8` script, an abstraction that more than one project uses) live in the **Butter_Objects** Max package, not beside the patch that first needed them:
+
+```
+/Users/johnjannone/Library/CloudStorage/Dropbox-JohnJannone/john jannone/_Projects__________________/_GitHub/Butter_Objects
+```
+
+It is its own git repo, laid out as a standard Max package (`javascript/`, `help/`, `examples/`, `docs/`), and symlinked into `~/Documents/Max 9/Packages/Butter_Objects`, so Max resolves every file in it by name from any patch on the machine. A box such as `v8ui @filename zkeyboard.js` in any patch needs no copy of the script next to it, and must not get one: two copies of a script under active development drift the first time one is edited in Max's script editor. Edit the object in the package, commit there, and restart Max (it caches scripts and abstractions for the session).
+
+Currently in the package: `zkeyboard` (`javascript/zkeyboard.js`), the kslider + multislider hybrid with key tints, dot overlays and click reporting; its help file; two benches; and John's Live devices under `devices/` with their engines under `javascript/` (`butter_keymap.amxd` + `keymap.js`, the sample-key mapper). Devices are worked on in place there — `spec2maxpat.py sync` reads and writes `.amxd`. Read the package `README.md` for the vocabulary before wiring it. The package's `docs/` folder is where a `<name>.maxref.xml` goes so the converter can resolve an object's inlets and outlets without spec overrides (see `patching/MAX_PATCHING.md` > *Shipping a Community Max Package*); none exist yet, so specs using `zkeyboard` still declare `inlets`, `outlets` and `outlettype`.
 
 ## Consult Installed Packages Before Long Native Chains {!core}
 
