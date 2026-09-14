@@ -200,6 +200,72 @@ prefix every internal global name. The prefix is structural; missing
 one breaks instance isolation silently. (Source: Cycling '74 forum,
 "Problems with pfft~ in Max4Live".)
 
+**In a device, every `send` / `receive` name is one of those global names.**
+Two instances of the same device on two tracks share every `s FOO` /
+`r FOO` pair between them, so a pair used for display messages, a stored
+value, or a pass-through MIDI bus silently joins the instances into one
+machine. The `send` / `receive` (and `send~` / `receive~`) refpages give the
+fix: start the name with three dashes, `s ---FOO`, and Live makes it "unique
+to the device". For instance: `butter_keymap.amxd` first shipped with
+`s KEYS_DELETED`, `s KB_PHYS`, `s CLICK_A`, `s MIDI_THRU`; two instances
+showed one shared deleted set, and each instance's untouched MIDI reached the
+other's `midiout` (John, 2026-09-13). The recognition signal is any `s` / `r`
+in a `.amxd` without the dashes — write them from the start, since the
+failure only appears with a second instance.
+
+The general rule, with the mechanism for each container (`---` for a device,
+`#0` for an abstraction, `poly~` voice or file-loading `bpatcher`, nothing
+extra for an embedded `p`, `pv` for patcher-local state), is `CLAUDE.md` >
+*Every Global Name Inside a Copied Thing Is Per-Instance*.
+
+## Per-instance state that must survive the Live set: `pattr` in parameter mode
+
+A device that keeps its own data — a list of deleted keys, a table of
+mappings, anything a `v8` engine holds — needs that data saved **with each
+device instance in the Live set**, not in a file next to the patch. Two
+instances of the device on two tracks must each reopen with their own
+state. `coll @embed 1` and `text` save with the *patch*, so every instance
+shares one copy and a write from one clobbers the others.
+
+The idiom is a `pattr` with parameter mode on. Its refpage: `parameter_enable`
+"enables use of this object with Max for Live Parameters"; the parameters guide
+says a Blob-typed parameter is non-automatable and "Stored Only" by default,
+which is exactly a per-instance store. **The shape differs from a UI object's.** A `live.dial` carries `parameter_enable: 1` as a top-level box key; a `pattr` (any plain object box) carries it inside `saved_object_attributes`, and a top-level key is silently ignored — Live saved the device with `saved_object_attributes: {parameter_enable: 0}` on a pattr that had been authored with the top-level key (2026-09-13). Mirror Ableton's own `Max DelayTaps.amxd`:
+
+```json
+"text": "pattr DELETED_KEYS @autorestore 0",
+"saved_object_attributes": {"annotation_name": "", "parameter_enable": 1},
+"saved_attribute_attributes": {"valueof": {
+    "parameter_initial_enable": 0,
+    "parameter_invisible": 1, "parameter_linknames": 1,
+    "parameter_longname": "DELETED_KEYS", "parameter_shortname": "DELETED_KEYS",
+    "parameter_type": 3}},
+"varname": "DELETED_KEYS"
+```
+
+`parameter_type: 3` is Blob and `parameter_invisible: 1` is Stored Only. **Give the pattr no Max-side value of its own** when the device reads the pattr directly: no `initial`, no `parameter_initial`, and `@autorestore 0` in the box text. Both of pattr's own restores fire at patch load (its refpage: with autorestore on, `initial` "will be restored upon patch load, rather than the value ... when the patch was last saved") and each can put the file's value back over the one Live has just restored. Ableton's DelayTaps keeps an `initial` because its pattrs feed UI objects Live restores on its own; a pattr that is itself the store cannot. (First device saved with `initial ["none"]` and autorestore on came back empty from a saved set, 2026-09-13.) Wiring:
+
+```
+engine outlet → [s NAME]  …  [r NAME] → [pattr NAME] → [prepend restore] → engine
+```
+
+Three rules make the loop work. **Ask for the value; do not wait for it.**
+Live restores the parameter into the pattr, but the device cannot rely on the
+pattr emitting it, so `live.thisdevice`'s left outlet — which bangs once the
+device is "opened and completely initialized", and again after a preset load
+or a save — drives a `t b b`: the right outlet re-runs the engine's `init`
+(colors, board attributes), then the left outlet bangs the pattr, whose
+refpage says a bang "outputs the data maintained by the pattr object". Plain
+`loadbang` / `loadmess` is too early for this: it fires before Live has
+restored anything. The engine's `restore` handler applies the value and
+redraws but never re-emits it, so what comes back from the pattr stops there.
+And the engine's `init` must not emit the value either — an `init` that sends
+an empty list would overwrite the restored one. The readout can hang off the
+pattr's outlet, so the operator sees the restored value too. For instance:
+`Claude2Max/patches/keymap/sample-key-mapper.maxpat` (2026-09-12). Not yet
+verified by saving and reopening a Live set; the refpage and parameters guide
+are the basis.
+
 ## `.amxd` packaging — what the file holds
 
 A `.amxd` file is a Live device wrapper around a `.maxpat`:
