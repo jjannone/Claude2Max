@@ -262,9 +262,12 @@ redraws but never re-emits it, so what comes back from the pattr stops there.
 And the engine's `init` must not emit the value either — an `init` that sends
 an empty list would overwrite the restored one. The readout can hang off the
 pattr's outlet, so the operator sees the restored value too. For instance:
-`Claude2Max/patches/keymap/sample-key-mapper.maxpat` (2026-09-12). Not yet
-verified by saving and reopening a Live set; the refpage and parameters guide
-are the basis.
+`Butter_tools/devices/butter_keymap.amxd`, which carries this shape as of
+2026-09-15. (The patch this paragraph first named,
+`Claude2Max/patches/keymap/sample-key-mapper.maxpat`, became that device and
+is no longer on disk.) Not yet verified by saving and reopening a Live set;
+the refpage and parameters guide are the basis, and the retest is the
+`butter_keymap` task in `TASK_QUEUE.md`.
 
 ## `.amxd` packaging — what the file holds
 
