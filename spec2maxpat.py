@@ -443,7 +443,18 @@ def read_patch_file(path):
     """Load a .maxpat / .maxhelp / .amxd from disk. Returns (maxpat_dict, raw_bytes);
     raw_bytes is what write_patch_file needs to put a .amxd's header back."""
     raw = open(path, "rb").read()
-    obj = _load_maxpat_json(raw.decode("utf-8", "ignore"))
+    obj = None
+    if raw.startswith(b"ampf"):
+        # Take the 'ptch' chunk by its length field. Scanning the bytes for the
+        # first '{' is wrong here: the little-endian u32 length itself can hold
+        # 0x7b ('{'), as a 69,243-byte butter_keymap.amxd did on 2026-09-14, and
+        # the scan then starts four bytes early on a byte that is not JSON.
+        for tag, payload in _amxd_chunks(raw):
+            if tag == b"ptch":
+                obj = _load_maxpat_json(payload.rstrip(b"\0").decode("utf-8", "ignore"))
+                break
+    if obj is None:
+        obj = _load_maxpat_json(raw.decode("utf-8", "ignore"))
     if obj is None:
         raise ValueError(f"{path}: not a Max patch (no JSON object found)")
     return obj, raw
@@ -2350,6 +2361,11 @@ _PRESERVE_ATTRS = {"bgcolor", "textcolor", "color", "fontsize", "fontface", "fon
                    "bubble", "bubbleside", "bubblepoint", "bubbletextmargin",
                    "bubble_bgcolor",   # bubble comments use this, NOT plain bgcolor
                    "items", "prefix",
+    # attrui binds to its target's attribute through `attr` (and sizes its
+    # label column with `text_width`). Without them an attrui added in Max
+    # reached the spec as a bare attrui and the next convert wrote one bound
+    # to nothing (2026-09-14, the z_displaymode attruis in zslider.maxhelp).
+    "attr", "text_width",
     # playlist~ / jit.playlist keep their loaded clips under `data` — content
     # the operator drops in at runtime, the same class of state as umenu items.
     "data",
@@ -2732,7 +2748,7 @@ def reconcile_spec(existing_spec, maxpat):
             merged_attrs[k] = val
         # Any attr the spec already names follows the box when the box carries a
         # different value: an Inspector edit, a v8ui's declared attribute changed
-        # in Max (offset / range / keyaspect on zkeyboard, 2026-09-12), a saved
+        # in Max (offset / range / keyaspect on zslider, 2026-09-12), a saved
         # parameter block. The patch is the source of truth; before this, sync
         # kept the spec's stale value and the next convert wrote it back.
         for k in list(merged_attrs):
