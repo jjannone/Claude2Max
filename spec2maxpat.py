@@ -2364,7 +2364,7 @@ _PRESERVE_ATTRS = {"bgcolor", "textcolor", "color", "fontsize", "fontface", "fon
     # attrui binds to its target's attribute through `attr` (and sizes its
     # label column with `text_width`). Without them an attrui added in Max
     # reached the spec as a bare attrui and the next convert wrote one bound
-    # to nothing (2026-09-14, the z_displaymode attruis in zslider.maxhelp).
+    # to nothing (2026-09-14, the z_displaymode attruis in butter_keys.maxhelp).
     "attr", "text_width",
     # playlist~ / jit.playlist keep their loaded clips under `data` — content
     # the operator drops in at runtime, the same class of state as umenu items.
@@ -2748,7 +2748,7 @@ def reconcile_spec(existing_spec, maxpat):
             merged_attrs[k] = val
         # Any attr the spec already names follows the box when the box carries a
         # different value: an Inspector edit, a v8ui's declared attribute changed
-        # in Max (offset / range / keyaspect on zslider, 2026-09-12), a saved
+        # in Max (offset / range / keyaspect on butter_keys, 2026-09-12), a saved
         # parameter block. The patch is the source of truth; before this, sync
         # kept the spec's stale value and the next convert wrote it back.
         for k in list(merged_attrs):

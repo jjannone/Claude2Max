@@ -31,7 +31,7 @@ def test_widened_newobj_keeps_its_size():
 
 def test_attr_named_in_spec_follows_box():
     spec = {"objects": {"kb": {"type": "v8ui", "pos": [30, 30], "size": [600, 100], "inlets": 2, "outlets": 3,
-                               "attrs": {"filename": "zslider.js", "offset": 36, "range": 61}}},
+                               "attrs": {"filename": "butter_keys.js", "offset": 36, "range": 61}}},
             "connections": []}
     m = s.convert_spec(spec)
     box = _box(m, lambda b: b.get("maxclass") == "v8ui")
@@ -40,7 +40,7 @@ def test_attr_named_in_spec_follows_box():
     out = s.reconcile_spec(copy.deepcopy(spec), m)
     a = out["objects"]["kb"]["attrs"]
     assert a["offset"] == 0 and a["range"] == 128, a
-    assert a["filename"] == "zslider.js"
+    assert a["filename"] == "butter_keys.js"
 
 
 def test_new_attrui_keeps_its_attr():
@@ -48,7 +48,7 @@ def test_new_attrui_keeps_its_attr():
     its attribute; before 2026-09-14 `_box_to_spec_obj` dropped `attr` and the
     next convert wrote an attrui bound to nothing."""
     spec = {"objects": {"kb": {"type": "v8ui", "pos": [30, 200], "size": [600, 100], "inlets": 2, "outlets": 3,
-                               "attrs": {"filename": "zslider.js"}}},
+                               "attrs": {"filename": "butter_keys.js"}}},
             "connections": []}
     m = s.convert_spec(spec)
     kb = _box(m, lambda b: b.get("maxclass") == "v8ui")
