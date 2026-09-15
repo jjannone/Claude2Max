@@ -251,7 +251,7 @@ Most Max objects only trigger output from inlet 0 (hot). These objects have two 
 
 | Object | Correct outlets | Common mistake |
 |--------|----------------|----------------|
-| `playlist~` | 5 (audio L, audio R, position, start/done list, dictionary) | Assumed 3 — and this table said so until 2026-08-21. It is also a **UI maxclass**, not a `newobj`, and is absent from `MAXCLASS_DEFAULTS` / `UI_SIZES`, so a spec must supply `inlets` / `outlets` / `outlettype` / `size`. See `patching/MAX_PATCHING.md`. |
+| `playlist~` | 5 (audio L, audio R, position, start/done list, dictionary) | Assumed 3 — and this table said so until 2026-08-21. It is also a **UI maxclass**, not a `newobj`, and is absent from `MAXCLASS_DEFAULTS` / `UI_SIZES`, so a spec must supply `inlets` / `outlets` / `outlettype`. Since 2026-09-15 `size` is no longer needed: the converter reads 350 × 240 from `playlist~.maxhelp` (see *UI classes: where the converter gets default size*). Supply one only to override that. See `patching/MAX_PATCHING.md`. |
 | `adsr~` | 4 (envelope~, trigger~, mute, dump) | Assumed 1–2 |
 | `live.gain~` | 5 (sig L, sig R, param value, raw 0–1, dB list) | Assumed 2 |
 | `dict` | 5 (dict, value, keys list, names list, status) | Assumed 2–3 |
@@ -635,9 +635,63 @@ For instance: a Max patch with a START button, a status text comment, a number b
 }
 ```
 
+### UI classes: where the converter gets default size
+
+A box's `size` is resolved by one function, `resolve_box_size`, in this order:
+
+1. the spec's own `size`;
+2. the `UI_SIZES` table — the override, and where a size checked against a fresh
+   instance in Max belongs;
+3. the class's own C74 help file (`chooser` → `chooser.maxhelp`), read by
+   `HelpSizeCache`: the most common size among that class's boxes in that file,
+   or the component-wise median when every box is a different size;
+4. `estimate_text_width(text)` × 22 — the text-width estimate.
+
+Step 4 is right only for a box that *displays* its text, so `newobj`, `message`
+and `comment` (`TEXT_SIZED_CLASSES`) skip step 3 and always use it. Every other
+class reaches step 3, which before 2026-09-15 did not exist: a UI class missing
+from `UI_SIZES` fell straight to the text estimate, and since a UI object has no
+box text that meant **40 × 22**. `{"type": "chooser"}` converted to a 40 × 22
+box; 71 UI classes with boxes in their own help file were in that state, and the
+repo's eight shootout patches still carry 268 `attrui` boxes stuck at 40 × 22
+from it.
+
+**Step 3 is a fallback, not a source of truth.** Nothing in the Max install
+records the size a new box is created at — it is computed in C per class. Four
+candidate sources were measured on 2026-09-15 against the 28 classes `UI_SIZES`
+already covers, and all four disagree with it and with each other:
+
+| candidate source | agrees with `UI_SIZES` |
+|---|---|
+| the class's own help file | 3 / 28 |
+| modal size across all 3,122 shipped C74 patches | 9 / 28 |
+| the same, restricted to `appversion.major == 9` | 9 / 28 |
+| the 63 shipped `object-prototypes/*.maxproto` | 0 / 25 |
+
+They are all collections of *authored, resized* boxes. The prototypes are styled
+design variants (`inlet` 18 × 18, `ezadc~` 40 × 40, `scope~` 100 × 50), not
+defaults. `UI_SIZES` is not reliable ground truth either — it gives `dial`
+(40, 48) where both the shipped prototype and 72 % of Max 9 instances say
+40 × 40, and it gives `live.toggle`, `live.numbox` and `live.text` the same
+(44, 20) while 96 % of Max 9 `live.toggle` boxes are 15 × 15. So the help-file
+size is only "a size Max itself shipped for this class" — which is a usable box,
+where the text estimate was not.
+
+**The resolution lives in one function because three callers must agree on it:**
+`build_box` writes the size, `presentation_layout` sizes a presentation rect
+with it, and `_size_is_default` decides from it whether `sync` may drop a box's
+`size` field. A caller that resolved differently would drop a `size` that
+`convert` then failed to reproduce, silently resizing the box on the next
+convert. `tests/test_ui_default_size.py` asserts the three agree across every
+class the converter knows.
+
 ### Inlet and Outlet Object Sizes
 
-The default size for `inlet` and `outlet` objects in Max is **30×30 px**. Do not specify a `size` for them in the spec — the converter uses 30×30 automatically. Setting a different size will produce the wrong shape.
+`UI_SIZES` gives `inlet` and `outlet` **30×30 px**, and the converter uses that
+automatically — do not specify a `size` for them in the spec. Note that Max 9's
+own shipped patches are split between 30 × 30 and 25 × 25 (25 × 25 is the more
+common of the two, 58 % of `inlet` boxes), so treat 30 × 30 as this repo's
+convention rather than as a verified fresh-instance default.
 
 ### Arithmetic: Float Output Requires a Float Argument
 

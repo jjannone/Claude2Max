@@ -166,6 +166,24 @@ When several search terms feed one substring scan and a cap bounds how many cand
 
 Keep any per-field score for labeling; add a hit count for ordering. For instance: `_substring_matches` in `mcp_server/server.py` now sorts by hits, then field score, then name, so "convolution reverb with a real impulse response" reaches the reranker with `hirt.convolutionreverb~` in the candidate set instead of `2threshattack~`, `@`, `anti-bis`.
 
+## When You Add a Step to a Chain of Fallbacks, Check What It Steals — Binding Rule
+
+A fallback chain tries one thing, then the next, then the next. Slip a new step into the middle and it grabs some of the inputs the old last step was already handling **correctly** — and those are exactly the ones you were not thinking about, because they were fine. You were looking at the cases the old default got wrong. Those are the only cases in your head while you write the new step, and they are not the only cases it will run on.
+
+So after adding the step, go and look at what the old step used to answer, and confirm the new one did not take any of it. The recognition signal: inserting a lookup ahead of an existing default, and reasoning only about the inputs that default got wrong.
+
+For instance: `resolve_box_size` in `spec2maxpat.py` gained a step that reads a UI class's default size from its own C74 help file, to fix UI objects converting at 40 × 22. It also captured `message` and `comment`, which have help files like any other class — so every comment and message box in every patch would have been given one fixed width regardless of its text, which is the one thing the text-width estimate underneath it had always got right. `TEXT_SIZED_CLASSES` restores them to the estimate. (2026-09-15.)
+
+## A Test Spells Out Its Own Examples — Never Read Them From the Thing Being Tested — Binding Rule
+
+A test that loops over the same list, table, or config it is checking passes when that thing is emptied, because there is nothing left to loop over. It goes green exactly when the breakage is worst, which is the opposite of what a test is for.
+
+Write the examples into the test by hand, and assert separately that they are present in the thing under test. Then ask: if the list I am reading were empty, would this test still pass? If yes, it is testing nothing. The general form covers any test whose inputs, expected values, or iteration count come from the code under test rather than from the test author.
+
+The cheap way to find these is to break the code on purpose and check that a test notices. A test nobody has ever seen fail is a test nobody has verified.
+
+For instance: `test_text_bearing_classes_keep_the_text_estimate` in `tests/test_ui_default_size.py` looped over `spec2maxpat.TEXT_SIZED_CLASSES`. Deleting the guard the test existed to protect emptied that constant, so the loop ran zero times and the test passed. It now names `newobj`, `message` and `comment` literally and asserts each is in the constant. Found by mutation-testing every new test in the file rather than trusting a green run. (2026-09-15.)
+
 ## An Installer's "Already Exists" Is Not Success When the Step Carries New Configuration — Binding Rule
 
 Setup steps that look idempotent — register a server, add a hook, merge a config block — must compare what already exists against what was requested. Skip only when they match; replace when they differ. Treating "already exists" as success means a re-run that carries new settings quietly leaves the old ones in place, and the user believes the change landed. For instance: `install_global.py --env ANTHROPIC_API_KEY=…` on a machine whose MCP server was already registered hit `claude mcp add`'s refusal to touch an existing entry, reported "already registered — skipping", and the key never reached the server. The fix removes and re-adds the registration when `--env` is passed.

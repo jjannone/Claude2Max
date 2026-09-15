@@ -1379,6 +1379,126 @@ UI_SIZES = {
     "textedit": (200, 80),
 }
 
+
+class HelpSizeCache:
+    """
+    A default patching size for a UI maxclass, read from the boxes of that
+    class in its own C74 help file (`chooser` -> chooser.maxhelp).
+
+    This is *a size Max itself shipped for the class*, not a verified
+    fresh-instance default. Nothing in the Max install records the size a new
+    box is created at: it is computed in C per class. Four candidate sources
+    were measured on 2026-09-15 against the 28 classes UI_SIZES already covers
+    — the class's own help file (3/28), the modal size across all 3,122 shipped
+    patches (9/28), the same restricted to appversion 9 (9/28), and the 63
+    shipped object-prototypes (0/25) — and every one of them disagrees with
+    UI_SIZES and with the others. They are all collections of *authored,
+    resized* boxes; the prototypes in particular are styled design variants
+    (`inlet` 18x18, `ezadc~` 40x40, `scope~` 100x50).
+
+    So this is a fallback, not a source of truth, and it is worth having only
+    because of what it replaces. Before it, a UI class missing from UI_SIZES
+    was sized by `estimate_text_width(text)` x 22 — the rule for a box that
+    displays its own text, which a UI object does not. `{"type": "chooser"}`
+    became a 40x22 box, far too small to use. 71 UI classes that have boxes in
+    their own help file were in that state. A size Max shipped is a usable box;
+    the text estimate is not.
+
+    UI_SIZES stays the override, and is where a size verified against a fresh
+    instance in Max belongs. Prefer the help file's most common size; when
+    every box in the file is a different size there is no mode to trust, so
+    take the component-wise median, which the demo-resized outliers at both
+    ends pull less than a first-box or mean would.
+    """
+
+    def __init__(self, c74):
+        self._c74   = c74
+        self._files = None   # lazy; maxclass -> help file Path
+        self._cache = {}
+
+    def _help_files(self):
+        if self._files is None:
+            files = {}
+            if self._c74 is not None:
+                for pattern in ("help/**/*.maxhelp", "packages/*/help/**/*.maxhelp"):
+                    for f in sorted(self._c74.glob(pattern)):
+                        files.setdefault(f.name[: -len(".maxhelp")], f)
+            self._files = files
+        return self._files
+
+    def lookup(self, maxclass):
+        """Return (w, h) ints, or None when the class has no help file or no
+        box of its own class in it."""
+        if maxclass in self._cache:
+            return self._cache[maxclass]
+        result = None
+        f = self._help_files().get(maxclass)
+        if f is not None:
+            try:
+                data = json.loads(f.read_text(errors="replace"))
+            except (OSError, json.JSONDecodeError):
+                data = None
+            seen = []
+
+            def walk(patcher):
+                for w in patcher.get("boxes", []):
+                    b = w.get("box", {})
+                    if b.get("maxclass") == maxclass:
+                        r = b.get("patching_rect")
+                        if isinstance(r, list) and len(r) >= 4:
+                            seen.append((float(r[2]), float(r[3])))
+                    if isinstance(b.get("patcher"), dict):
+                        walk(b["patcher"])
+
+            if isinstance(data, dict) and isinstance(data.get("patcher"), dict):
+                walk(data["patcher"])
+            if seen:
+                (wh, n), = collections.Counter(seen).most_common(1)
+                if n == 1:            # no mode at all -> median of each side
+                    ws = sorted(p[0] for p in seen)
+                    hs = sorted(p[1] for p in seen)
+                    mid = len(seen) // 2
+                    wh = (ws[mid], hs[mid])
+                result = (int(round(wh[0])), int(round(wh[1])))
+        self._cache[maxclass] = result
+        return result
+
+
+HELP_SIZE_CACHE = HelpSizeCache(REFPAGE_CACHE._c74)
+
+# Classes whose box width follows the text they display, so a fixed size read
+# from a help file is the wrong answer for them however well it was measured.
+# These are exactly the classes build_box writes a `text` field for and sizes
+# with estimate_text_width. They have help files like any other class —
+# message.maxhelp's boxes average 205x23, comment.maxhelp's 129x25 — so
+# without this guard every comment and message box in every patch would have
+# been given one fixed width regardless of its text.
+TEXT_SIZED_CLASSES = ("newobj", "message", "comment")
+
+
+def resolve_box_size(maxclass, text, spec_size=None):
+    """The (w, h) convert writes for a box, as one function.
+
+    Order: the spec's own `size`, the UI_SIZES override, the class's own help
+    file, then the text-width estimate at one line high.
+
+    It is one function because three callers have to agree on the answer:
+    build_box writes it, compute_presentation_layout sizes a presentation rect
+    with it, and _size_is_default decides from it whether sync may drop a box's
+    `size` field. A caller that resolved differently would drop a size convert
+    then failed to reproduce, silently resizing the box on the next convert.
+    """
+    if spec_size:
+        return int(spec_size[0]), int(spec_size[1])
+    if maxclass in UI_SIZES:
+        w, h = UI_SIZES[maxclass]
+        return int(w), int(h)
+    if maxclass not in TEXT_SIZED_CLASSES:
+        saved = HELP_SIZE_CACHE.lookup(maxclass)
+        if saved is not None:
+            return saved
+    return int(estimate_text_width(text)), 22
+
 X_MARGIN = 50
 Y_MARGIN = 50
 X_SPACING = 170
@@ -1539,11 +1659,13 @@ def _size_is_default(maxclass, text, w, h):
     next convert produces, and must keep it otherwise. A box widened in Max, or
     given a `size` in the spec for cord clearance, has a width the estimate does
     not reproduce; dropping it silently narrowed the box on the next convert
-    (sample-key-mapper's 560 px v8 box, 2026-09-12)."""
-    default_wh = UI_SIZES.get(maxclass)
-    if default_wh:
-        return (int(w), int(h)) == tuple(default_wh)
-    return int(h) == 22 and int(w) == estimate_text_width(text or "")
+    (sample-key-mapper's 560 px v8 box, 2026-09-12).
+
+    It asks resolve_box_size rather than repeating its rules, so that sync can
+    never drop a size convert would not write back. Until 2026-09-15 it read
+    UI_SIZES directly and fell through to the text estimate, which was the same
+    answer only while build_box did too."""
+    return (int(w), int(h)) == resolve_box_size(maxclass, text or "")
 
 
 # A box shows its whole text: narrower than the text, Max wraps it onto more
@@ -1712,13 +1834,7 @@ def presentation_layout(objects, layout_cfg=None):
         # Object size
         maxclass = obj_spec.get("type", "newobj")
         text     = obj_spec.get("text", "")
-        if obj_spec.get("size"):
-            w, h = obj_spec["size"]
-        elif maxclass in UI_SIZES:
-            w, h = UI_SIZES[maxclass]
-        else:
-            w = estimate_text_width(text)
-            h = 22
+        w, h = resolve_box_size(maxclass, text, obj_spec.get("size"))
 
         if isinstance(pres, list):
             if len(pres) == 2:
@@ -1864,13 +1980,7 @@ def build_box(user_id, obj_spec, index, x, y, script_dirs=None):
     outlettype = obj_spec.get("outlettype", io_info["outlettype"])
 
     # Sizing — spec override takes priority over defaults
-    if obj_spec.get("size"):
-        w, h = obj_spec["size"]
-    elif maxclass in UI_SIZES:
-        w, h = UI_SIZES[maxclass]
-    else:
-        w = estimate_text_width(text)
-        h = 22
+    w, h = resolve_box_size(maxclass, text, obj_spec.get("size"))
 
     box = {
         "box": {
