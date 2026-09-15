@@ -691,7 +691,7 @@ After converting, post-process the .maxpat to add `presentation_rect` to each pr
 
 ## Shipping a Community Max Package
 
-When packaging a Max abstraction, external, or set of patches for distribution (Package Manager, GitHub release, etc.), follow the canonical Max-package layout. Anything inside this directory shape becomes discoverable to Max via the standard search path, and a properly-formed refpage XML makes the package's objects automatically I/O-resolvable in Claude2Max specs without any per-object override.
+When packaging a Max abstraction, external, or set of patches for distribution (Package Manager, GitHub release, etc.), follow the canonical Max-package layout. Anything inside this directory shape becomes discoverable to Max via the standard search path, and a properly-formed refpage XML makes the package's objects automatically I/O-resolvable in Claude2Max specs without any per-object override. The converter finds the refpage when the package sits in Max's built-in `C74/packages` or in the user packages folder `~/Documents/Max 9/Packages` (a symlink there counts). It looks in `docs/`, `docs/refpages/`, `docs/refpages1/`, and one domain folder under `docs/refpages/`. Built-in packages are searched first, so a Cycling '74 page wins a name clash. The same folders are read for `interfaces/obj-qlookup.json` and `interfaces/max.db.json`.
 
 ```
 your-package/

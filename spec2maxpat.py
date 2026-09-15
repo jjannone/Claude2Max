@@ -989,11 +989,60 @@ class RefpageCache:
         "/Applications/Max 8.app",
     ]
 
-    def __init__(self):
+    # Where Max 9 keeps packages the user installed (Package Manager downloads,
+    # or a folder / symlink placed there by hand, e.g. Butter_tools). Verified on
+    # this machine 2026-09-14; other version folders are not assumed.
+    _USER_PACKAGE_ROOTS = [Path.home() / "Documents" / "Max 9" / "Packages"]
+
+    def __init__(self, user_packages=None):
         self._cache  = {}          # name -> dict or None
         self._c74    = self._find_c74()
         self._name_aliases = None  # lazy; see name_aliases()
         self._objdb = None         # lazy; see object_db()
+        # user_packages: a path or list of paths holding package folders.
+        # Injectable so tests never depend on the real home folder.
+        if user_packages is None:
+            roots = list(self._USER_PACKAGE_ROOTS)
+        elif isinstance(user_packages, (str, Path)):
+            roots = [Path(user_packages)]
+        else:
+            roots = [Path(p) for p in user_packages]
+        self._user_package_roots = roots
+
+    def search_roots(self):
+        """Where lookups look, and which of those places are missing.
+
+        A lookup that finds nothing because a packages folder is absent looks
+        exactly like a lookup for an object that does not exist, so callers that
+        report a miss should report this too.
+        """
+        builtin = self._c74 / "packages" if self._c74 is not None else None
+        return {
+            "c74": str(self._c74) if self._c74 is not None else None,
+            "builtin_packages": str(builtin) if builtin is not None else None,
+            "user_packages": [str(r) for r in self._user_package_roots if r.is_dir()],
+            "user_packages_missing": [str(r) for r in self._user_package_roots if not r.is_dir()],
+        }
+
+    def _package_dirs(self):
+        """Every package folder, built-in (C74/packages) first, then user roots.
+
+        Built-in first so a Cycling '74 page wins a name clash. Entries may be
+        symlinks (Butter_tools links to its git checkout); is_dir() follows them.
+        """
+        roots = []
+        if self._c74 is not None:
+            roots.append(self._c74 / "packages")
+        roots.extend(self._user_package_roots)
+        dirs = []
+        for root in roots:
+            try:
+                if not root.is_dir():
+                    continue
+                dirs.extend(p for p in sorted(root.iterdir()) if p.is_dir())
+            except OSError:
+                continue
+        return dirs
 
     def object_db(self):
         """Max's OWN object database — the most authoritative name source there is.
@@ -1017,15 +1066,16 @@ class RefpageCache:
         if self._objdb is not None:
             return self._objdb
         names, aliases = set(), {}
+        qlookups, dbs = [], []
         if self._c74 is not None:
-            qlookups = [self._c74 / "interfaces" / "obj-qlookup.json"]
-            dbs = [self._c74 / "interfaces" / "max.db.json"]
-            pkgs = self._c74 / "packages"
-            if pkgs.is_dir():
-                for pkg in sorted(pkgs.iterdir()):
-                    if pkg.is_dir():
-                        qlookups.append(pkg / "interfaces" / "obj-qlookup.json")
-                        dbs.append(pkg / "interfaces" / "max.db.json")
+            qlookups.append(self._c74 / "interfaces" / "obj-qlookup.json")
+            dbs.append(self._c74 / "interfaces" / "max.db.json")
+        # Built-in packages, then user packages (Data Knot, FluCoMa and cage
+        # ship max.db.json in ~/Documents/Max 9/Packages on this machine).
+        for pkg in self._package_dirs():
+            qlookups.append(pkg / "interfaces" / "obj-qlookup.json")
+            dbs.append(pkg / "interfaces" / "max.db.json")
+        if qlookups:
             for p in qlookups:
                 try:
                     data = json.loads(p.read_text())
@@ -1095,38 +1145,36 @@ class RefpageCache:
         return None
 
     def _find_xml(self, name):
-        """Return Path to <name>.maxref.xml, or None if not found."""
-        if self._c74 is None:
-            return None
+        """Return Path to <name>.maxref.xml, or None if not found.
+
+        Order: the install's standard domains, then built-in packages, then user
+        packages (~/Documents/Max 9/Packages), so a C74 page wins a name clash.
+        """
         # Standard domains first
-        for domain in self._STD_DOMAINS:
-            p = self._c74 / "docs/refpages" / domain / f"{name}.maxref.xml"
-            if p.exists():
-                return p
-        # C74 packages
-        packages = self._c74 / "packages"
-        if packages.exists():
-            for pkg in sorted(packages.iterdir()):
-                if not pkg.is_dir():
-                    continue
-                for sub in ["docs/refpages", "docs/refpages1", "docs"]:
-                    p = pkg / sub / f"{name}.maxref.xml"
-                    if p.exists():
-                        return p
-                # Packages may nest refpages one level deeper under a domain dir
-                # the way the core install does — RNBO ships
-                # packages/RNBO/docs/refpages/max/rnbo~.maxref.xml, so a flat
-                # check of docs/refpages misses it and rnbo~ reads as invented.
-                refroot = pkg / "docs" / "refpages"
-                if refroot.is_dir():
-                    try:
-                        for domain in sorted(refroot.iterdir()):
-                            if domain.is_dir():
-                                p = domain / f"{name}.maxref.xml"
-                                if p.exists():
-                                    return p
-                    except OSError:
-                        pass
+        if self._c74 is not None:
+            for domain in self._STD_DOMAINS:
+                p = self._c74 / "docs/refpages" / domain / f"{name}.maxref.xml"
+                if p.exists():
+                    return p
+        for pkg in self._package_dirs():
+            for sub in ["docs/refpages", "docs/refpages1", "docs"]:
+                p = pkg / sub / f"{name}.maxref.xml"
+                if p.exists():
+                    return p
+            # Packages may nest refpages one level deeper under a domain dir
+            # the way the core install does — RNBO ships
+            # packages/RNBO/docs/refpages/max/rnbo~.maxref.xml, so a flat
+            # check of docs/refpages misses it and rnbo~ reads as invented.
+            refroot = pkg / "docs" / "refpages"
+            if refroot.is_dir():
+                try:
+                    for domain in sorted(refroot.iterdir()):
+                        if domain.is_dir():
+                            p = domain / f"{name}.maxref.xml"
+                            if p.exists():
+                                return p
+                except OSError:
+                    pass
         return None
 
     @staticmethod
@@ -1257,7 +1305,13 @@ class RefpageCache:
         """Return a human-readable summary of an object for quick verification."""
         r = self.lookup(name)
         if r is None:
-            return f"{name}: NOT FOUND in refpages"
+            roots = self.search_roots()
+            msg = f"{name}: NOT FOUND in refpages"
+            if roots["c74"] is None:
+                msg += " (no Max install found)"
+            if roots["user_packages_missing"]:
+                msg += " (user packages folder missing: " + ", ".join(roots["user_packages_missing"]) + ")"
+            return msg
         lines = [
             f"{name}: {r['digest']}",
             f"  inlets={r['numinlets']}  outlets={r['numoutlets']}  types={r['outlettype']}",
