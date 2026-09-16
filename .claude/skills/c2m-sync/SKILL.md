@@ -1,12 +1,12 @@
 ---
 name: c2m-sync
-description: Run the sync-first step explicitly on a Claude2Max .maxpat — reverse-engineers an embedded spec from boxes/patchlines if missing, or reconciles an existing embedded spec with manual edits made in Max. Use BEFORE editing any existing .maxpat to capture user GUI changes that would otherwise be silently destroyed by the next convert. Also use when the user invokes /c2m-sync, asks "did my edits make it back into the spec?", or pastes in a .maxpat from outside the repo. The repo's PreToolUse Read hook auto-syncs on file reads, but this skill makes the operation visible and pedagogical for students. Skip if the .maxpat was just written by spec2maxpat.py convert (the spec is already authoritative).
+description: Run the sync-first step explicitly on a Claude2Max .maxpat — reverse-engineers an embedded spec from boxes/patchlines if missing, or reconciles an existing embedded spec with manual edits made in Max. Use BEFORE editing any existing .maxpat to capture user GUI changes that would otherwise be silently destroyed by the next convert. Also use when the user invokes /c2m-sync, asks "did my edits make it back into the spec?", or pastes in a .maxpat from outside the repo. The repo's PreToolUse Read hook only checks a patch on read and asks before syncing; this skill is how the sync actually runs. Skip if the .maxpat was just written by spec2maxpat.py convert (the spec is already authoritative).
 argument-hint: "<path/to/patch.maxpat>"
 ---
 
 # c2m-sync — explicit sync of a .maxpat's embedded spec
 
-Use this skill to make the sync-first rule visible and pedagogical. The repo already has a PreToolUse hook (`hooks/sync_maxpat.py`) that auto-runs on Read, but explicit invocation surfaces the operation to a student, lets you sync without first reading the file, and gives a single-command entry point when triaging an externally-sourced `.maxpat`.
+Use this skill to make the sync-first rule visible and pedagogical. The repo has a PreToolUse hook (`hooks/sync_maxpat.py`) that runs `sync --check` whenever a `.maxpat`, `.maxhelp` or `.amxd` is read. It writes nothing: when the spec is out of step, or missing, it tells you to ask the user before syncing. This skill is what runs the sync once they agree, and it surfaces the operation to a student and gives a single-command entry point when triaging an externally-sourced patch.
 
 The rule and the failure mode it protects against live in `CLAUDE.md` § "Working on an existing patch — sync first, always" — read that for the *why*. This skill is the *how*.
 
@@ -54,6 +54,6 @@ Per `CLAUDE.md`, spec files are **temporary** — write them to `/tmp/`, never t
 
 ## See also
 
-- `hooks/sync_maxpat.py` — the PreToolUse Read hook that auto-syncs in the background. This skill complements it by making sync explicit and pedagogical.
+- `hooks/sync_maxpat.py` — the PreToolUse Read hook. It checks the embedded spec on every read and writes nothing; since 2026-09-16 a mismatch is reported with a prompt to ask the user before re-syncing, instead of a silent sync that could overwrite an edit made in Max or by another session.
 - `spec2maxpat.py` — the converter (`convert`, `extract`, `sync`, `mct` subcommands)
 - `CLAUDE.md` § "Working on an existing patch — sync first, always" — the underlying rule
