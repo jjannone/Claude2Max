@@ -316,23 +316,6 @@ Likewise, `@offset x y` (used to shift the displayed origin for tabbed displays 
 
 When an object fans out to multiple destinations — for instance, both a processing chain and a display box — check whether placing all destinations at the same y-position will cause cords to cross. If so, stagger the destinations vertically so each incoming cord has a clear path. This is a case-by-case judgment based on the specific layout.
 
-### `join` / `unjoin`, not `pack` / `pak` / `unpack`
-
-`join @triggers -1` is `pak`: the refpage says `triggers` set to `-1` "will cause the object to trigger output for any inlet (all inlets will be 'hot')," and C74's `join.maxhelp` ships `join 3 @triggers -1`. `join` alone is `pack`. `unjoin` is `unpack`, and both take untyped items so no per-slot type declaration is needed. See the binding rule in `CLAUDE.md`.
-
-Two counts to get right:
-
-- **`unjoin <n>` has n+1 outlets.** The refpage's `outlets` arg "specifies the number of outlets (in addition to the rightmost outlet, which is always present)," so `unjoin 3` splits into three groups **plus** a remainder outlet. `@outsize` (default 1) sets the items per group. A spec that declares three outlets for `unjoin 3` is wrong; the converter now derives n+1 itself.
-- **`join <n>`'s arg is the inlet count, not initial values.** `pak 4000 8001` stored those numbers as its slots' starting values; `join` starts every slot at `int 0`. When the old `pak` args were carrying a meaningful default, move that default to a `loadmess` or to the downstream object's creation args — don't let it evaporate in the substitution.
-
-### `random`'s `@range` high value is exclusive
-
-`random @range <lo> <hi>` generates values from `lo` up to **`hi` minus one** for an int range, and arbitrarily close to but below `hi` for a float range. This is C74's own wording in `random.maxhelp`: "max of float range is arbtirarily close to range high value but for an int range it is one less than the high value," on a patch whose `random @range 25 50` is labelled "output for these objects will both be between 25 and 49."
-
-So any range that must **include** its top value is written with the top plus one. Picking one of N clips indexed from 1 is `random @range 1 <N+1>` — write the `+ 1` once where N is computed, not inside each consumer. Set the range at runtime with a `range <lo> <hi>` message to the left inlet (the refpage marks the attribute `set="1"`, and `range $1 $2` message boxes appear in C74's shipped patches).
-
-The general lesson, and the reason this bullet exists: **replacing an adapter chain with an attribute is not a mechanical substitution — the endpoints have to be re-verified.** The `scale 0 999 4000 8000` this replaced was itself off by one at the top, so the bug survived the rewrite until the help patch was read.
-
 ### Boxes in the patching view do not overlap
 
 A box drawn over another hides the other's text, and a cord into a covered inlet can be neither seen nor clicked. The reader of the patching view — the student learning the patch, or whoever edits it next — then has to drag boxes apart to find out what is there. So **no two boxes in the patching view intersect**, beyond the one pixel Max's rounding produces on save. This is the patching-view twin of the presentation rule that every row needs its own vertical budget, and the verifier checks both: `presentation-overlap` for the operator's view, `patching-overlap` for this one.
@@ -356,14 +339,6 @@ For instance: `[live.gain~]` (30px tall) at y=728 with `[s~ MIX_L]` / `[s~ MIX_R
 **This matters more now than it used to.** Under the retired hide-plumbing rule, a cramped region could be tidied by hiding its cords. Every cord is visible now, so the layout is the only tool left — spacing is not cosmetic, it is what makes the visible graph legible. See *Never Hide Patchcords or Boxes* in `CLAUDE.md`.
 
 **A straight vertical drop inside a column is the exception.** When two boxes are stacked with their left edges aligned and the cord runs straight down from outlet 0 to inlet 0, the cord reads as "this feeds that" at any length, and a compact column is easier to follow than one spread out to make each cord long. The ~30 px clearance is for cords that travel sideways. The verifier's `cord-too-short` check exempts aligned drops. For instance: John's parameter columns in reverb-shootout (2026-09-08) stack an init message, a `flonum` and a parameter message 8 px apart, one column per parameter.
-
-### `@triggers -1` is only needed when the inputs arrive independently
-
-`join @triggers -1` (like `pak`) exists to solve one problem: inlets that receive their values at unrelated times, where waiting for the leftmost inlet to fire would leave the output stale. **When a single upstream multi-outlet object feeds every inlet, that problem does not exist** — Max outputs right to left, so the cold inlets are already loaded by the time the hot one fires, and a plain `join` is correct. The attribute then adds nothing but a claim the reader has to check.
-
-For instance: `[unjoin 3]` feeding `[join]`'s two inlets from its outlets 0 and 1 needs no `@triggers` — outlet 1 lands in the cold inlet first, outlet 0 fires the hot inlet second, and the output carries both. Reach for `@triggers -1` when the inlets are fed from genuinely separate sources (two `r` objects, two UI controls the operator touches independently).
-
-Note where the guarantee comes from: right-to-left output is Max's universal convention — `trigger`'s refpage documents it in so many words ("Outputs any input received in order from right to left") and Max files the object under a "Right-to-Left" category — but `unjoin`'s and `unpack`'s own refpages do not restate it. It is a language rule, not a per-object promise.
 
 ### Lay fan-out destinations out right-to-left, in execution order
 
