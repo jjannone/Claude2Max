@@ -9,3 +9,10 @@ mcp_server/.venv/
 # Claude Code — local personal overrides (not for sharing)
 .claude/settings.local.json
 .claude/worktrees/
+
+# jjannone-max — John's personal corpus crawl. Only the insights file is
+# tracked: it carries generalized Max technique. The state file, the catalog,
+# the log and the enumerator all name his private project folders and carry
+# absolute paths with his account name, and this repo is public.
+jjannone-max/*
+!jjannone-max/jjannone_max_insights.md
