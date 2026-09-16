@@ -48,7 +48,7 @@ When listening for changes (rather than one-shot reads), use
 `live.observer` instead of `get`. Same chain otherwise.
 
 (Source pattern: half a dozen pass-2 forum threads, summarized in
-`c74-forum/forum_insights.md` § Max for Live.)
+`scans/c74-forum/forum_insights.md` § Max for Live.)
 
 ## `live.thisdevice` — the self-reference and load-complete signal
 
@@ -89,7 +89,7 @@ name, clip start time, clip length, slot index — anything Live computes
 asynchronously after the clip object instantiates).
 
 (Source: 40-reply thread `getpath of a clip only with deferlow?` —
-summarized in `c74-forum/forum_insights.md`.)
+summarized in `scans/c74-forum/forum_insights.md`.)
 
 ## Push 3 polyphonic key pressure (per-pad MPE)
 
@@ -295,7 +295,7 @@ automated in `spec2maxpat.py`.
 - **Spec format & object internals** — `SPEC_REFERENCE.md`. The
   `live.*` object family and their inlet/outlet shapes are documented
   there.
-- **Forum-sourced M4L insights** — `c74-forum/forum_insights.md` § Max
+- **Forum-sourced M4L insights** — `scans/c74-forum/forum_insights.md` § Max
   for Live. Source-of-record for the patterns canonized in this file.
 - **Refpage source of truth** —
   `/Applications/Max.app/Contents/Resources/C74/docs/refpages/m4l-ref/<obj>.maxref.xml`.

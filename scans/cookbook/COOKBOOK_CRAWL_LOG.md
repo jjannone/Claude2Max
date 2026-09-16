@@ -25,23 +25,23 @@ or more downloadable example patches.
 ```bash
 # One-time bootstrap (already done once). Pulls slugs from the alphabetical
 # examples list saved at /tmp/cookbook_recipes_raw.json.
-python3 cookbook/enumerate_cookbook_recipes.py --bootstrap
+python3 scans/cookbook/enumerate_cookbook_recipes.py --bootstrap
 
 # Show coverage by status and by chapter.
-python3 cookbook/enumerate_cookbook_recipes.py --status
+python3 scans/cookbook/enumerate_cookbook_recipes.py --status
 
 # Fetch chapter/keywords/attachments metadata for the next N pending recipes.
-python3 cookbook/enumerate_cookbook_recipes.py --scan-meta --limit 50
+python3 scans/cookbook/enumerate_cookbook_recipes.py --scan-meta --limit 50
 
 # Scan the full corpus (~4 min at 300ms/recipe). Safe to repeat — already
 # scanned recipes are skipped.
-python3 cookbook/enumerate_cookbook_recipes.py --scan-meta
+python3 scans/cookbook/enumerate_cookbook_recipes.py --scan-meta
 
 # Download attachments for one chapter — a session-sized chunk.
-python3 cookbook/enumerate_cookbook_recipes.py --download --chapter MSP --limit 10
+python3 scans/cookbook/enumerate_cookbook_recipes.py --download --chapter MSP --limit 10
 ```
 
-State file: `cookbook/cookbook_crawl_state.json`. Per-recipe status is one of
+State file: `scans/cookbook/cookbook_crawl_state.json`. Per-recipe status is one of
 `pending` → `scanned` → `downloaded` → `scraped`, plus `skipped` for recipes
 with no attachment. Downloads live in `/tmp/cookbook/<slug>/` (kept out of the
 repo — only the insights and state file are tracked).

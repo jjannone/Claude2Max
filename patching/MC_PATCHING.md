@@ -5,7 +5,7 @@ multichannel-signal wrapper that turns scalar `~` objects into per-channel
 arrays without manually duplicating boxes.
 
 This file is **incrementally filled** by the userguide crawl
-(`userguide/USERGUIDE_CRAWL_LOG.md`). Topics in scope:
+(`scans/userguide/USERGUIDE_CRAWL_LOG.md`). Topics in scope:
 
 | Userguide topic | Status |
 |---|---|
@@ -56,10 +56,10 @@ MC + Gen instances.
 Until the crawl fills this in, consult:
 
 - `polyphony.json` § "mc.poly~ and mcs.poly~" (already extracted in
-  `userguide/userguide_insights.md` § Polyphony) — distinguishes
+  `scans/userguide/userguide_insights.md` § Polyphony) — distinguishes
   `mc.poly~` (per-voice channels) from `mcs.poly~` (collapsed MC I/O).
 - The MC refpages directly via `RefpageCache` (lookup, not crawl).
-- `cookbook/cookbook_insights.md` and `c74-forum/forum_insights.md` for
+- `scans/cookbook/cookbook_insights.md` and `scans/c74-forum/forum_insights.md` for
   community-sourced MC patterns.
 
 ## Cross-References
@@ -68,7 +68,7 @@ Until the crawl fills this in, consult:
   signal-graph construction, scheduler interaction, audio-thread cost, etc.,
   applies to MC the same way.
 - **Polyphony in general** — see the Polyphony entries in
-  `userguide/userguide_insights.md` (and eventually
+  `scans/userguide/userguide_insights.md` (and eventually
   `MAX_PATCHING.md` once promoted). MC polyphony is one of three approaches
   alongside `poly~` and `ddg.mono`.
 - **Gen inside MC** — when `mc.gen~` instances need iteration semantics,

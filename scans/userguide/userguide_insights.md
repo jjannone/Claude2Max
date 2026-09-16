@@ -5,8 +5,8 @@ Principles distilled from the Max userguide topic files at
 Refpages are out of scope; this captures the cross-cutting "how Max works"
 material that doesn't fit into per-object reference.
 
-Topic-organized to mirror `c74-forum/forum_insights.md` and
-`cookbook/cookbook_insights.md`. Two flag conventions:
+Topic-organized to mirror `scans/c74-forum/forum_insights.md` and
+`scans/cookbook/cookbook_insights.md`. Two flag conventions:
 
 - **`[PROMOTION-CANDIDATE]`** — entry is proposed for promotion to
   `patching/MAX_PATCHING.md` (or a sibling companion) and awaits user
@@ -456,9 +456,9 @@ Toggle the whole feature with Preferences → Enable Patching Mechanics.
   `/Applications/Max.app/Contents/Resources/C74/docs/refpages/`, parsed by
   `RefpageCache._parse` in `spec2maxpat.py`. Use refpages for per-object
   attribute / message lookup; this file is for cross-cutting principles.
-- **Forum knowledge** — `c74-forum/forum_insights.md`. Real-world traps and
+- **Forum knowledge** — `scans/c74-forum/forum_insights.md`. Real-world traps and
   preferred patterns sourced from community Q&A.
-- **Cookbook knowledge** — `cookbook/cookbook_insights.md`. Curated
+- **Cookbook knowledge** — `scans/cookbook/cookbook_insights.md`. Curated
   educational examples (Dobrian / UCI).
 - **Patching companions** — `MAX_PATCHING.md`, `GEN_PATCHING.md`,
   `JIT_GEN_PATCHING.md`, `JITTER_PATCHING.md`, `M4L_PATCHING.md`,

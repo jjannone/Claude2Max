@@ -12,19 +12,19 @@ text — every recipe must have its attachments downloaded and read in full.
 
 Usage:
     # Bootstrap the state file from the alphabetical examples list
-    python3 cookbook/enumerate_cookbook_recipes.py --bootstrap
+    python3 scans/cookbook/enumerate_cookbook_recipes.py --bootstrap
 
     # Enumerate metadata (chapter, keywords, attachments) for unscanned recipes
-    python3 cookbook/enumerate_cookbook_recipes.py --scan-meta --limit 20
+    python3 scans/cookbook/enumerate_cookbook_recipes.py --scan-meta --limit 20
 
     # Download attachments for scanned recipes that haven't been downloaded
-    python3 cookbook/enumerate_cookbook_recipes.py --download --limit 20
+    python3 scans/cookbook/enumerate_cookbook_recipes.py --download --limit 20
 
     # Filter to a single chapter
-    python3 cookbook/enumerate_cookbook_recipes.py --scan-meta --chapter MSP
+    python3 scans/cookbook/enumerate_cookbook_recipes.py --scan-meta --chapter MSP
 
     # Show coverage summary
-    python3 cookbook/enumerate_cookbook_recipes.py --status
+    python3 scans/cookbook/enumerate_cookbook_recipes.py --status
 
 State file format (cookbook_crawl_state.json):
     {

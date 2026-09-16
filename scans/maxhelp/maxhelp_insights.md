@@ -1,7 +1,7 @@
 # .maxhelp Corpus Insights
 
 Discoveries from reading Cycling '74's shipped help patches (and installed
-package help). Topic-organized like `c74-forum/forum_insights.md`. Entries
+package help). Topic-organized like `scans/c74-forum/forum_insights.md`. Entries
 broadly useful enough to migrate into the reference docs are marked
 **[PROMOTION-CANDIDATE]** with a target file.
 

@@ -387,7 +387,7 @@ these, every `t i i` / `+ 1` in a real patch would false-positive.
 
 **Extension — valid set is now `own refpage ∪ jbox ∪ observed-in-help`
 (2026-06-21).** The `.maxhelp` corpus crawl (deliverable (a)) produced a
-`maxclass → observed-attrs` map (`maxhelp/maxhelp_observed_attrs.json`): every
+`maxclass → observed-attrs` map (`scans/maxhelp/maxhelp_observed_attrs.json`): every
 attribute set on each class across ~12K shipped help/abstraction/M4L patches,
 filtered to a ≥3-box floor and with `rnbo*`/`frozen*` export artifacts dropped.
 `_GateResolver._load_observed_attrs()` unions this into `attrs_for()`, so a

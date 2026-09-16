@@ -7,7 +7,7 @@ idioms, default box sizes, and per-object gotchas. Each session reads this log
 to see what's covered, picks the next chunk, extracts insights into
 `maxhelp_insights.md`, and updates this log.
 
-Mirrors the `c74-forum/` / `cookbook/` / `c74-projects/` crawl pattern. See
+Mirrors the `scans/c74-forum/` / `scans/cookbook/` / `scans/c74-projects/` crawl pattern. See
 `TASK_QUEUE.md` ("`.maxhelp` Corpus Crawl") for the full rationale.
 
 ## Why a help patch is high-signal
@@ -56,17 +56,17 @@ carry raw control characters in string values. No MCT decode; all local.
 ```bash
 # Mechanical attr-tally over ALL patcher kinds (.maxhelp+.maxpat+.amxd, ~6s).
 # Idempotent. Writes maxhelp_observed_attrs.json + maxhelp_crawl_state.json.
-python3 maxhelp/extract_observed_attrs.py
+python3 scans/maxhelp/extract_observed_attrs.py
 
 # Help patches only (the original, smaller tally):
-python3 maxhelp/extract_observed_attrs.py --kinds maxhelp
+python3 scans/maxhelp/extract_observed_attrs.py --kinds maxhelp
 
 # Smoke test / ranked summary:
-python3 maxhelp/extract_observed_attrs.py --limit 50 --summary --no-write
-python3 maxhelp/extract_observed_attrs.py --summary
+python3 scans/maxhelp/extract_observed_attrs.py --limit 50 --summary --no-write
+python3 scans/maxhelp/extract_observed_attrs.py --summary
 
 # Max JS API census over .js/.mjs (~2s). Writes maxhelp_js_api.json.
-python3 maxhelp/extract_js_api.py --summary
+python3 scans/maxhelp/extract_js_api.py --summary
 ```
 
 **Reading a help patch for prose insight** (chunked work, not mechanical):

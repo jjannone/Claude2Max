@@ -45,7 +45,7 @@ Every one of the 210 captured projects carries `forum_topic = "Misc"`. Sampled g
 
 ### 2. Projects rarely embed patches inline
 
-Across all 210 captured projects: **0 inline `patcher` (MCT) blocks, 0 inline `attachment` nodes**. Forum-style inline embedding is essentially absent here. Patches (when free) live at external URLs: GitHub, MaxForLive.com, GitLab, Google Drive, or the author's personal site. This is the primary architectural difference from `c74-forum/` (where MCT travels inline) and `cookbook/` (where patches are page attachments).
+Across all 210 captured projects: **0 inline `patcher` (MCT) blocks, 0 inline `attachment` nodes**. Forum-style inline embedding is essentially absent here. Patches (when free) live at external URLs: GitHub, MaxForLive.com, GitLab, Google Drive, or the author's personal site. This is the primary architectural difference from `scans/c74-forum/` (where MCT travels inline) and `scans/cookbook/` (where patches are page attachments).
 
 ### 3. The era split — older = open-source, recent = commercial
 

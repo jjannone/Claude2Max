@@ -22,9 +22,9 @@ runtime/library noise we count but don't tally):
                   bulk of the raw `.js` count; excluded from the API tally.
 
 Usage:
-    python3 maxhelp/extract_js_api.py            # full corpus
-    python3 maxhelp/extract_js_api.py --summary  # print ranked API surface
-    python3 maxhelp/extract_js_api.py --limit 200
+    python3 scans/maxhelp/extract_js_api.py            # full corpus
+    python3 scans/maxhelp/extract_js_api.py --summary  # print ranked API surface
+    python3 scans/maxhelp/extract_js_api.py --limit 200
 
 Output (next to this script):
     maxhelp_js_api.json  -- classification + ranked constructors/handlers/calls

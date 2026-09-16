@@ -122,7 +122,7 @@ class _GateResolver:
     def _load_observed_attrs(self):
         """Load the maxhelp corpus observed-attrs map, pre-filtered.
 
-        Applies the three integration cautions from maxhelp/maxhelp_insights.md:
+        Applies the three integration cautions from scans/maxhelp/maxhelp_insights.md:
         - Drop rnbo*/frozen* artifact keys (RNBO-export / freeze metadata, not user attrs)
         - Apply ≥3-box frequency floor (drops one-off noise / version cruft)
         - For no-refpage objects the observed set is a positive allowlist only;
@@ -130,7 +130,7 @@ class _GateResolver:
           observed set to flag attrs on objects whose full attr space is unknown.
         """
         import json as _json
-        observed_path = Path(__file__).resolve().parent / "maxhelp" / "maxhelp_observed_attrs.json"
+        observed_path = Path(__file__).resolve().parent / "scans" / "maxhelp" / "maxhelp_observed_attrs.json"
         try:
             raw = _json.loads(observed_path.read_text())
             objects = raw.get("objects", {})
@@ -413,7 +413,7 @@ _FOREIGN_LANGUAGE_BOXES = frozenset({
     "rnbo~",
 })
 
-# Box keys that are structural, not attributes (mirrors maxhelp/extract_observed_attrs).
+# Box keys that are structural, not attributes (mirrors scans/maxhelp/extract_observed_attrs).
 _MAXPAT_STRUCTURAL_KEYS = frozenset({
     "id", "maxclass", "text", "numinlets", "numoutlets", "outlettype",
     "patching_rect", "presentation_rect", "patcher", "saved_object_attributes",

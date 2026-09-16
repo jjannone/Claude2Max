@@ -49,7 +49,7 @@ If that returns `200`, the next chunk options are (post pass-5):
 Use `--diff --detect-content` to surface only NEW or UPDATED threads:
 
 ```bash
-python3 c74-forum/enumerate_forum_threads.py --category Gen --pages 26-32 --diff --detect-content
+python3 scans/c74-forum/enumerate_forum_threads.py --category Gen --pages 26-32 --diff --detect-content
 ```
 
 Pass-5's per-chunk yield: Gen 80, Jitter 97, MaxMSP 90, Javascript 72, RNBO 82, M4L 68, Misc 59 (548 total). Artifact-bearing rate ~37% overall. Gen and Jitter remain the highest-yield subforums for promotion-worthy insights per thread.

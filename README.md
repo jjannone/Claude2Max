@@ -72,8 +72,8 @@ The converter exports and decodes Max's "Copy Compressed" format, the encoding t
 Beyond the spec format, the repo carries curated patching knowledge gathered from the wider Max ecosystem:
 
 - `patching/PATCH_ANATOMY.md` — orientation for the Max landscape: the ten functional roles a box plays in a patch (input, UI, domain processing, state, logic, compiled low-level, routing, external services, output, infrastructure). Read first when planning a new patch or decomposing an existing one.
-- `c74-forum/forum_insights.md` — non-obvious behaviors, preferred patterns, and performance pitfalls extracted from the Cycling '74 forums (with the artifact-bearing-thread crawl framework that produced them).
-- `cookbook/cookbook_insights.md` — insights from the Max Cookbook (Dobrian / UC Irvine), each example patch downloaded and read in full.
+- `scans/c74-forum/forum_insights.md` — non-obvious behaviors, preferred patterns, and performance pitfalls extracted from the Cycling '74 forums (with the artifact-bearing-thread crawl framework that produced them).
+- `scans/cookbook/cookbook_insights.md` — insights from the Max Cookbook (Dobrian / UC Irvine), each example patch downloaded and read in full.
 - `patching/MAX_PATCHING.md` — patching principles, presentation-view guidelines, common pitfalls, and the documentation-verification rules that prevent silent-failure bugs (e.g. invented attribute names that Max accepts and ignores).
 
 These sources are consulted by Claude during design and debugging, alongside the official refpages.
@@ -262,8 +262,8 @@ _This step is only useful if you plan to use `git diff` on your `.maxpat` files.
 | [`TUTORIAL_GUIDELINES.md`](TUTORIAL_GUIDELINES.md) | Tutorial structural contract and breakage diagnostic. |
 | [`CLAUDE.md`](CLAUDE.md) | Workflow, process rules, and cross-cutting conventions for any Claude instance. |
 | [`packages/`](packages/) | Curated package library (`package_objects.json`), per-package concepts, query CLI. |
-| [`c74-forum/`](c74-forum/) | Forum-knowledge crawl framework + `forum_insights.md`. |
-| [`cookbook/`](cookbook/) | Max Cookbook crawl framework + `cookbook_insights.md`. |
+| [`scans/c74-forum/`](scans/c74-forum/) | Forum-knowledge crawl framework + `forum_insights.md`. |
+| [`scans/cookbook/`](scans/cookbook/) | Max Cookbook crawl framework + `cookbook_insights.md`. |
 | [`c2m-themes/`](c2m-themes/) | CSS-token-driven design system, 10 themes. |
 | [`patches/`](patches/) | Generated patches live here. |
 | [`.claude/skills/`](.claude/skills/) | The five `/c2m-*` slash commands. |

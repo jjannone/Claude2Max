@@ -19,14 +19,14 @@ Three document kinds, all the same `.maxpat` JSON structure:
     JSON object, ignoring trailing binary. High-value for `live.*` attrs.
 
 No MCT decode is needed and everything is local (no network). See
-`maxhelp/MAXHELP_CRAWL_LOG.md` for how this fits the session workflow and
+`scans/maxhelp/MAXHELP_CRAWL_LOG.md` for how this fits the session workflow and
 `TASK_QUEUE.md` ("`.maxhelp` Corpus Crawl") for the full rationale.
 
 Usage:
-    python3 maxhelp/extract_observed_attrs.py             # full corpus, all kinds
-    python3 maxhelp/extract_observed_attrs.py --kinds maxhelp   # help patches only
-    python3 maxhelp/extract_observed_attrs.py --limit 50 # quick smoke test
-    python3 maxhelp/extract_observed_attrs.py --summary   # print top objects/attrs
+    python3 scans/maxhelp/extract_observed_attrs.py             # full corpus, all kinds
+    python3 scans/maxhelp/extract_observed_attrs.py --kinds maxhelp   # help patches only
+    python3 scans/maxhelp/extract_observed_attrs.py --limit 50 # quick smoke test
+    python3 scans/maxhelp/extract_observed_attrs.py --summary   # print top objects/attrs
 
 Outputs (written next to this script):
     maxhelp_observed_attrs.json  -- object -> {boxes, attrs:{name:count}}

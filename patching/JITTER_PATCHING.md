@@ -5,7 +5,7 @@ Specialized companion to `MAX_PATCHING.md`, sibling to `GEN_PATCHING.md` /
 subsystem — at the level above per-object reference.
 
 This file is **incrementally filled** by the userguide crawl
-(`userguide/USERGUIDE_CRAWL_LOG.md`). Topics in scope:
+(`scans/userguide/USERGUIDE_CRAWL_LOG.md`). Topics in scope:
 
 | Userguide topic | Status |
 |---|---|
@@ -34,8 +34,8 @@ idioms.
 
 Until the crawl fills this in, consult:
 
-- `cookbook/cookbook_insights.md` — § Video/Jitter (12 recipes analyzed).
-- `c74-forum/forum_insights.md` — § Jitter (Jitter-heavy after pass-5).
+- `scans/cookbook/cookbook_insights.md` — § Video/Jitter (12 recipes analyzed).
+- `scans/c74-forum/forum_insights.md` — § Jitter (Jitter-heavy after pass-5).
 - `SPEC_REFERENCE.md` § Jitter Display — JXS texture-binding-by-`<param>`-order
   rule.
 - The Jitter refpages directly via `RefpageCache` (lookup, not crawl).

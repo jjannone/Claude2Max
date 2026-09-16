@@ -6,9 +6,9 @@ below was extracted by reading the downloaded `.maxpat` in full, not just
 summarizing the page.
 
 This file supplements the official docs, `SPEC_REFERENCE.md`, and
-`c74-forum/forum_insights.md`.
+`scans/c74-forum/forum_insights.md`.
 
-Each entry follows the same shape as `c74-forum/forum_insights.md`:
+Each entry follows the same shape as `scans/c74-forum/forum_insights.md`:
 
 > **Insight title**
 > The insight in 1–3 sentences.

@@ -14,5 +14,5 @@ mcp_server/.venv/
 # tracked: it carries generalized Max technique. The state file, the catalog,
 # the log and the enumerator all name his private project folders and carry
 # absolute paths with his account name, and this repo is public.
-jjannone-max/*
-!jjannone-max/jjannone_max_insights.md
+scans/jjannone-max/*
+!scans/jjannone-max/jjannone_max_insights.md

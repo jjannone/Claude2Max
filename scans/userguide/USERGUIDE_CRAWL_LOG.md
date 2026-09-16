@@ -11,8 +11,8 @@ Companion files in this folder:
   `skipped`) plus the destination patching/*.md file each topic feeds into.
 - `userguide_insights.md` — extracted principles, topic-organized.
 
-Mirror of the forum / cookbook crawl pattern. See `c74-forum/FORUM_CRAWL_LOG.md`
-and `cookbook/COOKBOOK_CRAWL_LOG.md` for prior art.
+Mirror of the forum / cookbook crawl pattern. See `scans/c74-forum/FORUM_CRAWL_LOG.md`
+and `scans/cookbook/COOKBOOK_CRAWL_LOG.md` for prior art.
 
 ## Inventory (frozen at session 1 — 2026-05-07)
 

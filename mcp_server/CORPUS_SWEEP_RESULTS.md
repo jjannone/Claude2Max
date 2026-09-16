@@ -1,7 +1,7 @@
 # Corpus Sweep Results — Rule-enforcement task, item 2
 
 **Run 2026-08-20, Sonnet.** Full run over the 11,873-file corpus enumerated in
-`maxhelp/maxhelp_crawl_state.json` (the same file list the `.maxhelp` corpus
+`scans/maxhelp/maxhelp_crawl_state.json` (the same file list the `.maxhelp` corpus
 crawl already built — core `help/`, bundled `packages/`, and the user's
 `~/Documents/Max 9/Packages`), using `verify_patch_file()` /
 `spec2maxpat.py verify` (item 1 of this task). Wall time: **10.84s** for all
@@ -338,7 +338,7 @@ A few things worth flagging for the Opus read, without deciding them:
 ## Driver script (for reference / re-run)
 
 The exact script used, `corpus_sweep.py`, iterates
-`maxhelp/maxhelp_crawl_state.json`'s file list, builds one resolver up front
+`scans/maxhelp/maxhelp_crawl_state.json`'s file list, builds one resolver up front
 (`spec2maxpat.build_resolver()`), and calls `verify_patch_file()` per file —
 i.e. it is a thin wrapper around the item-1 deliverables, not new checking
 logic. It was run from the session scratchpad and is not part of the repo's

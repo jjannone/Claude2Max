@@ -1219,7 +1219,7 @@ def search_packages(term: str, limit: int = 5) -> dict:
 # built from and that a session might edit: the package library and the
 # help-corpus observed-attrs map. (The jbox refpage XML lives in the Max install
 # and is not edited during patch work, so it isn't watched.)
-_OBSERVED_ATTRS_PATH = _REPO_ROOT / "maxhelp" / "maxhelp_observed_attrs.json"
+_OBSERVED_ATTRS_PATH = _REPO_ROOT / "scans" / "maxhelp" / "maxhelp_observed_attrs.json"
 
 
 def _build_resolver_safe():
@@ -1690,8 +1690,8 @@ _RULE_DOCS: list[Path] = [
 
 # Pitfall / insight corpora: the Common Pitfalls bullet list plus the two
 # community-knowledge insight files.
-_PITFALL_FORUM = _REPO_ROOT / "c74-forum" / "forum_insights.md"
-_PITFALL_COOKBOOK = _REPO_ROOT / "cookbook" / "cookbook_insights.md"
+_PITFALL_FORUM = _REPO_ROOT / "scans" / "c74-forum" / "forum_insights.md"
+_PITFALL_COOKBOOK = _REPO_ROOT / "scans" / "cookbook" / "cookbook_insights.md"
 
 def _split_sections(text: str, source: str) -> list:
     """Split markdown into `## ` sections → [{name, body, source}] (body incl. `### `)."""
@@ -1824,8 +1824,8 @@ def search_pitfalls(term: str, limit: int = 8) -> dict:
     bug that does not surface as an error.
 
     Searches three sources: the `## Common Pitfalls` bullets in
-    `patching/MAX_PATCHING.md`, every entry in `c74-forum/forum_insights.md`, and
-    every entry in `cookbook/cookbook_insights.md`. Deterministic token search —
+    `patching/MAX_PATCHING.md`, every entry in `scans/c74-forum/forum_insights.md`, and
+    every entry in `scans/cookbook/cookbook_insights.md`. Deterministic token search —
     ranks entries by how many of the query's words they contain (whole-phrase
     matches score highest).
 

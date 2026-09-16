@@ -13,7 +13,7 @@ adds the full body for inline-content detection.
 
 | Stage | Tool | Output |
 |---|---|---|
-| Enumerate one or more pages (cheap — one HTTP per page) | `python3 c74-projects/enumerate_c74_projects.py --pages 1-5` | tab-separated listing: topic, slug, title, website_url |
+| Enumerate one or more pages (cheap — one HTTP per page) | `python3 scans/c74-projects/enumerate_c74_projects.py --pages 1-5` | tab-separated listing: topic, slug, title, website_url |
 | Scan project bodies for inline MCT or attachment nodes (one extra HTTP per project — slower) | `… --pages 1-5 --detect-content` | listing + mct/attach counts |
 | Filter to projects with inline artifacts | `… --has-content` (or `--has-mct`, `--has-attach`) | only the rare projects with inline patches |
 | Download inline artifacts (rare on the projects gallery) | `… --download /tmp/c74-projects` | files saved per slug; state marked `downloaded` |
@@ -27,7 +27,7 @@ only NEW or UPDATED.
 ## Why this differs from the forum and cookbook crawls
 
 - **Forum threads** embed patches inline as MCT (`patcher`) blocks — the
-  patch travels in the JSON. `c74-forum/enumerate_forum_threads.py` decodes
+  patch travels in the JSON. `scans/c74-forum/enumerate_forum_threads.py` decodes
   them.
 - **Cookbook recipes** attach `.maxpat` files to each recipe page; we
   download and analyze the attachment.

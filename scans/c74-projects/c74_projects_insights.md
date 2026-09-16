@@ -2,7 +2,7 @@
 
 Patching insights extracted from **free, downloadable** patches found in the
 Cycling '74 projects gallery. Mirrors the structure of
-`c74-forum/forum_insights.md` and `cookbook/cookbook_insights.md` so all
+`scans/c74-forum/forum_insights.md` and `scans/cookbook/cookbook_insights.md` so all
 three knowledge sources can be searched the same way.
 
 **Scope**: only entries whose patch is in hand. Commercial/showcase-only

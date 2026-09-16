@@ -5,12 +5,12 @@ under `_Projects__________________/`. Insights live in the patches, not
 in folder names — every entry below was extracted by reading the `.maxpat`
 in full, not by pattern-matching on filenames or directory structure.
 
-This file supplements `c74-forum/forum_insights.md` and
-`cookbook/cookbook_insights.md`, and serves as the source-of-record before
-the closing-sweep promotes selected entries into `c74-forum/forum_insights.md`,
+This file supplements `scans/c74-forum/forum_insights.md` and
+`scans/cookbook/cookbook_insights.md`, and serves as the source-of-record before
+the closing-sweep promotes selected entries into `scans/c74-forum/forum_insights.md`,
 `patching/MAX_PATCHING.md`, `SPEC_REFERENCE.md`, or `packages/package_objects.json`.
 
-Each entry follows the same shape as `c74-forum/forum_insights.md`:
+Each entry follows the same shape as `scans/c74-forum/forum_insights.md`:
 
 > **Insight title**
 > The insight in 1–3 sentences.
