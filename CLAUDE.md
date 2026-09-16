@@ -788,6 +788,7 @@ To decode MCT received in the conversation: `python3 -c "from spec2maxpat import
 ## Key Files
 
 - `SPEC_REFERENCE.md` — **Read this first.** Complete spec format, object types, connection format, layout guidelines, v8/JS objects, MCT encoding, worked examples.
+- `patching/PATCH_ANATOMY.md` — Orientation for the Max landscape: the ten functional roles a box plays in a patch (input, UI, domain processing, state, logic, compiled, routing, external services, output, infrastructure). Read when planning a new patch or decomposing an existing one, before reaching for specific objects.
 - `patching/MAX_PATCHING.md` — Patching principles, presentation guidelines, documentation verification rules, common pitfalls. Read before any patch work.
 - `patching/GEN_PATCHING.md` — gen~ / gen programming model (audio rate / control rate), canonical idioms (slide envelope follower, samplerate→ms, equal-power crossfade), latency-compensation discipline. Read before any work inside a `gen~` / `gen` box.
 - `patching/JIT_GEN_PATCHING.md` — jit.gen / jit.gl.pix programming model (per-cell / per-pixel), position primitives (`norm`, `cell`, `dim`), texture sampling, distance-field idioms. Read before any work inside a `jit.gen` / `jit.gl.pix` box.

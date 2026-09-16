@@ -71,6 +71,7 @@ The converter exports and decodes Max's "Copy Compressed" format, the encoding t
 
 Beyond the spec format, the repo carries curated patching knowledge gathered from the wider Max ecosystem:
 
+- `patching/PATCH_ANATOMY.md` — orientation for the Max landscape: the ten functional roles a box plays in a patch (input, UI, domain processing, state, logic, compiled low-level, routing, external services, output, infrastructure). Read first when planning a new patch or decomposing an existing one.
 - `c74-forum/forum_insights.md` — non-obvious behaviors, preferred patterns, and performance pitfalls extracted from the Cycling '74 forums (with the artifact-bearing-thread crawl framework that produced them).
 - `cookbook/cookbook_insights.md` — insights from the Max Cookbook (Dobrian / UC Irvine), each example patch downloaded and read in full.
 - `patching/MAX_PATCHING.md` — patching principles, presentation-view guidelines, common pitfalls, and the documentation-verification rules that prevent silent-failure bugs (e.g. invented attribute names that Max accepts and ignores).
@@ -257,7 +258,7 @@ _This step is only useful if you plan to use `git diff` on your `.maxpat` files.
 | [`add_tutorial.py`](add_tutorial.py) | Tutorial generator (data-flow analysis → step clustering → v8 controller). |
 | [`c2m-explain/c2m_explain.py`](c2m-explain/c2m_explain.py) | One-shot walkthrough generator. Read-only. |
 | [`SPEC_REFERENCE.md`](SPEC_REFERENCE.md) | Full spec format reference. Read first. |
-| [`patching/MAX_PATCHING.md`](patching/MAX_PATCHING.md) | Patching principles, presentation guidelines, doc-verification rules. |
+| [`patching/`](patching/) | Patching references: PATCH_ANATOMY (orientation), MAX_PATCHING (principles + presentation + doc-verification), GEN_PATCHING (`gen~` / `gen`), JIT_GEN_PATCHING (`jit.gen` / `jit.gl.pix`), JITTER_JS_PATCHING (`[js]` / `[v8]` with matrices), M4L_PATCHING (Max for Live). |
 | [`TUTORIAL_GUIDELINES.md`](TUTORIAL_GUIDELINES.md) | Tutorial structural contract and breakage diagnostic. |
 | [`CLAUDE.md`](CLAUDE.md) | Workflow, process rules, and cross-cutting conventions for any Claude instance. |
 | [`packages/`](packages/) | Curated package library (`package_objects.json`), per-package concepts, query CLI. |

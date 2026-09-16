@@ -1,5 +1,7 @@
 # Max Patching Reference
 
+> For an overview of the functional roles a Max patch is built from — which kind of object does which job — see `patching/PATCH_ANATOMY.md`. This file is the principles and the pitfalls; that one is the map.
+
 **Read this file before constructing or editing any patch.** It contains all patching principles, presentation guidelines, documentation rules, and common pitfalls.
 
 ---
