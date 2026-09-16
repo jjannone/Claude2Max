@@ -48,8 +48,10 @@ try:
     from claude2max_verify import format_report as _verify_report
     from claude2max_verify import verify_resolver_only as _verify_resolver_only
     from claude2max_verify import verify_spec as _verify_spec
+    from claude2max_verify import iter_spec_scopes as _iter_spec_scopes
 except Exception:  # pragma: no cover — checker is a convenience, never required
     _verify_spec = None
+    _iter_spec_scopes = None
     _verify_report = None
     _verify_resolver_only = None
 
@@ -439,9 +441,19 @@ _MAXPAT_STRUCTURAL_KEYS = frozenset({
 })
 
 
-def _load_maxpat_json(text):
-    """Parse a .maxpat/.maxhelp (plain JSON) or .amxd (ampf-prefixed JSON)."""
-    text = text.lstrip("﻿ \t\r\n")
+# A string, or a bare trailing-dot float outside one. Max of the Max 7 era wrote
+# every float as `460.` with no digit after the dot, which json rejects. The
+# string alternative is matched first so a dot inside a box's text is never touched.
+_BARE_DOT_FLOAT = re.compile(r'"(?:[^"\\]|\\.)*"|(?<=\d)\.(?=[\s,\]}])')
+
+
+def _repair_bare_dot_floats(text):
+    """Rewrite `460.` to `460.0` everywhere outside a JSON string."""
+    return _BARE_DOT_FLOAT.sub(lambda m: m.group(0) if m.group(0)[0] == '"' else ".0", text)
+
+
+def _parse_maxpat_json(text):
+    text = text.lstrip("\ufeff \t\r\n")
     if text.startswith("{"):
         try:
             return json.loads(text)
@@ -457,11 +469,30 @@ def _load_maxpat_json(text):
     return None
 
 
+def _load_maxpat_json(text, notes=None):
+    """Parse a .maxpat/.maxhelp (plain JSON) or .amxd (ampf-prefixed JSON).
+
+    Strict parsing first. If that fails, retry once with bare trailing-dot floats
+    repaired, and append "legacy-float-repair" to `notes` so the caller can say
+    the file was read that way rather than looking like a modern patch."""
+    obj = _parse_maxpat_json(text)
+    if obj is not None:
+        return obj
+    repaired = _repair_bare_dot_floats(text)
+    if repaired == text:
+        return None
+    obj = _parse_maxpat_json(repaired)
+    if obj is not None and notes is not None:
+        notes.append("legacy-float-repair")
+    return obj
+
+
 def read_patch_file(path):
     """Load a .maxpat / .maxhelp / .amxd from disk. Returns (maxpat_dict, raw_bytes);
     raw_bytes is what write_patch_file needs to put a .amxd's header back."""
     raw = open(path, "rb").read()
     obj = None
+    notes = []
     if raw.startswith(b"ampf"):
         # Take the 'ptch' chunk by its length field. Scanning the bytes for the
         # first '{' is wrong here: the little-endian u32 length itself can hold
@@ -469,12 +500,15 @@ def read_patch_file(path):
         # the scan then starts four bytes early on a byte that is not JSON.
         for tag, payload in _amxd_chunks(raw):
             if tag == b"ptch":
-                obj = _load_maxpat_json(payload.rstrip(b"\0").decode("utf-8", "ignore"))
+                obj = _load_maxpat_json(payload.rstrip(b"\0").decode("utf-8", "ignore"), notes)
                 break
     if obj is None:
-        obj = _load_maxpat_json(raw.decode("utf-8", "ignore"))
+        obj = _load_maxpat_json(raw.decode("utf-8", "ignore"), notes)
     if obj is None:
         raise ValueError(f"{path}: not a Max patch (no JSON object found)")
+    if "legacy-float-repair" in notes:
+        print(f"[c2m] {path}: old float format (`460.`) read by repairing it to `460.0`.",
+              file=sys.stderr)
     return obj, raw
 
 
@@ -598,9 +632,13 @@ def gate_maxpat_file(path, stream=sys.stderr):
         text = p.read_text(encoding="utf-8", errors="replace")
     except OSError as exc:
         return {**blank, "error": f"unreadable: {exc}"}
-    data = _load_maxpat_json(text)
+    notes = []
+    data = _load_maxpat_json(text, notes)
     if not isinstance(data, dict) or not isinstance(data.get("patcher"), dict):
         return {**blank, "error": "not-a-patcher-file"}
+    if notes:
+        print(f"[c2m] '{p.name}': old float format (`460.`) read by repairing it to `460.0`.",
+              file=stream)
 
     resolver = build_resolver([str(p.parent)])
     if resolver is None or not resolver.healthy():
@@ -637,8 +675,9 @@ def verify_patch_file(path, resolver=None, use_resolver=True, stream=sys.stderr)
     structural + anti-guessing — and is the general "how clean is this patch"
     instrument behind the verify_patch MCP tool and the `verify` CLI command.
 
-    Prefers the embedded Claude2Max spec when present (single scope, full
-    fidelity — presentation/layout fields included). Falls back to a per-
+    Prefers the embedded Claude2Max spec when present (full fidelity —
+    presentation/layout fields included; every nested `patcher` sub-spec is
+    checked as its own scope). Falls back to a per-
     nested-subpatcher native-to-spec conversion (_iter_patcher_scopes) when no
     embed is found, which is the shape every C74 help patch, bundled-package
     patch, and hand-edited file is in — this is what makes the corpus sweep
@@ -666,9 +705,13 @@ def verify_patch_file(path, resolver=None, use_resolver=True, stream=sys.stderr)
         text = p.read_text(encoding="utf-8", errors="replace")
     except OSError as exc:
         return {**blank, "error": f"unreadable: {exc}"}
-    data = _load_maxpat_json(text)
+    notes = []
+    data = _load_maxpat_json(text, notes)
     if not isinstance(data, dict) or not isinstance(data.get("patcher"), dict):
         return {**blank, "error": "not-a-patcher-file"}
+    if notes:
+        print(f"[c2m] '{p.name}': old float format (`460.`) read by repairing it to `460.0`.",
+              file=stream)
 
     active_resolver = resolver
     degraded = False
@@ -696,7 +739,7 @@ def verify_patch_file(path, resolver=None, use_resolver=True, stream=sys.stderr)
     if embedded is not None:
         result = _verify_spec(embedded, resolver=active_resolver, base_dir=str(p.parent))
         result["mode"] = "embedded-spec"
-        result["scopes_checked"] = 1
+        result["scopes_checked"] = sum(1 for _ in _iter_spec_scopes(embedded))
         # Preliminary finding: in embedded-spec mode every rule below judges
         # the SPEC. If the spec does not match the boxes, every one of those
         # findings is about the wrong object — so say that first.

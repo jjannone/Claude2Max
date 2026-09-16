@@ -631,11 +631,12 @@ _IO_COMMENT_REACH_PX = 60.0
 
 
 def _check_io_labels(objects: dict, path: str, out: list) -> None:
-    """Recursive: inlet/outlet boxes inside a (sub)patcher need BOTH a comment
+    """Inlet/outlet boxes inside one (sub)patcher need BOTH a comment
     attr (the outside tooltip) AND an adjacent `comment` box inside the scope.
 
     Adjacency is edge-to-edge within _IO_COMMENT_REACH_PX in the patching view;
     when a scope has no positions to measure, any comment in the scope counts.
+    Deeper subpatchers are checked when run_all reaches their own scope.
     """
     comment_rects = []
     any_comment = False
@@ -672,11 +673,6 @@ def _check_io_labels(objects: dict, path: str, out: list) -> None:
                     f"the {mc} labels it inside — both are required.",
                     "CLAUDE.md > What You Must Handle > subpatcher inlet/outlet labeling",
                 ))
-        sub = obj.get("patcher")
-        if isinstance(sub, dict):
-            nested = sub.get("objects", {})
-            if isinstance(nested, dict):
-                _check_io_labels(nested, f"{path}{oid}/", out)
 
 
 def rule_subpatcher_labels(ctx: SpecContext) -> list:
@@ -776,6 +772,8 @@ def rule_debug_marking(ctx: SpecContext) -> list:
 #   kslider-demo-range                 0          0
 #   jit-matrix-fan-in                  —          —     resolver-gated; corpus run was --no-resolver
 #   cord-crosses-unrelated-box        95          0     panels excluded; attrui columns dominate
+#                                                       (2026-09-16: ports moved to the box edges as Max
+#                                                       draws them; 228 fewer hits over 25 patches)
 #   feeder-below-target                0          0
 #   fanout-order                       2          0
 #   cord-too-short                   103          0     older repo layouts used 25–30 px rows
@@ -1390,11 +1388,23 @@ _CORD_MIN_OVERLAP_AREA = 20.0
 _CORD_TOO_SHORT_PX = 15.0
 
 
+_PORT_W_PX = 7.0   # approximate width of the port nub Max draws on a box edge
+
+
 def _port_x(rect, index, count) -> float:
-    """Approximate x of outlet/inlet `index` on a box with `count` ports."""
+    """x of the centre of outlet/inlet `index` on a box with `count` ports.
+
+    Max draws the first port at the box's left edge, the last at its right edge,
+    and spreads the rest evenly between them. So port 0 is at the left edge
+    whatever the count, and a one-port box has its port at the left, not the
+    centre. With the count unknown, a port other than 0 falls back to the centre.
+    """
     x, w = rect[0], rect[2]
-    if isinstance(count, int) and count > 0 and isinstance(index, int) and 0 <= index < count:
-        return x + (index + 0.5) * w / count
+    half = _PORT_W_PX / 2.0
+    if index == 0:
+        return x + half
+    if isinstance(count, int) and count > 1 and isinstance(index, int) and 0 < index < count:
+        return x + half + index * max(w - _PORT_W_PX, 0.0) / (count - 1)
     return x + w / 2.0
 
 
@@ -1978,8 +1988,43 @@ def rule_patching_size_override(ctx: SpecContext) -> list:
 _INIT_CONTROLS = {"number", "flonum", "toggle", "dial", "slider", "umenu"}
 
 
+def _creation_args(text: str) -> list:
+    """Positional creation args of a box's text: the object name and every
+    `@name value…` run removed (attributes may appear anywhere after the name)."""
+    out, in_attr = [], False
+    for tok in text.split()[1:]:
+        if tok.startswith("@"):
+            in_attr = True
+        elif not in_attr:
+            out.append(tok)
+    return out
+
+
+def _destinations_hold_the_value(ctx: SpecContext, oid: str) -> bool:
+    """True when every cord out of `oid` lands on inlet i >= 1 of an object box
+    whose creation args include an i-th value (`[+ 12]` inlet 1, `[metro 250]`
+    inlet 1, `[makenote 100 200]` inlets 1 and 2). That argument is the inlet's
+    initial state, so the control feeding it needs no init of its own."""
+    cords = ctx.outgoing.get(oid) or []
+    if not cords:
+        return False
+    for _i, conn in cords:
+        inlet = conn[3]
+        tgt = ctx.objects.get(conn[2])
+        if (not isinstance(tgt, dict) or ctx.maxclass(tgt) != "newobj"
+                or not isinstance(inlet, int) or inlet < 1
+                or len(_creation_args(ctx.text(tgt))) < inlet):
+            return False
+    return True
+
+
 def rule_control_init_on_load(ctx: SpecContext) -> list:
     """(t) A control with nothing feeding it has undefined state on load.
+
+    Two cases are not reported, because the patch already has the default
+    (CLAUDE.md > Don't Add an Object That Duplicates What an Object Already in
+    the Patch Does): a toggle, which starts off; and a control whose every cord
+    lands on an inlet that the destination's creation argument already sets.
 
     Weakest defensible form: any incoming cord (loadmess, loadbang → message,
     a live data source) is assumed to initialize the control. Suppressed for
@@ -1996,6 +2041,10 @@ def rule_control_init_on_load(ctx: SpecContext) -> list:
         if not isinstance(obj, dict) or ctx.maxclass(obj) not in _INIT_CONTROLS:
             continue
         if ctx.incoming.get(oid):
+            continue
+        if ctx.maxclass(obj) == "toggle":
+            continue  # starts off and sends nothing until clicked: off is its known state
+        if _destinations_hold_the_value(ctx, oid):
             continue
         out.append(Violation(
             "control-init-on-load", STYLE, oid,
@@ -2240,7 +2289,8 @@ def rule_message_resolves(ctx: SpecContext, resolver) -> list:
     messages, so an absence is a SUSPICION worth surfacing, not a certainty worth
     blocking the build. Firing is deliberately conservative — flag only when the
     selector is symbolic, non-universal, and absent from EVERY *checkable*
-    dispatching target (resolves, has a non-empty methodlist, isn't a
+    dispatching target's methods AND attributes (an attribute name sent as a
+    message sets that attribute) (resolves, has a non-empty methodlist, isn't a
     data-passthrough/router or a custom-script object). That keeps false positives
     near zero while still catching `chord`→metro-style invented messages.
 
@@ -2281,7 +2331,12 @@ def rule_message_resolves(ctx: SpecContext, resolver) -> list:
                 # wildcard, so nothing sent here can be an invented message.
                 checkable = []
                 break
-            checkable.append((tcls, msgs))
+            # Every attribute is also settable by sending its name as a message
+            # (`mix 1.` does what an attrui for `mix` does), so an attribute
+            # name is documented behaviour, not a guess.
+            attrs, _asrc = (resolver.attrs_for(tcls) if hasattr(resolver, "attrs_for")
+                            else (None, ""))
+            checkable.append((tcls, msgs | (attrs or set())))
         if not checkable or any(sel in msgs for _t, msgs in checkable):
             continue
         targets = sorted({t for t, _ in checkable})
@@ -2353,6 +2408,57 @@ RESOLVER_REGISTRY = [
 ]
 
 
+# Boxes whose nested patcher holds another language (gen, RNBO), not Max. Their
+# contents are not checked against Max's rules or object set. Mirrors
+# spec2maxpat._FOREIGN_LANGUAGE_BOXES (this module must not import the converter).
+_FOREIGN_LANGUAGE_BOXES = frozenset({
+    "gen", "gen~", "jit.gen", "jit.pix", "jit.gl.pix", "jit.gl.slab", "jit.expr",
+    "rnbo~",
+})
+
+
+def iter_spec_scopes(spec: dict, prefix: str = ""):
+    """Yield (prefix, sub_spec) for a spec and every nested `patcher` sub-spec.
+
+    The prefix is the box-id path to the scope (`tab_2/` for a subpatcher of the
+    root), used to label where a finding is. gen and RNBO sub-specs are skipped.
+    """
+    if not isinstance(spec, dict):
+        return
+    yield prefix, spec
+    objs = spec.get("objects")
+    if not isinstance(objs, dict):
+        return
+    for oid, obj in objs.items():
+        if not isinstance(obj, dict):
+            continue
+        sub = obj.get("patcher")
+        if not isinstance(sub, dict) or not isinstance(sub.get("objects"), dict):
+            continue
+        words = (obj.get("text") or "").split()
+        if words and words[0] in _FOREIGN_LANGUAGE_BOXES:
+            continue
+        yield from iter_spec_scopes(sub, f"{prefix}{oid}/")
+
+
+def _run_rules(rules, ctx, prefix, *extra) -> list:
+    out: list = []
+    for rule in rules:
+        try:
+            found = rule(ctx, *extra) or []
+        except Exception as exc:  # a buggy rule must never sink the whole check
+            found = [Violation(
+                "rule-crashed", STYLE, rule.__name__,
+                f"Internal: rule {rule.__name__} raised {exc!r}; skipped.",
+                "claude2max_verify",
+            )]
+        for v in found:
+            if prefix:
+                v.location = f"{prefix}{v.location}"
+            out.append(v)
+    return out
+
+
 def run_resolver_rules(spec: dict, resolver) -> list:
     """Run ONLY the anti-guessing resolver rules (object / attribute / message).
 
@@ -2360,52 +2466,31 @@ def run_resolver_rules(spec: dict, resolver) -> list:
     name checks without the spec-format principle warnings (presentation, labels,
     debug marking) that don't map cleanly onto a hand-edited native patch. Returns
     the same Violation objects the convert gate produces — one rule library, so
-    convert and the post-edit gate flag identically.
+    convert and the post-edit gate flag identically. Walks every nested scope.
     """
-    ctx = SpecContext(spec)
     violations: list = []
-    for rule in RESOLVER_REGISTRY:
-        try:
-            violations.extend(rule(ctx, resolver) or [])
-        except Exception as exc:
-            violations.append(Violation(
-                "rule-crashed", STYLE, rule.__name__,
-                f"Internal: rule {rule.__name__} raised {exc!r}; skipped.",
-                "claude2max_verify",
-            ))
+    for prefix, scope in iter_spec_scopes(spec):
+        violations.extend(_run_rules(RESOLVER_REGISTRY, SpecContext(scope), prefix, resolver))
     violations.sort(key=lambda v: (_SEV_ORDER.get(v.severity, 9), v.rule))
     return violations
 
 
 def run_all(spec: dict, resolver=None, base_dir=None, native=False) -> list:
-    """Run every registered rule, return violations sorted by severity.
+    """Run every registered rule on the spec and every nested `patcher` sub-spec,
+    return violations sorted by severity.
 
     If ``resolver`` is supplied, the anti-guessing rules (object/attribute
     existence against C74 refpages + the package library) run too.
     ``base_dir`` (the patch's directory) lets file-reading rules resolve
     sibling scripts; None disables them. ``native`` marks a spec derived from
-    a native patch's boxes (see SpecContext.native).
+    a native patch's boxes (see SpecContext.native). A finding inside a
+    subpatcher has its location prefixed with the box-id path (`tab_2/m5`).
     """
-    ctx = SpecContext(spec, base_dir=base_dir, native=native)
     violations: list = []
-    for rule in REGISTRY:
-        try:
-            violations.extend(rule(ctx) or [])
-        except Exception as exc:  # a buggy rule must never sink the whole check
-            violations.append(Violation(
-                "rule-crashed", STYLE, rule.__name__,
-                f"Internal: rule {rule.__name__} raised {exc!r}; skipped.",
-                "claude2max_verify",
-            ))
-    if resolver is not None:
-        for rule in RESOLVER_REGISTRY:
-            try:
-                violations.extend(rule(ctx, resolver) or [])
-            except Exception as exc:
-                violations.append(Violation(
-                    "rule-crashed", STYLE, rule.__name__,
-                    f"Internal: rule {rule.__name__} raised {exc!r}; skipped.",
-                    "claude2max_verify",
-                ))
+    for prefix, scope in iter_spec_scopes(spec):
+        ctx = SpecContext(scope, base_dir=base_dir, native=native)
+        violations.extend(_run_rules(REGISTRY, ctx, prefix))
+        if resolver is not None:
+            violations.extend(_run_rules(RESOLVER_REGISTRY, ctx, prefix, resolver))
     violations.sort(key=lambda v: (_SEV_ORDER.get(v.severity, 9), v.rule))
     return violations

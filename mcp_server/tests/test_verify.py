@@ -41,8 +41,9 @@ class FakeResolver:
     be tested without Max installed. Mirrors the duck type the real resolver
     implements (see spec2maxpat._GateResolver), including the jbox base union."""
 
-    def __init__(self, objects, attrs=None, abstractions=None, base=FAKE_JBOX):
+    def __init__(self, objects, attrs=None, abstractions=None, base=FAKE_JBOX, messages=None):
         self._objs = set(objects)                 # resolvable object names
+        self._msgs = messages or {}               # class -> set(documented methods)
         self._attrs = attrs or {}                 # class -> set(own valid attrs) or None
         self._abs = set(abstractions or [])       # abstractions on disk
         self._base = set(base)                    # jbox base attrs
@@ -57,6 +58,11 @@ class FakeResolver:
 
     def abstraction_exists(self, name):
         return name in self._abs
+
+    def messages_for(self, name):
+        if name in self._msgs:
+            return self._msgs[name], "fake"
+        return None, "no-refpage"
 
 
 # ── ERROR rules ───────────────────────────────────────────────────────────────
@@ -901,6 +907,29 @@ def test_cord_crosses_unrelated_box():
     assert "cord-crosses-unrelated-box" not in _rules(verify_spec(beside))
 
 
+
+def test_cord_port_zero_sits_at_left_edge():
+    # An attrui staircase: each box 20 px right of the one above, every cord
+    # dropping from its left-edge outlet to the target's left inlet. In Max no
+    # cord touches the attruis below it.
+    objs = {"target": {"type": "newobj", "text": "abl.device.delay~", "pos": [100, 300]}}
+    conns = []
+    for k in range(2):
+        objs[f"a{k}"] = {"type": "attrui", "pos": [100 + 20 * k, 40 + 60 * k], "size": [150, 22]}
+        conns.append([f"a{k}", 0, "target", 0])
+    assert "cord-crosses-unrelated-box" not in _rules(verify_spec({"objects": objs, "connections": conns}))
+
+
+def test_cord_last_port_sits_at_right_edge():
+    # The last outlet of a wide box is at its right edge, so a box under that
+    # edge is crossed even though it is far from the box's centre.
+    objs = {"src": {"type": "newobj", "text": "unjoin 2", "pos": [100, 40], "size": [400, 22], "outlets": 3},
+            "under": {"type": "newobj", "text": "print X", "pos": [480, 150]},
+            "dst": {"type": "newobj", "text": "print Y", "pos": [480, 300]}}
+    r = verify_spec({"objects": objs, "connections": [["src", 2, "dst", 0]]})
+    hit = [v for v in r["violations"] if v["rule"] == "cord-crosses-unrelated-box"]
+    assert hit and "under" in hit[0]["message"], r["violations"]
+
 # (d) feeder-below-target -----------------------------------------------------
 def test_feeder_below_target():
     objs = {"m": {"type": "message", "text": "1", "pos": [100, 300]},
@@ -995,6 +1024,42 @@ def test_control_init_on_load():
     assert "control-init-on-load" not in _rules(verify_spec(ap))
     live = {"objects": {"d": {"type": "live.dial"}}, "connections": []}
     assert "control-init-on-load" not in _rules(verify_spec(live))
+
+
+def _init_hits(spec):
+    return [v["location"] for v in verify_spec(spec)["violations"] if v["rule"] == "control-init-on-load"]
+
+
+def test_control_init_bare_toggle_not_flagged():
+    assert _init_hits({"objects": {"t": {"type": "toggle"}}, "connections": []}) == []
+
+
+def test_control_init_number_into_argument_inlet_not_flagged():
+    spec = {"objects": {"n": {"type": "number"}, "add": {"type": "newobj", "text": "+ 12"}},
+            "connections": [["n", 0, "add", 1]]}
+    assert _init_hits(spec) == []
+    spec = {"objects": {"n": {"type": "flonum"},
+                        "mk": {"type": "newobj", "text": "makenote 100 200 @repeatmode 1"}},
+            "connections": [["n", 0, "mk", 2]]}
+    assert _init_hits(spec) == []
+
+
+def test_control_init_still_fires_without_argument():
+    bare_plus = {"objects": {"n": {"type": "number"}, "add": {"type": "newobj", "text": "+"}},
+                 "connections": [["n", 0, "add", 1]]}
+    assert _init_hits(bare_plus) == ["n"]
+    left = {"objects": {"n": {"type": "number"}, "add": {"type": "newobj", "text": "+ 12"}},
+            "connections": [["n", 0, "add", 0]]}
+    assert _init_hits(left) == ["n"]   # the left inlet is not set by the argument
+    attr_only = {"objects": {"n": {"type": "number"},
+                             "j": {"type": "newobj", "text": "join @triggers -1"}},
+                 "connections": [["n", 0, "j", 1]]}
+    assert _init_hits(attr_only) == ["n"]   # @triggers -1 is not a positional arg
+    mixed = {"objects": {"n": {"type": "number"},
+                         "add": {"type": "newobj", "text": "+ 12"},
+                         "p": {"type": "newobj", "text": "print"}},
+             "connections": [["n", 0, "add", 1], ["n", 0, "p", 0]]}
+    assert _init_hits(mixed) == ["n"]   # not EVERY destination holds the value
 
 
 # (u) declareattribute-conventions (JS scanner) --------------------------------
@@ -1125,6 +1190,100 @@ def test_off_grid():
     scattered = {"objects": {f"b{i}": {"type": "newobj", "text": "print", "pos": [31 + i * 17, 43 + i * 23]}
                              for i in range(8)}, "connections": []}
     assert not _hits(verify_spec(scattered), "off-grid")
+
+
+# ── nested scopes (2026-09-16) ────────────────────────────────────────────────
+# Every rule runs inside every `patcher` sub-spec, with the location prefixed by
+# the box-id path. Rule: CLAUDE.md > Inside a Subpatcher Is Still Max.
+
+def _p(name, objects, connections, **kw):
+    o = {"type": "newobj", "text": f"p {name}",
+         "attrs": {"comment": "no ports"},
+         "patcher": {"objects": objects, "connections": connections}}
+    o.update(kw)
+    return o
+
+
+def _nested_hidden_cord_spec():
+    inner = _p("INNER", {"a": {"type": "newobj", "text": "t b"},
+                         "b": {"type": "newobj", "text": "print X"}},
+               [["a", 0, "b", 0, {"hidden": 1}]])
+    outer = _p("OUTER", {"inner": inner}, [])
+    return {"objects": {"outer": outer}, "connections": []}
+
+
+def test_nested_rule_reports_with_box_path():
+    r = verify_spec(_nested_hidden_cord_spec())
+    locs = [v["location"] for v in r["violations"] if v["rule"] == "hidden-cord"]
+    assert locs == ["outer/inner/connections[0]"], locs
+
+
+def test_nested_io_labels_reported_once():
+    inner = _p("INNER", {"in0": {"type": "inlet"}}, [])
+    outer = _p("OUTER", {"inner": inner}, [])
+    r = verify_spec({"objects": {"outer": outer}, "connections": []})
+    locs = [v["location"] for v in r["violations"] if v["rule"] == "io-label-missing"]
+    assert locs == ["outer/inner/in0"], locs
+
+
+def test_gen_subspec_not_descended():
+    gen = {"type": "newobj", "text": "gen~",
+           "patcher": {"objects": {"h": {"type": "newobj", "text": "history", "hidden": 1}},
+                       "connections": []}}
+    r = verify_spec({"objects": {"g": gen}, "connections": []})
+    assert "hidden-box" not in _rules(r)
+    ctl = _p("CTL", {"h": {"type": "newobj", "text": "print X", "hidden": 1}}, [])
+    r = verify_spec({"objects": {"c": ctl}, "connections": []})
+    assert "hidden-box" in _rules(r)   # the same box in a Max subpatcher is reported
+
+
+def test_verify_patch_file_checks_nested_scopes():
+    import json, os, tempfile
+    m = spec2maxpat.convert_spec(_nested_hidden_cord_spec())
+    with tempfile.NamedTemporaryFile("w", suffix=".maxpat", delete=False) as f:
+        json.dump(m, f)
+        name = f.name
+    try:
+        r = spec2maxpat.verify_patch_file(name, use_resolver=False)
+    finally:
+        os.unlink(name)
+    assert r["mode"] == "embedded-spec"
+    assert r["scopes_checked"] == 3, r["scopes_checked"]
+    assert "outer/inner/connections[0]" in [v["location"] for v in r["violations"]]
+
+
+# ── message-unverified accepts attribute names (2026-09-16) ──────────────────
+
+def _msg_spec(text, target="abl.device.delay~"):
+    return {"objects": {"m": {"type": "message", "text": text},
+                        "t": {"type": "newobj", "text": target}},
+            "connections": [["m", 0, "t", 0]]}
+
+
+_DELAY_RESOLVER = FakeResolver(
+    ["abl.device.delay~"], attrs={"abl.device.delay~": {"mix", "time"}},
+    messages={"abl.device.delay~": {"clear", "signal"}})
+
+
+def test_message_that_is_an_attribute_is_not_flagged():
+    r = verify_spec(_msg_spec("mix 1."), resolver=_DELAY_RESOLVER)
+    assert "message-unverified" not in _rules(r)
+
+
+def test_message_that_is_a_method_is_not_flagged():
+    r = verify_spec(_msg_spec("clear"), resolver=_DELAY_RESOLVER)
+    assert "message-unverified" not in _rules(r)
+
+
+def test_message_that_is_neither_still_warns():
+    r = verify_spec(_msg_spec("mixx 1."), resolver=_DELAY_RESOLVER)
+    assert "message-unverified" in _rules(r)
+
+
+def test_message_to_object_without_refpage_unchanged():
+    r = verify_spec(_msg_spec("mixx 1.", target="nosuch.thing~"),
+                    resolver=FakeResolver(["nosuch.thing~"]))
+    assert "message-unverified" not in _rules(r)
 
 
 def _run():
