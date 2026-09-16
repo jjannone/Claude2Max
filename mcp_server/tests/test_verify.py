@@ -1020,6 +1020,113 @@ def test_declareattribute_conventions_scanner():
 
 # ── runner ────────────────────────────────────────────────────────────────────
 
+# ── whole-patch layout, folded in from c2m_layout.py (2026-09-16) ──────────────
+def _hits(result, rule):
+    return [v for v in result["violations"] if v["rule"] == rule]
+
+
+def test_patching_overlap():
+    base = {"a": {"type": "newobj", "text": "metro 500", "pos": [100, 100]},
+            "b": {"type": "newobj", "text": "counter", "pos": [120, 110]}}
+    assert _hits(verify_spec({"objects": base, "connections": []}), "patching-overlap")
+    clear = dict(base, b={"type": "newobj", "text": "counter", "pos": [100, 200]})
+    assert not _hits(verify_spec({"objects": clear, "connections": []}), "patching-overlap")
+    # backdrops, hidden runtime-state boxes and the spec embed are exempt
+    for extra in ({"type": "panel", "pos": [0, 0], "size": [400, 400]},
+                  {"type": "fpic", "pos": [0, 0], "size": [400, 400]},
+                  {"type": "comment", "text": "bubble", "pos": [110, 105], "attrs": {"hidden": 1}}):
+        objs = dict(clear, x=extra)
+        assert not _hits(verify_spec({"objects": objs, "connections": []}), "patching-overlap"), extra
+    embed = dict(clear)
+    embed["obj-spec-embed"] = {"type": "text.codebox", "pos": [100, 100], "size": [200, 200]}
+    assert not _hits(verify_spec({"objects": embed, "connections": []}), "patching-overlap")
+    # a transparent button over its comment is a click target, not a collision
+    label = {"c": {"type": "comment", "text": "start", "pos": [100, 100]},
+             "btn": {"type": "button", "pos": [100, 100], "size": [60, 22],
+                     "attrs": {"bgcolor": [0, 0, 0, 0]}}}
+    assert not _hits(verify_spec({"objects": label, "connections": []}), "patching-overlap")
+
+
+def test_presentation_overlap_skips_fpic_backdrop():
+    objs = {"pic": {"type": "fpic", "presentation": [0, 0, 400, 300]},
+            "t": {"type": "toggle", "presentation": [20, 20, 24, 24]},
+            "l": {"type": "comment", "text": "on", "presentation": [50, 20, 40, 22]}}
+    assert not _hits(verify_spec({"objects": objs, "connections": []}), "presentation-overlap")
+
+
+def test_long_cord():
+    def spec(dy, src_text="metro 500", outlettype=None):
+        src = {"type": "newobj", "text": src_text, "pos": [100, 40]}
+        if outlettype is not None:
+            src["outlettype"] = outlettype
+        return {"objects": {"src": src,
+                            "dst": {"type": "newobj", "text": "print X", "pos": [100, 40 + dy]}},
+                "connections": [["src", 0, "dst", 0]]}
+    long_hit = _hits(verify_spec(spec(700)), "cord-long")
+    assert long_hit and "[s NAME]" in long_hit[0]["message"]
+    assert not _hits(verify_spec(spec(300)), "cord-long")
+    # a receive at the source: the fix is to move it, not to add another pair
+    moved = _hits(verify_spec(spec(700, "r~ SRC")), "cord-long")
+    assert moved and "already a [r~]" in moved[0]["message"]
+    # a signal source gets s~ / r~ and the summing caution
+    sig = _hits(verify_spec(spec(700, "*~ 0.5", ["signal"])), "cord-long")
+    assert sig and "[s~ NAME]" in sig[0]["message"] and "sum" in sig[0]["message"]
+    # a declared non-signal outlet on a ~ object is not treated as signal
+    ctl = _hits(verify_spec(spec(700, "peakamp~ 100", ["float"])), "cord-long")
+    assert ctl and "[s NAME]" in ctl[0]["message"]
+    # a long cord that also crosses a box is reported once, by the crossing rule
+    crossing = spec(700)
+    crossing["objects"]["mid"] = {"type": "newobj", "text": "midiformat", "pos": [100, 380]}
+    r = verify_spec(crossing)
+    assert _hits(r, "cord-crosses-unrelated-box") and not _hits(r, "cord-long")
+
+
+def test_box_off_canvas():
+    # presented box past the window: one WARNING for the patch, naming the size needed
+    pres = {"width": 400, "height": 300,
+            "objects": {"a": {"type": "toggle", "presentation": [10, 10, 24, 24]},
+                        "b": {"type": "toggle", "presentation": [10, 500, 24, 24]},
+                        "c": {"type": "toggle", "presentation": [600, 10, 24, 24]}},
+            "connections": []}
+    hit = _hits(verify_spec(pres), "box-off-canvas")
+    assert len(hit) == 1 and hit[0]["severity"] == "warning" and hit[0]["location"] == "patcher"
+    assert "2 box(es)" in hit[0]["message"] and "624 × 524" in hit[0]["message"]
+    # the patching view of a presentation patch may scroll: not checked
+    pres["objects"]["far"] = {"type": "newobj", "text": "print", "pos": [3000, 3000]}
+    assert len(_hits(verify_spec(pres), "box-off-canvas")) == 1
+    # no presented boxes: the patching view opens, and a miss is STYLE
+    patching = {"width": 400, "height": 300,
+                "objects": {"a": {"type": "newobj", "text": "print", "pos": [500, 20]}},
+                "connections": []}
+    hit = _hits(verify_spec(patching), "box-off-canvas")
+    assert len(hit) == 1 and hit[0]["severity"] == "style"
+    # converter defaults (800 × 600) apply when the spec gives no size
+    inside = {"objects": {"a": {"type": "newobj", "text": "print", "pos": [700, 500]}}, "connections": []}
+    assert not _hits(verify_spec(inside), "box-off-canvas")
+    # a box above or left of the origin is reported as such
+    neg = {"objects": {"a": {"type": "newobj", "text": "print", "pos": [-40, 20]}}, "connections": []}
+    assert "left of or above" in _hits(verify_spec(neg), "box-off-canvas")[0]["message"]
+
+
+def test_off_grid():
+    def spec(extra_pos, n=6, step=15):
+        objs = {f"b{i}": {"type": "newobj", "text": "print", "pos": [30, 30 + i * step * 4]} for i in range(n)}
+        objs["odd"] = {"type": "newobj", "text": "print", "pos": extra_pos}
+        return {"objects": objs, "connections": []}
+    hit = _hits(verify_spec(spec([452, 90])), "off-grid")
+    assert len(hit) == 1 and hit[0]["location"] == "odd" and "(450, 90)" in hit[0]["message"]
+    assert not _hits(verify_spec(spec([450, 90])), "off-grid")
+    # comments are offset on purpose to compensate for text padding
+    objs = spec([450, 90])["objects"]
+    objs["label"] = {"type": "comment", "text": "freq", "pos": [37, 23]}
+    assert not _hits(verify_spec({"objects": objs, "connections": []}), "off-grid")
+    # too few boxes to establish a grid, or no grid at all: silent
+    assert not _hits(verify_spec(spec([452, 90], n=3)), "off-grid")
+    scattered = {"objects": {f"b{i}": {"type": "newobj", "text": "print", "pos": [31 + i * 17, 43 + i * 23]}
+                             for i in range(8)}, "connections": []}
+    assert not _hits(verify_spec(scattered), "off-grid")
+
+
 def _run():
     fns = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]
     passed = failed = 0

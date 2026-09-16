@@ -786,11 +786,39 @@ def rule_debug_marking(ctx: SpecContext) -> list:
 #   control-init-on-load              19      2,514     C74 convention: uninitialized number boxes
 #   attr-* / script-io-unlabelled      4          0     JS scanner; needs base_dir
 #
+# Added 2026-09-16 from c2m_layout.py, measured over `patches/` (20 files):
+#   patching-overlap                  58          0     label/control kisses of 2–7 px in the older sequencers
+#   cord-long                        198          0     169 leave an r~ that could sit by its inlet
+#   box-off-canvas                    13          0     one per patch; every shootout's presentation overruns its window
+#   off-grid                           1          0     silent unless ≥80% of ≥5 boxes share a grid
+#
 # Geometry and presentation rules read `pos` / presentation rects, which a
 # native-derived spec does not carry, so their corpus count is structurally 0.
 # ───────────────────────────────────────────────────────────────────────────
 
 _OVERLAP_TOLERANCE_PX = 1.0   # Max rounds rects on save; a 1 px kiss is not a collision
+
+# Classes whose job is to sit behind other boxes. An overlap with one is the
+# backdrop working, not a layout bug. (c2m_layout.py also counted `bpatcher`;
+# a bpatcher is a real box with ports, so it is not exempt here.)
+_BACKDROP_CLASSES = frozenset({"panel", "fpic"})
+
+
+def _is_click_target(ctx: "SpecContext", obj: dict) -> bool:
+    """A button drawn fully transparent (bgcolor alpha 0) is a click target
+    laid over something readable — a comment made clickable."""
+    if not isinstance(obj, dict) or ctx.maxclass(obj) != "button":
+        return False
+    attrs = obj.get("attrs") if isinstance(obj.get("attrs"), dict) else obj
+    bg = attrs.get("bgcolor")
+    return isinstance(bg, (list, tuple)) and len(bg) == 4 and float(bg[3]) == 0.0
+
+
+def _click_target_over_label(ctx: "SpecContext", a: dict, b: dict) -> bool:
+    """True when one box is a transparent click target and the other is the
+    comment it makes clickable — overlapping its label is its purpose."""
+    return ((_is_click_target(ctx, a) and ctx.maxclass(b) == "comment")
+            or (_is_click_target(ctx, b) and ctx.maxclass(a) == "comment"))
 
 
 def _rects_intersect(a, b, tol=_OVERLAP_TOLERANCE_PX):
@@ -829,28 +857,19 @@ def rule_presentation_overlap(ctx: SpecContext) -> list:
         r = ctx.pres_rect(obj)
         if r is None:
             continue
-        if ctx.maxclass(obj) == "panel":
+        mc = ctx.maxclass(obj)
+        if mc == "panel":
             panels.append((oid, r))
+        elif mc in _BACKDROP_CLASSES:
+            continue  # an fpic backdrop sits behind controls by design
         else:
             presented.append((oid, r))
     out = []
 
-    def _click_target(obj) -> bool:
-        # A button drawn fully transparent (bgcolor alpha 0) is a click target
-        # laid over something readable — a comment made clickable. Overlapping
-        # its label is its purpose, not a layout bug.
-        if ctx.maxclass(obj) != "button":
-            return False
-        attrs = obj.get("attrs") if isinstance(obj.get("attrs"), dict) else obj
-        bg = attrs.get("bgcolor")
-        return isinstance(bg, (list, tuple)) and len(bg) == 4 and float(bg[3]) == 0.0
-
     for i in range(len(presented)):
         for j in range(i + 1, len(presented)):
             (a_id, a), (b_id, b) = presented[i], presented[j]
-            oa, ob = ctx.objects[a_id], ctx.objects[b_id]
-            if (_click_target(oa) and ctx.maxclass(ob) == "comment") or \
-               (_click_target(ob) and ctx.maxclass(oa) == "comment"):
+            if _click_target_over_label(ctx, ctx.objects[a_id], ctx.objects[b_id]):
                 continue
             depth = _rects_intersect(a, b)
             if depth:
@@ -1395,6 +1414,34 @@ def _cord_geometry(ctx: SpecContext, conn):
     return sr, dr, [left, top, right - left, bottom - top]
 
 
+def _cord_crossings(ctx: SpecContext, conn, rects) -> tuple:
+    """(crossed box ids, whether they are all comments) for one cord.
+
+    Local cords — a vertical span under one row — and cords without geometry
+    cross nothing. Shared by cord-crosses-unrelated-box and cord-long, so a
+    cord is reported by exactly one of them.
+    """
+    g = _cord_geometry(ctx, conn)
+    if g is None:
+        return [], True
+    _sr, _dr, cord = g
+    if cord[3] < _ROW_PX:
+        return [], True
+    crossed, only_comments = [], True
+    for oid, r in rects.items():
+        if r is None or oid in (conn[0], conn[2]):
+            continue
+        if ctx.maxclass(ctx.objects[oid]) == "panel":
+            continue  # background z-order; cords run over panels by design
+        ox = min(cord[0] + cord[2], r[0] + r[2]) - max(cord[0], r[0])
+        oy = min(cord[1] + cord[3], r[1] + r[3]) - max(cord[1], r[1])
+        if ox > 0 and oy > 0 and ox * oy >= _CORD_MIN_OVERLAP_AREA:
+            crossed.append(oid)
+            if ctx.maxclass(ctx.objects[oid]) != "comment":
+                only_comments = False
+    return crossed, only_comments
+
+
 def rule_cord_crosses_unrelated_box(ctx: SpecContext) -> list:
     """(c) A cord that runs past boxes it does not connect should be an s/r pair.
 
@@ -1408,24 +1455,7 @@ def rule_cord_crosses_unrelated_box(ctx: SpecContext) -> list:
     out = []
     rects = {oid: ctx.box_rect(o) for oid, o in ctx.objects.items()}
     for i, conn in enumerate(ctx.connections):
-        g = _cord_geometry(ctx, conn)
-        if g is None:
-            continue
-        sr, dr, cord = g
-        if cord[3] < _ROW_PX:
-            continue
-        crossed, only_comments = [], True
-        for oid, r in rects.items():
-            if r is None or oid in (conn[0], conn[2]):
-                continue
-            if ctx.maxclass(ctx.objects[oid]) == "panel":
-                continue  # background z-order; cords run over panels by design
-            ox = min(cord[0] + cord[2], r[0] + r[2]) - max(cord[0], r[0])
-            oy = min(cord[1] + cord[3], r[1] + r[3]) - max(cord[1], r[1])
-            if ox > 0 and oy > 0 and ox * oy >= _CORD_MIN_OVERLAP_AREA:
-                crossed.append(oid)
-                if ctx.maxclass(ctx.objects[oid]) != "comment":
-                    only_comments = False
+        crossed, only_comments = _cord_crossings(ctx, conn, rects)
         if crossed:
             note = " (only comments — milder)" if only_comments else ""
             out.append(Violation(
@@ -1586,6 +1616,221 @@ def rule_button_side_tap(ctx: SpecContext) -> list:
                         f"{', '.join(others)}.",
                         "MAX_PATCHING.md > Buttons used as pass-through indicators are inline on the cord",
                     ))
+    return out
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# Whole-patch layout — folded in from c2m_layout.py (2026-09-16, at John's
+# direction). c2m_layout was a separate report module that judged the same
+# boxes this file does; its checks now live here so one mechanism judges a
+# layout. Not carried over: its pure metrics (bounding box, density, alignment
+# groups), which have no pass/fail, and its presentation overlap and
+# orphan-label checks, which already existed as presentation-overlap and
+# control-unlabelled.
+# ───────────────────────────────────────────────────────────────────────────
+
+_SPEC_EMBED_ID = "obj-spec-embed"   # storage in the shape of a box — never laid out
+_RECEIVE_CLASSES = frozenset({"r", "receive", "r~", "receive~"})
+_LONG_CORD_PX = 600.0               # centre to centre; c2m_layout's threshold
+_GRID_CANDIDATES = (15, 10, 5)      # coarsest first; Max's own default grid is 15
+_GRID_FIT_RATIO = 0.8               # share of boxes that must sit on a grid for it to count
+_GRID_MIN_BOXES = 5                 # fewer boxes than this cannot establish a grid
+_GRID_TOL_PX = 0.5
+
+
+def _laid_out(ctx: SpecContext, oid, obj) -> bool:
+    """A box the reader actually sees placed: not the spec embed, not hidden
+    (runtime-state boxes such as tutorial highlights overlap by design)."""
+    return isinstance(obj, dict) and oid != _SPEC_EMBED_ID and not ctx.is_hidden(obj)
+
+
+def rule_patching_overlap(ctx: SpecContext) -> list:
+    """Boxes in the patching view must not intersect.
+
+    A box drawn over another hides its text, and a cord into a covered inlet
+    cannot be seen or clicked. Pairwise intersection over every positioned box,
+    beyond a 1 px tolerance. Exempt: backdrops (panel, fpic), hidden boxes, the
+    spec embed, and a transparent button laid over the comment it makes
+    clickable. The patching-view twin of presentation-overlap.
+    Source: MAX_PATCHING.md > Boxes in the patching view do not overlap.
+    """
+    boxes = []
+    for oid, obj in ctx.objects.items():
+        if not _laid_out(ctx, oid, obj) or ctx.maxclass(obj) in _BACKDROP_CLASSES:
+            continue
+        r = ctx.box_rect(obj)
+        if r is not None:
+            boxes.append((oid, r))
+    out = []
+    for i in range(len(boxes)):
+        for j in range(i + 1, len(boxes)):
+            (a_id, a), (b_id, b) = boxes[i], boxes[j]
+            if _click_target_over_label(ctx, ctx.objects[a_id], ctx.objects[b_id]):
+                continue
+            depth = _rects_intersect(a, b)
+            if depth:
+                out.append(Violation(
+                    "patching-overlap", STYLE, f"{a_id} × {b_id}",
+                    f"'{a_id}' {[int(v) for v in a]} and '{b_id}' {[int(v) for v in b]} "
+                    f"overlap by {depth:.0f} px in the patching view — one hides the "
+                    f"other's text or ports. Move one of them clear.",
+                    "MAX_PATCHING.md > Boxes in the patching view do not overlap",
+                ))
+    return out
+
+
+def rule_long_cord(ctx: SpecContext) -> list:
+    """A cord that crosses the patch is a candidate for s / r.
+
+    Flags a cord whose endpoints' centres are more than ~600 px apart. A cord
+    that also runs through unrelated boxes is left to
+    cord-crosses-unrelated-box, so each cord is reported once.
+    Source: MAX_PATCHING.md > A cord that runs past objects it does not
+    connect becomes s / r (rule of thumb; STYLE).
+    """
+    out = []
+    rects = {oid: ctx.box_rect(o) for oid, o in ctx.objects.items()}
+    for i, conn in enumerate(ctx.connections):
+        if not isinstance(conn, (list, tuple)) or len(conn) < 4:
+            continue
+        if not isinstance(conn[0], str) or not isinstance(conn[2], str):
+            continue
+        sr, dr = rects.get(conn[0]), rects.get(conn[2])
+        if sr is None or dr is None:
+            continue
+        dx = (sr[0] + sr[2] / 2.0) - (dr[0] + dr[2] / 2.0)
+        dy = (sr[1] + sr[3] / 2.0) - (dr[1] + dr[3] / 2.0)
+        length = (dx * dx + dy * dy) ** 0.5
+        if length <= _LONG_CORD_PX:
+            continue
+        crossed, _only_comments = _cord_crossings(ctx, conn, rects)
+        if crossed:
+            continue  # cord-crosses-unrelated-box already reports this cord
+        src = ctx.objects.get(conn[0])
+        src = src if isinstance(src, dict) else {}
+        head = (ctx.text(src).split() or [""])[0]
+        head_line = f"Cord {conn[0]}:{conn[1]} → {conn[2]}:{conn[3]} runs {length:.0f} px."
+        if head in _RECEIVE_CLASSES:
+            # A receive exists so it can sit anywhere: moving it is the whole fix.
+            advice = (f" '{conn[0]}' is already a [{head}], so it can sit anywhere — "
+                      f"move it next to '{conn[2]}' and the cord becomes local.")
+        else:
+            types = src.get("outlettype")
+            declared = (types[conn[1]] if isinstance(types, list) and isinstance(conn[1], int)
+                        and 0 <= conn[1] < len(types) else "")
+            # Max saves some signal outlets with a blank type (r~ does), so a
+            # blank type falls back to the ~ naming convention.
+            signal = declared == "signal" or (declared in ("", None) and head.endswith("~"))
+            s_obj, r_obj = ("s~", "r~") if signal else ("s", "r")
+            caution = (" Give each such cord its own name: senders sharing a name "
+                       "sum into one receiver." if signal else "")
+            advice = (f" At that length the reader loses which two boxes it joins: put "
+                      f"[{s_obj} NAME] under '{conn[0]}' and [{r_obj} NAME] above "
+                      f"'{conn[2]}', or move the two boxes closer.{caution}")
+        out.append(Violation(
+            "cord-long", STYLE, f"connections[{i}]",
+            head_line + advice,
+            "MAX_PATCHING.md > A cord that runs past objects it does not connect becomes s / r",
+        ))
+    return out
+
+
+def rule_box_off_canvas(ctx: SpecContext) -> list:
+    """Every box of the view the patch opens in fits its window.
+
+    The window is the spec's `width` × `height` (convert's default 800 × 600).
+    A patch with any presented box opens in presentation — convert sets
+    `openinpresentation` then — so presented boxes are checked against the
+    window and a miss is a WARNING: the operator opens the patch and a control
+    is cut off. Otherwise the patching view opens, and a miss is STYLE. The
+    view the patch does not open in may scroll freely.
+    Source: MAX_PATCHING.md > Max Patching Knowledge ("Set patcher width and
+    height large enough to contain all objects without scrolling").
+    """
+    try:
+        win_w = float(ctx.spec.get("width", 800))
+        win_h = float(ctx.spec.get("height", 600))
+    except (TypeError, ValueError):
+        return []
+    presented = [(oid, o) for oid, o in ctx.objects.items()
+                 if _laid_out(ctx, oid, o) and ctx.has_presentation(o)]
+    if presented:
+        view, severity = "presentation", WARNING
+        rects = [(oid, ctx.pres_rect(o)) for oid, o in presented]
+    else:
+        view, severity = "patching", STYLE
+        rects = [(oid, ctx.box_rect(o)) for oid, o in ctx.objects.items() if _laid_out(ctx, oid, o)]
+    rects = [(oid, r) for oid, r in rects if r is not None]
+    past = [oid for oid, r in rects if r[0] + r[2] > win_w or r[1] + r[3] > win_h]
+    before = [oid for oid, r in rects if r[0] < 0 or r[1] < 0]
+    if not past and not before:
+        return []
+    # One finding per patch: a window too small is one cause, however many
+    # boxes it cuts off, and the useful number is the size that fits them all.
+    need_w = max(r[0] + r[2] for _oid, r in rects)
+    need_h = max(r[1] + r[3] for _oid, r in rects)
+    parts = []
+    if past:
+        sample = ", ".join(past[:4]) + ("…" if len(past) > 4 else "")
+        parts.append(
+            f"{len(past)} box(es) of the {view} view extend past its {int(win_w)} × "
+            f"{int(win_h)} window ({sample}); the {view} view needs about "
+            f"{int(max(need_w, win_w))} × {int(max(need_h, win_h))}. Grow the spec's "
+            f"width / height to that, or bring the boxes in")
+    if before:
+        sample = ", ".join(before[:4]) + ("…" if len(before) > 4 else "")
+        parts.append(
+            f"{len(before)} box(es) start left of or above the window's origin "
+            f"({sample}), which no window size reveals — move them in")
+    return [Violation(
+        "box-off-canvas", severity, "patcher",
+        "; ".join(parts) + f". This is the view the patch opens in, so the "
+        f"{'operator' if view == 'presentation' else 'reader'} has to scroll to find them.",
+        "MAX_PATCHING.md > Max Patching Knowledge — patcher width and height contain all objects",
+    )]
+
+
+def rule_off_grid(ctx: SpecContext) -> list:
+    """A box off the grid the rest of the patch uses is a slip.
+
+    Detects the coarsest grid (15, 10 or 5 px) that at least 80% of positioned
+    boxes sit on — at least five of them — and flags the ones that do not.
+    When no grid fits there is nothing to hold boxes to and the rule is silent.
+    Comments are left out entirely: a label is deliberately offset to
+    compensate for its text padding, which is an observed-good pattern
+    (CLAUDE.md > Modify, Don't Rebuild). Patching view only.
+    Source: MAX_PATCHING.md > Keep boxes on the grid the patch already uses.
+    """
+    pts = []
+    for oid, obj in ctx.objects.items():
+        if not _laid_out(ctx, oid, obj) or ctx.maxclass(obj) == "comment":
+            continue
+        r = ctx.box_rect(obj)
+        if r is not None:
+            pts.append((oid, r[0], r[1]))
+    if len(pts) < _GRID_MIN_BOXES:
+        return []
+
+    def on(v, step):
+        return abs(v - round(v / step) * step) < _GRID_TOL_PX
+
+    for step in _GRID_CANDIDATES:
+        n_on = sum(1 for _oid, x, y in pts if on(x, step) and on(y, step))
+        if n_on / len(pts) >= _GRID_FIT_RATIO:
+            break
+    else:
+        return []
+    out = []
+    for oid, x, y in pts:
+        if on(x, step) and on(y, step):
+            continue
+        nx, ny = round(x / step) * step, round(y / step) * step
+        out.append(Violation(
+            "off-grid", STYLE, oid,
+            f"'{oid}' sits at ({x:g}, {y:g}), while {n_on} of {len(pts)} boxes in "
+            f"this patch sit on a {step} px grid. Move it to ({nx:g}, {ny:g}).",
+            "MAX_PATCHING.md > Keep boxes on the grid the patch already uses",
+        ))
     return out
 
 
@@ -2088,6 +2333,11 @@ REGISTRY = [
     rule_fanout_order,
     rule_cord_too_short,
     rule_button_side_tap,
+    # whole-patch layout — folded in from c2m_layout.py (2026-09-16)
+    rule_patching_overlap,
+    rule_long_cord,
+    rule_box_off_canvas,
+    rule_off_grid,
 ]
 
 # Rules that need an authoritative resolver (object/attribute/message existence).
