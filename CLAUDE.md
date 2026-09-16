@@ -14,6 +14,8 @@ You arrived because your global CLAUDE.md told you to consult this repo before d
 2. `Claude2Max/SPEC_REFERENCE.md`. The spec format the converter consumes; object types and correctness notes; presentation layout specifics; jit.cellblock conventions; the v8 / JavaScript section.
 3. `Claude2Max/patching/MAX_PATCHING.md`. Common Pitfalls (the load-bearing section for silent-failure modes — read every bullet), presentation aesthetic checklist, per-object guidance.
 
+Reading these three files covers everything `load(["core"])` from the Claude2Max MCP server would send, because core is cut verbatim from them. So do one or the other, not both: after reading them, load only the other domains you need.
+
 Add as relevant: `patching/GEN_PATCHING.md` for `gen~` work, `patching/JIT_GEN_PATCHING.md` for `jit.gen` / `jit.gl.pix`, `patching/JITTER_JS_PATCHING.md` for `[js]` / `[v8]` touching matrices, `patching/M4L_PATCHING.md` for Max for Live devices.
 
 Before producing any Max content in this session, also consult `packages/package_objects.json` (via `python3 packages/query_packages.py search "<term>"`) before composing any chain of 3+ native objects — there is often a single installed package object that does what your chain does, and you would not have known about it from training data alone.

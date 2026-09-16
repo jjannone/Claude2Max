@@ -80,7 +80,7 @@ NOT to bypass the gate. Only for a real abstraction you've confirmed exists: set
   substring-keyword matching and reports `method: "keyword-fallback"`. Override the routing model
   with `CLAUDE2MAX_ASSESS_MODEL`. See `README.md` § Register.
 - If the server is unreachable, Claude falls back to reading the prose files directly.
-- `essentials()` is kept as a backward-compat alias for `load(["core"])` — old snippets still work.
+- `essentials()` was removed on 2026-09-16: it returned exactly `load(["core"])`. Call `load(["core"])` instead.
 - `verify_spec()` (Phase iii, done) shares its rule library (`claude2max_verify/`) with
   `spec2maxpat.py convert`, so the binding-rule checks fire both via the tool and at convert time.
 - The enforcement hook (PreToolUse — blocks `.maxpat` edits until `load()` has been called),

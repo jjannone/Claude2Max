@@ -78,10 +78,10 @@ Open any Claude Code session (the cwd doesn't matter). The server should appear 
 the available tools. Call:
 
 ```
-claude2max.essentials()
+claude2max.load(["core"])
 ```
 
-The structured binding-rule summary should return. If the tool isn't available,
+The core rules should return. If the tool isn't available,
 restart Claude Code to pick up the newly registered MCP server.
 
 ---
@@ -93,8 +93,7 @@ restart Claude Code to pick up the newly registered MCP server.
 | Tool | Description |
 |---|---|
 | `assess(task_description)` | Reads the task's intent and returns the knowledge modules it needs (`core`, `layout`, `gen`, `jitter`, `m4l`, `networking`, `msp`, `spec`). |
-| `load(domains)` | Assembles and returns the full knowledge for those modules as markdown. Additive — call again as the task grows. `core` is a short tool-facing preface plus every section of `CLAUDE.md` / `patching/MAX_PATCHING.md` / `SPEC_REFERENCE.md` whose heading is tagged `{!core}`, verbatim; `layout` is the `{!layout}` sections (patching-view cord discipline, presentation design, spacing); every other module appends its `{!<domain>}` sections to its file or literal. Tag a heading in the doc and it is in the module on the next call — no digest to maintain. |
-| `essentials()` | Backward-compat alias for `load(["core"])`. |
+| `load(domains)` | Assembles and returns the full knowledge for those modules as markdown. Additive — call again as the task grows; `core` is sent only when it is in the list (or the list is empty), so a later `load(["jitter"])` does not resend it. `core` is a short tool-facing preface plus every section of `CLAUDE.md` / `patching/MAX_PATCHING.md` / `SPEC_REFERENCE.md` whose heading is tagged `{!core}`, verbatim; `layout` is the `{!layout}` sections (patching-view cord discipline, presentation design, spacing); every other module appends its `{!<domain>}` sections to its file or literal. Tag a heading in the doc and it is in the module on the next call — no digest to maintain. |
 
 ### Verification — use after knowledge is loaded (Phase i)
 

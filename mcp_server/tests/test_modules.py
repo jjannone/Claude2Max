@@ -95,12 +95,31 @@ def test_assess_lists_layout():
 
 
 def test_sizes_reported():
-    core = len(server.load(["core"]))                 # load() always includes core
+    core = len(server.load(["core"]))                 # core on its own
     layout = len(server._build_module("layout"))      # the module on its own
     print(f"    sizes: core={core:,} chars, layout(alone)={layout:,} chars")
     assert core > 40_000          # verbatim rules, not a digest
     assert layout > 20_000
 
+
+def test_core_is_sent_only_when_asked_for():
+    """load() used to put all of core (~40k tokens) in front of every module, so a
+    session adding a domain mid-task received core a second time (2026-09-16)."""
+    stance = "## Operating stance"
+    layout_alone = server.load(["layout"])
+    assert stance not in layout_alone
+    assert "Core is not included in this load" in layout_alone
+    assert "## Patching Layout — Avoiding Cord Tangles" in layout_alone
+    for request in (["core"], ["core", "layout"], []):
+        text = server.load(request)
+        assert stance in text, request
+        assert "Core is not included" not in text, request
+    assert len(layout_alone) < len(server.load(["core"])) / 2
+
+
+def test_essentials_duplicate_tool_is_gone():
+    names = {t.name for t in server.mcp._tool_manager.list_tools()}
+    assert "essentials" not in names and "load" in names
 
 def _run():
     fns = [v for k, v in sorted(globals().items()) if k.startswith("test_") and callable(v)]

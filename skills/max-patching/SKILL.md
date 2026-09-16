@@ -30,6 +30,8 @@ If the MCP server is unreachable, skip to the **Fallback** section at the bottom
 mcp__claude2max__load(domains=["core", ...])   ← use the list from assess()
 ```
 
+**If this session has already read `CLAUDE.md`, `SPEC_REFERENCE.md` and `patching/MAX_PATCHING.md` in full, leave `"core"` out of the list.** Core is cut verbatim from those three files, so loading it too sends about 40k tokens twice. Otherwise keep it.
+
 Read the returned markdown — it is your working knowledge for this session.
 It contains binding rules, Common Pitfalls, preferred objects, and domain guidance.
 `core` is every repo doc section tagged `{!core}`, verbatim. If the task will place boxes
@@ -67,8 +69,9 @@ You now have the Max knowledge loaded. Use MCP tools throughout the session:
 - Before converting:    `mcp__claude2max__verify_spec(spec_json)`
 
 If the task scope grows (e.g. you encounter `jit.` objects after loading only core),
-call `mcp__claude2max__load(domains=["jitter"])` to add that domain. Each call
-accumulates without replacing prior loads.
+call `mcp__claude2max__load(domains=["jitter"])` to add that domain. Core is sent only
+when it is in the list, so this adds just the new domain; each call accumulates
+without replacing prior loads.
 
 ---
 

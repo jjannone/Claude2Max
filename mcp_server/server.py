@@ -23,7 +23,6 @@ verify_patch()      Same checks, run directly against a .maxpat/.maxhelp/.amxd
                     file on disk — single file or a directory sweep.
 search_pitfalls()   Search Common Pitfalls + forum/cookbook insights by term.
 lookup_rule()       Find a binding rule by a fragment of its name.
-essentials()        Backward-compat alias for load(["core"]).
 
 The verify_spec() rule library lives in mcp_server/claude2max_verify/ and is
 ALSO imported by spec2maxpat.py, so the same checks run automatically at convert
@@ -496,7 +495,6 @@ Recognition signals:
 """
 
 # ---------------------------------------------------------------------------
-# essentials() — now a backward-compat alias for load(["core"]).
 # ---------------------------------------------------------------------------
 
 _CORE_STANCE_MD = """\
@@ -566,18 +564,6 @@ If `list_attributes` returns 0 or very few attrs, look at the `creation args` fi
 - `verify_spec(spec_json)` — before `convert`; `verify_patch(path)` — after a build, a sync, or a hand-edit
 - `load(["layout"])` — before placing boxes or designing a presentation view
 """
-
-
-@mcp.tool()
-def essentials() -> str:
-    """
-    Backward-compatible alias for load(["core"]).
-
-    Prefer the assess() → load() two-call pattern for new work.
-    This alias exists so any PROJECT_CLAUDE_SNIPPET that calls essentials()
-    still works without change.
-    """
-    return load(["core"])
 
 
 # ── module routing — Claude evaluates task intent ─────────────────────────────
@@ -750,7 +736,9 @@ def load(domains: list) -> str:
 
     Parameters
     ----------
-    domains — list of domain names. "core" is always included even if omitted.
+    domains — list of domain names. "core" is sent only when it is in the list
+              (or the list is empty), so adding a domain mid-session does not
+              resend it. assess() always lists "core" first for the opening load.
               Available: "core", "layout", "gen", "jitter", "m4l", "networking", "msp", "spec"
 
     Returns
@@ -758,10 +746,12 @@ def load(domains: list) -> str:
     Assembled markdown covering all requested modules, ready to be read as
     working knowledge for the session.
     """
-    # Normalise — always include core, deduplicate, preserve order.
+    # Normalise — deduplicate, preserve order. Core is ~40k tokens and is cut
+    # verbatim from CLAUDE.md, SPEC_REFERENCE.md and MAX_PATCHING.md, so it is
+    # sent only when asked for: a session adding "jitter" later already has it.
     seen: set[str] = set()
     ordered: list[str] = []
-    for d in (["core"] + list(domains)):
+    for d in (list(domains) or ["core"]):
         if d not in seen:
             seen.add(d)
             ordered.append(d)
@@ -790,6 +780,11 @@ def load(domains: list) -> str:
         f"<!-- Claude2Max knowledge loaded: {loaded_list} -->\n"
         f"<!-- If the task evolves to include additional domains, call load([new_domain]) -->\n\n"
     )
+    if "core" not in ordered:
+        header += ("_Core is not included in this load. It is sent once per session, by "
+                   "`load([\"core\"])`. If this session has neither loaded it nor read CLAUDE.md, "
+                   "SPEC_REFERENCE.md and patching/MAX_PATCHING.md in full, call `load([\"core\"])` "
+                   "now._\n\n")
     return header + "\n\n---\n\n".join(sections)
 
 
