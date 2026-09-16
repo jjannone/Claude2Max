@@ -2045,11 +2045,24 @@ HELP_SIZE_CACHE = HelpSizeCache(REFPAGE_CACHE._c74)
 TEXT_SIZED_CLASSES = ("newobj", "message", "comment")
 
 
-def resolve_box_size(maxclass, text, spec_size=None):
+def min_object_box_width(numinlets, numoutlets):
+    """Narrowest an object box may be: 24 + 15 px per port on its busier side.
+
+    Rule: MAX_PATCHING.md > Give every port room (John, 2026-09-16)."""
+    ports = 0
+    for n in (numinlets, numoutlets):
+        if isinstance(n, int) and n > ports:
+            ports = n
+    return 24 + 15 * ports
+
+
+def resolve_box_size(maxclass, text, spec_size=None, ports=None):
     """The (w, h) convert writes for a box, as one function.
 
     Order: the spec's own `size`, the UI_SIZES override, the class's own help
-    file, then the text-width estimate at one line high.
+    file, then the text-width estimate at one line high. Then, for an object
+    box whose `ports` (numinlets, numoutlets) are given, the width is raised to
+    min_object_box_width, even over a spec `size`.
 
     It is one function because three callers have to agree on the answer:
     build_box writes it, compute_presentation_layout sizes a presentation rect
@@ -2057,6 +2070,13 @@ def resolve_box_size(maxclass, text, spec_size=None):
     `size` field. A caller that resolved differently would drop a size convert
     then failed to reproduce, silently resizing the box on the next convert.
     """
+    w, h = _unclamped_box_size(maxclass, text, spec_size)
+    if maxclass == "newobj" and ports:
+        w = max(w, min_object_box_width(*ports))
+    return w, h
+
+
+def _unclamped_box_size(maxclass, text, spec_size):
     if spec_size:
         return int(spec_size[0]), int(spec_size[1])
     if maxclass in UI_SIZES:
@@ -2255,7 +2275,7 @@ def estimate_text_width(text):
     return max(len(text) * 7 + 20, 40)
 
 
-def _size_is_default(maxclass, text, w, h):
+def _size_is_default(maxclass, text, w, h, ports=None):
     """True when a saved box's (w, h) is exactly what build_box writes with no
     `size` in the spec — so sync can drop the field without changing what the
     next convert produces, and must keep it otherwise. A box widened in Max, or
@@ -2266,8 +2286,18 @@ def _size_is_default(maxclass, text, w, h):
     It asks resolve_box_size rather than repeating its rules, so that sync can
     never drop a size convert would not write back. Until 2026-09-15 it read
     UI_SIZES directly and fell through to the text estimate, which was the same
-    answer only while build_box did too."""
-    return (int(w), int(h)) == resolve_box_size(maxclass, text or "")
+    answer only while build_box did too.
+
+    Pass the saved box's (numinlets, numoutlets) as `ports`: an object box saved
+    narrower than min_object_box_width is then not default, so sync records its
+    real width, and the next convert widens it."""
+    return (int(w), int(h)) == resolve_box_size(maxclass, text or "", ports=ports)
+
+
+def _saved_ports(box):
+    """(numinlets, numoutlets) of a saved box, or None when either is missing."""
+    ni, no = box.get("numinlets"), box.get("numoutlets")
+    return (ni, no) if isinstance(ni, int) and isinstance(no, int) else None
 
 
 # A box shows its whole text: narrower than the text, Max wraps it onto more
@@ -2436,7 +2466,8 @@ def presentation_layout(objects, layout_cfg=None):
         # Object size
         maxclass = obj_spec.get("type", "newobj")
         text     = obj_spec.get("text", "")
-        w, h = resolve_box_size(maxclass, text, obj_spec.get("size"))
+        ports = _spec_io(obj_spec)[:2] if maxclass == "newobj" else None
+        w, h = resolve_box_size(maxclass, text, obj_spec.get("size"), ports)
 
         if isinstance(pres, list):
             if len(pres) == 2:
@@ -2557,6 +2588,22 @@ def _embed_script(box, obj_spec, script_dirs):
     obj_spec.setdefault("attrs", {})["textfile"] = copy.deepcopy(tf)
 
 
+def _spec_io(obj_spec):
+    """(numinlets, numoutlets, outlettype) convert writes for a spec object:
+    the class's profile, a guess from an object box's text, then the spec's
+    own `inlets` / `outlets` / `outlettype`."""
+    maxclass = obj_spec.get("type", "newobj")
+    text = obj_spec.get("text", "")
+    io_info = ui_io(maxclass)
+    if maxclass == "newobj" and text:
+        guessed = guess_newobj_io(text)
+        if guessed:
+            io_info = guessed
+    return (obj_spec.get("inlets", io_info["numinlets"]),
+            obj_spec.get("outlets", io_info["numoutlets"]),
+            obj_spec.get("outlettype", io_info["outlettype"]))
+
+
 def build_box(user_id, obj_spec, index, x, y, script_dirs=None):
     """Build a .maxpat box dict from a spec object.
 
@@ -2565,23 +2612,11 @@ def build_box(user_id, obj_spec, index, x, y, script_dirs=None):
     output patch's folders."""
     maxclass = obj_spec.get("type", "newobj")
     text = obj_spec.get("text", "")
+    numinlets, numoutlets, outlettype = _spec_io(obj_spec)
 
-    # Determine inlet/outlet profile
-    io_info = ui_io(maxclass)
-
-    # For newobj, try to guess from text
-    if maxclass == "newobj" and text:
-        guessed = guess_newobj_io(text)
-        if guessed:
-            io_info = guessed
-
-    # Allow spec overrides
-    numinlets = obj_spec.get("inlets", io_info["numinlets"])
-    numoutlets = obj_spec.get("outlets", io_info["numoutlets"])
-    outlettype = obj_spec.get("outlettype", io_info["outlettype"])
-
-    # Sizing — spec override takes priority over defaults
-    w, h = resolve_box_size(maxclass, text, obj_spec.get("size"))
+    # Sizing — spec override takes priority over defaults; an object box is
+    # then widened to give its ports room
+    w, h = resolve_box_size(maxclass, text, obj_spec.get("size"), (numinlets, numoutlets))
 
     box = {
         "box": {
@@ -3155,7 +3190,7 @@ def _box_to_spec_obj(box):
         obj["text"] = text
 
     # Size — include only when it differs from what convert would write
-    if not _size_is_default(maxclass, text, int(w), int(h)):
+    if not _size_is_default(maxclass, text, int(w), int(h), _saved_ports(box)):
         obj["size"] = [int(w), int(h)]
 
     # Presentation
@@ -3400,7 +3435,7 @@ def reconcile_spec(existing_spec, maxpat):
         # specs stay clean of redundant size declarations.
         w_live, h_live = int(r[2]), int(r[3])
         maxclass_live = box.get("maxclass", spec_objects[sid].get("type", "newobj"))
-        if _size_is_default(maxclass_live, box.get("text", ""), w_live, h_live):
+        if _size_is_default(maxclass_live, box.get("text", ""), w_live, h_live, _saved_ports(box)):
             updated.pop("size", None)
         else:
             updated["size"] = [w_live, h_live]

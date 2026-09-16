@@ -250,6 +250,14 @@ def _truthy(v) -> bool:
 
 
 # ── spec accessors (forgiving — verify must never crash on a weird spec) ───────
+def _min_object_box_width(obj: dict):
+    """24 + 15 px per port on the busier side, from the spec's declared
+    `inlets` / `outlets`; None when neither is declared. Mirrors
+    spec2maxpat.min_object_box_width. Rule: MAX_PATCHING.md > Give every port room."""
+    counts = [n for n in (obj.get("inlets"), obj.get("outlets")) if isinstance(n, int)]
+    return 24 + 15 * max(counts) if counts else None
+
+
 class SpecContext:
     """Pre-computed views over a spec so rules don't each re-walk it."""
 
@@ -345,6 +353,8 @@ class SpecContext:
             return [x, y, float(w), float(h)]
         text = cls.text(obj)
         w = max(len(text) * 7 + 20, 40) if text else 40
+        if mc == "newobj":
+            w = max(w, _min_object_box_width(obj) or 0)
         return [x, y, float(w), 22.0]
 
     @staticmethod
@@ -772,8 +782,9 @@ def rule_debug_marking(ctx: SpecContext) -> list:
 #   kslider-demo-range                 0          0
 #   jit-matrix-fan-in                  —          —     resolver-gated; corpus run was --no-resolver
 #   cord-crosses-unrelated-box        95          0     panels excluded; attrui columns dominate
-#                                                       (2026-09-16: ports moved to the box edges as Max
-#                                                       draws them; 228 fewer hits over 25 patches)
+#                                                       (2026-09-16: ports moved toward the box edges as Max
+#                                                       draws them; 228 fewer hits over 25 patches with a
+#                                                       3.5 px inset, before the measured 19 px replaced it)
 #   feeder-below-target                0          0
 #   fanout-order                       2          0
 #   cord-too-short                   103          0     older repo layouts used 25–30 px rows
@@ -1388,23 +1399,24 @@ _CORD_MIN_OVERLAP_AREA = 20.0
 _CORD_TOO_SHORT_PX = 15.0
 
 
-_PORT_W_PX = 7.0   # approximate width of the port nub Max draws on a box edge
+_PORT_INSET_PX = 19.0   # port centre to box edge, both sides; measured by John in Max 2026-09-16
 
 
 def _port_x(rect, index, count) -> float:
     """x of the centre of outlet/inlet `index` on a box with `count` ports.
 
-    Max draws the first port at the box's left edge, the last at its right edge,
-    and spreads the rest evenly between them. So port 0 is at the left edge
-    whatever the count, and a one-port box has its port at the left, not the
-    centre. With the count unknown, a port other than 0 falls back to the centre.
+    Max centres the first port 19 px in from the box's left edge and the last
+    port 19 px in from its right edge, and spreads the rest evenly between them.
+    So port 0 is at x + 19 whatever the count. With the count unknown, a port
+    other than 0 falls back to the centre. A box narrower than two insets is not
+    measured; its ports are clamped to the centre (an assumption, not checked).
     """
     x, w = rect[0], rect[2]
-    half = _PORT_W_PX / 2.0
+    inset = min(_PORT_INSET_PX, w / 2.0)
     if index == 0:
-        return x + half
+        return x + inset
     if isinstance(count, int) and count > 1 and isinstance(index, int) and 0 < index < count:
-        return x + half + index * max(w - _PORT_W_PX, 0.0) / (count - 1)
+        return x + inset + index * (w - 2 * inset) / (count - 1)
     return x + w / 2.0
 
 
@@ -1652,6 +1664,36 @@ def _laid_out(ctx: SpecContext, oid, obj) -> bool:
     """A box the reader actually sees placed: not the spec embed, not hidden
     (runtime-state boxes such as tutorial highlights overlap by design)."""
     return isinstance(obj, dict) and oid != _SPEC_EMBED_ID and not ctx.is_hidden(obj)
+
+
+def rule_box_too_narrow(ctx: SpecContext) -> list:
+    """An object box narrower than 24 + 15 px per port crowds its ports.
+
+    Only boxes with an explicit `size` and a declared inlet or outlet count can
+    be judged (a spec without `size` is widened by convert). Convert widens a
+    narrow `size` itself; when editing an existing patch, widen the box.
+    Source: MAX_PATCHING.md > Give every port room.
+    """
+    out = []
+    for oid, obj in ctx.objects.items():
+        if not isinstance(obj, dict) or ctx.maxclass(obj) != "newobj":
+            continue
+        size = obj.get("size")
+        need = _min_object_box_width(obj)
+        if need is None or not isinstance(size, (list, tuple)) or not size:
+            continue
+        try:
+            w = float(size[0])
+        except (TypeError, ValueError):
+            continue
+        if w < need:
+            out.append(Violation(
+                "box-too-narrow", STYLE, oid,
+                f"'{oid}' ({ctx.text(obj).split()[0] if ctx.text(obj).split() else 'newobj'}) "
+                f"is {w:.0f} px wide; with its ports it needs at least {need} px. Widen it.",
+                "MAX_PATCHING.md > Give every port room",
+            ))
+    return out
 
 
 def rule_patching_overlap(ctx: SpecContext) -> list:
@@ -2390,6 +2432,7 @@ REGISTRY = [
     rule_button_side_tap,
     # whole-patch layout — folded in from c2m_layout.py (2026-09-16)
     rule_patching_overlap,
+    rule_box_too_narrow,
     rule_long_cord,
     rule_box_off_canvas,
     rule_off_grid,

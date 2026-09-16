@@ -909,20 +909,21 @@ def test_cord_crosses_unrelated_box():
 
 
 def test_cord_port_zero_sits_at_left_edge():
-    # An attrui staircase: each box 20 px right of the one above, every cord
-    # dropping from its left-edge outlet to the target's left inlet. In Max no
-    # cord touches the attruis below it.
+    # An attrui staircase: each box 30 px right of the one above, every cord
+    # dropping from its first outlet (19 px in from the left edge) to the
+    # target's first inlet. No cord touches the attruis below it; a centre
+    # port model would put every cord through them.
     objs = {"target": {"type": "newobj", "text": "abl.device.delay~", "pos": [100, 300]}}
     conns = []
     for k in range(2):
-        objs[f"a{k}"] = {"type": "attrui", "pos": [100 + 20 * k, 40 + 60 * k], "size": [150, 22]}
+        objs[f"a{k}"] = {"type": "attrui", "pos": [100 + 30 * k, 40 + 60 * k], "size": [150, 22]}
         conns.append([f"a{k}", 0, "target", 0])
     assert "cord-crosses-unrelated-box" not in _rules(verify_spec({"objects": objs, "connections": conns}))
 
 
 def test_cord_last_port_sits_at_right_edge():
-    # The last outlet of a wide box is at its right edge, so a box under that
-    # edge is crossed even though it is far from the box's centre.
+    # The last outlet of a wide box is 19 px in from its right edge, so a box
+    # under that edge is crossed even though it is far from the box's centre.
     objs = {"src": {"type": "newobj", "text": "unjoin 2", "pos": [100, 40], "size": [400, 22], "outlets": 3},
             "under": {"type": "newobj", "text": "print X", "pos": [480, 150]},
             "dst": {"type": "newobj", "text": "print Y", "pos": [480, 300]}}

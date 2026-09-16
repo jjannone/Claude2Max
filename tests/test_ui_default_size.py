@@ -32,7 +32,9 @@ def test_text_bearing_classes_keep_the_text_estimate():
     """message.maxhelp and comment.maxhelp have boxes (205x23, 129x25), so
     without the TEXT_SIZED_CLASSES guard every comment and message in every
     patch would get one fixed width whatever its text says."""
-    short, long = "hi", "a considerably longer comment than that one"
+    # "print hi" is wider than print's port minimum (39 px), so the object box
+    # width here is the text estimate alone (see test_min_object_box_width.py)
+    short, long = "print hi", "a considerably longer comment than that one"
     # named here, not read from s.TEXT_SIZED_CLASSES: a test that takes its
     # cases from the constant under test passes vacuously when that constant
     # is emptied, which is exactly the regression it is meant to catch.
