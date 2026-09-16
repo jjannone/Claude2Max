@@ -128,17 +128,39 @@ peer with default planecount/type/dim. Every subsequent `setall` /
 the `outlet(0, "jit_matrix", m.name)` emits the wrong shape — downstream
 consumers fail with no diagnostic.
 
-**The correct pattern when you want a named output matrix:**
+**The correct pattern: do not rename. Use the auto-generated name.**
 
 ```js
 var m = new JitterMatrix(3, "char", 1, 480);   // Form 1 — anonymous
-m.name = "immer_bands_mat";                    // then name via the setter
+// m.name is auto-assigned a globally-unique symbol (e.g. "u012345678"),
+// and every downstream consumer can resolve it.
+outlet(0, "jit_matrix", m.name);
 ```
 
-The `.name` setter is the safe way to give a constructed matrix a
-downstream-resolvable name. The auto-generated name (the default) is
-also resolvable — only set `.name` explicitly when a downstream object
-references the matrix by a stable name (e.g. via `@texturename`).
+**Assigning `.name` after construction rebinds the handle; it does not
+rename the peer.** This is the same trap one step later, and until
+2026-09-15 this file recommended it. `.name` is read/write, and the
+setter binds to — or creates — a matrix with that name, so
+`m.name = "my_name"` leaves `m` pointing at a *different*, newly-created,
+empty peer. The original peer's data is now unreachable through `m`.
+Every later `setall` / `setcell2d` paints the empty peer with no error,
+and `outlet(0, "jit_matrix", m.name)` hands downstream consumers the
+empty one. They resolve it, find nothing, and render black. The symptom
+is identical to the constructor trap above: no exception, no console
+line.
+
+Cycling '74's own shipped scripts never rename a constructed matrix:
+they use Form 1 or Form 3 and pass the auto-name to `outlet`. (Checked
+across the scripts in Max's `Examples/` tree, 2026-09-15. The rebinding
+mechanism is inferred from that corpus and from the documented "bind to
+or create" behaviour of the name setter, not from a doc page in the
+local install — treat the mechanism as reasoned, the practice as
+settled.)
+
+**If a downstream object needs a stable name** (`jit.gl.cornerpin
+@texturename foo`), bind to it up front with Form 2 —
+`new JitterMatrix("foo")` — rather than constructing anonymously and
+trying to rename.
 
 ---
 
@@ -176,8 +198,29 @@ var c = src.getcell2d(x, y);   // returns an array of plane values
 
 For 1D matrices, `getcell(i)` is sufficient. For 3D, `getcell3d(x, y, z)`.
 
-The return is **always an array, even for 1-plane matrices** — index
-`c[0]` rather than treating `c` as a scalar.
+**The return shape depends on planecount, and this is the costliest
+silent failure in the API.** A multi-plane matrix returns an array of
+plane values. A **1-plane matrix returns the scalar directly** — use it
+as a number, not `c[0]`. (This file said "always an array" until
+2026-09-15. Cycling '74's own 1-plane example,
+`Examples/jitter-examples/javascript/other/jstable.js`, treats every
+`getcell(i)` as a scalar throughout — `total += thetab.getcell(i)`,
+`outlet(0, p)`, `thetab.getcell(i) >= v` — and the multi-plane
+`jittermatrixtester.js` is the array case.)
+
+Indexing a scalar with `[0]` gives `undefined`, and `undefined` poisons
+the arithmetic downstream into `NaN`. The visible symptom is one step
+removed from the bug: `Math.max(EPS, undefined)` is `NaN`, `total += NaN`
+is `NaN`, `for (y = 0; y < NaN; y++)` never enters its body, no
+`setcell2d` runs, the output matrix keeps whatever the initial
+`setall(0)` left — and the render is black, with no JS exception.
+
+Know the source's planecount, or handle both shapes:
+
+```js
+var w = src.getcell2d(0, j);
+widths[j] = (typeof w === "number") ? w : w[0];
+```
 
 Reading many cells in a loop is slow because every call crosses the JS
 ↔ Jitter boundary. For per-pixel work on a matrix larger than ~1k
@@ -283,6 +326,26 @@ edits hot-reload.
 ---
 
 ## When NOT to use JS for matrix work
+
+**If it ends up on screen, write a shader first.** Prefer a GLSL fragment
+shader through `[jit.gl.slab @file my_shader.jxs]` over a `[v8]` / `[js]`
+painting the matrix cell by cell. This is the strongest of the rules in
+this section; the rest are about choosing a Jitter-native object over JS
+for matrix work that is not display.
+
+- The work happens on the GPU, where the pixels are going anyway — no JS ↔ Jitter crossing per pixel, no `setcell2d` cost.
+- A shader's `<param>` declarations become message-settable uniforms (`[param <name> $1]`), so the operator changes values live without touching the script. It compiles once at load and is a pure function of its uniforms after that.
+- Output resolution is set on the slab (`@dim 1920 1080`), independent of the input texture. A 1×N control matrix samples correctly into full HD; texcoord interpolation does the upscale.
+- The silent-failure surface is far smaller. A shader either compiles or prints a named, line-numbered error to the console. Against that, every trap in this file — the constructor name, the `.name` rebind, the 1-plane scalar return, the v8 inlet count — produces a black frame and says nothing.
+
+The evidence is IMMER v3's bands renderer: the `[v8]` version painting a
+1×480 char matrix took five rounds of debugging across several sessions,
+one trap per round, and never produced output reliably. The same logic as
+a `.jxs` fragment shader landed in one go.
+
+So for work that reaches the screen, the first question is not "how do I
+write this in JS?" but "can this be a shader?" For per-pixel image and
+video work the answer is almost always yes.
 
 Reach for `jit.gen` / `jit.gl.pix` instead when:
 

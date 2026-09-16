@@ -684,6 +684,16 @@ The `*.`, `+.` etc. variants are also valid float-mode objects, but prefer the f
 
 > When the `v8`/`js` object is a reusable building block (not highly specific patch logic) — and especially when it reimplements, extends, or hybridizes an existing Max object — follow **Building Reusable Objects — Generalize, and Mirror the Vocabulary You Inherit** in `CLAUDE.md`: generalize it, stay backwards-compatible with the object it's based on, reuse the inherited object's message/attribute names, and flag any conflicts for the user rather than silently resolving them.
 
+**`v8` and `js` take their port counts from the box text, not from the script and not from the JSON.** The refpage is explicit: with one int argument "the number of desired outlets is specified", and with two, "the first number specifies the number of outlets and the second number specifies the number of inlets" — default 1 and 1. So a box for 3 inlets and 1 outlet is written
+
+```
+v8 bands_to_matrix.js 1 3
+```
+
+**outlets first, inlets second.** In a spec that belongs in `text`, not in an `attrs` override. The script's own `inlets = 3` / `outlets = 1` globals are worth keeping as self-documentation, and `js` does honour them, but for `v8` the box text is what sizes the ports. Get it wrong and nothing reports it: cords aimed at inlets 1 and 2 collapse onto inlet 0, the `if (inlet === N)` branches never run, and the object sits there producing nothing.
+
+> **Open, and worth one minute in Max before relying on either reading.** The same refpage says `jsarguments` holds "any symbols or numbers" following the filename *or* the port counts, which leaves `v8 foo.js 15` ambiguous: 15 outlets, a script argument, or both. Ten patches under `patches/shootouts/` carry `v8 fx-shootout-highlight.js <N> @embed 1`, where the script reads `jsarguments[1]` as its slot count and declares `outlets = 1`; their saved JSON says 1 inlet and 1 outlet. If Max is in fact giving those boxes N outlets, the JSON and the running object disagree. See the task in `TASK_QUEUE.md`.
+
 **Spec usage** — `v8` is not in the converter's lookup table; always specify inlet/outlet counts:
 
 ```json
