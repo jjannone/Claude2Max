@@ -889,7 +889,7 @@ def lookup_object(name: str) -> dict:
     Return keys
     -----------
     found        — bool. False means the object does not exist as named.
-    source       — "c74-refpage" | "package" | "unknown"
+    source       — "c74-refpage" | "user-package-refpage" | "package" | "unknown"
     numinlets    — int (0 when unknown)
     numoutlets   — int (0 when unknown)
     outlettype   — list[str] — per-outlet type ("signal", "multichannelsignal", or "")
@@ -926,7 +926,7 @@ def lookup_object(name: str) -> dict:
             summary_lines.append(f"  see also: {', '.join(c74['seealso'])}")
         return {
             "found": True,
-            "source": "c74-refpage",
+            "source": _refpage.refpage_source(name) or "c74-refpage",
             "numinlets": c74["numinlets"],
             "numoutlets": c74["numoutlets"],
             "outlettype": c74["outlettype"],
@@ -1308,11 +1308,11 @@ def _attrs_for(object_name: str) -> tuple[dict | None, str]:
     object has no refpage. This is the RICH-METADATA source only; full VALIDITY
     (refpage ∪ jbox ∪ observed-in-help) is decided via the shared resolver in the
     tools below, so the tools agree with the convert gate.
-    source_label: "c74-refpage" | "no-refpage".
+    source_label: "c74-refpage" | "user-package-refpage" | "no-refpage".
     """
     c74 = _refpage.lookup(object_name)
     if c74 is not None:
-        return c74["attributes"], "c74-refpage"
+        return c74["attributes"], _refpage.refpage_source(object_name) or "c74-refpage"
     return None, "no-refpage"
 
 
@@ -1386,7 +1386,7 @@ def lookup_attribute(object_name: str, attr: str) -> dict:
     inspector_label — str — how the attribute appears in Max's Inspector UI
     valid_values    — list[str] — always [] in v1 (Max refpages don't embed enum
                       values in XML; `enumvals` fields are present but null)
-    source          — where validity was established: "c74-refpage" | "jbox-base"
+    source          — where validity was established: "c74-refpage" | "user-package-refpage" | "jbox-base"
                       (universal box attr) | "observed-in-help" (corpus) |
                       "no-refpage" (couldn't verify / object not found)
     summary         — str — human-readable result block
@@ -1405,7 +1405,7 @@ def lookup_attribute(object_name: str, attr: str) -> dict:
     # Pull rich refpage metadata when the attr is a refpage or jbox attr (jbox
     # entries carry their own metadata in the jbox refpage).
     entry = None
-    refpage_attrs, _ = _attrs_for(object_name)
+    refpage_attrs, refpage_label = _attrs_for(object_name)
     if bucket == "refpage" and refpage_attrs is not None:
         entry = refpage_attrs.get(attr)
     elif bucket == "jbox-base":
@@ -1433,7 +1433,7 @@ def lookup_attribute(object_name: str, attr: str) -> dict:
                 "writable":        entry["set"],
                 "inspector_label": inspector_label,
                 "valid_values":    [],
-                "source":          "c74-refpage" if bucket == "refpage" else "jbox-base",
+                "source":          refpage_label if bucket == "refpage" else "jbox-base",
                 "summary":         "\n".join(summary_lines),
             }
         # Valid via the help corpus (no refpage metadata available).
@@ -1479,7 +1479,7 @@ def lookup_attribute(object_name: str, attr: str) -> dict:
     return {
         "valid": False, "value_type": "", "size": 0, "default": "",
         "readable": False, "writable": False, "inspector_label": "",
-        "valid_values": [], "source": "c74-refpage",
+        "valid_values": [], "source": refpage_label,
         "summary": (
             f"INVALID: '{attr}' is NOT a valid attribute of '{object_name}' "
             f"(not in its refpage, the jbox base attrs, or the help corpus). "

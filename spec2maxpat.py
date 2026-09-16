@@ -193,7 +193,7 @@ class _GateResolver:
     def resolve_object(self, name):
         r = self._rp.lookup(name)
         if r is not None:
-            return {"source": "c74-refpage", "numinlets": r["numinlets"],
+            return {"source": self._rp.refpage_source(name) or "c74-refpage", "numinlets": r["numinlets"],
                     "numoutlets": r["numoutlets"], "outlettype": r["outlettype"]}
         p = self._pkg.lookup(name)
         if p is not None:
@@ -203,7 +203,8 @@ class _GateResolver:
         if alias:
             r = self._rp.lookup(alias)
             if r is not None:
-                return {"source": "c74-refpage-alias", "numinlets": r["numinlets"],
+                return {"source": (self._rp.refpage_source(alias) or "c74-refpage") + "-alias",
+                        "numinlets": r["numinlets"],
                         "numoutlets": r["numoutlets"], "outlettype": r["outlettype"]}
         # Max's own object registry (interfaces/obj-qlookup.json + package
         # max.db.json). Authoritative for EXISTENCE even when no refpage
@@ -1029,6 +1030,25 @@ class RefpageCache:
         else:
             roots = [Path(p) for p in user_packages]
         self._user_package_roots = roots
+
+    def refpage_source(self, name):
+        """Where `name`'s refpage was found, as a label for results.
+
+        "c74-refpage" for the Max install and the packages bundled with it,
+        "user-package-refpage" for a package under a user packages folder, None
+        when there is no refpage. Before 2026-09-16 every hit was reported as
+        "c74-refpage", so odot's o.route looked like part of Max. The check is
+        on the path as found, not resolved, because a user package is often a
+        symlink into another folder (Butter_tools is).
+        """
+        p = self._find_xml(name)
+        if p is None:
+            return None
+        found = str(p)
+        for root in self._user_package_roots:
+            if found.startswith(str(root).rstrip(os.sep) + os.sep):
+                return "user-package-refpage"
+        return "c74-refpage"
 
     def search_roots(self):
         """Where lookups look, and which of those places are missing.
