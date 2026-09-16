@@ -603,6 +603,9 @@ For instance: a Max patch with a START button, a status text comment, a number b
 }
 ```
 
+### The port-count record comes first
+
+
 ### UI classes: where the converter gets ports
 
 

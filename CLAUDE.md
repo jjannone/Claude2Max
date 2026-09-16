@@ -1247,6 +1247,19 @@ For instance: `live.*` objects were getting `parameter_enable: 1` and `saved_att
 - **Objects the converter cannot resolve** — supply `inlets`, `outlets`, `outlettype` in the spec. A `newobj` resolves through `NEWOBJ_IO`, its refpage, then the package library. A UI box (any other `type`) resolves through `MAXCLASS_DEFAULTS`, its own C74 help file, then its refpage (`SPEC_REFERENCE.md` > *UI classes: where the converter gets ports*). Boxes whose ports come from their contents (`bpatcher`, `v8.codebox`, `codebox~`, a `v8` script, a third-party UI object with no C74 help file or refpage) always need the override.
 - **Always embed the spec** — every .maxpat produced via Claude2Max must include a hidden `text.codebox` (`id: "obj-spec-embed"`, `"hidden": 1`) below all other objects, with the full spec JSON wrapped in `--- CLAUDE2MAX SPEC ---` / `--- END SPEC ---` delimiters. This applies whether the output is from the converter or assembled manually.
 
+## Some Objects Have Fixed Ports, Others Change — Know Which Before Counting {!core}
+
+An object's inlets and outlets are either fixed or flexible. `metro` always has 2 inlets and 1 outlet. `join 3`, `live.gain~ @channels 8` and any `p` box change with their arguments, attributes or contents. Treat the two differently. For a known-fixed object, use its counts and do not look them up again. For a known-flexible object, work the counts out from the box in front of you. For an object not yet marked either way, find out when it is used, and record what you learn so the next use knows. (John, 2026-09-16.)
+
+The record is `scans/maxhelp/maxhelp_port_counts.json`, built by `scans/maxhelp/extract_port_counts.py` from every patch **the installed version of Max** saved, and read by `PortCounts` in `spec2maxpat.py`. A class is fixed when boxes with at least two different argument lists all agree; flexible when any saved boxes disagree; unmarked otherwise. The converter asks the record first: a fixed class returns its counts, and a flexible class returns the counts Max saved for the exact same box text, if it has seen that text. Otherwise the converter's context rules apply, such as one inlet per `$` argument for `expr`. `sync` adds evidence from any patch Max saved to `maxhelp_port_counts_local.json`, which is gitignored because those patches can be private; a box that contradicts a fixed class turns it flexible.
+
+Two things decide what counts as evidence, and both were found by checking the record against files it had not seen:
+
+- **Only the installed Max version.** Older versions saved some objects differently. Max 9 gives `route a b c` four inlets, one per argument plus one; files Max 7 saved show one. Mixing versions made fixed objects look flexible and taught exact texts wrong counts.
+- **Only Max patchers.** Boxes inside `gen~`, `jit.gen`, `jit.gl.pix` and `rnbo~` are another language with the same names: a gen `*` can have one inlet, an RNBO `cycle~` two outlets.
+
+Measured 2026-09-16 against 71,282 boxes Max 9 saved in user packages, with the record built only from the Max install: 3,739 boxes the converter got wrong are now right, and none it got right are now wrong.
+
 ## Naming Convention {!core}
 
 Use **ALL CAPS** for all user-defined names: `send TEMPO`, `receive PITCH`, `pv CURRENT_STATE`, `buffer~ LOOPBUF`, `var STEP_COUNT = 0;`. Applies to patcher names, send/receive names, pv/v variables, buffer~ names, coll names, JS variables. Does NOT apply to Max built-in names, object names, or message selectors.

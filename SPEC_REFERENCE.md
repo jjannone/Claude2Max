@@ -635,6 +635,10 @@ For instance: a Max patch with a START button, a status text comment, a number b
 }
 ```
 
+### The port-count record comes first
+
+Before any rule below, `guess_newobj_io` and `ui_io` ask `PortCounts` (`scans/maxhelp/maxhelp_port_counts.json`). A **fixed** class (every box Max 9 saved agrees, across different arguments) returns its counts straight away. A **flexible** class returns the counts Max saved for the identical box text, when it has seen it. Everything else falls through to the rules below. `MAXCLASS_DEFAULTS` still comes before the record for UI classes, since those entries were verified by hand. See `CLAUDE.md` > *Some Objects Have Fixed Ports, Others Change*.
+
 ### UI classes: where the converter gets ports
 
 For any box whose `type` is not `newobj` (`chooser`, `umenu`, `panel`, `textbutton`, `live.text`, `filtergraph~`, …), `ui_io()` in `spec2maxpat.py` resolves inlets, outlets and outlet types in this order:

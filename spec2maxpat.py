@@ -1471,6 +1471,325 @@ class HelpBoxCache:
 HELP_BOX_CACHE = HelpBoxCache(REFPAGE_CACHE._c74)
 
 
+
+# ── Port counts: fixed, flexible, or not yet known ────────────────────────────
+#
+# Some objects always have the same inlets and outlets (`metro`: 2 in, 1 out).
+# Others change with their arguments, attributes or contents (`join 3`,
+# `live.gain~ @channels 8`, a `p` box). The registry below says which is which,
+# from boxes Max itself saved, so the converter uses a fixed class's counts
+# without looking anywhere else, reads a flexible class's counts from context,
+# and learns about the rest as patches are synced. John, 2026-09-16.
+
+# Classes whose ports come from what they hold, not from their box text. Two
+# boxes with identical text can have different ports, so no exact-text match is
+# trusted for them. Checked against obj-qlookup.json, 2026-09-16 (rnbo~ against
+# the RNBO package refpage).
+PORTS_FROM_CONTENTS = frozenset({
+    "p", "patcher", "bpatcher", "poly~", "mc.poly~", "pfft~",
+    "gen~", "gen", "mc.gen~", "mcs.gen~", "jit.gen", "jit.gl.pix", "jit.gl.slab",
+    "rnbo~", "amxd~", "vst~", "mc.vst~",
+})
+
+_FIXED_MIN_ARGLISTS = 2   # different positional argument lists that must agree
+_FIXED_MIN_BOXES = 3
+
+
+def saved_by_max(raw) -> bool:
+    """True when a patch file's bytes were written by Max, not by this toolkit.
+
+    Max 9 indents its JSON by four spaces and Max 8 by tabs; write_patch_file
+    indents by two. Only files Max wrote are evidence of what Max does.
+    """
+    if isinstance(raw, str):
+        raw = raw.encode("utf-8", "replace")
+    if raw.startswith(b"ampf"):
+        i = raw.find(b"{")
+        raw = raw[i:] if i >= 0 else b""
+    m = re.search(rb'\n([ \t]+)"', raw[:400])
+    return bool(m) and m.group(1) != b"  "
+
+
+_INSTALLED_MAX_MAJOR = "unread"
+
+
+def installed_max_major():
+    """The major version of the Max install, from its own Info.plist, or None."""
+    global _INSTALLED_MAX_MAJOR
+    if _INSTALLED_MAX_MAJOR == "unread":
+        _INSTALLED_MAX_MAJOR = None
+        c74 = REFPAGE_CACHE._c74
+        if c74 is not None:
+            try:
+                import plistlib
+                info = plistlib.loads((c74.parent.parent / "Info.plist").read_bytes())
+                _INSTALLED_MAX_MAJOR = int(str(info["CFBundleShortVersionString"]).split(".")[0])
+            except (OSError, KeyError, ValueError, plistlib.InvalidFileException):
+                pass
+    return _INSTALLED_MAX_MAJOR
+
+
+def counts_as_port_evidence(maxpat, raw) -> bool:
+    """True when a patch shows what the installed Max does with ports: Max
+    wrote it, and the same major version as the one installed.
+
+    Older versions saved some objects differently. Max 9 gives `route a b c`
+    four inlets, one per argument plus one; patches Max 7 saved show one. Those
+    files are right for their own version and wrong evidence for this one.
+    """
+    if not saved_by_max(raw):
+        return False
+    major = installed_max_major()
+    saved = ((maxpat.get("patcher") or {}).get("appversion") or {}).get("major")
+    return major is not None and saved == major
+
+
+# Boxes whose inner patcher is written in another language (gen, Jitter gen,
+# RNBO). Their operators share names with Max objects but not ports: a gen `*`
+# can have one inlet, an RNBO `cycle~` two outlets. Max marks such patchers with
+# a classnamespace other than "box"; older gen patchers carry none, so the
+# owning box is checked too. Names checked against obj-qlookup.json and the
+# RNBO package refpage, 2026-09-16.
+_OTHER_LANGUAGE_OWNERS = frozenset({"gen~", "gen", "mc.gen~", "mcs.gen~",
+                                     "jit.gen", "jit.pix", "jit.gl.pix", "rnbo~"})
+
+
+def iter_boxes(patcher, max_only=False):
+    """Every box dict in a patcher, at every depth of nesting.
+
+    max_only: skip patchers written in another language (gen, Jitter gen, RNBO)
+    and everything inside them, so only Max boxes are returned."""
+    if max_only and patcher.get("classnamespace") not in (None, "box"):
+        return
+    for entry in patcher.get("boxes", []):
+        box = entry.get("box")
+        if not isinstance(box, dict):
+            continue
+        yield box
+        sub = box.get("patcher")
+        if isinstance(sub, dict):
+            if max_only:
+                owner = (box.get("text") or box.get("maxclass") or "").split()
+                if owner and owner[0] in _OTHER_LANGUAGE_OWNERS:
+                    continue
+            yield from iter_boxes(sub, max_only=max_only)
+
+
+def port_observation(box, source=""):
+    """(class, args_key, text_key, (inlets, outlets), outlettype, is_ui) for a
+    saved box, or None when the box carries no port counts.
+
+    args_key is the positional arguments only, used to count how many different
+    argument lists agree. text_key is the whole box text, whitespace-normalised,
+    used for exact matches. A UI box has no text, so both keys are its source."""
+    if "numinlets" not in box or "numoutlets" not in box:
+        return None
+    try:
+        counts = (int(box["numinlets"]), int(box["numoutlets"]))
+    except (TypeError, ValueError):
+        return None
+    types = list(box.get("outlettype") or [])
+    if box.get("maxclass") == "newobj":
+        toks = (box.get("text") or "").split()
+        if not toks:
+            return None
+        return (toks[0], " ".join(_positional_args(toks[1:])), " ".join(toks[1:]),
+                counts, types, False)
+    return box.get("maxclass"), source, source, counts, types, True
+
+
+class PortCounts:
+    """The fixed / flexible / unmarked registry, plus what sync has learned.
+
+    Tracked file: scans/maxhelp/maxhelp_port_counts.json, built from files Max
+    saved by scans/maxhelp/extract_port_counts.py. Learned file:
+    maxhelp_port_counts_local.json beside it, gitignored, written by sync from
+    patches Max saved on this machine. It is kept apart because those patches
+    are private and the repo is public.
+    """
+
+    PATH = Path(__file__).resolve().parent / "scans" / "maxhelp" / "maxhelp_port_counts.json"
+    # C2M_PORT_COUNTS_LOCAL moves the learned file; the test suites set it so a
+    # test that syncs a Max-saved fixture never writes to the real one.
+    LOCAL_PATH = Path(os.environ.get("C2M_PORT_COUNTS_LOCAL")
+                      or PATH.with_name("maxhelp_port_counts_local.json"))
+
+    def __init__(self, data=None, local=None):
+        self.data = data or {"objects": {}}
+        self.local = local if local is not None else {"observations": []}
+        self.load_error = None
+        self._seen = set()
+        for obs in self.local.get("observations", []):
+            self._apply(obs)
+
+    # ── building ──────────────────────────────────────────────────────────────
+    @classmethod
+    def from_evidence(cls, ev):
+        """ev: {class: {"ui": bool, "keys": {args_key: Counter(counts)},
+        "texts": {text_key: Counter(counts)}, "types": Counter((counts, types))}}"""
+        objects = {}
+        for name, e in sorted(ev.items()):
+            counts = sorted({c for k in e["keys"].values() for c in k})
+            boxes = sum(sum(k.values()) for k in e["keys"].values())
+            entry = {"arglists": len(e["keys"]), "boxes": boxes}
+            if len(counts) > 1:
+                entry["kind"] = "flexible"
+                entry["counts"] = [list(c) for c in counts]
+            elif len(e["keys"]) >= _FIXED_MIN_ARGLISTS and boxes >= _FIXED_MIN_BOXES:
+                (ni, no), = counts
+                types = collections.Counter({t: n for (c, t), n in e["types"].items()})
+                entry.update(kind="fixed", numinlets=ni, numoutlets=no,
+                             outlettype=list(types.most_common(1)[0][0]))
+            else:
+                entry["kind"] = "unmarked"
+                entry["counts"] = [list(c) for c in counts]
+            if not e["ui"] and entry["kind"] != "fixed" and name not in PORTS_FROM_CONTENTS:
+                by_text = {t: list(next(iter(c))) for t, c in e.get("texts", {}).items() if len(c) == 1}
+                if by_text:
+                    entry["by_text"] = dict(sorted(by_text.items()))
+            if e["ui"]:
+                entry["ui"] = True
+            objects[name] = entry
+        return cls({"_about": ("Port counts per Max object class, from boxes Max itself saved. "
+                               "Built by scans/maxhelp/extract_port_counts.py; see PortCounts in "
+                               "spec2maxpat.py."),
+                    "objects": objects})
+
+    @classmethod
+    def load(cls):
+        data, local, err = None, None, None
+        try:
+            data = json.loads(cls.PATH.read_text(encoding="utf-8"))
+        except (OSError, ValueError) as exc:
+            err = f"{type(exc).__name__} reading {cls.PATH.name}"
+        try:
+            local = json.loads(cls.LOCAL_PATH.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            local = None           # absent until the first sync learns something
+        reg = cls(data, local)
+        reg.load_error = err
+        if err:
+            print(f"[ports] WARNING: port-count registry not loaded ({err}); every "
+                  f"object's ports come from the older lookups.", file=sys.stderr)
+        return reg
+
+    def save(self, path=None):
+        path = Path(path or self.PATH)
+        path.write_text(json.dumps(self.data, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+
+    # ── reading ───────────────────────────────────────────────────────────────
+    def kind(self, name):
+        e = self.data["objects"].get(name)
+        return e["kind"] if e else "unmarked"
+
+    def fixed(self, name):
+        e = self.data["objects"].get(name)
+        if e and e["kind"] == "fixed":
+            return {"numinlets": e["numinlets"], "numoutlets": e["numoutlets"],
+                    "outlettype": list(e["outlettype"])}
+        return None
+
+    def for_text(self, text):
+        """Counts for an object box's text: the class's fixed counts, or for a
+        flexible or unmarked class the counts Max saved for this exact text."""
+        toks = (text or "").split()
+        if not toks:
+            return None
+        hit = self.fixed(toks[0])
+        if hit:
+            return hit
+        e = self.data["objects"].get(toks[0])
+        c = (e or {}).get("by_text", {}).get(" ".join(toks[1:]))
+        if c:
+            return {"numinlets": c[0], "numoutlets": c[1], "outlettype": [""] * c[1]}
+        return None
+
+    # ── learning ──────────────────────────────────────────────────────────────
+    def observe(self, box, source=""):
+        """Record a box from a patch Max saved. Returns True when it taught the
+        registry something: a new class, a new exact text, or a class that turns
+        out not to be fixed after all. A fixed class whose box agrees is not
+        re-examined."""
+        obs = port_observation(box, source)
+        if obs is None:
+            return False
+        name, args_key, text_key, counts, types, ui = obs
+        e = self.data["objects"].get(name)
+        if e and e["kind"] == "fixed" and (e["numinlets"], e["numoutlets"]) == counts:
+            return False
+        record = {"cls": name, "args": args_key, "text": text_key,
+                  "counts": list(counts), "types": types, "ui": ui}
+        if not self._apply(record):
+            return False
+        self.local.setdefault("observations", []).append(record)
+        return True
+
+    def _apply(self, r):
+        key = (r["cls"], r["args"], r["text"], tuple(r["counts"]))
+        if key in self._seen:
+            return False
+        self._seen.add(key)
+        counts = tuple(r["counts"])
+        objs = self.data["objects"]
+        e = objs.get(r["cls"])
+        changed = False
+        if e is None:
+            e = objs[r["cls"]] = {"kind": "unmarked", "counts": [list(counts)],
+                                  "arglists": 1, "boxes": 1}
+            if r.get("ui"):
+                e["ui"] = True
+            changed = True
+        elif e["kind"] == "fixed":
+            # A saved box disagreed with a fixed class: it is flexible after all.
+            e.update(kind="flexible", counts=sorted([[e.pop("numinlets"), e.pop("numoutlets")], list(counts)]))
+            e.pop("outlettype", None)
+            changed = True
+        else:
+            if list(counts) not in e["counts"]:
+                e["counts"] = sorted(e["counts"] + [list(counts)])
+                changed = True
+            e["arglists"] = e.get("arglists", 0) + 1
+            e["boxes"] = e.get("boxes", 0) + 1
+            if e["kind"] == "unmarked":
+                if len(e["counts"]) > 1:
+                    e["kind"] = "flexible"; changed = True
+                elif e["arglists"] >= _FIXED_MIN_ARGLISTS and e["boxes"] >= _FIXED_MIN_BOXES:
+                    (ni, no), = e.pop("counts")
+                    e.update(kind="fixed", numinlets=ni, numoutlets=no, outlettype=list(r.get("types") or []))
+                    e.pop("by_text", None)
+                    changed = True
+        if e["kind"] != "fixed" and not r.get("ui") and r["cls"] not in PORTS_FROM_CONTENTS:
+            by_text = e.setdefault("by_text", {})
+            prior = by_text.get(r["text"])
+            if prior is None:
+                by_text[r["text"]] = list(counts); changed = True
+            elif prior != list(counts):
+                del by_text[r["text"]]; changed = True   # same text, different ports: no longer trusted
+        return changed
+
+    def save_local(self):
+        self.LOCAL_PATH.write_text(json.dumps(self.local, indent=1) + "\n", encoding="utf-8")
+
+    def learn_from_patch(self, maxpat, raw, source=""):
+        """Record every box of a patch Max saved, when it is evidence for the
+        installed version. Saves the local file only when something was learned.
+        Returns the number of observations added."""
+        if not counts_as_port_evidence(maxpat, raw):
+            return 0
+        added = sum(1 for box in iter_boxes(maxpat.get("patcher") or {}, max_only=True)
+                    if self.observe(box, source))
+        if added:
+            try:
+                self.save_local()
+            except OSError as exc:
+                print(f"[ports] WARNING: could not save what this patch taught the port registry "
+                      f"({type(exc).__name__}).", file=sys.stderr)
+        return added
+
+
+PORT_COUNTS = PortCounts.load()
+
+
 def ui_io(maxclass):
     """Inlet/outlet profile for a box that is not a `newobj`.
 
@@ -1487,6 +1806,9 @@ def ui_io(maxclass):
     """
     if maxclass in MAXCLASS_DEFAULTS:
         return dict(MAXCLASS_DEFAULTS[maxclass])
+    fixed = PORT_COUNTS.fixed(maxclass)       # known-fixed: no further lookups
+    if fixed is not None:
+        return fixed
     saved = HELP_BOX_CACHE.lookup(maxclass)
     if saved is not None:
         return dict(saved)
@@ -1735,6 +2057,12 @@ def _positional_args(tokens):
     return out
 
 
+def _quoted_args(text):
+    """Positional arguments of an object box, a double-quoted phrase counting as one."""
+    toks = re.findall(r'"(?:[^"\\]|\\.)*"|\S+', text or "")[1:]
+    return _positional_args(toks)
+
+
 def _int_arg(args, index, default):
     """args[index] as an int, or `default` when absent or non-numeric.
 
@@ -1763,7 +2091,16 @@ def guess_newobj_io(text):
     them, checked 2026-09-16) saves exactly that count. gen's `expr`, which names
     its inputs `in1`, `in2`, has no `$` arguments and is left alone.
     """
+    known = PORT_COUNTS.for_text(text)      # known-fixed class, or this exact text seen saved by Max
+    if known is not None:
+        return known
     info = _guess_newobj_io_base(text)
+    if info and text.split()[0] in ("route", "routepass"):
+        # Max 9 saves one inlet and one outlet per argument, plus one each
+        # (2,019 of 2,027 Max 9 boxes; the other 8 have quoted multi-word
+        # arguments, which count as one). Older Max saved a single inlet.
+        n = max(len(_quoted_args(text)), 1)
+        info = dict(info, numinlets=n + 1, numoutlets=n + 1, outlettype=[""] * (n + 1))
     if info and text.split()[0] in ("expr", "vexpr"):
         indexes = [int(n) for n in _EXPR_DOLLAR_ARG.findall(text)]
         if indexes:
@@ -1805,11 +2142,6 @@ def _guess_newobj_io_base(text):
             info["numinlets"] = 2 if n == 1 else 1
             info["numoutlets"] = n + 1
             info["outlettype"] = ["bang"] * n + [""]
-        elif obj_name in ("route",):
-            n = max(len(args), 1)
-            info["numinlets"] = 1
-            info["numoutlets"] = n + 1
-            info["outlettype"] = [""] * (n + 1)
         elif obj_name in ("gate",):
             n = _int_arg(args, 0, 1)
             info["numinlets"] = 2
@@ -3627,6 +3959,9 @@ def main():
 
     elif args.command == "sync":
         maxpat, raw_in = read_patch_file(args.input)
+        # A patch Max saved is evidence about ports; learn from it before sync
+        # rewrites the file in this toolkit's own formatting.
+        PORT_COUNTS.learn_from_patch(maxpat, raw_in, source=str(args.input))
 
         if args.check:
             try:

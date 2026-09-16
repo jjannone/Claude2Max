@@ -16,3 +16,8 @@ mcp_server/.venv/
 # absolute paths with his account name, and this repo is public.
 scans/jjannone-max/*
 !scans/jjannone-max/jjannone_max_insights.md
+
+# What sync learns about port counts from patches Max saved on this machine.
+# Those patches can be private; the tracked registry is built from Max's own
+# files and public packages only.
+scans/maxhelp/maxhelp_port_counts_local.json
