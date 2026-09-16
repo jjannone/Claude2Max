@@ -85,6 +85,9 @@ _VERIFIED_WORD_ALIASES = {
 }
 
 
+_OBSERVED_WARNED = False   # the missing-map warning prints once per process
+
+
 class _GateResolver:
     """Authoritative resolver passed to claude2max_verify's anti-guessing rules.
 
@@ -93,6 +96,8 @@ class _GateResolver:
     an on-disk abstraction check and the refpage attribute universe. Built once
     via build_resolver(); see the duck type in claude2max_verify/rules.py.
     """
+
+    OBSERVED_ATTRS_PATH = Path(__file__).resolve().parent / "scans" / "maxhelp" / "maxhelp_observed_attrs.json"
 
     def __init__(self, refpage, package_cache, search_dirs):
         self._rp = refpage
@@ -130,7 +135,8 @@ class _GateResolver:
           observed set to flag attrs on objects whose full attr space is unknown.
         """
         import json as _json
-        observed_path = Path(__file__).resolve().parent / "scans" / "maxhelp" / "maxhelp_observed_attrs.json"
+        observed_path = self.OBSERVED_ATTRS_PATH
+        self.observed_error = None
         try:
             raw = _json.loads(observed_path.read_text())
             objects = raw.get("objects", {})
@@ -146,7 +152,18 @@ class _GateResolver:
                 if filtered:
                     result[obj_name] = filtered
             return result
-        except (OSError, KeyError, TypeError, _json.JSONDecodeError):
+        except (OSError, KeyError, TypeError, _json.JSONDecodeError) as exc:
+            # A Silent Fallback Is Indistinguishable From a Genuine No-Match:
+            # an empty map here looks exactly like "no attributes observed", so
+            # record the cause (the type, not the message) and say so.
+            self.observed_error = f"{type(exc).__name__} reading {observed_path}"
+            global _OBSERVED_WARNED
+            if not _OBSERVED_WARNED:
+                _OBSERVED_WARNED = True
+                print(f"[resolver] WARNING: help-corpus attribute map not loaded "
+                      f"({self.observed_error}). Attribute checks fall back to the "
+                      f"refpages alone, so an attribute only the help files show "
+                      f"may be reported as unknown.", file=sys.stderr)
             return {}
 
     def _build_alias_map(self):
@@ -726,6 +743,10 @@ def verify_patch_file(path, resolver=None, use_resolver=True, stream=sys.stderr)
     result["checked"] = True
     if degraded:
         result["degraded"] = True
+    observed_error = getattr(active_resolver, "observed_error", None)
+    if observed_error:
+        result["resolver_note"] = (f"help-corpus attribute map not loaded ({observed_error}); "
+                                   f"attributes only the help files show were not checked")
     return result
 
 

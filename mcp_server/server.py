@@ -40,6 +40,7 @@ Run directly for debugging:
 See mcp_server/SMOKE_TEST_RESULTS.md for Phase (i) end-to-end test results.
 """
 
+import functools
 import json
 import re
 import os
@@ -284,6 +285,37 @@ Piece + room slug pair selects the Durable Object.
 """
 
 
+def _rel(path) -> str:
+    """A repo-relative path for messages, or the absolute one outside the repo."""
+    try:
+        return str(Path(path).resolve().relative_to(_REPO_ROOT.resolve()))
+    except ValueError:
+        return str(path)
+
+
+def _missing_sources(paths) -> list:
+    """Repo-relative names of the knowledge files that cannot be read right now.
+
+    A Silent Fallback Is Indistinguishable From a Genuine No-Match: every
+    builder below skips a missing file, so every tool that reads their output
+    reports the gap in its own result rather than returning a smaller answer
+    that looks complete."""
+    return [_rel(p) for p in paths if not Path(p).is_file()]
+
+
+def _note_degraded_resolver(fn):
+    """Attach `resolver_note` to a tool's dict result whenever the resolver, or
+    part of it, is unavailable — so a degraded answer never looks like a full one."""
+    @functools.wraps(fn)
+    def wrapper(*args, **kwargs):
+        result = fn(*args, **kwargs)
+        note = _resolver_note()
+        if note and isinstance(result, dict):
+            result["resolver_note"] = note
+        return result
+    return wrapper
+
+
 def _read_md(path: Path) -> str:
     try:
         return path.read_text(encoding="utf-8")
@@ -384,6 +416,8 @@ def _build_tagged(tag: str) -> str:
     parts: list[str] = []
     for path in _TAGGED_DOCS:
         if not path.exists():
+            parts.append(f"[Knowledge source missing: {_rel(path)} could not be read, so its "
+                         f"sections tagged {{!{tag}}} are absent from this module.]")
             continue
         secs = _extract_tagged_sections(_read_md(path), tag)
         if secs:
@@ -843,6 +877,7 @@ def _suggest_objects(bad_name: str, k: int = 3) -> list:
 # ---------------------------------------------------------------------------
 
 @mcp.tool()
+@_note_degraded_resolver
 def lookup_object(name: str) -> dict:
     """
     Call this before adding any `newobj` to a Max patch.
@@ -1222,11 +1257,23 @@ def search_packages(term: str, limit: int = 5) -> dict:
 _OBSERVED_ATTRS_PATH = _REPO_ROOT / "scans" / "maxhelp" / "maxhelp_observed_attrs.json"
 
 
+_resolver_error = None   # why the last build produced no resolver, or None
+
+
 def _build_resolver_safe():
+    """Build the gate resolver; on failure return None but record the cause.
+
+    The cause is the exception's type, not its message, per *A Silent Fallback
+    Is Indistinguishable From a Genuine No-Match*. `_resolver_note()` turns it
+    into the note every resolver-dependent tool attaches to its result."""
+    global _resolver_error
     try:
-        return _build_resolver()
-    except Exception:
+        r = _build_resolver()
+    except Exception as exc:
+        _resolver_error = f"resolver failed to build ({type(exc).__name__})"
         return None
+    _resolver_error = None if r is not None else "verify library unavailable"
+    return r
 
 
 _resolver_cache = _FileCache([_PACKAGES_PATH, _OBSERVED_ATTRS_PATH], _build_resolver_safe)
@@ -1236,6 +1283,21 @@ def _resolver():
     """The cached gate resolver, rebuilt when its source files change; None if the
     verify lib is absent."""
     return _resolver_cache.get()
+
+
+def _resolver_note():
+    """A sentence saying what a tool could not check, or None when nothing is missing."""
+    r = _resolver()
+    if r is None:
+        return (f"{_resolver_error or 'resolver unavailable'} — aliases, jbox base "
+                f"attributes and the help-corpus attribute map were not checked, so "
+                f"this answer rests on the refpages alone.")
+    err = getattr(r, "observed_error", None)
+    if err:
+        return (f"help-corpus attribute map not loaded ({err}) — attributes that only "
+                f"the help files show were not checked.")
+    return None
+
 
 
 def _jbox_attrs() -> dict:
@@ -1295,6 +1357,7 @@ def _classify_attr(object_name: str, attr: str):
 
 
 @mcp.tool()
+@_note_degraded_resolver
 def lookup_attribute(object_name: str, attr: str) -> dict:
     """
     Call this before writing any attribute on a Max object.
@@ -1432,6 +1495,7 @@ def lookup_attribute(object_name: str, attr: str) -> dict:
 
 
 @mcp.tool()
+@_note_degraded_resolver
 def list_attributes(object_name: str) -> dict:
     """
     Return all valid attributes for a Max object, sorted alphabetically.
@@ -1537,6 +1601,7 @@ def list_attributes(object_name: str) -> dict:
 # ---------------------------------------------------------------------------
 
 @mcp.tool()
+@_note_degraded_resolver
 def verify_spec(spec_json: str) -> dict:
     """
     Statically check a Claude2Max spec against the binding rules BEFORE converting.
@@ -1581,6 +1646,8 @@ def verify_spec(spec_json: str) -> dict:
     """
     resolver = _resolver()  # cached; SAME resolver lookup_attribute/list_attributes use
     result = _verify_spec_json(spec_json, resolver=resolver)
+    if resolver is None:
+        result["degraded"] = True   # the anti-guessing name checks did not run
     result["report"] = _verify_report(result)
     return result
 
@@ -1876,7 +1943,13 @@ def search_pitfalls(term: str, limit: int = 8) -> dict:
                f"behaviour is safe — the corpus is curated, not exhaustive. "
                f"Verify object/attribute names with lookup_object / "
                f"list_attributes before relying on them.")
-    return {"count": len(pitfalls), "query": term, "pitfalls": pitfalls, "message": msg}
+    result = {"count": len(pitfalls), "query": term, "pitfalls": pitfalls, "message": msg}
+    missing = _missing_sources([_PATCHING_DIR / "MAX_PATCHING.md", _PITFALL_FORUM, _PITFALL_COOKBOOK])
+    if missing:
+        result["missing_sources"] = missing
+        result["message"] = (f"WARNING: could not read {', '.join(missing)}, so its entries "
+                             f"are not in this search. " + msg)
+    return result
 
 
 @mcp.tool()
@@ -1958,7 +2031,13 @@ def lookup_rule(name_fragment: str, limit: int = 5) -> dict:
     else:
         msg = (f"No rule name matched '{name_fragment}'. Try a broader fragment, "
                f"or load(['core']) for the full binding-rule set.")
-    return {"count": len(rules), "query": name_fragment, "rules": rules, "message": msg}
+    result = {"count": len(rules), "query": name_fragment, "rules": rules, "message": msg}
+    missing = _missing_sources(_RULE_DOCS)
+    if missing:
+        result["missing_sources"] = missing
+        result["message"] = (f"WARNING: could not read {', '.join(missing)}, so its rules "
+                             f"are not in this search. " + msg)
+    return result
 
 
 if __name__ == "__main__":
