@@ -12,7 +12,7 @@ The patching surface itself is left to Max's native UI — never restyle boxes, 
 
 ## Step 0 — Offer the Opus / Claude Design switch
 
-Presentation UI design is an Opus trigger case. Surface the two-option prompt in `CLAUDE.md` § "Model Selection" (Option A: run `/model claude-opus-4-7`; Option B: take the design to claude.ai/design and bring the layout back for spec translation). Wait for the user's choice before designing.
+Presentation UI design is an Opus trigger case. Surface the two-option prompt in `CLAUDE.md` § "Model Selection" (Option A: run `/model opus` or `/model fable`; Option B: take the design to claude.ai/design and bring the layout back for spec translation). Wait for the user's choice before designing.
 
 ## Step 1 — Read the design system
 

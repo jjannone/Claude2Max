@@ -66,4 +66,4 @@ You're about to write or edit a file. Scan this list — each item is "if X appl
 - If the user asked a multi-part question and I'm replying without addressing every part: am I re-asking the unanswered parts, rather than guessing or treating silence as consent?
 
 ## Model selection
-- If this task is dense patch analysis, complex documentation reading, package curation, complex forum-thread synthesis, complex patch planning, or presentation UI design: have I paused and asked the user to switch with `/model claude-opus-4-7` before proceeding on Sonnet?
+- If this task is dense patch analysis, complex documentation reading, package curation, complex forum-thread synthesis, complex patch planning, or presentation UI design: have I paused and asked the user to switch with `/model opus` or `/model fable` before proceeding on Sonnet?

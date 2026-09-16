@@ -34,7 +34,7 @@ The recommended workflow for every student is to work in their **own GitHub fork
 
 - The student's session history, insights, and any patches they commit travel with them across machines and survive disk failure.
 - The student can pull upstream improvements into their fork without losing their work.
-- Discoveries the student makes during a session can be contributed back to the main repo as a pull request — see the community knowledge pipeline described in the **Community Knowledge — Insights Flow Upstream** section.
+- Discoveries the student makes during a session can be contributed back to the main repo as a pull request.
 - An instructor (or peer) can read the student's fork to see what they've been working on without needing access to their machine.
 
 **Students do not run `gh` or `git` commands themselves.** Claude is the interface. The student says "set me up" or "fork this so I have my own copy" and Claude runs the commands. The student's job is to describe what they want; Claude's job is to translate that into the right shell actions. Students with no prior CLI / git experience should never see a `git` invocation in the chat unless they ask to learn how the underlying mechanics work.
@@ -119,7 +119,7 @@ The verification mechanics for Max specifically — the refpage paths, the `grep
 
 **The rule applies independent of the workflow — including direct `.maxpat` edits.** The converter's lookup against `packages/package_objects.json` catches an unknown object name when a spec is converted. Hand-editing `.maxpat` JSON, modifying an existing patch with the Edit tool, or generating boxes via Python — those paths are now *also* covered by a PostToolUse content gate (`hooks/claude2max_maxpat_content_gate.py` → `spec2maxpat.gate_maxpat_file`) that runs the SAME anti-guessing rules over the written patch and feeds any invented object/attribute/message names back as a system reminder. But that gate is **post-hoc and non-blocking** (the edit already happened) — a safety net, not a license to guess. The verification discipline is the same in all paths. The recognition signal is identical to the attribute case: **if I'm typing an object's class name (the `text` field of a `newobj`) because it "sounds like the obvious name" for what I want to do, that is the moment verification is non-optional, regardless of which tool is producing the file.**
 
-For instance: writing `[oscparse]` between `[udpreceive]` and `[route /user]` because it's "the obvious complement to `udpreceive`" is the same kind of guess as `arr.contains()` in JS. Max 9 has no `oscparse`; OSC address-routing requires `[OSC-route]` from CNMAT Externals, and the path was a silent failure because the patch loaded with `[oscparse]` shown as a missing-object red box that's easy to overlook in a 100-box patch. Confirmed by `ls /Applications/Max.app/Contents/Resources/C74/docs/refpages/max-ref/ | grep -i osc` returning only `osc.codebox`, `osc.packet`, `param.osc` — none of which route by address.
+For instance: writing `[oscparse]` between `[udpreceive]` and `[route /user]` because it's "the obvious complement to `udpreceive`" is the same kind of guess as `arr.contains()` in JS. Max 9 has no `oscparse`, and the path was a silent failure because the patch loaded with `[oscparse]` shown as a missing-object red box that's easy to overlook in a 100-box patch. Confirmed by `ls /Applications/Max.app/Contents/Resources/C74/docs/refpages/max-ref/ | grep -i osc` returning only `osc.codebox`, `osc.packet`, `param.osc` — none of which route by address.
 
 **Practical check before adding any `newobj` text to a patch, regardless of source:**
 
@@ -488,7 +488,7 @@ Rendering an empty container for cases (1) and (2) produces the same DOM as case
 
 The five branches use the same UI region, but a confused user now knows whether to wait, switch wifi, restart Max, or ask the operator to type roles into a textedit.
 
-**Where this applies.** Anywhere server state shapes the UI: WebSocket-driven dashboards, REST-fetched lists, real-time roster panels, async-arriving config, anything that starts `null` / `undefined` / `[]` and gets populated later. The rule is symmetric with [Always Hide Plumbing Patchcords] — silence isn't neutral. Visible state that turns out to be incomplete is much less confusing than absence that turns out to mean "still loading."
+**Where this applies.** Anywhere server state shapes the UI: WebSocket-driven dashboards, REST-fetched lists, real-time roster panels, async-arriving config, anything that starts `null` / `undefined` / `[]` and gets populated later. Silence isn't neutral. Visible state that turns out to be incomplete is much less confusing than absence that turns out to mean "still loading."
 
 **The recognition signal:** if I'm writing `(arr || []).map(...)` or `if (data) { ...render... }` and the falsy branch produces nothing — that's the moment a placeholder is required. The fix is not adding a "loading" spinner everywhere (spinners conflate loading with broken); it's naming the specific not-yet condition the user is in.
 
@@ -614,7 +614,7 @@ The acceptance test is behavioral, not structural: open the patch, click every d
 
 For instance: the `butter_keys` comparison bench placed `kslider` and `butter_keys` showing MIDI 48–60, but several demos targeted notes outside that range (`chord 60 …`, `set 62`, `setval 62 …`) and the slider-face messages set values against an integer 0–127 range — so the keys lit nothing visible and the slider bars barely moved. The fix: every demo note pulled into 48–60, every arg-taking message given representative args, and slider-face values cast as `0.–1.` floats (with a `setminmax -1. 1.` bipolar example). Earlier the same failure hit `butter_keys.maxhelp` (displayed 36–48 while demos targeted 60–67). This rule is symmetric with **Never Render an Empty Container** and the presentation aesthetic rules: visible-but-wrong is recoverable; silent-and-blank trains the user to distrust the object.
 
-## Model Selection — When to Use Opus vs Sonnet
+## Model Selection — When to Use Opus or Fable vs Sonnet
 
 Claude Sonnet is the default and handles most tasks. **Do not proceed silently on Sonnet when Opus is warranted** — pause and prompt the user first. Use the exact phrasing below so the prompt is unambiguous.
 
@@ -622,7 +622,7 @@ Claude Sonnet is the default and handles most tasks. **Do not proceed silently o
 
 When any of the following tasks arises, stop before beginning and say:
 
-> "This task warrants Opus for better results — run `/model claude-opus-4-7`, then let me know and I'll continue."
+> "This task warrants Opus or Fable for better results — run `/model opus` or `/model fable`, then let me know and I'll continue."
 
 Trigger cases:
 
@@ -634,7 +634,7 @@ Trigger cases:
 6. **Designing a presentation mode UI** — layout hierarchy, panel grouping, visual weight, control placement. Stop and offer the user two options:
 
    > "Before we design the presentation UI, choose an approach:
-   > - **Option A** — run `/model claude-opus-4-7` and we'll design it here (Opus = same model as Claude Design)
+   > - **Option A** — run `/model opus` or `/model fable` and we'll design it here (Opus = same model as Claude Design)
    > - **Option B** — take the design to [claude.ai/design](https://claude.ai/design), which has separate usage included with your account, then bring the layout back and I'll translate it into spec coordinates
    >
    > Which would you prefer?"
@@ -647,7 +647,7 @@ Trigger cases:
 
 When the analytical or design phase is complete and implementation begins (spec writing, conversion, file editing), say:
 
-> "The analysis/design phase is done — you can switch back to Sonnet now: `/model claude-sonnet-4-6`."
+> "The analysis/design phase is done — you can switch back to Sonnet now: `/model sonnet`."
 
 ## Before Beginning Any Work
 
@@ -755,14 +755,13 @@ When planning a patch for a student, default to the objects in the table below f
 | Recording audio into a buffer | `record~` | Needs a named `buffer~`. Toggle to start/stop. |
 | Reverb | `bp.Gigaverb` (BEAP, ships with Max) | The lush default. `bp.Freeverb` is a lighter Schroeder-style alternative — also BEAP, also ships with Max. For higher fidelity, `hirt.convolutionreverb~` from HISSTools with a real IR — install the HISSTools package first. |
 | Delay line | `tapin~` / `tapout~` | `tapin~` holds the buffer; one or more `tapout~` objects read from it at different delay times. Don't reach for `delay~` — `tapin~/tapout~` is the standard idiom. |
-| Filter | `biquad~` with `filtergraph~` | `filtergraph~` is the editor — drag the graphical handle, send its output into `biquad~`'s right inlet to set coefficients. Visual + audible at the same time. |
+| Filter | `biquad~` with `filtergraph~` | `filtergraph~` is the editor — drag the graphical handle, send its output into `biquad~`'s right inlet to set coefficients. Visual + audible at the same time. Alternatives: `svf~` when you need lowpass, highpass, bandpass and bandstop at once, from its four outlets (0=LP, 1=HP, 2=BP, 3=BS; max cutoff = samplerate/4, not samplerate/2), and `lores~` for a simple low-resonance lowpass with no self-oscillation. |
 | Multi-value input | `multislider` | One object, N sliders, list output. Configure via inspector. |
 | Step sequencer UI | `live.step` (preferred) or `itable` | `live.step` gives a full graphical step sequencer with per-step velocity, pitch, and gate. Drive it with a `next` message on each clock tick (e.g. `metro → [message next] → live.step`); outlet 0 outputs the current step's values as a list (index, pitch, velocity, duration). `itable` is lighter: a graphical table editor where you draw values and query by index — send an int to outlet 0 to retrieve the stored value at that index. Neither requires Max for Live — both work in any Max patch. When the patch needs a step-display UI, offer the user a choice between these before falling back to a row of number boxes. |
 | Multi-column data display | `jit.cellblock` | The spreadsheet-style readout. Drive with `cell <col> <row> set <val>` messages. |
 | Sequencer / clock | `metro` | `metro` is the clock — send `1` to start, `0` to stop, interval as a creation arg or via the right inlet. For the step UI on top of the clock, see "Step sequencer UI" above. `metro @defer 1` pushes bangs to the low-priority queue to avoid audio-scheduler conflicts — `qmetro` is NOT a separate class, it is exactly `metro @defer 1`. |
 | Distribute one source to one of N outputs | `gate N` | `gate` is a *distributor*: data arrives at one inlet and exits through whichever of N outlets is currently selected. Send `1`–`N` to open that outlet; `0` closes all. Second creation arg sets the initially-open outlet (`gate 3 2` = 3 outlets, outlet 2 open at load). Passes all message types. |
 | Select one of N input sources | `switch N` | `switch` is a *selector*: one of N data inlets is routed to a single outlet based on the selection int. Use when you have multiple sources and want to monitor or route one at a time. (Note: `gate` and `switch` have inverted names relative to intuition — gate distributes, switch selects.) |
-| Filter | `svf~` (preferred) or `lores~` or `biquad~` + `filtergraph~` | `svf~` gives lowpass/highpass/bandpass/bandstop simultaneously from four outlets (0=LP, 1=HP, 2=BP, 3=BS) — prefer it when you need multiple filter types at once. Max cutoff = samplerate/4 (not samplerate/2). For interactive visual design, wire `filtergraph~` → `biquad~`. Use `lores~` for a simple low-resonance lowpass with no self-oscillation. |
 | Random / probability | `random` with attributes | `@range` takes **two** values — `random @range 4000 8000` emits 4000–8000 directly, so no downstream `scale` and no offset `+`. Change it live with a `range <lo> <hi>` message to the left inlet. `@seed` for reproducibility. Don't roll your own with `expr`. |
 | Scale / map a number range | `scale` | `scale <in_lo> <in_hi> <out_lo> <out_hi>` — one object, no math. Don't reach for `expr` for simple range mapping. |
 | Comparing / routing values | `v8` JavaScript | Branching logic with multiple conditions is far cleaner expressed as a few lines of JS than as a tree of `if` / `select` / `route` boxes. Use `v8`, not `js`. |
@@ -777,7 +776,7 @@ When planning a patch for a student, default to the objects in the table below f
 | Webcam capture | `jit.grab` | Open the device, send `bang` per frame (or wire a `qmetro` upstream). One object, no driver wrangling. |
 | GL drawing | No strong preference | Pick the `jit.gl.*` object that matches the primitive you need — `jit.gl.gridshape`, `jit.gl.mesh`, `jit.gl.sketch`, `jit.gl.text`, etc. |
 | Per-pixel work that ends up on screen | A GLSL shader via `jit.gl.slab @file <name>.jxs` | Ask "can this be a shader?" before "how do I write this in JS?" A `[v8]` painting a matrix cell by cell crosses the JS/Jitter boundary per pixel and carries four silent-failure traps that all render black without an error; a shader runs on the GPU, exposes its `<param>`s as live message-settable uniforms, and either compiles or names the line it failed on. See `patching/JITTER_JS_PATCHING.md` > *When NOT to use JS for matrix work*. |
-| OSC | `udpreceive` + CNMAT odot `o.route` | Use `o.route` rather than the native `OSC-route` when CNMAT odot is installed — `o.route` has cleaner semantics and is what the rest of the OSC community converged on. Install via Package Manager → CNMAT Externals. |
+| OSC | `udpreceive` + CNMAT odot `o.route` | Use `o.route` rather than `OSC-route` when CNMAT odot is installed — `o.route` has cleaner semantics and is what the rest of the OSC community converged on. |
 | Networking / WebSocket | `node.script` + the multi-user-template | When the patch needs to talk to phones, browsers, or the cloud, build on `multi-user-template` (see the dedicated section above) — don't roll a Node-for-Max LAN server from scratch. |
 | Several pages or examples in one window | Patcher tabs: `p "<name>"` with `showontab: 1` | Max's help-file mechanism; every page keeps its own patching and presentation view, nothing is hidden, no controller object. Not for choosing among items one set of controls acts on: that is a `live.tab` / `tab` selector inside one view (see *Several Views in One Window: Patcher Tabs, Not bpatchers*). |
 | Send / receive between distant parts of a patch | `s` / `r` for messages, `value` for shared scalar state, `pv` / `v` for patcher-scoped variables, `s~` / `r~` for signal | Pick by lifetime and scope. `s`/`r` for cross-patch broadcast of messages; `value` when two boxes need to read the same shared scalar; `pv`/`v` when the scope should not leak past the parent patcher; the `~` variants for signal-rate. **Write the abbreviations** (`s`, `r`, `s~`, `r~`), not the long forms. Use them where a cord would cross the patch — a short local connection stays a cord, because seeing it is what tells the reader the two objects are one chain. **A name is a channel, not a wire: repeat the sender.** When a second source needs an existing channel, put a new `s NAME` under that source instead of running a cord to the existing one — the refpage states that all same-named senders reach all same-named receivers, and C74's `jit.anim.path.maxhelp` ships nine `send topath` boxes in one patch. The order two receivers fire in is explicitly *not* deterministic, so never lean on it. Multiple `s~` sharing a name **sum** into the matching `r~`, which is what makes a mix bus one object per voice. |
@@ -862,8 +861,8 @@ provides:
 
 - **LAN server** — Node-for-Max (`server.js`) loaded by `node.script` in
   the patch. HTTP serves a static client; WebSocket fans events both
-  ways; OSC over UDP forwards sensor data to a `[udpreceive] → [oscparse]`
-  chain in the patch.
+  ways; OSC over UDP forwards sensor data to a `[udpreceive]`
+  in the patch.
 - **Lobby + role flow** — name entry, role multi-select, admin
   password (set in the patch), transport gate.
 - **Stage UI with 15 tabs** — every sensor the browser exposes (motion,
@@ -905,7 +904,7 @@ cloud status|connected <args>
 audience input|react|ping|join|leave <name> [args]
 ```
 
-OSC arrives at `[udpreceive <port>] → [oscparse]` with addresses:
+OSC arrives at `[udpreceive <port>]` with addresses:
 
 ```
 /user/<name>/<kind>[/<sub>]   sensors and controls
@@ -966,7 +965,7 @@ These bit IMMER v2 and would bite any derived piece in the same way.
   (`outputmode 0`).** Wiring it into `[setcloudurl $1]` captures the
   literal symbol `"text"`. Set `@outputmode 1`, route through
   `[route text]`, or skip the textedit and hardcode in code. Full
-  rule in the "Common Pitfalls" list further up.
+  rule in `patching/MAX_PATCHING.md` > Common Pitfalls.
 - **Broadcast ordering: `toRole:"perform"` first, per-name `to:<name>`
   second.** The relay forwards both to a joined remote performer's
   socket. The generic broadcast omits the `you` field; if it arrives
@@ -1242,7 +1241,7 @@ For instance: `live.*` objects were getting `parameter_enable: 1` and `saved_att
 ## What You Must Handle {!core}
 
 - **Object text, connections, layout** — write text exactly as you'd type it in Max. Get outlet/inlet indices right. Use explicit `pos`. See `SPEC_REFERENCE.md` and `patching/MAX_PATCHING.md` for all rules.
-- **Presentation** — see `patching/MAX_PATCHING.md` for all layout, spacing, and design rules. Key invariants: every presented control needs a comment label; set `openinpresentation: 1`; exclude infrastructure objects; use screenshots (computer-use MCP) to verify.
+- **Presentation** — see `patching/MAX_PATCHING.md` for all layout, spacing, and design rules. Key invariants: every presented control needs a comment label; set `openinpresentation: 1`; exclude infrastructure objects.
 - **Subpatcher, abstraction, and poly~ inlet/outlet labeling** — every `inlet` and `outlet` in a subpatcher/abstraction/poly~ must be labeled in two places: (1) **outside** — `attrs: {"comment": "in 0: bang — purpose | out 0: list — result"}` on the `p`/`poly~` object; (2) **inside** — `attrs: {"comment": "..."}` on each inlet/outlet spec entry AND an adjacent `comment` box. Never create an encapsulated unit without both levels.
 - **`v8` / `js` inlet/outlet labeling — the same obligation, met in the script.** A `v8 foo.js` box tells the reader nothing about what each inlet expects or each outlet emits, exactly as an unlabeled `p` box does, so every script that declares `inlets` / `outlets` also calls `setinletassist(n, "…")` and `setoutletassist(n, "…")` for each index. The text becomes the hover tooltip on the box in Max, the same surface a subpatcher's inlet comment reaches. Confirmed in Cycling '74's own shipped scripts (`packages/Jitter Tools/javascript/jitgltextureset.js`) and in Max's code-editor declarations; the second argument may be a string or a function that returns one, and the string form is what C74 uses. *For instance:* `kslider-restrike.js` declares one inlet and two outlets and labels all three; the header comment that already described them is now what Max shows on hover.
 - **Objects the converter cannot resolve** — supply `inlets`, `outlets`, `outlettype` in the spec. A `newobj` resolves through `NEWOBJ_IO`, its refpage, then the package library. A UI box (any other `type`) resolves through `MAXCLASS_DEFAULTS`, its own C74 help file, then its refpage (`SPEC_REFERENCE.md` > *UI classes: where the converter gets ports*). Boxes whose ports come from their contents (`bpatcher`, `v8.codebox`, `codebox~`, a `v8` script, a third-party UI object with no C74 help file or refpage) always need the override.
@@ -1447,9 +1446,9 @@ Three outcomes:
 
 - **`gh` is missing entirely** — say: "GitHub CLI (`gh`) isn't installed. I can install it via Homebrew if you'd like — that's the smoothest path to having your own fork of Claude2Max where your work lives. Want me to install it, or work locally for now?" If yes, run `brew install gh`. If no, fall through to the **Local-only fallback**.
 - **`gh` is installed but not authenticated** (`gh auth status` shows "not logged in") — say: "I'd like to set you up with your own GitHub fork of Claude2Max so your session work is backed up and shareable. To do that, I need to log you into GitHub via `gh auth login`. I'll walk you through each prompt in plain language. Should I start, or would you rather work locally for now?" If yes, run `gh auth login` interactively (default settings: GitHub.com, HTTPS, login with a web browser — Claude explains each prompt as it appears). If no, fall through to the **Local-only fallback**.
-- **`gh` is installed and authenticated** — continue to Step 4.
+- **`gh` is installed and authenticated** — continue to Step 4.5.
 
-### Step 4 — Is the current clone already a fork of jjannone/Claude2Max?
+### Step 4.5 — Is the current clone already a fork of jjannone/Claude2Max?
 
 ```bash
 gh repo view --json parent,nameWithOwner 2>/dev/null
@@ -1514,7 +1513,7 @@ Re-offer the fork setup **once or twice on later sessions**, then stop. Do not r
 
 Discoveries, corrections, and workflow improvements gathered during use.
 Entries broadly useful to other users are marked **[shareable]** — these are
-candidates for an upstream pull request via the **Community Knowledge** pipeline.
+candidates for an upstream pull request.
 
 ## Log
 
@@ -1527,7 +1526,7 @@ From that point forward in the session:
 
 ## State-File Location for External Projects
 
-When a student is using Claude2Max as a tool against an external project folder (see **Local-Folder Use Is Fully Supported**), the per-project state files belong with the project, not with the toolkit:
+When a student is using Claude2Max as a tool against an external project folder, the per-project state files belong with the project, not with the toolkit:
 
 - `WORK_HISTORY.md`, `TASK_QUEUE.md`, and `insights.md` should live in the external project folder so they travel with the student's work.
 - The Claude2Max repo's own `WORK_HISTORY.md` is reserved for changes to the toolkit itself (converter, skills, docs).
@@ -1571,7 +1570,7 @@ fi
 ```
 If the output is `CHECK_NEEDED`, run the session-start checks above. If `OK`, proceed normally. This resets on reboot, which is fine — a reboot implies a fresh start.
 
-When a queued task is completed, mark it `- [x]` and move it to the Done section with a completion date.
+When a queued task is completed, move it to the Done section with a completion date.
 
 **Task queue notation** — always use plain English markers, never checkbox symbols:
 - `[pending]` — not yet started
@@ -1580,7 +1579,7 @@ When a queued task is completed, mark it `- [x]` and move it to the Done section
 
 When adding a task to the queue, always write a full expanded description — enough for any Claude instance to pick it up cold without this conversation's context. Include: what to build, where (file/function), why it's needed, implementation notes, prerequisites, and how it fits into the larger system. Also present the expanded description to the user in chat so they can confirm it captures the intent correctly before it's committed.
 
-At the end of any session where meaningful work was done, append an entry to `WORK_HISTORY.md`. Do this automatically — no need for the user to ask. Format: `- YYYY-MM-DD: <1-2 sentence summary>`
+At the end of any session where meaningful work was done, append an entry to `WORK_HISTORY.md`. Do this automatically — no need for the user to ask. Format: `- YYYY-MM-DD: <brief, concise summary>`
 
 **If `WORK_HISTORY.md` does not exist, create it** with a minimal header before appending:
 

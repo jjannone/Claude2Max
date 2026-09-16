@@ -13,7 +13,7 @@ Format: `[pending]` = not started, `[complete]` = done (move to Done section), `
 
 ## Pending — Opus
 
-Tasks requiring deep analysis, architecture decisions, or sustained judgment. Prompt the user to run `/model claude-opus-4-7` before starting any of these.
+Tasks requiring deep analysis, architecture decisions, or sustained judgment. Prompt the user to run `/model opus` or `/model fable` before starting any of these.
 
 - [in progress] **`extract_spec` picks the first marker-bearing box — a stray stub shadows the real embed; repair `4step-sequencer.maxpat`** — Found 2026-08-18 while cleaning the gate-flagged attrs. Two defects, one in the converter and one in a patch, that compound into a silently destructive `convert`.
 
