@@ -482,6 +482,18 @@ Use it for BEAP modules and any other clipping meant to be pasted rather than lo
 
 Use `attrs` to set any additional Max box attributes:
 
+### What `sync` does to `attrs` — the live box wins on any disagreement
+
+Read from `reconcile_spec` in `spec2maxpat.py`, 2026-09-15, because the behaviour is easy to assume wrongly in either direction. Three rules, in this order:
+
+1. **An attribute the spec already names follows the box** whenever the box carries a different value. An Inspector edit, a `v8ui`'s declared attribute changed in Max, a saved parameter block — the patch is the source of truth and sync rewrites the spec to match (`CLAUDE.md` > *Never Use `convert` Unless It Is Specifically Needed*).
+2. **An attribute the spec does not name is captured only if it is on the allowlist** (`_PRESERVE_ATTRS`, 30 entries — the styling and range attrs, minus a value equal to Max's default for `fontsize` / `fontface` / `fontname`).
+3. **Everything else Max wrote on the box goes to `box_extras`**, verbatim, and comes back on the next convert. That is what keeps a `vst~`'s plug-in snapshot, a `parameter_enable`, a panel's gradient keys.
+
+So a hand-written `attrs` entry is **not** dropped merely because Max did not keep it — sync leaves the spec's value alone unless the box disagrees. A name that does not exist on the object therefore survives the round trip while doing nothing in Max, which is the silent failure *Never Write API Names From Memory* exists to prevent: verify the name, because neither Max nor sync will tell you.
+
+*(A retired branch, `claude/goofy-cori-cc5272`, proposed the opposite — dropping any spec attr Max had not preserved, so a typo could not survive. It was never landed and the design went the other way; recorded here so the question is not reopened without knowing it was asked.)*
+
 ```json
 {
   "type": "number",
