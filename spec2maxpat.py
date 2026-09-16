@@ -1728,8 +1728,31 @@ def _int_arg(args, index, default):
         return default
 
 
+_EXPR_DOLLAR_ARG = re.compile(r"\$[ifs](\d+)")
+
+
 def guess_newobj_io(text):
-    """Guess inlet/outlet counts for a newobj from its text."""
+    """Guess inlet/outlet counts for a newobj from its text.
+
+    `expr` and `vexpr` make one inlet per `$` argument, up to the highest index
+    used (`vexpr $f1 / $f2` has two). Their refpages list one inlet, and this
+    guesser used to say one too, so a cord into inlet 1 was written against a
+    box that claimed a single inlet: the patch still worked, because Max
+    recounts on load, but the verifier reported the cord out of range. Every
+    `expr` / `vexpr` box with `$` arguments in Max's own help patches (102 of
+    them, checked 2026-09-16) saves exactly that count. gen's `expr`, which names
+    its inputs `in1`, `in2`, has no `$` arguments and is left alone.
+    """
+    info = _guess_newobj_io_base(text)
+    if info and text.split()[0] in ("expr", "vexpr"):
+        indexes = [int(n) for n in _EXPR_DOLLAR_ARG.findall(text)]
+        if indexes:
+            info = dict(info, numinlets=max(indexes))
+    return info
+
+
+def _guess_newobj_io_base(text):
+    """Inlet/outlet counts from the object tables, refpages and package library."""
     if not text:
         return None
     parts = text.split()
