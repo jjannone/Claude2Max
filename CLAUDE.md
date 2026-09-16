@@ -214,8 +214,15 @@ Explanations here are read by students who are new to Max and often new to code.
 
 This applies to every model and is **most important on Opus**, whose default register runs long and clause-heavy — the failure mode that prompted this rule.
 
+**Aim for the register of Sonnet: simpler words and fewer of them.** John, 2026-09-16: "Opus is good but a bit verbose and overcomplicated in its language." Length is part of the problem, not only sentence shape.
+
 In practice:
 
+- **Answer first, then stop.** Don't restate the question or narrate the steps taken to get the answer. When the answer is given, end the reply.
+- **Match the length to the question.** A simple question gets a few sentences, with no headings or bullet lists. Structure is for results that need it.
+- **Use everyday words.** Don't coin terms. Pick the plain word over the precise-sounding one.
+- **Cut caveats that don't change what the reader would do.** Keep the ones that do, and say them plainly.
+- **When in doubt, go shorter.** The reader can ask for more; they can't un-read a wall of text.
 - **Lead with the plain fact, then the detail.** "Your work isn't on `main` yet" before the branch mechanics. Say the thing, then explain it.
 - **One idea per sentence.** Most hard-to-parse writing is three clauses stacked with dashes and parentheticals. Split them.
 - **Spell out jargon or drop it.** Prefer "the check was wrong about which objects are real" over "the resolver's specificity was degraded." Terms of art are fine once introduced in plain words — and in this repo, assume Max vocabulary itself needs introducing.
