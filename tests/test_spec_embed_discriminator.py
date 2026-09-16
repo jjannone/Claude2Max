@@ -140,7 +140,56 @@ def test_verify_patch_file_degrades_on_corrupt_embed(tmp_name="_corrupt_fixture.
     assert result["mode"] == "native-scopes", (
         f"expected fallback to box-level checking, got mode={result['mode']}")
     assert "[spec] WARNING" in buf.getvalue(), "corrupt embed was not reported"
+    rules = [v["rule"] for v in result["violations"]]
+    assert "spec-embed-corrupt" in rules, (
+        f"corrupt embed printed to stderr but not reported as a finding — {rules}")
+    corrupt_v = next(v for v in result["violations"] if v["rule"] == "spec-embed-corrupt")
+    assert corrupt_v["severity"] == "error", corrupt_v
+    assert result["ok"] is False, "a corrupt embed must not verify clean"
     print("PASS  verify_patch_file reports the corrupt embed and checks the boxes")
+
+
+def test_verify_patch_file_reports_ambiguous_marker(tmp_name="_ambiguous_fixture.maxpat"):
+    """More than one marker-bearing box must surface as a finding, not just a
+    stderr line — this is item (d) of the extract_spec repair task: the decoy
+    that shadowed 4step-sequencer.maxpat's real embed was silent to the gate.
+    """
+    import tempfile
+
+    real_box = {"id": "obj-1", "maxclass": "newobj", "text": "metro 500",
+                "patching_rect": [10.0, 10.0, 80.0, 22.0]}
+    with tempfile.TemporaryDirectory() as d:
+        path = os.path.join(d, tmp_name)
+        with open(path, "w") as f:
+            json.dump(_maxpat(real_box, _decoy_newobj(), _real_embed()), f)
+        result = s2m.verify_patch_file(path, stream=None)
+    assert result["mode"] == "embedded-spec", (
+        f"the real embed still parses — expected embedded-spec, got {result['mode']}")
+    rules = [v["rule"] for v in result["violations"]]
+    assert "spec-embed-ambiguous" in rules, (
+        f"a second marker-bearing box was not reported — {rules}")
+    ambiguous_v = next(v for v in result["violations"] if v["rule"] == "spec-embed-ambiguous")
+    assert ambiguous_v["severity"] == "warning", ambiguous_v
+    assert "obj-22" in ambiguous_v["message"]
+    assert result["ok"] is False, "an ambiguous embed must not verify silently clean"
+    print("PASS  verify_patch_file reports a decoy marker-bearing box left in the patch")
+
+
+def test_verify_patch_file_silent_on_ordinary_patch(tmp_name="_ordinary_fixture.maxpat"):
+    """Neither new finding fires on a patch with no spec embed at all."""
+    import tempfile
+
+    plain = {"id": "obj-1", "maxclass": "newobj", "text": "metro 500",
+             "patching_rect": [10.0, 10.0, 80.0, 22.0]}
+    with tempfile.TemporaryDirectory() as d:
+        path = os.path.join(d, tmp_name)
+        with open(path, "w") as f:
+            json.dump(_maxpat(plain), f)
+        result = s2m.verify_patch_file(path, stream=None)
+    rules = [v["rule"] for v in result["violations"]]
+    assert "spec-embed-ambiguous" not in rules and "spec-embed-corrupt" not in rules, (
+        f"a patch with no spec embed at all should not trip either rule — {rules}")
+    print("PASS  a patch with no embed at all trips neither new rule")
 
 
 def main():
@@ -152,6 +201,8 @@ def main():
     test_corrupt_embed_raises_rather_than_falling_back()
     test_missing_end_marker_raises()
     test_verify_patch_file_degrades_on_corrupt_embed()
+    test_verify_patch_file_reports_ambiguous_marker()
+    test_verify_patch_file_silent_on_ordinary_patch()
     print("\nAll tests passed.")
 
 

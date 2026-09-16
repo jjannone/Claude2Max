@@ -15,19 +15,6 @@ Format: `[pending]` = not started, `[complete]` = done (move to Done section), `
 
 Tasks requiring deep analysis, architecture decisions, or sustained judgment. Prompt the user to run `/model opus` or `/model fable` before starting any of these.
 
-- [in progress] **`extract_spec` picks the first marker-bearing box — a stray stub shadows the real embed; repair `4step-sequencer.maxpat`** — Found 2026-08-18 while cleaning the gate-flagged attrs. Two defects, one in the converter and one in a patch, that compound into a silently destructive `convert`.
-
-  ***Item (a) COMPLETE 2026-08-21 — Group A step 1 done. Items (b), (c), (d) remain; do them in the Group A order below.***
-
-  **Defect 1 — no discriminator on the embed scan. FIXED 2026-08-21.** `extract_spec()` in `spec2maxpat.py` walks `maxpat["patcher"]["boxes"]` and returns the first box whose `code` or `text` contains `--- CLAUDE2MAX SPEC ---`. It does not check the box id or maxclass. Any other box carrying the marker — a leftover from a prior cycle, a comment quoting the format, a tutorial box explaining it — wins if it sorts earlier. `_SKIP_BOX_IDS` already names `obj-spec-embed` as canonical scaffolding, so the discriminator exists; the extractor just doesn't use it. Fix: prefer `id == "obj-spec-embed"`, fall back to the first `text.codebox` match, and when more than one candidate carries the marker, say so rather than silently choosing. **Shipped 2026-08-21** as `_spec_embed_candidates()` / `_choose_spec_embed()` / a rewritten `extract_spec(maxpat, stream=sys.stderr)`. Two decisions worth carrying forward: (i) a corrupt *chosen* embed raises the new `SpecEmbedError` instead of falling through to a candidate that happens to parse — falling through is exactly how the decoy would have won, and `convert` writes whatever spec it is handed; (ii) `verify_patch_file` catches that error, prints it, and re-checks the patch from its own boxes (`mode="native-scopes"`), so a corrupt embed degrades the gate loudly instead of crashing it. The `extract` and `sync` CLI branches exit 1 and write nothing. Regression tests: `tests/test_spec_embed_discriminator.py` (8 cases).
-
-  **Defect 2 — `4step-sequencer.maxpat` carries both a decoy and a corrupt real embed.** `obj-22` is a `newobj` whose entire text is `--- CLAUDE2MAX SPEC ---\n{"name":"4-step-sequencer"}\n--- END SPEC ---` — a stub with no objects and no connections. Because it precedes `obj-spec-embed`, `extract_spec` returns it, so the patch reports `spec.objects = 0`. The real embed (`obj-spec-embed`, `code`, 4,403-char body) does not parse either: it truncates mid-string, and the truncation point shows why — the spec contains an object *named* `obj-spec-embed` whose `attrs.text` is itself a spec embed. A sync captured the spec-embed box as a spec object, producing self-reference. `_SKIP_BOX_IDS` should have prevented this, so either the spec predates that guard or a path bypasses it — determine which, because a live bypass would keep reproducing this.
-
-  **Why this matters:** `convert` consumes whatever `extract_spec` returns. On this patch today that is a 27-character stub, so converting `4step-sequencer.maxpat` would emit an essentially empty patch and destroy all 24 boxes. The patch is currently intact and the gate reports it clean — the damage is latent, triggered by the next `convert`. Nothing warns.
-
-  **Work**: (a) ~~add the discriminator + a multi-candidate warning to `extract_spec`~~ **DONE 2026-08-21**; (b) determine whether the `_SKIP_BOX_IDS` bypass is live by tracing which sync path wrote the self-referential object; (c) reconstruct `4step-sequencer.maxpat`'s spec from its 24 boxes via `sync` and delete the `obj-22` decoy; (d) add a rule to `claude2max_verify` for "more than one box carries the spec marker" and for "embed present but does not parse" — both are silent today. Item (d) overlaps the *embedded-spec presence* family scoped in the MCP-enforcement task **item 8**; build the detection rule there if that task runs first, and keep the converter-side `extract_spec` discriminator here.
-
-  **Also noticed 2026-08-21 while doing (a)** — `add_tutorial.py` carries its own second copy of `extract_spec` (line ~198). It already discriminates correctly (matches on `id == "obj-spec-embed"`), so it is not exposed to the decoy defect, but it swallows `json.JSONDecodeError` and returns `None`. On a patch like `4step-sequencer.maxpat` that reads as "this patch has no spec" — the same silent-acceptance failure one level over. Fold it into item (c) or (d): either make it call the converter's `extract_spec` or make it raise. Two implementations of one scan is the underlying smell.
 
   **Model**: Sonnet — the diagnosis is done, the remaining work is a trace, a detection rule, and a patch repair against a known-good box list.
 
@@ -274,17 +261,19 @@ Tasks requiring deep analysis, architecture decisions, or sustained judgment. Pr
 
   8. **Write the two missing rule families — round-trip integrity.** Two checks this task has always called for that do not exist in `rules.py` today. They were originally described inside item 3's body; promoted to their own numbered item 2026-08-21 because item 3 completed with "hold all promotion," which would have left them buried in a finished item where nobody would look for them. They are **independent of the promotion decision** — they need writing whether or not anything is ever promoted to blocking.
 
-     **(a) Embedded-spec presence and integrity.** A `.maxpat` produced through Claude2Max must carry the hidden `text.codebox` (`id: "obj-spec-embed"`) holding the spec between `--- CLAUDE2MAX SPEC ---` / `--- END SPEC ---`. Three failure modes, all silent today: the embed is missing entirely; the embed is present but does not parse as JSON; more than one box carries the marker (the `extract_spec` first-match bug — a stray stub shadows the real embed and a subsequent `convert` emits an essentially empty patch).
+     **(a) Embedded-spec presence and integrity.** A `.maxpat` produced through Claude2Max must carry the hidden `text.codebox` (`id: "obj-spec-embed"`) holding the spec between `--- CLAUDE2MAX SPEC ---` / `--- END SPEC ---`. Three failure modes, all silent until 2026-09-16: the embed is missing entirely; the embed is present but does not parse as JSON; more than one box carries the marker (the `extract_spec` first-match bug — a stray stub shadows the real embed and a subsequent `convert` emits an essentially empty patch).
 
-     **The design question to settle first:** this rule must NOT fire on patches Claude2Max did not produce. The 11,873-file C74 corpus legitimately has no embed and is perfectly valid; a naive "no embed = violation" makes the rule useless noise on every native patch. So the rule needs a discriminator for "is this OURS?" — candidate signals: the patch was reached via `verify_patch_file`'s embedded-spec branch, an explicit caller flag, or a marker the converter always writes. Decide the discriminator before writing the check. The *integrity* halves — does not parse, more than one marker — are safe to fire unconditionally, because they only trigger where a marker already exists.
+     **The *integrity* halves — done 2026-09-16, in `verify_patch_file` (`spec2maxpat.py`), not `rules.py`.** These two need no "is this ours?" discriminator: they only fire where a marker already exists, so they cannot land on the 11,873-file C74 corpus, which carries no marker at all. `spec-embed-corrupt` (ERROR) fires when the chosen embed raises `SpecEmbedError`; `spec-embed-ambiguous` (WARNING) fires when more than one box carries the marker, naming the chosen box and every ignored one. Both were built alongside the pre-existing `spec-stale` preliminary finding in the same function, for the same reason: every rule after them judges the wrong object otherwise. Tests in `tests/test_spec_embed_discriminator.py`.
+
+     **The *presence* half — still open, and it is the one that needs the discriminator.** "No embed at all" cannot fire on the C74 corpus without knowing a given patch was supposed to have one. **The design question to settle first:** candidate signals — the patch was reached via `verify_patch_file`'s embedded-spec branch, an explicit caller flag, or a marker the converter always writes. Decide the discriminator before writing the check.
 
      **(b) Spec-vs-patch object-count drift.** *Covered 2026-09-08 by `spec2maxpat.spec_matches_patch()` — content matching by `(maxclass, text)` subsumes the count comparison; surfaced as `sync --check` and as the `spec-stale` preliminary finding in `verify_patch`. The orphan carve-out below is still worth a rule of its own if the count check is ever wanted separately.* Compare `len(spec["objects"])` to the number of boxes in the patch and flag divergence beyond a small threshold. This is the 1669-vs-135 orphan case documented in `CLAUDE.md` § "Sync preserves; it does not prune": an embedded spec accumulated 1,534 unwired duplicates of one message box, and converting it would have re-emitted every one into the operator's view. `CLAUDE.md` already tells the reader to run this comparison by hand after every sync; this item makes it mechanical. Note the legitimate-orphan carve-out that section documents — unreferenced `comment` / `panel` / `pwindow` / `bpatcher` boxes are valid UI orphans and must not count toward drift.
 
-     **Where**: `mcp_server/claude2max_verify/rules.py`, registered in `REGISTRY` (not `RESOLVER_REGISTRY` — neither needs the authoritative resolver). Both ship with golden tests in `mcp_server/tests/test_verify.py`. Both land at `WARNING`, consistent with item 3's hold-all-promotion conclusion; revisit severity only when a Claude2Max-authored corpus exists to measure against.
+     **Where, for the remaining presence check**: follow the precedent the integrity halves set — a preliminary finding built directly in `verify_patch_file` (`spec2maxpat.py`), not a `rules.py` rule registered in `REGISTRY`, since it needs to run before the spec/native branch is even chosen rather than judging one spec's contents. Ship it with a golden test in `tests/test_spec_embed_discriminator.py` alongside the other two. Land at `WARNING`, consistent with item 3's hold-all-promotion conclusion; revisit severity only when a Claude2Max-authored corpus exists to measure against.
 
-     **Prerequisite met**: item 1 shipped `verify_patch_file()`, so once written these are reachable from all three entry points at once — the `verify_patch` MCP tool, `spec2maxpat.py verify`, and convert-time checking — with no additional wiring.
+     **Prerequisite met**: item 1 shipped `verify_patch_file()`, so once written this is reachable from all three entry points at once — the `verify_patch` MCP tool, `spec2maxpat.py verify`, and convert-time checking — with no additional wiring.
 
-     **Overlaps** the `extract_spec` repair task (first entry in this queue), whose work item (d) is the same multiple-marker / unparseable-embed check. Whichever task runs first should build it in `rules.py` and the other should consume it rather than reimplementing. Note that the `extract_spec` task additionally needs the *converter-side* fix (a discriminator so `extract_spec` picks the real embed rather than the first marker-bearing box); this item covers only the detection rule.
+     **The overlap this used to note is resolved.** The `extract_spec` repair task (its work item (d)) shipped the multiple-marker / unparseable-embed checks 2026-09-16 as `spec-embed-ambiguous` / `spec-embed-corrupt` in `verify_patch_file` — see that task's Done entry. Only the presence half above is still open.
 
   9. **Make the convert summary unmissable when only warnings fire.** From `DESIGN_DECISIONS.md` § (j). Today `convert` blocks loudly on errors but warnings print as individual `[verify]` lines into stderr scroll, where a long build buries them — the patch builds, the operator sees nothing, and a binding-rule violation ships. Add a single highlighted summary line even on a clean-but-warned build, naming the families rather than repeating each hit: `[verify] 3 warnings (presentation, 2 unlabelled controls) — not blocking`. Small, self-contained, no dependencies. Worth doing early precisely *because* item 3 held every principle rule at WARNING — a warning nobody reads is the same as no rule at all, so this is what keeps the held rules doing any work in the meantime.
 
@@ -1156,6 +1145,16 @@ Tasks that are primarily implementation, file editing, or verification — no de
 
   **Scope note.** Do not make the writer emit the old form. `write_patch_file` keeps writing `json.dumps`, which Max reads without complaint. This is read-tolerance only.
 
+- [complete] **`extract_spec` picks the first marker-bearing box — a stray stub shadows the real embed; repair `4step-sequencer.maxpat`** — Found 2026-08-18 while cleaning the gate-flagged attrs. Item (a) (the discriminator) shipped 2026-08-21; item (c) (repairing the patch) shipped 2026-09-09 as a separate commit. Items (b) and (d), plus the `add_tutorial.py` duplicate noted along the way, were the remainder.
+
+  *Completed 2026-09-16.* **(b) Traced — the bypass is not live.** `reconcile_spec` and `maxpat_to_spec` (the only two functions that turn `.maxpat` boxes into spec objects) both build their box list through `_collect_boxes`, which excludes any box whose id is in `_SKIP_BOX_IDS` or whose `code`/`text` carries the spec marker — a guard present since sync's original commit (2026-04-03), before this repo ever added `patches/4step-sequencer.maxpat`. `reconcile_spec` additionally drops any *existing* spec entry that fails to match a live box in either of its two matching passes, so even a stale self-referential `obj-spec-embed` entry already sitting in a prior spec cannot survive a sync — it can never match (its box is excluded from `box_by_id`) and is therefore never carried into `updated_objects`. `4step-sequencer.maxpat` was committed already-corrupt on 2026-06-21 as "untracked from a prior session," with no earlier commit in this repo to trace further; since the guard already existed everywhere sync could have touched it, the self-reference predates this repo's `spec2maxpat.py` sync tooling — most likely a hand-edit or an ad hoc pre-consolidation script, not a defect in the current converter. No fix needed; nothing here is reproducible today.
+
+  **(d) Two new preliminary findings in `verify_patch_file`** (`spec2maxpat.py`, same shape as the existing `spec-stale` check): `spec-embed-ambiguous` (WARNING) fires when more than one box carries `--- CLAUDE2MAX SPEC ---` — previously only a stderr line from `extract_spec`, now also a structured finding naming the chosen box and every ignored one, so a decoy left in a patch no longer reads as clean. `spec-embed-corrupt` (ERROR) fires when the chosen embed raises `SpecEmbedError` — previously the gate silently fell back to `native-scopes` mode with only a console line; now that fallback carries a finding saying `convert` must not run until the embed is repaired. Both are cheap: `_spec_embed_candidates(data)` is computed once and reused for both checks. Tests: `tests/test_spec_embed_discriminator.py` gained `test_verify_patch_file_reports_ambiguous_marker`, `test_verify_patch_file_silent_on_ordinary_patch`, and an extension to the existing corrupt-embed test asserting the new finding and `ok is False` (10 cases now, up from 8). Swept `patches/` afterward: 0 new findings — no patch in the repo currently carries either defect.
+
+  **`add_tutorial.py`'s duplicate `extract_spec` — deleted, not fixed.** It was never called anywhere in the codebase (confirmed by grep across every `.py` file) — `c2m-explain/c2m_explain.py` imports `add_tutorial` for `generate_steps` / `find_nearby_comment` / `describe_object` only, and `add_tutorial.py`'s own `main()` reads boxes directly without going through it. Two implementations of one scan, per the smell the task named, but the second implementation was dead weight rather than a live risk; removed the function and its now-unused `SPEC_MARKER_BEGIN` / `SPEC_MARKER_END` constants rather than routing it through the canonical `spec2maxpat.extract_spec` for no caller.
+
+  **Tests:** 118 repo tests (`pytest tests/`) and 115 MCP server tests (`mcp_server/.venv/bin/python -m pytest mcp_server/tests`) pass. Docs: `patching/MAX_PATCHING.md` > *A scan that returns the first match needs a discriminator…* appended with the 2026-09-16 fix.
+
   **Why it matters.** Sixteen years of John's corpus predate the current format. Any session that opens one of those patches today gets told it is not a Max patch, which sends the reader looking for a corrupt file instead of a serialization difference.
 
 - [complete] **Check every patch in `patches/` with `sync --check` and repair the two that fail** — Added by John 2026-09-08 after the new staleness check (`spec2maxpat.spec_matches_patch`, surfaced as `python3 spec2maxpat.py sync -i <patch> --check` and as the `spec-stale` warning in `verify_patch`) was run over `patches/` for the first time. Five of seven patches match their boxes. Two do not, and both are exactly the failure `CLAUDE.md > Workflow > A patch that arrives from elsewhere is stale` describes: any `convert` of either file would silently rewrite the boxes from a spec that does not describe them.
@@ -1283,30 +1282,23 @@ a silent denial drops 8,815 of 11,873 files (74% of the corpus) and the
 resulting totals still look plausible. One `find ~/Documents/"Max 9"/Packages
 -name "*.maxhelp" | wc -l` before starting is the whole check.
 
-#### Group A — spec-embed hazard. Strict internal order.
+#### Group A — spec-embed hazard. CLOSED 2026-09-16.
 
 Was the only item in the queue that could destroy work: converting
 `4step-sequencer.maxpat` emitted a 27-character stub and wiped 24 boxes, with no
-warning. **Step 1 shipped 2026-08-21, so that path is now closed** — the patch is
-still unrepaired, but every route into it fails loudly instead of quietly
-succeeding. The remaining steps are diagnosis, detection, and repair.
+warning. All four steps are done — see the `extract_spec` task's Done entry for
+the full account of each.
 
-1. ~~**`extract_spec` discriminator** (task item a)~~ — **DONE 2026-08-21.** It was
-   the change that makes `convert` non-destructive, and it is in. `extract` and
-   `sync` on `4step-sequencer.maxpat` now both exit 1 and write nothing, naming
-   the decoy (`obj-22`) and the truncation point (line 284 of a 4,403-char body).
-   Steps 2–4 below are unchanged and still pending.
-2. **Trace the `_SKIP_BOX_IDS` bypass** (task item b). **[CHANGED]** — must
-   precede the repair, not accompany it. If a sync path still writes the
-   spec-embed box into the spec as an object, repairing `4step-sequencer` *via
-   sync* reproduces the self-referential spec the repair exists to remove.
-3. **Detection rules** — "more than one box carries the spec marker" and "embed
-   present but does not parse" (task item d ≡ MCP-enforcement **item 8**).
-   **[CHANGED]** — before the repair, not after. Today exactly one affected
-   patch is known and the blast radius is unmeasured; the rule is what measures
-   it. Build it in the rule library per the existing cross-reference; keep the
-   converter-side discriminator in step 1.
-4. **Repair `4step-sequencer` + anything step 3 surfaces** (task item c).
+1. ~~**`extract_spec` discriminator** (task item a)~~ — **DONE 2026-08-21.**
+2. ~~**Trace the `_SKIP_BOX_IDS` bypass** (task item b)~~ — **DONE 2026-09-16.**
+   Traced, not fixed: `reconcile_spec` / `maxpat_to_spec` have excluded
+   marker-bearing boxes since sync's original commit, so the self-reference
+   predates this repo's tooling and is not reproducible today.
+3. ~~**Detection rules** (task item d)~~ — **DONE 2026-09-16** as
+   `spec-embed-ambiguous` / `spec-embed-corrupt` in `verify_patch_file`
+   (`spec2maxpat.py`), not in the rule library — see MCP-enforcement item 8(a).
+4. ~~**Repair `4step-sequencer`** (task item c)~~ — **DONE 2026-09-09**, ahead
+   of steps 2–3; `sync --check` on it reports clean.
 
 #### Group B — corpus
 

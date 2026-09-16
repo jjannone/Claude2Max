@@ -21,10 +21,6 @@ from collections import defaultdict, deque
 from pathlib import Path
 from textwrap import dedent
 
-SPEC_MARKER_BEGIN = "--- CLAUDE2MAX SPEC ---"
-SPEC_MARKER_END = "--- END SPEC ---"
-
-
 # Symbolic Max operators have refpages under their alphabetic spelling.
 # Verified against /Applications/Max.app/Contents/Resources/C74/docs/refpages/
 # (max-ref + msp-ref). `/` has no refpage; left to fall through.
@@ -193,24 +189,6 @@ OBJ_DESCRIPTIONS = {
 def load_maxpat(path):
     with open(path) as f:
         return json.load(f)
-
-
-def extract_spec(maxpat):
-    """Return embedded spec dict, or None."""
-    for wrap in maxpat["patcher"]["boxes"]:
-        box = wrap["box"]
-        if box.get("id") == "obj-spec-embed":
-            code = box.get("code", "")
-            m = re.search(
-                re.escape(SPEC_MARKER_BEGIN) + r"\s*(.*?)\s*" + re.escape(SPEC_MARKER_END),
-                code, re.DOTALL,
-            )
-            if m:
-                try:
-                    return json.loads(m.group(1))
-                except json.JSONDecodeError:
-                    pass
-    return None
 
 
 # ---------------------------------------------------------------------------

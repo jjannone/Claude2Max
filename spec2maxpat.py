@@ -727,6 +727,31 @@ def verify_patch_file(path, resolver=None, use_resolver=True, stream=sys.stderr)
     if not use_resolver:
         active_resolver = None
 
+    # Preliminary findings about the embed's own health — both are silent
+    # today (the discriminator resolves them deterministically and the
+    # SpecEmbedError fallback only prints), but a stale decoy box or a
+    # truncated embed is exactly the latent damage that made `convert` emit a
+    # near-empty patch for 4step-sequencer.maxpat with nothing reported clean.
+    candidates = _spec_embed_candidates(data)
+    ambiguous = None
+    if len(candidates) > 1:
+        chosen = _choose_spec_embed(candidates)
+        losers = ", ".join(_describe_candidate(c) for c in candidates if c is not chosen)
+        ambiguous = {
+            "rule": "spec-embed-ambiguous",
+            "severity": "warning",
+            "location": "(patch boxes)",
+            "message": (f"{len(candidates)} boxes carry the spec marker "
+                        f"'{SPEC_MARKER_BEGIN}' — using {_describe_candidate(chosen)}, "
+                        f"ignoring {losers}. A stale marker-bearing box left in a "
+                        f"patch can shadow the real embed if it ever sorts first; "
+                        f"delete it."),
+            "source": "patching/MAX_PATCHING.md > A scan that returns the first "
+                      "match needs a discriminator whenever the collection can "
+                      "hold more than one match",
+        }
+
+    embed_error = None
     try:
         embedded = extract_spec(data, stream=stream)
     except SpecEmbedError as exc:
@@ -736,10 +761,15 @@ def verify_patch_file(path, resolver=None, use_resolver=True, stream=sys.stderr)
               f"Verifying '{p.name}' from its boxes instead of its embedded spec.",
               file=stream)
         embedded = None
+        embed_error = exc
     if embedded is not None:
         result = _verify_spec(embedded, resolver=active_resolver, base_dir=str(p.parent))
         result["mode"] = "embedded-spec"
         result["scopes_checked"] = sum(1 for _ in _iter_spec_scopes(embedded))
+        if ambiguous is not None:
+            result["violations"].insert(0, ambiguous)
+            result["counts"]["warning"] = result["counts"].get("warning", 0) + 1
+            result["ok"] = False
         # Preliminary finding: in embedded-spec mode every rule below judges
         # the SPEC. If the spec does not match the boxes, every one of those
         # findings is about the wrong object — so say that first.
@@ -778,6 +808,27 @@ def verify_patch_file(path, resolver=None, use_resolver=True, stream=sys.stderr)
             all_v.extend(res["violations"])
             for k in counts:
                 counts[k] += res["counts"].get(k, 0)
+        # This is the branch a corrupt embed falls into (embedded is None), so
+        # the error that put us here — otherwise printed and discarded — must
+        # be named as a finding, not just a console line.
+        prelim = []
+        if embed_error is not None:
+            prelim.append({
+                "rule": "spec-embed-corrupt",
+                "severity": "error",
+                "location": "(embedded spec)",
+                "message": (f"{embed_error} `convert` would consume whatever spec "
+                            f"extract_spec returns here — do not convert from this "
+                            f"patch until it is repaired. Verifying from the "
+                            f"patch's own boxes instead; run `spec2maxpat.py sync` "
+                            f"to rebuild the embed."),
+                "source": "spec2maxpat.py > SpecEmbedError",
+            })
+        if ambiguous is not None:
+            prelim.append(ambiguous)
+        all_v = prelim + all_v
+        for v in prelim:
+            counts[v["severity"]] = counts.get(v["severity"], 0) + 1
         ok = counts["error"] == 0 and counts["warning"] == 0
         summary = (f"{counts['error']} error(s), {counts['warning']} warning(s), "
                    f"{counts['style']} style — {p.name} ({n_scopes} scope(s))")
