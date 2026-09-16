@@ -1,9 +1,9 @@
 # Task Queue
 
-Pending tasks for future sessions. Claude reads this at session start and
-reports any incomplete items to the user before beginning other work.
+Pending tasks for future sessions. At session start Claude reads only the headline of each
+open task and reports them to the user before beginning other work.
 
-**Also read the *Queue Analysis & Hygiene Notes* section at the bottom of this file** for current cross-task relationships, soft prerequisites, supersession notes, and recent hygiene decisions. The analysis is dated; if it's stale relative to the queue contents above, redo it.
+**When picking a task up, read its full entry and the *Queue Analysis & Hygiene Notes* section at the bottom of this file** for current cross-task relationships, soft prerequisites, supersession notes, and recent hygiene decisions. The analysis is dated; if it's stale relative to the queue contents above, redo it.
 
 Format: `[pending]` = not started, `[complete]` = done (move to Done section), `[in progress]` = currently being worked on.
 

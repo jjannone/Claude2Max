@@ -643,8 +643,6 @@ Trigger cases:
 
    Wait for the user's choice before proceeding. If they choose Option B, ask them to describe or paste the layout when they return and you'll handle the spec translation on Sonnet.
 
-   **Periodic check**: Claude Design is evolving rapidly. At the start of any session involving presentation UI work, do a quick web search for recent Claude Design news — new capabilities, API availability, Claude Code integration, or workflow changes. If anything materially affects how it can be used here, update this rule before proceeding.
-
 ### Prompt to switch back to Sonnet
 
 When the analytical or design phase is complete and implementation begins (spec writing, conversion, file editing), say:
@@ -653,7 +651,7 @@ When the analytical or design phase is complete and implementation begins (spec 
 
 ## Before Beginning Any Work
 
-Read and review the entire Claude2Max repo before starting — `CLAUDE.md`, `SPEC_REFERENCE.md`, `TUTORIAL_GUIDELINES.md`, and `spec2maxpat.py` — so your understanding of the current spec format, converter behavior, and conventions is fully up to date. Do not rely on prior session knowledge alone; the repo is the authoritative source.
+Before starting, read `CLAUDE.md`, `SPEC_REFERENCE.md` and `TUTORIAL_GUIDELINES.md` so your understanding of the current spec format and conventions is up to date. Read `spec2maxpat.py` only when the task touches the converter, and then only the functions involved. Do not rely on prior session knowledge alone; the repo is the authoritative source.
 
 **Before constructing or editing any patch**, read `patching/MAX_PATCHING.md`. It contains all patching principles, presentation view guidelines, documentation verification rules, and common pitfalls. Treat its presentation section as a checklist before starting any presentation layout.
 
@@ -1556,8 +1554,8 @@ To stop using the pointer, delete the file or leave it blank.
 ## Work History {!pre-commit}
 
 **At the start of every conversation, and after any gap of more than one hour within a conversation:**
-1. Read `WORK_HISTORY.md` to get up to date with recent changes.
-2. Read `TASK_QUEUE.md` and report any pending tasks to the user before beginning other work. Say something like: "There are N pending tasks in the queue — [list them briefly]. Want to work on any of these, or something else?"
+1. Read the last ~10 entries of `WORK_HISTORY.md`, not the whole file: `grep '^- 20' WORK_HISTORY.md | tail -10`.
+2. Read only the headlines of open tasks in `TASK_QUEUE.md` — `grep -n '^- \[\(pending\|in progress\)\]' TASK_QUEUE.md | cut -c1-220` — and report them to the user before beginning other work. Read a task's full entry only when picking it up. Say something like: "There are N pending tasks in the queue — [list them briefly]. Want to work on any of these, or something else?"
 
 To detect a long gap within a conversation, run this on every incoming message:
 ```bash
