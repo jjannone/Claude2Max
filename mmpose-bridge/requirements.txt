@@ -1,0 +1,18 @@
+# MMPose → OSC bridge dependencies.
+#
+# The OSC + camera layer is light; MMPose pulls in the OpenMMLab stack.
+# Install python-osc + opencv first to test the bridge wiring, then add MMPose.
+
+# --- OSC + camera (small, install these first) ---
+python-osc>=1.8
+opencv-python>=4.8
+
+# --- MMPose stack (heavier; follow the official install for your platform) ---
+# GPU users: install a CUDA-matched torch/torchvision FIRST, then the rest.
+#   https://mmpose.readthedocs.io/en/latest/installation.html
+torch>=2.0
+torchvision>=0.15
+mmengine>=0.10
+mmcv>=2.0.0
+mmdet>=3.2          # detector for top-down models (--model human)
+mmpose>=1.3
