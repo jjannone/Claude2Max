@@ -251,7 +251,7 @@ Most Max objects only trigger output from inlet 0 (hot). These objects have two 
 
 | Object | Correct outlets | Common mistake |
 |--------|----------------|----------------|
-| `playlist~` | 5 (audio L, audio R, position, start/done list, dictionary) | Assumed 3 — and this table said so until 2026-08-21. It is also a **UI maxclass**, not a `newobj`, and is absent from `MAXCLASS_DEFAULTS` / `UI_SIZES`, so a spec must supply `inlets` / `outlets` / `outlettype`. Since 2026-09-15 `size` is no longer needed: the converter reads 350 × 240 from `playlist~.maxhelp` (see *UI classes: where the converter gets default size*). Supply one only to override that. See `patching/MAX_PATCHING.md`. |
+| `playlist~` | 5 (audio L, audio R, position, start/done list, dictionary) | Assumed 3 — and this table said so until 2026-08-21. It is also a **UI maxclass**, not a `newobj`. Since 2026-09-15 a spec needs neither its ports nor its size: the converter reads 1 in / 5 out from `playlist~.maxhelp` (see *UI classes: where the converter gets ports*) and 350 × 240 from the same file (see *...gets default size*). Supply either only to override. See `patching/MAX_PATCHING.md`. |
 | `adsr~` | 4 (envelope~, trigger~, mute, dump) | Assumed 1–2 |
 | `live.gain~` | 5 (sig L, sig R, param value, raw 0–1, dB list) | Assumed 2 |
 | `dict` | 5 (dict, value, keys list, names list, status) | Assumed 2–3 |
@@ -634,6 +634,19 @@ For instance: a Max patch with a START button, a status text comment, a number b
   ]
 }
 ```
+
+### UI classes: where the converter gets ports
+
+For any box whose `type` is not `newobj` (`chooser`, `umenu`, `panel`, `textbutton`, `live.text`, `filtergraph~`, …), `ui_io()` in `spec2maxpat.py` resolves inlets, outlets and outlet types in this order:
+
+1. **`MAXCLASS_DEFAULTS`** — hand-verified exceptions.
+2. **The class's own C74 help file** (`chooser.maxhelp`) — the boxes Max saved. Used only when every box of that class in the file has the same counts. This source carries real outlet types and is right where a refpage is wrong (`live.scope~` saves 2 in / 1 out; its refpage says 1 / 0).
+3. **The refpage** (`chooser.maxref.xml`).
+4. **1 inlet / 1 outlet** when none of the above exists.
+
+Before 2026-09-15 only step 1 existed, so about fifty UI classes converted with one inlet and one outlet whatever Max gives them. A spec's `inlets` / `outlets` / `outlettype` still override all four. Supply them for boxes whose ports come from their contents: `bpatcher`, `v8.codebox`, `codebox~`. Those stay at 1 / 1 because no lookup can know what they will hold.
+
+This is the sibling of the section below, which resolves the same kind of box's *size* from the same help file. Both are guarded the same way: a source of truth for the cases they cover, and silent about the rest.
 
 ### UI classes: where the converter gets default size
 

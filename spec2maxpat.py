@@ -799,6 +799,16 @@ MAXCLASS_DEFAULTS = {
     "scope~":   {"numinlets": 2, "numoutlets": 0, "outlettype": []},
     "number~":  {"numinlets": 2, "numoutlets": 2, "outlettype": ["signal", "float"]},
     "live.gain~": {"numinlets": 2, "numoutlets": 5, "outlettype": ["signal", "signal", "", "float", "list"]},
+    # Ports set by the box's contents, not its class: a bpatcher has one per
+    # inlet / outlet box in the patcher it loads, a v8.codebox one per declared
+    # inlet / outlet. The help corpus shows every combination (bpatcher 0/1,
+    # 1/1, 2/0, 2/1, …), so no lookup can give the right answer; these keep the
+    # converter's long-standing 1 / 1 so ui_io() does not fall through to a
+    # help-file or refpage count that is no more right (bpatcher 1/0,
+    # v8.codebox 2/1, when 13 of 14 saved v8.codebox boxes are 1/1). A spec
+    # wiring one supplies `inlets` / `outlets`.
+    "bpatcher": {"numinlets": 1, "numoutlets": 1, "outlettype": [""]},
+    "v8.codebox": {"numinlets": 1, "numoutlets": 1, "outlettype": [""]},
 }
 
 # Common newobj inlet/outlet overrides based on object name
@@ -1272,6 +1282,126 @@ class RefpageCache:
 REFPAGE_CACHE = RefpageCache()
 
 
+_HELP_FILES = {}   # id(c74) -> {maxclass: Path}
+
+
+def _c74_help_files(c74):
+    """`{maxclass: help file}` for Max's own help patches, built once per root.
+
+    `chooser` -> chooser.maxhelp. Two readers share it, and they must see the
+    same file for a class or they would disagree about the same box: one takes
+    the class's ports from it (HelpBoxCache), the other its default size
+    (HelpSizeCache)."""
+    key = id(c74)
+    if key not in _HELP_FILES:
+        files = {}
+        if c74 is not None:
+            for pattern in ("help/**/*.maxhelp", "packages/*/help/**/*.maxhelp"):
+                for f in sorted(c74.glob(pattern)):
+                    files.setdefault(f.name[: -len(".maxhelp")], f)
+        _HELP_FILES[key] = files
+    return _HELP_FILES[key]
+
+
+def _help_patcher(c74, maxclass):
+    """The parsed help patcher for a class, or None."""
+    f = _c74_help_files(c74).get(maxclass)
+    if f is None:
+        return None
+    try:
+        data = json.loads(f.read_text(errors="replace"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    if isinstance(data, dict) and isinstance(data.get("patcher"), dict):
+        return data["patcher"]
+    return None
+
+
+def _walk_help_boxes(patcher, maxclass, visit):
+    """Call `visit(box)` for every box of `maxclass`, at any nesting depth."""
+    for w in patcher.get("boxes", []):
+        b = w.get("box", {})
+        if b.get("maxclass") == maxclass:
+            visit(b)
+        if isinstance(b.get("patcher"), dict):
+            _walk_help_boxes(b["patcher"], maxclass, visit)
+
+
+class HelpBoxCache:
+    """
+    Port counts for a UI maxclass as Max itself saves them, read from the boxes
+    of that class in its own C74 help file (`chooser` -> chooser.maxhelp).
+
+    Why this comes before the refpage for UI classes: a help file is Max's own
+    output, so it carries the real outlet types (the refpages write the
+    placeholder OUTLET_TYPE, which parses to ""), and it is right where the
+    refpage under-documents a class — live.scope~ saves 2 in / 1 out against a
+    refpage of 1 / 0, live.adsrui 10 / 10 against 1 / 0, mira.frame 0 / 0.
+
+    A help file shows an object in several configurations, and some classes
+    change their ports with an attribute or with their contents (`plot~` with
+    its plot count, `bpatcher` and `v8.codebox` with what they hold). So the
+    help file is used only when every box of the class in it agrees on the
+    counts; otherwise lookup() returns None and the caller asks the refpage.
+    """
+
+    def __init__(self, c74):
+        self._c74   = c74
+        self._cache = {}
+
+    def lookup(self, maxclass):
+        """Return {numinlets, numoutlets, outlettype}, or None when there is no
+        help file, no box of the class in it, or its boxes disagree."""
+        if maxclass in self._cache:
+            return self._cache[maxclass]
+        result = None
+        patcher = _help_patcher(self._c74, maxclass)
+        if patcher is not None:
+            counts, types = set(), collections.Counter()
+
+            def visit(b):
+                if "numoutlets" in b:
+                    counts.add((b.get("numinlets"), b["numoutlets"]))
+                    types[tuple(b.get("outlettype", []))] += 1
+
+            _walk_help_boxes(patcher, maxclass, visit)
+            if len(counts) == 1:
+                (ni, no), = counts
+                result = {"numinlets": ni, "numoutlets": no,
+                          "outlettype": list(types.most_common(1)[0][0])}
+        self._cache[maxclass] = result
+        return result
+
+
+HELP_BOX_CACHE = HelpBoxCache(REFPAGE_CACHE._c74)
+
+
+def ui_io(maxclass):
+    """Inlet/outlet profile for a box that is not a `newobj`.
+
+    Order: MAXCLASS_DEFAULTS (hand-verified exceptions), the class's own help
+    file, its refpage, then 1 in / 1 out. Before 2026-09-15 only the table was
+    consulted, so every UI class missing from it — chooser, umenu, panel,
+    textbutton, live.text, filtergraph~, playlist~ and some fifty more — was
+    written with one inlet and one outlet whatever Max gives it, and a cord from
+    any outlet past the first pointed at nothing.
+
+    The size sibling is resolve_box_size, which reads the same help file. Adding
+    a step here steals inputs from the step below it, so see CLAUDE.md > *When
+    You Add a Step to a Chain of Fallbacks, Check What It Steals*.
+    """
+    if maxclass in MAXCLASS_DEFAULTS:
+        return dict(MAXCLASS_DEFAULTS[maxclass])
+    saved = HELP_BOX_CACHE.lookup(maxclass)
+    if saved is not None:
+        return dict(saved)
+    rp = REFPAGE_CACHE.lookup(maxclass)
+    if rp is not None:
+        return {"numinlets": rp["numinlets"], "numoutlets": rp["numoutlets"],
+                "outlettype": list(rp["outlettype"])}
+    return {"numinlets": 1, "numoutlets": 1, "outlettype": [""]}
+
+
 class PackageObjectsCache:
     """
     Lazy lookup of installed-package object I/O from package_objects.json.
@@ -1413,18 +1543,7 @@ class HelpSizeCache:
 
     def __init__(self, c74):
         self._c74   = c74
-        self._files = None   # lazy; maxclass -> help file Path
         self._cache = {}
-
-    def _help_files(self):
-        if self._files is None:
-            files = {}
-            if self._c74 is not None:
-                for pattern in ("help/**/*.maxhelp", "packages/*/help/**/*.maxhelp"):
-                    for f in sorted(self._c74.glob(pattern)):
-                        files.setdefault(f.name[: -len(".maxhelp")], f)
-            self._files = files
-        return self._files
 
     def lookup(self, maxclass):
         """Return (w, h) ints, or None when the class has no help file or no
@@ -1432,26 +1551,16 @@ class HelpSizeCache:
         if maxclass in self._cache:
             return self._cache[maxclass]
         result = None
-        f = self._help_files().get(maxclass)
-        if f is not None:
-            try:
-                data = json.loads(f.read_text(errors="replace"))
-            except (OSError, json.JSONDecodeError):
-                data = None
+        patcher = _help_patcher(self._c74, maxclass)
+        if patcher is not None:
             seen = []
 
-            def walk(patcher):
-                for w in patcher.get("boxes", []):
-                    b = w.get("box", {})
-                    if b.get("maxclass") == maxclass:
-                        r = b.get("patching_rect")
-                        if isinstance(r, list) and len(r) >= 4:
-                            seen.append((float(r[2]), float(r[3])))
-                    if isinstance(b.get("patcher"), dict):
-                        walk(b["patcher"])
+            def visit(b):
+                r = b.get("patching_rect")
+                if isinstance(r, list) and len(r) >= 4:
+                    seen.append((float(r[2]), float(r[3])))
 
-            if isinstance(data, dict) and isinstance(data.get("patcher"), dict):
-                walk(data["patcher"])
+            _walk_help_boxes(patcher, maxclass, visit)
             if seen:
                 (wh, n), = collections.Counter(seen).most_common(1)
                 if n == 1:            # no mode at all -> median of each side
@@ -1965,8 +2074,7 @@ def build_box(user_id, obj_spec, index, x, y, script_dirs=None):
     text = obj_spec.get("text", "")
 
     # Determine inlet/outlet profile
-    defaults = MAXCLASS_DEFAULTS.get(maxclass, {"numinlets": 1, "numoutlets": 1, "outlettype": [""]})
-    io_info = dict(defaults)
+    io_info = ui_io(maxclass)
 
     # For newobj, try to guess from text
     if maxclass == "newobj" and text:
