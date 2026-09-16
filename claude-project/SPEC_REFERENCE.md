@@ -27,6 +27,8 @@ into a patch **inside Max** with `patchgen.js`, so:
 | `name` | no | none | Displayed as a title comment at the top of the patch |
 | `width` | no | 800 | Patcher window width in pixels |
 | `height` | no | 600 | Patcher window height in pixels |
+| `bglocked` | no | unset | `1` locks the background layer (Max's *View > Lock Background*): background objects — presentation panels — can't be selected while editing. Written to the patcher only when set; `sync` mirrors the patcher's value back. Required whenever the patch has presentation panels — see `patching/MAX_PATCHING.md` > *Presentation panels live in the background layer*. |
+| `patcher_extras` | no | unset | Patcher-level state Max writes that is not a box, carried verbatim: `snapshot` (the Snapshots panel's stored snapshots, values keyed by parameter long name) and `parameters` (Max's box-id → parameter-name registry, which Max rebuilds on save). `sync` fills it from the file and removes it when the operator deletes the snapshots in Max; `convert` writes it back. Do not author those two — they exist so a snapshot stored in Max survives the next convert (delay-shootout, 2026-09-09). Two keys *are* authored here: `showontab` and `showrootpatcherontab`, Max's patcher-window tabs. Put `"patcher_extras": {"showontab": 1}` in a `p` box's `patcher` sub-spec and Max shows that subpatcher as a tab of the parent window, titled with the box's name (`p "1 Key sends"`, quotes for spaces); `showrootpatcherontab` on the root decides whether the parent itself gets a tab. This is how every C74 help file is built, and `thispatcher setactivetab <name>` switches tabs. `sync` mirrors both on the root and, since 2026-09-13, inside nested `patcher` sub-specs. |
 | `objects` | yes | — | Dict of named objects (see below) |
 | `connections` | yes | — | Array of connections between objects |
 
@@ -53,10 +55,11 @@ The object ID (e.g. `"my_metro"`) is only used within the spec for wiring connec
 | `text` | depends | Object text — required for `newobj`, `message`, `comment` |
 | `pos` | no | Explicit position as `[x, y]` — overrides auto-layout |
 | `size` | no | Explicit **patching-view** size as `[width, height]` — always two elements; the converter unpacks it as `w, h` and a one-element list raises. Overrides the object's default box size. Set only when the content needs it (wide `message`/`comment`, clipped routing text). Resizing for layout belongs in `presentation_rect`, not here — see *Preserve each object's default box size in the patching view* in `patching/MAX_PATCHING.md` § Common Pitfalls. |
-| `inlets` | no | Override number of inlets |
+| `inlets` | no | Override number of inlets. `sync` always sets `inlets`, `outlets`, and `outlettype` from the saved box — Max is the authority on an object's ports, and the converter's refpage guess disagreed with saved `kslider`, `midiformat`, `panel`, and `r` boxes. |
 | `outlets` | no | Override number of outlets |
 | `outlettype` | no | Override outlet types array |
 | `attrs` | no | Dict of extra Max attributes to set on the box |
+| `box_extras` | no | Box-level state Max writes on save that no other spec field describes, carried verbatim: a `vst~` plug-in `snapshot` and `autosave`, `parameter_enable`, a panel's `angle` / `mode` / `proportion`, `lastchannelcount` on `live.gain~`, a subpatcher's Inspector `saved_object_attributes`. The box-level twin of the root `patcher_extras`. `sync` fills it from the file (every key that is not derived by the converter and not in the `attrs` whitelist) and removes what Max removed; `convert` writes it back without overriding anything the spec authors elsewhere. Never author it. Exists so that convert cannot lose an edit the user made in Max — rule: `CLAUDE.md > Never Use convert Unless It Is Specifically Needed`. |
 | `presentation` | no | Position in presentation view: `[x, y]` or `[x, y, w, h]`. Objects with this field appear in the presentation. The canonical form emitted by extract/sync is the 4-element list. |
 | `presentation_rect` | no | Alternative spelling of `presentation` as `[x, y, w, h]`. Accepted on input — when both are present, `presentation_rect` wins. Sync emits everything as `presentation` to keep the spec canonical. |
 | `patcher` | no | Nested spec for subpatchers (see below) |
@@ -108,7 +111,7 @@ These don't need a `text` field:
 | Type | Description |
 |------|-------------|
 | `"ezdac~"` | Audio output toggle (speaker icon) |
-| `"ezadc~"` | Audio input toggle (mic icon) |
+| `"ezadc~"` | Audio input toggle (mic icon). Its button is DSP on/off, not a mute — give the input a `toggle` → `*~` mute that loads muted (`patching/MAX_PATCHING.md` > *Live input always has a mute*). |
 | `"gain~"` | Audio gain slider |
 | `"meter~"` | Level meter |
 | `"scope~"` | Oscilloscope display |
@@ -142,15 +145,22 @@ These automatically get `parameter_enable` set:
 
 ```json
 {
-  "type": "newobj",
-  "text": "v8 mylogic.js",
-  "inlets": 1,
-  "outlets": 4,
-  "outlettype": ["", "", "bang", "int"]
+  "objects": {
+    "logic": {
+      "type": "newobj",
+      "text": "v8 mylogic.js @embed 1",
+      "inlets": 1,
+      "outlets": 4,
+      "outlettype": ["", "", "bang", "int"]
+    },
+    "logic_embed": { "type": "newobj", "text": "loadmess embed 1" }
+  },
+  "connections": [["logic_embed", 0, "logic", 0]]
 }
 ```
 
 - The `.js` file lives in the same directory as the `.maxpat`.
+- **Always add `@embed 1` in the text AND a `[loadmess embed 1]` feeding the box** (`CLAUDE.md > Embed the Script in Every v8 Box`). The attribute makes Max use the stored copy when the `.js` is missing; the message makes Max keep the copy when it saves with the `.js` present (verified in Max 9, 2026-09-10 — the attribute alone is overridden on save). The converter reads the file and stores the source in the box, so the patch runs when the `.js` does not travel with it. On disk the box carries `filename` plus a `textfile` block `{text, filename, flags, embed, autowatch}` — the shape Max writes for `v8 videotester @embed 1` in its own `v8.maxhelp`. Creation arguments go between the filename and the attribute: `v8 highlight.js 15 @embed 1`. Convert with `-o` next to the `.js` (the converter searches the output folder, the spec folder, and their `code/` / `javascript/` subfolders); the verifier warns `script-not-embedded` when the attribute is missing.
 - Incoming messages are dispatched to JS functions by selector: `bang` → `function bang()`, `setmode 2` → `function setmode(val)`, etc.
 - Set inlet/outlet counts in JS with `inlets = N; outlets = N;` globals.
 - **Label every inlet and outlet in the script** with `setinletassist(n, "text")` / `setoutletassist(n, "text")` right after the counts. The text is the hover tooltip on the box in Max — the v8 equivalent of a subpatcher's inlet comment, and required by the same rule (`CLAUDE.md > What You Must Handle`). Index is zero-based from the left. Confirmed in C74's shipped `jitgltextureset.js`; Max's code editor declares the second parameter as a function, and a plain string works and is what C74 uses.
@@ -220,6 +230,7 @@ Most Max objects only trigger output from inlet 0 (hot). These objects have two 
 
 | Object | Correct outlets | Common mistake |
 |--------|----------------|----------------|
+| `playlist~` | 5 (audio L, audio R, position, start/done list, dictionary) | Assumed 3 — and this table said so until 2026-08-21. It is also a **UI maxclass**, not a `newobj`. Since 2026-09-15 a spec needs neither its ports nor its size: the converter reads 1 in / 5 out from `playlist~.maxhelp` (see *UI classes: where the converter gets ports*) and 350 × 240 from the same file (see *...gets default size*). Supply either only to override. See `patching/MAX_PATCHING.md`. |
 | `adsr~` | 4 (envelope~, trigger~, mute, dump) | Assumed 1–2 |
 | `live.gain~` | 5 (sig L, sig R, param value, raw 0–1, dB list) | Assumed 2 |
 | `dict` | 5 (dict, value, keys list, names list, status) | Assumed 2–3 |
@@ -297,7 +308,7 @@ When placing a `live.*` object on a light-background theme (e.g. soviet, swiss, 
 }
 ```
 
-Do **not** use `patcher.bglocked` as a workaround — it changes the patcher canvas color globally and does not reliably affect selection chrome on live objects.
+`bglocked` on the patcher is unrelated to this problem. It locks the background layer so background objects (presentation panels) cannot be selected while editing — see `patching/MAX_PATCHING.md` > *Presentation panels live in the background layer*. It does not touch the canvas color or the selection chrome of `live.*` objects, so it is neither a workaround here nor something to avoid because of this note.
 
 ## Object Relationships
 Some objects must be used in pairs or have strong conventional partners.
@@ -323,11 +334,11 @@ Some objects must be used in pairs or have strong conventional partners.
 
 ### Z-order in .maxpat files
 
-In Max, the order of objects in the `boxes` array determines their visual stacking: **earlier items render on top** (in front), later items render behind. This matters for:
+In Max, the order of objects in the `boxes` array determines their visual stacking: **later items draw on top** (in front), earlier items sit behind (corrected 2026-09-09 — this section used to say the opposite; see `patching/MAX_PATCHING.md` > *Max .maxpat Internals*). This matters for:
 
-- **Annotation comments** — place first in the array so they appear above all patch objects
-- **Background panels** — place last in the array so they render behind everything
-- This is the opposite of some GUI frameworks where later items are "on top"
+- **Annotation comments and click targets** — declare them after the objects they must cover (a transparent button over a title comment goes after the comment)
+- **Background panels** — render behind everything. The converter places every `panel` box after every non-panel box on its own; the spec author's part is `background: 1` on each presentation panel and `bglocked: 1` at the spec root (see `patching/MAX_PATCHING.md` > *Presentation panels live in the background layer*).
+- The same convention as most drawing APIs: paint order, last on top
 
 ### Bubble comments (@bubbleside)
 
@@ -402,6 +413,8 @@ This replaces two earlier binding sections here ("Always hide redundant message 
 ## Subpatchers
 Any `newobj` with text starting with `p` can contain a nested patcher. Add a `patcher` field with the same spec structure. Use `inlet` and `outlet` types inside to define the subpatcher's inlets and outlets:
 
+`sync` reconciles a nested `patcher` sub-spec against the live subpatcher the same way it reconciles the root, recursively: a box added, moved, or deleted inside a `p` in Max is captured, connections are rebuilt, and the nested `bglocked` / `patcher_extras` are mirrored. A patch that arrives with subpatchers and no spec gets a nested sub-spec per `p` box. (Before 2026-09-13 only the root was reconciled, and an edit inside a subpatcher was reverted by the next convert.)
+
 ```json
 {
   "objects": {
@@ -424,8 +437,33 @@ Any `newobj` with text starting with `p` can contain a nested patcher. Add a `pa
 }
 ```
 
+### Embedding an existing patcher verbatim — `maxpat`
+
+A `bpatcher` object may carry a `maxpat` field holding a **raw patcher dict** copied from a saved file — the `patcher` value of a box in a `.maxpat` / clipping, not a Claude2Max spec. The converter writes it back unchanged with `embed: 1`, which is exactly what pasting a clipping into a patch does. Inlet and outlet counts come from the embedded patcher's `inlet` / `outlet` boxes unless `inlets` / `outlets` are given. `sync` mirrors the live patcher back into the field, so a dial turned inside the module in Max survives the next convert.
+
+```json
+"gv_bp": {
+  "type": "bpatcher", "pos": [30, 1540], "size": [332, 116],
+  "attrs": {"varname": "RV_GIGAVERB", "viewvisibility": 1, "bgmode": 0, "border": 0},
+  "maxpat": { "fileversion": 1, "boxes": [ ... ], "lines": [ ... ] }
+}
+```
+
+Use it for BEAP modules and any other clipping meant to be pasted rather than loaded by name — see `patching/MAX_PATCHING.md` > Common Pitfalls (*BEAP clipping files are wrappers*). Do not use it for patchers you are authoring: those are `patcher` sub-specs (above), which the converter lays out and verifies.
+
 ## Extra Attributes
 Use `attrs` to set any additional Max box attributes:
+
+### What `sync` does to `attrs` — the live box wins on any disagreement
+
+
+1. **An attribute the spec already names follows the box** whenever the box carries a different value. An Inspector edit, a `v8ui`'s declared attribute changed in Max, a saved parameter block — the patch is the source of truth and sync rewrites the spec to match (`CLAUDE.md` > *Never Use `convert` Unless It Is Specifically Needed*).
+2. **An attribute the spec does not name is captured only if it is on the allowlist** (`_PRESERVE_ATTRS`, 30 entries — the styling and range attrs, minus a value equal to Max's default for `fontsize` / `fontface` / `fontname`).
+3. **Everything else Max wrote on the box goes to `box_extras`**, verbatim, and comes back on the next convert. That is what keeps a `vst~`'s plug-in snapshot, a `parameter_enable`, a panel's gradient keys.
+
+So a hand-written `attrs` entry is **not** dropped merely because Max did not keep it — sync leaves the spec's value alone unless the box disagrees. A name that does not exist on the object therefore survives the round trip while doing nothing in Max, which is the silent failure *Never Write API Names From Memory* exists to prevent: verify the name, because neither Max nor sync will tell you.
+
+*(A retired branch, `claude/goofy-cori-cc5272`, proposed the opposite — dropping any spec attr Max had not preserved, so a typo could not survive. It was never landed and the design went the other way; recorded here so the question is not reopened without knowing it was asked.)*
 
 ```json
 {
@@ -491,6 +529,7 @@ Concretely:
 - **Set `presentation: 1`** on every UI object the operator needs to see or interact with.
 - **Set `presentation_rect: [x, y, w, h]`** on each such object so it has an explicit position in the presentation layout. The presentation positions are independent of patching positions — optimize each view for its own purpose.
 - **Include comment labels** for every visible control. A control worth showing is worth labelling.
+- **Put every panel on the background layer** — `attrs.background: 1` on the panel and `bglocked: 1` at the spec root — so panels paint behind the controls and cannot be selected while editing. The converter orders panels last on its own. Rule: `patching/MAX_PATCHING.md` > *Presentation panels live in the background layer*.
 - **Omit internal logic objects** (route, prepend, sprintf, message boxes used for routing, debug print, etc.). They live only in the patching view — omit them here rather than marking them `hidden` anywhere.
 
 The only exempt cases are: utility subpatchers that are themselves embedded inside a parent's presentation (the parent supplies the UI), and pure-DSP / pure-utility patches that have no operator at all (codebox modules called from elsewhere).
@@ -564,9 +603,68 @@ For instance: a Max patch with a START button, a status text comment, a number b
 }
 ```
 
+### UI classes: where the converter gets ports
+
+
+2. **The class's own C74 help file** (`chooser.maxhelp`) — the boxes Max saved. Used only when every box of that class in the file has the same counts. This source carries real outlet types and is right where a refpage is wrong (`live.scope~` saves 2 in / 1 out; its refpage says 1 / 0).
+3. **The refpage** (`chooser.maxref.xml`).
+4. **1 inlet / 1 outlet** when none of the above exists.
+
+Before 2026-09-15 only step 1 existed, so about fifty UI classes converted with one inlet and one outlet whatever Max gives them. A spec's `inlets` / `outlets` / `outlettype` still override all four. Supply them for boxes whose ports come from their contents: `bpatcher`, `v8.codebox`, `codebox~`. Those stay at 1 / 1 because no lookup can know what they will hold.
+
+This is the sibling of the section below, which resolves the same kind of box's *size* from the same help file. Both are guarded the same way: a source of truth for the cases they cover, and silent about the rest.
+
+### UI classes: where the converter gets default size
+
+A box's `size` is resolved by one function, `resolve_box_size`, in this order:
+
+1. the spec's own `size`;
+   instance in Max belongs;
+3. the class's own C74 help file (`chooser` → `chooser.maxhelp`), read by
+   `HelpSizeCache`: the most common size among that class's boxes in that file,
+   or the component-wise median when every box is a different size;
+4. `estimate_text_width(text)` × 22 — the text-width estimate.
+
+Step 4 is right only for a box that *displays* its text, so `newobj`, `message`
+and `comment` (`TEXT_SIZED_CLASSES`) skip step 3 and always use it. Every other
+class reaches step 3, which before 2026-09-15 did not exist: a UI class missing
+box text that meant **40 × 22**. `{"type": "chooser"}` converted to a 40 × 22
+box; 71 UI classes with boxes in their own help file were in that state, and the
+repo's eight shootout patches still carry 268 `attrui` boxes stuck at 40 × 22
+from it.
+
+**Step 3 is a fallback, not a source of truth.** Nothing in the Max install
+records the size a new box is created at — it is computed in C per class. Four
+already covers, and all four disagree with it and with each other:
+
+|---|---|
+| the class's own help file | 3 / 28 |
+| modal size across all 3,122 shipped C74 patches | 9 / 28 |
+| the same, restricted to `appversion.major == 9` | 9 / 28 |
+| the 63 shipped `object-prototypes/*.maxproto` | 0 / 25 |
+
+They are all collections of *authored, resized* boxes. The prototypes are styled
+design variants (`inlet` 18 × 18, `ezadc~` 40 × 40, `scope~` 100 × 50), not
+(40, 48) where both the shipped prototype and 72 % of Max 9 instances say
+40 × 40, and it gives `live.toggle`, `live.numbox` and `live.text` the same
+(44, 20) while 96 % of Max 9 `live.toggle` boxes are 15 × 15. So the help-file
+size is only "a size Max itself shipped for this class" — which is a usable box,
+where the text estimate was not.
+
+**The resolution lives in one function because three callers must agree on it:**
+`build_box` writes the size, `presentation_layout` sizes a presentation rect
+with it, and `_size_is_default` decides from it whether `sync` may drop a box's
+`size` field. A caller that resolved differently would drop a `size` that
+`convert` then failed to reproduce, silently resizing the box on the next
+convert. `tests/test_ui_default_size.py` asserts the three agree across every
+class the converter knows.
+
 ### Inlet and Outlet Object Sizes
 
-The default size for `inlet` and `outlet` objects in Max is **30×30 px**. Do not specify a `size` for them in the spec — the converter uses 30×30 automatically. Setting a different size will produce the wrong shape.
+automatically — do not specify a `size` for them in the spec. Note that Max 9's
+own shipped patches are split between 30 × 30 and 25 × 25 (25 × 25 is the more
+common of the two, 58 % of `inlet` boxes), so treat 30 × 30 as this repo's
+convention rather than as a verified fresh-instance default.
 
 ### Arithmetic: Float Output Requires a Float Argument
 
@@ -617,18 +715,34 @@ The `*.`, `+.` etc. variants are also valid float-mode objects, but prefer the f
 
 > When the `v8`/`js` object is a reusable building block (not highly specific patch logic) — and especially when it reimplements, extends, or hybridizes an existing Max object — follow **Building Reusable Objects — Generalize, and Mirror the Vocabulary You Inherit** in `CLAUDE.md`: generalize it, stay backwards-compatible with the object it's based on, reuse the inherited object's message/attribute names, and flag any conflicts for the user rather than silently resolving them.
 
+**`v8` and `js` take their port counts from the box text, not from the script and not from the JSON.** The refpage is explicit: with one int argument "the number of desired outlets is specified", and with two, "the first number specifies the number of outlets and the second number specifies the number of inlets" — default 1 and 1. So a box for 3 inlets and 1 outlet is written
+
+```
+v8 bands_to_matrix.js 1 3
+```
+
+**outlets first, inlets second.** In a spec that belongs in `text`, not in an `attrs` override. The script's own `inlets = 3` / `outlets = 1` globals are worth keeping as self-documentation, and `js` does honour them, but for `v8` the box text is what sizes the ports. Get it wrong and nothing reports it: cords aimed at inlets 1 and 2 collapse onto inlet 0, the `if (inlet === N)` branches never run, and the object sits there producing nothing.
+
+> **Open, and worth one minute in Max before relying on either reading.** The same refpage says `jsarguments` holds "any symbols or numbers" following the filename *or* the port counts, which leaves `v8 foo.js 15` ambiguous: 15 outlets, a script argument, or both. Ten patches under `patches/shootouts/` carry `v8 fx-shootout-highlight.js <N> @embed 1`, where the script reads `jsarguments[1]` as its slot count and declares `outlets = 1`; their saved JSON says 1 inlet and 1 outlet. If Max is in fact giving those boxes N outlets, the JSON and the running object disagree. See the task in `TASK_QUEUE.md`.
+
 **Spec usage** — `v8` is not in the converter's lookup table; always specify inlet/outlet counts:
 
 ```json
 {
-  "type": "newobj",
-  "text": "v8 onesound.js",
-  "inlets": 1, "outlets": 6,
-  "outlettype": ["", "", "", "bang", "bang", "int"]
+  "objects": {
+    "sound": {
+      "type": "newobj",
+      "text": "v8 onesound.js @embed 1",
+      "inlets": 1, "outlets": 6,
+      "outlettype": ["", "", "", "bang", "bang", "int"]
+    },
+    "sound_embed": { "type": "newobj", "text": "loadmess embed 1" }
+  },
+  "connections": [["sound_embed", 0, "sound", 0]]
 }
 ```
 
-**External JS files** — place `.js` files in the same directory as the `.maxpat`. Max resolves them relative to the patch file.
+**External JS files** — place `.js` files in the same directory as the `.maxpat`. Max resolves them relative to the patch file. **And still write `@embed 1`, with a `[loadmess embed 1]` feeding the box**: the converter stores the file's source in the box's `textfile.text`, the message makes Max keep it on save, sync repairs it if a save dropped it, and the box runs even when the `.js` is missing. After editing the `.js`, run `sync` on the patch: sync refreshes the embedded copy from the file, restores a missing file from the embedded copy, and stops with a conflict when the patch is newer than the file and the two differ (`--script-from-disk` / `--script-from-patch` resolve it). Rule and mechanics: `CLAUDE.md > Embed the Script in Every v8 Box`.
 
 **jsui objects** — use `"type": "jsui"` with `attrs: {"filename": "script.js"}`, not `type: "newobj", text: "jsui script.js"`. The `filename` attribute is how Max natively associates a JS file with a jsui; omitting it leaves the object unlinked and non-functional. Always include it:
 
@@ -646,8 +760,9 @@ Use just the filename (not an absolute path) so the patch is portable — Max fi
 
 **`jsui`/`v8ui` attributes — declare custom ones in the script; colors are set in JS, not as attributes.**
 
-- **Custom scalar attributes**: declare in the script with the object-form `declareattribute("dotsize", {default:8, type:"float32", min:"1", max:"40", setter:"set_dotsize", label:"Dot Size"})` plus a `function set_dotsize(v){ dotsize=v; mgraphics.redraw(); }` setter. These become real `@attributes` (settable via `@attr`, message, attrui, Inspector). Set them in a spec via `attrs: {...}` like any box attribute.
+- **Custom scalar attributes**: declare in the script with the object-form `declareattribute("dotsize", {default:8, type:"float", min:1, max:40, setter:"set_dotsize", label:"Dotsize"})` plus a `function set_dotsize(v){ dotsize=v; mgraphics.redraw(); }` setter. Types are `"long"`, `"float"`, `"symbol"` or `"atom"` with numeric `min` / `max`, as `help/max/v8.maxhelp` documents; `"int"` and `"float32"` are not type names (absent from the v8 engine as well, checked 2026-09-14). These become real `@attributes` (settable via `@attr`, message, attrui, Inspector). Set them in a spec via `attrs: {...}` like any box attribute.
 - **The converter's verifier does NOT validate attributes on script-loading objects** (`jsui`, `v8ui`, `js`, `v8`, `mxj`, `gen~`, `jit.gen`, `jit.gl.slab`, `rnbo~`) — their attribute set is open-ended (script-defined), so a refpage check would false-positive on every custom attr. Don't be surprised that `@dotsize` passes verification on a `v8ui`.
+- **Do not rely on a `v8ui` box's saved attribute keys to restore a declared attribute's value.** The converter writes a declared attribute (`mode`, `range`, a custom `@z_clicknotes`) as a plain key on the box, the shape the Zendrum help file showed. Max does not apply those keys at load and does not write them back: a `butter_keys` box saved with `mode: 1` came up in mono mode, and when Live saved the device the keys were gone from the box (2026-09-12/13). The cause is load order — the object's attributes exist only after the script has run, after box keys are applied. So have the patch assert any attribute it depends on by message after load — a `loadmess` into the box, or the engine that drives the board sending `mode 1`, `lohikey 0 127` in its own init — or pass them as `jsarguments`, which Max hands to the script at load. A declared attribute accepts a message of its own name, so the message path is safe.
 - **Colors are set in JavaScript, NOT via `declareattribute`.** No rgba color-attribute declaration form is documented or used in any shipped jsui. The convention (see shipped `jsui_3ddial.js`) is to set colors from `jsarguments` (creation args) and from messages (e.g. `function frgb(r,g,b){...}`), storing them as `[r,g,b,a]` arrays for `mgraphics.set_source_rgba()`. So expose colors as messages (`dotcolor1 r g b a`, `hkeycolor r g b a`, …), not attributes. Max-native rgba uses 0.–1. floats.
 - **The drawing/mouse API** (verified against shipped `jsui_live_barslider.js`, `v8ui-pointer-test.js`): `mgraphics.init()` / `mgraphics.relative_coords = 0` / `mgraphics.autofill = 0` at top level; `function paint()` draws via `mgraphics.set_source_rgba / rectangle / ellipse / move_to / line_to / close_path / fill / stroke / set_line_width`; `mgraphics.size` → `[w,h]`; `function onclick(x,y)` / `ondrag(x,y)` give box-pixel coords; `mgraphics.redraw()` to repaint. Multi-inlet routing via an `inlet` global is NOT verifiable from shipped examples — use one inlet + selector messages.
 

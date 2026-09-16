@@ -15,6 +15,7 @@ authoritative per-skill doc; this README is a one-line discovery aid.
 
 Skill manifests in `.claude/skills/<name>/SKILL.md` are the in-repo source of
 truth. `<tool>/UPSTREAM-SKILL.md` files at the repo root (currently
-`c2m-themes/`, `c2m-explain/`) are snapshot manifests intended for export to
-a separate distribution repo — see `CLAUDE.md` § "Plugin / Slash Commands"
+`c2m-themes/`, `c2m-explain/`) are manifests intended for export to
+a separate distribution repo. `c2m-explain/UPSTREAM-SKILL.md` is generated from
+the in-repo skill by `tools/build_upstream_skills.py`; never edit it by hand — see `CLAUDE.md` § "Plugin / Slash Commands"
 for the distinction.
