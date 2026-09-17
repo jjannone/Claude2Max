@@ -51,7 +51,7 @@ Before writing attributes:
     `mcp__claude2max__lookup_attribute(object_name, attr)` — check one specific attribute
 
 Before composing a chain of 3+ native objects:
-    `mcp__claude2max__search_packages(term)` — 2,944-object library may cover it in one external
+    `mcp__claude2max__search_packages(term)` — 2,943-object library may cover it in one external
 
 ### Before converting — check the whole spec (the gate WILL block guesses)
 

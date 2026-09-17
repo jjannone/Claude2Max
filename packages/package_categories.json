@@ -1,0 +1,802 @@
+[
+  {
+    "name": "Audio analysis: descriptor & control-stream tools",
+    "description": "Routing, smoothing and summarising descriptor or control streams: histograms, meta-controls, threshold routing, demodulation."
+  },
+  {
+    "name": "Audio analysis: descriptor bundles & analysis frames",
+    "description": "All-in-one analyzers that output several descriptors together, feature-extraction libraries for buffers, and objects that capture frames for analysis."
+  },
+  {
+    "name": "Audio analysis: loudness & envelope followers",
+    "description": "Amplitude, RMS, peak and loudness trackers that turn a sound's level into numbers or control signals."
+  },
+  {
+    "name": "Audio analysis: mel bands & MFCCs",
+    "description": "Band energies on mel or Bark scales and MFCC timbre coefficients, live or from buffers."
+  },
+  {
+    "name": "Audio analysis: onsets, attacks & thresholds",
+    "description": "Live detectors that fire when a sound starts, crosses a level or changes character, plus beat and tempo estimates."
+  },
+  {
+    "name": "Audio analysis: partials, peaks & spectra",
+    "description": "Sinusoidal partial tracking, spectral peaks, raw spectrum or spectrogram frames, sine-plus-noise models and impulse-response measurements."
+  },
+  {
+    "name": "Audio analysis: pitch, chroma & harmony",
+    "description": "Pitch and fundamental trackers, pitch-class (chroma) analysis, and roughness or dissonance estimates from partials."
+  },
+  {
+    "name": "Audio analysis: SDIF analysis files",
+    "description": "Reading, writing, packing and unpacking SDIF files that store spectral, pitch, marker and partial-tracking analyses."
+  },
+  {
+    "name": "Audio analysis: slicing sound files & buffers",
+    "description": "Offline analysis that finds onsets, transients, loud regions or tempo changes across a whole buffer and returns slice points or curves."
+  },
+  {
+    "name": "Audio analysis: spectral shape statistics",
+    "description": "Measurements of the spectrum's shape per frame: centroid, spread, skewness, kurtosis, flatness, rolloff, slope, decrease, flux and energy."
+  },
+  {
+    "name": "Audio analysis: timbre qualities",
+    "description": "Descriptors named for how a sound feels, such as brightness, warmth, hardness, noisiness or metallic character."
+  },
+  {
+    "name": "Audio effects: compression & limiting",
+    "description": "Compressors, limiters, levelers and auto-gain objects that control loudness."
+  },
+  {
+    "name": "Audio effects: delay & echo",
+    "description": "Delays and echoes, including feedback, ping-pong, multi-tap, reverse and click-free variable delays."
+  },
+  {
+    "name": "Audio effects: distortion & lo-fi",
+    "description": "Overdrive, fuzz, saturation, waveshaping, wavefolding, clipping, bitcrushing and sample-rate reduction."
+  },
+  {
+    "name": "Audio effects: EQ & DC removal",
+    "description": "Equalizers with bands and shelves, band-splitting crossovers, and filters that remove DC offset."
+  },
+  {
+    "name": "Audio effects: filters & resonators",
+    "description": "Lowpass, highpass, multimode, analog-model and vowel filters, plus tuned resonators and vocoders."
+  },
+  {
+    "name": "Audio effects: gates & transients",
+    "description": "Noise gates, expanders and transient shapers that act on attacks and quiet passages."
+  },
+  {
+    "name": "Audio effects: modulation",
+    "description": "Chorus, flanger, phaser, vibrato, ring modulation and frequency shifting."
+  },
+  {
+    "name": "Audio effects: pitch shift & time stretch",
+    "description": "Pitch shifters, harmonizers, pitch correction and time stretching of live audio or buffers."
+  },
+  {
+    "name": "Audio effects: reverb",
+    "description": "Reverbs of every kind, including plate, hall, shimmer, freeze and convolution reverbs that use an impulse response."
+  },
+  {
+    "name": "Audio effects: stutter & glitch",
+    "description": "Stutters, beat repeats, scrubbing, shuffling, short freezes and other glitch effects."
+  },
+  {
+    "name": "Audio I/O: crossfades & switches",
+    "description": "Fading or switching between two or more audio sources smoothly, with straight, S-shaped or constant-power curves."
+  },
+  {
+    "name": "Audio I/O: gain, mixers & channel strips",
+    "description": "Volume, pan, mute and on/off controls for one channel or many, including multi-channel mixers and click-free gates."
+  },
+  {
+    "name": "Audio I/O: hardware inputs, outputs & audio settings",
+    "description": "Getting sound in from and out to the audio interface, output stages with meters, speaker testers, and setting sample rate or vector size from a patch."
+  },
+  {
+    "name": "Audio I/O: routing matrices & buses",
+    "description": "Sending audio between many inputs and outputs with a matrix or patchbay, and wireless send/receive buses."
+  },
+  {
+    "name": "bach lllls: arithmetic & scaling",
+    "description": "Element-by-element math on whole nested lllls: arithmetic, powers, rounding, clipping, range scaling, snapping to nearest values, expressions, fractions and coordinate conversion."
+  },
+  {
+    "name": "bach lllls: building & reshaping",
+    "description": "Putting lllls together and changing their shape: joining, prepending, collecting, wrapping and flattening levels, grouping, splitting, interleaving, padding, repeating, reversing and rotating."
+  },
+  {
+    "name": "bach lllls: getting & changing elements",
+    "description": "Reading and editing elements at positions or nested addresses, and stepping through an llll one element at a time."
+  },
+  {
+    "name": "bach lllls: matrices & vectors",
+    "description": "Linear algebra on lllls used as matrices and vectors: building, slicing, multiplying, inverting and solving, plus exchange with matrixctrl."
+  },
+  {
+    "name": "bach lllls: number theory & series",
+    "description": "Series generators and whole-number math: arithmetic, geometric and recursive series, primes, divisors, GCD and LCM, factorials, bases and bits, and converting between differences and running totals."
+  },
+  {
+    "name": "bach lllls: sets, combinations & random",
+    "description": "Set operations, counts of occurrences, combinations, permutations and partitions, and random picking, shuffling and weighted choice."
+  },
+  {
+    "name": "bach lllls: sorting, searching & lambda functions",
+    "description": "Sorting, searching and filtering lllls, and transforming them with a custom function patched into a lambda loop."
+  },
+  {
+    "name": "bach lllls: statistics & functions",
+    "description": "Summaries of number lists such as sum, mean, median and deviation, plus breakpoint-function calculus, resampling and a Fourier transform on lists."
+  },
+  {
+    "name": "bach lllls: storage, files & conversion",
+    "description": "Keeping lllls in memory and sharing them by name, reading and writing files and databases, and converting to and from text, dictionaries and folder listings."
+  },
+  {
+    "name": "bach lllls: type tests, comparison & routing",
+    "description": "Checking what an llll contains or how long and deep it is, comparing lllls, and routing data by type, change or key."
+  },
+  {
+    "name": "Buffers & offline: buffer data as lists & SDIF",
+    "description": "Turning buffer samples into Max lists and back, and storing or reading SDIF analysis data."
+  },
+  {
+    "name": "Buffers & offline: channels, sample rate & format",
+    "description": "Selecting, splitting, interleaving and mixing down buffer channels, and changing sample rate or format."
+  },
+  {
+    "name": "Buffers & offline: cutting, joining & fades",
+    "description": "Editing buffers in time: crop, trim silence, slice, split, join, repeat, reverse, rotate, fade and mix."
+  },
+  {
+    "name": "Buffers & offline: impulse responses & measurement",
+    "description": "Measuring rooms and devices, and making, aligning, averaging, inverting, trimming and convolving impulse responses in buffers."
+  },
+  {
+    "name": "Buffers & offline: loading, saving & offline processing",
+    "description": "Reading sound files into buffers, writing them out, reporting buffer details, and running patches offline on buffers."
+  },
+  {
+    "name": "Buffers & offline: math on buffers",
+    "description": "Adding, multiplying, comparing, scaling, thresholding and normalizing buffer contents."
+  },
+  {
+    "name": "Buffers & offline: stretching, wavesets & offline effects",
+    "description": "Offline sound transformations on buffers: extreme time-stretch and freeze, waveset shuffling, morphing, windowing, transient separation and filtering."
+  },
+  {
+    "name": "Buffers & offline: tables, wavetables & envelopes",
+    "description": "Filling buffers with computed shapes: wavetables from harmonics, breakpoint lines and curves, windows, random tables, clicks and envelopes."
+  },
+  {
+    "name": "Computer vision: faces, features & calibration",
+    "description": "Recognising things in an image and relating it to the real camera: face detection and landmarks, feature points and keypoint matching, lens calibration and 3D position."
+  },
+  {
+    "name": "Computer vision: helpers for blobs & shapes",
+    "description": "Objects that only work on another vision object's output to measure shapes: per-blob bounds, centroids, moments, orientation and recognition, and whole-shape roundness, elongation and direction."
+  },
+  {
+    "name": "Computer vision: helpers for points, faces & perspective",
+    "description": "Objects that only work on another vision object's output: picking face parts and stable face points, seeding point tracking, reading lines from a Hough space, finding peaks, perspective transforms, and skipping empty results."
+  },
+  {
+    "name": "Computer vision: motion, tracking & optical flow",
+    "description": "Detecting and following movement in camera images: frame differences, background averages, optical flow, point, blob, colour and region tracking."
+  },
+  {
+    "name": "Computer vision: thresholds, edges & shapes",
+    "description": "Finding and measuring shapes in an image: adaptive thresholds, morphology cleanup, edges and lines, labelling blobs, contours, distance transforms, and centroid, mass and moments."
+  },
+  {
+    "name": "FrameLib: arithmetic & comparison",
+    "description": "Operations on pairs of frames, value by value: add, subtract, multiply, divide, powers, min and max, comparisons, logic, and math expressions."
+  },
+  {
+    "name": "FrameLib: complex numbers",
+    "description": "Math on complex values stored as pairs of real and imaginary frames, such as spectra from an FFT."
+  },
+  {
+    "name": "FrameLib: filters & spectral",
+    "description": "Filtering and smoothing frames, FFT and inverse FFT, windowing, power spectra, convolution and correlation."
+  },
+  {
+    "name": "FrameLib: frame editing",
+    "description": "Cutting, joining and rearranging the values inside frames: chop, split, join, pad, shift, reverse, sort, take a section, look up values, or clean out invalid values."
+  },
+  {
+    "name": "FrameLib: input & output",
+    "description": "Bridges between frames and the rest of Max: capturing audio, overlap-adding back to audio or control signals, messages in and out, reading buffers, sample rate, and context control."
+  },
+  {
+    "name": "FrameLib: rounding, logs & ranges",
+    "description": "One-input math on every value in a frame: absolute value, rounding, roots, exponentials and logs, error functions, clipping, folding, wrapping, range mapping and unit conversion."
+  },
+  {
+    "name": "FrameLib: routing, storage & tags",
+    "description": "Moving frames around and keeping them: routing and selecting streams, multistream packing, delaying and storing frames, and naming values with tags and strings to set parameters."
+  },
+  {
+    "name": "FrameLib: schedulers & generators",
+    "description": "Where frames come from: schedulers that start frames at intervals, audio blocks or listed times, clocks and counters, and generators that fill frames with constants, ramps, random values or stepped patterns."
+  },
+  {
+    "name": "FrameLib: statistics & analysis",
+    "description": "Descriptors that sum up a frame, such as mean, RMS, centroid, peaks and percentiles, plus running statistics that track each value across recent frames."
+  },
+  {
+    "name": "FrameLib: trigonometry & coordinates",
+    "description": "Trigonometric and hyperbolic functions on frame values, conversion between cartesian and polar coordinates, and speaker gains for 3D panning."
+  },
+  {
+    "name": "Generative: chance gates & weighted choice",
+    "description": "Objects that let events through by chance or pick an outcome from a list of weights, including probability gates, step probability patterns and weight builders."
+  },
+  {
+    "name": "Generative: Markov & sequence models",
+    "description": "Markov chains and variable-order models that learn sequences and predict or generate new ones."
+  },
+  {
+    "name": "Generative: music & data generators",
+    "description": "Ready-made generators of notes, MIDI and control data from number sequences, drawings, text or rules, plus objects that glitch, delay or granulate data streams."
+  },
+  {
+    "name": "Generative: quantum circuits",
+    "description": "Tools for building and simulating small quantum circuits and reading their results for composing."
+  },
+  {
+    "name": "Generative: random numbers & no-repeat draws",
+    "description": "Random number generators, including bounded, stepped, log-scaled and shaped distributions, urn-style draws without repeats, seeding, and filters that block repeated values."
+  },
+  {
+    "name": "Generative: random walks, ramps & drift",
+    "description": "Random walks, drunk-style steps, random ramps and envelopes, and slowly wandering offsets added to numbers or signals."
+  },
+  {
+    "name": "Generative: rule systems",
+    "description": "Cellular automata, grammar rewriting such as L-systems, rule-based chaining and genetic-algorithm breeding."
+  },
+  {
+    "name": "Generative: selection & permutation",
+    "description": "Ways of drawing elements from a stored list: at random, without repeats, in cycles, in groups or by stepping to neighbours."
+  },
+  {
+    "name": "Generative: simulations & games",
+    "description": "Physical simulations, flocking, fractals and playable games whose events can trigger notes or data."
+  },
+  {
+    "name": "Gesture & hardware: computer keyboard, mouse & game controllers",
+    "description": "Using the computer keyboard, mouse, trackpad, joysticks and other HID devices as controllers."
+  },
+  {
+    "name": "Gesture & hardware: gesture & trigger detection",
+    "description": "Turning movement or button data into events: thresholds, debouncing, jabs, shakes, holds, onsets in control voltage and footswitch triggers."
+  },
+  {
+    "name": "Gesture & hardware: MIDI, grid & touch controllers",
+    "description": "Ready-made interfaces for specific controllers such as Launchpads, touch surfaces, MPE instruments and phones, plus controller mapping and high-resolution MIDI parsing."
+  },
+  {
+    "name": "Gesture & hardware: serial, Arduino & bytes",
+    "description": "Talking to microcontrollers and devices over serial, Bluetooth or DMX, and packing or unpacking the raw bytes they send."
+  },
+  {
+    "name": "Gesture & hardware: smoothing, scaling & calibration",
+    "description": "Cleaning up sensor and controller streams: moving averages, medians, spike removal, auto-ranging, calibration and axis scaling."
+  },
+  {
+    "name": "Granular: corpus building, tagging & matching",
+    "description": "Analyzing sound files into a corpus, tagging its sounds, and choosing the segment that best matches a target."
+  },
+  {
+    "name": "Granular: corpus players & mosaicing",
+    "description": "Playing back matched corpus segments, including live audio mosaicing and corpus-driven samplers."
+  },
+  {
+    "name": "Granular: granulating live input",
+    "description": "Granulators, grain delays, freezes and micro-loopers that work on incoming audio as it arrives."
+  },
+  {
+    "name": "Granular: granulating stored sounds",
+    "description": "Granulators that read grains from a buffer or container, plus grain clocks and per-grain random helpers."
+  },
+  {
+    "name": "Lists & data: building lists",
+    "description": "Gathering incoming values into lists, generating number rows, repeating values and keeping rolling windows of recent items."
+  },
+  {
+    "name": "Lists & data: bytes, encodings & buffer conversion",
+    "description": "Converting data between formats: ASCII codes, hex, bytes, base64, compression, checksums, and copying between lists and buffer~."
+  },
+  {
+    "name": "Lists & data: change detection, matching & routing",
+    "description": "Passing data only when it changes or matches, and routing messages or list items to different outlets, voices or channels."
+  },
+  {
+    "name": "Lists & data: get, insert & remove items",
+    "description": "Taking items out of a list by position, inserting, replacing or removing items, measuring length, and cutting or interleaving lists."
+  },
+  {
+    "name": "Lists & data: sorting, shuffling & set operations",
+    "description": "Reordering lists (sort, reverse, rotate, shuffle), removing duplicates, testing membership, finding the nearest item and combining lists as sets."
+  },
+  {
+    "name": "Lists & data: storage & files",
+    "description": "Keeping data for later: stores like coll and registers, recording and replaying timed data, and reading or writing text and XML files."
+  },
+  {
+    "name": "Lists & data: text & symbols",
+    "description": "Working with symbols as text: joining, cutting, searching, comparing, changing case and pulling numbers out of text."
+  },
+  {
+    "name": "Machine learning: classifying sounds & data",
+    "description": "Training on labeled examples and then labeling new sounds, poses or lists, with nearest-neighbour, neural-network and other classifiers."
+  },
+  {
+    "name": "Machine learning: corpus matching & clustering",
+    "description": "Building a corpus of analyzed sounds, finding the nearest match, clustering, and browsing items by feature in 2D."
+  },
+  {
+    "name": "Machine learning: data sets, scaling & dimension reduction",
+    "description": "Containers and queries for training data, summary statistics, column scaling, and reducing many dimensions to few (PCA, MDS, UMAP, self-organizing maps)."
+  },
+  {
+    "name": "Machine learning: gestures & sequences",
+    "description": "Following and recognizing gestures over time, time warping, hidden Markov models and sequence encoding or complexity."
+  },
+  {
+    "name": "Machine learning: regression & mapping",
+    "description": "Trained models that map one set of values, such as descriptors or movement, onto continuous parameters like synth controls."
+  },
+  {
+    "name": "Machine learning: score segmentation & features",
+    "description": "Cutting a symbolic score into segments and measuring each one, such as pitch centroid, duration, energy or rhythm."
+  },
+  {
+    "name": "Math (numbers): arithmetic & math functions",
+    "description": "Basic arithmetic, rounding, logarithms, powers, min/max, sign and typed formulas applied to single numbers."
+  },
+  {
+    "name": "Math (numbers): comparisons, thresholds & splitting",
+    "description": "Comparing numbers, banging when a value crosses a threshold, noticing when a stream stops or changes trend, and sending numbers to different outlets by range."
+  },
+  {
+    "name": "Math (numbers): constants & special values",
+    "description": "Objects that output pi, e, the golden ratio, infinity, NaN or the number limits, and ones that detect or remove special float values."
+  },
+  {
+    "name": "Math (numbers): coordinates & angles",
+    "description": "Converting between cartesian, polar and spherical coordinates, degrees and radians, wrapping angles and finding distances."
+  },
+  {
+    "name": "Math (numbers): integers, primes & bits",
+    "description": "Whole-number math: greatest common divisor, least common multiple, primes, factorials, integer division and converting integers to and from bits."
+  },
+  {
+    "name": "Math (numbers): interpolation & ramps",
+    "description": "Moving between values or lists over time or by position: interpolation, easing crossfades, transition rows and control-rate ramps."
+  },
+  {
+    "name": "Math (numbers): list math",
+    "description": "Math applied to every item of a list at once: add, multiply, power, modulo, rounding, clipping, scaling, easing and differences between items."
+  },
+  {
+    "name": "Math (numbers): matrices, vectors & transforms",
+    "description": "Linear algebra on lists and matrices: dot and cross products, covariance, singular value decomposition, identity matrices and the discrete cosine transform."
+  },
+  {
+    "name": "Math (numbers): scaling, ranges & curves",
+    "description": "Mapping numbers from one range to another, bending them through curves, converting units like decibels, and clamping, wrapping or folding them into a range."
+  },
+  {
+    "name": "Math (numbers): smoothing, filtering & rate limiting",
+    "description": "Smoothing or filtering a stream of control numbers (slides, lowpass, Kalman and classic filter designs) and limiting how often values pass."
+  },
+  {
+    "name": "Math (numbers): statistics & running totals",
+    "description": "Means, medians, minimum and maximum, deviation, sums, histograms and slopes, over a list or a sliding window of incoming numbers."
+  },
+  {
+    "name": "Math (signal): ramps, phasors & easing",
+    "description": "Signal ramps, envelopes, phasors and accumulators, plus easing curves and smoothers that reshape a signal over time."
+  },
+  {
+    "name": "Math (signal): scaling, conversion & polarity",
+    "description": "Signal-rate math that rescales, rounds, attenuates, flips polarity, converts units or coordinates, or picks the larger or smaller of two signals."
+  },
+  {
+    "name": "Math (signal): signal routing & logic",
+    "description": "Sending a control signal to different outputs by value, onset or a sync signal, sample-and-hold, and logic on gate signals."
+  },
+  {
+    "name": "Math (signal): signals to messages & back",
+    "description": "Turning signals into numbers or lists when they change or on a trigger, and turning numbers or lists into signals."
+  },
+  {
+    "name": "Max for Live & DAW: plug-in & device hosting",
+    "description": "Hosting Max for Live devices and VST or Audio Unit plug-ins inside a patch, and choosing plug-in presets per platform."
+  },
+  {
+    "name": "MIDI: chords & arpeggios",
+    "description": "Building chords from single notes or chord names, chord progressions and their analysis, interpolating between chords, and arpeggiators that play held chords one note at a time."
+  },
+  {
+    "name": "MIDI: input, output & playback",
+    "description": "Getting MIDI in and out of Max: device menus, note, controller and pitch-bend output, on-screen keyboards, MIDI file players, signals turned into MIDI, and players that send notes to General MIDI or Pianoteq instruments."
+  },
+  {
+    "name": "MIDI: notes, voices & velocity",
+    "description": "Handling MIDI notes once they arrive: making notes with durations, mono and poly voice allocation, velocity replacement, crescendo and swell ramps, and snapping note timing to a beat."
+  },
+  {
+    "name": "MIDI: scales & modes",
+    "description": "Keeping note numbers in a key: snapping notes to a scale or mode, choosing and analyzing modes, moving between related modes, and playing or ramping through scales."
+  },
+  {
+    "name": "Networking: audio over the network",
+    "description": "Streaming live audio between computers or apps, with the servers and clients that connect them."
+  },
+  {
+    "name": "Networking: online collaboration & web clients",
+    "description": "Sharing data, chat, rooms, timers and controls with remote users over the internet or with a web browser."
+  },
+  {
+    "name": "Networking: OSC messages & addresses",
+    "description": "Building, routing, scheduling and rewriting OSC messages and their addresses."
+  },
+  {
+    "name": "Networking: UDP, TCP & service discovery",
+    "description": "Sending and receiving raw data over UDP or TCP, and announcing or finding services on the local network."
+  },
+  {
+    "name": "Notation: editing scores in time",
+    "description": "Cutting, joining, looping, reversing, rotating, stretching and warping whole scores in time, inserting or removing time, changing barlines, and crossfading or granulating scores."
+  },
+  {
+    "name": "Notation: playing & rendering scores",
+    "description": "Turning a score into sound or control data: playback drivers, splitting played notes into parameters, converting glissandi and slots into line and curve messages, driving one patch per note, and bouncing a score to audio or a DAW project."
+  },
+  {
+    "name": "Notation: score editors, import & export",
+    "description": "Editable on-screen scores in measured or proportional notation, recording notes into a score, rhythmic quantization into measures, and converting scores to and from other formats and SDIF analyses."
+  },
+  {
+    "name": "Notation: transforming pitch & dynamics",
+    "description": "Changing the notes of a whole score: transposing, inverting and stretching pitches, frequency shift and ring or FM modulation computed on notes, and filtering, compressing or reshaping velocities."
+  },
+  {
+    "name": "Notation: twelve-tone rows",
+    "description": "Serial composition with twelve-tone rows: generating, checking, normalizing, transposing, permuting and displaying rows, row matrices and the infinity series."
+  },
+  {
+    "name": "Notation: voices, chords & rests",
+    "description": "Working inside a score's structure: merging, splitting and remapping voices, making a voice monophonic, handling ties, reversing or rotating chords and rests separately, and applying a function to every chord."
+  },
+  {
+    "name": "odot OSC bundles: making, storing & viewing",
+    "description": "Creating OSC bundles from text, values or UI objects, storing, timestamping and scheduling them, and printing or displaying them."
+  },
+  {
+    "name": "odot OSC bundles: routing, testing & editing",
+    "description": "Routing bundles by address or expression, changing addresses, combining or comparing bundles, and computing with their values."
+  },
+  {
+    "name": "OpenGL & 3D: GPU compute & particles",
+    "description": "Running compute shaders on the GPU: GPU images and buffers, transfers back to textures and matrices, and GPU particle systems with emitters, forces and obstacles."
+  },
+  {
+    "name": "OpenGL & 3D: rotations, curves & 3D math",
+    "description": "Math for 3D positions and orientation: quaternions, rotation conversions, 3D transforms and projection, and Bézier and B-spline curves."
+  },
+  {
+    "name": "OpenGL & 3D: shapes, meshes & geometry",
+    "description": "Drawing 3D shapes and building geometry: preset shapes and meshes, triangles and quads from grids and lines, contour lines and displaced surfaces."
+  },
+  {
+    "name": "OpenGL & 3D: textures, planes & shader controls",
+    "description": "Placing textures on screen and managing shader effects: texture and video planes, grids and corner-pinning, texture coordinates, noise textures, effect bypass and parameter panels."
+  },
+  {
+    "name": "OpenGL & 3D: worlds, cameras & lights",
+    "description": "Setting up a 3D scene: render worlds, cameras and camera controls, lights and shadows, environments, materials and sub-scene nodes."
+  },
+  {
+    "name": "Patching utilities: abstraction arguments & shared code",
+    "description": "Reading an abstraction's arguments and attributes, and calling shared patch code by name."
+  },
+  {
+    "name": "Patching utilities: bang counting & gating",
+    "description": "Counting, repeating, filtering and gating bangs and messages: first-only, every nth, double-bang detection, watchdogs and locks."
+  },
+  {
+    "name": "Patching utilities: debugging, timing & threads",
+    "description": "Printing and monitoring messages, timing how long processing takes, deferring messages, moving work between threads and firing after the patch loads."
+  },
+  {
+    "name": "Patching utilities: files, folders & paths",
+    "description": "Finding, creating, opening and naming files, folders, applications and system paths."
+  },
+  {
+    "name": "Patching utilities: Max app, system & date",
+    "description": "Controlling Max and the computer (cursor, menubar, Overdrive, quit, window size) and reading platform, CPU load, date and time."
+  },
+  {
+    "name": "Patching utilities: message routing & sends",
+    "description": "Routing messages by type or selector, adding prefixes, cordless sends and receives, and converting between module signal ranges."
+  },
+  {
+    "name": "Patching utilities: scripting, presets & patcher control",
+    "description": "Changing a patch from inside itself by scripting name, getting and setting object parameters, script evaluation, preset storage and module menus."
+  },
+  {
+    "name": "PiPo modules: audio descriptors & segmentation",
+    "description": "Pitch, loudness, LPC and formant descriptors, and modules that cut the stream into segments at onsets, gates, syllables or fixed sizes."
+  },
+  {
+    "name": "PiPo modules: hosts & stream utilities",
+    "description": "The hosts that run PiPo chains on lists, live audio or MuBu tracks, and modules that select, scale, sum, count or script the data."
+  },
+  {
+    "name": "PiPo modules: smoothing, derivatives & motion sensors",
+    "description": "Filters that smooth noisy data or take its rate of change, and modules for accelerometer, orientation and muscle-sensor data."
+  },
+  {
+    "name": "PiPo modules: spectra & transforms",
+    "description": "Framing audio and turning frames into spectra, bands, MFCCs, wavelets or other transforms, plus moments and peaks of a vector."
+  },
+  {
+    "name": "Pitch & frequency: Hz, cents & tuning",
+    "description": "Pitch as frequency: converting between Hz, note numbers, midicents and frequency ratios, custom reference tuning, microtonal grids, octave shifts, harmonic series and virtual fundamentals."
+  },
+  {
+    "name": "Pitch & frequency: melodies & intervals",
+    "description": "Making and reshaping melodic lines: random-walk melodies, melodies built from interval choices, interval filters that block octaves or chosen intervals, and smoothing, mirroring, stretching or snapping a pitch contour."
+  },
+  {
+    "name": "Pitch & frequency: note names & pitch classes",
+    "description": "Converting between note numbers, note names such as C4, pitch spellings and pitch classes 0 to 11."
+  },
+  {
+    "name": "Pitch & frequency: pitch-class sets & harmony theory",
+    "description": "Music-theory analysis of pitch collections: pitch-class set complements, interval vectors and prime forms, modular pitch arithmetic, chroma vectors and Tonnetz lattices."
+  },
+  {
+    "name": "Rhythm & time: clocks & transport",
+    "description": "Sources of time: metronomes and BPM or Hz clocks, phasor clocks, clock multiply and divide, Ableton Link sync, and objects that follow or control Max's global transport."
+  },
+  {
+    "name": "Rhythm & time: counters & time conversion",
+    "description": "Counting steps, beats and seconds, countdowns, and converting between BPM, milliseconds, seconds, ticks, bars and beats, and note values."
+  },
+  {
+    "name": "Rhythm & time: cues, recording & looping",
+    "description": "Cue lists that fire events in order or jump to a cue, and recorders that capture and loop control data or played notes."
+  },
+  {
+    "name": "Rhythm & time: delays, gates & bang logic",
+    "description": "Timing and filtering events: delaying messages and triggers, limiting or queueing message rate, lengthening gates, passing every nth bang or blocking bangs that come too soon, logic on trigger streams, and bursts or alternations of bangs."
+  },
+  {
+    "name": "Rhythm & time: envelopes & ramps",
+    "description": "Shapes over time: AD, ADSR and function envelopes, ramps started by events or onsets, multi-segment line ramps, one-shot ramps per MC channel, and drawn automation curves."
+  },
+  {
+    "name": "Rhythm & time: random & rule-based rhythms",
+    "description": "Rhythms built from lists of time gaps between notes, chosen by chance, series, Markov chains or random walks, plus note durations from those gaps and gradual accelerando or ritardando."
+  },
+  {
+    "name": "Rhythm & time: rhythm pattern generators",
+    "description": "Objects that invent rhythms rather than store them: Euclidean and binary patterns, probability rhythms, rhythms from crossing LFOs, ratchets, bouncing and cloud trigger bursts, and interpolating between rhythms."
+  },
+  {
+    "name": "Rhythm & time: step sequencers",
+    "description": "Sequencers that store steps and play them from a clock: note, value, gate and drum step sequencers, grid and tracker-style patterns, and envelope sequencers on uneven beat grids."
+  },
+  {
+    "name": "Rhythm & time: swing, subdivision & quantizing",
+    "description": "Reshaping a clock's timing: swing and loose feel, uneven subdivision of a phasor ramp, resetting its phase, time-warping to uneven beat grids, and delaying events onto a clock grid."
+  },
+  {
+    "name": "Sampling: loopers",
+    "description": "Recording live audio and looping it back, with overdub, reversing, stretching, glitching or phasing."
+  },
+  {
+    "name": "Sampling: recording to buffers & files",
+    "description": "Recording audio into a buffer~ or to a sound file on disk, including overdub, click-free starts and dated file names."
+  },
+  {
+    "name": "Sampling: samplers & slice players",
+    "description": "Playing samples on demand from notes, bangs or pulses, with voices, key groups, pads and slices."
+  },
+  {
+    "name": "Sampling: sound file players",
+    "description": "Playing and looping sound files or buffers from start to end, with transport controls, playlists and section selection."
+  },
+  {
+    "name": "Spatial audio: ambisonic encoding, decoding & binaural",
+    "description": "Encoding sources into ambisonics, decoding to speakers, stereo or headphones, and binaural playback tools."
+  },
+  {
+    "name": "Spatial audio: ambisonic field effects",
+    "description": "Processing an ambisonic sound field: rotating, mirroring, widening, delaying, diffusing and displaying it."
+  },
+  {
+    "name": "Spatial audio: distance & doppler",
+    "description": "Distance calculations, distance-based gain and Doppler delay for moving sources."
+  },
+  {
+    "name": "Spatial audio: motion & positions",
+    "description": "Generators and processors of source or grain positions and movement paths, and effects that move sound across channels on their own."
+  },
+  {
+    "name": "Spatial audio: multi-speaker panners",
+    "description": "Panners for fixed layouts such as quad, hexagon, octagon, cube and 16-speaker rings, plus fold-downs to stereo."
+  },
+  {
+    "name": "Spatial audio: stereo panning & width",
+    "description": "Panning between two speakers, stereo width, mid/side and fake stereo from mono."
+  },
+  {
+    "name": "Spatial audio: VBAP & any-layout panners",
+    "description": "Panners that work with any speaker layout you describe, such as VBAP and node maps, and the tools that load those layouts."
+  },
+  {
+    "name": "Spectral: bin filtering & noise reduction",
+    "description": "Keeping, removing or reshaping frequency bins, spectral EQ, per-bin compression and noise reduction."
+  },
+  {
+    "name": "Spectral: cross-synthesis & morphing",
+    "description": "Effects that combine two sounds' spectra: cross synthesis, spectral morphing, convolution and resynthesis from another sound."
+  },
+  {
+    "name": "Spectral: FFT & spectrogram tools",
+    "description": "Building blocks for computing, inverting and handling FFTs and spectrograms, mostly on buffers."
+  },
+  {
+    "name": "Spectral: freeze & delay",
+    "description": "Spectral freezes, per-band delays, and effects that hold, loop or replay frequency bins over time."
+  },
+  {
+    "name": "Spectral: pitch & frequency warping",
+    "description": "Phase vocoders and effects that transpose, tune, stretch or warp frequencies and formants."
+  },
+  {
+    "name": "Spectral: scrambling & smearing",
+    "description": "Effects that shuffle, smear or modulate frequency bins, or grow new spectra from rules."
+  },
+  {
+    "name": "Spectral: sound separation",
+    "description": "Splitting a sound into parts: harmonic and percussive, sines and noise, transients, harmonics or learned components."
+  },
+  {
+    "name": "Synthesis: additive & resynthesis",
+    "description": "Building sounds from banks of sine partials, and resynthesizing sound from analyzed partial or noise data."
+  },
+  {
+    "name": "Synthesis: drums & percussion",
+    "description": "Kicks, snares, hi-hats, cymbals, claves and shaken or scraped percussion like maracas, tambourine and guiro."
+  },
+  {
+    "name": "Synthesis: FM & wavetable",
+    "description": "Frequency modulation, wavetable and wave-terrain synthesis, plus tools for browsing spaces of timbres."
+  },
+  {
+    "name": "Synthesis: LFOs, envelopes & control signals",
+    "description": "Slow oscillators, random wobbles, envelopes and shape generators used to move other parameters rather than to be heard."
+  },
+  {
+    "name": "Synthesis: noise",
+    "description": "White, pink, band-limited and filtered noise sources, noise textures and audio-rate random values."
+  },
+  {
+    "name": "Synthesis: oscillators & tone generators",
+    "description": "Basic and analog-style oscillators, chaotic and cross-modulating oscillators, and test-tone generators."
+  },
+  {
+    "name": "Synthesis: plucked & bowed strings",
+    "description": "Physical models of strings: Karplus-Strong plucks, guitars, mandolin, sitar and bowed violin."
+  },
+  {
+    "name": "Synthesis: ready-made synth voices",
+    "description": "Complete playable synths and poly~ voices, mono or polyphonic, that take notes and make sound with no further building."
+  },
+  {
+    "name": "Synthesis: sound effects & environmental sounds",
+    "description": "Models of everyday sounds: wind, water, rain, bubbles, motors, explosions, rolling, scraping, breaking and bouncing."
+  },
+  {
+    "name": "Synthesis: struck bars, membranes & resonators",
+    "description": "Physical models of struck and bowed bars, drum heads and bells, resonant filter banks, and modal objects that are hit or rubbed."
+  },
+  {
+    "name": "Synthesis: wind instruments & voices",
+    "description": "Physical models of blown instruments such as flute, clarinet, sax and brass, plus sung vowels and speech."
+  },
+  {
+    "name": "UI: buttons, pads, tabs & color pickers",
+    "description": "Controls for choosing states: pads, LEDs, tabs, radio-style toggle groups, key-triggered buttons, and color pickers."
+  },
+  {
+    "name": "UI: data plotters & corpus views",
+    "description": "Visualizing datasets and analysis results: 2D scatter plots, corpus browsers, descriptor and class displays, graphs, trees and word clouds."
+  },
+  {
+    "name": "UI: function, curve & distribution editors",
+    "description": "Graphical editors for breakpoint functions, envelopes, step values and probability curves."
+  },
+  {
+    "name": "UI: meters, scopes, waveforms & spectrograms",
+    "description": "Displays of audio and control signals: level meters, oscilloscopes, data scopes, waveform views and spectrum or spectrogram displays."
+  },
+  {
+    "name": "UI: sliders, dials & number boxes",
+    "description": "On-screen controls for setting values: sliders, range sliders, dials, endless encoders, number boxes, keyboards and control panels."
+  },
+  {
+    "name": "UI: text, tables & drawing helpers",
+    "description": "Showing text and matrix values in comments, message boxes and cellblocks, typing text in a dialog, and helpers for drawing shapes on a canvas."
+  },
+  {
+    "name": "UI: XY pads & 2D maps",
+    "description": "Two-dimensional controls where dragging a point positions a source or blends between nodes."
+  },
+  {
+    "name": "Video: audio & video bridges",
+    "description": "Turning sound into images and images into sound: audio scanned to video, loudness to texture, textures read as audio, MC signals written into matrices, and audio-video sync."
+  },
+  {
+    "name": "Video: blur, sharpen & edges",
+    "description": "Spatial image filters: blurs, sharpening, convolution kernels, edge detection and filter-design filters applied across an image."
+  },
+  {
+    "name": "Video: brightness, contrast & posterize",
+    "description": "Changing brightness levels: brightness and contrast, inverting, thresholds and brightness bands, transfer curves, folding, posterizing and dithering, and per-pixel math."
+  },
+  {
+    "name": "Video: cameras, movies & recording",
+    "description": "Bringing video in from cameras, movies and image folders, and saving the output as movies or still images."
+  },
+  {
+    "name": "Video: colour & hue",
+    "description": "Changing colour: tints, hue rotation, saturation, duotone and sepia looks, colour-space and gamma conversion, and colour maps."
+  },
+  {
+    "name": "Video: feedback, delay & time",
+    "description": "Effects that work across frames: feedback trails, frame delays, frame differences, freeze-frame, smoothing over time and slit-scan frame buffers."
+  },
+  {
+    "name": "Video: matrix data tools",
+    "description": "Working with Jitter matrices as data: reading and listing cells, sorting and sifting, changing type and size, iterating, easing values and building expressions."
+  },
+  {
+    "name": "Video: mixers, crossfaders & keyers",
+    "description": "Combining textures: mixers, crossfaders, blend modes, chroma and luma keys, alpha masks, and splitting or packing colour channels."
+  },
+  {
+    "name": "Video: output, preview & monitoring",
+    "description": "Showing video: render contexts and output windows, fullscreen, in-patch previews, scopes and video monitors, texture size readouts and the global timer."
+  },
+  {
+    "name": "Video: sharing with other apps",
+    "description": "Sending and receiving live video textures to and from other applications over Syphon and Spout."
+  },
+  {
+    "name": "Video: sources & oscillators",
+    "description": "Video generators: waveform and pattern oscillators, noise, solid colours, LFOs and envelopes as textures, test patterns and titles."
+  },
+  {
+    "name": "Video: vector drawing effects & outputs",
+    "description": "Processing and displaying oscilloscope-style vector drawings: moving, scaling, warping, cropping and mixing them, plus previews, oscilloscope simulation and audio outputs."
+  },
+  {
+    "name": "Video: vector drawing sources",
+    "description": "Generators of oscilloscope-style vector drawings made from audio-rate X, Y and brightness signals: rasters, grids, shapes, text, noise and traced outlines."
+  },
+  {
+    "name": "Video: warps, displacement & pixelation",
+    "description": "Moving pixels around: displacement, zoom and rotation, mirroring, fisheye and polar warps, pixelation, glitch and pixel sorting."
+  }
+]

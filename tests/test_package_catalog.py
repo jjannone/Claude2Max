@@ -52,20 +52,43 @@ def test_name_clashes_ignore_case_and_name_the_other_side():
 
 
 def test_catalog_entries_are_validated():
-    good = {"function": "Pans a sound.", "category": "Spatial audio & panning", "usefulness": 3,
+    names = ["Spatial audio: panners", "Generative: random walks"]
+    good = {"function": "Pans a sound.", "category": "Spatial audio: panners", "usefulness": 3,
             "wraps_builtin": "", "builtin_alternative": "", "superseded_by": "", "comments": ""}
-    assert "Spatial audio & panning" in cat.CATEGORY_NAMES
-    assert cat.validate_entry(good) == []
-    assert any("category" in p for p in cat.validate_entry({**good, "category": "Panning"}))
-    assert any("usefulness" in p for p in cat.validate_entry({**good, "usefulness": 6}))
-    assert any("missing" in p for p in cat.validate_entry({"category": "Synthesis", "usefulness": 2}))
+    check = lambda e: cat.validate_entry(e, names)
+    assert check(good) == []
+    assert check({**good, "crossref": ["Generative: random walks"]}) == []
+    assert any("category" in p for p in check({**good, "category": "Panning"}))
+    assert any("usefulness" in p for p in check({**good, "usefulness": 6}))
+    assert any("missing" in p for p in check({"category": "Spatial audio: panners", "usefulness": 2}))
+    assert any("unknown crossref" in p for p in check({**good, "crossref": ["Randomness"]}))
+    assert any("repeats" in p for p in check({**good, "crossref": ["Spatial audio: panners"]}))
+    assert any("not a list" in p for p in check({**good, "crossref": "Generative: random walks"}))
+
+
+def test_category_file_is_the_category_list():
+    data = json.loads(cat.CATEGORY_FILE.read_text())
+    assert data and all(set(c) == {"name", "description"} and c["name"] and c["description"] for c in data)
+    assert [c["name"] for c in data] == cat.CATEGORY_NAMES
+    assert len(set(cat.CATEGORY_NAMES)) == len(cat.CATEGORY_NAMES)
+
+
+def test_superseded_and_deprecated_marks():
+    current = ({}, {"superseded_by": ""})
+    superseded = ({}, {"superseded_by": "pipe"})
+    deprecated_no_replacement = ({"deprecated_by": ""}, {"superseded_by": ""})
+    both = ({"deprecated_by": "o.route"}, {"superseded_by": "o.route (odot)"})
+    assert cat.status_marks(*current) == ("", "")
+    assert cat.status_marks(*superseded) == ("SUPERSEDED", "pipe")
+    assert cat.status_marks(*deprecated_no_replacement) == ("DEPRECATED", "DEPRECATED")
+    assert cat.status_marks(*both) == ("DEPRECATED SUPERSEDED", "o.route (odot)")
 
 
 def test_check_reports_missing_and_orphan_entries():
     library = {"PkgA": {"one": {}, "two": {}}}
     entry = {"function": "x", "category": "Synthesis", "usefulness": 2, "wraps_builtin": "",
              "builtin_alternative": "", "superseded_by": "", "comments": ""}
-    problems = cat.check(library, {"PkgA": {"one": entry, "ghost": entry}}, ["PkgA"])
+    problems = cat.check(library, {"PkgA": {"one": entry, "ghost": entry}}, ["PkgA"], ["Synthesis"])
     assert problems == ["PkgA / two: no catalog entry",
                         "PkgA / ghost: catalog entry for an object not in the library"], problems
 

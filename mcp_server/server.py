@@ -15,7 +15,7 @@ load()    → load those modules into context (front-loads knowledge before patc
 Verification tools (use after knowledge is loaded)
 ---------------------------------------------------
 lookup_object()     Authoritative object existence + I/O signature.
-search_packages()   Search 2,944-object package library by term.
+search_packages()   Search 2,943-object package library by term.
 lookup_attribute()  Attribute validity check for a specific attr.
 list_attributes()   All valid attrs for an object (bulk verification).
 verify_spec()       Static binding-rule check on a spec before converting.
@@ -533,7 +533,7 @@ exists to turn that silent, out-of-session failure into a loud, in-session one.
 
 ## Before writing any object name (`newobj` text field)
 
-Call `lookup_object(name)` — it queries C74 refpages and the 2,944-object
+Call `lookup_object(name)` — it queries C74 refpages and the 2,943-object
 package library authoritatively. Do NOT write an object name until
 `lookup_object` confirms it exists.
 
@@ -879,7 +879,7 @@ def lookup_object(name: str) -> dict:
 
     Returns authoritative existence, I/O signature, digest, and use_when
     guidance for the named object.  Queries C74 refpages first (built-in
-    Max objects), then the 2,944-object Claude2Max package library
+    Max objects), then the 2,943-object Claude2Max package library
     (installed externals).
 
     Skipping this call is how you get silent-failure patches: Max accepts
@@ -1157,7 +1157,7 @@ def _fmt_results(cands: list, relevance: str) -> list:
 @mcp.tool()
 def search_packages(term: str, limit: int = 5) -> dict:
     """
-    Search the Claude2Max package library (2,944 installed package objects) by intent.
+    Search the Claude2Max package library (2,943 installed package objects) by intent.
 
     Call this before composing any chain of 3+ native Max objects — there is
     often a single package external that covers the whole chain.

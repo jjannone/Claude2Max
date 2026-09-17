@@ -1171,6 +1171,7 @@
       "use_when": "Bank of exponentially decaying sine partials. Model as `freq gain decayrate` triples (the resonators~ / res-transform format), given as arguments or a list. A virtual time index drives the decay: `goto <seconds>` jumps to a time (0 is the start of the decay; negative times grow exponentially and are risky), `rate <scalar>` scales all decay rates, `min_vtime` / `max_vtime` limit the virtual time range, or send a signal to control virtual time directly. A float sets the overall output gain; `clear` removes all partials. Use for bells, plates and plucked tones from a resonance model, re-struck by jumping virtual time back to 0."
     },
     "deinterleave": {
+      "deprecated_by": "",
       "digest": "\"De-interleave\" (aka delace) elements in one list into some number of smaller lists.",
       "kind": "external",
       "numinlets": 1,
@@ -1216,6 +1217,7 @@
       "use_when": "Bank of harmonic sine oscillators over one fundamental. Arguments: fundamental, then partial amplitudes. A float sets the fundamental; a list is the fundamental followed by amplitudes (`420. 0.1 0.2 0.3`); `first-amplitude <amp>` sets the fundamental's level; `wave <shape> <max-sinusoids>` loads pulse-train, sine, sawtooth, square or triangle; `noisiness <0.\u20131.>` adds noise to all partials (use sinusoids~ in bwe mode for per-partial noise); `clear` fades out and empties. Use for additive harmonic tones whose partial levels you control directly."
     },
     "interleave": {
+      "deprecated_by": "",
       "digest": "Interleave (lace) separate list elements into a single list",
       "kind": "external",
       "numinlets": 3,
@@ -1298,7 +1300,7 @@
       "use_when": "Legacy CNMAT converter between Max messages and OSC packets (`FullPacket` messages); box text in the help file is `OpenSoundControl`. Argument: buffer size in bytes (default 1024). Build bundles with `openbundle` / `closebundle` (or `[` / `]`), set the time with `OSCTimeTag`; incoming packets are parsed to Max messages; `errorreporting`, `printcontents`, `debug` for diagnostics. **Deprecated** per its refpage in favour of the odot package. For new work: udpreceive and udpsend already decode and encode OSC; for bundles use odot's o.route / o.select to dispatch, o.expr.codebox for expressions, o.compose to write bundles as text, o.display to view them. odot's o.expr and o.message are themselves in odot's deprecated folder."
     },
     "osc-route": {
-      "deprecated_by": "",
+      "deprecated_by": "o.route",
       "digest": "Dispatch OSC messages according to an address hierarchy stripping off the portion of the address that matched",
       "kind": "",
       "numinlets": 1,
@@ -1315,7 +1317,7 @@
       "use_when": "Dispatch OSC messages by address hierarchy, stripping matched prefix. **DEPRECATED** \u2014 use odot's o.route which handles full OSC bundles with types and timetags. Legacy: constructor args list addresses, runtime `set <outlet> <address>` reconfigures; `allmessages` enumerates patterns. For simple cases the native `route` works on plain symbols; for full OSC use odot."
     },
     "osc-schedule": {
-      "deprecated_by": "",
+      "deprecated_by": "o.schedule",
       "digest": "Schedule delivery of an OSC packet/bundle at a future time using an encoded timestamp",
       "kind": "",
       "numinlets": 1,
@@ -1333,7 +1335,7 @@
       "use_when": "Schedule OSC packet/bundle delivery at a future time via OSC timetag. **DEPRECATED** \u2014 use odot's o.schedule. Legacy: `FullPacket <bytes> <pointer>` queues a packet, `reset` clears the queue; `@maxdelay` (ms ceiling), `@packetsize` (ceiling), `@queuesize` (queue depth), `@precision` (timing tolerance) tune behaviour."
     },
     "osc-timetag": {
-      "deprecated_by": "",
+      "deprecated_by": "o.timetag",
       "digest": "Generate, transform, and manipulate OSC timetags.",
       "kind": "",
       "numinlets": 2,
@@ -12742,7 +12744,6 @@
   },
   "MIAP": {
     "MIAP": {
-      "deprecated_by": "",
       "digest": "MIAP Max Panner",
       "kind": "",
       "numinlets": 1,
@@ -12788,7 +12789,6 @@
       "use_when": "Convert Meyer Sound Matrix-3 / D-Mitri project files into MIAP JSON map and trajectory files: read_project <file>, map <n> / trajectory <n> to choose, write_map / write_trajectory <file> to save. Real names are capitalized (externals, refpages, init/miap-objectlist.txt). macOS 10.15+ / Windows 10+."
     },
     "MIAP~": {
-      "deprecated_by": "",
       "digest": "MIAP MSP Panner",
       "kind": "",
       "numinlets": 1,
@@ -13445,7 +13445,6 @@
       "use_when": "Real-time following and recognition of time profiles. MuBu container operation \u2014 see package_concepts.md MuBu section."
     },
     "imubu": {
-      "deprecated_by": "",
       "digest": "MuBu container with a graphical user interface",
       "kind": "external",
       "numinlets": 1,
@@ -13820,7 +13819,6 @@
       "use_when": "PiPo module (not a standalone box) that computes basic audio descriptors: f0, periodicity, loudness and spectral moments. Use it by name, without the `pipo.` prefix, inside a PiPo host: `pipo` (lists), `pipo~` (live audio), `mubu.process` (MuBu tracks, offline) or `mubu.model`; chain modules with colons. Attributes carry the module prefix: `@basic.winsize`, `@basic.hopsize`, `@basic.minfreq`, `@basic.downsampling`, `@basic.threshold`. Same description as pipo.descr, and its help file actually demonstrates the `descr` module; prefer `descr`."
     },
     "pipo.bayesfilter": {
-      "deprecated_by": "",
       "digest": "non-linear bayesian filtering",
       "kind": "external",
       "numinlets": 0,
@@ -25748,16 +25746,6 @@
       "tags": [],
       "use_when": "Draw per-harmonic delay and gain for `abc.hoa.decorrelation~ @mode man`; type `abc.dtd.ui` (bpatcher). Messages: `functiontype 0-22`, `factor 0.-1.`, `delay <samples>`, `channels <n>` (segments, one per circular harmonic). Its outputs feed `gain<i>`/`delay<i>` lists to the decorrelator. Works with `pattrstorage`."
     },
-    "abc.env.generator~": {
-      "digest": "Abclib's enveloped noise with rarefaction",
-      "kind": "",
-      "numinlets": 1,
-      "numoutlets": 0,
-      "outlettype": [],
-      "source": "refpage",
-      "tags": [],
-      "use_when": "Internal helper \u2014 a refpage with no patcher or help file behind it; it duplicates `abc.env.noise~`'s description. Use `abc.env.noise~` instead."
-    },
     "abc.env.noise~": {
       "digest": "Abclib's enveloped noise with rarefaction",
       "kind": "abstraction",
@@ -28362,6 +28350,7 @@
       "use_when": "Adjugate of a matrix (matrix of cofactors transposed). For non-singular A, adj(A)/det(A) = inv(A). Right outlet bangs on non-square/ill-conditioned input."
     },
     "bach.append": {
+      "deprecated_by": "bach.join",
       "digest": "Append lllls together",
       "kind": "external",
       "numinlets": 1,
@@ -37857,7 +37846,6 @@
       "use_when": "Granular harmonizer abstraction using grainflow~."
     },
     "grainflow.live~": {
-      "deprecated_by": "",
       "digest": "the live granulation object for grainflow",
       "kind": "external",
       "numinlets": 4,
@@ -38402,6 +38390,7 @@
       "use_when": "Compiled stereo panner for grainflow grains: each new grain gets a random equal-power stereo position. Input: grains as mc channels. Attributes: `@panCenter` and `@panSpread` (randomness around the center). Use as the simplest way to turn grainflow~'s one-channel-per-grain output into stereo."
     },
     "grainflow.util.vbap3d": {
+      "deprecated_by": "grainflow.spat.pan~",
       "digest": "An easy way to pan grains generated with grainflow.",
       "kind": "abstraction",
       "numinlets": 1,
@@ -38430,7 +38419,6 @@
       "use_when": "Visualize Grainflow granulation on a waveform display."
     },
     "grainflow~": {
-      "deprecated_by": "",
       "digest": "the base object for grainflow",
       "kind": "external",
       "numinlets": 4,
@@ -41368,6 +41356,7 @@
       "use_when": "Display incoming odot bundles. odot OSC-bundle operator \u2014 see package_concepts.md odot section."
     },
     "o.edge~": {
+      "deprecated_by": "",
       "digest": "Report transitions between 0 and non-zero",
       "kind": "external",
       "numinlets": 1,

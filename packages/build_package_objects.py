@@ -177,20 +177,20 @@ def detect_kind(package_dir, object_name):
 
 def detect_deprecated(xml_path):
     """
-    Return True if the refpage's discussion/description text contains the
-    word "deprecated" (case-insensitive). Curators fill in the actual
-    replacement object name in `deprecated_by`.
+    Return True if the refpage says the OBJECT is deprecated: the word
+    "deprecated" in its own digest or description, or in a discussion entry.
+    Text inside the method and attribute lists is ignored, because there it
+    describes one deprecated message or attribute of an object that is still
+    current (grainflow~'s `trav` message, MIAP's node-trim message).
+    Curators fill in the replacement object name in `deprecated_by`.
     """
     try:
         root = ET.parse(xml_path).getroot()
     except ET.ParseError:
         return False
-    for tag in ("digest", "description", "discussion"):
-        for el in root.iter(tag):
-            text = "".join(el.itertext()).lower()
-            if "deprecated" in text:
-                return True
-    return False
+    elements = [root.find("digest"), root.find("description"), *root.iter("discussion")]
+    elements += [e for misc in root.findall("misc") for e in misc.iter("description")]
+    return any(el is not None and "deprecated" in "".join(el.itertext()).lower() for el in elements)
 
 
 def extract_package(package_dir):

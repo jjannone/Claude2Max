@@ -782,7 +782,7 @@ When planning a patch for a student, default to the objects in the table below f
 | Send / receive between distant parts of a patch | `s` / `r` for messages, `value` for shared scalar state, `pv` / `v` for patcher-scoped variables, `s~` / `r~` for signal | Pick by lifetime and scope. `s`/`r` for cross-patch broadcast of messages; `value` when two boxes need to read the same shared scalar; `pv`/`v` when the scope should not leak past the parent patcher; the `~` variants for signal-rate. **Write the abbreviations** (`s`, `r`, `s~`, `r~`), not the long forms. Use them where a cord would cross the patch — a short local connection stays a cord, because seeing it is what tells the reader the two objects are one chain. **A name is a channel, not a wire: repeat the sender.** When a second source needs an existing channel, put a new `s NAME` under that source instead of running a cord to the existing one — the refpage states that all same-named senders reach all same-named receivers, and C74's `jit.anim.path.maxhelp` ships nine `send topath` boxes in one patch. The order two receivers fire in is explicitly *not* deterministic, so never lean on it. Multiple `s~` sharing a name **sum** into the matching `r~`, which is what makes a mix bus one object per voice. |
 | JS / scripting | `v8` (default) | Modern JavaScript engine — ES6+, faster, better-supported. Use the older `js` object only when you have a specific reason (e.g. you're modifying an existing patch that already uses it). |
 
-When in doubt — or before composing any chain of 3+ native objects — run `python3 packages/query_packages.py search "<term>"` to see whether an installed package handles the whole task in a single object. The package library (2,944 entries) often shortcuts a long chain into one well-named external.
+When in doubt — or before composing any chain of 3+ native objects — run `python3 packages/query_packages.py search "<term>"` to see whether an installed package handles the whole task in a single object. The package library (2,943 entries) often shortcuts a long chain into one well-named external.
 
 ### Existing patch (externally sourced or manually edited)
 
@@ -827,7 +827,7 @@ To decode MCT received in the conversation: `python3 -c "from spec2maxpat import
 - `packages/package_schema.py` — Canonical schema; `normalize()`/`validate()` for `package_objects.json`.
 - `packages/query_packages.py` — `list`, `search <term>`, `validate`. Read-only CLI for the package library.
 - `packages/CURATION.md` — How to extend package coverage: extractor CLIs, schema norms, `use_when` quality bar.
-- `packages/package_catalog.xlsx` — Spreadsheet of every object in the installed packages: function, category, 1–5 usefulness, the built-in it wraps or could replace it, Apple Silicon support, name clashes, `use_when`, comments. Generated: edit `packages/package_catalog.json` and rebuild with `python3 packages/build_package_catalog.py` (`--check` reports gaps), never edit the `.xlsx` by hand.
+- `packages/package_catalog.xlsx` — Spreadsheet of every object in the installed packages: function, category, 1–5 usefulness, the built-in it wraps or could replace it, what supersedes it (objects marked SUPERSEDED / DEPRECATED), `use_when`, comments. Intel-only externals are left out. Generated: edit `packages/package_catalog.json` and rebuild with `python3 packages/build_package_catalog.py` (`--check` reports gaps), never edit the `.xlsx` by hand. The category list and descriptions live in `packages/package_categories.json`; an entry's optional `crossref` list fills the "Also in" column.
 - `packages/removed_records.json` — Names taken out of the library (nothing loads under them) or renamed, with reasons. The extractors skip them.
 - `scans/c74-forum/forum_insights.md` / `scans/cookbook/cookbook_insights.md` / `scans/c74-projects/c74_projects_database.md` — Community knowledge, non-obvious patterns, real examples, and a catalog of community projects.
 
@@ -835,7 +835,7 @@ To decode MCT received in the conversation: `python3 -c "from spec2maxpat import
 
 When designing or debugging a patch, consult these curated sources — not just the official docs:
 
-- **`packages/package_objects.json`** — 2,944 package objects with `use_when`. Search: `python3 packages/query_packages.py search "<term>"`. Check before building any multi-object native chain.
+- **`packages/package_objects.json`** — 2,943 package objects with `use_when`. Search: `python3 packages/query_packages.py search "<term>"`. Check before building any multi-object native chain.
 - **`packages/package_concepts.md`** — Paradigms for packages with custom types (bach lllls, FrameLib chains, FluCoMa workflow). Read when using a new package.
 - **`scans/c74-forum/forum_insights.md`** — Non-obvious behaviors, preferred patterns, performance pitfalls from Cycling '74 forums.
 - **`scans/cookbook/cookbook_insights.md`** — Insights from Max Cookbook examples (Dobrian/UCI).

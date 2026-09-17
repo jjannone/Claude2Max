@@ -7,12 +7,12 @@ Joins two files:
   - packages/package_catalog.json  judgments per object: function, category,
                                    usefulness 1-5, built-in it wraps, built-in
                                    alternative, superseded by, comments
-and adds facts read from the machine: package author and version, whether a
-compiled external runs natively on Apple Silicon, and name clashes with Max's
-own objects or with another package.
+and adds package author and version, read from each package-info.json.
 
 Only packages installed in ~/Documents/Max 9/Packages get rows. Library
-packages that are not installed are reported, not written.
+packages that are not installed are reported, not written. Compiled
+externals with no Apple Silicon code are left out and reported, and `--check`
+also reports names that clash with Max's own objects or another package.
 
 Usage:
     python3 packages/build_package_catalog.py            # write packages/package_catalog.xlsx
@@ -33,34 +33,9 @@ OUTPUT = HERE / "package_catalog.xlsx"
 USER_PACKAGES = Path.home() / "Documents" / "Max 9" / "Packages"
 MAX_C74 = Path("/Applications/Max.app/Contents/Resources/C74")
 
-CATEGORIES = [
-    ("Audio I/O & mixing", "Audio in and out, gain, mixing, channel routing, sends."),
-    ("Synthesis", "Oscillators, synth voices, physical and modal models, noise."),
-    ("Sampling & playback", "Sample and buffer playback, loopers, recording."),
-    ("Granular & concatenative", "Grain engines and corpus-based concatenation."),
-    ("Effects: time & modulation", "Delay, reverb, chorus, flanger, phaser, pitch shift."),
-    ("Effects: filters & EQ", "Filters and equalizers."),
-    ("Effects: dynamics & distortion", "Compressors, limiters, saturation, bit crushing."),
-    ("Spectral (FFT) processing", "Processing in the frequency domain."),
-    ("Spatial audio & panning", "Stereo and multichannel panning, ambisonics, binaural, distance, doppler."),
-    ("Audio analysis & descriptors", "Pitch, onset and envelope tracking; audio features."),
-    ("Buffers & offline audio", "Non-realtime buffer work, sound files, impulse responses."),
-    ("Pitch, harmony & MIDI", "MIDI handling, scales, chords, tuning."),
-    ("Notation & composition", "Score and roll editors, computer-aided composition."),
-    ("Rhythm, time & sequencing", "Clocks, tempo, sequencers, timing, envelopes over time."),
-    ("Generative & algorithmic", "Randomness, Markov chains, cellular automata, chaos, L-systems."),
-    ("Math & signal conditioning", "Arithmetic, scaling, smoothing, interpolation, easing, coordinates."),
-    ("Lists, data & storage", "List manipulation, data structures, databases, text."),
-    ("Machine learning & corpus analysis", "Classification, regression, clustering, dimension reduction."),
-    ("Gesture, sensors & hardware", "Controllers, HID, serial, sensors, mapping devices to parameters."),
-    ("Networking & communication", "OSC, web, sockets, Link, collaboration."),
-    ("Video & image processing", "Jitter matrix processing, video effects, video synthesis."),
-    ("OpenGL, 3D & shaders", "GPU drawing, 3D scenes, shaders."),
-    ("Computer vision", "Tracking, detection, blobs, faces, optical flow."),
-    ("UI & visualization", "GUI widgets, scopes, meters, displays."),
-    ("Patching utilities & scripting", "Patcher scripting, presets, debugging, JS helpers."),
-    ("Max for Live & DAW integration", "Live API helpers, plug-in hosting, DAW sync."),
-]
+CATEGORY_FILE = HERE / "package_categories.json"
+# Categories and their one-line descriptions, in the order the Categories sheet lists them.
+CATEGORIES = [(c["name"], c["description"]) for c in json.loads(CATEGORY_FILE.read_text())]
 CATEGORY_NAMES = [name for name, _ in CATEGORIES]
 
 USEFULNESS = {
@@ -177,20 +152,31 @@ def package_info(package_dir):
     return info if isinstance(info, dict) else {}
 
 
-def validate_entry(entry):
-    """Problems with one catalog entry, as strings. Empty list means valid."""
+def validate_entry(entry, category_names=None):
+    """Problems with one catalog entry, as strings. Empty list means valid.
+
+    `crossref` is optional: other categories the object clearly also belongs
+    to, each a known category and none equal to its own."""
+    names = CATEGORY_NAMES if category_names is None else category_names
     problems = []
     missing = [f for f in JUDGMENT_FIELDS if f not in entry]
     if missing:
         problems.append("missing " + ", ".join(missing))
-    if entry.get("category") not in CATEGORY_NAMES:
+    if entry.get("category") not in names:
         problems.append(f"unknown category {entry.get('category')!r}")
     if entry.get("usefulness") not in USEFULNESS:
         problems.append(f"usefulness {entry.get('usefulness')!r} is not 1-5")
+    crossref = entry.get("crossref", [])
+    if not isinstance(crossref, list):
+        problems.append("crossref is not a list")
+    else:
+        problems += [f"unknown crossref category {c!r}" for c in crossref if c not in names]
+        if entry.get("category") in crossref:
+            problems.append("crossref repeats the object's own category")
     return problems
 
 
-def check(library, catalog, installed):
+def check(library, catalog, installed, category_names=None):
     problems = []
     for pkg in sorted(installed):
         for name in sorted(library.get(pkg, {})):
@@ -198,7 +184,7 @@ def check(library, catalog, installed):
             if entry is None:
                 problems.append(f"{pkg} / {name}: no catalog entry")
             else:
-                problems.extend(f"{pkg} / {name}: {p}" for p in validate_entry(entry))
+                problems.extend(f"{pkg} / {name}: {p}" for p in validate_entry(entry, category_names))
     for pkg, entries in catalog.items():
         for name in entries:
             if name not in library.get(pkg, {}):
@@ -206,50 +192,73 @@ def check(library, catalog, installed):
     return problems
 
 
+def status_marks(record, entry):
+    """The function-column suffix and the Superseded-by cell for one object.
+
+    Deprecated comes from the library's `deprecated_by` key (the package says
+    so); superseded from the catalog's `superseded_by` (a named replacement)."""
+    deprecated = "deprecated_by" in record
+    replacement = entry.get("superseded_by") or record.get("deprecated_by", "")
+    marks = [word for word, on in (("DEPRECATED", deprecated), ("SUPERSEDED", bool(entry.get("superseded_by")))) if on]
+    return " ".join(marks), replacement or ("DEPRECATED" if deprecated else "")
+
+
 def build_rows(library, catalog, installed):
-    builtin = max_object_names()
-    clashes = name_clashes({p: list(library[p]) for p in installed}, builtin)
-    rows = []
+    """Rows for the Objects sheet, and the (package, object) pairs left out as Intel-only."""
+    rows, intel_only = [], []
     for pkg in sorted(installed, key=str.lower):
         bundles = mxo_bundles(USER_PACKAGES / pkg)
         for name in sorted(library[pkg], key=str.lower):
+            if apple_silicon(bundles.get(name)) == "No (Intel only)":
+                intel_only.append((pkg, name))
+                continue
             rec = library[pkg][name]
             j = catalog.get(pkg, {}).get(name, {})
             level = USEFULNESS.get(j.get("usefulness"), ("", ""))[0]
             unknown_ports = not rec["numinlets"] and not rec["numoutlets"]
-            superseded = j.get("superseded_by") or rec.get("deprecated_by", "")
-            rows.append([
-                name, pkg, j.get("function", ""), j.get("category", ""),
-                j.get("usefulness"), level, rec["kind"],
-                None if unknown_ports else rec["numinlets"],
-                None if unknown_ports else rec["numoutlets"],
-                j.get("wraps_builtin", ""), j.get("builtin_alternative", ""),
-                superseded, apple_silicon(bundles.get(name)),
-                clashes.get((pkg, name), ""), rec["use_when"],
-                SOURCE_LABELS.get(rec["source"], rec["source"]), j.get("comments", ""),
-            ])
-    return rows
+            marks, superseded = status_marks(rec, j)
+            function = j.get("function", "")
+            rows.append({
+                "Object": name, "Package": pkg,
+                "General function": f"{function} {marks}".strip(), "Category": j.get("category", ""),
+                "Also in": "; ".join(j.get("crossref", [])),
+                "Usefulness (1-5)": j.get("usefulness"), "Usefulness level": level,
+                "Kind": rec["kind"],
+                "Inlets": None if unknown_ports else rec["numinlets"],
+                "Outlets": None if unknown_ports else rec["numoutlets"],
+                "Wraps built-in": j.get("wraps_builtin", ""),
+                "Built-in alternative": j.get("builtin_alternative", ""),
+                "Superseded by": superseded,
+                "use_when": rec["use_when"],
+                "Doc source": SOURCE_LABELS.get(rec["source"], rec["source"]),
+                "Comments": j.get("comments", ""),
+            })
+    # Row order as John sorted it in Excel (2026-09-16): category A-Z, most useful first.
+    rows.sort(key=lambda r: (r["Category"].lower(), -(r["Usefulness (1-5)"] or 0),
+                             r["Package"].lower(), r["Object"].lower()))
+    return rows, intel_only
 
 
+# Order and widths as John arranged them in Excel (2026-09-16).
 COLUMNS = [
     ("Object", 26, "The name you type in an object box."),
-    ("Package", 22, "The package folder in ~/Documents/Max 9/Packages."),
+    ("Package", 9, "The package folder in ~/Documents/Max 9/Packages."),
     ("General function", 44, "What it does, in one plain sentence."),
     ("Category", 26, "One primary category; see the Categories sheet."),
+    ("Also in", 26, "Other categories this object clearly belongs to as well, for instance a random-walk melody generator filed under MIDI that is also a random generator."),
     ("Usefulness (1-5)", 11, "5 = everyday patching, 1 = highly specific use. See the Usefulness sheet."),
-    ("Usefulness level", 12, "The name of the usefulness rating."),
-    ("Kind", 12, "external (compiled), abstraction (a Max patch), or javascript."),
+    ("Usefulness level", 15.66, "The name of the usefulness rating."),
+    ("Kind", 15.66, "external (compiled), abstraction (a Max patch), or javascript."),
+    ("Built-in alternative", 34, "A built-in Max object that does the same or a similar job, and how it differs."),
     ("Inlets", 7, "Inlet count. Blank when unknown (for instance ports built by a script)."),
     ("Outlets", 7, "Outlet count. Blank when unknown."),
-    ("Wraps built-in", 24, "The built-in Max object(s) doing the real work, when this is essentially a wrapper or front panel for them. Built-in includes Max's bundled packages."),
-    ("Built-in alternative", 34, "A built-in Max object that does the same or a similar job, and how it differs."),
-    ("Superseded by", 20, "A newer object that replaces this one."),
-    ("Apple Silicon native", 13, "For compiled externals: Yes, or No (Intel only, needs Rosetta). Blank for patches and scripts."),
-    ("Name clash", 24, "Shares its name with a built-in Max object or an object in another installed package. Max loads whichever it finds first."),
+    ("Comments", 44, "Gotchas, required companions, platform limits, anything else that changes a decision."),
+    ("Wraps built-in", 26.33, "The built-in Max object(s) doing the real work, when this is essentially a wrapper or front panel for them. Built-in includes Max's bundled packages."),
+    ("Superseded by", 20, "A newer object that replaces this one, or DEPRECATED when the package deprecates it without naming a replacement. General function ends in SUPERSEDED and/or DEPRECATED to match."),
     ("use_when", 60, "The curated guidance from packages/package_objects.json: when to reach for it and how to drive it."),
     ("Doc source", 12, "Where the object's documentation came from: refpage, help file, or the abstraction patch itself."),
-    ("Comments", 44, "Gotchas, required companions, platform limits, anything else that changes a decision."),
 ]
+COLUMN_NAMES = [name for name, _, _ in COLUMNS]
 
 LEVEL_FILLS = {5: "C6EFCE", 4: "DDEBF7", 3: "FFF2CC", 2: "F2F2F2", 1: "E7E6E6"}
 
@@ -262,7 +271,6 @@ def write_workbook(rows, library, catalog, installed, path):
     font = Font(name="Arial", size=10)
     bold = Font(name="Arial", size=10, bold=True)
     header_fill = PatternFill("solid", fgColor="D9E1F2")
-    top = Alignment(vertical="top")
     wrap = Alignment(vertical="top", wrap_text=True)
 
     def header(ws, names_widths):
@@ -272,20 +280,40 @@ def write_workbook(rows, library, catalog, installed, path):
             ws.column_dimensions[get_column_letter(col)].width = width
         ws.freeze_panes = "B2"
 
+    # Formatting as John set it in Excel (2026-09-17): 16 pt object names,
+    # 35 pt rows, numeric columns centred.
+    big, big_bold = Font(name="Arial", size=16), Font(name="Arial", size=16, bold=True)
+    centred = {"Usefulness (1-5)", "Inlets", "Outlets"}
+    wrapped = {"General function", "Also in", "Wraps built-in", "Built-in alternative", "use_when", "Comments"}
+
+    def align(name, is_header=False):
+        return Alignment(horizontal="center" if name in centred else None, vertical="top",
+                         wrap_text=True if is_header or name in wrapped else None)
+
     wb = Workbook()
     ws = wb.active
     ws.title = "Objects"
     header(ws, [(n, w) for n, w, _ in COLUMNS])
-    wrapped = {"General function", "Wraps built-in", "Built-in alternative", "Name clash", "use_when", "Comments"}
+    for c, name in enumerate(COLUMN_NAMES, 1):
+        cell = ws.cell(row=1, column=c)
+        cell.alignment = align(name, is_header=True)
+        if name == "Object":
+            cell.font = big_bold
+    ws.sheet_format.defaultRowHeight = 35
+    ws.sheet_format.customHeight = True
+    ws.row_dimensions[1].height = 35
+    level_cols = [COLUMN_NAMES.index("Usefulness (1-5)") + 1, COLUMN_NAMES.index("Usefulness level") + 1]
     for r, row in enumerate(rows, 2):
-        for c, value in enumerate(row, 1):
+        ws.row_dimensions[r].height = 35
+        for c, name in enumerate(COLUMN_NAMES, 1):
+            value = row[name]
             cell = ws.cell(row=r, column=c, value=value if value != "" else None)
-            cell.font = font
-            cell.alignment = wrap if COLUMNS[c - 1][0] in wrapped else top
-        if row[4] in LEVEL_FILLS:
-            fill = PatternFill("solid", fgColor=LEVEL_FILLS[row[4]])
-            ws.cell(row=r, column=5).fill = fill
-            ws.cell(row=r, column=6).fill = fill
+            cell.font = big if name == "Object" else font
+            cell.alignment = align(name)
+        if row["Usefulness (1-5)"] in LEVEL_FILLS:
+            fill = PatternFill("solid", fgColor=LEVEL_FILLS[row["Usefulness (1-5)"]])
+            for c in level_cols:
+                ws.cell(row=r, column=c).fill = fill
     ws.auto_filter.ref = f"A1:{get_column_letter(len(COLUMNS))}{len(rows) + 1}"
 
     counted = f"Counted by packages/build_package_catalog.py on {datetime.date.today().isoformat()}."
@@ -295,12 +323,12 @@ def write_workbook(rows, library, catalog, installed, path):
                 ("Main category", 28), ("Everyday or broad (4-5)", 12), ("Description", 80)])
     for r, pkg in enumerate(sorted(installed, key=str.lower), 2):
         info = package_info(USER_PACKAGES / pkg)
-        pkg_rows = [row for row in rows if row[1] == pkg]
-        cats = [row[3] for row in pkg_rows if row[3]]
+        pkg_rows = [row for row in rows if row["Package"] == pkg]
+        cats = [row["Category"] for row in pkg_rows if row["Category"]]
         main = max(sorted(set(cats), key=CATEGORY_NAMES.index), key=cats.count) if cats else ""
         text = lambda v: ", ".join(map(str, v)) if isinstance(v, list) else str(v or "")
         values = [pkg, text(info.get("author")), text(info.get("version")), len(pkg_rows), main,
-                  sum(1 for row in pkg_rows if (row[4] or 0) >= 4), text(info.get("description"))]
+                  sum(1 for row in pkg_rows if (row["Usefulness (1-5)"] or 0) >= 4), text(info.get("description"))]
         for c, value in enumerate(values, 1):
             cell = wp.cell(row=r, column=c, value=value if value != "" else None)
             cell.font, cell.alignment = font, wrap
@@ -309,7 +337,7 @@ def write_workbook(rows, library, catalog, installed, path):
     wc = wb.create_sheet("Categories")
     header(wc, [("Category", 34), ("What belongs here", 70), ("Objects", 9)])
     for r, (name, desc) in enumerate(CATEGORIES, 2):
-        for c, value in enumerate([name, desc, sum(1 for row in rows if row[3] == name)], 1):
+        for c, value in enumerate([name, desc, sum(1 for row in rows if row["Category"] == name)], 1):
             cell = wc.cell(row=r, column=c, value=value)
             cell.font, cell.alignment = font, wrap
     wc.cell(row=len(CATEGORIES) + 3, column=1, value=counted).font = font
@@ -318,7 +346,7 @@ def write_workbook(rows, library, catalog, installed, path):
     header(wu, [("Rating", 8), ("Level", 14), ("Meaning", 80), ("Objects", 9)])
     for r, rating in enumerate(sorted(USEFULNESS, reverse=True), 2):
         level, meaning = USEFULNESS[rating]
-        for c, value in enumerate([rating, level, meaning, sum(1 for row in rows if row[4] == rating)], 1):
+        for c, value in enumerate([rating, level, meaning, sum(1 for row in rows if row["Usefulness (1-5)"] == rating)], 1):
             cell = wu.cell(row=r, column=c, value=value)
             cell.font, cell.alignment = font, wrap
         wu.cell(row=r, column=1).fill = PatternFill("solid", fgColor=LEVEL_FILLS[rating])
@@ -360,9 +388,14 @@ def main():
         print(line, file=sys.stderr)
     print(f"{len(problems)} problem(s) across {len(installed)} installed packages", file=sys.stderr)
     if args.check:
+        clashes = name_clashes({p: list(library[p]) for p in installed}, max_object_names())
+        for (pkg, name), text in sorted(clashes.items()):
+            print(f"name clash: {pkg} / {name}: {text}", file=sys.stderr)
         sys.exit(1 if problems else 0)
 
-    rows = build_rows(library, catalog, installed)
+    rows, intel_only = build_rows(library, catalog, installed)
+    if intel_only:
+        print("Intel-only externals, left out: " + ", ".join(f"{p} / {n}" for p, n in intel_only), file=sys.stderr)
     write_workbook(rows, library, catalog, installed, args.output)
     print(f"Wrote {len(rows)} objects to {args.output}", file=sys.stderr)
 

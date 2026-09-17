@@ -129,6 +129,9 @@
     "upshot_launchpadcontrol": "renamed to upshot_lpcontrol: upshot_launchpadcontrol is not a name Max loads",
     "upshot_noise": "renamed to upshot_noisegenerator: upshot_noise is not a name Max loads"
   },
+  "abclib": {
+    "abc.env.generator~": "Refpage only: no abstraction or external answers to the name, so it creates a missing object. Superseded by abc.env.noise~."
+  },
   "av-toolbox": {
     "av.template": "Only `docs/av.template.maxref.xml` exists: an empty documentation template. No patcher, help file, init mapping or javascript uses the name (searched the whole av-toolbox folder, including init/*.txt and package-info.json, which only lists the doc file)."
   },
