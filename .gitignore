@@ -21,3 +21,6 @@ scans/jjannone-max/*
 # Those patches can be private; the tracked registry is built from Max's own
 # files and public packages only.
 scans/maxhelp/maxhelp_port_counts_local.json
+
+# Lock files Excel and Word leave beside an open document.
+~$*

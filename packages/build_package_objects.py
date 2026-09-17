@@ -28,8 +28,9 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(1, str(Path(__file__).parent.parent))
 from spec2maxpat import RefpageCache  # reuse the parser
-from package_schema import normalize, OPTIONAL_KEYS  # canonical record shape
+from package_schema import normalize, OPTIONAL_KEYS, removed_names  # canonical record shape
 
 DEFAULT_ROOT = Path.home() / "Documents" / "Max 9" / "Packages"
 
@@ -259,7 +260,10 @@ def merge_into(existing, package_name, new_objects):
     regardless of what state it was in before.
     """
     bucket = existing.setdefault(package_name, {})
+    skip = removed_names(package_name)
     for name, record in new_objects.items():
+        if name in skip:
+            continue
         prior = bucket.get(name, {})
         if prior.get("use_when"):
             record["use_when"] = prior["use_when"]

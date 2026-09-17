@@ -1,0 +1,181 @@
+{
+  "CNMAT Externals": {
+    "analyzer~": "Only a help file and refpage are installed; there is no .mxo or .mxe64 binary. Searched: `CNMAT Externals/externals/`, the package's package-info.json filelist, and every `analyzer~.mx*` under ~/Documents/Max 9, ~/Documents/Max 8 and /Applications/Max.app. Typing the name gives a missing-object box.",
+    "bdist": "Only a help file and refpage are installed; there is no .mxo or .mxe64 binary. Searched: `CNMAT Externals/externals/`, the package's package-info.json filelist, and every `bdist.mx*` under ~/Documents/Max 9, ~/Documents/Max 8 and /Applications/Max.app. Typing the name gives a missing-object box.",
+    "bessel": "Only a help file and refpage are installed; there is no .mxo or .mxe64 binary. Searched: `CNMAT Externals/externals/`, the package's package-info.json filelist, and every `bessel.mx*` under ~/Documents/Max 9, ~/Documents/Max 8 and /Applications/Max.app. Typing the name gives a missing-object box.",
+    "randdist": "Only a help file and refpage are installed; there is no .mxo or .mxe64 binary. Searched: `CNMAT Externals/externals/`, the package's package-info.json filelist, and every `randdist.mx*` under ~/Documents/Max 9, ~/Documents/Max 8 and /Applications/Max.app. Typing the name gives a missing-object box.",
+    "sdif-buffer": "renamed to SDIF-buffer: sdif-buffer is not a name Max loads",
+    "sdif-fileinfo": "renamed to SDIF-fileinfo: sdif-fileinfo is not a name Max loads",
+    "sdif-info": "renamed to SDIF-info: sdif-info is not a name Max loads",
+    "sdif-listpoke": "renamed to SDIF-listpoke: sdif-listpoke is not a name Max loads",
+    "sdif-ranges": "renamed to SDIF-ranges: sdif-ranges is not a name Max loads",
+    "sdif-tuples": "renamed to SDIF-tuples: sdif-tuples is not a name Max loads"
+  },
+  "Collab-Hub": {
+    "CH-ClientTesting": "renamed to ch.client-testing: CH-ClientTesting is not a name Max loads",
+    "CH-Controls": "renamed to ch.controls: CH-Controls is not a name Max loads",
+    "CH-Timer": "renamed to ch.timer: CH-Timer is not a name Max loads"
+  },
+  "Digital Orchestra Toolbox": {
+    "dot.quaternion.axisAngle": "renamed to dot.quaternion.axisangle: dot.quaternion.axisAngle is not a name Max loads"
+  },
+  "FFTease": {
+    "fftz.multiq~": "renamed to fftz.multyq~: fftz.multiq~ is not a name Max loads"
+  },
+  "FlowSwing": {
+    "flowSwing_audioWarp": "renamed to flowSwing.audioWarp: flowSwing_audioWarp is not a name Max loads",
+    "flowSwing_envelop": "renamed to flowSwing.envelop: flowSwing_envelop is not a name Max loads",
+    "flowSwing_nested": "renamed to flowSwing.nested: flowSwing_nested is not a name Max loads",
+    "flowSwing_noise": "renamed to flowSwing.noise: flowSwing_noise is not a name Max loads",
+    "flowSwing_onsetDetect": "renamed to flowSwing.onsetDetect: flowSwing_onsetDetect is not a name Max loads",
+    "flowSwing_stepUI": "renamed to flowSwing.stepUI: flowSwing_stepUI is not a name Max loads",
+    "flowSwing_subDiv": "renamed to flowSwing.subDiv: flowSwing_subDiv is not a name Max loads"
+  },
+  "FrameLib": {
+    "fl.and~": "renamed to fl.&&~: fl.and~ is not a name Max loads",
+    "fl.complex.divide~": "renamed to fl.complex./~: fl.complex.divide~ is not a name Max loads",
+    "fl.complex.minus~": "renamed to fl.complex.-~: fl.complex.minus~ is not a name Max loads",
+    "fl.complex.plus~": "renamed to fl.complex.+~: fl.complex.plus~ is not a name Max loads",
+    "fl.complex.times~": "renamed to fl.complex.*~: fl.complex.times~ is not a name Max loads",
+    "fl.divide~": "renamed to fl./~: fl.divide~ is not a name Max loads",
+    "fl.equals~": "renamed to fl.==~: fl.equals~ is not a name Max loads",
+    "fl.greaterthaneq~": "renamed to fl.>=~: fl.greaterthaneq~ is not a name Max loads",
+    "fl.greaterthan~": "renamed to fl.>~: fl.greaterthan~ is not a name Max loads",
+    "fl.lessthaneq~": "renamed to fl.<=~: fl.lessthaneq~ is not a name Max loads",
+    "fl.lessthan~": "renamed to fl.<~: fl.lessthan~ is not a name Max loads",
+    "fl.minus~": "renamed to fl.-~: fl.minus~ is not a name Max loads",
+    "fl.modulo~": "renamed to fl.%~: fl.modulo~ is not a name Max loads",
+    "fl.notequals~": "renamed to fl.!=~: fl.notequals~ is not a name Max loads",
+    "fl.not~": "renamed to fl.!~: fl.not~ is not a name Max loads",
+    "fl.or~": "renamed to fl.||~: fl.or~ is not a name Max loads",
+    "fl.plus~": "renamed to fl.+~: fl.plus~ is not a name Max loads",
+    "fl.times~": "renamed to fl.*~: fl.times~ is not a name Max loads"
+  },
+  "MIAP": {
+    "miap": "renamed to MIAP: miap is not a name Max loads",
+    "miap.map": "renamed to MIAP.map: miap.map is not a name Max loads",
+    "miap.meyer": "renamed to MIAP.meyer: miap.meyer is not a name Max loads",
+    "miap~": "renamed to MIAP~: miap~ is not a name Max loads"
+  },
+  "Max for the Visual Arts": {
+    "CSV2Matrix": "Only a tutorial help file (`CSV2Matrix.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `CSV2Matrix` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "GetUrlContent": "Only a tutorial help file (`GetUrlContent.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `GetUrlContent` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder). The help patch uses `mxj GetUrlContent`, whose Java class is not shipped in the package.",
+    "IP_broadcast": "Only a tutorial help file (`IP_broadcast.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `IP_broadcast` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "Jitter2Syphon": "Only a tutorial help file (`Jitter2Syphon.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `Jitter2Syphon` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "LFO-fader": "Only a tutorial help file (`LFO-fader.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `LFO-fader` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "MAtsuitween": "Only a tutorial help file (`MAtsuitween.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `MAtsuitween` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "MMF-Fantastick": "renamed to mmf-fs.core: MMF-Fantastick is not a name Max loads",
+    "PattrKitty": "Only a tutorial help file (`PattrKitty.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `PattrKitty` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "asyncread_export": "Only a tutorial help file (`asyncread_export.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `asyncread_export` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "basic-db": "Only a tutorial help file (`basic-db.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `basic-db` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "cataDelaunay": "Only a tutorial help file (`cataDelaunay.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `cataDelaunay` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder). The help patch uses `mxj cataDelaunay`, whose Java class is not shipped in the package.",
+    "coll2cellblock": "Only a tutorial help file (`coll2cellblock.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `coll2cellblock` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "coll_tools": "Only a tutorial help file (`coll_tools.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `coll_tools` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "counter_uzi_line": "Only a tutorial help file (`counter_uzi_line.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `counter_uzi_line` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "csv2coll": "Only a tutorial help file (`csv2coll.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `csv2coll` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "delta_detect": "Only a tutorial help file (`delta_detect.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `delta_detect` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "exhibition_tools": "Only a tutorial help file (`exhibition_tools.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `exhibition_tools` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "filtering_change": "Only a tutorial help file (`filtering_change.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `filtering_change` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "function_interpolation": "Only a tutorial help file (`function_interpolation.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `function_interpolation` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "list_in_max": "Only a tutorial help file (`list_in_max.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `list_in_max` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "loadbangs": "Only a tutorial help file (`loadbangs.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `loadbangs` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "matrixcontrol": "Only a tutorial help file (`matrixcontrol.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `matrixcontrol` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "max2printer": "Only a tutorial help file (`max2printer.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `max2printer` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "maxuin": "renamed to maxuino: maxuin is not a name Max loads",
+    "moduloo": "Only a tutorial help file (`moduloo.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `moduloo` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "netSend": "Only a tutorial help file (`netSend.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `netSend` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "network_scanner": "Only a tutorial help file (`network_scanner.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `network_scanner` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "path_patcher": "Only a tutorial help file (`path_patcher.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `path_patcher` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "pattr_animation": "Only a tutorial help file (`pattr_animation.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `pattr_animation` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "polar_cartesian": "Only a tutorial help file (`polar_cartesian.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `polar_cartesian` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "simple_probability": "Only a tutorial help file (`simple_probability.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `simple_probability` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "simple_triggers": "Only a tutorial help file (`simple_triggers.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `simple_triggers` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "smoother_derivitive": "Only a tutorial help file (`smoother_derivitive.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `smoother_derivitive` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "sound-gate": "Only a tutorial help file (`sound-gate.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `sound-gate` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "spray_cycle_gate": "Only a tutorial help file (`spray_cycle_gate.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `spray_cycle_gate` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "sprintf_help": "Only a tutorial help file (`sprintf_help.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `sprintf_help` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "stereography": "Only a tutorial help file (`stereography.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `stereography` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "table": "`table.maxhelp` in this package is a demo of the built-in `table` object; the package itself has no object named `table` (the built-in belongs to Max, not to Max for the Visual Arts).",
+    "thelistpackage": "Only a tutorial help file (`thelistpackage.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `thelistpackage` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "trignonometry": "Only a tutorial help file (`trignonometry.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `trignonometry` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "vector": "Only a tutorial help file (`vector.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `vector` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "vector_practice": "Only a tutorial help file (`vector_practice.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `vector_practice` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "video_output": "Only a tutorial help file (`video_output.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `video_output` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "zl_help": "Only a tutorial help file (`zl_help.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `zl_help` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder).",
+    "zlgraph_help": "Only a tutorial help file (`zlgraph_help.maxhelp`) exists. No abstraction, external, script, prototype or init mapping named `zlgraph_help` was found in any installed package or the Max app (searched for .maxpat, .js, .mxo, .mxe64, .maxproto, .class, .jar; the package has no init folder)."
+  },
+  "PeRColate": {
+    "mesh2D~": "renamed to mesh2d~: mesh2D~ is not a name Max loads"
+  },
+  "PnP.Maxtools": {
+    "pnp.maxtools demo": "No external, abstraction or init mapping has this name. Only patchers/demo/pnp.maxtools demo.maxhelp, demo.js and a refpage exist (searched the package for *demo*); the name also contains a space. It is a demo help patch."
+  },
+  "RTC-lib": {
+    "permute": "Only help/Lists/permute.maxhelp exists. No permute.mxo/.mxe64 in RTC-lib/externals, no permute.maxpat, not in package-info.json externals or patchers, RTC-lib has no init mappings; `find` for permute.* across ~/Documents/Max 9 and the Max app found no loadable file.",
+    "randomseeder": "renamed to RandomSeeder: randomseeder is not a name Max loads"
+  },
+  "TS.Modular": {
+    "ts.XYZ": "renamed to ts.xyz: ts.XYZ is not a name Max loads",
+    "ts.clock": "renamed to ts.clockMini: ts.clock is not a name Max loads",
+    "ts.clockDiv": "renamed to ts.clockdiv: ts.clockDiv is not a name Max loads",
+    "ts.clockMult": "renamed to ts.clockmult: ts.clockMult is not a name Max loads",
+    "ts.presetManager": "No abstraction or external: searched all of ~/Documents/Max 9/Packages and Max.app/C74 for ts.presetManager.* — only help/ts.presetManager.maxhelp and Snippets/Save + Rec/ts.presetManager.maxsnip exist. The snippet pastes loose objects (pattrstorage typeName @greedy 1 @changemode 1, autopattr @autoname 1, preset, number boxes); it is a template, not an object. TS.Modular has no init folder, so no mapping either.",
+    "ts.probabilityClock": "renamed to ts.probabilityGate: ts.probabilityClock is not a name Max loads",
+    "ts.scale": "renamed to ts.scaler: ts.scale is not a name Max loads",
+    "ts.vertEcho": "renamed to ts.vertecho: ts.vertEcho is not a name Max loads"
+  },
+  "Upshot": {
+    "upshot_granulator": "renamed to upshot_granular: upshot_granulator is not a name Max loads",
+    "upshot_launchpadcontrol": "renamed to upshot_lpcontrol: upshot_launchpadcontrol is not a name Max loads",
+    "upshot_noise": "renamed to upshot_noisegenerator: upshot_noise is not a name Max loads"
+  },
+  "av-toolbox": {
+    "av.template": "Only `docs/av.template.maxref.xml` exists: an empty documentation template. No patcher, help file, init mapping or javascript uses the name (searched the whole av-toolbox folder, including init/*.txt and package-info.json, which only lists the doc file)."
+  },
+  "bach": {
+    "bach.mode": "Searched ~/Documents/Max 9/Packages/{bach,cage,dada} (externals, patchers, init mappings, interfaces qlookup): only a refpage exists, no .mxo/.mxe64, .maxpat or objectfile/alias mapping. It is listed in bach-objectlist.txt and bach-obj-qlookup.json, but no bach.mode.maxpat ships in bach 0.8.3, so the name does not load."
+  },
+  "cage": {
+    "cage.anal": "Searched ~/Documents/Max 9/Packages/{bach,cage,dada} (externals, patchers, init mappings, interfaces qlookup): only a refpage exists, no .mxo/.mxe64, .maxpat or objectfile/alias mapping. Old name; cage.markov.analysis is the loadable object with the same refpage text.",
+    "cage.ezaddsynth~": "Searched ~/Documents/Max 9/Packages/{bach,cage,dada} (externals, patchers, init mappings, interfaces qlookup): only a refpage exists, no .mxo/.mxe64, .maxpat or objectfile/alias mapping. Old name; cage.ezsynth~ is the loadable object with the same refpage text.",
+    "cage.ezseq~": "Searched ~/Documents/Max 9/Packages/{bach,cage,dada} (externals, patchers, init mappings, interfaces qlookup): only a refpage exists, no .mxo/.mxe64, .maxpat or objectfile/alias mapping. Old name; cage.ezsampler~ is the loadable object with the same refpage text.",
+    "cage.glue": "Searched ~/Documents/Max 9/Packages/{bach,cage,dada} (externals, patchers, init mappings, interfaces qlookup): only a refpage exists, no .mxo/.mxe64, .maxpat or objectfile/alias mapping. Refpage has no inlets, outlets or messages; not in cage-obj-qlookup.json.",
+    "cage.prob": "Searched ~/Documents/Max 9/Packages/{bach,cage,dada} (externals, patchers, init mappings, interfaces qlookup): only a refpage exists, no .mxo/.mxe64, .maxpat or objectfile/alias mapping. Old name; cage.markov.synthesis is the loadable object with the same refpage text.",
+    "cage.scissors": "Searched ~/Documents/Max 9/Packages/{bach,cage,dada} (externals, patchers, init mappings, interfaces qlookup): only a refpage exists, no .mxo/.mxe64, .maxpat or objectfile/alias mapping. Refpage has no inlets, outlets or messages; not in cage-obj-qlookup.json."
+  },
+  "catart-mubu": {
+    "camu.control": "Help file only (patchers/help/camu.control.maxhelp). No camu.control.maxpat anywhere in the package (searched patchers/ recursively). The help demonstrates camu.control.linnstrument, camu.control.sensel and camu.control.blocks; patchers/lib also has camu.control.mpe, camu.control.qwerty, camu.control.linnstrows.",
+    "camu.help-template": "Help-file template only (patchers/help/camu.help-template.maxhelp, placeholder corpus name xxxxxx-help-corpus). No abstraction of this name in the package."
+  },
+  "cv.jit": {
+    "cv.jit.hsflow": "renamed to cv.jit.HSflow: cv.jit.hsflow is not a name Max loads",
+    "cv.jit.lkflow": "renamed to cv.jit.LKflow: cv.jit.lkflow is not a name Max loads"
+  },
+  "dada": {
+    "dada.match": "Searched ~/Documents/Max 9/Packages/{bach,cage,dada} (externals, patchers, init mappings, interfaces qlookup): only a refpage exists, no .mxo/.mxe64, .maxpat or objectfile/alias mapping. Refpage has no inlets, outlets or messages; not in dada-obj-qlookup.json.",
+    "dada.pareto": "Searched ~/Documents/Max 9/Packages/{bach,cage,dada} (externals, patchers, init mappings, interfaces qlookup): only a refpage exists, no .mxo/.mxe64, .maxpat or objectfile/alias mapping. Not in dada-obj-qlookup.json.",
+    "dada.terrain.rectangle~": "Searched ~/Documents/Max 9/Packages/{bach,cage,dada} (externals, patchers, init mappings, interfaces qlookup): only a refpage exists, no .mxo/.mxe64, .maxpat or objectfile/alias mapping. Duplicate refpage of dada.terrain.rect~, which ships as dada/patchers/dada.terrain.rect~.maxpat."
+  },
+  "ears": {
+    "ears.div~": "renamed to ears./~: ears.div~ is not a name Max loads",
+    "ears.eq~": "renamed to ears.==~: ears.eq~ is not a name Max loads",
+    "ears.features~": "Refpage only. Searched ears/externals (no .mxo/.mxe64), ears/init mappings, interfaces/ears-obj-qlookup.json, and all of ~/Documents/Max 9/Packages and C74/packages for the name: no loadable object. Its refpage is an old copy of ears.essentia~ (same attributes).",
+    "ears.minus~": "renamed to ears.-~: ears.minus~ is not a name Max loads",
+    "ears.model~": "Refpage only. Searched ears/externals, ears/init mappings, ears-obj-qlookup.json, all installed and bundled packages: no external, abstraction or mapping. Use the ears.model.* objects.",
+    "ears.neq~": "renamed to ears.!=~: ears.neq~ is not a name Max loads",
+    "ears.plus~": "renamed to ears.+~: ears.plus~ is not a name Max loads",
+    "ears.py~": "Refpage only (authors Bianchi and Agostini). Searched ears/externals, ears/init, ears-obj-qlookup.json and all packages: no external, abstraction or mapping.",
+    "ears.rdiv~": "renamed to ears.!/~: ears.rdiv~ is not a name Max loads",
+    "ears.rminus~": "renamed to ears.!-~: ears.rminus~ is not a name Max loads",
+    "ears.times~": "renamed to ears.*~: ears.times~ is not a name Max loads",
+    "ears.utils.playmp3~": "Refpage and a help file whose box text is this name, but no external, abstraction or init mapping exists (searched ears/externals, ears/init, ears-obj-qlookup.json, all packages). The installed external is ears.playmp3~, already in the library."
+  },
+  "jasch objects": {
+    "3dmatrix": "renamed to 3Dmatrix: 3dmatrix is not a name Max loads",
+    "dbmult~": "renamed to db*~: dbmult~ is not a name Max loads",
+    "dot": "renamed to .: dot is not a name Max loads"
+  },
+  "ml.star": {
+    "ml.scalar": "Only docs/ml.scalar.maxref.xml exists, a copy of ml.scale's refpage with \"scale\" renamed. No external in externals/ (and not in package-info.json filelist), no help file, no patcher."
+  }
+}

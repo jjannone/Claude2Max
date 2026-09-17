@@ -1,6 +1,6 @@
 ---
 name: c2m-package-search
-description: Search the Claude2Max curated package library (2,795+ installed Max package objects across 68+ packages — bach, FluCoMa, HISSTools, FFTease, cv.jit, FrameLib, MuBu, etc.) for an object that solves a problem in one external instead of a long native chain. Use BEFORE composing any chain of 3+ native objects to do something — convolution, granular synthesis, FFT, computer vision, ML, OSC, list manipulation, descriptor analysis, etc. Also use when the user asks "is there a package object for X?", "what does <package object> do?", or invokes /c2m-package-search. Skip for built-in Max objects (consult the C74 refpages instead).
+description: Search the Claude2Max curated package library (2,944 installed Max package objects across 74 packages — bach, FluCoMa, HISSTools, FFTease, cv.jit, FrameLib, MuBu, etc.) for an object that solves a problem in one external instead of a long native chain. Use BEFORE composing any chain of 3+ native objects to do something — convolution, granular synthesis, FFT, computer vision, ML, OSC, list manipulation, descriptor analysis, etc. Also use when the user asks "is there a package object for X?", "what does <package object> do?", or invokes /c2m-package-search. Skip for built-in Max objects (consult the C74 refpages instead).
 argument-hint: "<search-term>"
 ---
 

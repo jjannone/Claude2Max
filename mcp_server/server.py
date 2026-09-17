@@ -15,13 +15,13 @@ load()    → load those modules into context (front-loads knowledge before patc
 Verification tools (use after knowledge is loaded)
 ---------------------------------------------------
 lookup_object()     Authoritative object existence + I/O signature.
-search_packages()   Search 2,795-object package library by term.
+search_packages()   Search 2,944-object package library by term.
 lookup_attribute()  Attribute validity check for a specific attr.
 list_attributes()   All valid attrs for an object (bulk verification).
 verify_spec()       Static binding-rule check on a spec before converting.
 verify_patch()      Same checks, run directly against a .maxpat/.maxhelp/.amxd
                     file on disk — single file or a directory sweep.
-search_pitfalls()   Search Common Pitfalls + forum/cookbook insights by term.
+search_pitfalls()   Search Common Pitfalls + forum/cookbook/package/tutorial insights by term.
 lookup_rule()       Find a binding rule by a fragment of its name.
 
 The verify_spec() rule library lives in mcp_server/claude2max_verify/ and is
@@ -533,7 +533,7 @@ exists to turn that silent, out-of-session failure into a loud, in-session one.
 
 ## Before writing any object name (`newobj` text field)
 
-Call `lookup_object(name)` — it queries C74 refpages and the 2,795-object
+Call `lookup_object(name)` — it queries C74 refpages and the 2,944-object
 package library authoritatively. Do NOT write an object name until
 `lookup_object` confirms it exists.
 
@@ -879,7 +879,7 @@ def lookup_object(name: str) -> dict:
 
     Returns authoritative existence, I/O signature, digest, and use_when
     guidance for the named object.  Queries C74 refpages first (built-in
-    Max objects), then the 2,795-object Claude2Max package library
+    Max objects), then the 2,944-object Claude2Max package library
     (installed externals).
 
     Skipping this call is how you get silent-failure patches: Max accepts
@@ -1157,7 +1157,7 @@ def _fmt_results(cands: list, relevance: str) -> list:
 @mcp.tool()
 def search_packages(term: str, limit: int = 5) -> dict:
     """
-    Search the Claude2Max package library (2,795 installed externals) by intent.
+    Search the Claude2Max package library (2,944 installed package objects) by intent.
 
     Call this before composing any chain of 3+ native Max objects — there is
     often a single package external that covers the whole chain.
@@ -1750,10 +1750,15 @@ _RULE_DOCS: list[Path] = [
     _PATCHING_DIR / "MAX_PATCHING.md",
 ]
 
-# Pitfall / insight corpora: the Common Pitfalls bullet list plus the two
-# community-knowledge insight files.
-_PITFALL_FORUM = _REPO_ROOT / "scans" / "c74-forum" / "forum_insights.md"
-_PITFALL_COOKBOOK = _REPO_ROOT / "scans" / "cookbook" / "cookbook_insights.md"
+# Pitfall / insight corpora: the Common Pitfalls bullet list plus the insight
+# files, each as (path, source label).
+_PITFALL_INSIGHTS: list = [
+    (_REPO_ROOT / "scans" / "c74-forum" / "forum_insights.md", "forum"),
+    (_REPO_ROOT / "scans" / "cookbook" / "cookbook_insights.md", "cookbook"),
+    (_REPO_ROOT / "scans" / "packages" / "packages_insights.md", "packages"),
+    (_REPO_ROOT / "scans" / "packages" / "tutorials_insights.md", "tutorials"),
+]
+_PITFALL_SOURCES = [_PATCHING_DIR / "MAX_PATCHING.md"] + [p for p, _ in _PITFALL_INSIGHTS]
 
 def _split_sections(text: str, source: str) -> list:
     """Split markdown into `## ` sections → [{name, body, source}] (body incl. `### `)."""
@@ -1841,18 +1846,14 @@ def _build_pitfall_chunks() -> list:
                         "source": "Common Pitfalls",
                         "section": "Common Pitfalls"})
 
-    if _PITFALL_FORUM.exists():
-        out.extend(_split_blockquote_entries(_read_md(_PITFALL_FORUM), "forum"))
-    if _PITFALL_COOKBOOK.exists():
-        out.extend(_split_blockquote_entries(_read_md(_PITFALL_COOKBOOK), "cookbook"))
+    for path, source in _PITFALL_INSIGHTS:
+        if path.exists():
+            out.extend(_split_blockquote_entries(_read_md(path), source))
 
     return out
 
 
-_pitfall_chunks_cache = _FileCache(
-    [_PATCHING_DIR / "MAX_PATCHING.md", _PITFALL_FORUM, _PITFALL_COOKBOOK],
-    _build_pitfall_chunks,
-)
+_pitfall_chunks_cache = _FileCache(_PITFALL_SOURCES, _build_pitfall_chunks)
 
 
 def _pitfall_chunks() -> list:
@@ -1860,7 +1861,7 @@ def _pitfall_chunks() -> list:
     All searchable pitfall/insight entries, cached. [{text, source, section}].
 
     Sources: the `## Common Pitfalls` bullet list in MAX_PATCHING.md, plus every
-    `> `-block entry in the forum and cookbook insight files.
+    `> `-block entry in the insight files listed in `_PITFALL_INSIGHTS`.
     """
     return _pitfall_chunks_cache.get()
 
@@ -1877,7 +1878,7 @@ def _truncate(text: str, cap: int) -> str:
 @mcp.tool()
 def search_pitfalls(term: str, limit: int = 8) -> dict:
     """
-    Search the silent-failure corpus — Common Pitfalls + forum/cookbook insights.
+    Search the silent-failure corpus — Common Pitfalls + forum, cookbook, package and tutorial insights.
 
     Use this when you hit (or want to pre-empt) surprising Max behaviour: an
     object that "fires but does nothing", a value that arrives wrong downstream,
@@ -1885,9 +1886,10 @@ def search_pitfalls(term: str, limit: int = 8) -> dict:
     behaviours Max accepts silently and then misbehaves on — exactly the class of
     bug that does not surface as an error.
 
-    Searches three sources: the `## Common Pitfalls` bullets in
-    `patching/MAX_PATCHING.md`, every entry in `scans/c74-forum/forum_insights.md`, and
-    every entry in `scans/cookbook/cookbook_insights.md`. Deterministic token search —
+    Searches five sources: the `## Common Pitfalls` bullets in
+    `patching/MAX_PATCHING.md`, and every entry in `scans/c74-forum/forum_insights.md`,
+    `scans/cookbook/cookbook_insights.md`, `scans/packages/packages_insights.md` and
+    `scans/packages/tutorials_insights.md`. Deterministic token search —
     ranks entries by how many of the query's words they contain (whole-phrase
     matches score highest).
 
@@ -1902,7 +1904,7 @@ def search_pitfalls(term: str, limit: int = 8) -> dict:
     count    — number of matching entries returned
     query    — the term searched
     pitfalls — list of {snippet, source, section}; source ∈
-               {"Common Pitfalls", "forum", "cookbook"}
+               {"Common Pitfalls", "forum", "cookbook", "packages", "tutorials"}
     message  — human-readable headline (names the no-match case explicitly)
 
     Smoke tests
@@ -1939,7 +1941,7 @@ def search_pitfalls(term: str, limit: int = 8) -> dict:
                f"Verify object/attribute names with lookup_object / "
                f"list_attributes before relying on them.")
     result = {"count": len(pitfalls), "query": term, "pitfalls": pitfalls, "message": msg}
-    missing = _missing_sources([_PATCHING_DIR / "MAX_PATCHING.md", _PITFALL_FORUM, _PITFALL_COOKBOOK])
+    missing = _missing_sources(_PITFALL_SOURCES)
     if missing:
         result["missing_sources"] = missing
         result["message"] = (f"WARNING: could not read {', '.join(missing)}, so its entries "

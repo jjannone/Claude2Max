@@ -47,9 +47,9 @@ The `sync` command reads a `.maxpat`, diffs the live boxes against the embedded 
 
 Inlet/outlet counts, signal-rate types, attribute names, message selectors, and digests are looked up on demand from Cycling '74's bundled `*.maxref.xml` files via a session-cached `RefpageCache`. There is no external object database to maintain — the cache always matches the installed Max version. 130+ stock Max objects are covered; unknown objects can be supplied by the spec or fall through to the package library.
 
-### Curated Package Library — 2,795+ Installed Package Objects
+### Curated Package Library — 2,944 Installed Package Objects
 
-`packages/package_objects.json` indexes every installed Max-package object (currently 2,795 across 68+ packages — bach, FluCoMa, HISSTools, FFTease, cv.jit, FrameLib, MuBu, Sound Design Toolkit, CNMAT Externals, RTC-lib, Digital Orchestra Toolbox, and many more). Each entry carries a digest, I/O counts, kind, and a hand-written `use_when` field that explains *when to reach for this object instead of a long native chain* — including key attributes, message selectors, and constructor arguments needed to wire it correctly. The `/c2m-package-search` slash command surfaces relevant entries before any 3+ object native chain is composed. Per-package paradigms (bach lllls, FrameLib frame chains, FluCoMa corpus workflow, etc.) are documented in `packages/package_concepts.md`.
+`packages/package_objects.json` indexes every installed Max-package object (currently 2,944 across 74 packages — bach, FluCoMa, HISSTools, FFTease, cv.jit, FrameLib, MuBu, Sound Design Toolkit, CNMAT Externals, RTC-lib, Digital Orchestra Toolbox, and many more). Each entry carries a digest, I/O counts, kind, and a hand-written `use_when` field that explains *when to reach for this object instead of a long native chain* — including key attributes, message selectors, and constructor arguments needed to wire it correctly. The `/c2m-package-search` slash command surfaces relevant entries before any 3+ object native chain is composed. Per-package paradigms (bach lllls, FrameLib frame chains, FluCoMa corpus workflow, etc.) are documented in `packages/package_concepts.md`.
 
 ### Interactive Tutorial System
 
@@ -113,7 +113,7 @@ The contemporary field is small and converges on three architectures: **imperati
 
 | Project | Architecture | File Artifact? | Object Verification | Package Knowledge | Round-Trip | Tutorials |
 |---------|-------------|----------------|---------------------|-------------------|------------|-----------|
-| **Claude2Max** | Declarative spec → `.maxpat` | Yes | C74 refpage XML (on demand) | 2,795 objects, curated `use_when` | Embedded spec + sync | Built-in (`/c2m-tutorial`, `/c2m-explain`) |
+| **Claude2Max** | Declarative spec → `.maxpat` | Yes | C74 refpage XML (on demand) | 2,944 objects, curated `use_when` | Embedded spec + sync | Built-in (`/c2m-tutorial`, `/c2m-explain`) |
 | **MaxPyLang** (Barnard PL Labs) | Imperative Python API → `.maxpat` | Yes | Type system in the Python API | None curated | None — code is the source | None |
 | **MaxMCP** | MCP server, mutates running Max | No (live patch) | Whatever Max accepts at runtime | None curated | Live state; no file source | None |
 | **tiianhk / MaxMSP-MCP** | MCP server, mutates running Max | No (live patch) | Whatever Max accepts at runtime | None curated | Live state | First-class "explain this patch" |
@@ -134,7 +134,7 @@ The contemporary field is small and converges on three architectures: **imperati
 ### What Claude2Max keeps that no other tool does
 
 - **Refpage-grounded I/O.** Inlet counts, attribute names, message selectors, and digests come from the actual `*.maxref.xml` files Max ships with — not from the LLM's memory or a static database that drifts behind Max releases. This catches the silent-failure class of bug (Max accepts unknown attribute names and ignores them) that 2023-vintage LLM-emits-Max-JSON experiments documented as a primary foot-gun.
-- **Curated installed-package library with `use_when`.** 2,795 package objects, each with a hand-written judgment about when to reach for it instead of a long native chain. The LLM consults this *before* composing a chain, not after.
+- **Curated installed-package library with `use_when`.** 2,944 package objects, each with a hand-written judgment about when to reach for it instead of a long native chain. The LLM consults this *before* composing a chain, not after.
 - **Embedded spec round-trip.** The `.maxpat` is the source of truth; manual edits in Max are preserved by `sync`; there are no stray `.json` files in the project.
 - **First-class tutorials and explanations.** `/c2m-tutorial` bakes an interactive walkthrough into the patch itself; `/c2m-explain` generates a fresh walkthrough on demand — neither requires the LLM to be present when the student opens the patch.
 - **Themed presentation-view design system.** 10 themes with a token contract, translated automatically into spec coordinates.

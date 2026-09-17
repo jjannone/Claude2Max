@@ -12,11 +12,18 @@ python3 packages/build_package_objects.py --package "<package name>" --merge pac
 
 # Help-file-only packages (no refpages — Vsynth, jasch objects, etc.)
 python3 packages/build_helpfile_objects.py --package "<package name>" --merge packages/package_objects.json
+
+# Abstraction-only packages (neither — ABL Effect Modules, AudioMix, etc.)
+python3 packages/build_abstraction_objects.py --package "<package name>" --merge packages/package_objects.json
 ```
+
+The abstraction extractor reads `.maxpat` files under the package's `patchers/` and `externals/` folders. The object name is the file name; ports are the patch's top-level `inlet` / `outlet` boxes. It skips overview and launch patches, and any patch with no ports, since nothing can be wired to it — unless the patch's top level holds a `js` or `v8` box, which may build its ports by script at load (abclib's wrappers work this way; their port counts then come out 0 / 0, meaning unknown). Run it after the refpage or help-file extractor, not instead: it never overwrites a record those sources wrote. Its stdout mode also prints `_inner`, the object classes used inside each patch, which shows at a glance what a module wraps. Packages whose patches are all demos (tutorial series, Max for Live device bundles) produce no records; their value goes into insights, not the library.
 
 Then fill the empty `use_when` fields for the objects worth keeping. Skip pure alternatives with no advantage over built-ins. Both extractors preserve existing `use_when` values across re-extractions.
 
 Run `python3 packages/query_packages.py validate` after each merge to confirm zero hard issues.
+
+**A name with documentation is not always an object.** Packages ship refpages and help files for names that nothing loads: a refpage left behind after its external was dropped, a template, a help page covering a family of objects, a name that only works through a prefix (`mxj`, `gen~ @gen`). Before writing `use_when` for a record, check that something answers to the name: an external, an abstraction, a script, or an `init/` mapping. When nothing does, remove the record and add it to `packages/removed_records.json` with the reason; when the record sits under a name Max does not load, rename it and record the old name there. All three extractors skip the names in that file, so re-running one does not bring them back from the same documentation.
 
 ## What Makes a Good use_when Entry
 

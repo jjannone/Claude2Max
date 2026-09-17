@@ -112,7 +112,7 @@ def cmd_list(args):
             status = "uncurated — helpfiles only"
             counts["extractable"] += 1
         else:
-            status = "no docs (needs other approach)"
+            status = "no docs — abstraction extractor"
             counts["helpless"] += 1
 
         if args.uncurated and curated_key:

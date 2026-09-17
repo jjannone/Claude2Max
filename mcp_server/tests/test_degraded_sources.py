@@ -33,7 +33,8 @@ def _patched(name, value, fn):
 
 
 def test_pitfall_search_names_a_missing_source():
-    r = _patched("_PITFALL_FORUM", _NOWHERE, lambda: server.search_pitfalls("textedit"))
+    sources = list(server._PITFALL_SOURCES) + [_NOWHERE]
+    r = _patched("_PITFALL_SOURCES", sources, lambda: server.search_pitfalls("textedit"))
     assert r.get("missing_sources") == ["scans/no-such-crawl/no_such_insights.md"], r.get("missing_sources")
     assert r["message"].startswith("WARNING: could not read scans/no-such-crawl/no_such_insights.md")
     assert "missing_sources" not in server.search_pitfalls("textedit")

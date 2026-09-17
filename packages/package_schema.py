@@ -8,16 +8,36 @@ add a key to CANONICAL_DEFAULTS here, and both extractors automatically
 emit it on the next run.
 
 Used by:
-  - build_package_objects.py    (refpage extractor)
-  - build_helpfile_objects.py   (helpfile extractor)
-  - query_packages.py validate  (library health check)
+  - build_package_objects.py     (refpage extractor)
+  - build_helpfile_objects.py    (helpfile extractor)
+  - build_abstraction_objects.py (abstraction extractor)
+  - query_packages.py validate   (library health check)
 
 Anyone adding a new extractor MUST run their records through `normalize()`
 before merging — `merge_into` enforces this defensively but extractors
-should not rely on that.
+should not rely on that — and MUST skip the names `removed_names()` returns.
 """
 
+import json
 from collections import OrderedDict
+from pathlib import Path
+
+REMOVED_RECORDS = Path(__file__).resolve().parent / "removed_records.json"
+
+
+def removed_names(package_name, path=None):
+    """Names taken out of the library for a package, which extractors must not re-add.
+
+    A package can ship a refpage or help file for a name that no loadable
+    object answers to, and a record can sit under a name Max does not load;
+    both were removed or renamed by hand, with the reason, in
+    removed_records.json. Re-running an extractor would otherwise bring them
+    straight back from the same documentation file."""
+    try:
+        data = json.loads(Path(path or REMOVED_RECORDS).read_text())
+    except (OSError, json.JSONDecodeError):
+        return set()
+    return set(data.get(package_name, {}))
 
 
 # Required keys with their default values. Adding a key here propagates
@@ -29,7 +49,7 @@ CANONICAL_DEFAULTS = OrderedDict([
     ("outlettype", []),
     ("kind",       ""),
     ("tags",       []),
-    ("source",     ""),     # "refpage" or "helpfile"
+    ("source",     ""),     # "refpage", "helpfile" or "abstraction"
     ("use_when",   ""),
 ])
 
@@ -54,7 +74,7 @@ TYPE_CONSTRAINTS = {
     "deprecated_by": str,
 }
 
-VALID_SOURCES = frozenset({"refpage", "helpfile"})
+VALID_SOURCES = frozenset({"refpage", "helpfile", "abstraction"})
 VALID_KINDS   = frozenset({"external", "abstraction", "javascript", ""})
 
 

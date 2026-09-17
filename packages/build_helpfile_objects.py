@@ -33,7 +33,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from package_schema import normalize, OPTIONAL_KEYS  # canonical record shape
+from package_schema import normalize, OPTIONAL_KEYS, removed_names  # canonical record shape
 
 DEFAULT_ROOT = Path.home() / "Documents" / "Max 9" / "Packages"
 _EXTERNAL_SUFFIXES = {".mxo", ".mxe", ".mxe64"}
@@ -189,7 +189,10 @@ def merge_into(existing, package_name, new_objects):
     are dropped by `normalize`'s unknown-key filter.
     """
     bucket = existing.setdefault(package_name, {})
+    skip = removed_names(package_name)
     for name, record in new_objects.items():
+        if name in skip:
+            continue
         prior = bucket.get(name, {})
         if prior.get("use_when"):
             record["use_when"] = prior["use_when"]
