@@ -55,6 +55,32 @@ def test_nested_domain_folder_in_user_package():
     assert r is not None and (r["numinlets"], r["numoutlets"]) == (3, 1), r
 
 
+def test_domain_folder_directly_under_docs_in_user_package():
+    """Jitter Tools' real layout: packages/Jitter Tools/docs/jit.fx/*.maxref.xml
+    — a domain folder directly under docs/, not under docs/refpages at all.
+    Data Knot (a user package) ships the same shape: docs/dataknot-ref/."""
+    tmp = Path(tempfile.mkdtemp())
+    cache, _c74, users = _cache(tmp)
+    d = users / "SomePkg" / "docs" / "somepkg-ref"
+    d.mkdir(parents=True)
+    (d / "zfx.maxref.xml").write_text(_refpage("zfx", 1, 2))
+    r = cache.lookup("zfx")
+    assert r is not None and (r["numinlets"], r["numoutlets"]) == (1, 2), r
+
+
+def test_domain_folder_under_refpages1_in_user_package():
+    """Gen's real layout: packages/Gen/docs/refpages1/common/*.maxref.xml and
+    docs/refpages1/jit/*.maxref.xml — a domain folder under refpages1, which
+    the flat docs/refpages1/<name>.maxref.xml check alone does not reach."""
+    tmp = Path(tempfile.mkdtemp())
+    cache, _c74, users = _cache(tmp)
+    d = users / "GenLikePkg" / "docs" / "refpages1" / "common"
+    d.mkdir(parents=True)
+    (d / "zgen.maxref.xml").write_text(_refpage("zgen", 4, 1))
+    r = cache.lookup("zgen")
+    assert r is not None and (r["numinlets"], r["numoutlets"]) == (4, 1), r
+
+
 def test_builtin_package_wins_name_clash():
     tmp = Path(tempfile.mkdtemp())
     cache, c74, users = _cache(tmp)

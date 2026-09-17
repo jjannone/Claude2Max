@@ -1296,14 +1296,23 @@ class RefpageCache:
                 p = pkg / sub / f"{name}.maxref.xml"
                 if p.exists():
                     return p
-            # Packages may nest refpages one level deeper under a domain dir
-            # the way the core install does — RNBO ships
-            # packages/RNBO/docs/refpages/max/rnbo~.maxref.xml, so a flat
-            # check of docs/refpages misses it and rnbo~ reads as invented.
-            refroot = pkg / "docs" / "refpages"
-            if refroot.is_dir():
+            # Packages may nest refpages one level deeper under a domain dir,
+            # under any of the three flat locations above. RNBO needs it under
+            # docs/refpages (packages/RNBO/docs/refpages/max/rnbo~.maxref.xml).
+            # Gen needs it under docs/refpages1 (docs/refpages1/common/ and
+            # docs/refpages1/jit/, 5 pages). Jitter Tools needs it directly
+            # under docs/ (docs/jit.fx/, 83 pages) — that domain folder isn't
+            # under refpages at all. The user package Data Knot is the same
+            # shape as Jitter Tools (docs/dataknot-ref/, 129 pages). Verified
+            # on this machine 2026-09-16; without this walk all four read as
+            # having no refpage, so the gate can't resolve their inlets,
+            # outlets, attributes or messages.
+            for sub in ["docs/refpages", "docs/refpages1", "docs"]:
+                subroot = pkg / sub
+                if not subroot.is_dir():
+                    continue
                 try:
-                    for domain in sorted(refroot.iterdir()):
+                    for domain in sorted(subroot.iterdir()):
                         if domain.is_dir():
                             p = domain / f"{name}.maxref.xml"
                             if p.exists():
