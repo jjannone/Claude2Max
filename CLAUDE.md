@@ -105,6 +105,27 @@ Know which tier a claim falls in, because the verification differs and only the 
 
 Max itself cannot be executed from here — that limitation is why the second and third rows exist as separate lookup paths rather than collapsing into "just run it."
 
+**Running a tool is only verification when you run it the way the tool runs.**
+An environment mismatch fails in the same shape as a real defect: a
+`ModuleNotFoundError` reads as "this isn't installed" or "that feature doesn't
+exist" whether the package is genuinely missing or merely missing from the
+interpreter you happened to type. So before concluding anything from a failed
+run — and certainly before writing "could not be run here" — find out what
+interpreter or environment the thing is actually configured to use. The
+registration, the launch config, or the shebang names it; that is a lookup, not
+a guess.
+
+For instance: this repo's MCP server is registered with its own virtualenv,
+`mcp_server/.venv/bin/python3` (Python 3.12, where `mcp` is installed), while a
+bare `python3` on the same machine resolves to `/usr/bin/python3` (Python 3.9,
+where it is not). Running `python3 -m pytest mcp_server/tests/test_modules.py`
+therefore fails to collect, which looks exactly like the test being unrunnable;
+the same command under the venv interpreter passes 11 of 11. **Use
+`mcp_server/.venv/bin/python3` for anything touching the MCP server** —
+`server.py`, its tests, and the `{!tag}` module extraction. The registration
+lives in `~/.claude.json` under `mcpServers`; read the `command` field rather
+than printing the whole entry, which also holds an API key. (2026-09-22.)
+
 ## Never Write API Names From Memory {!core}
 
 Never write a method name, property name, attribute name, function name, CSS property, shell flag, environment variable, or any other API identifier from memory. If the name didn't come from a documentation page, header file, refpage, autocomplete, or other authoritative source within the last few seconds, it is a guess — and a guess is forbidden. This applies across every language and every environment, not just Max.
