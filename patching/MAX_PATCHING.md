@@ -6,6 +6,51 @@
 
 ---
 
+## An Identifier Scoped to a Container Carries Its Container — Binding Rule {!core}
+
+When an identifier is unique only *within* some container, any structure that
+holds identifiers from more than one container must key on **container plus
+identifier**, never the identifier alone. A flat map keyed on the bare name
+silently merges entries that were never the same thing, and it merges them
+without complaining — the write succeeds, the count comes out plausible, and
+the damage is somewhere else in the file.
+
+That silence is the whole danger. An operation like this reports how much it
+did, not whether it was right, so "restored 183 boxes" reads as success whether
+the 183 went to their own boxes or to strangers'.
+
+**In Max, a box id is scoped to its own patcher.** `obj-5` exists in the root,
+in every tab, and in every subpatcher, and those are different boxes. So
+anything that walks nested patchers and remembers boxes — a differ, a restore,
+a merge, a comparison against another version of the same file — keys them by
+their path: the chain of boxes that contains them, plus the id.
+
+For instance: restoring a help file's layout from its committed copy, keyed by
+id alone, wrote one tab's geometry into another tab's boxes. It reported 183
+boxes restored and looked like it had worked; `butter_comment.maxhelp` went
+from 0 overlapping boxes to 53. Re-keyed by path, the same restore put 181
+boxes back and returned the file to 0. (2026-09-22.)
+
+The same scoping holds for everything else Max keeps per patcher rather than
+per patch — a scripting name (`varname`), a `pattr` name, a `pv` variable — and
+the rule covers those as it covers ids, because the property that matters is
+the scope, not which kind of name it is. It is the mirror image of *Every
+Global Name Inside a Copied Thing Is Per-Instance* in `CLAUDE.md`: that rule is
+about a name that reaches further than intended, this one about a name treated
+as if it reached further than it does.
+
+**The recognition signal** is building a dict, set or lookup keyed by an
+identifier inside a function that also recurses into nested scopes. At that
+moment, ask whether two containers could hand you the same key — and if they
+could, put the path in it.
+
+**A companion habit, which is what actually caught this one:** verify a bulk
+edit by measuring a property of the result, not by reading the count the edit
+reports about itself. Overlapping-box count before and against the committed
+version was the measurement here; a diff, a checksum, or a test would serve the
+same purpose. A number the operation prints about its own work cannot tell you
+the work was correct.
+
 ## A Stack of Bound Controls Is One Block, Not a List — Binding Rule {!layout}
 
 When several controls bound to the same object are stacked in a column — a run
