@@ -51,14 +51,14 @@ BUTTER_COMMENT_EMBEDSTATE = [
     ["bgcolor", 0, 0, 0, 0], ["bubble", 0], ["bubble_bgcolor", 1, 1, 1, 1],
     ["bubble_outlinecolor", 0, 0, 0, 1], ["bubblepoint", 0.5],
     ["bubbleside", 1], ["bubbletextmargin", 0], ["bubbleusescolors", 0],
-    ["underline", 0], ["z_autoheight", 0], ["z_bullet", "\u2022"],
-    ["z_codebg", 0.5, 0.5, 0.5, 0.18], ["z_headingscale", 1],
-    ["z_hyperlinkcolor", 0.2, 0.45, 0.95, 1], ["z_indent", 14],
-    ["z_linespacing", 1.25], ["z_linkunderline", 1], ["z_markdown", 1],
-    ["z_monofont", ""], ["z_padding", 4], ["z_paraspacing", 0.5],
-    ["z_pointsize", 12, 10], ["z_sendto", ""],
-    ["z_tablecolor", 0.5, 0.5, 0.5, 0.55], ["z_tablefill", 1],
-    ["z_tablepad", 4], ["z_tablewrap", 0.34], ["z_text", ""], ["z_wrap", 1],
+    ["underline", 0], ["_autoheight", 0], ["_bullet", "\u2022"],
+    ["_codebg", 0.5, 0.5, 0.5, 0.18], ["_headingscale", 1],
+    ["_hyperlinkcolor", 0.2, 0.45, 0.95, 1], ["_indent", 14],
+    ["_linespacing", 1.25], ["_linkunderline", 1], ["_markdown", 1],
+    ["_monofont", ""], ["_padding", 4], ["_paraspacing", 0.5],
+    ["_pointsize", 12, 10], ["_sendto", ""],
+    ["_tablecolor", 0.5, 0.5, 0.5, 0.55], ["_tablefill", 1],
+    ["_tablepad", 4], ["_tablewrap", 0.34], ["_text", ""], ["_wrap", 1],
 ]
 
 
@@ -526,13 +526,13 @@ class Page:
                 "fontname": MONO, "fontsize": 10.0, "textcolor": DIM,
             },
             "box_extras": {"embedstate": butter_embedstate({
-                "z_text": "<br>".join(self.notes_lines),
-                "z_tablecolor": [0.45, 0.46, 0.5, 0.7],
+                "_text": "<br>".join(self.notes_lines),
+                "_tablecolor": [0.45, 0.46, 0.5, 0.7],
                 # almost the page colour, a shade darker: a code span should read as a
                 # different kind of text, not as a highlight
-                "z_codebg": [0.0, 0.0, 0.0, 0.18],
-                "z_linespacing": 1.2, "z_headingscale": 0.75,
-                "z_tablewrap": 0.3, "z_padding": 8,
+                "_codebg": [0.0, 0.0, 0.0, 0.18],
+                "_linespacing": 1.2, "_headingscale": 0.75,
+                "_tablewrap": 0.3, "_padding": 8,
             })},
         })
         self.add("page_panel", {

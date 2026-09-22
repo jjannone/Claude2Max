@@ -6,6 +6,61 @@
 
 ---
 
+## A Stack of Bound Controls Is One Block, Not a List — Binding Rule {!layout}
+
+When several controls bound to the same object are stacked in a column — a run
+of `attrui`, a set of number boxes, anything the operator reads down — lay them
+out as one solid block: **each row sits 1 pixel below the last.** One pixel is a
+hairline — enough that two rows do not fuse into one shape, far too little to
+read as a gap. Anything more is a visual separator, and the eye uses a separator
+to group things whether or not a grouping was meant, so an evenly-spaced column
+silently says "these are unrelated items in a list" about controls that are one
+surface. Space belongs *between* groups, where it marks a real boundary, and a
+header comment names what each block is (see *Group Bound Controls by Function,
+With Headers*).
+
+That also gives a layout pass a rule for telling the two apart: a gap **larger
+than one row** is deliberate and is left alone; anything smaller is closed to
+1 pixel.
+
+For instance, the `attrui` columns in `butter_keys.maxhelp` were on a 28-pixel
+pitch with boxes 22 pixels tall, so six pixels of patcher showed between every
+row. They are now 1 pixel apart in four labelled blocks, and each tab's
+attributes read as the control panel they are. (John, 2026-09-22.)
+
+The recognition signal: writing a `y` step for a column that is larger than the
+box height. That is the moment to ask whether the extra pixels are marking a
+boundary or just habit.
+
+## Many Cords to One Place Share One Path — Binding Rule {!layout}
+
+When a block of controls all feeds the same destination, do not let the cords
+fan out individually. **Route them along a shared trunk so they read as one
+segmented cord**: give every patchline the same elbow points, so the long run is
+a single line with a short stub off each control, instead of N diagonals crossing
+the same space. One connection is being made — one control surface driving one
+object — and the drawing should say that once rather than N times.
+
+**The route is three straight segments, never a diagonal.** Each cord leaves its
+outlet going straight **up or straight down** to a shared height, turns once and
+runs **straight horizontal** to a point **directly above the destination inlet**,
+then drops straight in. Because a column of controls shares one x, every
+vertical stub lies on the same line and every horizontal run lies on the same
+line, so the whole bundle draws as one segmented cord with the controls hanging
+off it.
+
+In a `.maxpat` this is the patchline's `midpoints` field, a flat list of elbow
+points `[x1, y1, x2, y2, …]` (C74's own `jit.mo.func.maxhelp` and
+`jit.mo.fieldmask.maxhelp` use it). The two bends are
+`[columnX + 3, runY, inletX + 3, runY]` — a port sits about 3 pixels in from its
+box's left edge, and `runY` a dozen pixels above the destination. 55 cords across
+six tabs of `butter_keys.maxhelp` are routed this way; `tools/attrui_layout.py`
+applies both this and the 1-pixel stacking to any patch. (John, 2026-09-22.)
+
+The general principle outlives the mechanism: **when one relationship is drawn
+many times, draw it once.** The recognition signal is a fan of cords leaving
+adjacent boxes for the same inlet.
+
 ## Always Verify Against Max Documentation — Never Guess
 
 Max is not consistent in its terminology, implementation, or formatting. Attribute names, types, value ranges, and defaults vary unpredictably between objects and even between related objects in the same family. What works for `jit.gl.text3d` may not work for `jit.gl.text`. An attribute that takes a symbol in one object takes an int in another. A value that seems obvious (`align center`) may be silently ignored because the type is wrong (`align 1`). There is no reliable pattern to reason from — the only safe source is the documentation for that exact object.
