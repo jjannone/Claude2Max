@@ -142,6 +142,14 @@ For instance: Max object existence was being decided by refpage filename globbin
 
 A second, narrower instance of the same principle: a refpage's real object name lives in the XML root's `name` attribute (`div.maxref.xml` declares `name="/"`), because a filename cannot contain `/`. Reading that attribute harvests the operator alias map mechanically — 56 entries with zero collisions — instead of maintaining 23 by hand.
 
+## Describe an Object Only From Its Own Files, and Only If It Loads — Binding Rule {!core}
+
+Any description of what a Max object does, how to drive it, or who made it must come from that object's own files: its refpage, its help file, its patch or script, or its package's README. A name, a one-line digest, or the family the object seems to belong to is not a source. Before describing it at all, confirm that something actually loads under the name: an external, an abstraction, a script, or a mapping in the package's `init/` files. Documentation alone is not evidence, because packages ship refpages and help files for names nothing answers to.
+
+This covers every place an object gets described: `use_when` entries, `package_concepts.md` sections, catalog rows, comments in a patch, and chat answers. A description written from the name reads as fluently as one written from the refpage, which is why nobody catches it until a patch fails.
+
+For instance: the package library's May 2026 entries were largely written from names and digests. The 2026-09-16 scan found about 1,300 that were wrong. `bach.trace` was described as a debug tap, though it computes a matrix trace. FrameLib entries set parameters with `@name`, where FrameLib uses `/name value`. All 84 TS.Modular entries named the wrong author, and 68 records described objects that do not load at all. The recognition signal: writing what an object does without having opened one of its files in this session.
+
 ## The Closing Delimiter Is the Outermost One — Binding Rule
 
 When content is wrapped between a start marker and an end marker, the real end marker is the **last** one, not the first. The wrapped content may legitimately contain the marker text itself — a quoted example, a box whose text repeats it, a document that discusses the format — and a parser that stops at the first match returns a truncated body that fails in a way that looks like corruption. The same trap exists for any quoting, fencing, or wrapping scheme: code fences inside a document about code fences, a string delimiter inside a string, a comment terminator inside a comment.
@@ -604,15 +612,102 @@ Keep the `.js` next to the patch anyway — that is where the script is edited, 
 
 `sync --check` reports script drift alongside spec drift. Which copy Max runs when both are present has not been verified here; keeping them identical through sync makes the question moot.
 
-The recognition signal: any box whose text names a file. That is the moment to read the object's refpage for an embed attribute before deciding the file alone is enough. `v8ui` documents the same `embed` attribute; the on-disk shape for a UI box has not been observed yet, so verify one saved from Max before relying on it. Embedded patchers are the same principle with a different mechanism — the spec's `maxpat` field on a `bpatcher` (see `SPEC_REFERENCE.md > Embedding an existing patcher verbatim`).
+The recognition signal: any box whose text names a file — **or, for a UI box, whose `filename` names one.** That is the moment to read the object's refpage for an embed attribute before deciding the file alone is enough.
 
-## Attribute Labels Must Begin With the Attribute's Own Word — Binding Rule {!core}
+**`v8ui` / `jsui` embed too, and the shape is different in three ways** (measured 2026-09-21 over every `.maxpat` / `.maxhelp` in the Max install and the installed packages — 8,488 such boxes):
 
-The goal is a list a human can scan: `attrui` and the Inspector list an object's attributes **alphabetically by their human-readable `label`, not by the attribute name.** So when you give an attribute a `label` (the `label:` field in `declareattribute`, or any equivalent), the label **must begin with the same word the attribute name begins with.** Then someone who knows the attribute is `@z_displaymode` can find it by scanning the list for "Z_displaymode…"; if the label leads with some other word, the entry is effectively unfindable — the reader has to open and read every line. Lead with the attribute's own leading word, then add clarifying words or a parenthetical.
+1. **There is no box text**, so nothing can carry `@embed 1`. The script is the `filename` attribute, and a spec asks for the embed with `attrs.embed`, which convert moves into the `textfile` block.
+2. **`embed` is never a box key.** None of the 8,488 boxes carries one; the one embedded example, C74's own `v8ui.maxhelp`, stores the whole thing as `textfile {filename, flags, embed: 1, autowatch, text}`. Writing a box-level `embed` puts a key in the file that no patch Max saved has.
+3. **No `loadmess embed 1`.** Nothing in that corpus sends `embed` as a *message* to a UI script box, and a script with a `function anything()` — as `butter_keys.js` has — would swallow it before the object saw it. So the save-survives-a-save half of the object-box pattern has no UI equivalent yet; the Inspector's **Save Javascript with Patcher** tick is the per-box control, and whether a Max save drops the stored copy for a UI box is still unverified. Embedded patchers are the same principle with a different mechanism — the spec's `maxpat` field on a `bpatcher` (see `SPEC_REFERENCE.md > Embedding an existing patcher verbatim`).
 
-For instance: `@z_displaymode` → `"Z_displaymode (Notes / Sliders)"`, **not** `"Display Mode (keyboard or sliders)"`; `@offset` → `"Offset (low MIDI key)"`, **not** `"Low MIDI Key"`; `@range` → `"Range (number of keys)"`, **not** `"Number of Keys"`.
+## An Attribute an Object Declares in Its Own Code Is Stored Somewhere Else — Binding Rule {!core}
 
-**Cycling '74's own objects routinely break this rule** — `kslider`'s `offset` is labeled "Octave offset", its `range` is "Number of keys to display" — so do not use C74 labels as the model here. This is one of the deliberate places our objects are *better* than the built-ins, not bug-compatible with them. The recognition signal: any time you write a `label:`, check that its first word matches the attribute name's first word before moving on — it is a per-attribute check, like verifying the API name itself.
+A file format stores a component's built-in settings one way. Settings the
+component *declares for itself*, in its own code, are almost always stored a
+second way — a nested block, a side table, a serialized blob — because the host
+had no way to know their names when it designed the first one. Write such a
+setting where the built-in ones go and the file is accepted, the component
+loads, and the setting is dropped in silence. Nothing errors, because nothing is
+malformed; the value simply never reaches the code that declared it.
+
+So before writing one, **find out where the host puts it by making the host put
+one there**: set the value through the application's own interface, save, and
+read the file. Then write exactly the shape that came back. The documentation
+usually names the flag that turns persistence on and stops there, which reads
+like permission to guess the location, and the guess costs a component that
+loads and does nothing.
+
+**In Max, a script-declared attribute — `declareattribute(..., {embed: 1})` in a
+`v8`, `v8ui` or `jsui` — is stored in an `embedstate` array on the box**, never
+as a top-level box key. Each row is `[name, value...]`, the rows are
+alphabetical, and Max writes **every** declared attribute, not only the ones
+that differ from their defaults. Built-in attributes are unaffected: `filename`,
+`border`, `fontname`, `fontsize` and `textcolor` stay top-level as usual, so one
+box carries both storage shapes at once and which one a name belongs to depends
+on whether the object or the script declared it.
+
+For instance: the seven `butter_comment` blocks in
+`patches/waveform-reference.maxpat` carried `z_text` and six style attributes as
+top-level keys. Every box instantiated and every one drew nothing. The shape
+above was measured on 2026-09-22 by building a one-box patch, having John set
+`z_text` in the Inspector and save, and reading what Max wrote — necessary
+because **nothing in the Max install or in any installed package saves a
+`jsui` / `v8ui` script attribute**, so there was no example on disk to copy.
+`tools/waveform_reference_builder.py` holds the resulting default array as
+`BUTTER_COMMENT_EMBEDSTATE`.
+
+The recognition signal: writing a value for a name that an object's own code
+introduced, rather than one its refpage lists. That is the moment to ask where
+the host actually keeps it, and the answer comes from a save, not from memory.
+This is the storage-location twin of *Never Write API Names From Memory* — that
+rule is about the name being real, this one about the place being right, and
+both fail the same way, by acceptance rather than by error.
+
+## A Label Says What the Surface Does Not Already Show — Binding Rule {!core}
+
+A label sits beside the thing it names, and the space it has is small. So it carries what the reader does not already have in front of them: what the field means, what its values do, what changes when it moves. Open it by repeating something the surface prints an inch away and that width is spent twice on one word — and when the text is then truncated, the half that gets cut is the half that carried the information.
+
+**For a Max attribute's `label` this means: write the comment on the attribute, and nothing else.** No name, no parentheses wrapping the useful part. Max's Inspector prints the attribute's **name** in one column and its `label` in the next, so `label:"Z_bullet (character drawn for a - list item)"` shows as `Z_bullet (character drawn f…` beside a column already reading `z_bullet`, where `character drawn for a - list item` would have fitted whole. `attrui` shows the **name** on its own face, not the label, so nothing is lost there either.
+
+For instance, all from `Butter_tools/javascript/` on 2026-09-22: `@z_bullet` → `"character drawn for a - list item"`; `@z_padding` → `"px inside the box edge; 4 matches comment"`; `@mode` on `butter_keys` → `"how a key responds: mono, poly, touchscreen, z_mono"`, where the label had been the bare word `"Mode"` and said nothing at all. 57 labels were rewritten and 7 bare ones were given a description for the first time.
+
+This **reverses** *Attribute Labels Must Begin With the Attribute's Own Word*, retired 2026-09-22 at John's direction. That rule's premise was that the Inspector and `attrui` list attributes by label alone, so a label that led with any other word was unfindable. Neither does: the Inspector shows the name in its own column and `attrui` shows the name, so the leading word was redundant rather than load-bearing. `tests/butter_comment_headless.js` now checks the opposite — that no label restates its attribute's name, and that none is still `Name (…)` shaped.
+
+The general form, which outlives the Max instance: **before writing any label, caption, tooltip, legend or column header, look at what the surface already shows next to it, and write only what it does not.** The recognition signal is typing an identifier into a human-readable label — that is the moment to check whether the identifier is already on screen.
+
+## Code Style Marks What the Reader Could Type — Binding Rule {!core}
+
+A typographic style is a claim about what a piece of text *is*. Code style —
+monospace, or a tinted box, or backticks — claims this is a literal: something
+the reader could type into a box, copy into a path bar, or search a folder for.
+Put it on ordinary English and the claim is false, so the reader goes looking
+for something to type and finds a phrase. The cost is small each time and
+constant, because the style is doing the opposite of its job: it stops marking
+literals and starts marking emphasis, at which point nothing on the page tells
+the reader which words are names.
+
+**What takes code style**: an object's name, an attribute, a message, an
+argument, a literal value, an identifier — and **a file or folder path**, which
+takes it precisely so it is distinguishable from the sentence around it
+(John, 2026-09-22). The test is whether a reader could select the text and use
+it somewhere.
+
+**What does not**: an aside in English, a category label, a note about where
+something comes from, a description of what a package is for. Those take
+italics, or nothing. Italics read as an annotation and leave the literals as
+the only monospaced things on the page.
+
+This governs every surface: `comment` boxes and Butter Markdown in a patch,
+tutorial text, the repo's own documents, chat replies, and commit messages.
+Comment boxes matter most, because they ship with the patch.
+
+For instance: the reference patch's package tables annotated five rows with
+`` `ships inside Max` `` and one with `` `offline` ``, so eleven mono boxes on
+screen said "type this" about a sentence fragment, next to real object names in
+the same style. Both are now italic; `metro`, `table~`, `pong~ @mode clip` and
+the other 236 spans stayed as they were. The recognition signal: reaching for
+backticks around a phrase with a space in it, when the phrase is not something
+you could paste into Max.
 
 ## Match the Generated Control to the Attribute's Value Space — Binding Rule {!core}
 
@@ -731,7 +826,7 @@ Hook commands, MCP registrations, launch configs, and anything else stored as a 
 
 The sync-first rule above says "before any work on an existing .maxpat." Analyzing, verifying, and committing a patch are work too. Any `.maxpat` that arrives from another session, another person, or an external source has an embedded spec that may describe an earlier version of the boxes, and every action taken on the file before that is checked acts on the wrong object: an analysis describes boxes the spec does not know about, `verify_patch` in embedded-spec mode judges a spec that does not match the boxes and reports it clean, and a commit enshrines the mismatch so the next `convert` silently reverts the other author's edits.
 
-So the check comes first, before reading the patch for meaning, before running the verifier, and before committing. Run `python3 spec2maxpat.py sync -i <patch>` (which is the check and the repair in one step), then the object-count comparison in the section below, then a content-level comparison: match spec entries to boxes by `(type, text)` — never by id, since spec ids are semantic names and box ids are Max's `obj-N` — and confirm nothing exists on only one side, the connection counts agree, and matched objects share a presentation rect.
+So the check comes first, before reading the patch for meaning, before running the verifier, and before committing. Run `python3 spec2maxpat.py sync -i <patch>` (which is the check and the repair in one step), then the object-count comparison in the section below, then a content-level comparison: match spec entries to boxes by `(type, text)` — never by id, since spec ids are semantic names and box ids are Max's `obj-N` — and confirm nothing exists on only one side, the connection counts agree, and matched objects share a presentation rect **and agree about every attribute they both carry**. That last one is why an embedded script, a `playlist~`'s loaded clip, or a panel's colour cannot change under the spec unnoticed; it compares only attributes present on both sides, because an attribute on one side alone is Max writing a default or the spec asking for one, neither of which `sync` could ever reconcile.
 
 The recognition signal: **git shows the file modified, and this session did not modify it.** That is the moment the file is untrusted, whatever the task is.
 
@@ -1247,6 +1342,20 @@ Anything more than one patch loads by name — a `v8` / `v8ui` / `jsui` script, 
 
 So when a script or abstraction is about to be copied next to a patch, stop and put it in the package instead (for John: Butter_tools, below). Edit it there, commit it there, and restart Max, which caches scripts and abstractions for the session. The one exception is a patch that must travel self-contained, where `@embed 1` on a `v8` box stores the source *inside the patch* rather than beside it (see *Embed the Script in Every v8 Box*); that is a copy Max keeps in step through `sync`, not a loose file. For instance: `zkeyboard.js` was copied from Zendrum_Player into `patches/keymap/` on 2026-09-12 so the sample-key-mapper could load it. John caught it the same session, and the fix was a package, not a rule about copying carefully. (John, 2026-09-12.)
 
+## When a Host Demands Its Own Copy, Record It and Sync It in the Same Action — Binding Rule {!core}
+
+The rule above gives a file one home. Some hosts will not allow that: Live imports a device into its User Library, a DAW copies a plug-in into its own folder, an installer writes a hook or a config somewhere the repo cannot see, a build writes an artifact to a deploy target. The copy is real, it is the one that actually runs, and it is invisible from the repo — so it goes stale the moment the original changes, and nothing errors. The symptom is a thing that behaves like an old version of itself, and the debugging starts on the original, which is fine.
+
+So when a copy cannot be avoided:
+
+1. **Write down where it lives**, in the repo, next to the original — a short "copies" list in the package's own `CLAUDE.md` or `README.md`. A copy nobody recorded is a copy nobody will update.
+2. **Update the original and every copy in one action.** Not two steps, not "I'll re-import it later." If the original is synced, committed, or rebuilt, the copies are refreshed in the same breath.
+3. **When something misbehaves, check which copy is running before debugging the original.** Compare dates and compare the names inside — a file the original stopped referring to weeks ago is the fastest tell.
+
+The recognition signal: any moment a host offers to *import*, *install*, *add to library*, or *collect* a file the repo already owns. That is when the copy is created, and that is when it gets recorded.
+
+For instance: `butter_keymap.amxd` lives in `Butter_tools/devices/`, and Live had imported it to `~/Music/Ableton/User Library/Presets/MIDI Effects/Max MIDI Effect/Imported/`. The package's device was renamed twice — `zkeyboard.js` → `zslider.js` → `butter_keys.js` — and gained per-instance `---` send/receive names, while Live's copy stayed at its 2026-09-13 version. Live therefore ran a device whose two `v8ui` boxes asked for `zkeyboard.js`, a name that no longer existed anywhere on disk, so both keyboards drew nothing and the device looked like butter_keys had broken. Copying the current device over Live's fixed it in one command. (John, 2026-09-21.)
+
 ## Butter_tools — John's Own Max Package, One Home for Reusable Objects
 
 Reusable objects John writes (a `v8ui` script, a `v8` script, an abstraction that more than one project uses) live in the **Butter_tools** Max package, not beside the patch that first needed them:
@@ -1257,7 +1366,9 @@ Reusable objects John writes (a `v8ui` script, a `v8` script, an abstraction tha
 
 It is its own git repo, laid out as a standard Max package (`javascript/`, `help/`, `examples/`, `docs/`), and symlinked into `~/Documents/Max 9/Packages/Butter_tools`, so Max resolves every file in it by name from any patch on the machine. A box such as `v8ui @filename butter_keys.js` in any patch needs no copy of the script next to it, and must not get one: two copies of a script under active development drift the first time one is edited in Max's script editor. Edit the object in the package, commit there, and restart Max (it caches scripts and abstractions for the session).
 
-Currently in the package: `butter_keys` (`javascript/butter_keys.js`), the kslider + multislider hybrid with key tints, dot overlays and click reporting; its help file; two benches; and John's Live devices under `devices/` with their engines under `javascript/` (`butter_keymap.amxd` + `keymap.js`, the sample-key mapper). Devices are worked on in place there — `spec2maxpat.py sync` reads and writes `.amxd`. Read the package `README.md` for the vocabulary before wiring it. The package's `docs/` folder is where a `<name>.maxref.xml` goes so the converter can resolve an object's inlets and outlets without spec overrides (see `patching/MAX_PATCHING.md` > *Shipping a Community Max Package*). `RefpageCache` searches `~/Documents/Max 9/Packages` after Max's built-in packages (since 2026-09-14, following symlinks), so `docs/butter_keys.maxref.xml` is found. **The refpage is keyed by object name, so which form the box text takes decides whether it is found at all.** A box whose text is `butter_keys` — the name `init/butter-tools-objectmappings.txt` maps to `v8ui @filename butter_keys.js @border 0` — converts with 2 inlets and 4 outlets and needs no overrides. A box written out as `v8ui @filename butter_keys.js` is looked up as `v8ui` (1 inlet, 1 outlet), so a spec using that form still declares `inlets`, `outlets` and `outlettype`.
+Currently in the package: `butter_keys` (`javascript/butter_keys.js`), the kslider + multislider hybrid with key tints, dot overlays and click reporting; `butter_comment` (`javascript/butter_comment.js`), a comment that draws formatted text; their help files; two benches; and John's Live devices under `devices/` with their engines under `javascript/` (`butter_keymap.amxd` + `keymap.js`, the sample-key mapper). Devices are worked on in place there — `spec2maxpat.py sync` reads and writes `.amxd`. Read the package `README.md` for the vocabulary before wiring it. The package's `docs/` folder is where a `<name>.maxref.xml` goes so the converter can resolve an object's inlets and outlets without spec overrides (see `patching/MAX_PATCHING.md` > *Shipping a Community Max Package*). `RefpageCache` searches `~/Documents/Max 9/Packages` after Max's built-in packages (since 2026-09-14, following symlinks), so `docs/butter_keys.maxref.xml` is found. **The refpage is keyed by object name, so which form the box text takes decides whether it is found at all.** A box whose text is `butter_keys` — the name `init/butter-tools-objectmappings.txt` maps to `v8ui @filename butter_keys.js @border 0` — converts with 2 inlets and 4 outlets and needs no overrides. A box written out as `v8ui @filename butter_keys.js` is looked up as `v8ui` (1 inlet, 1 outlet), so a spec using that form still declares `inlets`, `outlets` and `outlettype`.
+
+**The package's text format is Butter Markdown** (`Butter_tools/docs/BUTTER_MARKDOWN.md`): ordinary Markdown plus one extension, `[text]{attrs}`, for font, size and colour, and em-dash-fenced tables. `butter_comment` reads it, and any later Butter_tools object that draws words reads the same format, so text written for one moves to another unchanged — read that file before writing text for one of them, or before adding an object that draws text. Two things about it that bite from a patch, both because Max parses a message box before the text ever reaches the object: a **message box eats the backslash in `\n`**, so a line break written from a patch is `<br>`; and a comma or semicolon must be escaped `\,` / `\;`, which is why the format also takes **`≤` (option-comma) for the comma** in a colour, so the common case needs no escaping.
 
 ## Consult Installed Packages Before Long Native Chains {!core}
 
