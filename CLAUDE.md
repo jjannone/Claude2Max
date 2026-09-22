@@ -427,6 +427,18 @@ For instance, on 2026-09-12 the MIDI teaching examples had `notein` and a `kslid
 
 More generally: do not make a structural choice that removes visualization Max already offers, or that lets two visible things about the same data disagree. The recognition signal: a UI object and a source both feeding the same inlet, or a UI object that only ever shows what the operator did to it. That is the moment to move it onto the cord.
 
+## A Control With a State Shows It — Not a Message Box That Clicks — Binding Rule {!core}
+
+When the operator's choice has a state — on or off, one of several, a value that persists — give them the object that displays that state, not a message box that sends it. Both objects click, so clickability decides nothing. What decides it is that a message box is write-only: it looks exactly the same whether the thing it started is running or stopped, so the operator has to remember what they last clicked, or look somewhere else in the patch to find out. A `toggle`, a `umenu`, a `live.tab`, a number box shows the answer where the hand already is.
+
+This is *Put the Display in the Path* applied to the control instead of to the data, and it fails the same way: the picture and the state drift apart, silently, the first time anything else changes the state.
+
+For instance, in `butter.alphamask.maxhelp` a `loadbang` fed a clickable `[1]` message into `jit.playlist`, with a comment saying "0 stops." One click played the clip and nothing on screen said so. It is now `loadmess 1` → `toggle` → `jit.playlist`: the same single click, plus the X in the box that says the clip is running. The refpage confirms the wiring — a nonzero `int` into a `toggle` "is sent out the outlet" and displays the X, so the loaded `1` both starts the clip and lights the control. (John, 2026-09-21.)
+
+The recognition signal: defending a message box on the grounds that it is clickable. Clickable is the floor, not the reason. That is the moment to ask what state the click sets, and whether an object exists that shows it — and if the answer is a family with an older and a newer member, *Prefer the Most Modern Member of an Object Family* picks which one.
+
+Message boxes keep every job where there is no state to show: a one-shot `read`, a `bang`-like trigger, a formatter fed from upstream, and setting a real attribute where `attrui` cannot reach (see *Drive a Real Attribute With `attrui`, Not a `$` Message Box*).
+
 ## Don't Add an Object That Duplicates What an Object Already in the Patch Does — Binding Rule {!core}
 
 Before adding any object, check whether an object already in the patch does that job on its own, through a creation argument, an attribute, a message it accepts, or its default behavior. An object added to do what a neighbor already does is one more box to read, one more cord to trace, and a second place the behavior is set, so the two can disagree later. The essential objects of a patch carry a great deal of built-in behavior, and a reader should learn that behavior from the object itself, not from a helper wired beside it.
@@ -434,6 +446,38 @@ Before adding any object, check whether an object already in the patch does that
 For instance, three additions removed from the MIDI teaching examples on 2026-09-08 at John's direction: a `[loadmess 12]` feeding a number box whose only destination was `[+ 12]`, when the argument already sets the starting value; a `[loadmess 0]` into a toggle, when a toggle starts off and sends nothing until it is clicked; and a `[flush]` object under a `[kslider]`, when `kslider` accepts a `flush` message itself in polyphonic mode.
 
 The recognition signal: the object I am about to add exists only to initialize, reset, convert, or clear something for one neighbor. That is the moment to read the neighbor's refpage for the argument, attribute, or message that does it directly. This is the third rule of a family. *Prefer an Object's Own Attribute Over an Adapter Chain* asks whether an attribute replaces a downstream object; *Prefer the Object That States Its Behavior in an Attribute* asks which of two objects to add; this rule asks whether to add one at all. It also bounds *Every control must initialize to a known state on patch load* in `patching/MAX_PATCHING.md`: an init object is owed only when the control's default state is not the intended one, or when a downstream object has no default of its own.
+
+## Never Write a Value the Object Already Has — Binding Rule {!core}
+
+Do not write a creation argument, or an attribute, whose value is the object's own default. It reads as a decision somebody made, so the next reader has to go and find out what it changed, and the answer is nothing. Worse, it hides the values that *are* decisions among the ones that are not: a box carrying five attributes of which two matter is harder to read than a box carrying two. Write only what differs from the default, and let the box show the decisions.
+
+For instance, both from `butter.alphamask.maxhelp` (John, 2026-09-21): `join 2 @triggers -1` is `join @triggers -1`, because the refpage states "If there is no argument, there will be two inlets" — so `2` says nothing and `@triggers -1` says everything. And `jit.gl.layer @blend_enable 1` is `jit.gl.layer`, because that class already loads with blending on.
+
+**The defaults are in a registry Max ships, so this is checkable rather than remembered** (see *Prefer the Tool's Own Registry Over Reconstructing One*). Attribute defaults: `Contents/Resources/C74/interfaces/transform-defaults/transform-defaults.json`, 708 classes, each mapping an attribute name to the value a fresh instance has. Creation-argument defaults are not in it — those come from the object's refpage, in the `objarg` description, the way `join`'s does. Both are one lookup, and the rule is per-value like *Never Write API Names From Memory*: check each argument and each attribute you are about to write, not the box as a whole.
+
+That registry also settles what an alias actually is. `jit.gl.layer` maps to the `jit.gl.videoplane` binary in `init/jitter-objectmappings.txt`, but it is not the same object: the registry gives it `blend_enable` 1, `depth_enable` 0, `preserve_aspect` 1 and `transform_reset` 5, against videoplane's 0, 1, 0 and 0. So the two names are two sets of defaults over one implementation, and which name you write is itself a decision. C74's own `pass.gamma.correction.maxpat` writes `jit.gl.layer @blend_enable 0` — turning it *off* — which is the tell.
+
+The recognition signal: typing a number or an attribute because it makes the box "say what it does." The box already says what it does; a default written out says what it does *not* do.
+
+## One `loadmess` Carries a Group of Related Settings — Binding Rule {!core}
+
+When several settings load together and belong to one thing, load them from one object, not one per setting. `loadmess` takes the whole list and `unjoin` splits it to its destinations, so a group of N defaults is two boxes however large N grows, instead of a `loadbang` fanning out to N message boxes. It also puts the defaults where a reader can see them at once, in the order the destinations sit in, so one glance says what the patch starts as.
+
+For instance, `butter.alphamask.maxhelp` set its mask placement with a `loadbang` into three message boxes, `0.5`, `0.5` and `1.`, one per flonum — four boxes and three cords for three numbers. `loadmess 0.5 0.5 1.` into `unjoin 2` is two boxes and does the same. (John, 2026-09-21.) C74 ships the pattern too, in `jit.gl.buffer.maxhelp`.
+
+Mind the outlet count, which is the one thing that catches people: `unjoin N` has **N+1** outlets, N groups plus the remainder, so three values need `unjoin 2`. The `@outsize` attribute (default 1) sets how many items go to each group when the settings are not single numbers.
+
+The rule is about grouping, not about `loadmess` specifically: the test is whether the settings belong together. Three numbers that place one mask do. A metro interval and a reverb mix do not — those are two groups, and two `loadmess` objects, each near what it feeds. And it does not license adding an init object that is not owed in the first place (see *Don't Add an Object That Duplicates What an Object Already in the Patch Does*): a value that is already the object's argument or default needs no `loadmess` at all.
+
+## Drive a Real Attribute With `attrui`, Not a `$` Message Box — Binding Rule {!core}
+
+When an object has a real attribute, set it with an `attrui` rather than a number box wired into a `[attrname $1]` message. The `attrui` is one box instead of three, it names the attribute on its own face, and it reads the current value back from the object — so it is the control and the display at once, and the two cannot disagree (see *Put the Display in the Path*). The `$` message box is the opposite on every count: it shows a number whose meaning is in the message text, it never learns what the object's value actually is, and the number box beside it shows only what the operator last typed. This also satisfies *If You Mention an Attribute, Show It* for free.
+
+Mechanics, verified against the help corpus: the `attrui` connects to the object's **left** inlet, never another one; its `attr` attribute names the attribute; `text_width` sets the label column.
+
+**"Real attribute" is the load-bearing part, and an abstraction usually has none.** An abstraction that takes `@name value` on its box is parsing those with `patcherargs`, whose refpage says it *retrieves and parses* attribute-style arguments — it does not register anything with Max's attribute system, which is what `attrui` inspects. So `attrui` cannot list them, and the `$` message box is the right answer there. Confirmed in Max by John, 2026-09-21: an `attrui` wired to `butter.alphamask`, whose `@position` and `@scale` come from `patcherargs @position 0.5 0.5 @scale 1.`, does not list `position`.
+
+The recognition signal: writing a message box whose text is an attribute name followed by `$1`. That is the moment to check whether the target is a real object with that attribute — in which case use `attrui` — or an abstraction parsing typed arguments, in which case keep the message box.
 
 ## Don't Use `[textedit]` for Set-Once Configuration — Binding Rule {!core}
 
