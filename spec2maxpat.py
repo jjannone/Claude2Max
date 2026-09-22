@@ -30,6 +30,7 @@ Spec format:
 import argparse
 import collections
 import copy
+import hashlib
 import json
 import math
 import os
@@ -2568,6 +2569,16 @@ def _raw_patcher_ports(raw):
 # args and attributes may follow it (`v8 foo.js 15 @embed 1`).
 _SCRIPT_CLASSES = ("v8", "js")
 
+# UI script boxes: `v8ui` / `jsui`. They have no box text — the script is the
+# `filename` attribute, and the embed flag lives ONLY inside the `textfile`
+# block. Verified 2026-09-21 against every .maxpat/.maxhelp in the Max install
+# and the installed packages: of 8,488 jsui/v8ui boxes, none carries a
+# box-level `embed` key, while C74's own v8ui.maxhelp saves the embedded shape
+# as textfile {filename, flags, embed: 1, autowatch, text}. So a spec may ask
+# for the embed with `attrs.embed`, and convert writes the request into the
+# textfile block rather than leaving it on the box.
+_SCRIPT_UI_CLASSES = ("v8ui", "jsui")
+
 
 def script_ref(text):
     """(script_name, embed_requested) for a `v8` / `js` box text, else (None, False).
@@ -2610,7 +2621,11 @@ def find_script_file(name, script_dirs):
 
 
 def _embed_script(box, obj_spec, script_dirs):
-    """Write a v8 / js box's `textfile` block so the patch carries its script.
+    """Write a script box's `textfile` block so the patch carries its script.
+
+    Covers both shapes: an object box (`v8 foo.js @embed 1`, script named in the
+    box text) and a UI box (`v8ui` / `jsui`, script named in `filename` and the
+    embed asked for with `attrs.embed` — see _SCRIPT_UI_CLASSES).
 
     Max stores a script-loading box as top-level `filename` plus a `textfile`
     dict {text, filename, flags, embed, autowatch}; with `embed: 1` the source
@@ -2621,10 +2636,18 @@ def _embed_script(box, obj_spec, script_dirs):
     the patch will not carry the source. Shape verified against C74's
     v8.maxhelp and jit-geom-voronoi.maxpat, 2026-09-09.
     """
-    name, embed = script_ref(box.get("text", ""))
+    prior = box.get("textfile") if isinstance(box.get("textfile"), dict) else {}
+    if box.get("maxclass") in _SCRIPT_UI_CLASSES:
+        # A UI script box names its script in `filename` and has no box text to
+        # carry `@embed 1`; the spec asks with attrs.embed, which convert has
+        # already copied onto the box. Max never serializes that key, so take
+        # it off again — the request belongs in the textfile block.
+        name = box.get("filename") or prior.get("filename")
+        embed = bool(box.pop("embed", 0))
+    else:
+        name, embed = script_ref(box.get("text", ""))
     if name is None:
         return
-    prior = box.get("textfile") if isinstance(box.get("textfile"), dict) else {}
     if not embed and prior.get("embed") != 1:
         return
     tf = dict(prior)
@@ -2637,7 +2660,8 @@ def _embed_script(box, obj_spec, script_dirs):
         tf["text"] = path.read_text(encoding="utf-8")
     elif not isinstance(tf.get("text"), str):
         where = ", ".join(str(d) for d in (script_dirs or [])) or "no search dirs"
-        print(f"[convert] WARNING: '{box.get('text')}' asks to embed {name} but the "
+        what = box.get("text") or f"{box.get('maxclass')} @filename {name}"
+        print(f"[convert] WARNING: '{what}' asks to embed {name} but the "
               f"file was not found ({where}) and the spec holds no copy — the patch "
               f"will NOT carry the script. Convert with -o next to the .js, or add "
               f"it to attrs.textfile.text.", file=sys.stderr)
@@ -2667,9 +2691,9 @@ def _spec_io(obj_spec):
 def build_box(user_id, obj_spec, index, x, y, script_dirs=None):
     """Build a .maxpat box dict from a spec object.
 
-    `script_dirs`: directories searched for a `v8` / `js` box's script when the
-    box asks for `@embed 1` (see _embed_script) — normally the spec's and the
-    output patch's folders."""
+    `script_dirs`: directories searched for a `v8` / `js` / `v8ui` / `jsui` box's
+    script when the box asks to embed (see _embed_script) — normally the spec's
+    and the output patch's folders."""
     maxclass = obj_spec.get("type", "newobj")
     text = obj_spec.get("text", "")
     numinlets, numoutlets, outlettype = _spec_io(obj_spec)
@@ -2719,7 +2743,7 @@ def build_box(user_id, obj_spec, index, x, y, script_dirs=None):
     for k, val in attrs.items():
         box["box"][k] = val
 
-    if maxclass == "newobj":
+    if maxclass == "newobj" or maxclass in _SCRIPT_UI_CLASSES:
         _embed_script(box["box"], obj_spec, script_dirs)
 
     # Max-only box state (see _box_extras) goes back verbatim. Keys the spec
@@ -2960,6 +2984,160 @@ def _spec_pres_rect(obj):
     return None
 
 
+def _attr_digest(val, _depth=0):
+    """A value reduced to something comparable and printable.
+
+    Numbers lose int/float identity (Max writes 6 and 6.0 for the same
+    attribute), a long string becomes its length and hash so a 39k embedded
+    script is compared without either side being rendered, and lists and dicts
+    are reduced element by element.
+    """
+    if isinstance(val, bool):
+        return val
+    if isinstance(val, (int, float)):
+        return round(float(val), 6)
+    if isinstance(val, str):
+        if len(val) > 120:
+            return f"<{len(val)} chars sha1:{hashlib.sha1(val.encode()).hexdigest()[:8]}>"
+        return val
+    if isinstance(val, (list, tuple)):
+        return [_attr_digest(v, _depth + 1) for v in val]
+    if isinstance(val, dict):
+        return {k: _attr_digest(v, _depth + 1) for k, v in sorted(val.items())}
+    return val
+
+
+def _attr_drift(spec_obj, box):
+    """[{attr, spec, patch}] for every attribute BOTH sides carry with different
+    values.
+
+    Drift means the two disagree about a value they both hold. An attribute on
+    one side only is not drift, in either direction, and this is the whole of
+    why:
+
+    * On the box only — Max writes defaults and internal state on every save,
+      and sync mirrors just the whitelist in _PRESERVE_ATTRS. The spec is
+      simply quiet about it.
+    * In the spec only — Max drops an attribute whose value matches the style
+      or patcher default (`fontname Monaco` on a comment, `mode 1` on a `v8ui`
+      whose script keeps its own state in `embedstate`). The spec is what the
+      author asked for and the next convert will re-assert it, which is the
+      intended behaviour, not a regression. Reporting it makes a file stale
+      that `sync` — which only ever copies box → spec — cannot un-stale, and a
+      check its own repair tool cannot satisfy is a check that gets ignored.
+
+    Measured 2026-09-21: across the 21 patches in `patches/`, the one-side-only
+    direction fired 0 times and the disagreement direction 6, every one of them
+    a real edit made in Max (a `playlist~` holding a different audio file, a
+    `live.tab` relaid out, two comments' highlight colours swapped).
+    """
+    out = []
+    attrs = spec_obj.get("attrs")
+    if not isinstance(attrs, dict):
+        return out
+    for k, sval in sorted(attrs.items()):
+        # _BOX_DERIVED_KEYS is the converter's own list of keys it computes
+        # from the spec rather than copying out of `attrs` — ports, geometry,
+        # text, the wrapped line counts. Reading it here instead of keeping a
+        # second list means the two cannot drift apart.
+        if k in _BOX_DERIVED_KEYS or k not in box:
+            continue
+        sd, bd = _attr_digest(sval), _attr_digest(box.get(k))
+        if sd != bd:
+            out.append({"attr": k, "spec": sd, "patch": bd, "what": "value"})
+    return out
+
+
+def _spec_geom(obj):
+    """(x, y, w, h) a spec object is authored at, or None when it says nothing.
+    The key that tells twins apart — see _pair_by_geometry."""
+    pos, size = obj.get("pos"), obj.get("size")
+    if not (isinstance(pos, (list, tuple)) and len(pos) >= 2):
+        return None
+    try:
+        xy = (round(float(pos[0]), 1), round(float(pos[1]), 1))
+        wh = ((round(float(size[0]), 1), round(float(size[1]), 1))
+              if isinstance(size, (list, tuple)) and len(size) >= 2 else (None, None))
+    except (TypeError, ValueError):
+        return None
+    return xy + wh
+
+
+def _box_geom(box):
+    """(x, y, w, h) a box occupies in the patching view — the same key, box side.
+    Width and height are dropped when the spec did not state a size, so the two
+    are compared on whatever the spec actually committed to."""
+    rect = box.get("patching_rect")
+    if not (isinstance(rect, (list, tuple)) and len(rect) >= 4):
+        return None
+    try:
+        return tuple(round(float(v), 1) for v in rect[:4])
+    except (TypeError, ValueError):
+        return None
+
+
+def _pair_by_geometry(sids, bids, spec_objects, boxes):
+    """[(spec_id, box_id)] for objects that share a content key, or None when
+    they cannot be told apart.
+
+    Several boxes commonly share one content key: a UI class has no text, so
+    every `panel` in a patch keys the same, and so does every `v8ui`. Position
+    is the only other thing both sides record, so the twins pair by it — but
+    only when the two sides agree about the whole set of positions. If any has
+    moved, or two sit at the same spot, the pairing would be a guess, and a
+    guess here does not report "no drift", it reports drift on the wrong twin:
+    one panel recoloured turns into every panel's colour rotated by one. So the
+    ambiguous case returns None and the group is left uncompared, which is what
+    this check did for every such group before.
+    """
+    if len(sids) != len(bids):
+        return None
+    if len(sids) == 1:
+        return [(sids[0], bids[0])]
+    sgeo = {sid: _spec_geom(spec_objects[sid]) for sid in sids}
+    bgeo = {bid: _box_geom(boxes[bid]) for bid in bids}
+    if any(g is None for g in sgeo.values()) or any(g is None for g in bgeo.values()):
+        return None
+    # compare on the fields the spec committed to: a spec with no `size` says
+    # nothing about width and height, so those are not part of the key
+    def trim(g, ref):
+        return tuple(v for v, r in zip(g, ref) if r is not None)
+    ref = next(iter(sgeo.values()))
+    if any(tuple(v is None for v in g) != tuple(v is None for v in ref) for g in sgeo.values()):
+        return None
+    skeys = sorted(trim(g, ref) for g in sgeo.values())
+    bkeys = sorted(trim(g, ref) for g in bgeo.values())
+    if skeys != bkeys or len(set(skeys)) != len(skeys):
+        return None
+    return list(zip(sorted(sids, key=lambda i: trim(sgeo[i], ref)),
+                    sorted(bids, key=lambda i: trim(bgeo[i], ref))))
+
+
+def _one_to_one_drift(report, key, sobj, box, fmt, scope, stream):
+    """Compare one spec object against the box it pairs with: presentation,
+    attributes, and — when both hold a patcher — the scope inside it."""
+    s_rect = _spec_pres_rect(sobj)
+    s_has = bool(sobj.get("presentation") or sobj.get("presentation_rect"))
+    b_has = bool(box.get("presentation"))
+    b_rect = box.get("presentation_rect")
+    b_rect = [float(v) for v in b_rect[:4]] if b_has and b_rect else None
+    if s_has != b_has:
+        report["presentation_drift"].append(
+            {"key": fmt(key), "spec": s_rect if s_has else None,
+             "patch": b_rect if b_has else None, "what": "presence"})
+    elif s_rect is not None and b_rect is not None and \
+            any(abs(a - b) > 0.5 for a, b in zip(s_rect, b_rect)):
+        report["presentation_drift"].append(
+            {"key": fmt(key), "spec": s_rect, "patch": b_rect, "what": "rect"})
+    for d in _attr_drift(sobj, box):
+        report["attribute_drift"].append(dict(d, key=fmt(key)))
+    if isinstance(sobj.get("patcher"), dict) and isinstance(box.get("patcher"), dict):
+        sub = spec_matches_patch({"patcher": box["patcher"]}, spec=sobj["patcher"],
+                                 scope=(scope + "/" if scope else "") + fmt(key), stream=stream)
+        if not sub["matches"]:
+            report["nested"][fmt(key)] = sub
+
+
 def spec_matches_patch(maxpat, spec=None, scope="", stream=None):
     """Compare a .maxpat's boxes against its embedded spec, by content.
 
@@ -2988,6 +3166,10 @@ def spec_matches_patch(maxpat, spec=None, scope="", stream=None):
                             connections as [src_key, outlet, dst_key, inlet].
         presentation_drift  [{key, spec, patch}] rect or presence differences
                             on objects matched one-to-one.
+        attribute_drift     [{key, attr, spec, patch, what}] attributes both the
+                            spec and the box carry with different values, on
+                            paired objects. Long values (an embedded script) are
+                            reported as length and hash.
         nested              {key: sub-report} for recursed subpatchers.
         summary             one line.
 
@@ -3002,7 +3184,7 @@ def spec_matches_patch(maxpat, spec=None, scope="", stream=None):
         "spec_objects": 0, "boxes": 0,
         "only_in_spec": [], "only_in_patch": [],
         "connection_diff": {"only_in_spec": [], "only_in_patch": []},
-        "presentation_drift": [], "nested": {}, "summary": "",
+        "presentation_drift": [], "attribute_drift": [], "nested": {}, "summary": "",
     }
     if spec is None:
         report["summary"] = "no embedded spec — nothing to compare"
@@ -3066,32 +3248,17 @@ def spec_matches_patch(maxpat, spec=None, scope="", stream=None):
     # --- presentation drift and nested scopes, on one-to-one matches -----------
     for k, sids in spec_keys.items():
         bids = box_keys.get(k, [])
-        if len(sids) != 1 or len(bids) != 1:
+        pairs = _pair_by_geometry(sids, bids, spec_objects, boxes)
+        if pairs is None:
             continue
-        sobj, box = spec_objects[sids[0]], boxes[bids[0]]
-        s_rect = _spec_pres_rect(sobj)
-        s_has = bool(sobj.get("presentation") or sobj.get("presentation_rect"))
-        b_has = bool(box.get("presentation"))
-        b_rect = box.get("presentation_rect")
-        b_rect = [float(v) for v in b_rect[:4]] if b_has and b_rect else None
-        if s_has != b_has:
-            report["presentation_drift"].append(
-                {"key": _fmt(k), "spec": s_rect if s_has else None, "patch": b_rect if b_has else None,
-                 "what": "presence"})
-        elif s_rect is not None and b_rect is not None and \
-                any(abs(a - b) > 0.5 for a, b in zip(s_rect, b_rect)):
-            report["presentation_drift"].append(
-                {"key": _fmt(k), "spec": s_rect, "patch": b_rect, "what": "rect"})
-        if isinstance(sobj.get("patcher"), dict) and isinstance(box.get("patcher"), dict):
-            sub = spec_matches_patch({"patcher": box["patcher"]}, spec=sobj["patcher"],
-                                     scope=(scope + "/" if scope else "") + _fmt(k), stream=stream)
-            if not sub["matches"]:
-                report["nested"][_fmt(k)] = sub
+        for sid, bid in pairs:
+            sobj, box = spec_objects[sid], boxes[bid]
+            _one_to_one_drift(report, k, sobj, box, _fmt, scope, stream)
 
     report["matches"] = not (
         report["only_in_spec"] or report["only_in_patch"]
         or report["connection_diff"]["only_in_spec"] or report["connection_diff"]["only_in_patch"]
-        or report["presentation_drift"] or report["nested"]
+        or report["presentation_drift"] or report["attribute_drift"] or report["nested"]
     )
     where = f" in {scope}" if scope else ""
     if report["matches"]:
@@ -3108,6 +3275,8 @@ def spec_matches_patch(maxpat, spec=None, scope="", stream=None):
             parts.append(f"connections differ (+{len(cd['only_in_patch'])} / -{len(cd['only_in_spec'])})")
         if report["presentation_drift"]:
             parts.append(f"{len(report['presentation_drift'])} presentation rect(s) drifted")
+        if report["attribute_drift"]:
+            parts.append(f"{len(report['attribute_drift'])} attribute(s) drifted")
         if report["nested"]:
             parts.append(f"{len(report['nested'])} subpatcher(s) differ")
         report["summary"] = (f"spec is STALE{where} — {report['spec_objects']} spec objects vs "
@@ -3129,6 +3298,9 @@ def format_spec_match_report(report, indent="  "):
     for d in report["presentation_drift"]:
         lines.append(f"{indent}presentation {d['what']} drift on [{d['key']}]: "
                      f"spec {d['spec']} vs patch {d['patch']}")
+    for d in report.get("attribute_drift", []):
+        lines.append(f"{indent}attribute drift on [{d['key']}]: "
+                     f"{d['attr']} = {d['spec']} in spec vs {d['patch']} in patch")
     for key, sub in report["nested"].items():
         lines.append(f"{indent}subpatcher [{key}]:")
         lines.extend(format_spec_match_report(sub, indent + "  ").splitlines()[1:])

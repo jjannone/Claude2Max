@@ -161,6 +161,18 @@ These automatically get `parameter_enable` set:
 
 - The `.js` file lives in the same directory as the `.maxpat`.
 - **Always add `@embed 1` in the text AND a `[loadmess embed 1]` feeding the box** (`CLAUDE.md > Embed the Script in Every v8 Box`). The attribute makes Max use the stored copy when the `.js` is missing; the message makes Max keep the copy when it saves with the `.js` present (verified in Max 9, 2026-09-10 — the attribute alone is overridden on save). The converter reads the file and stores the source in the box, so the patch runs when the `.js` does not travel with it. On disk the box carries `filename` plus a `textfile` block `{text, filename, flags, embed, autowatch}` — the shape Max writes for `v8 videotester @embed 1` in its own `v8.maxhelp`. Creation arguments go between the filename and the attribute: `v8 highlight.js 15 @embed 1`. Convert with `-o` next to the `.js` (the converter searches the output folder, the spec folder, and their `code/` / `javascript/` subfolders); the verifier warns `script-not-embedded` when the attribute is missing.
+- **A `v8ui` / `jsui` box embeds the same way, but asks for it differently.** A UI box has no text to carry `@embed 1` — it names its script in `filename` — so the spec asks with `attrs.embed`:
+
+```json
+"keys": {
+  "type": "v8ui",
+  "pos": [30, 190], "size": [600, 100],
+  "inlets": 2, "outlets": 4, "outlettype": ["", "", "", ""],
+  "attrs": {"filename": "butter_keys.js", "embed": 1, "border": 0}
+}
+```
+
+  Convert moves the request into the `textfile` block and takes the `embed` key back off the box, because that is the only shape Max writes: of the 8,488 `jsui` / `v8ui` boxes in the Max install and the installed packages, none carries a box-level `embed` key, while the one embedded example — C74's own `v8ui.maxhelp` — stores `textfile {filename, flags, embed: 1, autowatch, text}` (measured 2026-09-21). **No `[loadmess embed 1]` here**: nothing in that corpus sends `embed` as a *message* to a UI script box, and a script with a `function anything()` would swallow it. Whether Max keeps the stored copy across a save with the `.js` present is not yet verified for a UI box; the Inspector's **Save Javascript with Patcher** tick is the per-box control if a save drops it.
 - Incoming messages are dispatched to JS functions by selector: `bang` → `function bang()`, `setmode 2` → `function setmode(val)`, etc.
 - Set inlet/outlet counts in JS with `inlets = N; outlets = N;` globals.
 - **Label every inlet and outlet in the script** with `setinletassist(n, "text")` / `setoutletassist(n, "text")` right after the counts. The text is the hover tooltip on the box in Max — the v8 equivalent of a subpatcher's inlet comment, and required by the same rule (`CLAUDE.md > What You Must Handle`). Index is zero-based from the left. Confirmed in C74's shipped `jitgltextureset.js`; Max's code editor declares the second parameter as a function, and a plain string works and is what C74 uses.
