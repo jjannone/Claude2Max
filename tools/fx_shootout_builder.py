@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """fx_shootout_builder.py — first-draft builder for the effect shootout patches.
 
-Builds every `patches/shootouts/<category>-shootout.maxpat` from one slot table, on the
-model of `patches/reverb-shootout.maxpat`: one source bus (`s~ SRC_L / SRC_R /
+Builds every `patches/shootouts/audio/<category>-shootout.maxpat` from one slot table, on
+the model of `patches/shootouts/audio/reverb-shootout.maxpat`: one source bus (`s~ SRC_L / SRC_R /
 SRC_M`), every effect running in parallel and set 100% wet, a `live.tab` that
 picks which one reaches the master through two `selector~` (30 ms crossfade),
 and an equal-power master dry/wet.
@@ -36,7 +36,7 @@ from spec2maxpat import wrapped_lines, wrapped_height  # noqa: E402
 MAX = "/Applications/Max.app/Contents/Resources/C74"
 BEAP = f"{MAX}/packages/BEAP/clippings"
 M4L = f"{MAX}/packages/Max for Live/patchers/Max Audio Effect"
-PATCH_DIR = os.path.join(REPO, "patches", "shootouts")
+PATCH_DIR = os.path.join(REPO, "patches", "shootouts", "audio")
 SCRATCH = os.environ.get("FX_SCRATCH", "/tmp")
 
 DARK = [0.13, 0.13, 0.15, 1.0]

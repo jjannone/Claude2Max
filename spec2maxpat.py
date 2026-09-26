@@ -4244,8 +4244,15 @@ def main():
                               search_dirs=extra_dirs):
                 sys.exit(1)  # blocked — nothing written
 
-        # the output folder first: that is where Max will look for the .js
-        maxpat = convert_spec(spec, script_dirs=list(reversed(extra_dirs)))
+        # the output folder first: that is where Max will look for the .js.
+        # Then its parent, as sync does: patches that share one script keep it
+        # one level up (a package's javascript/, or patches/shootouts/ for the
+        # audio/ and video/ shootouts), so it has one home instead of a copy
+        # beside every patch.
+        script_dirs = list(reversed(extra_dirs))
+        if args.output:
+            script_dirs.insert(1, Path(args.output).resolve().parent.parent)
+        maxpat = convert_spec(spec, script_dirs=script_dirs)
         output = json.dumps(maxpat, indent=2)
 
         if args.output:

@@ -986,7 +986,7 @@ Tasks that are primarily implementation, file editing, or verification — no de
   **Tests.** Follow *A Test Spells Out Its Own Examples* — write the cases literally, never by looping over the registry, which would pass if the registry were empty. Cover: `jit.gl.layer @blend_enable 1` flagged and `jit.gl.layer @blend_enable 0` not (the registry gives that class `1`, against `jit.gl.videoplane`'s `0` — this pair is the sharpest test that the lookup is per-class and not per-binary); a float written `1.` against a stored `1.0`; a multi-value color; a `##uniqueid##` attr skipped; an attr on a class absent from the registry skipped; and an attr inside a subpatcher flagged, so the recursion is covered.
   **Prereqs**: none. **Scope check before starting**: import and run the current verifier rather than reading `WORK_HISTORY.md` for what it covers (*Verify External State*).
 
-- [pending] **Add the package effects found in the 2026-09-16 scan to the effect shootouts, labelled with the package each one needs** — Added 2026-09-16 at John's request. The shootouts in `patches/shootouts/` (reverb, delay, modulation, pitch, dynamics, distortion, filter, eq, special-fx, plus the filter-devices / filter-beap / distortion-modules variants) compare built-in objects, `abl.*` objects, BEAP modules, Max for Live devices and Audio Units — and not one object from an installed third-party package. The package scan rated every installed package object (`packages/package_catalog.xlsx`, source `packages/package_catalog.json`), and dozens are realtime effects that belong in these comparisons.
+- [pending] **Add the package effects found in the 2026-09-16 scan to the effect shootouts, labelled with the package each one needs** — Added 2026-09-16 at John's request. The shootouts in `patches/shootouts/audio/` (reverb, delay, modulation, pitch, dynamics, distortion, filter, eq, special-fx, plus the filter-devices / filter-beap / distortion-modules variants) compare built-in objects, `abl.*` objects, BEAP modules, Max for Live devices and Audio Units — and not one object from an installed third-party package. The package scan rated every installed package object (`packages/package_catalog.xlsx`, source `packages/package_catalog.json`), and dozens are realtime effects that belong in these comparisons.
   **Labelling is the point of the task.** A package object in a shootout loads as a red missing-object box on any machine without that package, and a student has no way to tell a missing package from a broken patch. So every added slot must name its package where the reader looks: the pane title or the one-line note under it (for instance "requires PnP.Maxtools"), the patching-view header comment, and a single "Packages this patch needs" comment near the top of the presentation listing each package by its Package Manager name. Keep the tab item short but distinguishable, e.g. `19 pnp.reverb~` — the object prefix already hints at the package. Show John the format on the first patch before doing the rest. Every copy of a slot list keeps the same order and numbering (*Every Copy of a List Shows the Same Order and the Same Numbering*, CLAUDE.md).
   **Candidates**, read from the catalog (names are library records, so they exist; realtime audio in → audio out only). Verify each object's inlets, outlets, arguments and parameter names against its refpage or help file before wiring (*Never Write API Names From Memory*), and set parameters so the effect is audible at 100 % wet, as the existing slots do:
   | Shootout | Candidates (package) |
@@ -1036,14 +1036,14 @@ Tasks that are primarily implementation, file editing, or verification — no de
 
   | patch | 40 × 22 `attrui` boxes |
   |---|---|
-  | `patches/shootouts/distortion-shootout.maxpat` | 63 |
-  | `patches/shootouts/reverb-shootout.maxpat` | 52 |
-  | `patches/shootouts/filter-shootout.maxpat` | 46 |
-  | `patches/shootouts/modulation-shootout.maxpat` | 41 |
-  | `patches/shootouts/delay-shootout.maxpat` | 26 |
-  | `patches/shootouts/dynamics-shootout.maxpat` | 19 |
-  | `patches/shootouts/pitch-shootout.maxpat` | 15 |
-  | `patches/shootouts/eq-shootout.maxpat` | 6 |
+  | `patches/shootouts/audio/distortion-shootout.maxpat` | 63 |
+  | `patches/shootouts/audio/reverb-shootout.maxpat` | 52 |
+  | `patches/shootouts/audio/filter-shootout.maxpat` | 46 |
+  | `patches/shootouts/audio/modulation-shootout.maxpat` | 41 |
+  | `patches/shootouts/audio/delay-shootout.maxpat` | 26 |
+  | `patches/shootouts/audio/dynamics-shootout.maxpat` | 19 |
+  | `patches/shootouts/audio/pitch-shootout.maxpat` | 15 |
+  | `patches/shootouts/audio/eq-shootout.maxpat` | 6 |
 
   The converter change does **not** fix them, deliberately: `sync` now classifies 40 × 22 as a non-default size for `attrui` and writes it into the spec, so the damage is preserved rather than silently rewritten. That is the right behaviour for sync (it must not change a user's boxes on its own), which is why this is a separate, explicit repair.
 
@@ -1149,7 +1149,7 @@ Tasks that are primarily implementation, file editing, or verification — no de
 
   **The ambiguity.** `v8.maxref.xml` says two things that do not obviously agree. Its `inlets-outlets` argument: with one int "the number of desired outlets is specified", with two "the first number specifies the number of outlets and the second number specifies the number of inlets", default 1 and 1. Its `jsarguments` argument: "following the optional filename or number of outlets and inlets, any symbols or numbers can be entered that will be assigned to the Javascript variable jsarguments." So for `v8 foo.js 15`, the 15 could be an outlet count, a script argument, or — if Max consumes it as a count and still exposes it — both.
 
-  **Why it matters here.** Ten patches under `patches/shootouts/` carry `v8 fx-shootout-highlight.js <N> @embed 1` with N from 11 to 20. `patches/shootouts/fx-shootout-highlight.js` declares `outlets = 1` and reads `jsarguments[1]` as its slot count, and every one of those boxes is saved in the JSON with `numinlets: 1, numoutlets: 1`. If Max reads N as an outlet count, those boxes have 11–20 outlets in Max while their JSON says one, and the next Max save would rewrite the file.
+  **Why it matters here.** Ten patches under `patches/shootouts/audio/` carry `v8 fx-shootout-highlight.js <N> @embed 1` with N from 11 to 20. `patches/shootouts/fx-shootout-highlight.js` declares `outlets = 1` and reads `jsarguments[1]` as its slot count, and every one of those boxes is saved in the JSON with `numinlets: 1, numoutlets: 1`. If Max reads N as an outlet count, those boxes have 11–20 outlets in Max while their JSON says one, and the next Max save would rewrite the file.
 
   **How to settle it.** Open any shootout patch, click the `v8` box, and count its outlets. Then put a `post(jsarguments.length + " " + jsarguments[1])` in the script, or read it in the Max console, and see whether the argument still arrives.
   - *N outlets, and `jsarguments[1]` is still N:* the refpage reading is right and both are true. Move the slot count to a form that cannot be read as a port count — an attribute, a `loadmess`, or a second symbol argument — and re-save the ten patches.
