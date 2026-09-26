@@ -908,6 +908,58 @@ def test_cord_crosses_unrelated_box():
 
 
 
+def test_attrui_cords_are_never_sent_to_s_r():
+    # An attrui must be cabled straight to its object, so neither cord rule may
+    # advise an s / r pair for it: not when it crosses other boxes, and not
+    # when it is long. A message box in the same place still gets the advice.
+    objs = {"target": {"type": "newobj", "text": "metro 500", "pos": [100, 900]},
+            "between": {"type": "newobj", "text": "print X", "pos": [100, 400]},
+            "a": {"type": "attrui", "pos": [100, 40], "size": [150, 22]},
+            "m": {"type": "message", "text": "interval 250", "pos": [300, 40]}}
+    conns = [["a", 0, "target", 0], ["m", 0, "target", 0]]
+    r = verify_spec({"objects": objs, "connections": conns})
+    about_a = [v for v in r["violations"] if v["rule"] in ("cord-crosses-unrelated-box", "cord-long")
+               and "a:0" in v["message"]]
+    about_m = [v for v in r["violations"] if v["rule"] in ("cord-crosses-unrelated-box", "cord-long")
+               and "m:0" in v["message"]]
+    assert not about_a, about_a
+    assert about_m, r["violations"]
+
+
+def test_a_column_feeding_one_inlet_is_not_a_crossing():
+    # Five stacked messages all feeding one [s NAME] under them: each cord runs
+    # past its siblings by design. A box that does NOT feed that inlet, placed
+    # in the column, is still reported.
+    objs = {"s": {"type": "newobj", "text": "s OUT", "pos": [100, 300]}}
+    conns = []
+    for k in range(5):
+        objs[f"m{k}"] = {"type": "message", "text": f"go {k}", "pos": [100, 40 + 23 * k]}
+        conns.append([f"m{k}", 0, "s", 0])
+    r = verify_spec({"objects": objs, "connections": conns})
+    assert not _hits(r, "cord-crosses-unrelated-box"), r["violations"]
+    objs["stray"] = {"type": "newobj", "text": "print X", "pos": [100, 200]}
+    r = verify_spec({"objects": objs, "connections": conns})
+    hits = _hits(r, "cord-crosses-unrelated-box")
+    assert hits and all("stray" in h["message"] for h in hits), hits
+
+
+def test_a_column_header_comment_is_not_a_crossing():
+    # Two groups of messages share one [s OUT], with a comment naming the
+    # second group between them. The shared path runs past that header by
+    # design. A comment beside the column, not in it, is still reported.
+    objs = {"s": {"type": "newobj", "text": "s OUT", "pos": [100, 300]},
+            "head": {"type": "comment", "text": "second group", "pos": [100, 110], "size": [200, 20]}}
+    conns = []
+    for k, y in enumerate([40, 63, 136, 159]):
+        objs[f"m{k}"] = {"type": "message", "text": f"go {k}", "pos": [100, y]}
+        conns.append([f"m{k}", 0, "s", 0])
+    r = verify_spec({"objects": objs, "connections": conns})
+    assert not _hits(r, "cord-crosses-unrelated-box"), r["violations"]
+    objs["aside"] = {"type": "comment", "text": "a note", "pos": [90, 200], "size": [200, 20]}
+    hits = _hits(verify_spec({"objects": objs, "connections": conns}), "cord-crosses-unrelated-box")
+    assert hits and all("aside" in h["message"] for h in hits), hits
+
+
 def test_cord_port_zero_sits_at_left_edge():
     # An attrui staircase: each box 30 px right of the one above, every cord
     # dropping from its first outlet (19 px in from the left edge) to the
@@ -1145,6 +1197,22 @@ def test_long_cord():
     crossing["objects"]["mid"] = {"type": "newobj", "text": "midiformat", "pos": [100, 380]}
     r = verify_spec(crossing)
     assert _hits(r, "cord-crosses-unrelated-box") and not _hits(r, "cord-long")
+
+
+def test_tab_window_too_small():
+    # A window of tabs opens at the root's size. Tabs of 1000 x 800 need a root
+    # of at least 1000 x 826; the 700 x 400 root the Butter help files had is
+    # flagged, and the fitted one is not. A root with no tabs is never checked.
+    def spec(w, h):
+        tab = {"type": "newobj", "text": "p one", "inlets": 0, "outlets": 0, "outlettype": [], "pos": [20, 80],
+               "patcher": {"width": 1000, "height": 800, "objects": {}, "connections": [],
+                           "patcher_extras": {"showontab": 1}}}
+        return {"width": w, "height": h, "objects": {"t": tab}, "connections": [],
+                "patcher_extras": {"showontab": 0, "showrootpatcherontab": 0}}
+    hit = _hits(verify_spec(spec(700, 400)), "tab-window-too-small")
+    assert hit and "1000 × 826" in hit[0]["message"], hit
+    assert not _hits(verify_spec(spec(1000, 826)), "tab-window-too-small")
+    assert not _hits(verify_spec({"width": 300, "height": 200, "objects": {}, "connections": []}), "tab-window-too-small")
 
 
 def test_box_off_canvas():

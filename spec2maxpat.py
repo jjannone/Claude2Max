@@ -321,15 +321,28 @@ class _GateResolver:
             return self._bundled
         names = set()
         c74 = getattr(self._rp, "_c74", None)
+        roots = []
         if c74 is not None:
-            for root in (c74 / "patchers", c74 / "packages"):
-                if not root.is_dir():
-                    continue
-                try:
-                    for f in root.rglob("*.maxpat"):
-                        names.add(f.stem.lower())
-                except OSError:
-                    pass
+            roots += [c74 / "patchers", c74 / "packages"]
+        # User packages are on Max's search path too (~/Documents/Max 9/
+        # Packages/<pkg>/patchers/…), so an abstraction there is as real as a
+        # bundled one. A package is often a symlink, so each is resolved
+        # before it is walked. Without this, butter_hid in Butter_tools was
+        # blocked as an invented name (2026-09-25).
+        for pkgs in RefpageCache._USER_PACKAGE_ROOTS:
+            try:
+                for pkg in pkgs.iterdir():
+                    roots.append(pkg.resolve() / "patchers")
+            except OSError:
+                pass
+        for root in roots:
+            if not root.is_dir():
+                continue
+            try:
+                for f in root.rglob("*.maxpat"):
+                    names.add(f.stem.lower())
+            except OSError:
+                pass
         self._bundled = names
         return names
 

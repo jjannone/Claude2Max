@@ -106,6 +106,22 @@ The general principle outlives the mechanism: **when one relationship is drawn
 many times, draw it once.** The recognition signal is a fan of cords leaving
 adjacent boxes for the same inlet.
 
+**The same holds when the destination is a send.** A group of nearby boxes
+feeding one `s NAME` shares **one** `s NAME`, reached by one routed path. One
+`s NAME` under each box is the same relationship drawn N times, just with boxes
+instead of cords. Repeat a sender only for sources in *different places* in the
+patch (see *A send/receive name is a channel, not a wire*). The test is whether
+the sources sit together: together, one send; apart, one send each.
+
+**Related short messages sit side by side in a row, not stacked.** `first`,
+`next`, `prev` and `last` are one idea, and a row of four small boxes reads as
+one control. Each cord drops a short way to a shared horizontal run under the
+row, then runs along it to a point above the send and drops in. Only the
+direction differs from the column case: the stubs are vertical and the run is
+horizontal. Stack messages in a column when each one is long, or when each one
+is its own idea. (John, 2026-09-24, with an MCT of exactly that row feeding one
+`[s TO_TABLE_COLL]`.)
+
 ## Always Verify Against Max Documentation — Never Guess
 
 Max is not consistent in its terminology, implementation, or formatting. Attribute names, types, value ranges, and defaults vary unpredictably between objects and even between related objects in the same family. What works for `jit.gl.text3d` may not work for `jit.gl.text`. An attribute that takes a symbol in one object takes an int in another. A value that seems obvious (`align center`) may be silently ignored because the type is wrong (`align 1`). There is no reliable pattern to reason from — the only safe source is the documentation for that exact object.
@@ -187,6 +203,7 @@ Max can show subpatchers as tabs of their parent window. It is a patcher-level f
 - **Each tab is an ordinary patcher**, with its own patching view, presentation view, `openinpresentation`, rect, and lock state. A tab that opens in presentation shows its controls; unlock and leave presentation to see its wiring.
 - **`thispatcher setactivetab <name>`** switches to the tab whose subpatcher has that name (refpage: "the active tab may be changed by passing the setactivetab message followed by the name of the subpatcher as displayed on the tab itself").
 - **In a Claude2Max spec** the keys travel in `patcher_extras`: `"patcher_extras": {"showontab": 1}` on a `p` box's `patcher` sub-spec, and `{"showontab": 0, "showrootpatcherontab": 0}` on the root. `convert` writes them; `sync` mirrors them back, on the root and inside each nested sub-spec. A tab subpatcher with no `inlet` / `outlet` boxes should declare `"inlets": 0, "outlets": 0, "outlettype": []`, or the converter gives the `p` box one of each.
+- **The window opens at the ROOT patcher's size, so the root must be as big as the largest tab.** Every tab is drawn in that one window; a root smaller than a tab opens that tab cut off, however carefully the tab itself was sized. Cycling '74's help files make the root exactly as wide as their tabs and 26 px taller, for the tab bar (`metro`, `umenu`, `kslider`, `mtof`, `jit.cellblock`, measured 2026-09-24). In a spec that is the root's `width` and `height`: the largest tab's width, and its height plus 26. The verifier reports a smaller root as `tab-window-too-small`. For instance, every Butter_tools help file shipped with a 700 × 400-ish root around 1000-wide tabs and opened too small, until John said so (2026-09-24). The same holds for any patch: it opens at the size stored in it, so size that to what the reader must see first.
 - **Not the same thing as the `tab` / `live.tab` objects.** Those are selectors inside one view. The rule that separates the two is `CLAUDE.md` > *Several Views in One Window: Patcher Tabs, Not bpatchers*.
 
 For instance: `what_is_midi_for_max.maxpat` (John's Brooklyn College MIDI examples) is a root with ten `p "<n> <name>"` boxes, each inner patcher `showontab: 1`, root `showrootpatcherontab: 0`; opening it shows a ten-tab window and nothing else.
@@ -479,6 +496,11 @@ The refpage is explicit that this is the intended model: "All send objects that 
 For instance: `[select 0] → [0(` sits in the transport column on the far left, and the sounds column already has an `[s SOUNDS]` about 600px to its right. Wiring the `0` message to that existing sender drags a cord across the whole patch. A second `[s SOUNDS]` placed just under the `0` message says the same thing locally, and the transport column becomes readable on its own.
 
 The same reasoning covers `r NAME` (any number of receivers) and `s~` / `r~` — where multiple senders additionally **sum**, which is what makes a mix bus one `s~` pair per voice.
+
+**This is for sources in different places.** When the sources sit together — a
+column of message boxes, a row of related buttons — they share one `s NAME`
+through one routed path instead (see *Many Cords to One Place Share One Path*).
+A send under every box of a group is clutter, not locality.
 
 **The one thing duplicate senders do not give you is order.** The refpage: "The order of reception by two or more receive objects is not deterministic." So use as many senders as the layout wants, but never rely on which `r NAME` fires first — when order matters, wire it explicitly with a `trigger` (and lay it out right-to-left, per the rule above).
 

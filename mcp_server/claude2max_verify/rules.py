@@ -1436,6 +1436,18 @@ def _cord_geometry(ctx: SpecContext, conn):
     return sr, dr, [left, top, right - left, bottom - top]
 
 
+def _cord_must_stay(ctx: SpecContext, conn) -> bool:
+    """A cord the s / r advice must never touch.
+
+    An attrui inspects the object at the other end of its own cord, so it is
+    cabled straight to that object — never through s / r or a subpatcher
+    (CLAUDE.md > Drive a Real Attribute With attrui). Its cords are left to
+    the one-segmented-cord routing instead.
+    """
+    src = ctx.objects.get(conn[0]) if isinstance(conn, (list, tuple)) and conn else None
+    return isinstance(src, dict) and ctx.maxclass(src) == "attrui"
+
+
 def _cord_crossings(ctx: SpecContext, conn, rects) -> tuple:
     """(crossed box ids, whether they are all comments) for one cord.
 
@@ -1443,15 +1455,33 @@ def _cord_crossings(ctx: SpecContext, conn, rects) -> tuple:
     cross nothing. Shared by cord-crosses-unrelated-box and cord-long, so a
     cord is reported by exactly one of them.
     """
+    if _cord_must_stay(ctx, conn):
+        return [], True
     g = _cord_geometry(ctx, conn)
     if g is None:
         return [], True
     _sr, _dr, cord = g
     if cord[3] < _ROW_PX:
         return [], True
+    # Boxes that feed the same inlet are the cord's own column: their cords
+    # share one routed path into it (MAX_PATCHING.md > Many Cords to One Place
+    # Share One Path), so running past them is the design, not a crossing.
+    siblings = {c[0] for c in ctx.connections
+                if isinstance(c, (list, tuple)) and len(c) >= 4
+                and c[2] == conn[2] and c[3] == conn[3]}
+    # A comment at the column's x, among its boxes, is one of the column's
+    # group headers; the shared path runs past it by design too.
+    sib = [rects.get(x) for x in siblings if rects.get(x)]
+    headers = set()
+    if len(sib) > 1:
+        xs = {round(r[0]) for r in sib}
+        top, bottom = min(r[1] for r in sib), max(r[1] + r[3] for r in sib)
+        headers = {oid for oid, r in rects.items()
+                   if r and ctx.maxclass(ctx.objects[oid]) == "comment"
+                   and round(r[0]) in xs and top - 40 <= r[1] <= bottom}
     crossed, only_comments = [], True
     for oid, r in rects.items():
-        if r is None or oid in (conn[0], conn[2]):
+        if r is None or oid in (conn[0], conn[2]) or oid in siblings or oid in headers:
             continue
         if ctx.maxclass(ctx.objects[oid]) == "panel":
             continue  # background z-order; cords run over panels by design
@@ -1747,6 +1777,8 @@ def rule_long_cord(ctx: SpecContext) -> list:
             continue
         if not isinstance(conn[0], str) or not isinstance(conn[2], str):
             continue
+        if _cord_must_stay(ctx, conn):
+            continue
         sr, dr = rects.get(conn[0]), rects.get(conn[2])
         if sr is None or dr is None:
             continue
@@ -1785,6 +1817,42 @@ def rule_long_cord(ctx: SpecContext) -> list:
             "MAX_PATCHING.md > A cord that runs past objects it does not connect becomes s / r",
         ))
     return out
+
+
+TAB_BAR_PX = 26   # the tab strip above the tabs: C74 help roots are their tabs' height + 26
+
+
+def rule_tab_window_too_small(ctx: SpecContext) -> list:
+    """A window of patcher tabs opens at the ROOT patcher's size.
+
+    Every tab is drawn inside that one window, so a root smaller than its
+    largest tab opens every larger tab cut off, however carefully the tab
+    itself was sized. Cycling '74's help files make the root exactly as wide
+    as their tabs and 26 px taller, for the tab bar (metro, umenu, kslider,
+    mtof, jit.cellblock — measured 2026-09-24).
+    Source: MAX_PATCHING.md > Patcher Tabs — Several Patches in One Window.
+    """
+    tabs = [o for o in ctx.objects.values()
+            if isinstance(o, dict) and isinstance(o.get("patcher"), dict)
+            and (o["patcher"].get("patcher_extras") or {}).get("showontab")]
+    if not tabs:
+        return []
+    try:
+        win_w = float(ctx.spec.get("width", 800))
+        win_h = float(ctx.spec.get("height", 600))
+        need_w = max(float(t["patcher"].get("width", 800)) for t in tabs)
+        need_h = max(float(t["patcher"].get("height", 600)) for t in tabs) + TAB_BAR_PX
+    except (TypeError, ValueError):
+        return []
+    if win_w >= need_w and win_h >= need_h:
+        return []
+    return [Violation(
+        "tab-window-too-small", WARNING, "patcher",
+        f"This window shows {len(tabs)} patcher tab(s), and a tabbed window opens at the root's "
+        f"size: {int(win_w)} × {int(win_h)}, but the largest tab needs {int(need_w)} × {int(need_h)} "
+        f"(its size plus {TAB_BAR_PX} px for the tab bar). Set the root's width and height to that.",
+        "MAX_PATCHING.md > Patcher Tabs — Several Patches in One Window",
+    )]
 
 
 def rule_box_off_canvas(ctx: SpecContext) -> list:
@@ -2435,6 +2503,7 @@ REGISTRY = [
     rule_box_too_narrow,
     rule_long_cord,
     rule_box_off_canvas,
+    rule_tab_window_too_small,
     rule_off_grid,
 ]
 
