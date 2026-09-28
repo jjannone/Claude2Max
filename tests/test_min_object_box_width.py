@@ -22,9 +22,9 @@ def _one(obj):
 
 
 def test_object_box_widened_to_its_ports():
-    # unjoin 3 has 4 outlets: 24 + 15 * 4 = 84 px, above its 76 px text estimate
-    r = _rect(_one({"type": "newobj", "text": "unjoin 3"}), lambda b: b.get("text") == "unjoin 3")
-    assert r[2] == 84, r
+    # unjoin 9 has 10 outlets: 24 + 15 * 10 = 174 px, above its 90 px text estimate
+    r = _rect(_one({"type": "newobj", "text": "unjoin 9"}), lambda b: b.get("text") == "unjoin 9")
+    assert r[2] == 174, r
 
 
 def test_spec_size_below_minimum_is_widened():
@@ -47,10 +47,10 @@ def test_message_and_ui_boxes_are_not_covered():
 
 
 def test_sync_records_a_narrow_saved_box():
-    box = {"maxclass": "newobj", "text": "unjoin 3", "numinlets": 1, "numoutlets": 4,
-           "patching_rect": [30, 30, 76, 22]}
-    assert s._box_to_spec_obj(box).get("size") == [76, 22]
-    box["patching_rect"] = [30, 30, 84, 22]
+    box = {"maxclass": "newobj", "text": "unjoin 9", "numinlets": 1, "numoutlets": 10,
+           "patching_rect": [30, 30, 90, 22]}
+    assert s._box_to_spec_obj(box).get("size") == [90, 22]
+    box["patching_rect"] = [30, 30, 174, 22]
     assert "size" not in s._box_to_spec_obj(box)
 
 
