@@ -91,7 +91,7 @@ CLIP = notes(
         ("**ableton-dsp** " + IN_MAX,
          "`abl.dsp.saturator~` `abl.dsp.overdrive~` `abl.dsp.distortion~` `abl.dsp.fuzz~` `abl.dsp.expshaper~` "
          "`abl.device.roar~` — voiced effect units rather than primitives. "
-         "`patches/shootouts/audio/distortion-shootout.maxpat` auditions eighteen of them."),
+         "`patches/shootouts/audio/distortion-shootout-v1.0.maxpat` auditions eighteen of them."),
         ("**ableton-dsp** " + IN_MAX, "`abl.dsp.waveshaper~` — tab 6"),
         ("**s2n**", "`sn.drive~` — tab 6"),
         ("**PeRColate**",
@@ -255,8 +255,8 @@ CATALOG = (
         ("**RNBO Synth Building Blocks**", "`sbb.osc.wavetable` — inside RNBO patches only"),
     ])
     + ["",
-       "Already in this repo: `patches/shootouts/audio/distortion-shootout.maxpat` auditions eighteen distortion and "
-       "lo-fi units side by side. `distortion-modules-shootout.maxpat` does the same for BEAP and .amxd devices."])
+       "Already in this repo: `patches/shootouts/audio/distortion-shootout-v1.0.maxpat` auditions eighteen distortion and "
+       "lo-fi units side by side. `distortion-modules-shootout-v1.0.maxpat` does the same for BEAP and .amxd devices."])
 
 ALL = {"sources": SOURCES, "clip": CLIP, "math": MATH, "lookup": LOOKUP,
        "lofi": LOFI, "pkgshape": PKGSHAPE, "catalog": CATALOG}

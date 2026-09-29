@@ -1036,14 +1036,14 @@ Tasks that are primarily implementation, file editing, or verification — no de
 
   | patch | 40 × 22 `attrui` boxes |
   |---|---|
-  | `patches/shootouts/audio/distortion-shootout.maxpat` | 63 |
-  | `patches/shootouts/audio/reverb-shootout.maxpat` | 52 |
-  | `patches/shootouts/audio/filter-shootout.maxpat` | 46 |
-  | `patches/shootouts/audio/modulation-shootout.maxpat` | 41 |
-  | `patches/shootouts/audio/delay-shootout.maxpat` | 26 |
-  | `patches/shootouts/audio/dynamics-shootout.maxpat` | 19 |
-  | `patches/shootouts/audio/pitch-shootout.maxpat` | 15 |
-  | `patches/shootouts/audio/eq-shootout.maxpat` | 6 |
+  | `patches/shootouts/audio/distortion-shootout-v1.0.maxpat` | 63 |
+  | `patches/shootouts/audio/reverb-shootout-v1.1.maxpat` | 52 |
+  | `patches/shootouts/audio/filter-shootout-v1.0.maxpat` | 46 |
+  | `patches/shootouts/audio/modulation-shootout-v1.0.maxpat` | 41 |
+  | `patches/shootouts/audio/delay-shootout-v1.1.maxpat` | 26 |
+  | `patches/shootouts/audio/dynamics-shootout-v1.0.maxpat` | 19 |
+  | `patches/shootouts/audio/pitch-shootout-v1.0.maxpat` | 15 |
+  | `patches/shootouts/audio/eq-shootout-v1.0.maxpat` | 6 |
 
   The converter change does **not** fix them, deliberately: `sync` now classifies 40 × 22 as a non-default size for `attrui` and writes it into the spec, so the damage is preserved rather than silently rewritten. That is the right behaviour for sync (it must not change a user's boxes on its own), which is why this is a separate, explicit repair.
 
