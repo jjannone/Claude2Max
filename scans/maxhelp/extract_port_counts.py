@@ -13,6 +13,10 @@ Writes `maxhelp_port_counts.json`:
               attributes, contents). For object boxes the file keeps each
               argument list whose boxes all agree, so an exact match can be
               read back; every other case falls to the converter's own rules.
+              A flexible class also gets a `formula` when one explains every
+              saved box (inlets or outlets = how many arguments, one argument
+              read as a count, or an attribute), so a text Max never saved
+              can still be answered. See `_fit_port_formula` in spec2maxpat.py.
   unmarked  — too little evidence to say. `sync` adds evidence from patches
               Max saved, which can later move a class to fixed or flexible.
 
