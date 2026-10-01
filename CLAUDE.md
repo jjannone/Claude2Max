@@ -213,6 +213,16 @@ So after adding the step, go and look at what the old step used to answer, and c
 
 For instance: `resolve_box_size` in `spec2maxpat.py` gained a step that reads a UI class's default size from its own C74 help file, to fix UI objects converting at 40 × 22. It also captured `message` and `comment`, which have help files like any other class — so every comment and message box in every patch would have been given one fixed width regardless of its text, which is the one thing the text-width estimate underneath it had always got right. `TEXT_SIZED_CLASSES` restores them to the estimate. (2026-09-15.)
 
+## Before Saying a Fix Covers Every Case, Measure What Is Still Wrong — Binding Rule
+
+A fix is usually checked against the cases that prompted it: the bug that was reported, the examples the user named, the ones that came to mind while writing it. Those all pass, and the fix then gets described as general. But passing the cases you thought of says nothing about the cases you did not. So before claiming that a fix covers a whole class of things, measure it across the whole set: count what is still wrong, by a method that does not start from your own list. Then report what remains uncovered next to what was fixed. "Fixed 1,595, and these are still wrong" is a result. "Fixed for every class" without that count is a guess.
+
+Three ways to get a list that is not your own, each of which applies well beyond this instance: test on data the fix has not seen; ask the system's own documentation or registry which members of the class exist, and check each one; and take away any shortcut that hides errors (a cache, an exact-match memory) so the rule itself is what gets measured.
+
+For instance: the port-count work of 2026-10-01 fitted formulas across every class and was reported as covering "every class." John asked whether the cases were all found or biased towards his examples. A scan of all refpages for "number of inlets / outlets" found 89 that state such a rule, about 50 of them uncovered, and one existing hand rule (`funnel`) that was wrong. None of that was visible from the tests, which named his examples and mine.
+
+The recognition signal: writing "all," "every," or "general" about a fix whose checks were chosen by the person who wrote the fix. That is the moment to go and count.
+
 ## A Test Spells Out Its Own Examples — Never Read Them From the Thing Being Tested — Binding Rule
 
 A test that loops over the same list, table, or config it is checking passes when that thing is emptied, because there is nothing left to loop over. It goes green exactly when the breakage is worst, which is the opposite of what a test is for.
