@@ -1,0 +1,1624 @@
+[
+ {
+  "capability": "Shape-based mapping and masking editor",
+  "category": "projection mapping",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Palette:kantanMapper",
+   "Kantan UV Helper"
+  ],
+  "what_it_does": "An editor drawn over the live projector output. You draw quads and freeform bezier outlines on the real object, then give each shape a texture or use it as a mask.",
+  "source_urls": [
+   "https://docs.derivative.ca/Palette:kantanMapper",
+   "https://docs.derivative.ca/Projection_Mapping"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.gl.meshwarp",
+   "jit.gl.cornerpin"
+  ],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for cornerpin, meshwarp, keystone, warp: found jit.gl.cornerpin (four-corner mapping with mouse handles) and jit.gl.meshwarp (refpage: 'Video mapping tool', a 2D mesh deformer with a mask). Neither refpage describes drawing arbitrary bezier shapes and assigning a texture per shape. packages/query_packages.py search (installed third-party packages) 'projection mapping' returned only Vsynth vs_output.",
+  "confidence": "medium",
+  "notes": "A later pass should open jit.gl.meshwarp's help file to see how far its mask mode goes."
+ },
+ {
+  "capability": "Projector calibration from a 3D model",
+  "category": "projection mapping",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Palette:camSchnappr"
+  ],
+  "what_it_does": "Matches a virtual camera to a real projector: you click known points of a 3D model where they fall on the physical object, and OpenCV camera calibration solves the projector's position and lens. Supports several projectors with blending.",
+  "source_urls": [
+   "https://docs.derivative.ca/Palette:camSchnappr",
+   "https://docs.derivative.ca/Projection_Mapping"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "cv.jit.calibration",
+   "cv.jit.findchessboardcorners",
+   "jit.gl.camera"
+  ],
+  "max_check": "Registry and refpage search for 'calibrat' returned nothing. packages/query_packages.py search (installed third-party packages) 'calibrat' found cv.jit.calibration and cv.jit.findchessboardcorners (chessboard camera calibration). jit.gl.camera's refpage lists proj_matrix and view_matrix attributes, so a solved matrix could be applied. No object was found that solves a projector pose from model-to-screen point pairs.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Multi-projector edge blending",
+  "category": "projection mapping",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Palette:projectorBlend"
+  ],
+  "what_it_does": "Takes one image, stretches it over a grid of overlapping projectors and produces the blended edges, with per-projector overlap, gamma, luminance and blank-out controls.",
+  "source_urls": [
+   "https://docs.derivative.ca/Palette:projectorBlend",
+   "https://docs.derivative.ca/Projection_Mapping"
+  ],
+  "max_status": "absent",
+  "max_closest": [],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for 'edge blend' and 'soft edge': no match. packages/query_packages.py search (installed third-party packages) 'edge blend': no match. It could be built from a shader in jit.gl.slab or jit.gl.pix, but nothing ready-made was found.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Import of projector calibration files",
+  "category": "projection mapping",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "MPCDI TOP",
+   "MPCDI DAT",
+   "Vioso TOP",
+   "Scalable Display TOP"
+  ],
+  "what_it_does": "Loads the warp and blend data written by camera-based auto-calibration systems (the MPCDI standard, VIOSO, Scalable Displays) and applies it to the output.",
+  "source_urls": [
+   "https://docs.derivative.ca/MPCDI",
+   "https://docs.derivative.ca/MPCDI_TOP",
+   "https://docs.derivative.ca/Vioso",
+   "https://docs.derivative.ca/Scalable_Display_TOP",
+   "https://docs.derivative.ca/How-to_calibrate_your_projector_with_Scalable_Displays"
+  ],
+  "max_status": "absent",
+  "max_closest": [],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for mpcdi, vioso, scalable: no match. Not in the installed-package library either.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Perspective-correct rendering for a viewing position",
+  "category": "projection mapping",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Quad Reprojection",
+   "Palette:quadReproject",
+   "Palette:sweetSpot"
+  ],
+  "what_it_does": "Renders a scene so it looks right from one spot in the room. The quad version renders each flat screen or LED panel straight to its own pixels in the vertex shader, with no second warp pass.",
+  "source_urls": [
+   "https://docs.derivative.ca/Quad_Reprojection",
+   "https://docs.derivative.ca/Palette:quadReproject",
+   "https://docs.derivative.ca/Palette:sweetSpot"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.gl.camera"
+  ],
+  "max_check": "Searched the registry and refpage text for reproject and off-axis: no match. jit.gl.camera's refpage lists frustum, proj_matrix, projection_mode and view_matrix attributes, so an off-axis projection can be set by hand. No object or example named for this technique was found.",
+  "confidence": "low",
+  "notes": "Needs a check of jit.gl.camera @projection_mode and of the Jitter examples folder."
+ },
+ {
+  "capability": "Dome formats: cube map to fisheye or equirectangular",
+  "category": "projection mapping",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Projection TOP",
+   "Palette:domeViewer"
+  ],
+  "what_it_does": "Converts a cube map render into fisheye or equirectangular images for domes and spheres, and previews content on a virtual dome.",
+  "source_urls": [
+   "https://docs.derivative.ca/Projection_TOP",
+   "https://docs.derivative.ca/Palette:domeViewer"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.gl.cubemap"
+  ],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for dome, fisheye, equirect: jit.gl.cubemap (refpage methods include equirect_matrix and panorama_matrix, which load such images into a cube map) and jit.gl.environment. No object was found that goes the other way, from a cube map to a fisheye image.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "DMX, Art-Net, sACN and KiNET input and output",
+  "category": "lighting/DMX/lasers",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "DMX Out CHOP",
+   "DMX In CHOP",
+   "Art-Net DAT"
+  ],
+  "what_it_does": "Sends and receives lighting control data on USB DMX interfaces and on the network lighting protocols, with a routing table for net, subnet and universe, and a device discovery table.",
+  "source_urls": [
+   "https://docs.derivative.ca/DMX",
+   "https://docs.derivative.ca/DMX_Out_CHOP",
+   "https://docs.derivative.ca/Art-Net",
+   "https://docs.derivative.ca/SACN",
+   "https://docs.derivative.ca/Art-Net_DAT"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "fxwdmxusbpro",
+   "serial",
+   "udpsend"
+  ],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for dmx, art-net, sacn, fixture: no match. packages/query_packages.py search (installed third-party packages) 'dmx' found one object, fxwdmxusbpro in Max for the Visual Arts (an abstraction that sends 512 channels to an Enttec DMX USB Pro through the serial object). 'artnet' and 'art-net': no match.",
+  "confidence": "high",
+  "notes": "Max has no built-in lighting protocol objects. Third-party Art-Net externals may exist but none is installed here."
+ },
+ {
+  "capability": "Fixture-level lighting from geometry attributes",
+  "category": "lighting/DMX/lasers",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "DMX Fixture POP",
+   "DMX Out POP",
+   "DMX Map DAT",
+   "TDGdtf"
+  ],
+  "what_it_does": "Each primitive of a geometry stands for one fixture. Point attributes such as colour and position are packed into the fixture's channel layout, including 16-bit channels, and addresses are laid out automatically. GDTF and MVR files describe the fixtures and the rig.",
+  "source_urls": [
+   "https://docs.derivative.ca/DMX_Fixture_POP",
+   "https://docs.derivative.ca/DMX_Out_POP",
+   "https://docs.derivative.ca/DMX_Map_DAT",
+   "https://docs.derivative.ca/GDTF_and_MVR_in_TouchDesigner"
+  ],
+  "max_status": "absent",
+  "max_closest": [],
+  "max_check": "Same searches as the DMX entry. Nothing in the registry, refpages or installed packages maps structured data onto fixture profiles or reads GDTF or MVR.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Pan and tilt solving for moving heads",
+  "category": "lighting/DMX/lasers",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Pan Tilt CHOP"
+  ],
+  "what_it_does": "Works out the pan and tilt angles that aim each moving-head fixture at a 3D target, choosing angles that avoid flips, with range limits.",
+  "source_urls": [
+   "https://docs.derivative.ca/Pan_Tilt_CHOP"
+  ],
+  "max_status": "absent",
+  "max_closest": [],
+  "max_check": "Searched the registry and refpage text for pan-tilt and 'moving head': no match. The trigonometry could be written in expr or JavaScript.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Laser projector output",
+  "category": "lighting/DMX/lasers",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Laser CHOP",
+   "Laser Device CHOP",
+   "EtherDream DAT",
+   "Pangolin CHOP"
+  ],
+  "what_it_does": "Turns points and lines into the sample stream a laser scanner needs, with blanking and corner dwell control, and sends it to EtherDream, Helios or ShowNET hardware, to AVB audio devices, or to Pangolin Beyond.",
+  "source_urls": [
+   "https://docs.derivative.ca/Lasers",
+   "https://docs.derivative.ca/Laser_CHOP",
+   "https://docs.derivative.ca/Laser_Device_CHOP"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "vector_3ch_out"
+  ],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for laser, ilda: no match. packages/query_packages.py search (installed third-party packages) 'laser' found Vsynth vector_3ch_out, which sends X, Y and brightness as audio signals to audio outputs. No object talks to a laser DAC, and none handles blanking timing.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Timing engine with segments, states and callbacks",
+  "category": "timeline/cueing/show control",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Timer CHOP",
+   "Initialize Start"
+  ],
+  "what_it_does": "One operator that counts a length, cycles, runs a table of segments in series or parallel, reports its state as channels (initializing, ready, running, done) and calls scripts at each stage. Used for cue lists, playlists and state machines. Many other operators share its Initialize and Start controls.",
+  "source_urls": [
+   "https://docs.derivative.ca/Timer_CHOP",
+   "https://docs.derivative.ca/Initialize_Start"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "timepoint",
+   "transport",
+   "mtr",
+   "qlist",
+   "line",
+   "delay"
+  ],
+  "max_check": "Read refpages: timepoint (bang at a transport time), transport (named clocks), mtr (record and sequence messages), qlist (timed message cues). Each covers a part. No single object was found that holds a segment table with states and per-stage callbacks.",
+  "confidence": "medium",
+  "notes": "Easily built in v8, so this is a packaging gap more than a capability gap."
+ },
+ {
+  "capability": "Keyframe curve editor for any parameter",
+  "category": "timeline/cueing/show control",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Animation Editor",
+   "Animation COMP",
+   "Keyframe CHOP"
+  ],
+  "what_it_does": "A curve editor with keys and tangent handles for any number of named channels, stored in a component and played back by timeline, index or lookup.",
+  "source_urls": [
+   "https://docs.derivative.ca/Animation_Editor",
+   "https://docs.derivative.ca/Keyframe_Animation",
+   "https://docs.derivative.ca/Animation_COMP",
+   "https://docs.derivative.ca/Keyframe_CHOP"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "function",
+   "mtr",
+   "jit.anim.path"
+  ],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for keyframe, timeline, cue: only sflist~ and qlist matched. Read refpages: function (breakpoint editor with curve mode, one function per object), jit.anim.path (interpolates 3D transform points), mtr. No multi-channel keyframe editor was found. packages/query_packages.py search (installed third-party packages) 'keyframe' and 'timeline' returned nothing relevant (bach.roll is a score editor).",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Timecode as a built-in type, with LTC in and out",
+  "category": "timeline/cueing/show control",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Timecode CHOP",
+   "LTC In CHOP",
+   "LTC Out CHOP",
+   "tdu.Timecode"
+  ],
+  "what_it_does": "SMPTE timecode is read from and written to an audio channel, generated, converted and compared. Movie players, the timer and video inputs all report and accept timecode.",
+  "source_urls": [
+   "https://docs.derivative.ca/Timecode",
+   "https://docs.derivative.ca/Timecode_CHOP",
+   "https://docs.derivative.ca/LTC_In_CHOP"
+  ],
+  "max_status": "absent",
+  "max_closest": [],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for timecode, ltc, smpte, mtc: no match. packages/query_packages.py search (installed third-party packages) 'timecode': no match; 'ltc' matched only an unrelated compander.",
+  "confidence": "high",
+  "notes": "MIDI timecode could be parsed by hand from raw MIDI; that was not counted as support."
+ },
+ {
+  "capability": "Scene-based show framework",
+  "category": "timeline/cueing/show control",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Palette:sceneChanger"
+  ],
+  "what_it_does": "A ready-made framework in which each scene is a component with one video output. It crossfades from scene to scene, and scenes that are not playing do not compute.",
+  "source_urls": [
+   "https://docs.derivative.ca/Palette:sceneChanger"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "pattrstorage",
+   "poly~",
+   "jit.playlist"
+  ],
+  "max_check": "Read refpages: pattrstorage (store, recall and interpolate presets), jit.playlist (clip list for video files). Max has the parts (presets, muting, crossfades) and no packaged scene framework was found in the registry.",
+  "confidence": "low",
+  "notes": ""
+ },
+ {
+  "capability": "Event lifetimes as data for instancing",
+  "category": "timeline/cueing/show control",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Event CHOP"
+  ],
+  "what_it_does": "Keeps one sample alive for each triggered event (for instance each key press), with age, envelope state and an id, until its release ends. Feeding it to instancing gives one drawn object per live event.",
+  "source_urls": [
+   "https://docs.derivative.ca/Event_CHOP"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "poly~",
+   "jit.gl.multiple"
+  ],
+  "max_check": "No equivalent single object found. poly~ gives per-voice lifetimes for audio and messages; jit.gl.multiple (refpage read) draws instances from matrices. Joining the two is manual.",
+  "confidence": "low",
+  "notes": ""
+ },
+ {
+  "capability": "Scene import as an editable node hierarchy: USD, glTF, FBX, Alembic",
+  "category": "rendering/3D",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "USD COMP",
+   "glTF In COMP",
+   "glTF Out COMP",
+   "FBX COMP",
+   "Alembic In POP",
+   "Alembic Out POP"
+  ],
+  "what_it_does": "Loading a scene file builds a tree of geometry, camera, light, material and animation nodes that can each be edited. glTF and Alembic can also be written out.",
+  "source_urls": [
+   "https://docs.derivative.ca/USD_In_TouchDesigner",
+   "https://docs.derivative.ca/GlTF",
+   "https://docs.derivative.ca/FBX",
+   "https://docs.derivative.ca/Alembic"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.gl.model"
+  ],
+  "max_check": "Read jit.gl.model's refpage: it reads 'a variety of 3D model formats, such as OBJ, Collada, and Blender', supports skinned animation, and has getnodenames, nodebind and getmaterial_dict. The refpage does not list USD, Alembic or glTF, and no exporter was found. The exact format list needs checking against the model loader.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Inverse kinematics and bone objects",
+  "category": "rendering/3D",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Inverse Kin CHOP",
+   "Bone COMP",
+   "Skin Deform POP"
+  ],
+  "what_it_does": "Bone components form a skeleton, an IK solver moves the chain to reach a goal, and geometry is skinned to the bones on the GPU.",
+  "source_urls": [
+   "https://docs.derivative.ca/Inverse_Kin_CHOP",
+   "https://docs.derivative.ca/Deforming_Geometry_(Skinning)"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.gl.model",
+   "jit.anim.node"
+  ],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for inverse kinematics, ik, skeleton, bone, skinning: no match. jit.gl.model's refpage shows hasbones, drawskeleton, getbonenames and nodebind, so skinned playback and driving bones by hand are possible. No IK solver was found.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Multi-point 3D picking with surface data",
+  "category": "rendering/3D",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Render Pick DAT",
+   "Render Pick CHOP"
+  ],
+  "what_it_does": "For any number of screen points at once, reports the object under each point with its 3D position, normal, texture coordinate, colour and instance id. This makes multi-touch on a rendered scene possible.",
+  "source_urls": [
+   "https://docs.derivative.ca/Render_Pick_DAT",
+   "https://docs.derivative.ca/Render_Pick_CHOP"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.gl.picker",
+   "jit.phys.picker",
+   "jit.gl.camera"
+  ],
+  "max_check": "Read jit.gl.picker's refpage: it reports the name of the object under the mouse and has touch and touch_ray methods. jit.gl.camera has getviewportray and screentoworld. The refpages do not mention returning normals, UVs or instance ids.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Substance materials",
+  "category": "rendering/3D",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Substance TOP",
+   "Substance Select TOP",
+   "PBR MAT"
+  ],
+  "what_it_does": "Loads Adobe Substance .sbsar materials, exposes their settings as parameters, and feeds every texture layer to the PBR material.",
+  "source_urls": [
+   "https://docs.derivative.ca/Substance_TOP",
+   "https://docs.derivative.ca/PBR_MAT"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "jit.gl.pbr"
+  ],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for substance, sbsar: no match. jit.gl.pbr (refpage read) takes separate albedo, normal, roughness and metallic textures, so baked texture sets work; procedural .sbsar files do not.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Gaussian splat loading and rendering",
+  "category": "rendering/3D",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Point File In POP",
+   "Palette:gsGeo",
+   "Palette:gsScene"
+  ],
+  "what_it_does": "Reads Gaussian splat files and renders them with a supplied shader component.",
+  "source_urls": [
+   "https://docs.derivative.ca/Gaussian_Splats",
+   "https://docs.derivative.ca/Point_File_In_POP"
+  ],
+  "max_status": "absent",
+  "max_closest": [],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for gaussian, splat: only blur effects matched.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Fluid, smoke and soft-body simulation",
+  "category": "rendering/3D",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "NVIDIA Flow TOP",
+   "NVIDIA Flow Emitter COMP",
+   "NVIDIA Flex Solver COMP",
+   "NVIDIA Flex TOP"
+  ],
+  "what_it_does": "GPU simulation of fire and smoke volumes, and of particle-based fluids and soft bodies, alongside rigid bodies.",
+  "source_urls": [
+   "https://docs.derivative.ca/NVIDIA_Flow_TOP",
+   "https://docs.derivative.ca/NVIDIA_Flex_Solver_COMP",
+   "https://docs.derivative.ca/Bullet_Dynamics"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.phys.world",
+   "jit.gl.volume"
+  ],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for fluid, smoke: no match. jit.phys.world (refpage read) does collision detection and rigid body dynamics, which matches the Bullet side. jit.gl.volume renders a density field but does not simulate one.",
+  "confidence": "medium",
+  "notes": "The NVIDIA operators are Windows and NVIDIA only, per the MacOS page."
+ },
+ {
+  "capability": "Hosting Notch blocks and serving disguise RenderStream",
+  "category": "rendering/3D",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Notch TOP",
+   "RenderStream In TOP",
+   "RenderStream Out TOP",
+   "RenderStream In CHOP"
+  ],
+  "what_it_does": "Runs compiled Notch real-time effects inside the graph with their exposed properties as parameters, and lets a disguise media server drive a project as a render node.",
+  "source_urls": [
+   "https://docs.derivative.ca/Notch",
+   "https://docs.derivative.ca/Notch_TOP",
+   "https://docs.derivative.ca/RenderStream"
+  ],
+  "max_status": "absent",
+  "max_closest": [],
+  "max_check": "Searched the registry and refpage text for notch and renderstream: the only hits were filter objects whose text uses 'notch' in the audio sense. Not in the installed packages.",
+  "confidence": "high",
+  "notes": "Both need licences from the other vendor."
+ },
+ {
+  "capability": "Rich text rendering with inline formatting",
+  "category": "rendering/3D",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Text COMP",
+   "Geo Text COMP",
+   "Text Formatting Codes"
+  ],
+  "what_it_does": "Resolution-independent text in 2D panels and in 3D, with inline codes for colour, underline, scale and gradients, and a table that positions and styles many text blocks at once.",
+  "source_urls": [
+   "https://docs.derivative.ca/Text_COMP",
+   "https://docs.derivative.ca/Geo_Text_COMP",
+   "https://docs.derivative.ca/Text_Formatting_Codes"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.gl.text",
+   "comment",
+   "v8ui"
+  ],
+  "max_check": "Read jit.gl.text's refpage: 2D, 3D or outline text with font, size, alignment and tracking for the whole object. No per-span formatting or per-block table. The repo's own butter_comment draws formatted text in a patcher, not in a GL scene.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Professional video cards for output, with sync",
+  "category": "video I/O & playback",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Video Device Out TOP",
+   "Video Device In TOP",
+   "ST2110 In TOP",
+   "ST2110 Out TOP"
+  ],
+  "what_it_does": "Sends and receives video on Blackmagic, AJA, Bluefish444 and Deltacast cards with embedded audio and timecode, synced outputs, and uncompressed video over IP (ST 2110).",
+  "source_urls": [
+   "https://docs.derivative.ca/Video_Device_Out_TOP",
+   "https://docs.derivative.ca/ST2110",
+   "https://docs.derivative.ca/Interoperability"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.grab"
+  ],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for blackmagic, decklink, sdi, aja, 'output device': no match. jit.grab is in the registry for capture. No object for output to a video card was found.",
+  "confidence": "medium",
+  "notes": "Capture through a card that presents itself to the OS as a camera should work with jit.grab; output was the gap found."
+ },
+ {
+  "capability": "NDI video over the network",
+  "category": "video I/O & playback",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "NDI In TOP",
+   "NDI Out TOP",
+   "NDI DAT"
+  ],
+  "what_it_does": "Sends and receives NDI video and audio, lists sources on the network, and carries metadata tables with frames.",
+  "source_urls": [
+   "https://docs.derivative.ca/NDI",
+   "https://docs.derivative.ca/Interoperability"
+  ],
+  "max_status": "absent",
+  "max_closest": [],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for the word ndi: no match. packages/query_packages.py search (installed third-party packages) 'ndi' matched only words containing those letters.",
+  "confidence": "high",
+  "notes": "Absent from Max and from the packages installed on this machine. A third-party package may exist; none was checked."
+ },
+ {
+  "capability": "Internet streaming out and in: RTMP, SRT, RTSP",
+  "category": "video I/O & playback",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Video Stream Out TOP",
+   "Video Stream In TOP"
+  ],
+  "what_it_does": "Encodes video with the GPU (H.264, H.265, AV1) and streams it to services such as Twitch and YouTube, or between sites with SRT, including per-frame metadata. The matching input operator receives streams.",
+  "source_urls": [
+   "https://docs.derivative.ca/Video_Stream_Out_TOP",
+   "https://docs.derivative.ca/Video_Streaming_User_Guide",
+   "https://docs.derivative.ca/RTMP",
+   "https://docs.derivative.ca/SRT",
+   "https://docs.derivative.ca/RTSP"
+  ],
+  "max_status": "absent",
+  "max_closest": [],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for rtmp, rtsp, srt, stream: no video streaming object. jit.net.send sends matrices to another Max only.",
+  "confidence": "high",
+  "notes": "The output operator needs an NVIDIA card, per its page."
+ },
+ {
+  "capability": "Web page rendered to a texture",
+  "category": "video I/O & playback",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Web Render TOP",
+   "Audio Web Render CHOP",
+   "Palette:webBrowser"
+  ],
+  "what_it_does": "Renders a web page with Chromium into an image usable anywhere in the graph, with the page's audio available as a signal.",
+  "source_urls": [
+   "https://docs.derivative.ca/Web_Render_TOP",
+   "https://docs.derivative.ca/Audio_Web_Render_CHOP",
+   "https://docs.derivative.ca/Palette:webBrowser"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jweb",
+   "jweb~",
+   "jit.desktop"
+  ],
+  "max_check": "Read jweb's refpage: a Chromium-based browser as a patcher UI object, with an offscreen render mode for drawing in the patcher. jweb~ adds audio output. Neither refpage describes a texture or matrix output. jit.desktop can copy a screen region.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Tunable high-rate movie playback",
+  "category": "video I/O & playback",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Movie File In TOP",
+   "Info CHOP",
+   "Hap",
+   "NotchLC"
+  ],
+  "what_it_does": "Exposes each playback stage for tuning: pre-read frame count, hardware decode, an unbuffered high-rate disk read mode, and live readouts of read time, decode time and dropped frames. Covers Hap variants, NotchLC, ProRes and EXR sequences.",
+  "source_urls": [
+   "https://docs.derivative.ca/Movie_File_In_TOP",
+   "https://docs.derivative.ca/Movie_Playback",
+   "https://docs.derivative.ca/Hap",
+   "https://docs.derivative.ca/NotchLC",
+   "https://docs.derivative.ca/OpenEXR"
+  ],
+  "max_status": "unsure",
+  "max_closest": [
+   "jit.movie",
+   "jit.playlist",
+   "jit.openexr"
+  ],
+  "max_check": "Read jit.movie's refpage (engine attribute, asyncread, texture output) and saw the bundled hap package folder. The refpage attribute list shows no pre-read count or decode-time readout, but engine-specific options were not read.",
+  "confidence": "low",
+  "notes": ""
+ },
+ {
+  "capability": "Driving displays without the desktop, with hardware frame lock",
+  "category": "video I/O & playback",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Direct Display Out TOP",
+   "Hardware Frame-Lock",
+   "Window COMP"
+  ],
+  "what_it_does": "Outputs straight to GPU display ports, bypassing the Windows desktop compositor, and locks buffer swaps across GPUs and machines with NVIDIA Quadro Sync.",
+  "source_urls": [
+   "https://docs.derivative.ca/Direct_Display_Out_TOP",
+   "https://docs.derivative.ca/Hardware_Frame_Lock",
+   "https://docs.derivative.ca/Perfect_Playback"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "jit.window",
+   "jit.world",
+   "jit.displays"
+  ],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) and the Max userguide for genlock, frame lock, vsync: no match in the userguide. jit.window and jit.world (refpages read) have sync and fullscreen attributes; jit.displays reports and sets monitor modes. Nothing addresses desktop-free output or swap groups.",
+  "confidence": "high",
+  "notes": "Windows and workstation NVIDIA cards only."
+ },
+ {
+  "capability": "Point cloud files and operations",
+  "category": "video I/O & playback",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Point File In TOP",
+   "Point File In POP",
+   "Point Transform TOP",
+   "File Out POP"
+  ],
+  "what_it_does": "Reads point clouds from .ply, .xyz, .pts, .csv, .exr and others, as textures or as GPU points, with thinning and re-ranging, and writes them back out.",
+  "source_urls": [
+   "https://docs.derivative.ca/Point_Clouds",
+   "https://docs.derivative.ca/Point_File_In_TOP",
+   "https://docs.derivative.ca/Point_File_In_POP",
+   "https://docs.derivative.ca/File_Types"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.openexr",
+   "jit.matrix",
+   "jit.geom.topoints"
+  ],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for 'point cloud', ply, exr: jit.openexr (reads and writes EXR with any number of planes). The userguide's Jitter geometry topic links a point cloud example. packages/query_packages.py search (installed third-party packages) 'point cloud': no match. No point-file reader was found.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Colour management with OpenColorIO, and HDR",
+  "category": "video I/O & playback",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "OpenColorIO TOP",
+   "Color Space"
+  ],
+  "what_it_does": "Declares input and output colour spaces per operator, applies OCIO configs and LUTs, and supports HDR display output.",
+  "source_urls": [
+   "https://docs.derivative.ca/Color_Space",
+   "https://docs.derivative.ca/OpenColorIO_TOP"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.colorspace",
+   "jit.fx.lin2srgb",
+   "jit.fx.srgb2lin",
+   "jit.gl.pass"
+  ],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for ocio, opencolorio, aces, lut, tone map, hdr, color space: jit.colorspace, jit.fx.lin2srgb, jit.fx.srgb2lin. A tonemap.jxp pass file ships for jit.gl.pass. No OCIO support and nothing about HDR display output was found.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "AI video operators on NVIDIA cards",
+  "category": "video I/O & playback",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "NVIDIA Background TOP",
+   "NVIDIA Upscaler TOP"
+  ],
+  "what_it_does": "Person segmentation without a green screen, and AI upscaling of video, run from NVIDIA's SDKs.",
+  "source_urls": [
+   "https://docs.derivative.ca/NVIDIA_Background_TOP",
+   "https://docs.derivative.ca/NVIDIA_Upscaler_TOP"
+  ],
+  "max_status": "absent",
+  "max_closest": [],
+  "max_check": "Searched the registry and refpage text for segment, upscal, super-res: only audio and matrix-grid objects matched. No person segmentation or AI upscaling object was found in Max or in the installed packages.",
+  "confidence": "medium",
+  "notes": "Windows and NVIDIA only; models are a separate download."
+ },
+ {
+  "capability": "Lens distortion matching and camera tracking input",
+  "category": "video I/O & playback",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Lens Distort TOP",
+   "FreeD In CHOP",
+   "Stype TOP",
+   "Stype In CHOP",
+   "MoSys TOP",
+   "MoSys CHOP"
+  ],
+  "what_it_does": "Applies or removes Brown-Conrady lens distortion so renders match a real camera, and reads camera position and lens data from broadcast tracking systems.",
+  "source_urls": [
+   "https://docs.derivative.ca/Lens_Distort_TOP",
+   "https://docs.derivative.ca/FreeD_In_CHOP",
+   "https://docs.derivative.ca/Stype",
+   "https://docs.derivative.ca/MoSys"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "cv.jit.calibration"
+  ],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for lens, undistort, distortion: only audio distortion and jit.fx.vhs matched. cv.jit.calibration exists in the package library (not read in detail). No FreeD, Stype or MoSys receiver found.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "GPU geometry operators with attributes",
+  "category": "GPU compute/shaders",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "POP",
+   "Math Mix POP",
+   "Neighbor POP",
+   "Trace POP",
+   "Ray POP",
+   "Projection POP",
+   "GLSL POP"
+  ],
+  "what_it_does": "A family of about a hundred operators that create and change points, lines and polygons on the GPU. Every point can carry any named attributes, and operators do maths on them without code. Results render directly or drive lights and lasers.",
+  "source_urls": [
+   "https://docs.derivative.ca/POP",
+   "https://docs.derivative.ca/Learning_About_POPs",
+   "https://docs.derivative.ca/Neighbor_POP",
+   "https://docs.derivative.ca/Ray_POP",
+   "https://docs.derivative.ca/Trace_POP",
+   "https://docs.derivative.ca/Projection_POP"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "Jitter Geometry (bundled package, jit.geom.* objects)",
+   "jit.gl.tf",
+   "jit.gl.buffer",
+   "jit.mo (bundled package)",
+   "jit.gl.mesh"
+  ],
+  "max_check": "Found the bundled Jitter Geometry package (27 refpages, jit.geom.* plus jit.geometry: decimate, subdivide, remesh, distribute, topoints and others) and jit.gl.tf with jit.gl.buffer (transform feedback on mesh data, shader required). The jit.geom refpages were not read for whether they run on the GPU or carry custom attributes.",
+  "confidence": "medium",
+  "notes": "The closest Max idea is a float jit.matrix as an attribute table, processed by jit.gen or jit.gl.pix."
+ },
+ {
+  "capability": "Compute shaders as an operator",
+  "category": "GPU compute/shaders",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "GLSL TOP",
+   "GLSL POP",
+   "GLSL Advanced POP",
+   "Compute Shader"
+  ],
+  "what_it_does": "A shader mode that is not tied to drawing: threads read and write textures or geometry buffers at any location, in several passes.",
+  "source_urls": [
+   "https://docs.derivative.ca/Compute_Shader",
+   "https://docs.derivative.ca/GLSL_TOP",
+   "https://docs.derivative.ca/Write_a_GLSL_TOP",
+   "https://docs.derivative.ca/Write_a_GLSL_POP",
+   "https://docs.derivative.ca/GLSL_POP"
+  ],
+  "max_status": "unsure",
+  "max_closest": [
+   "jit.gl.shader",
+   "jit.gl.slab",
+   "jit.gl.pix",
+   "jit.gl.tf"
+  ],
+  "max_check": "Searched refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for 'compute shader' and ssbo: no match. jit.gl.shader's refpage says a shader 'consists of both a vertex program and a fragment program'. jit.gl.tf gives transform feedback. A grep of the gl3 package folder for 'compute' found nothing but its package-info file.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Editable GPU particle system",
+  "category": "GPU compute/shaders",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Particle POP",
+   "Feedback POP",
+   "Force Radial POP",
+   "Palette:particlesGpu"
+  ],
+  "what_it_does": "Particles are points with attributes on the GPU. The simulation is a feedback loop of ordinary operators the user can open and change, with birth from attributes, forces, pre-roll, and millions of points.",
+  "source_urls": [
+   "https://docs.derivative.ca/Particle_POP",
+   "https://docs.derivative.ca/Feedback_POP",
+   "https://docs.derivative.ca/Palette:particlesGpu"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.p.shiva",
+   "jit.p.vishnu",
+   "jit.p.bounds",
+   "jit.gl.tf",
+   "jit.mo (bundled package)"
+  ],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for particle: jit.p.shiva, jit.p.vishnu and jit.p.bounds (matrix-based, CPU) and jit.gl.tf for GPU feedback with a hand-written shader. No ready GPU particle object was found.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Ray casting against geometry as data",
+  "category": "GPU compute/shaders",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Ray POP",
+   "Hardware Ray Tracing"
+  ],
+  "what_it_does": "Casts a ray from every point and reports what it hits (distance, primitive, normal, attributes, bounces), optionally using the GPU's ray tracing hardware.",
+  "source_urls": [
+   "https://docs.derivative.ca/Ray_POP",
+   "https://docs.derivative.ca/Hardware_Ray_Tracing"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.phys.world"
+  ],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for ray trace, raycast: no match by name. jit.phys.world's refpage lists raytest and screenraytest methods against physics bodies. A restir.jxp pass file ships for jit.gl.pass, which is a rendering effect, not ray results as data.",
+  "confidence": "low",
+  "notes": "Hardware ray tracing is not supported on macOS, per the docs."
+ },
+ {
+  "capability": "Typed custom parameters on components, with generated UI",
+  "category": "control surface/UI building",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Custom Parameters",
+   "Component Editor Dialog",
+   "Parameter COMP",
+   "Palette:autoUI"
+  ],
+  "what_it_does": "Any component can be given pages of typed parameters with labels, ranges, defaults, help and enable rules. A panel of them can be shown anywhere, and a full widget UI can be generated from them.",
+  "source_urls": [
+   "https://docs.derivative.ca/Custom_Parameters",
+   "https://docs.derivative.ca/Component_Editor_Dialog",
+   "https://docs.derivative.ca/Parameter_COMP",
+   "https://docs.derivative.ca/Palette:autoUI"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "patcherargs",
+   "attrui",
+   "pattr",
+   "param",
+   "bpatcher"
+  ],
+  "max_check": "Read refpages: param ('Define a polyphonic-compatible parameter in poly~', numeric only, appears as an attribute on poly~), pattr, attrui. The userguide has a Parameter Connect topic. No way was found to declare typed, ranged parameters on an ordinary abstraction and get an inspector-style panel for them.",
+  "confidence": "medium",
+  "notes": "This repo's own rules note that an abstraction's @name values are parsed by patcherargs and are invisible to attrui."
+ },
+ {
+  "capability": "Expression, export and two-way binding on every parameter",
+  "category": "control surface/UI building",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Parameter Mode",
+   "Parameter Expression",
+   "CHOP Export",
+   "Binding",
+   "Bind CHOP"
+  ],
+  "what_it_does": "Any parameter of any operator can be driven by a typed expression, overridden by a data channel, or bound both ways to another parameter, table cell or control, with the mode shown by colour.",
+  "source_urls": [
+   "https://docs.derivative.ca/Parameter_Mode",
+   "https://docs.derivative.ca/Parameter",
+   "https://docs.derivative.ca/Export",
+   "https://docs.derivative.ca/CHOP_Export",
+   "https://docs.derivative.ca/Binding",
+   "https://docs.derivative.ca/Bind_CHOP"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "pattr",
+   "attrui",
+   "mappings",
+   "expr"
+  ],
+  "max_check": "Read refpages: pattr (bindto, shares an object's data), mappings (keyboard and MIDI mapping to parameter-enabled objects). The userguide has Mapping and Parameter Connect topics. Attributes have no expression mode; a value is computed elsewhere and sent as a message.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Operator viewers and live UI as textures",
+  "category": "control surface/UI building",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "OP Viewer TOP",
+   "OP Viewer COMP",
+   "Annotate COMP"
+  ],
+  "what_it_does": "Any node's viewer or any control panel can be shown inside another panel or turned into an image, and still takes mouse and touch input. A panel can therefore sit on a 3D object and stay usable.",
+  "source_urls": [
+   "https://docs.derivative.ca/OP_Viewer_TOP",
+   "https://docs.derivative.ca/OP_Viewer_COMP",
+   "https://docs.derivative.ca/Annotate_COMP",
+   "https://docs.derivative.ca/Render_Pick_DAT"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.desktop",
+   "bpatcher",
+   "jit.gl.picker"
+  ],
+  "max_check": "jit.desktop's refpage: copies a screen rectangle into a matrix. bpatcher shows a patcher inside another. No object was found that renders a patcher's UI to a texture and forwards interaction.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Large data lists drawn through callbacks",
+  "category": "control surface/UI building",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "List COMP",
+   "Palette:lister",
+   "Table COMP"
+  ],
+  "what_it_does": "A list control that asks a script what to draw for each visible cell, so very long lists stay fast, with locked header rows, scroll bars, sorting and editing in the lister component.",
+  "source_urls": [
+   "https://docs.derivative.ca/List_COMP",
+   "https://docs.derivative.ca/Palette:lister",
+   "https://docs.derivative.ca/Table_COMP"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.cellblock",
+   "chooser",
+   "v8ui",
+   "dict.view"
+  ],
+  "max_check": "Registry has jit.cellblock, chooser, dict.view and v8ui. This repo's own butter_table is a jit.cellblock replacement with sorting and filtering. Nothing callback-driven ships with Max.",
+  "confidence": "low",
+  "notes": ""
+ },
+ {
+  "capability": "Remote control panels in a browser or another machine",
+  "category": "control surface/UI building",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Palette:webRTCPanel",
+   "Palette:webRTCPanelRcv",
+   "Palette:remotePanel"
+  ],
+  "what_it_does": "Streams any control panel to another machine or to a web page over WebRTC and sends the clicks back.",
+  "source_urls": [
+   "https://docs.derivative.ca/Palette:webRTCPanel",
+   "https://docs.derivative.ca/Palette:remotePanel",
+   "https://docs.derivative.ca/WebRTC"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "mira.frame",
+   "mira.multitouch"
+  ],
+  "max_check": "Read mira.frame's refpage: it mirrors Mira-supported objects inside a patcher region on an iPad, and it has a miraweb_aspect attribute (a Miraweb package is installed on this machine). Mira rebuilds the supported controls natively; it does not stream an arbitrary rendered panel.",
+  "confidence": "medium",
+  "notes": "For standard controls Mira may be the better tool; the gap is custom-drawn or video-backed panels."
+ },
+ {
+  "capability": "Native multi-touch and TUIO input",
+  "category": "control surface/UI building",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Multi Touch In DAT",
+   "TUIO In DAT",
+   "Palette:multiTouch"
+  ],
+  "what_it_does": "Reads every finger from a Windows touch screen as a table (id, position, contact size, timing), and receives TUIO 1.1 and 2.0.",
+  "source_urls": [
+   "https://docs.derivative.ca/Multi_Touch_In_DAT",
+   "https://docs.derivative.ca/MultiTouch",
+   "https://docs.derivative.ca/TUIO"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "mira.multitouch",
+   "udpreceive"
+  ],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for multi-touch, touch screen, tuio: only mira.multitouch (touches from an iPad running Mira). packages/query_packages.py search (installed third-party packages) 'tuio': no match. TUIO is OSC, so udpreceive could carry it with hand parsing.",
+  "confidence": "medium",
+  "notes": "Multi Touch In DAT is not supported on macOS, per its page."
+ },
+ {
+  "capability": "Frame-locked sync across machines",
+  "category": "networking/sync",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Sync In CHOP",
+   "Sync Out CHOP",
+   "Touch In/Out Synced Ports",
+   "TDSynchro"
+  ],
+  "what_it_does": "A server and its clients wait for each other every frame so all machines render the same frame, with timeouts and banning of slow clients. A toolkit splits a large canvas across machines and keeps the pieces frame-matched.",
+  "source_urls": [
+   "https://docs.derivative.ca/Sync_CHOPs_Common",
+   "https://docs.derivative.ca/Syncing_Multiple_Computers",
+   "https://docs.derivative.ca/Sync",
+   "https://docs.derivative.ca/Touch_In/Out_Synced_Ports",
+   "https://docs.derivative.ca/TDSynchro"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "jit.net.send",
+   "udpsend"
+  ],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for sync: sync~, mc.sync~, plugsync~ (audio tempo sync) and jit.gl.asyncread. jit.net.send (refpage read) sends matrices over TCP. Nothing makes several Max instances step frames together.",
+  "confidence": "high",
+  "notes": "Sync In and Out need a Pro licence, per the docs."
+ },
+ {
+  "capability": "Servers and message protocols as graph nodes",
+  "category": "networking/sync",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Web Server DAT",
+   "WebSocket DAT",
+   "SocketIO DAT",
+   "TCP/IP DAT",
+   "MQTT Client DAT",
+   "Web Client DAT"
+  ],
+  "what_it_does": "An HTTP and WebSocket server with TLS, WebSocket and Socket.IO clients, raw TCP, an MQTT client and an HTTP client with OAuth, each a node with script callbacks.",
+  "source_urls": [
+   "https://docs.derivative.ca/Web_Server_DAT",
+   "https://docs.derivative.ca/WebSocket_DAT",
+   "https://docs.derivative.ca/Socket.IO",
+   "https://docs.derivative.ca/TCP/IP_DAT",
+   "https://docs.derivative.ca/MQTT_Client_DAT",
+   "https://docs.derivative.ca/MQTT",
+   "https://docs.derivative.ca/Web_Client_DAT",
+   "https://docs.derivative.ca/Network_Protocols"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "maxurl",
+   "udpsend",
+   "udpreceive",
+   "jit.net.send",
+   "node.script"
+  ],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for websocket, mqtt, http, web server, tcp: maxurl (HTTP requests through libcurl), udpsend, udpreceive, jit.net.send and jit.net.recv. node.script runs a Node.js process, which is how this repo's multi-user template serves HTTP and WebSocket. No native WebSocket, MQTT or general TCP object.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "WebRTC peer connections",
+  "category": "networking/sync",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "WebRTC DAT",
+   "Palette:signalingServer",
+   "Palette:signalingClient",
+   "Palette:webRTC"
+  ],
+  "what_it_does": "Low-latency video, audio and data between the program and browsers or other peers, with sample signalling components.",
+  "source_urls": [
+   "https://docs.derivative.ca/WebRTC",
+   "https://docs.derivative.ca/WebRTC_DAT"
+  ],
+  "max_status": "absent",
+  "max_closest": [],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for webrtc: no match. Not in the installed packages.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Running part of a project in a separate process",
+  "category": "networking/sync",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Engine COMP",
+   "TouchEngine"
+  ],
+  "what_it_does": "Loads a component into its own process, with its own frame clock, and passes images, channels and tables to and from it. The same engine loads components inside Unreal Engine and several media servers.",
+  "source_urls": [
+   "https://docs.derivative.ca/Engine_COMP",
+   "https://docs.derivative.ca/TouchEngine",
+   "https://docs.derivative.ca/TouchEngine_For_Unreal_Engine_Plugin"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "node.script",
+   "poly~",
+   "jit.net.send"
+  ],
+  "max_check": "Searched refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for 'separate process', interprocess: no match. node.script runs JavaScript in a separate process. No object runs a patcher in another process with texture and signal exchange.",
+  "confidence": "medium",
+  "notes": "Max's own route into other hosts is Max for Live and RNBO export, which were not compared here."
+ },
+ {
+  "capability": "Shared memory for images and channels",
+  "category": "networking/sync",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Shared Mem In TOP",
+   "Shared Mem Out TOP",
+   "Shared Mem In CHOP",
+   "Shared Mem Out CHOP"
+  ],
+  "what_it_does": "Passes images and channel data between processes on one machine through shared memory, with a global mode that keeps several streams on the same frame.",
+  "source_urls": [
+   "https://docs.derivative.ca/Shared_Memory",
+   "https://docs.derivative.ca/Syphon_Spout_In_TOP"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.gl.syphonserver",
+   "jit.gl.syphonclient"
+  ],
+  "max_check": "Searched refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for 'shared memory', shm: no match. The installed Syphon package gives jit.gl.syphonserver and jit.gl.syphonclient for textures on macOS. Nothing for control or audio data.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Scene-linked spatial audio",
+  "category": "audio",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Audio Render CHOP",
+   "Audio Binaural CHOP"
+  ],
+  "what_it_does": "Spatialises sound sources from the positions and directions of objects in the 3D scene relative to a listener object, with distance falloff, directivity and simulated reflections, to binaural, surround or ambisonics (Steam Audio).",
+  "source_urls": [
+   "https://docs.derivative.ca/Audio_Render_CHOP",
+   "https://docs.derivative.ca/Audio_Binaural_CHOP"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "abc.hoa.encoder~",
+   "abc.hoa.binaural~",
+   "irtransaural~"
+  ],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for binaural, ambisonic, hrtf: nothing built in. packages/query_packages.py search (installed third-party packages) found abclib's higher-order ambisonics set (encoder, decoders, binaural), HIRT's irtransaural~, and the Panning Tools and MIAP packages. These are stronger audio tools; none takes its positions from Jitter scene objects or models room reflections from geometry.",
+  "confidence": "medium",
+  "notes": "Max is the better audio tool overall. The candidate is only the automatic link from 3D scene to spatialiser."
+ },
+ {
+  "capability": "Python with NumPy and OpenCV inside the graph",
+  "category": "data/tables/scripting",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Python",
+   "Script TOP",
+   "Script CHOP",
+   "Script SOP",
+   "Script DAT",
+   "NumPy",
+   "OpenCV"
+  ],
+  "what_it_does": "Python is the script language for expressions, callbacks and custom operators. Images and channels convert to and from NumPy arrays, and OpenCV ships with it.",
+  "source_urls": [
+   "https://docs.derivative.ca/Python",
+   "https://docs.derivative.ca/NumPy",
+   "https://docs.derivative.ca/OpenCV",
+   "https://docs.derivative.ca/Script_TOP",
+   "https://docs.derivative.ca/Script_CHOP"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "v8",
+   "js",
+   "node.script",
+   "jit.gl.lua",
+   "mxj",
+   "cv.jit (installed package)"
+  ],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for python, numpy, opencv: no match. Max scripts in JavaScript (v8, js, node.script), Lua (jit.gl.lua) and Java (mxj). cv.jit wraps parts of OpenCV as objects. packages/query_packages.py search (installed third-party packages) 'python': no match.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Tables as a dataflow type",
+  "category": "data/tables/scripting",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Table DAT",
+   "Select DAT",
+   "Merge DAT",
+   "Sort DAT",
+   "Evaluate DAT",
+   "Substitute DAT",
+   "DAT Export"
+  ],
+  "what_it_does": "Text tables flow through wires and are filtered, merged, sorted and evaluated by operators. A table can also drive parameters across the project.",
+  "source_urls": [
+   "https://docs.derivative.ca/DAT",
+   "https://docs.derivative.ca/Table_DAT",
+   "https://docs.derivative.ca/Evaluate_DAT",
+   "https://docs.derivative.ca/JSON_DAT",
+   "https://docs.derivative.ca/FIFO_DAT"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "coll",
+   "dict",
+   "array.map",
+   "jit.cellblock",
+   "text",
+   "zl"
+  ],
+  "max_check": "Registry shows coll, the dict.* and array.* families, jit.cellblock and text. These store and query data on request. There is no table type that is passed down a cord and transformed step by step.",
+  "confidence": "low",
+  "notes": ""
+ },
+ {
+  "capability": "The patch as queryable data",
+  "category": "data/tables/scripting",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "OP Find DAT",
+   "Tag",
+   "Info CHOP",
+   "Info DAT",
+   "Examine DAT",
+   "Parameter CHOP"
+  ],
+  "what_it_does": "Operators list every node that matches a search (type, name, tag, parameter value), expose any node's internal state as channels or a table, and read any parameter as a channel.",
+  "source_urls": [
+   "https://docs.derivative.ca/OP_Find_DAT",
+   "https://docs.derivative.ca/Tag",
+   "https://docs.derivative.ca/Info_CHOP",
+   "https://docs.derivative.ca/Info_DAT",
+   "https://docs.derivative.ca/Examine_DAT",
+   "https://docs.derivative.ca/Parameter_CHOP"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "thispatcher",
+   "v8",
+   "getattr",
+   "pattrstorage"
+  ],
+  "max_check": "Registry has thispatcher, getattr and the JavaScript patcher API through v8. Introspection is possible in script. No object returns a live table of matching objects, and there are no tags.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Table-driven replication of components",
+  "category": "data/tables/scripting",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Replicator COMP",
+   "Clone"
+  ],
+  "what_it_does": "Creates one copy of a master component per table row, adds and removes copies as the table changes, and runs a script on each new copy.",
+  "source_urls": [
+   "https://docs.derivative.ca/Replicator_COMP",
+   "https://docs.derivative.ca/Clone"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "poly~",
+   "bpatcher",
+   "thispatcher",
+   "jit.gl.multiple"
+  ],
+  "max_check": "poly~ makes N instances of a patcher from a count; thispatcher scripting can create objects; jit.gl.multiple repeats GL objects from matrices. None rebuilds a set of UI or processing components from a table.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Depth cameras and skeleton tracking",
+  "category": "sensors/tracking/ML",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Kinect Azure TOP",
+   "Kinect Azure CHOP",
+   "Orbbec TOP",
+   "RealSense TOP",
+   "ZED TOP",
+   "OAK Device CHOP",
+   "Nuitrack TOP",
+   "Nuitrack CHOP",
+   "Leap Motion CHOP"
+  ],
+  "what_it_does": "Operators for each depth camera family give colour, depth, point cloud and body skeleton data; Leap Motion gives hands.",
+  "source_urls": [
+   "https://docs.derivative.ca/Kinect",
+   "https://docs.derivative.ca/Kinect_Azure_TOP",
+   "https://docs.derivative.ca/Orbbec",
+   "https://docs.derivative.ca/RealSense",
+   "https://docs.derivative.ca/ZED",
+   "https://docs.derivative.ca/OAK-D",
+   "https://docs.derivative.ca/Nuitrack_TOP",
+   "https://docs.derivative.ca/Leap_Motion"
+  ],
+  "max_status": "absent",
+  "max_closest": [],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for kinect, leap, realsense, skeleton, 'depth cam': no match. packages/query_packages.py search (installed third-party packages) kinect, leap, realsense, skeleton: no match.",
+  "confidence": "high",
+  "notes": "Several of these are Windows-only in TouchDesigner too."
+ },
+ {
+  "capability": "Body and face tracking from a plain camera",
+  "category": "sensors/tracking/ML",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Body Track CHOP",
+   "Face Track CHOP",
+   "Face Track SOP"
+  ],
+  "what_it_does": "From any video image: 34 body keypoints in 2D or 3D for several people, and face landmarks with head rotation and a fitted 3D face mesh.",
+  "source_urls": [
+   "https://docs.derivative.ca/Body_Track_CHOP",
+   "https://docs.derivative.ca/Face_Track_CHOP"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "cv.jit.faces",
+   "cv.jit.face.landmarks"
+  ],
+  "max_check": "packages/query_packages.py search (installed third-party packages) found cv.jit.faces (face rectangles) and cv.jit.face.landmarks (68 landmarks per face). 'skeleton' and 'pose': nothing relevant. No body keypoint tracking was found.",
+  "confidence": "high",
+  "notes": "The TouchDesigner operators need an NVIDIA card and a separate model download."
+ },
+ {
+  "capability": "LIDAR scanners and scan-based blob tracking",
+  "category": "sensors/tracking/ML",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Hokuyo CHOP",
+   "Ouster TOP",
+   "SICK TOP",
+   "Leuze ROD4 CHOP",
+   "Blob Track CHOP"
+  ],
+  "what_it_does": "Reads 2D and 3D laser scanners directly, and tracks groups of scan points as blobs with ids, velocity and occlusion handling.",
+  "source_urls": [
+   "https://docs.derivative.ca/LIDAR",
+   "https://docs.derivative.ca/Hokuyo_CHOP",
+   "https://docs.derivative.ca/Blob_Track_CHOP"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "cv.jit.blobs.centroids",
+   "serial"
+  ],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for lidar: no match. packages/query_packages.py search (installed third-party packages) 'lidar': no match. cv.jit's blob objects work on images, not on scan point lists.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Stage and motion-capture tracking protocols",
+  "category": "sensors/tracking/ML",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "BlackTrax CHOP",
+   "PosiStageNet CHOP",
+   "OptiTrack In CHOP"
+  ],
+  "what_it_does": "Receives performer and object positions from BlackTrax, PosiStageNet and OptiTrack systems as channels.",
+  "source_urls": [
+   "https://docs.derivative.ca/BlackTrax",
+   "https://docs.derivative.ca/PosiStageNet_CHOP",
+   "https://docs.derivative.ca/OptiTrack_In_CHOP",
+   "https://docs.derivative.ca/Interoperability"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "udpreceive"
+  ],
+  "max_check": "Searched the registry and refpage text for blacktrax, posistage, optitrack, natnet: no match. Not in the installed packages. The protocols run over UDP, so a hand-written parser on udpreceive is possible.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "VR headsets",
+  "category": "sensors/tracking/ML",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "OpenVR TOP",
+   "OpenVR CHOP",
+   "Oculus Rift TOP",
+   "Palette:TDVR"
+  ],
+  "what_it_does": "Renders to OpenVR and Oculus headsets and reads headset and controller tracking.",
+  "source_urls": [
+   "https://docs.derivative.ca/Palette:TDVR",
+   "https://docs.derivative.ca/Interoperability"
+  ],
+  "max_status": "absent",
+  "max_closest": [],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for vr, headset, hmd: no match. packages/query_packages.py search (installed third-party packages) 'oculus': no match.",
+  "confidence": "medium",
+  "notes": "Not supported on macOS in TouchDesigner either, per its MacOS page."
+ },
+ {
+  "capability": "GPU optical flow",
+  "category": "sensors/tracking/ML",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Optical Flow TOP"
+  ],
+  "what_it_does": "Per-pixel motion vectors computed on the GPU as a float image, ready to drive particles or displacement.",
+  "source_urls": [
+   "https://docs.derivative.ca/Optical_Flow_TOP"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "cv.jit.HSflow",
+   "cv.jit.LKflow"
+  ],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for 'optical flow': no match. packages/query_packages.py search (installed third-party packages) found cv.jit.HSflow and cv.jit.LKflow, which work on greyscale matrices on the CPU.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Image to vector outlines",
+  "category": "sensors/tracking/ML",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Trace POP",
+   "Trace SOP"
+  ],
+  "what_it_does": "Traces the bright areas of an image into line strips or triangles, live, for drawing with lasers or extruding.",
+  "source_urls": [
+   "https://docs.derivative.ca/Trace_POP",
+   "https://docs.derivative.ca/Trace_SOP"
+  ],
+  "max_status": "unsure",
+  "max_closest": [
+   "xray.jit.contourmap",
+   "jit.gl.isosurf"
+  ],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for contour, outline, vectorize, trace: no match by meaning. packages/query_packages.py search (installed third-party packages) 'contour' found xray.jit.contourmap, which was not read.",
+  "confidence": "low",
+  "notes": ""
+ },
+ {
+  "capability": "A live viewer in every node",
+  "category": "workflow/authoring",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Viewer",
+   "Node Viewer",
+   "Viewer Active Flag"
+  ],
+  "what_it_does": "Every operator shows its current output in the node itself (image, graph, table or 3D view), and the viewer can take mouse input.",
+  "source_urls": [
+   "https://docs.derivative.ca/Viewer",
+   "https://docs.derivative.ca/Network",
+   "https://docs.derivative.ca/First_Things_to_Know_about_TouchDesigner"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.pwindow",
+   "scope~",
+   "number"
+  ],
+  "max_check": "The Max userguide's Debugging and Probing topic covers hovering a patch cord to inspect message, signal and matrix data (the probe). Seeing data at all times needs a display object such as jit.pwindow, scope~ or number added by hand.",
+  "confidence": "high",
+  "notes": "A difference of design more than a missing feature. This repo's 'Put the Display in the Path' rule covers the same need."
+ },
+ {
+  "capability": "Demand-driven evaluation",
+  "category": "workflow/authoring",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Cook",
+   "Dependency"
+  ],
+  "what_it_does": "A node computes only when something downstream needs its result and an input has changed, so unused branches cost nothing without being switched off by hand.",
+  "source_urls": [
+   "https://docs.derivative.ca/Cook",
+   "https://docs.derivative.ca/Dependency",
+   "https://docs.derivative.ca/Procedural",
+   "https://docs.derivative.ca/Event"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "gate",
+   "poly~",
+   "jit.gl.node"
+  ],
+  "max_check": "Max evaluates when a message arrives. Unused branches are stopped by hand, with gate, by muting poly~ voices or by disabling GL objects.",
+  "confidence": "medium",
+  "notes": "A model difference. Listed because it shapes how large shows are optimised."
+ },
+ {
+  "capability": "Per-node performance profiling",
+  "category": "workflow/authoring",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Performance Monitor",
+   "Palette:probe",
+   "Perform CHOP",
+   "Perform DAT",
+   "Info CHOP"
+  ],
+  "what_it_does": "Shows what computed in a frame, in order, with CPU and GPU time per node. It can wait for a slow frame and capture it, and frame statistics are available as data.",
+  "source_urls": [
+   "https://docs.derivative.ca/Performance_Monitor",
+   "https://docs.derivative.ca/Palette:probe",
+   "https://docs.derivative.ca/Perform_CHOP",
+   "https://docs.derivative.ca/Perform_DAT",
+   "https://docs.derivative.ca/Optimize"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "adstatus",
+   "jit.fpsgui",
+   "cpuclock"
+  ],
+  "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for profil, performance, cpu usage: adstatus (audio CPU), jit.fpsgui, cpuclock. The userguide search for 'profil' matched only unrelated uses. No per-object timing view was found.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Locked, licensable components",
+  "category": "deployment",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Privacy",
+   "Component Privacy",
+   "CodeMeter"
+  ],
+  "what_it_does": "A project or a single component can be password-protected so it runs but cannot be opened, and a component can be tied to a hardware or cloud dongle so its author can license it.",
+  "source_urls": [
+   "https://docs.derivative.ca/Privacy",
+   "https://docs.derivative.ca/TouchPlayer"
+  ],
+  "max_status": "unsure",
+  "max_closest": [
+   "standalone"
+  ],
+  "max_check": "Searched the Max userguide for encrypt, password, protect: no relevant match. The standalone object's refpage and the Standalones and Collectives topic cover building applications. No per-abstraction protection was found; Max for Live freezing and RNBO export were not examined.",
+  "confidence": "low",
+  "notes": ""
+ },
+ {
+  "capability": "Media embedded in the project file",
+  "category": "deployment",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Virtual File System",
+   "Palette:virtualFile"
+  ],
+  "what_it_does": "Movies, images, audio and fonts can be stored inside a project or component file and opened with a vfs: path by any file-reading operator.",
+  "source_urls": [
+   "https://docs.derivative.ca/Virtual_File_System"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "standalone"
+  ],
+  "max_check": "The Max userguide has Projects and Standalones and Collectives topics, which bundle files next to or inside a built application; the standalone object's refpage was read. A patcher file itself does not carry media, apart from script text (see this repo's rule on embedding v8 scripts).",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "One process per GPU",
+  "category": "deployment",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "GPU Affinity",
+   "Using Multiple Graphic Cards"
+  ],
+  "what_it_does": "A launch option binds each running instance to one graphics card, so several instances on one machine each use their own GPU.",
+  "source_urls": [
+   "https://docs.derivative.ca/Using_Multiple_Graphic_Cards",
+   "https://docs.derivative.ca/Hardware_Frame_Lock"
+  ],
+  "max_status": "unsure",
+  "max_closest": [],
+  "max_check": "Searched refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for affinity, multi-gpu: no match. Not looked for in OS-level settings.",
+  "confidence": "low",
+  "notes": ""
+ }
+]

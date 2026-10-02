@@ -1,0 +1,1158 @@
+[
+  {
+    "capability": "Scene list: a document as a row of independent patches, one active at a time",
+    "category": "timeline/cueing/show control",
+    "tool": "Isadora",
+    "tool_names": [
+      "Scene",
+      "Scene List",
+      "Scene Editor",
+      "Enter Scene Trigger",
+      "Enter Scene Value",
+      "Current Scene Number",
+      "Get Scene Name"
+    ],
+    "what_it_does": "A show file is a row of self-contained patches called Scenes. Activating one starts all its actors and media; leaving it stops them. The row is the running order of the show.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=140",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=141",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=142",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=483",
+      "https://troikatronix.com/isadora/cueing-show-control/"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "pcontrol",
+      "thispatcher",
+      "pattrstorage",
+      "qlist",
+      "mo.cue (modulo package)"
+    ],
+    "max_check": "Grepped obj-qlookup.json (core registry, 1,323 names) for 'scene' and 'cue': no names. Grepped the userguide for 'scene': only GL-scene and Live-API uses. Package library search 'scene' and 'cue': mo.cue (numbered cue trigger) and upshot_cues ('program cues'), neither a container of patches. Read refpages: pcontrol opens, closes and loads patcher windows; thispatcher setactivetab switches tabs; qlist stores timed messages. None starts and stops a whole patch with its media as a unit.",
+    "confidence": "high",
+    "notes": "The single largest gap. Everything a Max user builds by hand around poly~, pcontrol, mute and loadbang is the host's job here."
+  },
+  {
+    "capability": "Scene transitions with per-scene fade in, fade out and layering mode",
+    "category": "timeline/cueing/show control",
+    "tool": "Isadora",
+    "tool_names": [
+      "Jump",
+      "Jump++",
+      "Jump By Name",
+      "Jump to Cue",
+      "Fade In Time",
+      "Fade Out Time",
+      "Crossfade Mode",
+      "Scene Intensity"
+    ],
+    "what_it_does": "Changing Scene crossfades the whole outgoing and incoming patch, video and sound together, over times stored on each Scene or given to the Jump actor. The new Scene can be added, drawn above or drawn below the old one.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=150",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=151",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=547",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=549",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=551",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=694"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "jit.xfade",
+      "pattrstorage",
+      "line"
+    ],
+    "max_check": "Read refpages: jit.xfade crossfades two matrices; pattrstorage has 'fade' and 'recall' messages that interpolate stored parameter values. Neither fades two running patches against each other. No registry name contains 'fade' beyond these (jit.xfade found by grep 'xfade').",
+    "confidence": "high",
+    "notes": "Depends on the Scene model above; listed separately because the fade is the part operators use every cue."
+  },
+  {
+    "capability": "Secondary (background) Scenes with their own intensity",
+    "category": "timeline/cueing/show control",
+    "tool": "Isadora",
+    "tool_names": [
+      "Activate Scene",
+      "Activate Scene Amount",
+      "Deactivate Scene",
+      "Broadcaster",
+      "Listener"
+    ],
+    "what_it_does": "A patch can switch on other Scenes to run alongside the current one, each at its own brightness and volume, and they stay on across later Scene changes until switched off. Used for a continuous music bed, an always-on sensor or lighting patch, or parts of a heavy patch that run only when needed.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=386",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=388",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=464",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=415",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=566",
+      "https://support.troikatronix.com/support/solutions/articles/13000046020-isadora-3-how-to-run-multiple-scenes-simultaneously-using-the-activate-scene-actor"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "poly~",
+      "pcontrol",
+      "send",
+      "receive"
+    ],
+    "max_check": "No registry or package hit for 'scene'. Max has no primary/secondary distinction because every loaded patcher runs; the closest practice is muting poly~ voices or subpatchers by hand. poly~ and mute behaviour taken from the repo's userguide notes (scans/userguide), not re-read this session.",
+    "confidence": "medium",
+    "notes": "Max's everything-runs model covers the 'always on' case for free; what is missing is the managed on/off with a level."
+  },
+  {
+    "capability": "Cue numbering with point cues and renumbering",
+    "category": "timeline/cueing/show control",
+    "tool": "Isadora",
+    "tool_names": [
+      "Cue Numbering",
+      "Scene Index",
+      "Manual",
+      "Automatic",
+      "Renumber Cues",
+      "Jump to Cue",
+      "Next Cue",
+      "Prev Cue"
+    ],
+    "what_it_does": "Each Scene carries a cue number separate from its position. Cues can be numbered by hand with decimals, or kept in order automatically with inserted cues getting point numbers such as 8.5. A patch or an operator button can go to a cue by number.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=144",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=145",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=146",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=147",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=549",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=861",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=868"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "mo.cue (modulo package)",
+      "upshot_cues (Upshot package)",
+      "qlist",
+      "umenu"
+    ],
+    "max_check": "Registry grep 'cue': none. Package search 'cue': mo.cue ('set numbered cues and trigger events') and upshot_cues ('program cues'); only their library entries were read, not their patches. qlist refpage read: sequential message list, no numbering scheme.",
+    "confidence": "medium",
+    "notes": "mo.cue may cover go-to-by-number; nothing found does insert-between numbering."
+  },
+  {
+    "capability": "Go Triggers: one document-wide GO / BACK binding for keyboard, MIDI and HID",
+    "category": "timeline/cueing/show control",
+    "tool": "Isadora",
+    "tool_names": [
+      "Go Triggers",
+      "Next Scene",
+      "Previous Scene",
+      "Go Forward",
+      "Go Backward",
+      "Edit Go Triggers"
+    ],
+    "what_it_does": "One dialog binds next, previous, go-forward and go-backward to a key, a MIDI message or a learned HID button for the whole show. Go-forward and go-backward fire matching actors inside the active Scene, so the same button also steps through events within a cue.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=147",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=148",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=149",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=150",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=514",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=206"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "key",
+      "Mapping (MIDI and key mapping, Max 9)",
+      "hid",
+      "midiin"
+    ],
+    "max_check": "Read the userguide topic mapping.json: Max 9 binds MIDI input or key presses to parameter-enabled objects, with learn. That covers binding a control to a button; it has no notion of next/previous cue. Registry has key, hid, gamepad.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Cue Sheet: operator prompts that fire keys",
+    "category": "timeline/cueing/show control",
+    "tool": "Isadora",
+    "tool_names": [
+      "Cue Sheet",
+      "Cue Sheet Editor",
+      "Keyboard Watcher"
+    ],
+    "what_it_does": "Each Scene holds a list of cues with a line of text telling the operator what to wait for. Taking a cue shows the next prompt and sends that cue's key to the patch as if typed.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=219",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=220",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=221"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "qlist",
+      "coll",
+      "umenu",
+      "comment"
+    ],
+    "max_check": "Registry and package grep for 'cue' as above; nothing presents a prompt list to an operator. Would be built from coll or qlist plus a display.",
+    "confidence": "medium",
+    "notes": "Small feature; listed because it is a ready-made operator surface."
+  },
+  {
+    "capability": "Blind Mode: edit one Scene while another runs the show",
+    "category": "workflow/authoring",
+    "tool": "Isadora",
+    "tool_names": [
+      "Blind Mode"
+    ],
+    "what_it_does": "Borrowed from lighting consoles. The operator opens and edits a different Scene while the active Scene keeps playing and keeps answering Go Triggers. The Scene being edited stays paused.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=223",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=224",
+      "https://troikatronix.com/isadora/cueing-show-control/"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "patcher editing while running"
+    ],
+    "max_check": "No registry or userguide hit for 'blind'. In Max any patcher can be edited while others run, so the live half exists; there is no way to edit a patch that is guaranteed not to execute, which is what blind means.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Scene snapshots of every input, with per-actor opt-out",
+    "category": "workflow/authoring",
+    "tool": "Isadora",
+    "tool_names": [
+      "Snapshots",
+      "Take Snapshot",
+      "Recall Snapshot",
+      "Update Snapshot",
+      "Disable Actor Snapshot"
+    ],
+    "what_it_does": "One click stores every input value of every actor in the Scene, with no set-up. Snapshots are recalled by click or by actor, and chosen actors can be told to ignore recalls.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=181",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=182",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=183",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=680",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=763",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=794"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "preset",
+      "pattrstorage",
+      "autopattr",
+      "Snapshots (patcher snapshots)"
+    ],
+    "max_check": "Read refpages: preset stores and recalls user-interface objects' values; pattrstorage stores and recalls pattr presets and interpolates between them. Read userguide snapshots.json and presets_and_interpolation.json headings. Max is the stronger system (interpolation, files, priorities) but needs objects bound or named; Isadora captures every input automatically.",
+    "confidence": "medium",
+    "notes": "Arguably Max is ahead here. Kept because zero-setup capture of all inputs is the difference."
+  },
+  {
+    "capability": "Automatic range scaling on every link",
+    "category": "workflow/authoring",
+    "tool": "Isadora",
+    "tool_names": [
+      "Limit Min",
+      "Limit Max",
+      "Scale Min",
+      "Scale Max",
+      "Limit-Scale Value"
+    ],
+    "what_it_does": "Each output has a range and each input has a range, and a value is mapped from one to the other as it crosses the link, with inversion by swapping the input's limits. Most connections need no scaling actor.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=163",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=164",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=165",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=166",
+      "https://support.troikatronix.com/support/solutions/articles/13000113815-understanding-and-using-port-shapes-and-fills"
+    ],
+    "max_status": "better-elsewhere",
+    "max_closest": [
+      "scale",
+      "zmap",
+      "live.dial (parameter range)"
+    ],
+    "max_check": "Max has the scale object (registry). Scaling is an object on the cord, not a property of the connection. zmap and parameter ranges not re-read this session.",
+    "confidence": "medium",
+    "notes": "A design difference, not a missing function. Better in Isadora for beginners; hides the mapping from view, which Max's patch-is-the-documentation rule would dislike."
+  },
+  {
+    "capability": "Control Panels scoped to groups of Scenes, linked by Control ID",
+    "category": "control surface/UI building",
+    "tool": "Isadora",
+    "tool_names": [
+      "Control Panel",
+      "Control ID",
+      "Split Control Panels",
+      "Join Control Panels",
+      "Show-Hide Control",
+      "Set Control Focus",
+      "Scene Select",
+      "Next Cue",
+      "Prev Cue",
+      "Stage Preview",
+      "Monitor",
+      "Timecode"
+    ],
+    "what_it_does": "The operator interface is a separate panel whose controls reach actor inputs and outputs by ID number, not by cords. A panel belongs to a run of Scenes, so the interface on screen changes as the show moves on. Ready-made controls include a Scene list, GO and BACK buttons, a Stage thumbnail and a timecode display.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=184",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=185",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=186",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=188",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=189",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=718",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=725",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=861",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=872",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=880",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=882"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "presentation mode",
+      "bpatcher",
+      "patcher tabs",
+      "pattr",
+      "thispatcher"
+    ],
+    "max_check": "Max's presentation view is one per patcher; thispatcher setactivetab (refpage read) switches tabs. Nothing ties an interface page to a position in a show. Scene Select, Next Cue, Prev Cue have no counterpart because there are no Scenes.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Bin Picker: clickable thumbnail grid of a media bin",
+    "category": "control surface/UI building",
+    "tool": "Isadora",
+    "tool_names": [
+      "Bin Picker",
+      "Media View",
+      "Get Media Count",
+      "Get Media Index",
+      "Get Media File Name"
+    ],
+    "what_it_does": "A control that shows the files in a media bin as a grid of names or thumbnails; clicking one sends its number to any player. Media is addressed by index everywhere, so any number can pick a clip.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=135",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=139",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=503",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=504",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=833"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.playlist",
+      "playlist~",
+      "chooser",
+      "umenu"
+    ],
+    "max_check": "Read refpages: jit.playlist organizes video clips with a visual strip per clip; chooser is a scrolling list of selectable items. Neither is a thumbnail grid that feeds an arbitrary player. Only the first 650 characters of the Bin Picker entry were read.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Run-only, password-locked show files with graded permissions",
+    "category": "deployment",
+    "tool": "Isadora",
+    "tool_names": [
+      "Save As Read Only",
+      "Lock Document",
+      "Unlock Document"
+    ],
+    "what_it_does": "A document can be locked with a password so recipients can run it but not edit the patch. The author decides whether they may still edit the control panels, import media, or save.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=214",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=215"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "standalone application",
+      "collective"
+    ],
+    "max_check": "Read userguide standalones_and_collectives.json headings: Max builds standalone applications and collectives. A standalone hides the patch but is a build, not a lock on an editable file with selectable permissions.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Stages: numbered outputs decoupled from physical displays, saved per document",
+    "category": "video I/O & playback",
+    "tool": "Isadora",
+    "tool_names": [
+      "Stage Setup",
+      "Stage",
+      "Virtual Stage",
+      "Display",
+      "Force Stage Preview",
+      "Show-Hide Stages",
+      "Get Stage Size",
+      "Stage Preview"
+    ],
+    "what_it_does": "Patches render to a Stage number. A set-up window, saved with the document, says which displays make up each Stage, at what resolution, flipped or not. If a display is missing the Stage opens as a preview window, so the same file runs on a laptop and in the theatre. Virtual Stages are off-screen canvases at any size.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=225",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=226",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=227",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=228",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=230",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=231",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=726",
+      "https://troikatronix.com/isadora/multi-projector-setups-blending-and-routing/"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.world",
+      "jit.window",
+      "jit.gl.node"
+    ],
+    "max_check": "Read refpages: jit.world wraps a window, renderer and corner pin; its attribute list has fullscreen, rect, size, windowposition, enable_cornerpin, output_texture and no display-assignment table. jit.gl.node captures a sub-scene to a texture, the nearest thing to a Virtual Stage. Display assignment in Max is a window rectangle set per patch.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Automatic edge blending from overlapping displays, with a wizard",
+    "category": "projection mapping",
+    "tool": "Isadora",
+    "tool_names": [
+      "Blend Maker",
+      "Blend Adjustment",
+      "Edge Blend Mask",
+      "Global Edge Blend Mask",
+      "Gamma Curve"
+    ],
+    "what_it_does": "Drag two displays of one Stage so they overlap and the overlap becomes a soft blend. Curve, gamma and knee are adjusted per edge. A wizard builds grids from 1x1 to 8x1 projectors from a resolution and an overlap. Mask actors do the same from inside a patch.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=235",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=236",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=237",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=238",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=477",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=509"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "jit.gl.cornerpin",
+      "jit.gl.meshwarp",
+      "jit.gl.slab"
+    ],
+    "max_check": "Grepped all refpages and bundled package docs for 'edgeblend' and 'keystone': no files. Userguide grep 'edge blend': none. Package library search 'blend' and 'edge': audio and geometry hits only. jit.gl.meshwarp (refpage read) has apply_mask and mask_mode attributes but no blend-between-projectors function.",
+    "confidence": "high",
+    "notes": "A shader in jit.gl.slab could do it; nothing shipped or installed does."
+  },
+  {
+    "capability": "IzzyMap: slice mapping inside every output, with every point drivable live",
+    "category": "projection mapping",
+    "tool": "Isadora",
+    "tool_names": [
+      "IzzyMap",
+      "Projector",
+      "Triangle",
+      "Rectangle",
+      "Bézier Grid",
+      "Composite",
+      "sub-slice",
+      "Solo Master"
+    ],
+    "what_it_does": "Each output actor contains a mapping editor. Regions of the source are cut out as triangles, quads, curved grids or compound masks built by adding and subtracting shapes, and placed on the surface. Slice position, opacity and individual point coordinates can be published as inputs and moved by sensors while the show runs.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=258",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=277",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=278",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=279",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=280",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=282",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=283",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=284",
+      "https://troikatronix.com/isadora/projection-mapping/",
+      "https://support.troikatronix.com/support/solutions/articles/13000014932-using-izzymap-s-composite-mapping-mode"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.gl.meshwarp",
+      "jit.gl.cornerpin",
+      "vs_output (Vsynth package)",
+      "av.cornerpin (av-toolbox package)"
+    ],
+    "max_check": "Read refpages: jit.gl.meshwarp ('Video mapping tool', Jitter Tools package) deforms a texture on a 2D mesh with a mask and has meshdim, curvature, nurbs_order, mask_mode, save, read; jit.gl.cornerpin maps a texture by its four corners. Package search 'projection mapping': vs_output only. So one warped surface per object exists; a multi-slice editor with input and output views and compound masks does not.",
+    "confidence": "high",
+    "notes": "The composite-mapping KB article was fetched and not read."
+  },
+  {
+    "capability": "Dome and mirror warping from externally calibrated mesh files",
+    "category": "projection mapping",
+    "tool": "Isadora",
+    "tool_names": [
+      "3D Mesh Projector"
+    ],
+    "what_it_does": "Renders video through a warp mesh made by Paul Bourke's meshmapper, giving a correct image on a dome, cylinder or fisheye-mirror rig.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=343"
+    ],
+    "max_status": "unsure",
+    "max_closest": [
+      "jit.gl.meshwarp",
+      "jit.gl.mesh"
+    ],
+    "max_check": "jit.gl.meshwarp refpage read: accepts a mesh_matrix and can read and save its own files. Whether it can load a Bourke-format mesh was not checked. Only the opening description of the Isadora actor was read.",
+    "confidence": "low",
+    "notes": ""
+  },
+  {
+    "capability": "Media preloading handled by the host at every Scene change",
+    "category": "video I/O & playback",
+    "tool": "Isadora",
+    "tool_names": [
+      "Preload Scene",
+      "Picture Preload",
+      "Sound Preload",
+      "Loaded Media"
+    ],
+    "what_it_does": "Before a jump, Isadora reads which clips the next Scene will play, from where and at what speed, loads them in the background while the current Scene keeps running, and jumps only when they are ready. An actor can run the same preload early so a later cut is instant.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=650",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=645",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=745",
+      "https://support.troikatronix.com/support/solutions/articles/13000014938-understanding-preloading-safely-using-the-preload-actors",
+      "https://support.troikatronix.com/support/solutions/articles/13000029774-use-the-initialize-feature-instead-of-enter-scene-value-to-initialize-media-inputs"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.polymovie (Jitter Tools package)",
+      "jit.movie (asyncread)",
+      "sfplay~ (preload)"
+    ],
+    "max_check": "Refpage grep 'preload' found jit.polymovie, sfplay~, sflist~. Read jit.polymovie refpage: manages multiple jit.movie instances and preloads files for fast switching (Jitter Tools package). jit.movie has an asyncread message. Preloading exists per object; deciding what to preload from the next cue's contents does not.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Record a Stage or camera and get the file back as playable media at once",
+    "category": "video I/O & playback",
+    "tool": "Isadora",
+    "tool_names": [
+      "Capture Stage to Movie",
+      "Capture Stage to Picture",
+      "Capture Camera to Movie",
+      "Capture Control",
+      "Set Captured Media Folder"
+    ],
+    "what_it_does": "An actor records a Stage or a live input to disk and, when stopped, places the new file in a chosen media slot, so the next actor can play back what was just recorded. Meant for live sampling of performers.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=290",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=291",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=425",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=426",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=427",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=429",
+      "https://support.troikatronix.com/support/solutions/articles/13000041633-using-capture-stage-and-camera-actors-to-create-new-media-files-"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.record",
+      "jit.vcr",
+      "jit.gl.asyncread",
+      "jit.matrixset",
+      "jit.gl.textureset"
+    ],
+    "max_check": "Read refpages: jit.record writes matrices to a movie; jit.vcr adds MSP audio; jit.gl.asyncread reads back the GL context. Recording exists. The record-then-appear-in-the-bin step is patched by hand (write, then read into jit.movie). The KB article was fetched and not read; its URL is from the enumerated index.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Offline rendering by slowing the whole clock",
+    "category": "video I/O & playback",
+    "tool": "Isadora",
+    "tool_names": [
+      "Render Speed",
+      "Record Settings",
+      "Abort Recording On Dropped Frames"
+    ],
+    "what_it_does": "A recording setting slows Isadora's internal clock to a percentage, so media and all time-based actors run slower and a heavy Scene records at full frame rate without dropped frames.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=245",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=246"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.record (@realtime 0)",
+      "Non-real-time Processing",
+      "jit.world (fixed_delta)"
+    ],
+    "max_check": "Read userguide non_realtime.json headings: it has sections for non-real-time audio and video. jit.record refpage: a realtime attribute, default off; when on, frames are written on a clock at the set frame rate rather than as each matrix arrives, which implies that with it off every arriving matrix becomes one frame. jit.world has a fixed_delta attribute (seen in its attribute list; description not read). So Max can render offline; the one-setting, whole-patch slowdown is the difference.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "One-checkbox Syphon, Spout, NDI and Blackmagic output per Stage",
+    "category": "video I/O & playback",
+    "tool": "Isadora",
+    "tool_names": [
+      "Syphon Stage Output",
+      "Spout Stage Output",
+      "Blackmagic Output Enable",
+      "Syphon Receiver",
+      "Spout Receiver",
+      "NDI Watcher"
+    ],
+    "what_it_does": "Each Stage or display can also be published to other applications or to capture-card outputs by ticking a box in Stage Setup, or by an actor that turns it on for one Scene.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=231",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=748",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=749",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=759",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=760",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=613",
+      "https://troikatronix.com/isadora/multi-projector-setups-blending-and-routing/"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.gl.syphonserver",
+      "jit.gl.syphonclient",
+      "vs_spout_server (Vsynth)",
+      "vs_spout_client (Vsynth)"
+    ],
+    "max_check": "Package library: Syphon package has jit.gl.syphonserver and jit.gl.syphonclient; Spout appears only through Vsynth modules that need a separate Spout package. Registry and package search for 'ndi', 'blackmagic', 'decklink': nothing installed. NDI output is claimed on the Site page; the manual documents only NDI input.",
+    "confidence": "medium",
+    "notes": "Third-party NDI and Blackmagic externals for Max may exist but are not installed here, so not verified."
+  },
+  {
+    "capability": "Timecode as a data type, with MTC chase for movies",
+    "category": "timeline/cueing/show control",
+    "tool": "Isadora",
+    "tool_names": [
+      "MTC Reader",
+      "MTC Compare",
+      "MTC Movie Locker",
+      "Timecode Comparator",
+      "Timecode Calculator",
+      "Timecode Converter",
+      "Use Timecode"
+    ],
+    "what_it_does": "Timecode is a value type that converts itself to seconds, frames or text depending on what it is linked to, and compares correctly across frame rates. Actors read incoming MIDI Timecode, fire at a given time, and lock a movie to it by trimming speed and jumping when drift is too large.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=292",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=293",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=299",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=300",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=607",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=608",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=609",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=785",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=786",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=787"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "rtin",
+      "midiin",
+      "sysexin",
+      "transport",
+      "timepoint",
+      "jit.movie"
+    ],
+    "max_check": "Registry grep 'timecode', 'mtc', 'smpte', 'ltc': no names. Refpage grep 'time code' / 'MTC': only adstatus. Package library search 'timecode', 'mtc', 'ltc': nothing relevant. rtin refpage read: MIDI real-time messages (clock, start, stop), not quarter-frame timecode. transport and timepoint work in Max's own musical time.",
+    "confidence": "high",
+    "notes": "MTC quarter-frame messages could be decoded from midiin by hand. Only MTC input is documented for Isadora; no LTC."
+  },
+  {
+    "capability": "MIDI Show Control send and receive by named fields",
+    "category": "timeline/cueing/show control",
+    "tool": "Isadora",
+    "tool_names": [
+      "Send MIDI Show Control",
+      "MIDI Show Control Watcher"
+    ],
+    "what_it_does": "Builds and decodes MIDI Show Control messages from named fields: device ID, command format, command, cue number, cue list, cue path, and timecode for timed commands. The sender's inputs change to match the command chosen.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=596",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=701",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=702"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "sxformat",
+      "sysexin",
+      "midiout"
+    ],
+    "max_check": "Registry grep 'msc', 'showcontrol': none. Package search 'show control': none. sxformat refpage read: formats system exclusive bytes from arguments. MSC is sysex, so it can be assembled by hand; no object knows the protocol.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "PJLink projector control",
+    "category": "lighting/DMX/lasers",
+    "tool": "Isadora",
+    "tool_names": [
+      "Send PJLink"
+    ],
+    "what_it_does": "Sends PJLink commands to a networked projector, with optional password, and outputs the projector's reply. Used to close the shutter between cues instead of projecting black.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=707",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=708",
+      "https://support.troikatronix.com/support/solutions/articles/13000067857-using-the-send-pjlink-actor"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "sadam.tcpClient (Sadam Library)",
+      "mxj net.tcp.send",
+      "node.script"
+    ],
+    "max_check": "Registry and package search 'pjlink': none. PJLink is a text protocol over TCP port 4352 (per the manual). Max's core registry has no TCP client: grep 'tcp' matched nothing, and 'net.' matched only jit.net.send and jit.net.recv, which carry matrices. sadam.tcpClient is installed (library entry read: 'Bidirectional TCP client'). max-mxj ships net.tcp.send and net.tcp.recv help files (seen by name, not read).",
+    "confidence": "high",
+    "notes": "Category is the nearest fit: projector hardware control."
+  },
+  {
+    "capability": "VISCA-over-IP camera control",
+    "category": "video I/O & playback",
+    "tool": "Isadora",
+    "tool_names": [
+      "VISCA PTZ Controller"
+    ],
+    "what_it_does": "Controls pan, tilt, zoom and focus of PTZ cameras that speak VISCA over IP or Datavideo DVIP, with range presets per camera model. Public beta, tested by the vendor on two models.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=813"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "udpsend",
+      "sadam.tcpClient (Sadam Library)",
+      "serial"
+    ],
+    "max_check": "Registry and package search 'visca', 'ptz': none. Would be raw bytes over UDP or TCP. Only the first 2,300 of 21,700 characters of the actor entry were read.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Art-Net DMX send and receive",
+    "category": "lighting/DMX/lasers",
+    "tool": "Isadora",
+    "tool_names": [
+      "ArtNet Send",
+      "ArtNet Receive",
+      "LanBox Channels"
+    ],
+    "what_it_does": "Sends a DMX frame to an Art-Net node or broadcasts it, at a limited rate, and receives DMX so a lighting desk can drive the patch. Nodes on the network are listed in a menu.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=403",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=404",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=405",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=554",
+      "https://troikatronix.com/isadora/lighting-control/",
+      "https://support.troikatronix.com/support/solutions/articles/13000042899-controlling-led-strips-via-artnet"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "fxwdmxusbpro (Max for the Visual Arts)",
+      "udpsend",
+      "serial"
+    ],
+    "max_check": "Registry grep 'dmx', 'artnet', 'sacn': none. Refpage grep 'dmx': only a mention in serial. Package library: fxwdmxusbpro only (library entry read: sends DMX to an Enttec DMX USB Pro over serial). No Art-Net or sACN object is installed. udpsend refpage read: it has a rawbytes message, so Art-Net packets could be built by hand.",
+    "confidence": "high",
+    "notes": "Well-known third-party Art-Net externals exist for Max but none is installed, so none was verified."
+  },
+  {
+    "capability": "Lighting-style soft patch that crossfades with the Scenes",
+    "category": "lighting/DMX/lasers",
+    "tool": "Isadora",
+    "tool_names": [
+      "Matrix Value Send",
+      "Matrix Value Receive",
+      "Matrix Color Send",
+      "Channel Map",
+      "Master"
+    ],
+    "what_it_does": "Cues send levels to logical channels. One receiver maps each logical channel to any set of output channels through an editable table, applies a grand master, and blends levels from two Scenes according to their fade progress, so a Scene crossfade is also a lighting crossfade. Output is formatted text for Art-Net, serial DMX or MIDI.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=580",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=581",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=582",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=583",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=584",
+      "https://support.troikatronix.com/support/solutions/articles/13000085235-routing-values-using-the-matrix-value-send-and-receive-actors"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "router",
+      "matrixctrl",
+      "pattrstorage",
+      "coll"
+    ],
+    "max_check": "Registry has router and matrixctrl (names seen; refpages not read this session). pattrstorage refpage read: interpolates between stored presets, which is the nearest thing to a level crossfade. No object combines a patch table, a master and cue-driven mixing.",
+    "confidence": "high",
+    "notes": "Matrix Value Receive was read in full. Matrix Color Send, which samples pixel rows or columns of a video into the same channels for LED strips, was read in part; that sampling step alone is not a gap, since jit.spill ('Unroll a matrix into a list') and jit.iter exist in the registry. The soft patch with cue-driven mixing is the idea worth porting."
+  },
+  {
+    "capability": "BlackTrax (RTTrP) tracking input",
+    "category": "sensors/tracking/ML",
+    "tool": "Isadora",
+    "tool_names": [
+      "Blacktrax Watcher"
+    ],
+    "what_it_does": "Receives RTTrP packets from a BlackTrax performer-tracking system, by unicast or multicast, and outputs position, rotation, velocity and acceleration for a named trackable.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=409",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=410"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "udpreceive"
+    ],
+    "max_check": "Registry and package search 'blacktrax', 'mocap': none. Would need a binary packet parser.",
+    "confidence": "high",
+    "notes": "Niche; relevant to large venues."
+  },
+  {
+    "capability": "Depth-camera skeleton tracking and a shared skeleton data type",
+    "category": "sensors/tracking/ML",
+    "tool": "Isadora",
+    "tool_names": [
+      "OpenNI Tracker",
+      "Skeleton Decoder",
+      "Skeleton Visualizer",
+      "Skeleton From JSON",
+      "Rokoko Studio Live Watcher"
+    ],
+    "what_it_does": "One actor reads Kinect, Orbbec and RealSense depth cameras and outputs depth, colour, body masks and skeletons, and can record and replay depth streams. Skeletons travel as one value type that a decoder splits into named joints, a visualizer draws, a motion-capture suit also produces, and a JSON converter can feed from any other source.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=622",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=623",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=683",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=728",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=730",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=732",
+      "https://support.troikatronix.com/support/solutions/articles/13000069937-skeleton-tracking-in-isadora-3-with-openni-tracker"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "cv.jit (package)",
+      "jit.grab",
+      "dict"
+    ],
+    "max_check": "Registry and package search 'kinect', 'openni', 'skeleton', 'pose', 'mediapipe', 'leap': nothing installed. cv.jit is installed and covers 2D image analysis, not depth skeletons. Only the opening of the OpenNI Tracker entry was read; the KB article URL is from the index and was not read.",
+    "confidence": "medium",
+    "notes": "Third-party Kinect externals for Max exist but are not installed here. OpenNI Tracker is marked public beta with a long-run crash note."
+  },
+  {
+    "capability": "Leap Motion hand tracking",
+    "category": "sensors/tracking/ML",
+    "tool": "Isadora",
+    "tool_names": [
+      "Leap Motion Watcher"
+    ],
+    "what_it_does": "Reports the position and rotation of hands over a Leap Motion controller, and the angle and distance between two hands.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=559"
+    ],
+    "max_status": "absent",
+    "max_closest": [],
+    "max_check": "Registry and package search 'leap': none installed.",
+    "confidence": "medium",
+    "notes": "Third-party externals may exist; not verified."
+  },
+  {
+    "capability": "Declarative parser for serial and TCP streams that creates named outputs",
+    "category": "data/tables/scripting",
+    "tool": "Isadora",
+    "tool_names": [
+      "Serial In Watcher – Text",
+      "Serial In Watcher – Binary",
+      "TCP In Watcher - Text",
+      "TCP In Watcher - Binary",
+      "Text Parser",
+      "input parser"
+    ],
+    "what_it_does": "A watcher holds a pattern describing an incoming message: literal text, numbers of given width, hex, character sets, raw bytes, and bitfields with byte order. Each named element in the pattern becomes an output of the actor, typed as integer, float or text.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=311",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=312",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=313",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=314",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=317",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=318",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=319",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=320",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=321",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=716",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=717",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=764",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=765"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "serial",
+      "regexp",
+      "unpack",
+      "match",
+      "itoa",
+      "sprintf",
+      "v8"
+    ],
+    "max_check": "Read refpages: serial sends and receives bytes; regexp applies PCRE to symbols and lists. Parsing a device protocol in Max is a chain (serial, zl or match, itoa, regexp, unpack) or a script. Nothing turns one pattern string into typed, named outlets, and there is no bitfield extractor found.",
+    "confidence": "high",
+    "notes": "Read in full. Would port well as a v8 object."
+  },
+  {
+    "capability": "Raw TCP client in the core toolset",
+    "category": "networking/sync",
+    "tool": "Isadora",
+    "tool_names": [
+      "TCP Stream Control",
+      "TCP Send Data",
+      "TCP In Watcher - Text",
+      "TCP In Watcher - Binary"
+    ],
+    "what_it_does": "Opens a TCP connection to an address and port by stream number, sends formatted bytes, and parses replies, for talking to projectors, media servers and other show equipment.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=764",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=765",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=766",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=767"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "sadam.tcpClient (Sadam Library)",
+      "sadam.tcpServer (Sadam Library)",
+      "mxj net.tcp.send",
+      "node.script",
+      "jit.net.send"
+    ],
+    "max_check": "Core registry grep 'tcp': no names. jit.net.send refpage read: sends matrices and messages to jit.net.recv over TCP, not arbitrary bytes to a third-party device. Installed Sadam Library provides sadam.tcpClient, sadam.tcpServer, sadam.tcpSender, sadam.tcpReceiver (library entries read). max-mxj has net.tcp.send / net.tcp.recv help files (seen by name).",
+    "confidence": "high",
+    "notes": "Available through a package, Java or Node; missing only from the core objects."
+  },
+  {
+    "capability": "Zero-configuration value sharing between machines on a LAN",
+    "category": "networking/sync",
+    "tool": "Isadora",
+    "tool_names": [
+      "Net Broadcaster",
+      "Listener",
+      "Net ID"
+    ],
+    "what_it_does": "Sends a number to other copies of the program on the local network by channel, addressed by a machine number set in preferences or to all machines, using multicast so no IP addresses are entered.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=208",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=616"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "mxj net.maxhole",
+      "mxj net.multi.send",
+      "mxj net.multi.recv",
+      "udpsend",
+      "udpreceive"
+    ],
+    "max_check": "udpsend refpage read: needs a host and port. The bundled max-mxj package ships help files named net.maxhole, net.multi.send and net.multi.recv (found by listing the package's help folder; the help files were not opened, so what they do is taken from their names only). No core registry name suggests multicast.",
+    "confidence": "low",
+    "notes": "Probably covered by the mxj classes; the later pass should open net.maxhole.maxhelp to confirm."
+  },
+  {
+    "capability": "IzzyCast: internet video, audio and data sessions between patches",
+    "category": "networking/sync",
+    "tool": "Isadora",
+    "tool_names": [
+      "IzzyCast Create Session",
+      "IzzyCast Join Session",
+      "IzzyCast Broadcaster",
+      "IzzyCast Receiver",
+      "IzzyCast Devices"
+    ],
+    "what_it_does": "A host creates a session and others join by a session number. Each participant can send video, audio and control data to the others, and each incoming stream arrives as an ordinary video stream in the patch. Built on the Zoom Video SDK, so it needs no network set-up; paid by prepaid participant-minutes.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=524",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=526",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=533",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=535",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=540",
+      "https://support.troikatronix.com/support/solutions/articles/13000097342-izzycast-faq",
+      "https://troikatronix.com/izzycast/"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "jit.net.send",
+      "jit.net.recv",
+      "node.script (Node for Max package)",
+      "AOO for Max (package, audio)"
+    ],
+    "max_check": "jit.net.send refpage read: matrices to a jit.net.recv at a known host and port, no relay or NAT traversal. Installed 'AOO for Max' package is audio over network (seen in the package list; its objects were not read). Nothing found carries video between remote patches through a hosted service.",
+    "confidence": "high",
+    "notes": "A paid hosted service, not a pure software feature. The IzzyCast feature pages were fetched and not read."
+  },
+  {
+    "capability": "RTMP streaming straight from a patch",
+    "category": "video I/O & playback",
+    "tool": "Isadora",
+    "tool_names": [
+      "RTMP Streamer"
+    ],
+    "what_it_does": "Streams a video and audio feed to YouTube, Twitch, Facebook Live and similar services from an actor, given a stream URL and key.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=686",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=687",
+      "https://support.troikatronix.com/support/solutions/articles/13000089992-using-the-rtmp-streamer-actor"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "jit.gl.syphonserver (to OBS)"
+    ],
+    "max_check": "Registry and package search 'rtmp', 'stream': no streaming objects. The usual Max route is Syphon or NDI into separate streaming software. KB article URL is from the index; fetched, not read.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Text to speech as one object",
+    "category": "audio",
+    "tool": "Isadora",
+    "tool_names": [
+      "Speak Text"
+    ],
+    "what_it_does": "Speaks a block of text with the operating system's voices, with voice, rate and volume inputs, an output device choice on macOS, and a trigger when finished.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=746"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "upshot_texttospeech (Upshot package)"
+    ],
+    "max_check": "Core registry grep 'speech', 'speak', 'tts': none. Package library: upshot_texttospeech ('text to speech engine'; library entry read, patch not opened).",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Speech to text as one object",
+    "category": "sensors/tracking/ML",
+    "tool": "Isadora",
+    "tool_names": [
+      "Audio to Text"
+    ],
+    "what_it_does": "Converts spoken audio into text inside the patch, for voice-controlled pieces. Added in an Isadora 4 point release.",
+    "source_urls": [
+      "https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes"
+    ],
+    "max_status": "absent",
+    "max_closest": [],
+    "max_check": "Registry and package search 'speech to text', 'stt', 'whisper': none.",
+    "confidence": "low",
+    "notes": "Seen only as a heading and one sentence in the release notes; it is not in the v4.0 manual. How it works was not read."
+  },
+  {
+    "capability": "Subtitle playback from SRT files",
+    "category": "video I/O & playback",
+    "tool": "Isadora",
+    "tool_names": [
+      "SRT Subtitle Player",
+      "Text Draw"
+    ],
+    "what_it_does": "Given a timecode position, normally a movie's, outputs the caption text from an SRT file for that moment, ready to draw over the video.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=751"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "jit.gl.text",
+      "text",
+      "coll",
+      "v8"
+    ],
+    "max_check": "Registry and package search 'subtitle', 'srt': none. Would be a short script plus jit.gl.text.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Embedded Python with virtual environments and pip packages",
+    "category": "data/tables/scripting",
+    "tool": "Isadora",
+    "tool_names": [
+      "Pythoner"
+    ],
+    "what_it_does": "Runs Python scripts inside the patch in one long-lived interpreter, with inputs and outputs as script values, virtual environments, pip packages, and a per-show environment folder that travels with the file. Not sandboxed.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=657",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=658",
+      "https://support.troikatronix.com/support/solutions/articles/13000118388-pythoner-updating-notes",
+      "https://troikatronix.com/isadora/"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "v8",
+      "node.script",
+      "mxj"
+    ],
+    "max_check": "Registry grep 'python' and 'py': no Python object. Package library search 'python': none installed. Max's scripting hosts are JavaScript (v8, js), Node (node.script) and Java (mxj).",
+    "confidence": "high",
+    "notes": "Only the first tenth of the 38,000-character manual entry was read. Third-party Python externals for Max exist but are not installed here."
+  },
+  {
+    "capability": "Paste-in ShaderToy shaders with automatic inputs",
+    "category": "GPU compute/shaders",
+    "tool": "Isadora",
+    "tool_names": [
+      "GLSL Shader"
+    ],
+    "what_it_does": "A fragment shader is typed or pasted into the actor's editor and compiled on the spot. The compiler recognises ShaderToy code, so most shaders from that site run unchanged, and time and mouse inputs appear on the actor when the shader uses them.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=513",
+      "https://support.troikatronix.com/support/solutions/articles/13000025645-glsl-shader-actor-tutorial"
+    ],
+    "max_status": "better-elsewhere",
+    "max_closest": [
+      "jit.gl.slab",
+      "jit.gl.shader",
+      "jit.gl.pix",
+      "jit.gl.pass"
+    ],
+    "max_check": "Read refpages: jit.gl.slab processes textures with fragment shaders and exposes shader params (getparamlist, param); jit.gl.pass runs post-processing passes from a JXP file. Max shaders live in a .jxs XML wrapper that declares params and binds; grep of the Max install docs for 'shadertoy' found nothing. So the capability is there and deeper; the paste-and-run path is not.",
+    "confidence": "medium",
+    "notes": "Only the first sixth of the KB tutorial was read. JitLygia is installed and may ease shader work; not checked."
+  },
+  {
+    "capability": "Triggers by wall-clock time and date",
+    "category": "timeline/cueing/show control",
+    "tool": "Isadora",
+    "tool_names": [
+      "Time of Day",
+      "Clock"
+    ],
+    "what_it_does": "Fires at a given time every day, once at a given date and time, or periodically by the wall clock. For installations that open and close on a schedule.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=439",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=784"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "date",
+      "metro",
+      "select"
+    ],
+    "max_check": "date refpage read: reports current date and time when asked, so a schedule is a polling loop plus comparison. No registry name suggests a scheduler; timepoint works on transport time, not clock time.",
+    "confidence": "medium",
+    "notes": "Small but common in installations."
+  },
+  {
+    "capability": "User Actors: embedded sub-patches that update every copy on request",
+    "category": "workflow/authoring",
+    "tool": "Isadora",
+    "tool_names": [
+      "User Actor",
+      "Macro",
+      "Save & Update All",
+      "New Instance",
+      "Global Toolbox",
+      "Local Toolbox",
+      "User Actor On/Off"
+    ],
+    "what_it_does": "A wrapped group of actors is stored inside the document yet keeps a shared identity. Closing its editor offers to rewrite every copy in every open document, keeping links and hand-set input values, or to split it off as a new variant. An on/off actor inside it stops its contents to save processing.",
+    "source_urls": [
+      "https://troikatronix.com/files/isadora-manual.pdf#page=171",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=172",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=173",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=177",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=178",
+      "https://troikatronix.com/files/isadora-manual.pdf#page=795",
+      "https://support.troikatronix.com/support/solutions/articles/13000085286-keeping-global-user-actors-in-sync-when-collaborating"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "abstraction",
+      "patcher (p)",
+      "bpatcher",
+      "poly~"
+    ],
+    "max_check": "Max abstractions are files and update everywhere by nature; p subpatchers are embedded copies that never update each other. The embedded-but-synchronised middle case was not found. Based on the repo's userguide notes on abstractions and subpatchers, not re-read this session.",
+    "confidence": "medium",
+    "notes": ""
+  }
+]

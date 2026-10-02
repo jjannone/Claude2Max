@@ -1,0 +1,1407 @@
+[
+  {
+    "capability": "Automatic soft-edge blend between overlapping projectors",
+    "category": "projection mapping",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Soft-Edge Blending",
+      "Soft Edge",
+      "Auto Setup",
+      "Width",
+      "Power"
+    ],
+    "what_it_does": "Select two or more overlapping quads and press one button; MadMapper works out the shared area and fades each projector's edge so the seam disappears. Width and a gamma value are then tuned per edge. Angled overlaps are handled with a feathered mask inside each surface.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/6.-outputs/soft-edge-blending",
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/surface-inspector"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "jit.gl.cornerpin",
+      "jit.gl.slab",
+      "jit.gl.pix"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'soft edge', 'edge blend' and 'feather': no hits anywhere. 'keystone': no hits. jit.gl.cornerpin's refpage describes repositioning four image corners only. A blend ramp could be written by hand as a shader in jit.gl.slab or jit.gl.pix, but nothing computes the overlap.",
+    "confidence": "high",
+    "notes": "The automatic overlap calculation is the part with no Max equivalent; the ramp itself is a simple shader."
+  },
+  {
+    "capability": "Mesh warping with free points, Bézier handles and a linked input mesh",
+    "category": "projection mapping",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Mesh Warping",
+      "Bezier Mesh Warping",
+      "Add Warping Point",
+      "Link Input and Output Mesh",
+      "Show Input Mesh",
+      "Precision",
+      "Unlink Tangents"
+    ],
+    "what_it_does": "A quad gets an internal grid of warp points that are added anywhere, dragged on the output, and given Bézier tangent handles for curved surfaces. By default each point moved on the output is mirrored on the input side so the picture is not stretched; the link can be turned off to edit the two meshes separately.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/warping-and-geometry",
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/surface-inspector",
+      "https://madmapper.com/files/05-Mesh%20Warping.pdf"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.gl.cornerpin",
+      "jit.gl.nurbs",
+      "jit.gl.mesh"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'warp': no object; three jitter userguide topics mention it. 'bezier': only jit.mgraphics text. jit.gl.cornerpin (refpage: maps a texture by repositioning the image corners, with mouse handles in the window) covers four corners. jit.gl.nurbs (refpage: renders a NURBS surface from a control matrix) and jit.gl.mesh (geometry from matrices) can hold a warped surface, but neither gives draggable warp points on the output.",
+    "confidence": "medium",
+    "notes": "A Max user would have to build the point editor. jit.gl.nurbs's refpage lists a 'ctlshow' attribute; whether its control points can be dragged with the mouse was not checked."
+  },
+  {
+    "capability": "Layer list of surfaces, each with an input crop and an output shape edited by dragging",
+    "category": "projection mapping",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Video Surfaces",
+      "Surfaces List",
+      "Surface Inspector",
+      "Input View",
+      "Stage Preview",
+      "Input Rectangle",
+      "Video Quad",
+      "Triangle",
+      "Circle",
+      "Mask"
+    ],
+    "what_it_does": "The whole mapping is a stack of surfaces. For each one you drag a rectangle over the source to choose what it shows, and separately drag its corners on the output to place it. List order is drawing order; groups scale their children's opacity.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/interface-overview",
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces",
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/surface-types",
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/assigning-content-to-surfaces",
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/surface-groups-and-masks"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.gl.cornerpin",
+      "jit.gl.videoplane",
+      "jit.gl.handle",
+      "jit.world",
+      "av.cornerpin (av-toolbox)"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'cornerpin' finds jit.gl.cornerpin and jit.world (which the refpage says contains a jit.gl.cornerpin, enabled with 'enable_cornerpin'). jit.gl.videoplane's refpage: shows video in OpenGL. jit.gl.handle's refpage: turns mouse drags into rotate and position messages. One jit.gl.cornerpin per surface is the Max way; there is no surface list, no input-crop view and no grouping.",
+    "confidence": "medium",
+    "notes": "This is MadMapper's whole interface, so it is a design difference more than a missing object. Listed because it is what the other mapping candidates sit on."
+  },
+  {
+    "capability": "Bézier masks with feathering that follow the surface or the source",
+    "category": "projection mapping",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Mask",
+      "Add Mask",
+      "Feathering",
+      "Invert Mask",
+      "Bézier Masking",
+      "Centered",
+      "Inside",
+      "Outside"
+    ],
+    "what_it_does": "Masks are drawn on the output freehand or point by point and smoothed into Bézier curves. A surface can carry several, each inverted or not, each with a feathered edge. A mask can stay fixed, follow the surface's warp, or follow the input picture. A separate Mask surface cuts every layer beneath it.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/surface-groups-and-masks",
+      "https://madmapper.com/files/04-Masking.pdf",
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/warping-and-geometry"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.mgraphics",
+      "jit.gl.sketch",
+      "av.pix.mask (av-toolbox)",
+      "jit.keyscreen"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'mask': jit.keyscreen (refpage: a three-source chromakey that builds a mask from a key image) and av.pix.mask (package entry: makes a black/white mask from an image). 'feather': no hits. jit.mgraphics has curve_to, fill and path methods in its refpage, so a mask texture can be drawn from code. Nothing provides drawing a mask on the output with the mouse.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "3D calibration: line up a 3D model with a real object from matched points",
+    "category": "projection mapping",
+    "tool": "MadMapper",
+    "tool_names": [
+      "3D Calibration",
+      "3D Surface",
+      "Calibrate",
+      "Fix Position",
+      "Reset Calibration"
+    ],
+    "what_it_does": "Import an OBJ of the real object, pick known points on the model, and place each on the matching point of the object as the projector sees it. MadMapper solves the projector's view, shows the RMS error as points are added, and locks the result.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/advanced-3d-and-scanning",
+      "https://docs.madmapper.com/madmapper/6/15.-troubleshooting"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "jit.gl.model",
+      "jit.gl.camera",
+      "cv.jit.calibration",
+      "cv.jit.unproject"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'calibrat': nothing in Max itself. Package hits: cv.jit.calibration (camera intrinsics and lens distortion from chessboard views), cv.jit.findchessboardcorners, cv.jit.unproject (2D image points to 3D camera coordinates). jit.gl.model's refpage: reads and draws OBJ and other formats. None solves a projector pose from point pairs on a model.",
+    "confidence": "medium",
+    "notes": "The cv.jit objects calibrate a camera, not a projector. Whether they could be combined to do this was not tested."
+  },
+  {
+    "capability": "Structured-light scan that gives the projector's own view of the scene",
+    "category": "projection mapping",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Space Scanner",
+      "Spatial Scanner",
+      "Capture",
+      "Capture Timing"
+    ],
+    "what_it_does": "The projector shows a series of stripe patterns while a camera photographs them. The result is an image of the scene as seen from the projector, pixel for pixel, set as the output's background so surfaces can be drawn on it away from the site.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/12.-advanced/special-tools-and-auto-calibration",
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/tools-space-scanner",
+      "https://madmapper.com/files/13-Space%20Scanner%20Guide-1.pdf"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "jit.grab",
+      "cv.jit.calibration"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'structured light': no hits anywhere. jit.grab's refpage: digitizes video from any digitizer. Capture exists; the pattern projection and decoding do not.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Camera scan that finds where every LED pixel is",
+    "category": "lighting/DMX/lasers",
+    "tool": "MadMapper",
+    "tool_names": [
+      "LED Scanner",
+      "Start Scan",
+      "DMX Range",
+      "Map LEDs at 0,0 if not detected"
+    ],
+    "what_it_does": "MadMapper flashes each LED in a DMX range one at a time while a camera watches, then places the fixtures in the workspace where the camera saw them. An irregular LED installation is mapped without measuring.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/5.-dmx-and-led-mapping/tools-led-scanner",
+      "https://docs.madmapper.com/madmapper/6/12.-advanced/special-tools-and-auto-calibration"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "jit.grab"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). No DMX output objects in Max to begin with (see the DMX candidates). 'pixel map' and 'fixture': no relevant hits.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Camera scan that calibrates a laser to the scene",
+    "category": "lighting/DMX/lasers",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Laser Scanner",
+      "MAD Laser Scanner"
+    ],
+    "what_it_does": "The laser draws a moving 16 x 16 grid of dots while a camera records them. The result is a background image for the laser output showing the scene from the laser's position, for aligning paths to real objects.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/7.-laser-madlaser/tools-laser-scanner",
+      "https://docs.madmapper.com/madmapper/6/12.-advanced/special-tools-and-auto-calibration"
+    ],
+    "max_status": "absent",
+    "max_closest": [],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'laser', 'ilda', 'galvo': no hits in Max; one package hit, Vsynth's vector_3ch_out (see the laser output candidate).",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Line surfaces: paths drawn on the output with media running along them",
+    "category": "projection mapping",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Line",
+      "Video Line",
+      "FreeDraw",
+      "madLine",
+      "Enable Bezier",
+      "Match Output Geometry",
+      "Match Line per segment",
+      "Match Line chained",
+      "Match Line Vertical Split"
+    ],
+    "what_it_does": "Paths are drawn on the output freehand or point by point, with thickness, joins and Bézier curves, to trace edges of architecture or LED strips. A media item is mapped along the path, either per segment, chained over all paths, or by the paths' position on the output, so a pattern can run along an outline.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/freedraw-and-madline",
+      "https://madmapper.com/files/MadLaser%20Guide.pdf",
+      "https://docs.madmapper.com/madmapper/6/15.-troubleshooting/madmapper-release-notes-history"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.gl.path",
+      "jit.path",
+      "jit.gl.sketch"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). jit.gl.path's refpage: generates and renders a 3D path as a line, ribbon, tube or extruded contour, storing position, colour, scale and orientation per point; attributes include 'joinstyle' and 'interpmode', and messages 'append', 'edit', 'edithandle'. That covers rendering a path. Drawing it on the output with the mouse and mapping a texture along it were not found.",
+    "confidence": "medium",
+    "notes": "The four texturing mode names come from the MadLaser guide's Laser Lines section; the release notes name 'Match Output Geometry' for video lines too."
+  },
+  {
+    "capability": "SVG files become editable line surfaces, laser paths or fixtures",
+    "category": "projection mapping",
+    "tool": "MadMapper",
+    "tool_names": [
+      "SVG Import",
+      "Import SVG",
+      "Export SVG",
+      "Svg Image player",
+      "SVG Folder Player"
+    ],
+    "what_it_does": "Dropping an SVG into a project turns its paths into Line surfaces that can then be edited and animated. The same file can become laser paths or DMX fixtures. Masks and lines can be exported back to SVG.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/svg-import-and-animation",
+      "https://docs.madmapper.com/madmapper/6/3.-media/media-formats-and-video-codecs",
+      "https://docs.madmapper.com/madmapper/6/15.-troubleshooting/madmapper-release-notes-history",
+      "https://docs.madmapper.com/madmapper/6/1.-introduction/what's-new/release-notes-v6"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.mgraphics"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'svg': no object by that name. jit.mgraphics's refpage lists svg_create, svg_render, svg_set, svg_get_size, so Max can draw an SVG into a picture. Nothing found that reads an SVG's paths as points for jit.gl.path or similar.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Video wall layout built from panel count, resolution and bezel size",
+    "category": "projection mapping",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Video Wall Template",
+      "Video Wall Setup",
+      "Setup bezel",
+      "Number of screens",
+      "Destination"
+    ],
+    "what_it_does": "A template asks how many screens across and down, their resolution, the bezel width and their rotation, and creates the grid of surfaces with the bezel gaps allowed for. An output's destination can also split one canvas across several displays.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/video-wall-setup",
+      "https://docs.madmapper.com/madmapper/6/6.-outputs"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "jit.window",
+      "jit.world",
+      "jit.displays"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). jit.displays's refpage: enumerates and sets monitor attributes. jit.window: draws to a window, with 'rect', 'pos', 'fullscreen'. No bezel or video-wall helper found.",
+    "confidence": "medium",
+    "notes": "Simple arithmetic to build by hand; listed because it is a one-step setup in MadMapper."
+  },
+  {
+    "capability": "Alignment aids drawn on the real output",
+    "category": "projection mapping",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Show Test Pattern",
+      "Video Cursor",
+      "Laser Cursor",
+      "Show Info",
+      "Highlight Selection",
+      "Highlight Background",
+      "Object Isolation",
+      "Grid Generator"
+    ],
+    "what_it_does": "Each output can show a test pattern, the mouse position as a cross or circle on the projected image (or as a laser beam), the names and outlines of selected surfaces, or only the surfaces being edited. These make it possible to work while looking at the real object instead of the screen.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/6.-outputs",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/keyboard-shortcuts",
+      "https://docs.madmapper.com/madmapper/6/9.-master-settings",
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/warping-and-geometry"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.gl.cornerpin",
+      "jit.gl.text",
+      "jit.gl.sketch"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). jit.gl.cornerpin's refpage has 'drawcorners', 'corner_color', 'hover' attributes, so its handles are visible in the output window. No ready test pattern or output cursor was found; both can be drawn with jit.gl.sketch or jit.gl.text.",
+    "confidence": "low",
+    "notes": ""
+  },
+  {
+    "capability": "DMX fixtures as surfaces that sample the picture under them",
+    "category": "lighting/DMX/lasers",
+    "tool": "MadMapper",
+    "tool_names": [
+      "MadLight",
+      "DMX Fixture",
+      "DMX Line",
+      "DMX Circle",
+      "DMX Bézier",
+      "DMX samplers",
+      "DMX Filtering",
+      "Response Curve"
+    ],
+    "what_it_does": "A light fixture is placed on the output like a video surface and takes its colour from the pixels beneath it, so any video composition drives LEDs and lights directly. Sampling can be one pixel, a box average, or a stretched average for strips, and each fixture has a response curve.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/5.-dmx-and-led-mapping/dmx-fundamentals",
+      "https://docs.madmapper.com/madmapper/6/5.-dmx-and-led-mapping/dmx-fixtures",
+      "https://docs.madmapper.com/madmapper/6/1.-introduction/what's-new/madmapper-v6"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "fxwdmxusbpro (Max for the Visual Arts)",
+      "jit.matrix",
+      "serial"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'dmx': no Max object; the word appears once, in the serial refpage. One package hit: fxwdmxusbpro (an abstraction that sends a list of channel values to an Enttec DMX USB Pro over serial). 'fixture', 'pixel map': nothing. A Max user would read pixels from a jit.matrix and build the channel list by hand.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Art-Net and sACN in and out, with node discovery and many universes",
+    "category": "lighting/DMX/lasers",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Art-Net",
+      "sACN",
+      "ArtNet In",
+      "Unicast",
+      "Universe Synchronization",
+      "DMX Monitor",
+      "DMX Router",
+      "DMX to OSC",
+      "DMX Input"
+    ],
+    "what_it_does": "MadMapper sends and receives DMX over Ethernet as Art-Net or sACN, in broadcast or unicast, finds Art-Net nodes by polling, and handles thousands of universes. Incoming DMX can control any parameter. Small modules route universes to USB interfaces, forward a universe as OSC, and show live channel values.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/5.-dmx-and-led-mapping/dmx-fundamentals",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences",
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control",
+      "https://docs.madmapper.com/madmapper/6/8.-modules",
+      "https://docs.madmapper.com/madmapper/6/15.-troubleshooting",
+      "https://madmapper.com/madmapper/features"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "udpsend",
+      "udpreceive",
+      "fxwdmxusbpro (Max for the Visual Arts)"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'art-net', 'artnet', 'sacn', 'e131': no hits in Max or in the package library. udpsend and udpreceive (refpages: send and receive messages over UDP) are the only transport; the packet format would have to be built by hand.",
+    "confidence": "high",
+    "notes": "Third-party Art-Net externals for Max may exist outside this machine; none is in the repo's package library."
+  },
+  {
+    "capability": "Fixture definitions: channel types, 16-bit pairs, computed channels, wiring order",
+    "category": "lighting/DMX/lasers",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Fixture Editor",
+      "DMX Fixture Definitions",
+      "Pixel Type",
+      "Pixel Size",
+      "Assignation",
+      "Slider",
+      "Expression",
+      "16 Bits",
+      "LED Strip Mode",
+      "Matrix Mode",
+      "Skip channels 511–512"
+    ],
+    "what_it_does": "A fixture type is described once: its pixel grid, the meaning of each channel (colour components, generic sliders, or a value computed by a GLSL expression from colour, position, time and other sliders), 8 or 16 bits, and which of 16 wiring orders its pixels follow. Definitions are files that can be shared. Moving heads use colour channels fed by video and slider channels for pan, tilt and gobo.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/14.-technical-notes/dmx-fixture-definitions",
+      "https://docs.madmapper.com/madmapper/6/5.-dmx-and-led-mapping/dmx-fixtures",
+      "https://docs.madmapper.com/madmapper/6/5.-dmx-and-led-mapping/controlling-moving-lights"
+    ],
+    "max_status": "absent",
+    "max_closest": [],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'fixture': no hits anywhere.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Fixture layouts imported from and exported to SVG or CSV, patch included",
+    "category": "lighting/DMX/lasers",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Import Fixtures",
+      "Export Fixtures",
+      "Import DMX Fixtures from CSV",
+      "__UN__",
+      "__CH__",
+      "__FT__",
+      "__FD__",
+      "__SL__"
+    ],
+    "what_it_does": "A lighting layout drawn in a vector program becomes patched fixtures on import: universe, channel, fixture type and strip length are read from each shape's id or attributes, and layer groups become fixture groups. Exporting gives an SVG that rebuilds the same setup or serves as a guide for making video.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/14.-technical-notes/dmx:-import-export-from-svg",
+      "https://docs.madmapper.com/madmapper/6/14.-technical-notes/dmx-fixture-definitions"
+    ],
+    "max_status": "absent",
+    "max_closest": [],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). No fixture concept in Max, so nothing to import into.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Record DMX streams with synced audio and play them back",
+    "category": "lighting/DMX/lasers",
+    "tool": "MadMapper",
+    "tool_names": [
+      "MadLight Recorder",
+      "MadLight Sequence",
+      "MadLight Player",
+      "Export to MiniMad",
+      "Sync"
+    ],
+    "what_it_does": "Records every DMX frame MadMapper sends, or that arrives from another desk, into a compact sequence file with an optional audio track kept in sync. Sequences are replayed by a player module, placed in timelines, or exported to a standalone player.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/5.-dmx-and-led-mapping/madlight-recorder",
+      "https://docs.madmapper.com/madmapper/6/6.-outputs/timeline-export",
+      "https://docs.madmapper.com/madmapper/6/15.-troubleshooting/madmapper-release-notes-history"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "mtr"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). mtr's refpage: records messages and plays them back in sequence, with read and write. It could record channel lists as messages, but there is no DMX-specific recorder and no stored-changes-only file format.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Laser output to ILDA DACs, including over audio channels",
+    "category": "lighting/DMX/lasers",
+    "tool": "MadMapper",
+    "tool_names": [
+      "MadLaser",
+      "Laser Output",
+      "Etherdream",
+      "ShowNET",
+      "Helios USB",
+      "LaserCube",
+      "IDN",
+      "FB4",
+      "Moncha",
+      "Enable Audio Laser (AVB / Dante)",
+      "PPS",
+      "Desired FPS"
+    ],
+    "what_it_does": "Drives laser projectors directly: coloured paths are turned into frames of points and sent to network or USB DACs, or as five audio channels (X, Y, R, G, B) to an AVB or Dante audio interface. Any number of lasers can be used.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/7.-laser-madlaser",
+      "https://docs.madmapper.com/madmapper/6/6.-outputs",
+      "https://docs.madmapper.com/madmapper/6/13.-setup-and-installation/additional-hardware",
+      "https://madmapper.com/files/MadLaser%20AVB%20Support-1.pdf",
+      "https://madmapper.com/extensions/madlaser"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "vector_3ch_out (Vsynth)"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'ilda', 'etherdream', 'galvo': no hits anywhere. 'laser': one package hit, Vsynth's vector_3ch_out (package entry: sends vector X, Y and brightness signals to audio outputs). That is the same idea as MadMapper's audio laser output, without colour channels or any DAC protocol.",
+    "confidence": "high",
+    "notes": "The audio route is the one a Max patch could plausibly follow, since X/Y/R/G/B as signals is ordinary MSP. Whether vector_3ch_out is meant for lasers or for oscilloscopes was not checked."
+  },
+  {
+    "capability": "Laser path planning: blanking, corner dwell, speed, draw order, frame rate",
+    "category": "lighting/DMX/lasers",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Laser Render",
+      "Max Speed",
+      "Optimize Angles",
+      "Angle Min",
+      "Angle Delay",
+      "End Repeat",
+      "In Fade",
+      "Out Fade",
+      "Point Intensity",
+      "Min Points",
+      "Blank Delay",
+      "Color Delay",
+      "Min Voltage",
+      "Scan Area",
+      "ILDA Mode",
+      "Preserve FPS",
+      "Preserve Image Quality"
+    ],
+    "what_it_does": "Before points go to the laser, MadMapper orders the paths to shorten beam travel, shares scan time between paths by length, adds points at corners so they stay sharp, blanks the beam between paths, shifts colours in time to match the mirrors, and either holds the frame rate or holds the detail when there is too much to draw.",
+    "source_urls": [
+      "https://madmapper.com/files/MadLaser%20Guide.pdf",
+      "https://docs.madmapper.com/madmapper/6/6.-outputs",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences/madlaser-preferences",
+      "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/LaserMaterialsDoc.md"
+    ],
+    "max_status": "absent",
+    "max_closest": [],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). No laser objects in Max or the package library, so none of this exists.",
+    "confidence": "high",
+    "notes": "This is the part that would be hardest to rebuild; it encodes what real scanners can physically do."
+  },
+  {
+    "capability": "Trace video into laser paths in real time",
+    "category": "lighting/DMX/lasers",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Real-Time Video Vectorization",
+      "Find Paths",
+      "Find Contours",
+      "Threshold",
+      "Thickness",
+      "Denoizing",
+      "Canny Size",
+      "Path Filtering",
+      "Path Limits",
+      "Output Polylines",
+      "Processed Image"
+    ],
+    "what_it_does": "A movie, image or camera feed is traced every frame on the GPU, either by thinning bright lines to their skeleton or by edge detection. Paths can be filtered by length and capped in number, and the tracing stages can be previewed.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/7.-laser-madlaser/real-time-video-vectorization",
+      "https://madmapper.com/files/MadLaser%20Guide.pdf"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "cv.jit.findcontours",
+      "cv.jit.canny",
+      "jit.sobel"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'vectoriz': nothing relevant. 'contour': cv.jit.findcontours (package entry: traces contours from a binary image as ordered point sequences) and cv.jit.canny (Canny edge detection to 1-pixel binary edges). These run on matrices on the CPU. The line-skeleton mode and the length filtering were not found.",
+    "confidence": "medium",
+    "notes": "jit.sobel's refpage: Sobel and Prewitt gradient edge detection on matrices."
+  },
+  {
+    "capability": "Shaders that output coloured paths instead of pixels",
+    "category": "GPU compute/shaders",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Laser Materials",
+      "laserMaterialFunc",
+      "POINT_COUNT",
+      "RENDER_SETTINGS",
+      "mm_LastFrameData",
+      "MadLaserMaterialShapeLibrary.glsl",
+      "Laser Generators",
+      "Laser Line FX"
+    ],
+    "what_it_does": "A laser material is a GLSL function called once per sample point that returns a 2D position, a colour and a shape number; a change of shape number starts a new path. The previous frame's points can be read back for motion that depends on the past. A small library adds move-to, line-to and curve-to calls.",
+    "source_urls": [
+      "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/LaserMaterialsDoc.md",
+      "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/Libraries/MadLaserMaterialShapeLibrary.md",
+      "https://docs.madmapper.com/madmapper/6/3.-media/media-bin"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.gl.slab",
+      "jit.gl.pix",
+      "jit.gen"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). No laser-specific object. The mechanism itself (a shader writing positions and colours into a small texture, one row each) could be done with jit.gl.slab (refpage: generate and process images with fragment shaders) or jit.gl.pix, then read back; nothing interprets such a texture as paths.",
+    "confidence": "low",
+    "notes": "Status is 'partial' only because the texture trick is available in Max; the path interpretation and laser output are absent."
+  },
+  {
+    "capability": "Split one laser composition across several lasers",
+    "category": "lighting/DMX/lasers",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Laser Dispatch",
+      "Dispatch Count",
+      "Publish Internal Loopback",
+      "Laser Buffer"
+    ],
+    "what_it_does": "A laser composition built on an output with no hardware is looped back as media and shared out between several real lasers, so a picture too complex for one scanner stays bright and steady. Shapes are tracked from frame to frame so each stays on the same laser. The looped composition can also be mesh warped as a whole.",
+    "source_urls": [
+      "https://madmapper.com/files/MadLaser%20Guide.pdf",
+      "https://docs.madmapper.com/madmapper/6/6.-outputs",
+      "https://docs.madmapper.com/madmapper/6/7.-laser-madlaser",
+      "https://docs.madmapper.com/madmapper/6/15.-troubleshooting/madmapper-release-notes-history"
+    ],
+    "max_status": "absent",
+    "max_closest": [],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). No laser objects in Max or the package library.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Laser safety limits built into the output",
+    "category": "lighting/DMX/lasers",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Laser Safety Zones & Masks",
+      "Masks",
+      "Invert Mask",
+      "Mask Beams Only",
+      "Max non-moving Beam Intensity",
+      "Unlock Security Features",
+      "Arm Lasers"
+    ],
+    "what_it_does": "Each laser output has masks the beam cannot enter, or enters only at reduced power, and a limit on the power of a beam that is not moving. Lasers emit nothing until armed and are un-armed when the computer wakes from sleep.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/7.-laser-madlaser/laser-visualization-and-safety",
+      "https://docs.madmapper.com/madmapper/6/7.-laser-madlaser/getting-started-with-madlaser",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences/madlaser-preferences",
+      "https://docs.madmapper.com/madmapper/6/1.-introduction/what's-new/release-notes-v6"
+    ],
+    "max_status": "absent",
+    "max_closest": [],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). No laser objects in Max or the package library.",
+    "confidence": "high",
+    "notes": "The manual itself says software masks must not be the only protection."
+  },
+  {
+    "capability": "ILDA files: import, export and recording",
+    "category": "lighting/DMX/lasers",
+    "tool": "MadMapper",
+    "tool_names": [
+      "ILDA Files",
+      "Store Ilda Frame",
+      "Record Ilda Movie",
+      "Record at fixed frame rate",
+      "Record as ILDA stream",
+      "ILDA Export"
+    ],
+    "what_it_does": "Standard .ild laser files play as media on laser surfaces. Any laser output can save its current frame or record a movie of its points, either at a fixed frame rate or as a raw point stream for playing from a laser's own SD card. Timelines export to ILDA slower than real time.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/7.-laser-madlaser/ilda-files",
+      "https://docs.madmapper.com/madmapper/6/6.-outputs",
+      "https://madmapper.com/files/MadLaser%20Guide.pdf",
+      "https://docs.madmapper.com/madmapper/6/6.-outputs/timeline-export"
+    ],
+    "max_status": "absent",
+    "max_closest": [],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'ilda': no hits anywhere.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Send laser paths to previsualisation programs and other apps",
+    "category": "networking/sync",
+    "tool": "MadMapper",
+    "tool_names": [
+      "External Visualisation",
+      "Capture",
+      "Depence",
+      "WYSIWYG",
+      "LA.preview",
+      "Publish to PONK",
+      "PONK",
+      "Beam Preview",
+      "Enable Fog"
+    ],
+    "what_it_does": "Laser output can be sent to 3D previsualisation software to program a show before the venue, and shared with other programs as paths over the network using the open PONK protocol. A beam preview with simulated fog can itself be shown on video outputs.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/7.-laser-madlaser/laser-visualization-and-safety",
+      "https://docs.madmapper.com/madmapper/6/6.-outputs",
+      "https://docs.madmapper.com/madmapper/6/15.-troubleshooting/madmapper-release-notes-history",
+      "https://madmapper.com/extensions/madlaser"
+    ],
+    "max_status": "absent",
+    "max_closest": [],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'ponk': no hits anywhere. No laser objects of any kind were found.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Cue grid: snapshots of chosen parameters, each with its own transition",
+    "category": "timeline/cueing/show control",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Scenes",
+      "Cues",
+      "Cue Bank",
+      "Edit",
+      "CUE ALL",
+      "Update Scene",
+      "Launch Quantize",
+      "Transition Type",
+      "Auto Play",
+      "Live mode"
+    ],
+    "what_it_does": "A scene stores everything; a cue stores only the parameters you click while in Edit mode. Starting a cue fades each stored parameter from its present value to the stored one, with a transition that can be set per parameter. Cues sit in a grid of banks, rows and columns; one item per row plays at a time, and launches can wait for the beat.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/10.-timelines/scenes-and-cues",
+      "https://madmapper.com/files/06-Scenes%20and%20Cues.pdf",
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control/osc-commands-and-channels-list"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "pattrstorage",
+      "preset",
+      "pattr",
+      "autopattr",
+      "Snapshots"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). pattrstorage's refpage: saves and recalls presets of client objects, with 'recall' accepting a fractional preset number for interpolation, 'recallmulti' for a weighted mix, 'interp' to set each client's interpolation mode, and 'active' and 'priority' per client. Userguide topics 'presets_and_interpolation' and 'snapshots' cover the same ground. Max can store and interpolate presets; a timed fade, per-parameter fade settings, and a grid with one-per-row playback would have to be patched.",
+    "confidence": "medium",
+    "notes": "pattrstorage's 'fade' message is marked deprecated in its refpage (identical to recall)."
+  },
+  {
+    "capability": "Keyframe any parameter by touching it while Record is on",
+    "category": "timeline/cueing/show control",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Timelines",
+      "Animate",
+      "Record",
+      "Keyframe Interpolation",
+      "None",
+      "Linear",
+      "Bezier",
+      "Auto Curve",
+      "Simplify",
+      "Quantize",
+      "OSC Tracks",
+      "MIDI Tracks"
+    ],
+    "what_it_does": "Any cue can be given a timeline. With Record on, moving a control writes a keyframe at the playhead and adds a track for that parameter if there was none. Keyframes interpolate as steps, lines, hand-shaped Bézier curves or automatic smooth curves. Tracks can also send OSC and MIDI to other equipment.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/10.-timelines/creating-and-editing-timelines",
+      "https://docs.madmapper.com/madmapper/6/10.-timelines/track-types-and-inspectors",
+      "https://docs.madmapper.com/madmapper/6/1.-introduction/what's-new/release-notes-v6"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "mtr",
+      "function",
+      "jit.anim.path",
+      "jit.path",
+      "seq",
+      "detonate"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'timeline': no Max object (package hits are Link's link.beat and link.phasor~, and bach.roll). 'keyframe': no object. mtr (refpage: records messages and plays them back in sequence) records gestures as events, not editable curves. function (refpage: breakpoint function editor, with 'setcurve') is one curve per object. jit.path and jit.anim.path interpolate between stored points. No editor that shows many parameters as tracks on one time axis was found.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Master timeline that plays other timelines, with markers",
+    "category": "timeline/cueing/show control",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Conductor",
+      "Timeline Player Tracks",
+      "Timelines Grid",
+      "Playback Mode",
+      "Controlled Speed",
+      "Global BPM",
+      "Insert / Delete Time"
+    ],
+    "what_it_does": "One master timeline arranges scenes, cues and their own timelines along a time axis, next to video, audio, OSC and MIDI tracks. Expert mode lets timelines contain timelines. Playback follows its own clock, a speed control, the global BPM or an outside clock.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/10.-timelines/timelines-overview-and-the-conductor",
+      "https://docs.madmapper.com/madmapper/6/10.-timelines/track-types-and-inspectors",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences/expert-mode"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "transport",
+      "timepoint",
+      "mtr"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). transport's refpage: controls a clock for objects linked to it. timepoint: bangs when the clock reaches a time. These give a shared clock and cue points; arranging nested sequences on a visible time axis is not provided.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Chase external timecode: MTC, LTC, Art-Net timecode",
+    "category": "networking/sync",
+    "tool": "MadMapper",
+    "tool_names": [
+      "External Sync",
+      "MIDI MTC",
+      "Audio LTC",
+      "ArtNet TimeCode",
+      "ltc_time",
+      "Per-Timeline External Sync"
+    ],
+    "what_it_does": "A timeline can follow timecode from outside: MIDI timecode, LTC arriving as audio, or Art-Net timecode. In expert mode different timelines can follow different sources.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/1.-introduction/what's-new/release-notes-v6",
+      "https://docs.madmapper.com/madmapper/6/9.-master-settings/audio-input-and-beat-detection",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences/expert-mode",
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control"
+    ],
+    "max_status": "unsure",
+    "max_closest": [
+      "transport",
+      "rtin",
+      "midiin"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'ltc', 'mtc', 'midi time code': no hits. 'smpte': only in the seq and jit.colorspace refpages. 'timecode': only dsp and adstatus text. rtin's refpage: receives MIDI real time messages; midiin: raw MIDI bytes, from which MTC could be decoded by hand. transport has a 'clocksource' attribute whose possible sources were not looked up. No LTC decoder found.",
+    "confidence": "medium",
+    "notes": "Marked unsure because transport's clock sources and third-party LTC externals were not checked."
+  },
+  {
+    "capability": "Video editing tracks inside the show timeline",
+    "category": "video I/O & playback",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Montage Tracks",
+      "Montages",
+      "Split Clip",
+      "Clips",
+      "Replace Visual",
+      "No Media Behavior",
+      "Skip Rendering"
+    ],
+    "what_it_does": "A timeline track on which movies, images and generators are cut, moved, reversed and crossfaded like in a video editor. The edited result is one media item that is assigned to surfaces, lasers or lights like any other.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/10.-timelines/track-types-and-inspectors",
+      "https://docs.madmapper.com/madmapper/6/10.-timelines/clips",
+      "https://docs.madmapper.com/madmapper/6/1.-introduction/what's-new/madmapper-v6"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.playlist",
+      "jit.movie"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). jit.playlist's refpage: organises video files as clips, each with a selected section, reorderable by dragging, with 'next', 'pause', 'selection'. That is a clip list, not clips placed at times on an axis with crossfades.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Timeline markers that pause, loop or jump, with chained actions",
+    "category": "timeline/cueing/show control",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Time Markers",
+      "Follow Actions",
+      "Pause",
+      "Continue",
+      "Loop",
+      "Go to Marker",
+      "Go and Play",
+      "Go to Marker and Pause",
+      "Start Timeline"
+    ],
+    "what_it_does": "Markers on a timeline decide what happens when the playhead reaches them: wait for the operator, loop back, or jump to another marker. A follow action chains a second step. Markers can be triggered by name from any controller or over OSC.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/10.-timelines/time-markers-and-follow-actions",
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control/osc-commands-and-channels-list"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "timepoint",
+      "transport",
+      "mtr"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). timepoint's refpage: outputs a bang when the clock reaches a specific time. With transport that gives a cue point; the wait, loop and jump behaviour would be patched around it.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Render the whole show to files: video per output, laser, DMX and audio",
+    "category": "deployment",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Export to File",
+      "Timeline Export",
+      "Export Video Outputs",
+      "ILDA Export",
+      "DMX Export",
+      "Export Audio Output",
+      "Export Loop section"
+    ],
+    "what_it_does": "One export renders a timeline to a movie for each video output, an ILDA file for each laser, a DMX sequence and an audio mix, without having to run in real time.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/6.-outputs/timeline-export",
+      "https://docs.madmapper.com/madmapper/6/1.-introduction/what's-new/madmapper-v6"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.record",
+      "jit.vcr",
+      "jit.gl.asyncread",
+      "jit.world"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). jit.record's refpage: saves a sequence of matrices as a movie, with a 'realtime' attribute. jit.vcr: the same with MSP audio. jit.gl.asyncread: reads back the GL framebuffer. The userguide has a 'Non-real-time Processing' topic with a video section, and jit.world's refpage lists 'fixed_delta'. So one video stream can be rendered offline in Max; several outputs plus laser and DMX in one pass cannot.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Run shows from a calendar file or the clock",
+    "category": "timeline/cueing/show control",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Calendar Scheduler",
+      "Import ICS File",
+      "Cue Scheduler",
+      "Timeline Scheduler",
+      "Timeline Automation",
+      "Startup Timeline",
+      "Idle Timeline",
+      "Device Activity"
+    ],
+    "what_it_does": "An exported calendar file triggers scenes and cues by event name, recurring events included. Other modules start a timeline at set times or on set weekdays, keep it running inside a daily window, start one when the project opens, or start one when nobody has touched the controls for a while.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/9.-master-settings/scheduling-and-automation",
+      "https://docs.madmapper.com/madmapper/6/8.-modules",
+      "https://madmapper.com/files/08-Calendar%20Scheduler.pdf",
+      "https://madmapper.com/files/07-Cue%20Scheduler.pdf",
+      "https://docs.madmapper.com/madmapper/6/15.-troubleshooting/madmapper-release-notes-history"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "date"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'calendar', 'icalendar': no objects. date's refpage: reports the current date and time. A daily schedule can be patched from date; reading an .ics file with recurrence rules would need a script.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Share any output with other apps: Syphon, Spout, NDI, internal loopback",
+    "category": "video I/O & playback",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Publish to Syphon / Spout",
+      "Publish to NDI",
+      "Publish Internal Loopback",
+      "Video Buffer",
+      "Keep running",
+      "Low Bandw."
+    ],
+    "what_it_does": "Each output has switches to publish it to other programs on the same computer, to the network as NDI, or back into MadMapper as a live source. Incoming Syphon, Spout and NDI streams appear as media with no setup.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/6.-outputs",
+      "https://docs.madmapper.com/madmapper/6/3.-media/media-bin",
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control",
+      "https://docs.madmapper.com/madmapper/6/6.-outputs/loopback-and-advanced-output-techniques"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.gl.syphonserver (Syphon)",
+      "jit.gl.syphonclient (Syphon)",
+      "jit.gl.node",
+      "jit.gl.texture"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). Syphon: package objects jit.gl.syphonserver and jit.gl.syphonclient (Syphon package, installed). Spout: named in Vsynth's package entries as needing a Spout package that is not installed here (and is Windows only). NDI: no object in the registry, refpages or package library; the userguide 'video' topic names Syphon, Spout and OBS for recording but not NDI. Internal loopback is ordinary texture routing in Max (jit.gl.node, jit.gl.texture).",
+    "confidence": "medium",
+    "notes": "NDI is the real gap on this machine."
+  },
+  {
+    "capability": "Vector media: Lottie animations and resizable SVG",
+    "category": "video I/O & playback",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Supported Vector Animation",
+      "Lottie",
+      "Svg Image player",
+      "SVG Folder Player"
+    ],
+    "what_it_does": "Lottie JSON animations exported from After Effects play as media, and SVG images render at any chosen size on video surfaces or as true vectors on lasers.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/3.-media/media-formats-and-video-codecs",
+      "https://docs.madmapper.com/madmapper/6/15.-troubleshooting/madmapper-release-notes-history",
+      "https://docs.madmapper.com/madmapper/6/1.-introduction/what's-new/release-notes-v6"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.mgraphics"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'lottie': no hits anywhere. SVG: jit.mgraphics has svg_render and related methods.",
+    "confidence": "low",
+    "notes": ""
+  },
+  {
+    "capability": "Depth cameras and tethered still cameras as live inputs",
+    "category": "sensors/tracking/ML",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Kinect ONE",
+      "Intel RealSense",
+      "Canon EDSDK",
+      "Kinect Masker",
+      "Blackmagic",
+      "Live Input"
+    ],
+    "what_it_does": "Kinect ONE and Intel RealSense depth sensors, Canon cameras through Canon's own SDK, Sony cameras and Blackmagic cards appear as live inputs, switched on in preferences.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences",
+      "https://docs.madmapper.com/madmapper/6/15.-troubleshooting/madmapper-release-notes-history",
+      "https://madmapper.com/madmapper/features",
+      "https://madmapper.com/files/13-Space%20Scanner%20Guide-1.pdf"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.grab"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). jit.grab's refpage: digitizes video from any digitizer; the userguide 'video_engine' topic says both platforms include native support for Blackmagic input devices. 'kinect', 'realsense', 'canon': no hits in Max or the package library.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Shader whose controls are built from its own header",
+    "category": "GPU compute/shaders",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Materials",
+      "materialColorForPixel",
+      "INPUTS",
+      "FLAGS",
+      "floatRange",
+      "generate_as_define",
+      "ISFs",
+      "AI / Code Editor"
+    ],
+    "what_it_does": "A shader file starts with a JSON block that lists its parameters. MadMapper reads it and makes the sliders, checkboxes, colour pickers and menus, grouped by label, and every one is at once available to controllers, cues and timelines. The editor recompiles as you type.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/3.-media/writing-custom-glsl-materials",
+      "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/MaterialsDoc.md",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/toolbar-and-workspace"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.gl.slab",
+      "jit.gl.shader",
+      "jit.gl.pix",
+      "jit.gl.pix.codebox",
+      "jit.gl.isf (ISF)",
+      "jit.gl.bfg"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'isf': package object jit.gl.isf (package entry: renders ISF files to GL textures) is in the repo's library, but no ISF package folder was found in this machine's Packages. jit.gl.pix's refpage says it can export 'isf'. jit.gl.slab and jit.gl.shader load JXS shader files with params. jit.gl.bfg's refpage lists getparamlist, getparamtype, getparamdefault, which shows shader parameters can be enumerated; a control still has to be made for each.",
+    "confidence": "medium",
+    "notes": "The gap is the automatic interface and its automatic exposure to cues and controllers, not shader loading."
+  },
+  {
+    "capability": "Smooth, tempo-aware animation values computed outside the shader",
+    "category": "GPU compute/shaders",
+    "tool": "MadMapper",
+    "tool_names": [
+      "GENERATORS",
+      "time_base",
+      "animator",
+      "damper",
+      "adsr",
+      "linear_filter",
+      "ease_filter",
+      "pass_thru",
+      "bpm_sync",
+      "link_speed_to_global_bpm",
+      "CLOCK_TIME"
+    ],
+    "what_it_does": "The shader's header can ask the host for helper values: a time that advances at a controllable speed without jumping when the speed changes, optionally locked to the beat; shaped cycles; and smoothed or eased versions of any input. They arrive as uniforms.",
+    "source_urls": [
+      "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/MaterialsDoc.md",
+      "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/MadMapperSurfaceFxDoc.md",
+      "https://docs.madmapper.com/madmapper/6/3.-media/writing-custom-glsl-materials"
+    ],
+    "max_status": "better-elsewhere",
+    "max_closest": [
+      "jit.gl.slab",
+      "line",
+      "slide",
+      "transport"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). Not searched as a feature: in Max these values are made in the patch and sent to the shader as params, which is more general. MadMapper is better only in that the shader file carries the request itself, so a shared shader animates correctly with no patch around it.",
+    "confidence": "low",
+    "notes": "Refpages: line generates ramps from one value to another in a set time; slide smooths a stream of values; transport runs a tempo-based clock. These are the patch-side equivalents."
+  },
+  {
+    "capability": "Audio spectrum and waveform delivered to shaders as textures",
+    "category": "GPU compute/shaders",
+    "tool": "MadMapper",
+    "tool_names": [
+      "audioFFT",
+      "audio",
+      "SIZE",
+      "ATTACK",
+      "DECAY",
+      "RELEASE",
+      "Audio Analysis Channels"
+    ],
+    "what_it_does": "A shader input declared as spectrum or waveform receives a one-pixel-high texture of up to 512 values, with attack, decay and release smoothing applied to each band before the shader sees it.",
+    "source_urls": [
+      "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/MaterialsDoc.md",
+      "https://docs.madmapper.com/madmapper/6/3.-media/writing-custom-glsl-materials"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.catch~",
+      "jit.gl.texture"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). jit.catch~'s refpage: turns MSP signals into a stream of matrices, which can be sent to a shader as a texture. The FFT and the per-band smoothing are patched separately.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Shader libraries for noise and 2D shapes, included by name",
+    "category": "GPU compute/shaders",
+    "tool": "MadMapper",
+    "tool_names": [
+      "MadNoise.glsl",
+      "MadSDF.glsl",
+      "MadCommon.glsl",
+      "#include",
+      "NOISE_TEXTURE_BASED"
+    ],
+    "what_it_does": "Three libraries ship with the program and are pulled into any shader with an include line: many kinds of noise in 2D and 3D with derivatives, signed-distance-field shapes with fill, stroke, glow and repetition, and colour helpers.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/14.-technical-notes/glsl-shader-functions-reference",
+      "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/MaterialsDoc.md"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.gl.bfg",
+      "jit.bfg",
+      "JitLygia (installed package, not read)"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). jit.gl.bfg's refpage: generates textures from a library of procedural basis functions (noise, fractal, distorted) on the GPU. That gives noise as a texture source, not as functions to call inside your own shader. A package named JitLygia is in this machine's Packages folder but is not in the repo's package library and was not read.",
+    "confidence": "low",
+    "notes": ""
+  },
+  {
+    "capability": "Material and effect compiled into one shader, drawn straight on the output",
+    "category": "rendering/3D",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Materials",
+      "Surface FX",
+      "fxColorForPixel",
+      "FX_NORM_PIXEL",
+      "Render To Texture",
+      "REQUIRES_TEXTURE",
+      "REQUIRES_LAST_FRAME",
+      "mm_LastFrame"
+    ],
+    "what_it_does": "A generative material and the effect on its surface are merged into one program and drawn directly at the output's resolution, with no intermediate texture, so it stays sharp on any size of surface. A switch renders it to a fixed-size texture instead when that is cheaper or when an effect needs to sample it many times.",
+    "source_urls": [
+      "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/MaterialsDoc.md",
+      "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/MadMapperSurfaceFxDoc.md",
+      "https://docs.madmapper.com/madmapper/6/3.-media/media-bin"
+    ],
+    "max_status": "unsure",
+    "max_closest": [
+      "jit.gl.slab",
+      "jit.gl.shader",
+      "jit.gl.material"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). jit.gl.slab processes textures stage by stage; jit.gl.shader binds one shader to geometry (refpage: compiles and submits a vertex and fragment program). Whether Max can merge two separately written shaders automatically was not found and not tested.",
+    "confidence": "low",
+    "notes": ""
+  },
+  {
+    "capability": "In-app shader library: install, publish and remix community shaders",
+    "category": "workflow/authoring",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Online Material Library",
+      "Library",
+      "Install + Add to Project",
+      "Publish",
+      "Favorites",
+      "Offline Library"
+    ],
+    "what_it_does": "A panel lists shaders and effects published by other users; one click installs one into the project, and your own can be published publicly or kept private on your account. The whole library is cached for offline use.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/3.-media/online-material-library",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/toolbar-and-workspace",
+      "https://docs.madmapper.com/madmapper/6/1.-introduction/what's-new/madmapper-v6"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "Package Manager"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). The userguide has a 'package_manager' topic: Max installs whole packages from inside the application. There is no per-shader library with publishing.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Text prompt to a working shader with controls",
+    "category": "workflow/authoring",
+    "tool": "MadMapper",
+    "tool_names": [
+      "MadAI",
+      "Mad AI",
+      "Using MadAI",
+      "MadAI Credits"
+    ],
+    "what_it_does": "Typing a description produces a material, laser material or 2D effect, complete with sliders for the parameters asked for; further prompts refine it, and the code stays editable. It runs on the maker's servers, one credit per prompt.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/12.-advanced/mad-ai-extension",
+      "https://docs.madmapper.com/madmapper/6/3.-media/online-material-library",
+      "https://madmapper.com/extensions/FAQ"
+    ],
+    "max_status": "absent",
+    "max_closest": [],
+    "max_check": "Not searched in Max: this is a paid online service, not a program feature that could be looked up as an object.",
+    "confidence": "high",
+    "notes": "Listed for completeness. The FAQ page cited was read only in its MadAI and MadLaser general sections."
+  },
+  {
+    "capability": "Map any parameter to any controller by 'learn', with range, filter and curve",
+    "category": "control surface/UI building",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Control List",
+      "Learn",
+      "Add Control",
+      "Source Range",
+      "Target Range",
+      "Filter",
+      "Curve",
+      "Toggle",
+      "Feedback Device",
+      "Controls Combiner",
+      "Macro"
+    ],
+    "what_it_does": "Right-click a control or switch on Learn, move a key, MIDI control, OSC address, DMX channel, audio band or gamepad stick, and the two are linked. Each link has input and output ranges, a smoothing filter, a response curve drawn in a graph, and can send feedback to motorised or lit controllers.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control",
+      "https://docs.madmapper.com/madmapper/6/9.-master-settings/audio-input-and-beat-detection",
+      "https://docs.madmapper.com/madmapper/6/8.-modules"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "Mappings (userguide topic 'mapping')",
+      "param.osc",
+      "gamepad",
+      "hi"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). The userguide 'mapping' topic: Max's Mappings connect MIDI controllers and the computer keyboard to parameter-enabled interface objects, per patcher, with min, max, exponent, steps, relative, trigger and pickup modes; not available in Max for Live. So MIDI and key learn exist. OSC, DMX, audio and gamepad as learnable sources, filters and drawn curves were not found in that topic.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Every parameter reachable by OSC without setup, and discoverable",
+    "category": "networking/sync",
+    "tool": "MadMapper",
+    "tool_names": [
+      "OSC Commands",
+      "Copy OSC Address",
+      "OSC Query",
+      "OSCQuery",
+      "Feedback Port",
+      "Enable Bonjour Discovery"
+    ],
+    "what_it_does": "Every parameter has a readable OSC address from the moment it exists, a wildcard sets many at once, and other programs can browse the whole address tree with OSCQuery. Right-clicking any control copies its address.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control",
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control/osc-commands-and-channels-list"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "param.osc",
+      "osc.packet",
+      "osc.codebox",
+      "udpreceive"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). Max 9 has param.osc (refpage: controls and reports parameters using OSC), osc.packet and osc.codebox, and the userguide 'OSC' topic says an OSCQuery server can be enabled in the general preferences. So Max covers this for parameter-enabled objects. Wildcard addresses were not looked for.",
+    "confidence": "medium",
+    "notes": "Close to parity in Max 9. Kept in the list so the later pass can confirm what param.osc exposes."
+  },
+  {
+    "capability": "Pad controllers that mirror the cue grid, and a Stream Deck plugin",
+    "category": "control surface/UI building",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Control Surface",
+      "Enable Device Arrow Keys",
+      "Enable View Scrolling",
+      "Stream Deck",
+      "Scene / Cue Launcher",
+      "Parameter Controller"
+    ],
+    "what_it_does": "A Launchpad or APC shows the cue grid on its pads in each cue's colour and launches cues; the arrow keys scroll the grid. A Stream Deck key launches a cue and shows its thumbnail, and a Stream Deck+ dial turns any parameter.",
+    "source_urls": [
+      "https://madmapper.com/files/14-Controle%20Surface%20Module%20Guide-1.pdf",
+      "https://madmapper.com/files/15-Stream%20Deck%20Plugin-1.pdf",
+      "https://docs.madmapper.com/madmapper/6/8.-modules"
+    ],
+    "max_status": "unsure",
+    "max_closest": [
+      "jk.lpx (jk.lpx)",
+      "jk.lpxcore (jk.lpx)"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'launchpad', 'apc': one package, jk.lpx (package entry: links one pad or button of a Novation Launchpad X to a live.text or live.menu, with a jk.lpxcore per patch for ports and colours). 'stream deck': no hits. So single pads can be bound; a grid that mirrors a preset bank is not provided.",
+    "confidence": "low",
+    "notes": ""
+  },
+  {
+    "capability": "Switch projectors on and off and close their shutters over the network",
+    "category": "networking/sync",
+    "tool": "MadMapper",
+    "tool_names": [
+      "MadProjectorControl",
+      "PJLink",
+      "Power",
+      "Mute"
+    ],
+    "what_it_does": "A module per projector speaks PJLink: power and shutter buttons that follow the projector's real state, plus model and lamp information. Because the buttons are ordinary parameters, cues and schedulers can run a venue's projectors unattended.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/12.-advanced/madprojectorcontrol",
+      "https://madmapper.com/files/MadMapper%20-%20MadProjectorControl%20Guide.pdf",
+      "https://madmapper.com/extensions/madprojectorcontrol"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "sadam.tcpClient (Sadam Library)"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'pjlink': no hits anywhere. 'tcp': Max's own hits are jit.net.send and jit.net.recv, which are for matrices; the package library has sadam.tcpClient, sadam.tcpSender, sadam.tcpReceiver and sadam.tcpServer (Sadam Library, installed). So a TCP connection is available from a package and the PJLink commands would be written by hand.",
+    "confidence": "medium",
+    "notes": "The manual describes PJLink only as a network protocol; that it runs over TCP is not stated there, so sadam.tcpClient as the carrier is an assumption to confirm."
+  },
+  {
+    "capability": "Export a mapping to a small standalone player that syncs with others",
+    "category": "deployment",
+    "tool": "MadMapper",
+    "tool_names": [
+      "MiniMad",
+      "miniMAD",
+      "Export Video Mapping to MiniMad",
+      "MiniMad Video",
+      "MiniMad Light",
+      "MiniMad Controller",
+      "Sync Group"
+    ],
+    "what_it_does": "A project's surfaces and media, or its recorded light sequences, are exported to a Raspberry Pi based box that plays them with no computer. Several boxes on one network cable keep their playback together with no configuration, and can be controlled from MadMapper or by OSC.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/6.-outputs/minimad",
+      "https://docs.madmapper.com/madmapper/6/1.-introduction/extensions-and-companions",
+      "https://download.madmapper.com/minimad/MiniMad_3_User_Guide.pdf",
+      "https://madmapper.com/files/02-MiniMad%20Controller.pdf"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "RNBO",
+      "standalone"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'raspberry': the userguide 'rnbo' topic says RNBO patchers export to hardware targets like Raspberry Pi; that is audio code, not video mapping or DMX playback. The registry has a 'standalone' object and the userguide a 'standalones_and_collectives' topic, for desktop applications.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Settings for installations that run with nobody there",
+    "category": "deployment",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Silent Mode",
+      "Always Minimize at startup",
+      "Fullscreen",
+      "AutoSave",
+      "Project Backup",
+      "/application/shutdown_computer",
+      "/application/restart_computer",
+      "Expert Mode"
+    ],
+    "what_it_does": "A project can open straight into fullscreen with every prompt suppressed, arm its outputs, recover from a crash using automatic saves, and be told over OSC, MIDI or DMX to quit or to shut down or restart the computer.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences/expert-mode",
+      "https://docs.madmapper.com/madmapper/6/12.-advanced/project-backup-and-recovery",
+      "https://docs.madmapper.com/madmapper/6/15.-troubleshooting"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "standalone",
+      "jit.window",
+      "jit.world"
+    ],
+    "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'autosave': only pattrstorage and plug-in refpages. Max has standalones (userguide topic) and fullscreen windows; quitting or shutting down the computer by message, and crash recovery of a running patch, were not looked up.",
+    "confidence": "low",
+    "notes": ""
+  }
+]

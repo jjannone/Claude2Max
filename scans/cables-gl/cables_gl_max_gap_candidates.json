@@ -1,0 +1,1134 @@
+[
+ {
+  "capability": "Keyframe timeline on any number port",
+  "category": "timeline/cueing/show control",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Timeline",
+   "Ops.TimeLine.Anim",
+   "Ops.TimeLine.TimelineValue",
+   "Ops.TimeLine.TimeLineTime",
+   "Ops.TimeLine.TimeLineSetTime",
+   "Ops.TimeLine.TimelineConfig"
+  ],
+  "what_it_does": "Any number input on any op can be switched to animated and given keys on one shared timeline in the editor. Ops read and set the timeline's position, so the whole patch can be scrubbed, looped or jumped to a frame. A curve can also be an op of its own that feeds many ports.",
+  "source_urls": [
+   "https://cables.gl/docs/2_1_timeline/animation",
+   "https://cables.gl/docs/0_howtouse/keys/keys",
+   "https://cables.gl/op/Ops.TimeLine.Anim",
+   "https://cables.gl/op/Ops.TimeLine.TimelineValue",
+   "https://cables.gl/ops/Ops.TimeLine"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "function",
+   "mtr",
+   "jit.anim.path",
+   "pattrstorage",
+   "transport"
+  ],
+  "max_check": "Max object registry (interfaces/obj-qlookup.json, 1,323 names): 'timeline' and 'keyfram' match nothing. refpage names and digests (1,940 .maxref.xml files under C74): nothing for either word. userguide (C74/docs/userguide/content): 'timeline' in 0 files; 'keyframe' only inside CSS in parameter_mode.json. packages/query_packages.py search 'timeline' returns only Link objects; 'keyframe' returns one unrelated OSC object. Refpages read for the closest objects: function (breakpoint function editor), mtr (records and sequences messages), jit.anim.path (interpolates 3D transform points over time), pattrstorage (has interp and fade messages).",
+  "confidence": "high",
+  "notes": "Max has per-object curve and sequence tools but nothing found that keys an arbitrary attribute on a shared, scrubbable timeline. The cables page is short and says the timeline was just rebuilt; the detail is in videos, which were not read."
+ },
+ {
+  "capability": "Beat grid on the timeline and tap tempo",
+  "category": "timeline/cueing/show control",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.TimeLine.Viz.TimeLineBPM",
+   "Ops.Audio.BpmTap",
+   "Ops.WebAudio.ClockSequencerPattern",
+   "Ops.Devices.Midi.MidiClock"
+  ],
+  "what_it_does": "TimeLineBPM draws beat and bar markers on the timeline for a given BPM so keys can be lined up with music. BpmTap turns taps into a tempo and then sends beat triggers itself, with sync and nudge inputs.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.TimeLine.Viz.TimeLineBPM",
+   "https://cables.gl/op/Ops.Audio.BpmTap",
+   "https://cables.gl/op/Ops.WebAudio.ClockSequencerPattern",
+   "https://cables.gl/op/Ops.Devices.Midi.MidiClock"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "transport",
+   "metro",
+   "Upshot / upshot_transport"
+  ],
+  "max_check": "Max object registry (interfaces/obj-qlookup.json, 1,323 names): 'tap' matches only tapin~/tapout~ variants; 'transport' matches transport. packages/query_packages.py search 'tap tempo': Upshot upshot_transport (controls the global transport with tap tempo) and a demo patch in Max for the Visual Arts. No timeline exists in Max to draw a beat grid on (see the first candidate).",
+  "confidence": "medium",
+  "notes": "The tap-tempo half is a small convenience and is covered by an installed package. The beat grid depends on having a timeline at all."
+ },
+ {
+  "capability": "Offline render of a patch to an image sequence at a fixed frame rate",
+  "category": "video I/O & playback",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Gl.RenderAnim_v2",
+   "Ops.Gl.MediaRecorder_v2",
+   "Ops.Gl.SaveScreenShot_v3",
+   "Ops.Gl.DownloadTexture_v3"
+  ],
+  "what_it_does": "RenderAnim steps the patch frame by frame at a chosen frame rate for a set number of seconds or frames and saves PNGs (zipped if wanted) or a WebM file, with optional transparency and a chosen size. Because the timeline drives the animation, the result does not depend on how fast the machine renders.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Gl.RenderAnim_v2",
+   "https://cables.gl/op/Ops.Gl.MediaRecorder_v2",
+   "https://cables.gl/docs/faq/features/recording/recording"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.record",
+   "jit.vcr",
+   "jit.world",
+   "jit.gl.asyncread"
+  ],
+  "max_check": "refpage names and digests (1,940 .maxref.xml files under C74): jit.record (record a movie file), jit.vcr, jit.gl.asyncread. jit.record refpage: a realtime attribute, default off. jit.world refpage attribute list includes fixed_delta, and so do jit.phys.world and jit.anim.path. userguide (C74/docs/userguide/content): 'non-realtime' in 0 files.",
+  "confidence": "low",
+  "notes": "Max looks able to do this by combining a fixed time step with non-realtime recording, but the recipe was not found written down and was not tested. May not be a gap at all."
+ },
+ {
+  "capability": "Pre-warming shaders and GPU uploads during loading",
+  "category": "rendering/3D",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.TimeLine.PreRender",
+   "Ops.TimeLine.DemoPrerender",
+   "Ops.Cables.LoadingStatus_v2",
+   "Ops.Cables.LoadingJob"
+  ],
+  "what_it_does": "PreRender draws the patch at a series of timeline times while a loading bar shows, so shaders are compiled and assets uploaded before playback starts. DemoPrerender records the moments in a run where heavy events caused frame drops and pre-renders exactly those. LoadingStatus reports asset-loading progress to the patch.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.TimeLine.PreRender",
+   "https://cables.gl/op/Ops.TimeLine.DemoPrerender",
+   "https://cables.gl/ops/Ops.Cables"
+  ],
+  "max_status": "unsure",
+  "max_closest": [],
+  "max_check": "refpage names and digests (1,940 .maxref.xml files under C74): 'loading' and 'progress' match no name or digest. No Max object was found that reports GPU or asset loading progress or pre-renders at future times.",
+  "confidence": "medium",
+  "notes": "Useful for timed pieces where the first appearance of a scene stutters. A Max patch could fake it by drawing everything once behind a cover; no built-in was found."
+ },
+ {
+  "capability": "Shader effects that add to any material",
+  "category": "GPU compute/shaders",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Gl.ShaderEffects",
+   "FresnelGlow",
+   "VertexDisplacementMap_v5",
+   "Twist_v3",
+   "Bend_v2",
+   "SplineDeform_v2",
+   "ColorArea_v5",
+   "AreaDiscardPixel_v2",
+   "PerlinAreaDeform_v4",
+   "{{MODULE_VERTEX_POSITION}}",
+   "{{MODULE_COLOR}}"
+  ],
+  "what_it_does": "35 ops that sit after a material and insert their own vertex or fragment code into whatever shader is active: displacement, twist, bend, glow, colouring or discarding inside a 3D region. Several stack on one material, and they work on built-in and hand-written shaders alike, because every shader has marked insertion points.",
+  "source_urls": [
+   "https://cables.gl/docs/5_writing_ops/shader/shader",
+   "https://cables.gl/ops/Ops.Gl.ShaderEffects",
+   "https://cables.gl/op/Ops.Gl.ShaderEffects.FresnelGlow",
+   "https://cables.gl/ops"
+  ],
+  "max_status": "unsure",
+  "max_closest": [
+   "jit.gl.material",
+   "jit.gl.pbr",
+   "jit.gl.shader",
+   "jit.gl.pass",
+   "jit.geom.twist",
+   "jit.geom.displace"
+  ],
+  "max_check": "refpage names and digests (1,940 .maxref.xml files under C74): jit.gl.material and jit.gl.pbr generate shaders that adapt to textures and lights; their attribute lists show no way to add vertex or fragment code. jit.gl.shader manages one complete shader. jit.gl.pass processes rendered passes, after the geometry stage. jit.geom.twist, jit.geom.displace, jit.geom.waves deform geometry in the Jitter Geometry package, on the geometry rather than in the material's shader.",
+  "confidence": "medium",
+  "notes": "The gap is composability: in Max, adding a vertex deformation to a lit material appears to mean writing a whole shader. Whether jit.gl.material's generated shader can be exported and edited was not checked."
+ },
+ {
+  "capability": "Shadow filtering choices and per-branch cast/receive",
+  "category": "rendering/3D",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Gl.ShaderEffects.Shadow_v3",
+   "Ops.Gl.ShaderEffects.ShadowPass_v2",
+   "Ops.Gl.Phong.DirectionalLight_v5",
+   "Ops.Gl.Phong.PointLight_v5",
+   "Ops.Gl.Phong.SpotLight_v5"
+  ],
+  "what_it_does": "A Shadow op after any material makes the meshes under it cast or receive shadows, with a choice of four filters (Default, PCF, Poisson, VSM), a sample count, shadow colour and an opacity mask that cuts holes in shadows. The docs explain each filter's cost and the fix for each common artifact.",
+  "source_urls": [
+   "https://cables.gl/docs/7_lighting/shadows/shadows",
+   "https://cables.gl/op/Ops.Gl.ShaderEffects.Shadow_v3"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.gl.light",
+   "jit.gl.pbr",
+   "jit.gl.material",
+   "av-toolbox / av.light.shadows"
+  ],
+  "max_check": "refpage names and digests (1,940 .maxref.xml files under C74): jit.gl.light has shadows, shadowblur, shadowquality, shadowrange and shadowtexoutname attributes; jit.gl.pbr and jit.gl.material have shadow_soft, shadow_hard, shadow_radius, shadow_eps. No attribute naming a filter algorithm was seen. packages/query_packages.py search 'shadow': av-toolbox av.light.shadows and av.pbr.shadows (preset helpers).",
+  "confidence": "medium",
+  "notes": "Max has shadows. What cables adds is a named choice of algorithm and the option to turn casting on and off per branch of the scene. The documentation of artifacts is also better than anything found in the Max userguide ('shadow' appears in 2 userguide files, neither about tuning)."
+ },
+ {
+  "capability": "PBR material extras: clear coat, thin-film iridescence, lightmaps, parallax-corrected reflections",
+  "category": "rendering/3D",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Gl.Pbr.PbrMaterial_v2",
+   "Ops.Gl.Pbr.PbrEnvironmentLight"
+  ],
+  "what_it_does": "The PBR material has a clear-coat layer, thin-film iridescence, a lightmap input, vertex colours used as AO, roughness or metalness, and built-in tonemapping. The environment light can correct reflections for a box-shaped room.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Gl.Pbr.PbrMaterial_v2",
+   "https://cables.gl/op/Ops.Gl.Pbr.PbrEnvironmentLight"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.gl.pbr",
+   "jit.gl.environment",
+   "jit.gl.pass"
+  ],
+  "max_check": "refpage names and digests (1,940 .maxref.xml files under C74): jit.gl.pbr attributes read in full (roughness, metalness, height_scale, parallax, parallax_shadowing, reflection, self_shadow, tex_gen, triplanar_blend, shadow_*); grep of the refpage for clearcoat, iridescen and lightmap found nothing. jit.gl.environment loads equirectangular EXR maps for IBL. Tonemapping exists in Max as a jit.gl.pass effect (tonemap.jxp found in the install).",
+  "confidence": "medium",
+  "notes": "Max's jit.gl.pbr has things the cables one does not list, such as triplanar mapping and parallax shadowing, so this is a difference in feature set, not a clear lead."
+ },
+ {
+  "capability": "Node-level control of a loaded glTF scene",
+  "category": "rendering/3D",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Gl.GLTF.GltfScene_v5",
+   "Ops.Gl.GLTF.GltfNode_v2",
+   "Ops.Gl.GLTF.GltfMorphTargets",
+   "Ops.Gl.GLTF.GltfSkin",
+   "Ops.Gl.GLTF.GltfSetMaterial",
+   "Ops.Gl.GLTF.GltfToggleVisibility",
+   "Ops.Gl.GLTF.GltfAnimationArray",
+   "Ops.Gl.GLTF.GltfGeometry",
+   "Ops.Gl.GLTF.GltfDracoCompression_v2"
+  ],
+  "what_it_does": "24 ops address one loaded .glb scene by node name: transform or hide a node, replace its material, weight morph targets, play a skin with its own timing, read the scene's camera, pull out a node's geometry, or turn an animation into arrays of coordinates. Draco-compressed files are supported.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Gl.GLTF.GltfScene_v5",
+   "https://cables.gl/op/Ops.Gl.GLTF.GltfMorphTargets",
+   "https://cables.gl/op/Ops.Gl.GLTF.GltfSkin",
+   "https://cables.gl/ops/Ops.Gl.GLTF"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.gl.model",
+   "jit.anim.node"
+  ],
+  "max_check": "refpage names and digests (1,940 .maxref.xml files under C74): jit.gl.model lists glTF, FBX, Collada, OBJ and others as supported types, and has animation messages (animenable, animtime, animweight, animblendmode), node messages (nodebind, getnodenames, getbonenames) and material and texture group messages. 'morph' matches no jit refpage name or digest, and grep of the jit.gl.model refpage for 'morph' found nothing. Max object registry (interfaces/obj-qlookup.json, 1,323 names): 'gltf' matches no object name.",
+  "confidence": "medium",
+  "notes": "Max loads glTF and plays skinned animation. Morph targets, and animation exported as arrays, were not found on the Max side."
+ },
+ {
+  "capability": "GPU-compressed textures (KTX2)",
+  "category": "rendering/3D",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Gl.GLTF.KtxCompression_v2"
+  ],
+  "what_it_does": "Loads a KTX2 texture file and reports which compressed formats the GPU supports. Compressed textures stay small in GPU memory.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Gl.GLTF.KtxCompression_v2"
+  ],
+  "max_status": "unsure",
+  "max_closest": [
+   "jit.gl.texture"
+  ],
+  "max_check": "Max object registry (interfaces/obj-qlookup.json, 1,323 names) and refpage names and digests (1,940 .maxref.xml files under C74): 'ktx' and 'dds' match nothing. The jit.gl.texture refpage was not read for compressed formats.",
+  "confidence": "low",
+  "notes": "Needs a closer look at jit.gl.texture before calling it a gap."
+ },
+ {
+  "capability": "Instancing fed by textures, with billboarding modes",
+  "category": "rendering/3D",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Gl.MeshInstancer_v4",
+   "Ops.Gl.Meshes.MeshInstancerFromTexture_v3",
+   "Ops.Gl.ShaderEffects.InstancedDisplacementMap_v2",
+   "Ops.Gl.ShaderEffects.InstancedTextureColorize",
+   "Ops.Extension.WebGpu.MeshInstancer"
+  ],
+  "what_it_does": "One geometry is drawn many times on the GPU. Per-instance position, rotation, scale, colour and texture coordinates come from arrays, or from textures whose RGB is read as XYZ, so a shader or feedback texture can move the instances with no CPU step. Spherical and cylindrical billboarding are options.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Gl.MeshInstancer_v4",
+   "https://cables.gl/op/Ops.Gl.Meshes.MeshInstancerFromTexture_v3",
+   "https://cables.gl/docs/9_performance_optimization/02_usual_suspects/usual_suspects"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.gl.multiple",
+   "jit.gl.buffer",
+   "jit.gl.mesh",
+   "jit.gl.tf",
+   "Compute / jit.gp.world"
+  ],
+  "max_check": "refpage names and digests (1,940 .maxref.xml files under C74): jit.gl.multiple draws instances of a named GL object from position, rotate, scale, color and texture matrices. jit.gl.buffer has instanced and instance_div attributes and a texbuf attribute. jit.gl.tf does transform feedback on jit.gl.mesh. packages/query_packages.py search 'particle': the Compute package's jit.gp.* GPU particle system.",
+  "confidence": "medium",
+  "notes": "Max can instance. Whether jit.gl.multiple runs on the GPU, and whether instance data can come straight from a texture, was not established from the refpages. Billboarding was not searched for."
+ },
+ {
+  "capability": "Distance-field (MSDF) text with per-character transforms",
+  "category": "rendering/3D",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Gl.FontMSDF_v2",
+   "Ops.Gl.TextMeshMSDF_v2",
+   "SDF Font"
+  ],
+  "what_it_does": "Text is drawn from a multi-channel signed-distance-field font atlas, so it stays sharp at any size, with border and shadow options. Arrays set the position, scale, rotation and colour of every character. The file browser converts a .ttf into the atlas.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Gl.TextMeshMSDF_v2",
+   "https://cables.gl/op/Ops.Gl.FontMSDF_v2",
+   "https://cables.gl/docs/0_howtouse/files/files"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.gl.text",
+   "jit.gl.textmult"
+  ],
+  "max_check": "refpage names and digests (1,940 .maxref.xml files under C74): jit.gl.text has a mode attribute with values 2d, 3d and outline. jit.gl.textmult treats a list of words as several texts controlled by matrices. userguide (C74/docs/userguide/content): 'MSDF' and 'signed distance' in 0 files. Max object registry (interfaces/obj-qlookup.json, 1,323 names): 'msdf' matches nothing.",
+  "confidence": "medium",
+  "notes": "jit.gl.textmult works per word; cables works per character. The 3d and outline modes may already give sharp text in Max, so the practical gain could be small."
+ },
+ {
+  "capability": "Font outlines and SVG paths as geometry, and variable-font animation",
+  "category": "rendering/3D",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Extension.OpenType.OpentypeFont",
+   "Ops.Extension.OpenType.OpentypeToSvgPath",
+   "Ops.Graphics.Geometry.SvgPathToGeometry_v3",
+   "Ops.Graphics.Geometry.Triangulate2dPath",
+   "Ops.Extension.FontKit.GlyphAxisMorph",
+   "Ops.Extension.FontKit.GlyphTransformAnim",
+   "Ops.Gl.Textures.TextureSVG_v2",
+   "SVG path points"
+  ],
+  "what_it_does": "A font's glyphs are read out as SVG path strings, and an SVG path becomes a filled 3D geometry or an array of points. The FontKit extension animates a variable font's axes (weight, width) separately for each glyph.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Graphics.Geometry.SvgPathToGeometry_v3",
+   "https://cables.gl/ops/Ops.Extension.FontKit",
+   "https://cables.gl/op/Ops.Extension.FontKit.GlyphAxisMorph",
+   "https://cables.gl/ops/Ops.Extension.OpenType",
+   "https://cables.gl/docs/0_howtouse/files/files"
+  ],
+  "max_status": "unsure",
+  "max_closest": [
+   "jit.gl.text",
+   "jit.gl.sketch",
+   "jit.gl.path"
+  ],
+  "max_check": "Max object registry (interfaces/obj-qlookup.json, 1,323 names): 'svg' matches no object. refpage names and digests (1,940 .maxref.xml files under C74): 'svg' matches no name or digest; 'font' matches only fontlist. packages/query_packages.py search 'svg': no matches. userguide (C74/docs/userguide/content): 'svg' appears in 9 files (filetypes.json among them), which were not read, so Max does read SVG somewhere, probably for drawing rather than as mesh data.",
+  "confidence": "medium",
+  "notes": "No Max route from an SVG path or a font outline to mesh vertices was found. Variable-font axes were not found at all."
+ },
+ {
+  "capability": "Lottie animation playback",
+  "category": "video I/O & playback",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Extension.Lottie.LottieTexturePlayer_v2",
+   "Ops.Extension.Lottie.LottieSVGPlayer_v2"
+  ],
+  "what_it_does": "Plays a Lottie (Bodymovin) vector animation file into a texture or an HTML element, with frame, speed and play-mode control.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Extension.Lottie.LottieTexturePlayer_v2",
+   "https://cables.gl/ops/Ops.Extension.Lottie"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "jweb"
+  ],
+  "max_check": "Max object registry (interfaces/obj-qlookup.json, 1,323 names), refpage names and digests (1,940 .maxref.xml files under C74), userguide (C74/docs/userguide/content) and packages/query_packages.py search: 'lottie' matches nothing anywhere. jweb (a Chromium page in a UI box) could host the JavaScript player, but nothing found gets a jweb page into a texture.",
+  "confidence": "medium",
+  "notes": "Lottie is a common hand-off format from motion designers."
+ },
+ {
+  "capability": "HTML and CSS elements built in the patch and pinned to 3D positions",
+  "category": "control surface/UI building",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Html",
+   "Ops.Html.Elements.Element_v2",
+   "Ops.Html.CSS.TransformElement",
+   "Ops.Html.CSS.TransformCSS3DElement",
+   "Ops.Html.CSS.ElementCss3DTransform",
+   "Ops.Html.Elements.InputElement",
+   "Ops.Html.GridLayout.Grid",
+   "Ops.Html.CSS.CSS_v3"
+  ],
+  "what_it_does": "94 ops make page elements from the graph, style them with CSS and listen to their events. TransformElement keeps an element at the screen position of the current 3D transform, so labels and buttons follow objects in the scene.",
+  "source_urls": [
+   "https://cables.gl/docs/faq/html_css/html_css_getting_started",
+   "https://cables.gl/op/Ops.Html.CSS.TransformElement",
+   "https://cables.gl/op/Ops.Html.Elements.Element_v2",
+   "https://cables.gl/ops/Ops.Html"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jweb",
+   "jit.gl.text",
+   "jit.gl.camera"
+  ],
+  "max_check": "refpage names and digests (1,940 .maxref.xml files under C74): jweb hosts a web page in a UI box and has executejavascript; it is a separate box, not a layer over a jit.world window. jit.gl.camera has worldtoscreen and screentoworld messages, which give the position a label would need. No Max object was found that overlays UI elements on a render window.",
+  "confidence": "medium",
+  "notes": "In cables this is free because the canvas is already inside a web page."
+ },
+ {
+  "capability": "An element of the page captured as an image for a texture",
+  "category": "video I/O & playback",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Extension.HtmlToTexture.HtmlToTexture"
+  ],
+  "what_it_does": "Takes an HTML element and outputs an image data URL of it, with a progress value and a finished trigger. The op page has no description.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Extension.HtmlToTexture.HtmlToTexture",
+   "https://cables.gl/docs/faq/features/htmltexture/htmltexture"
+  ],
+  "max_status": "unsure",
+  "max_closest": [
+   "jweb",
+   "jit.desktop"
+  ],
+  "max_check": "refpage names and digests (1,940 .maxref.xml files under C74): jweb's rendermode attribute has an offscreen value that draws to the patcher window, not to a texture. jit.desktop copies a screen rectangle into a matrix, which would capture a visible jweb.",
+  "confidence": "low",
+  "notes": "The cables FAQ says a website cannot be rendered to a texture, which conflicts with this op's name. What the op really does is not documented."
+ },
+ {
+  "capability": "Self-arranging control panel over the output",
+  "category": "control surface/UI building",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Sidebar.Sidebar",
+   "Ops.Sidebar.Slider_v3",
+   "Ops.Sidebar.Toggle_v4",
+   "Ops.Sidebar.DropDown_v2",
+   "Ops.Sidebar.XYPad",
+   "Ops.Sidebar.Group",
+   "Ops.Sidebar.SideBarSwitch",
+   "Ops.Sidebar.Presets_v2",
+   "Ops.Sidebar.SidebarVariables"
+  ],
+  "what_it_does": "22 ops build a control panel that sits over the canvas: sliders, toggles, menus, colour pickers, an XY pad, groups, tabs and presets. Controls are chained from a Sidebar op and have no position settings. The panel ships with the exported patch.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Sidebar.Sidebar",
+   "https://cables.gl/op/Ops.Sidebar.XYPad",
+   "https://cables.gl/op/Ops.Sidebar.Presets_v2",
+   "https://cables.gl/ops/Ops.Sidebar"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "attrui",
+   "mira.frame",
+   "pattrstorage"
+  ],
+  "max_check": "refpage names and digests (1,940 .maxref.xml files under C74): attrui (inspect attributes), mira.frame (mirror a patcher on an iPad), pattrstorage. Max's own answer is the presentation view, where every control is placed by hand (this repo's CLAUDE.md > Always Create a Presentation View). No Max object was found that lays out a panel of controls by itself.",
+  "confidence": "medium",
+  "notes": "Arguably better in cables for quick operator panels; Max's presentation view gives full control of layout, at the cost of doing it by hand."
+ },
+ {
+  "capability": "Every input is a visible, stored parameter",
+  "category": "workflow/authoring",
+  "tool": "cables.gl",
+  "tool_names": [
+   "parameter panel",
+   "op.inFloat",
+   "op.inBool",
+   "op.inDropDown",
+   "op.setPortGroup",
+   "port.shouldLink"
+  ],
+  "what_it_does": "Each input port of an op also shows as a control in a side panel with its current value. The typed value is saved with the patch and comes back when a cable is removed. Ports are typed and colour-coded, and a cable can be dropped on a parameter name.",
+  "source_urls": [
+   "https://cables.gl/docs/5_writing_ops/dev_ops/dev_ops",
+   "https://cables.gl/docs/5_writing_ops/dev_creating_ports/dev_creating_ports",
+   "https://cables.gl/docs/0_howtouse/ui_walkthrough/ui_walkthrough",
+   "https://cables.gl/docs/5_writing_ops/object_ports/object_ports"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "attrui",
+   "Inspector (Max feature)"
+  ],
+  "max_check": "This repo's CLAUDE.md (If You Mention an Attribute, Show It; Drive a Real Attribute With attrui) describes the Max side: attributes show in the Inspector or an attrui, while values sent to inlets are not displayed or stored by the object. attrui refpage digest: 'Inspect attributes'.",
+  "confidence": "medium",
+  "notes": "A design difference more than a missing object. It removes a class of 'what value is this object holding?' questions that Max answers with extra display boxes."
+ },
+ {
+  "capability": "Live view of activity on every cable",
+  "category": "workflow/authoring",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Flow mode"
+  ],
+  "what_it_does": "Pressing f in the editor shows, on all cables at once, how often each one is carrying triggers or data. It is used to find branches that run more often than they need to.",
+  "source_urls": [
+   "https://cables.gl/docs/9_performance_optimization/01_tools/tools",
+   "https://cables.gl/docs/0_howtouse/ui_walkthrough/ui_walkthrough"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "Watchpoints (Max feature)",
+   "Event Probe (Max feature)"
+  ],
+  "max_check": "userguide (C74/docs/userguide/content): debugging_and_probing.json describes watchpoints set on single patch cords (monitor, print or pause) and probing; 'event probe' appears in 3 files. No mode that shows activity on all cords at once was found.",
+  "confidence": "medium",
+  "notes": "The Max userguide page was only sampled around the matched words, not read in full."
+ },
+ {
+  "capability": "Per-op CPU profiler and a GPU statistics op",
+  "category": "workflow/authoring",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Profiler",
+   "Ops.Gl.Performance",
+   "Ops.Gl.PerformanceMeasure",
+   "Ops.Debug.StopWatch",
+   "Ops.Debug.ProfileGL"
+  ],
+  "what_it_does": "A profiler in the Tools menu lists CPU use per op and per subpatch. The Performance op shows frame rate, CPU and GPU milliseconds per frame, and counts of shader binds, draw calls, mesh uploads and render-to-texture passes.",
+  "source_urls": [
+   "https://cables.gl/docs/9_performance_optimization/01_tools/tools",
+   "https://cables.gl/docs/9_performance_optimization/01_tools/02_profiler/profiler_howto",
+   "https://cables.gl/docs/9_performance_optimization/01_tools/01_performance/performance"
+  ],
+  "max_status": "unsure",
+  "max_closest": [
+   "jit.fpsgui",
+   "cpuclock",
+   "adstatus"
+  ],
+  "max_check": "refpage names and digests (1,940 .maxref.xml files under C74): 'fps' gives jit.fpsgui (FPS meter); 'cpu' gives cpuclock; adstatus reports audio driver settings. userguide (C74/docs/userguide/content): 'profil' appears in 4 files, all about the OpenGL core profile or unrelated; none describes profiling a patch. jit.world has a running_fps attribute.",
+  "confidence": "medium",
+  "notes": "No per-object CPU profile or GPU draw statistics were found for Max. The userguide search was by keyword only."
+ },
+ {
+  "capability": "Show the final compiled shader of whatever is active",
+  "category": "GPU compute/shaders",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Gl.Shader.ShaderInfo",
+   "Ops.Gl.Shader.ShaderInfoUniforms_v2",
+   "Ops.Gl.Shader.GetShader"
+  ],
+  "what_it_does": "Placed anywhere in the render tree, ShaderInfo shows the full vertex and fragment source of the shader in use at that point, including code added by effect ops, and its uniforms with their current values.",
+  "source_urls": [
+   "https://cables.gl/docs/9_performance_optimization/04_debugging_shaders/debugging_shaders",
+   "https://cables.gl/docs/5_writing_ops/shader/shader",
+   "https://cables.gl/ops/Ops.Gl.Shader"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.gl.shader",
+   "jit.gl.material",
+   "jit.gl.pbr"
+  ],
+  "max_check": "refpage names and digests (1,940 .maxref.xml files under C74): jit.gl.shader has dump, getparamlist and getparamval messages for a shader you loaded yourself. jit.gl.material and jit.gl.pbr have getparamlist and getparamval. Nothing was found that prints the generated source of jit.gl.material or jit.gl.pbr.",
+  "confidence": "low",
+  "notes": "Small, but it is what makes generated materials debuggable."
+ },
+ {
+  "capability": "Compute shaders in the graph",
+  "category": "GPU compute/shaders",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Extension.WebGpu.CompCompute",
+   "Ops.Extension.WebGpu.ComputeStorageInput",
+   "Ops.Extension.WebGpu.ComputeStorageOutput",
+   "Ops.Extension.WebGpu.ComputeUniform",
+   "Ops.Extension.WebGpu.ArrayToGpuBuffer",
+   "Ops.Extension.WebGpu.GpuBufferToArray"
+  ],
+  "what_it_does": "The WebGPU extension runs compute shaders from source typed into an op, with ops that bind storage buffers and uniforms and move arrays to and from the GPU.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Extension.WebGpu.CompCompute",
+   "https://cables.gl/ops/Ops.Extension.WebGpu"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "Compute / jit.gpu.compute",
+   "Compute / jit.gpu.buffer",
+   "Compute / jit.gpu.image",
+   "Compute / jit.gp.world",
+   "jit.gl.tf"
+  ],
+  "max_check": "Max object registry (interfaces/obj-qlookup.json, 1,323 names) and refpage names and digests (1,940 .maxref.xml files under C74): 'compute' matches no core object. packages/query_packages.py search 'compute shader' and 'jit.gpu': the installed Compute package has jit.gpu.compute (runs a GLSL compute shader through Vulkan), jit.gpu.buffer, jit.gpu.image, jit.gpu.tomatrix, jit.gpu.totexture and a GPU particle system built on them. jit.gl.tf (core) does transform feedback.",
+  "confidence": "medium",
+  "notes": "Not a gap on this machine: Max has it through a package, with help files and a particle system on top. The cables op pages have no written documentation. Listed so a later pass does not rediscover it."
+ },
+ {
+  "capability": "Export a whole patch, visuals included, as a web page",
+  "category": "deployment",
+  "tool": "cables.gl",
+  "tool_names": [
+   "HTML Export",
+   "Export via Iframe",
+   "CABLES.EMBED.addPatch",
+   "CABLES.Patch",
+   "cables.min.js",
+   "ops.js"
+  ],
+  "what_it_does": "A patch exports as a folder of static files: the runtime, only the ops the patch uses, the patch as JSON, its assets and a sample page. It then runs on any web server, or in an iframe, with no cables account or server.",
+  "source_urls": [
+   "https://cables.gl/docs/4_export_embed/dev_embed/dev_embed",
+   "https://cables.gl/docs/4_export_embed/dev_embed/export_zip/export_zip",
+   "https://cables.gl/docs/4_export_embed/dev_embed_webservers/dev_embed_webservers",
+   "https://cables.gl/docs/4_export_embed/embedding/embedding",
+   "https://cables.gl/docs/4_export_embed/dev_embed/export_embed/export_embed"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "rnbo~",
+   "standalone",
+   "jweb"
+  ],
+  "max_check": "userguide (C74/docs/userguide/content): 'web export' and 'WebAssembly' in 0 files; standalones_and_collectives.json covers building desktop applications. The RNBO package in the install contains a WebAssembly adapter (source/rnbo/adapters/wasm). refpage names and digests (1,940 .maxref.xml files under C74): rnbo~ is a wrapper for RNBO, which has its own object set; no Jitter object appears among the RNBO refpages.",
+  "confidence": "high",
+  "notes": "Max can put audio made in RNBO on the web. Nothing was found that puts Jitter visuals or a general Max patch in a browser. The RNBO web docs themselves were not read."
+ },
+ {
+  "capability": "Host page API: variables, named triggers, callbacks, URL parameters",
+  "category": "deployment",
+  "tool": "cables.gl",
+  "tool_names": [
+   "CABLES.patch.setVariable",
+   "CABLES.patch.getVar",
+   "Ops.Cables.Function_v2",
+   "Ops.Cables.CallBack_v2",
+   "Ops.Website.UrlQueryParams_v2",
+   "Ops.Vars.VarSetNumber_v2",
+   "Ops.Cables.PatchInfo_v2"
+  ],
+  "what_it_does": "JavaScript on the page that hosts a patch can set, read and watch the patch's variables, call named triggers with parameters, and receive calls from the patch. Starting values can be passed when the patch is created or read from the URL.",
+  "source_urls": [
+   "https://cables.gl/docs/4_export_embed/dev_embed_vars/dev_embed_vars",
+   "https://cables.gl/docs/4_export_embed/dev_embed_functions/dev_embed_functions",
+   "https://cables.gl/op/Ops.Cables.Function_v2",
+   "https://cables.gl/op/Ops.Cables.CallBack_v2",
+   "https://cables.gl/op/Ops.Website.UrlQueryParams_v2"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "param",
+   "rnbo~",
+   "jweb",
+   "node.script"
+  ],
+  "max_check": "refpage names and digests (1,940 .maxref.xml files under C74): RNBO's param ('define a parameter that can control RNBO externally'). jweb has executejavascript for a page inside Max, the reverse direction. node.script controls a Node.js process from Max. No interface was found for outside code to drive a running Max patch other than network messages.",
+  "confidence": "medium",
+  "notes": "Follows from the web-export candidate. Listed separately because the API is what makes a patch usable as a component in someone else's site."
+ },
+ {
+  "capability": "Deploy targets and scripted export",
+  "category": "deployment",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Export to github (pages)",
+   "Export and deploy to netlify",
+   "cables-cli",
+   "/api/project/[PID]/export",
+   "/api/mypatches",
+   "Export creating a standalone executable"
+  ],
+  "what_it_does": "The export dialog pushes a patch straight to GitHub Pages or Netlify, or builds an Electron executable on the cables servers. A command-line tool and an HTTP API with a key run the same export without the editor, so it can be part of a build script.",
+  "source_urls": [
+   "https://cables.gl/docs/4_export_embed/dev_embed/export_github/export_github",
+   "https://cables.gl/docs/4_export_embed/dev_embed/export_netlify/export_netlify",
+   "https://cables.gl/docs/4_export_embed/dev_embed/export_cli/export_cli",
+   "https://cables.gl/docs/4_export_embed/dev_embed/export_exe/export_exe",
+   "https://cables.gl/docs/9_1_communication/api/api"
+  ],
+  "max_status": "unsure",
+  "max_closest": [
+   "standalone"
+  ],
+  "max_check": "userguide (C74/docs/userguide/content): 'command line' in 0 files; standalones_and_collectives.json describes building from the application. refpage names and digests (1,940 .maxref.xml files under C74): standalone ('configure parameters for standalone applications'). No scripted or headless build of a Max standalone was found.",
+  "confidence": "medium",
+  "notes": "The cables executable for Mac is unsigned and the docs list workarounds, so that part is rough."
+ },
+ {
+  "capability": "Launch flags for installations: display, fullscreen, patch",
+  "category": "deployment",
+  "tool": "cables.gl",
+  "tool_names": [
+   "--fullscreen",
+   "--maximize-renderer",
+   "--patch=<path>",
+   "--screen=",
+   "--force-igpu",
+   "--dont-force-dgpu",
+   "Ops.Gl.ExternalCanvas",
+   "Ops.Ui.MaximizeRenderer"
+  ],
+  "what_it_does": "The standalone app takes command-line flags that open a given patch, go fullscreen, fill the window with the output, and choose the display by index, by name, as 'external' or by pixel offset. Two more flags choose which GPU to use.",
+  "source_urls": [
+   "https://cables.gl/docs/6_2_standalone/5_standalone_faq/standalone_faq",
+   "https://cables.gl/op/Ops.Gl.ExternalCanvas"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.world",
+   "jit.window",
+   "jit.displays",
+   "standalone"
+  ],
+  "max_check": "refpage names and digests (1,940 .maxref.xml files under C74): jit.world has fullscreen, floating, windowposition and fsmenubar attributes; jit.window displays data in a window; jit.displays sets and queries monitor attributes; standalone configures built applications. userguide (C74/docs/userguide/content): 'command line' in 0 files.",
+  "confidence": "low",
+  "notes": "Max does all of this from inside the patch. The cables way keeps the choice of display out of the patch, which suits a start-up script on an installation machine."
+ },
+ {
+  "capability": "Several people editing one patch at once",
+  "category": "workflow/authoring",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Multiplayer",
+   "Pilot",
+   "Participant"
+  ],
+  "what_it_does": "Several users open the same patch. One is the Pilot and makes the changes; the others see cursors, selections and the Pilot's view, follow parameter changes and the rendered output live, can ask for the pilot seat, and can chat.",
+  "source_urls": [
+   "https://cables.gl/docs/5_1_permissions/4_multiplayer/multiplayer",
+   "https://cables.gl/docs/5_1_permissions/0_users/users"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "Projects (Max feature)"
+  ],
+  "max_check": "userguide (C74/docs/userguide/content): 'multiplayer' in 0 files; 'collaborat' in 1 file (standalones_and_collectives.json), which says a Project is the document to use with a version control tool such as Git. refpage names and digests (1,940 .maxref.xml files under C74): 'collab' matches nothing. packages/query_packages.py search 'collab': the Collab-Hub package, which shares data between performers' patches, not the editing of one patch.",
+  "confidence": "high",
+  "notes": "One editor at a time, so closer to screen sharing with hand-over than to simultaneous editing. Useful for teaching."
+ },
+ {
+  "capability": "Versions in op names, with update prompts, and permission namespaces",
+  "category": "workflow/authoring",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Patch.",
+   "Ops.User.",
+   "Ops.Team.",
+   "Ops.Extension.",
+   "_v2",
+   ".Deprecated.",
+   ".Dev.",
+   "rename"
+  ],
+  "what_it_does": "An op's version is part of its name. Old versions keep working in old patches, are hidden from the add-op list, and the editor offers to update them. Renaming an op updates every patch that uses it. Four namespaces decide who may use and edit an op: one patch, one user, a team, or everyone.",
+  "source_urls": [
+   "https://cables.gl/docs/5_writing_ops/dev_renaming/dev_renaming",
+   "https://cables.gl/docs/5_1_permissions/3_ops/ops",
+   "https://cables.gl/docs/5_writing_ops/patchingops/subpatchops"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "Package Manager (Max feature)",
+   "abstractions (Max feature)",
+   "Projects (Max feature)"
+  ],
+  "max_check": "userguide (C74/docs/userguide/content): abstractions.json, packages.json and projects.json exist; 'version control|git' in 0 files by that pattern, though the Git sentence above was found under 'collaborat'. This repo's CLAUDE.md (A Reusable Object Has One Home on the Search Path) describes Max resolving a file by name on the search path, with no version in the name. No Max mechanism was found that keeps two versions of an abstraction side by side and prompts to update.",
+  "confidence": "medium",
+  "notes": "Depends on cables being a hosted service that knows every patch. Still, the naming rule alone is something a Max package could adopt."
+ },
+ {
+  "capability": "Public patches open in the editor from a link, and can be cloned",
+  "category": "workflow/authoring",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Public patches",
+   "Unlisted - Allow Editor",
+   "Clone",
+   "Patchlists",
+   "Example patch"
+  ],
+  "what_it_does": "A public or unlisted patch opens in the full editor for anyone with the link, who can change it without saving and clone it to their own account. Every op's page links an example patch that opens the same way, and lists patches that use the op.",
+  "source_urls": [
+   "https://cables.gl/docs/5_1_permissions/1_patches/patches",
+   "https://cables.gl/docs/5_1_permissions/5_patchlists/patchlists",
+   "https://cables.gl/docs/faq/features/sharing/sharing",
+   "https://cables.gl/docs/5_writing_ops/dev_ops/dev_ops"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "help files (Max feature)",
+   "Max Compressed Text (Max feature)"
+  ],
+  "max_check": "This repo's CLAUDE.md describes the Max ways to pass a patch on: a .maxpat file, or Max Compressed Text pasted with File > New From Clipboard, and a help file per object. Each needs Max installed on the reader's machine. No hosted, open-by-link patch viewer was found in the userguide file list.",
+  "confidence": "medium",
+  "notes": "The teaching value is that a student can open a working example with one click and nothing installed."
+ },
+ {
+  "capability": "Authoring in a browser tab with nothing to install",
+  "category": "workflow/authoring",
+  "tool": "cables.gl",
+  "tool_names": [
+   "cables.gl editor",
+   "MIT License"
+  ],
+  "what_it_does": "The editor runs in a web browser. The docs say no licence is bought, the runtime is MIT licensed and the main features stay free; storage, upload size and exports per day have limits tied to supporter levels.",
+  "source_urls": [
+   "https://cables.gl/docs/faq/general/general",
+   "https://cables.gl/docs/faq/licence_payment/licence/licence",
+   "https://cables.gl/docs/faq/licence_payment/payment/payment",
+   "https://cables.gl/docs/faq/teaching/teaching"
+  ],
+  "max_status": "absent",
+  "max_closest": [],
+  "max_check": "Max is a desktop application at /Applications/Max.app. No browser-hosted Max editor appears in the userguide file list. Max's licence terms were not looked up.",
+  "confidence": "high",
+  "notes": "A property of the platform, not a feature to copy. It matters when choosing a tool for a class where students cannot install software."
+ },
+ {
+  "capability": "File conversion on upload",
+  "category": "workflow/authoring",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Convert to .FBX to .GLB scene",
+   "Convert to HDRI to RGBE",
+   "CSV to json",
+   "MIDI to json",
+   "SDF Font",
+   "SVG path points",
+   "Compress .GLB 3D Scene to Draco .GLB scene",
+   "Convert pointcloud"
+  ],
+  "what_it_does": "Dropping a file on the editor converts it to a form the ops read: FBX to GLB, HDR to an RGBE PNG, CSV and MIDI to JSON, a point-cloud text file to JSON. The file browser can also compress a GLB, resize and recompress images, make an SDF font from a .ttf and turn an SVG into points.",
+  "source_urls": [
+   "https://cables.gl/docs/0_howtouse/files/files",
+   "https://cables.gl/docs/faq/webgl_differences/webgl_differences"
+  ],
+  "max_status": "unsure",
+  "max_closest": [
+   "jit.gl.model",
+   "jit.openexr"
+  ],
+  "max_check": "refpage names and digests (1,940 .maxref.xml files under C74): jit.gl.model reads FBX and glTF directly, and jit.openexr exists, so two of the conversions are not needed in Max. refpage names and digests (1,940 .maxref.xml files under C74): 'csv' matches nothing; reading CSV into a dict or coll was not searched further. No asset-conversion step was found in Max's file handling.",
+  "confidence": "low",
+  "notes": "Half of this exists because a browser cannot read the original formats. The MIDI-to-JSON and SVG-to-points conversions are the parts with no Max counterpart found."
+ },
+ {
+  "capability": "Face, hand and body tracking from a camera",
+  "category": "sensors/tracking/ML",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Extension.Mediapipe.MpFaceTracking",
+   "Ops.Extension.Mediapipe.FaceMesh",
+   "Ops.Extension.Mediapipe.MpHandTracking",
+   "Ops.Extension.Mediapipe.MpHand",
+   "Ops.Extension.Mediapipe.MpPoseTracking_v2",
+   "Ops.Extension.Mediapipe.MpPoseGetCoordinate"
+  ],
+  "what_it_does": "Google's Mediapipe models run in the patch on a webcam or video element and output a face mesh as points and as geometry, hand landmarks for each hand, and body pose landmarks and lines. Pose tracking can also output a mask texture of the person.",
+  "source_urls": [
+   "https://cables.gl/ops/Ops.Extension.Mediapipe",
+   "https://cables.gl/op/Ops.Extension.Mediapipe.MpPoseTracking_v2",
+   "https://cables.gl/op/Ops.Extension.Mediapipe.MpHandTracking",
+   "https://cables.gl/op/Ops.Extension.Mediapipe.MpFaceTracking"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "cv.jit (package)",
+   "jweb"
+  ],
+  "max_check": "Max object registry (interfaces/obj-qlookup.json, 1,323 names): 'mediapipe' and 'face' match nothing; 'pose' and 'hand' match only unrelated names. userguide (C74/docs/userguide/content): 'mediapipe' in 0 files. packages/query_packages.py search 'mediapipe' and 'hand tracking': no matches; 'pose' and 'face' return unrelated objects in the first results. This repo's CLAUDE.md names cv.jit.faces as an installed object; its help file was not read here.",
+  "confidence": "medium",
+  "notes": "Absent from core Max and from the packages installed on this machine. Packages that are not installed were not searched. A jweb page running Mediapipe is the likely Max route."
+ },
+ {
+  "capability": "Classifiers trained in Teachable Machine",
+  "category": "sensors/tracking/ML",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Extension.TeachableMachines.ImageClassifier_v2",
+   "Ops.Extension.TeachableMachines.AudioClassifier",
+   "Ops.Extension.TeachableMachines.PoseDetection_v2"
+  ],
+  "what_it_does": "A model trained on Google's Teachable Machine site is loaded from its URL and classifies the webcam image, the microphone or a body pose, giving class names and scores.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Extension.TeachableMachines.ImageClassifier_v2",
+   "https://cables.gl/op/Ops.Extension.TeachableMachines.AudioClassifier",
+   "https://cables.gl/ops/Ops.Extension.TeachableMachines"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "FluidCorpusManipulation (package)",
+   "Data Knot (package)",
+   "ml.star (package)"
+  ],
+  "max_check": "packages/query_packages.py search 'teachable': no matches. packages/query_packages.py search 'classif': 21 matches, the first ones Data Knot audio classifiers; FluidCorpusManipulation and ml.star are installed. None of the results seen classifies images.",
+  "confidence": "medium",
+  "notes": "Max has trainable classifiers for audio and for numeric data. The gap is image and pose classification, and loading a model trained elsewhere with no code."
+ },
+ {
+  "capability": "VR and AR sessions with controllers and hand tracking",
+  "category": "rendering/3D",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Devices.WebXr.Vr.Vr",
+   "Ops.Devices.WebXr.Vr.VrController",
+   "Ops.Devices.WebXr.Vr.VrHand"
+  ],
+  "what_it_does": "The Vr op starts a WebXR session in VR or AR mode and renders the patch for each eye, giving the viewer's pose. Two more ops give controller tracking and tracked hands with bones and pointing rays.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Devices.WebXr.Vr.Vr",
+   "https://cables.gl/op/Ops.Devices.WebXr.Vr.VrHand",
+   "https://cables.gl/ops/Ops.Devices.WebXr.Vr"
+  ],
+  "max_status": "absent",
+  "max_closest": [],
+  "max_check": "Max object registry (interfaces/obj-qlookup.json, 1,323 names): 'vr' matches no object. refpage names and digests (1,940 .maxref.xml files under C74): 'vr' and 'oculus' match nothing. userguide (C74/docs/userguide/content): 'WebXR|OpenXR|VR ' in 0 files. packages/query_packages.py search 'vr' and 'oculus': no relevant matches.",
+  "confidence": "medium",
+  "notes": "Absent from core Max and the installed packages. Third-party VR packages that are not installed were not searched. The cables op pages have no written documentation."
+ },
+ {
+  "capability": "Phone sensors read by ops in a patch that runs on the phone",
+  "category": "sensors/tracking/ML",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Devices.Mobile.MotionSensor_v2",
+   "Ops.Devices.Mobile.GeoLocation",
+   "Ops.Devices.Mobile.DeviceVibrate",
+   "Ops.Devices.Mobile.ShakeGesture",
+   "Ops.Devices.Mobile.Pinch",
+   "Ops.Devices.TouchGesture",
+   "Ops.Gl.Matrix.DeviceOrientationCamera",
+   "cables-phonegap-skeleton"
+  ],
+  "what_it_does": "Because an exported patch is a web page, it runs on a phone, and ops read the phone's orientation, acceleration, rotation rate, location and touch gestures, and can vibrate it. One op steers the 3D camera with the gyroscope.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Devices.Mobile.MotionSensor_v2",
+   "https://cables.gl/ops/Ops.Devices.Mobile",
+   "https://cables.gl/op/Ops.Gl.Matrix.DeviceOrientationCamera",
+   "https://cables.gl/docs/faq/javascript_frameworks/cordova/cordova"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "mira.motion",
+   "mira.multitouch",
+   "mira.frame",
+   "node.script"
+  ],
+  "max_check": "refpage names and digests (1,940 .maxref.xml files under C74): mira.motion (accelerometer, gyroscope and magnetometer data from an iPad), mira.multitouch, mira.frame. This repo's CLAUDE.md describes multi-user-template, which gets browser sensor data from phones into Max through node.script. In both, the patch stays on the computer and the phone is a remote.",
+  "confidence": "high",
+  "notes": "The difference is where the patch runs. Max cannot run on the phone."
+ },
+ {
+  "capability": "Speech recognition and text to speech",
+  "category": "sensors/tracking/ML",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Extension.Voice.SpeechRecognition",
+   "Ops.Extension.Voice.Say_v2",
+   "Ops.Extension.Voice.MeSpeak"
+  ],
+  "what_it_does": "SpeechRecognition turns microphone speech into text with a confidence value, using the browser's service; its page says audio is sent to Google. Say speaks a string with a chosen voice, pitch, rate and volume.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Extension.Voice.SpeechRecognition",
+   "https://cables.gl/op/Ops.Extension.Voice.Say_v2",
+   "https://cables.gl/ops/Ops.Extension.Voice"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "Upshot / upshot_texttospeech",
+   "jweb"
+  ],
+  "max_check": "Max object registry (interfaces/obj-qlookup.json, 1,323 names) and refpage names and digests (1,940 .maxref.xml files under C74): 'speech' matches nothing. userguide (C74/docs/userguide/content): 'speech' in 0 files. packages/query_packages.py search 'speech' and 'text to speech': Upshot upshot_texttospeech (text to speech engine) and an unrelated syllable segmenter. No speech-to-text object was found.",
+  "confidence": "medium",
+  "notes": "Text to speech exists through a package. Speech to text was not found. This repo's multi-user-template lists speech recognition on the phone side."
+ },
+ {
+  "capability": "WebSocket client ops and shared state across clients",
+  "category": "networking/sync",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Net.WebSocket.WebSocket_v2",
+   "Ops.Net.WebSocket.WebSocketSend",
+   "Ops.Extension.SocketCluster.SocketClusterClient_v2",
+   "Ops.Extension.SocketCluster.SocketClusterSendObject",
+   "Ops.Extension.SocketCluster.SocketClusterReceiveObject",
+   "Ops.Extension.Standalone.Net.SocketClusterServer",
+   "Ops.Extension.Standalone.Net.HttpServer"
+  ],
+  "what_it_does": "Two core ops open a WebSocket and send and receive JSON. The SocketCluster extension links many copies of a patch through a server by channel and topic, with a rule that one client sends at a time. The standalone build can run the SocketCluster server and an HTTP server as ops.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Net.WebSocket.WebSocket_v2",
+   "https://cables.gl/op/Ops.Extension.SocketCluster.SocketClusterClient_v2",
+   "https://cables.gl/op/Ops.Extension.Standalone.Net.SocketClusterServer",
+   "https://cables.gl/op/Ops.Extension.Standalone.Net.HttpServer"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "node.script",
+   "maxurl",
+   "jit.net.send",
+   "Collab-Hub / CH-Client",
+   "udpsend"
+  ],
+  "max_check": "Max object registry (interfaces/obj-qlookup.json, 1,323 names) and refpage names and digests (1,940 .maxref.xml files under C74): 'websocket' matches nothing. packages/query_packages.py search 'websocket' and 'http server': no matches. refpage names and digests (1,940 .maxref.xml files under C74): maxurl makes HTTP requests (get, post, put, delete); node.script runs a Node.js process, which is how this repo's multi-user-template does WebSockets; jit.net.send sends matrices over TCP. packages/query_packages.py search 'collab': Collab-Hub client and server modules.",
+  "confidence": "medium",
+  "notes": "Max reaches WebSockets only through Node. A native object would remove a process and a script from every such patch."
+ },
+ {
+  "capability": "A prompt to a language model as an op",
+  "category": "data/tables/scripting",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Extension.Ai.LlmPrompt",
+   "Ops.Extension.Ai.LLmModelList"
+  ],
+  "what_it_does": "LlmPrompt has ports for a prompt, a value, an API URL and an authentication string, and a trigger to run it. The op page has no description and its output ports have placeholder names.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Extension.Ai.LlmPrompt",
+   "https://cables.gl/ops/Ops.Extension.Ai"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "maxurl",
+   "node.script",
+   "dict"
+  ],
+  "max_check": "Max object registry (interfaces/obj-qlookup.json, 1,323 names): 'llm' matches nothing. packages/query_packages.py search 'llm': only unrelated substring matches. refpage names and digests (1,940 .maxref.xml files under C74): maxurl can post to an HTTP API and returns a dictionary, so a Max patch can call the same services by hand.",
+  "confidence": "low",
+  "notes": "New and undocumented on the cables side. Listed for completeness."
+ },
+ {
+  "capability": "Physics beyond rigid bodies: soft bodies, character controller, height fields",
+  "category": "rendering/3D",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Extension.Rapier3d.World_v2",
+   "Ops.Extension.Rapier3d.Body_v3",
+   "Ops.Extension.Rapier3d.Joint",
+   "Ops.Extension.Rapier3d.SoftBody",
+   "Ops.Extension.Rapier3d.CharacterController",
+   "Ops.Extension.Rapier3d.HeightField",
+   "Ops.Extension.Rapier3d.Emitter",
+   "Ops.Extension.Rapier3d.RayCast"
+  ],
+  "what_it_does": "The Rapier extension has rigid bodies made from arrays of positions, joints (revolute, prismatic, spherical) with limits and motors, ray casts and collision events, plus a soft body with pinning, a character controller and a height-field collider.",
+  "source_urls": [
+   "https://cables.gl/ops/Ops.Extension.Rapier3d",
+   "https://cables.gl/op/Ops.Extension.Rapier3d.SoftBody",
+   "https://cables.gl/op/Ops.Extension.Rapier3d.Joint",
+   "https://cables.gl/op/Ops.Extension.Rapier3d.Body_v3"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.phys.world",
+   "jit.phys.body",
+   "jit.phys.multiple",
+   "jit.phys.hinge",
+   "jit.phys.6dof",
+   "jit.phys.conetwist",
+   "jit.phys.barslide",
+   "jit.phys.point2point",
+   "jit.phys.ghost",
+   "jit.phys.picker"
+  ],
+  "max_check": "refpage names and digests (1,940 .maxref.xml files under C74): ten jit.phys.* objects: world, body, multiple, five constraint types, ghost (collision sensor and force field) and picker. jit.phys.world has a raytest message. 'soft' matches no physics object. packages/query_packages.py search 'soft body': no matches; 'physics': unrelated results.",
+  "confidence": "medium",
+  "notes": "Max's rigid-body set is at least as complete. The gap is soft bodies, and ready-made character and terrain colliders. The cables SoftBody page has ports but no description."
+ },
+ {
+  "capability": "Project a texture onto meshes from a point in space",
+  "category": "projection mapping",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Gl.ShaderEffects.TextureProjection_v2",
+   "Ops.Gl.Meshes.QuadWarpTexture"
+  ],
+  "what_it_does": "TextureProjection is a shader effect that maps a texture onto any mesh, instancer or point cloud along a chosen plane or in screen space, in object or world coordinates, blended with the material. It can also drive point size or alpha.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Gl.ShaderEffects.TextureProjection_v2",
+   "https://cables.gl/op/Ops.Gl.Meshes.QuadWarpTexture"
+  ],
+  "max_status": "unsure",
+  "max_closest": [
+   "jit.gl.pbr",
+   "jit.gl.material",
+   "jit.gl.cornerpin",
+   "jit.gl.meshwarp"
+  ],
+  "max_check": "refpage names and digests (1,940 .maxref.xml files under C74): no digest matches 'tex.*projec'. jit.gl.pbr has a tex_gen attribute with listed values, which were not read. For warping output to a projector Max is ahead: jit.gl.cornerpin and jit.gl.meshwarp ('video mapping tool', with mesh, masks and save) against one four-corner op in cables.",
+  "confidence": "low",
+  "notes": "Read jit.gl.pbr's tex_gen values before treating this as a gap. On projection mapping as a whole, cables is the weaker tool."
+ },
+ {
+  "capability": "Charts from a data object",
+  "category": "data/tables/scripting",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Extension.ECharts.ECharts",
+   "Ops.Extension.ECharts.EChartsEvent"
+  ],
+  "what_it_does": "Wraps the Apache ECharts library: one configuration object describes a chart of any of its many types, drawn in an HTML element, with themes and click events.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Extension.ECharts.ECharts",
+   "https://cables.gl/ops/Ops.Extension.ECharts"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "plot~",
+   "jit.plot",
+   "FluidCorpusManipulation / fluid.plotter",
+   "jweb"
+  ],
+  "max_check": "Max object registry (interfaces/obj-qlookup.json, 1,323 names): 'chart' matches nothing; 'plot' gives plot~ and jit.plot. packages/query_packages.py search 'chart': no matches; 'scatter': fluid.plotter and fluid.jit.plotter. jweb could host the same JavaScript library.",
+  "confidence": "low",
+  "notes": "A data-visualisation convenience, far from Max's core uses."
+ },
+ {
+  "capability": "Subtitle files as timed data",
+  "category": "timeline/cueing/show control",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Extension.Subtitles.ParseSubtitles",
+   "Ops.Extension.Subtitles.SubtitleAnim"
+  ],
+  "what_it_does": "Parses .srt and .vtt subtitle files and turns the cues into keys of an animation object, so text follows the timeline or a video's time.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Extension.Subtitles.SubtitleAnim",
+   "https://cables.gl/ops/Ops.Extension.Subtitles"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "coll",
+   "text",
+   "jit.textfile"
+  ],
+  "max_check": "Max object registry (interfaces/obj-qlookup.json, 1,323 names) and refpage names and digests (1,940 .maxref.xml files under C74): 'subtit' matches nothing. packages/query_packages.py search 'subtitle': no matches.",
+  "confidence": "low",
+  "notes": "Small. A few lines of v8 would parse the format in Max."
+ },
+ {
+  "capability": "Editable spreadsheet op that outputs rows as objects",
+  "category": "data/tables/scripting",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Data.SpreadSheetArray",
+   "Ops.Json.CsvArray",
+   "Ops.Ui.VizArrayTable_v2"
+  ],
+  "what_it_does": "A grid edited inside the op, with named columns, that outputs a flat array, an array of rows, or one object per row keyed by column name, and downloads as CSV.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Data.SpreadSheetArray",
+   "https://cables.gl/ops/Ops.Json"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.cellblock",
+   "coll",
+   "dict.view",
+   "Butter_tools / butter_table"
+  ],
+  "max_check": "refpage names and digests (1,940 .maxref.xml files under C74): jit.cellblock ('edit rows and columns of data'), dict.view, coll. 'spreadsheet' and 'csv' match no name or digest. This repo's CLAUDE.md lists butter_table, a jit.cellblock replacement with sorting, filtering and lookups, in John's own package.",
+  "confidence": "low",
+  "notes": "Covered well enough in Max, more so with butter_table. CSV import and export were not found as a built-in."
+ }
+]
