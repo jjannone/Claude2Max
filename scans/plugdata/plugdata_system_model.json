@@ -1,0 +1,801 @@
+[
+  {
+    "id": 1,
+    "dimension": "Evaluation",
+    "summary": "Two engines run side by side. Control work happens only when an event pushes a message down a cord, and each cascade runs to the end, depth first. Audio is not demand-driven: while DSP is on, every tilde object in every open patch (shown or not) is computed every block, and the only way to stop unused audio work is a [switch~] in that window. Gem frames are pushed the same way, as a message sent down from each [gemhead] once per frame.",
+    "details": [
+      "A message sets off a tree of further messages, run depth first [chapter2.htm 2.4.2].",
+      "With DSP on, Pd computes audio for all open patches, visible or not [chapter2.htm 2.1.1].",
+      "Sub-windows are always running, whether open or not [chapter2.htm 2.1.1].",
+      "Tilde objects are sorted into one linear list and run block by block [chapter2.htm 2.5.2].",
+      "[switch~] off: the window and its subwindows compute nothing; a bang computes one block [chapter2.htm 2.5.4; block~-help.pd].",
+      "Gem: [gemhead] sends a gem_state message down the chain once per frame [14.gem/Gem-help.pd, recorded in plugdata_gem_insights.md 1].",
+      "Gem pix objects only reprocess an image when the source or a parameter changes [GemFaq/Pixes.html, recorded in plugdata_gem_insights.md 2]."
+    ],
+    "names": [
+      "[switch~]",
+      "[block~]",
+      "dsp 1",
+      "dsp 0",
+      "[gemhead]",
+      "gem_state"
+    ],
+    "sources": [
+      "Documentation/1.manual/resources/chapter2.htm",
+      "Documentation/5.reference/block~-help.pd",
+      "Documentation/14.gem/Gem-help.pd",
+      "Documentation/14.gem/examples/Documentation/manual/Pixes.html"
+    ],
+    "what_a_max_user_would_notice": "The same push model as Max for messages. The difference is that audio work in a patch is never skipped on its own; Max's mute~ (refpage: disable signal processing in a subpatch) has its Pd counterpart in [switch~], which also changes block size.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 2,
+    "dimension": "Ordering",
+    "summary": "Outlets fire right to left and cascades run depth first, as in Max. When one outlet feeds several inlets, Pd sends in the order the cords were made, which cannot be seen in the patch, so [trigger] is the only safe way to fix an order. Signal order is decided by sorting the DSP graph, and a signal sent to an object sorted earlier arrives one block late.",
+    "details": [
+      "Fan-out order follows connection creation order and 'is not evident in the appearance of the patch' [chapter2.htm 2.4.3].",
+      "Max sends fan-out right to left by position; Pd by creation order [chapter2.htm 2.11.1].",
+      "All objects send from right to left when they use several outlets [chapter2.htm 2.4.3].",
+      "Two cascades scheduled for the same logical time run in the order they were scheduled [chapter2.htm 2.6.3].",
+      "A zero delay schedules a new cascade after the current one, at the same logical time [chapter2.htm 2.6.1].",
+      "Signal sent to an earlier point in the sorted list is delayed one block; sorting follows cords between subpatches, so a dummy cord forces writer before reader [chapter2.htm 2.5.5; 3.audio.examples/G05.execution.order.pd].",
+      "Triggerize (Ctrl+T) inserts a [t a a] that keeps the existing cord order [chapter2.htm 2.3.6].",
+      "The DSP graph must be acyclic: 'DSP loop detected' [chapter2.htm 2.5.2]."
+    ],
+    "names": [
+      "[trigger]",
+      "[t]",
+      "Triggerize",
+      "[delay]"
+    ],
+    "sources": [
+      "Documentation/1.manual/resources/chapter2.htm",
+      "Documentation/2.control.examples/03.connections.pd",
+      "Documentation/3.audio.examples/G05.execution.order.pd"
+    ],
+    "what_a_max_user_would_notice": "A fan-out that is safe in Max because of box positions can run in any order in Pd, and moving boxes changes nothing. Pd patches therefore use [t] far more often.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 3,
+    "dimension": "Time",
+    "summary": "One logical clock, kept as a 64-bit float in milliseconds, drives both messages and audio. Audio runs in blocks of 64 samples, and messages run only between blocks, so a cascade's changes all land on the same block. Scheduled events always run in order even when Pd falls behind real time, and the patch can render faster than real time with fast-forward or batch mode.",
+    "details": [
+      "Time is a 64-bit float in ms; it 'essentially never' overflows [chapter2.htm 2.6].",
+      "Messages are never passed during a DSP tick; ticks are atomic [chapter2.htm 2.6.1].",
+      "Calculation is never reordered for real-time reasons, to keep Pd deterministic [chapter2.htm 2.6.3].",
+      "[timer] measures logical time; [realtime] and [cputime] the wall clock [chapter2.htm 2.6.3; timer-help.pd].",
+      "Tempo units on [delay], [metro], [timer], [text sequence]: msec, sec, min, samp, or permin and the like [delay-help.pd, metro-help.pd].",
+      "'fast-forward <ms>' to pd renders that much time as fast as the CPU allows [pd-messages.pd].",
+      "-batch runs offline as a batch process; -schedlib plugs in an external scheduler [chapter3.htm 3.4.1].",
+      "[pd~] subprocess clock is slaved to the audio I/O it gets from the parent [pd~-help.pd].",
+      "plugdata [playhead] reports DAW bpm, position in ppq, samples and seconds (plugin only) [playhead-help.pd]."
+    ],
+    "names": [
+      "[timer]",
+      "[realtime]",
+      "[cputime]",
+      "[delay]",
+      "[metro]",
+      "tempo",
+      "fast-forward",
+      "-batch",
+      "-schedlib",
+      "[playhead]"
+    ],
+    "sources": [
+      "Documentation/1.manual/resources/chapter2.htm",
+      "Documentation/1.manual/resources/chapter3.htm",
+      "Documentation/5.reference/pd-messages.pd",
+      "Documentation/5.reference/timer-help.pd",
+      "Documentation/5.reference/delay-help.pd",
+      "Documentation/5.reference/pd~-help.pd",
+      "Documentation/5.reference/playhead-help.pd"
+    ],
+    "what_a_max_user_would_notice": "There is one scheduler, not a high-priority scheduler plus a low-priority queue as in Max's scheduler topic, so there is no overdrive setting to think about. Offline rendering is a message from inside the patch rather than a choice of audio driver.",
+    "confidence": "high",
+    "open_questions": "Gem's frame clock (default 20 fps in [gemwin]) runs off the same Pd scheduler; how frame timing interacts with audio blocks was not documented in what was read."
+  },
+  {
+    "id": 4,
+    "dimension": "Data types",
+    "summary": "Messages carry floats, symbols and pointers; there is no int, so 1 and 1. are the same. Signals are blocks of 32-bit floats and, since 0.54, any signal cord may hold several channels. Stored data lives in named arrays (shared by control and signal objects), [text] (lists of messages), and data structures: scalars built from templates, read through pointers, and drawn by drawing instructions.",
+    "details": [
+      "One number type; whole numbers exact to 2^24 in the normal build, 2^53 in Pd64 [chapter2.htm 2.4.1, 2.11.1].",
+      "Special selectors: float, symbol, list, bang, pointer; a list starting with a symbol needs the word list [chapter2.htm 2.4.1].",
+      "No quotes: spaces in a symbol are escaped with a backslash [chapter2.htm 2.11.1].",
+      "Signals are 32-bit floats; each signal has a block length and a channel count [chapter2.htm 2.5.1, 2.5.6].",
+      "Arrays are read and written by both control and signal objects and can be drawn with the mouse [chapter2.htm 2.9].",
+      "A template is [struct] plus drawing objects; scalars are accessed with [pointer], [get], [set], [element] [chapter2.htm 2.10; struct-help.pd].",
+      "Conversions: [sig~], [line~], [vline~] to signal; [snapshot~], [tabwrite~], [env~] from signal; [makefilename] number to symbol; [list fromsymbol] / [list tosymbol] for characters [chapter2.htm 2.5.3, 2.11.1; list-help.pd].",
+      "Gem adds the gem_state frame message and pix images (RGBA, YUV or grey, 8-bit) [plugdata_gem_insights.md 1-2]."
+    ],
+    "names": [
+      "float",
+      "symbol",
+      "list",
+      "bang",
+      "pointer",
+      "[array define]",
+      "[text define]",
+      "[struct]",
+      "[pointer]",
+      "[snake~]",
+      "[sig~]",
+      "[snapshot~]",
+      "[makefilename]",
+      "gem_state"
+    ],
+    "sources": [
+      "Documentation/1.manual/resources/chapter2.htm",
+      "Documentation/5.reference/list-help.pd",
+      "Documentation/5.reference/struct-help.pd",
+      "Documentation/5.reference/text-object-help.pd",
+      "Documentation/5.reference/snake-tilde-help.pd"
+    ],
+    "what_a_max_user_would_notice": "Max's messages topic lists int as its own atom type; Pd has none, so integer division and int/float typing never come up. There is no dict; nested data is done with data structures, which Max has no equivalent for.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 5,
+    "dimension": "Rates and channels",
+    "summary": "Control and audio are split as in Max, with control running between audio blocks. Each window can set its own block size, overlap and resampling factor with [block~], and [inlet~]/[outlet~] convert at the boundary, so FFT size, one-sample feedback and oversampling are all just block settings. Multichannel is a property of the cord: stateless objects handle any channel count unchanged, and [clone] spreads channels over copies.",
+    "details": [
+      "[block~ 1024 4 2]: 1024-sample blocks, overlap 4, twice the rate; one per window, inherited by subwindows [chapter2.htm 2.5.4].",
+      "Block size 1 allows one-sample feedback [chapter2.htm 2.5.4].",
+      "FFT objects work on the block, so block size sets the FFT size [chapter2.htm 2.5.4].",
+      "[send~]/[throw~] must not cross windows with different block sizes [chapter2.htm 2.5.5].",
+      "Stateless objects adapt to channel count; filters and oscillators do not, use [clone] [chapter2.htm 2.5.6].",
+      "[clone -di/-do/-d] distributes and gathers multichannel signals [clone-help.pd].",
+      "A multichannel cord looks the same as a mono one [chapter2.htm 2.11.1].",
+      "Secondary audio inlets take floats and promote them to signals [chapter2.htm 2.5.2].",
+      "Gem frame rate is set on [gemwin] (default 20) [plugdata_gem_insights.md 1]."
+    ],
+    "names": [
+      "[block~]",
+      "[switch~]",
+      "[inlet~]",
+      "[outlet~]",
+      "[snake~]",
+      "[clone]",
+      "-di",
+      "-do"
+    ],
+    "sources": [
+      "Documentation/1.manual/resources/chapter2.htm",
+      "Documentation/5.reference/block~-help.pd",
+      "Documentation/5.reference/clone-help.pd",
+      "Documentation/5.reference/snake-tilde-help.pd"
+    ],
+    "what_a_max_user_would_notice": "Max uses separate mc. objects (mc.pack~ refpage) and a pfft~ manager (refpage: spectral processing manager for patchers); Pd has neither and does both by settings on the cord and the window.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 6,
+    "dimension": "State and saving",
+    "summary": "A patch saves only what you see: boxes, their creation text and the cords. Values sent to objects later are lost on reload, by design, so that a patch is 'printable'. The exceptions are subpatch contents, arrays and [text]/[array define] with keep flags, IEM GUIs in init mode, and [savestate] for abstractions; there is deliberately no preset system. plugdata adds [daw_storage] for DAW sessions and an autosave database.",
+    "details": [
+      "Pd saves 'only what you see': creation arguments and connections [chapter2.htm 2.1.4].",
+      "Design principle: the appearance of a patch should fully determine its function [chapter2.htm 2.7.2].",
+      "No preset or pattrstorage, on purpose; restore with sends and message boxes [chapter2.htm 2.11.1].",
+      "Array contents saved as #A lines when 'save contents' is set [2.control.examples/16.more.arrays.pd raw file].",
+      "IEM GUI 'init' mode sends the value saved with the patch at load; does not work for abstractions [sliders-help.pd].",
+      "[savestate]: abstraction state saved in the parent file; output before connections are made; not inside [clone] [savestate-help.pd].",
+      "[loadbang] fires at load; dynamically created loadbangs do not fire until sent 'loadbang' [chapter2.htm 2.1.4; pd-messages.pd].",
+      "Patch font size is saved, zoom is not [chapter2.htm 2.1.1].",
+      "plugdata [daw_storage tag] saves a value in the DAW session [daw_storage-help.pd].",
+      "plugdata autosave keeps patch versions in a database and offers a newer one on reload [https://github.com/plugdata-team/plugdata/releases v0.8.3]."
+    ],
+    "names": [
+      "[savestate]",
+      "[loadbang]",
+      "init",
+      "-k",
+      "[daw_storage]",
+      "#A"
+    ],
+    "sources": [
+      "Documentation/1.manual/resources/chapter2.htm",
+      "Documentation/5.reference/sliders-help.pd",
+      "Documentation/5.reference/savestate-help.pd",
+      "Documentation/5.reference/pd-messages.pd",
+      "Documentation/5.reference/daw_storage-help.pd",
+      "https://github.com/plugdata-team/plugdata/releases"
+    ],
+    "what_a_max_user_would_notice": "Max saves object state and offers pattrstorage (refpage: save and recall pattr presets) and Snapshots; a Pd patch reopens with every number box at zero unless the patch itself re-sends values.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 7,
+    "dimension": "Parameters",
+    "summary": "Vanilla Pd has no parameter system. Settings are creation arguments, inlets and messages; IEM GUIs expose every property as a message and can take $1 or $0. Parameters appear only at the edges: plugdata's [param] maps a value to DAW automation, and Heavy turns annotated receives such as [r gain @hv_param 0 1 0.5] into plugin parameters on export.",
+    "details": [
+      "Every IEM GUI property can be set by message (size, color, label, range, init, send, receive, lin/log) and can hold $0/$1 [sliders-help.pd].",
+      "IEM GUIs have built-in send and receive names [chapter2.htm 2.11.1].",
+      "[param name]: create default min max, range, mode (float, int, log, exp); outlet gives the DAW value [param-help.pd, recorded in plugdata_insights.md 15].",
+      "[param] 'create 0.5' default applies only on first load in the DAW [https://github.com/plugdata-team/plugdata/releases v0.9.2].",
+      "Heavy: @hv_param lo hi default [type], @hv_event, @hv_table [https://wasted-audio.github.io/hvcc/latest/getting-started/patching/].",
+      "External control is by FUDI over [netreceive] or OSC through [oscparse]; no automatic mapping layer [netsend-receive-help.pd]."
+    ],
+    "names": [
+      "[param]",
+      "@hv_param",
+      "@hv_event",
+      "@hv_table",
+      "range",
+      "mode",
+      "init"
+    ],
+    "sources": [
+      "Documentation/5.reference/sliders-help.pd",
+      "Documentation/5.reference/param-help.pd",
+      "https://github.com/plugdata-team/plugdata/releases",
+      "https://wasted-audio.github.io/hvcc/latest/getting-started/patching/",
+      "Documentation/1.manual/resources/chapter2.htm"
+    ],
+    "what_a_max_user_would_notice": "Max's parameter mode topic describes parameters with initial values, names, units and modulation shared by presets, Live and MIDI mapping. Pd has nothing in the core, so a 'parameter' is just a named receive.",
+    "confidence": "medium",
+    "open_questions": "The pairing of [param]'s messages to its inlets comes from comment order in param-help.pd and was not confirmed in plugdata."
+  },
+  {
+    "id": 8,
+    "dimension": "Encapsulation and reuse",
+    "summary": "[pd name] is a one-off subpatch saved inside the parent; an abstraction is any .pd file typed by name. Arguments arrive as $1, $2 in object boxes, $0 is unique per patch, and [pdcontrol] args gives a variable-length list. [clone] replicates an ordinary abstraction N times with the copy number in $1. Graph-on-parent lets the abstraction draw its own face on the parent box.",
+    "details": [
+      "One-off subpatches are like bracketed blocks; abstractions like subroutines [chapter2.htm 2.8, 2.8.1].",
+      "In object boxes $1 expands at creation; in message boxes at message time, and $0 does not expand there [chapter2.htm 2.8.1, 2.11.1].",
+      "Pd shows $1 literally inside an open abstraction; abstractions open editable [chapter2.htm 2.11.1].",
+      "Saving an abstraction affects new instances; other open copies need reloading [chapter2.htm 2.8.1; 12.PART2.subpatch.pd].",
+      "Saving inside a subpatch saves the parent; a subpatch cannot be saved as its own file except by copy-paste [chapter2.htm 2.11.1].",
+      "[clone abs N args]: $1 is copy number, list with leading number addresses a copy; next/this/all/set; resize; vis [clone-help.pd].",
+      "Graph-on-parent flag is saved in the abstraction; only controls show [chapter2.htm 2.8.2].",
+      "[declare -path] inside an abstraction applies only to that abstraction (since 0.47) [declare-help.pd].",
+      "Sharing: deken package manager; libraries of abstractions are just folders [chapter4.htm 4.1.4, 4.3.2]."
+    ],
+    "names": [
+      "[pd]",
+      "$0",
+      "$1",
+      "[pdcontrol]",
+      "args",
+      "[clone]",
+      "graph on parent",
+      "[savestate]",
+      "[inlet~]",
+      "[outlet~]"
+    ],
+    "sources": [
+      "Documentation/1.manual/resources/chapter2.htm",
+      "Documentation/1.manual/resources/chapter4.htm",
+      "Documentation/5.reference/clone-help.pd",
+      "Documentation/5.reference/pdcontrol-help.pd",
+      "Documentation/5.reference/declare-help.pd",
+      "Documentation/2.control.examples/12.PART2.subpatch.pd",
+      "Documentation/2.control.examples/gop-abs.pd"
+    ],
+    "what_a_max_user_would_notice": "One mechanism ($) where Max uses # for arguments and abstractions open read-only, per Pd's own manual. Graph-on-parent replaces the bpatcher (refpage: embed a subpatch with a visible UI), but the face is decided inside the abstraction, not by the box that loads it.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 9,
+    "dimension": "Names and scope",
+    "summary": "Names are global by default: [send]/[receive], arrays, [value], [text], [send~], [throw~] and delay lines all meet by name anywhere. Locality is made by hand with $0 in the name. Every window is itself a receiver named pd-<name>, and Pd is the receiver pd, so the same send mechanism reaches objects, windows and the engine.",
+    "details": [
+      "$0-name gives local send/receive, arrays, values, texts [chapter2.htm 2.7.5].",
+      "No pv equivalent; use different [value] names per subpatch [chapter2.htm 2.11.1].",
+      "In Pd the destination is changeable on [send]; [float], [int], [value] have a send message [chapter2.htm 2.11.1].",
+      "Windows answer to pd-<subpatch> or pd-<file>.pd; [namecanvas] adds a name [pd-messages.pd].",
+      "[send~] is one-to-many and only one per name; [throw~] many-to-one, summed [chapter2.htm 2.5.5].",
+      "IEM GUI send/receive names hide the inlet/outlet; $0 must be escaped when set by message [sliders-help.pd; chapter2.htm 2.7.5].",
+      "Library name clashes are resolved with slash prefixes, [else/knob] [chapter4.htm 4.4.3].",
+      "Gem: [gemhead] is a [gemreceive __gem_render 50], a receive with a priority [plugdata_gem_insights.md 1]."
+    ],
+    "names": [
+      "[send]",
+      "[receive]",
+      "$0",
+      "pd-<name>",
+      "[namecanvas]",
+      "[value]",
+      "[send~]",
+      "[throw~]",
+      "[catch~]"
+    ],
+    "sources": [
+      "Documentation/1.manual/resources/chapter2.htm",
+      "Documentation/1.manual/resources/chapter4.htm",
+      "Documentation/5.reference/pd-messages.pd",
+      "Documentation/5.reference/sliders-help.pd",
+      "Documentation/5.reference/namecanvas-help.pd"
+    ],
+    "what_a_max_user_would_notice": "Max has pv (refpage: share data within a patch hierarchy) for scoped values; Pd has no scoped name, only $0 prefixes. Sending to a window by name replaces thispatcher (refpage: send messages to a patcher).",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 10,
+    "dimension": "Show structure",
+    "summary": "A work is one patch graph, with subpatches. There are no scenes, cues or timelines in the core. Sections are turned on and off with [switch~] for audio and [spigot] for messages, and sequences are played from [text sequence] or [qlist], which send timed messages to named receivers.",
+    "details": [
+      "[switch~] to switch between algorithms, ramping to zero first to avoid clicks [chapter2.htm 2.5.4].",
+      "[text sequence] with -g sends each line to the receiver named by its first word; auto treats leading numbers as waits [text-object-help.pd].",
+      "[qlist] is the older sequencer; help points to [text] [qlist-help.pd].",
+      "plugdata [playhead] gives DAW transport and position, so a DAW can act as the timeline [playhead-help.pd].",
+      "Gem: parts of a scene are switched with [spigot] on the frame message [plugdata_gem_insights.md 1]."
+    ],
+    "names": [
+      "[switch~]",
+      "[spigot]",
+      "[text sequence]",
+      "[qlist]",
+      "[playhead]"
+    ],
+    "sources": [
+      "Documentation/1.manual/resources/chapter2.htm",
+      "Documentation/5.reference/text-object-help.pd",
+      "Documentation/5.reference/qlist-help.pd",
+      "Documentation/5.reference/playhead-help.pd"
+    ],
+    "what_a_max_user_would_notice": "Close to Max: both leave show structure to the patch. Pd has fewer helpers for it.",
+    "confidence": "medium",
+    "open_questions": ""
+  },
+  {
+    "id": 11,
+    "dimension": "Interface",
+    "summary": "Vanilla Pd's controls live in the patch itself: atom boxes and the IEM set ([bng], [tgl], [nbx], sliders, radios, [vu], [cnv]). A control binds to a value by cord or by its built-in send/receive names. An abstraction's face is its graph-on-parent area. plugdata adds a presentation mode, a plugin mode that shows the patch with none of plugdata's own UI, an Inspector sidebar for properties, and pdlua objects that paint their own GUIs.",
+    "details": [
+      "Vanilla GUI set: number, symbol, list boxes plus IEM GUIs [all_guis.pd; chapter2.htm 2.11.1].",
+      "Clicking runs a control in run mode; edit mode changes the patch [chapter2.htm 2.2.1].",
+      "GOP shows only controls on the parent box; open the subpatch with right-click Open [chapter2.htm 2.8.2].",
+      "plugdata presentation mode exists since v0.4; hides subpatchers and abstractions; no edit mode inside it [https://github.com/plugdata-team/plugdata/releases v0.4, v0.5.1, v0.5.3].",
+      "plugdata plugin mode shows the patch without plugdata's GUI [https://github.com/plugdata-team/plugdata/releases v0.7.1].",
+      "plugdata inspector and console can share a split sidebar; minimap; command input sends messages to a selected object [https://github.com/plugdata-team/plugdata/releases v0.9.2].",
+      "pdlua paint(g) makes an object a GUI with mouse callbacks [13.pdlua/pdlua-help.pd, recorded in plugdata_insights.md 13]."
+    ],
+    "names": [
+      "[bng]",
+      "[tgl]",
+      "[nbx]",
+      "[hsl]",
+      "[vsl]",
+      "[hradio]",
+      "[vradio]",
+      "[vu]",
+      "[cnv]",
+      "graph on parent",
+      "presentation mode",
+      "plugin mode",
+      "Inspector"
+    ],
+    "sources": [
+      "Documentation/5.reference/all_guis.pd",
+      "Documentation/5.reference/sliders-help.pd",
+      "Documentation/1.manual/resources/chapter2.htm",
+      "https://github.com/plugdata-team/plugdata/releases",
+      "Documentation/13.pdlua/pdlua-help.pd"
+    ],
+    "what_a_max_user_would_notice": "Vanilla Pd has a small GUI set and no presentation view; plugdata's presentation and plugin modes fill that gap but are not part of the .pd format's documented semantics.",
+    "confidence": "medium",
+    "open_questions": "How plugdata stores presentation layout in a .pd file, and whether vanilla Pd ignores it, was not found in what was read."
+  },
+  {
+    "id": 12,
+    "dimension": "Editing while running",
+    "summary": "Edit mode and run mode differ only in what a click does; the patch keeps running, audio included, while it is edited. Changing the audio network while DSP is on makes Pd re-sort the tilde objects. Retyping a box destroys the old object and makes a new one, so its state is lost. Compiled externals stay loaded until Pd quits, while abstractions and pdlua classes can be reloaded live.",
+    "details": [
+      "In edit mode the patch runs the same way, DSP included [chapter2.htm 2.2.1].",
+      "Undo/redo work in both modes [chapter2.htm 2.2.1].",
+      "Pd re-sorts tilde objects when the audio network changes with audio on [chapter2.htm 2.5.2].",
+      "Retyping an object box destroys the old object and creates a new one [chapter2.htm 2.7.1].",
+      "Renaming [pd spot] to [pd jane] keeps the contents [chapter2.htm 2.7.2].",
+      "Replacing an external's binary needs a Pd restart; abstractions update when reloaded [chapter4.htm 4.5].",
+      "'; pdluax reload' reloads Lua objects and keeps their state [pdlua-help.pd, recorded in plugdata_insights.md 13].",
+      "Gem: objects can be added to a running chain since 0.888 [plugdata_gem_insights.md 1].",
+      "plugdata autosave database [https://github.com/plugdata-team/plugdata/releases v0.8.3]."
+    ],
+    "names": [
+      "edit mode",
+      "run mode",
+      "Ctrl+E",
+      "pdluax reload",
+      "Triggerize",
+      "Paste Replace"
+    ],
+    "sources": [
+      "Documentation/1.manual/resources/chapter2.htm",
+      "Documentation/1.manual/resources/chapter4.htm",
+      "Documentation/13.pdlua/pdlua-help.pd",
+      "https://github.com/plugdata-team/plugdata/releases"
+    ],
+    "what_a_max_user_would_notice": "Same live-editing feel as Max. Retyping a box loses its state in both; Pd says so as a design rule.",
+    "confidence": "high",
+    "open_questions": "Whether a DSP re-sort causes an audible gap was not stated."
+  },
+  {
+    "id": 13,
+    "dimension": "Scripting",
+    "summary": "The patch file is itself a list of messages to canvases, and the same messages (obj, msg, connect, disconnect, clear, vis, menusave) can be sent to any window at run time, so patches build and edit patches. Inside objects, [expr], [expr~] and [fexpr~] give C-like expressions, and pdlua (shipped with plugdata) lets a .pd_lua file define a new object class with control, signal and graphics methods. There is no JavaScript.",
+    "details": [
+      "Window messages: obj x y name args, msg, floatatom, text, connect a out b in, disconnect, clear, vis, menusave, dirty, loadbang [pd-messages.pd].",
+      "Objects are numbered in creation order for connect, counting every element including comments [pd-messages.pd].",
+      "Changes made by dynamic patching do not mark the patch dirty unless 'dirty 1' [pd-messages.pd].",
+      "'; pd open file dir' and 'menunew' open and create patches [pd-messages.pd].",
+      "[fexpr~] reads previous input and output samples, so a filter is one line [expr-help.pd, recorded in plugdata_insights.md 6].",
+      "pdlua: in_1_float style methods, dsp/perform for signals, paint for graphics, live reload [pdlua-help.pd].",
+      "Tcl GUI plugins extend the vanilla editor [chapter4.htm 4.2].",
+      "plugdata command input sends messages to a selected object without a message box [https://github.com/plugdata-team/plugdata/releases v0.9.2]."
+    ],
+    "names": [
+      "obj",
+      "msg",
+      "connect",
+      "disconnect",
+      "clear",
+      "vis",
+      "menusave",
+      "dirty",
+      "[namecanvas]",
+      "[pdcontrol]",
+      "[expr]",
+      "[expr~]",
+      "[fexpr~]",
+      "pdlua",
+      "[pdluax]"
+    ],
+    "sources": [
+      "Documentation/5.reference/pd-messages.pd",
+      "Documentation/5.reference/expr-help.pd",
+      "Documentation/13.pdlua/pdlua-help.pd",
+      "Documentation/1.manual/resources/chapter4.htm",
+      "https://github.com/plugdata-team/plugdata/releases"
+    ],
+    "what_a_max_user_would_notice": "Dynamic patching uses the same text as the file format, not a separate scripting API, and objects are addressed by creation index rather than by scripting name. Lua takes the place of Max's js and v8 (Max's js refpage now calls js the legacy engine).",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 14,
+    "dimension": "Errors and debugging",
+    "summary": "Errors print in red to the console of the main Pd window, with log levels. Ctrl+click on an error line, or Find Last Error, selects the object that caused it, and a missing-object error can open deken with that name. [trace] prints every message a chosen message causes. plugdata adds hover oscilloscopes on signal cords, an activity overlay and connection activity display.",
+    "details": [
+      "Console with log levels; errors in red; Ctrl+click finds the source [chapter2.htm 2.1.1].",
+      "Stack overflow from a loop without delay; Find Last Error in the Find menu [chapter2.htm 2.4.2].",
+      "'DSP loop detected (some tilde objects weren't scheduled)' [chapter2.htm 2.5.2].",
+      "Ctrl+click on a creation error opens deken with the object name [chapter4.htm 4.3.2].",
+      "[trace] with '; pd set-tracing 1' prints the chain of messages; click to select [trace-help.pd; pd-messages.pd].",
+      "plugdata signal debugger: oscilloscope and sample value when hovering a signal cord [https://github.com/plugdata-team/plugdata/releases v0.8.3].",
+      "plugdata activity overlay highlights objects sending messages; connection activity display [https://github.com/plugdata-team/plugdata/releases v0.8.0, v0.9.0].",
+      "Heavy Compiled Mode outlines objects that cannot compile [https://plugdata.org/docs/book/CompilingPatches.html].",
+      "Gem [gemwin] profile 1 prints ms per frame [plugdata_gem_insights.md 1]."
+    ],
+    "names": [
+      "Find Last Error",
+      "[print]",
+      "[trace]",
+      "set-tracing",
+      "Compiled Mode",
+      "profile"
+    ],
+    "sources": [
+      "Documentation/1.manual/resources/chapter2.htm",
+      "Documentation/1.manual/resources/chapter4.htm",
+      "Documentation/5.reference/trace-help.pd",
+      "Documentation/5.reference/pd-messages.pd",
+      "https://github.com/plugdata-team/plugdata/releases",
+      "https://plugdata.org/docs/book/CompilingPatches.html"
+    ],
+    "what_a_max_user_would_notice": "Vanilla Pd has no watchpoints, stepping or cord probes like Max's debugging topic describes; [trace] is the nearest tool. plugdata's hover scope covers part of what Max's signal probe does.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 15,
+    "dimension": "Rendering",
+    "summary": "Gem draws by passing a frame message down chains that start at [gemhead]. Objects on the chain change OpenGL state (transform, colour, texture, shader) for everything below them, and a geo at the bottom draws with whatever has built up, so order on the cord is order of application. Draw order between chains is the number on each [gemhead]. Images are processed on the CPU by pix objects and handed to the GPU by an explicit [pix_texture].",
+    "details": [
+      "Chain: [gemhead] -> state objects -> geo; [color] affects all objects after it [BasicObj.html, recorded in plugdata_gem_insights.md 1].",
+      "State leaks between branches unless [separator] saves and restores matrices; colour is not restored [separator-help.pd].",
+      "[gemhead] priority default 50, lower first; negative drawn last and fixed to the screen [gemhead-help.pd].",
+      "Lights need low numbers, transparent things high; framebuffer chains before their users [alpha-help.pd, light-help.pd, gemframebuffer-help.pd].",
+      "[gemwin] holds the window, camera (view, perspec), global lighting, fog, stereo, single/double buffer [gemwin-help.pd].",
+      "pix processing is cached and reprocessed only on change [Pixes.html].",
+      "[gemframebuffer] renders everything below it into a texture [gemframebuffer-help.pd].",
+      "[glsl_program] finds uniforms itself; a uniform is set by a message with its name [glsl_program-help.pd].",
+      "The frame is an ordinary Pd message, so [spigot], [t a a], [until] loops and recursion work on it [gem.release_notes.txt 0.888]."
+    ],
+    "names": [
+      "[gemhead]",
+      "[gemwin]",
+      "[separator]",
+      "[pix_texture]",
+      "[gemframebuffer]",
+      "[glsl_program]",
+      "[gemlist]",
+      "[gemrepeat]",
+      "gem_state"
+    ],
+    "sources": [
+      "Documentation/14.gem/gemhead-help.pd",
+      "Documentation/14.gem/gemwin-help.pd",
+      "Documentation/14.gem/separator-help.pd",
+      "Documentation/14.gem/pix_texture-help.pd",
+      "Documentation/14.gem/gemframebuffer-help.pd",
+      "Documentation/14.gem/glsl_program-help.pd",
+      "Documentation/14.gem/examples/Documentation/manual/BasicObj.html",
+      "Documentation/14.gem/examples/Documentation/manual/Pixes.html",
+      "Documentation/14.gem/examples/Documentation/gem.release_notes.txt"
+    ],
+    "what_a_max_user_would_notice": "In Jitter a shape object owns its own transform and colour; in Gem those are boxes above it on the cord, and draw order is a number rather than a layer plus depth test.",
+    "confidence": "medium",
+    "open_questions": "Read from plugdata_gem_insights.md rather than re-read this session. Which window backend plugdata uses and whether a Gem window works inside a plugin host are unknown."
+  },
+  {
+    "id": 16,
+    "dimension": "Performance and concurrency",
+    "summary": "Pd computes messages and audio in one thread. The GUI is a separate process, and the manual warns that heavy drawing competes with sound. To use another core you start a second Pd as a subprocess with [pd~], exchanging audio and messages. Cost is mostly invisible per object; plugdata adds a CPU meter, and Gem can profile frame time.",
+    "details": [
+      "Pd's GUI runs as a separate process and competes for CPU; close unused windows [chapter2.htm 2.6.2].",
+      "The scheduler keeps a lead set by -audiobuf and -blocksize; when late, audio gaps appear [chapter2.htm 2.6.2].",
+      "Max can use multiple cores; Pd relies on [pd~] [chapter2.htm 2.11.1].",
+      "[pd~] runs a sub-process with its own patch; DSP must run in the parent; MIDI must be passed as messages [pd~-help.pd].",
+      "Larger blocks are slightly more efficient; [switch~] budgets DSP [chapter2.htm 2.5.4].",
+      "-rt real-time priority, -nosleep spin [chapter3.htm 3.4.1].",
+      "plugdata CPU usage meter with history graph [https://github.com/plugdata-team/plugdata/releases v0.8.1].",
+      "Gem FAQ answer to audio clicks while rendering: two Pd processes over the network [plugdata_gem_insights.md 4]."
+    ],
+    "names": [
+      "[pd~]",
+      "[stdout]",
+      "-audiobuf",
+      "-blocksize",
+      "-rt",
+      "-nosleep",
+      "[switch~]",
+      "profile"
+    ],
+    "sources": [
+      "Documentation/1.manual/resources/chapter2.htm",
+      "Documentation/1.manual/resources/chapter3.htm",
+      "Documentation/5.reference/pd~-help.pd",
+      "Documentation/5.reference/stdout-help.pd",
+      "https://github.com/plugdata-team/plugdata/releases",
+      "Documentation/14.gem/examples/Documentation/manual/GemFaq.html"
+    ],
+    "what_a_max_user_would_notice": "No parallel voices, no separate high-priority thread, and graphics share the audio thread unless split into another process.",
+    "confidence": "medium",
+    "open_questions": "Whether plugdata runs Pd's engine on the host's audio thread in plugin mode was not documented in what was read."
+  },
+  {
+    "id": 17,
+    "dimension": "Several machines",
+    "summary": "Pd's own network format, FUDI, is plain-text Pd messages ending in a semicolon, sent over TCP or UDP by [netsend] and [netreceive]; command-line pdsend and pdreceive speak it too. OSC is built from [oscformat]/[oscparse] plus raw-byte netsend. The GUI itself talks to the engine over a socket, so it can run on another machine.",
+    "details": [
+      "[netsend]/[netreceive]: TCP default, -u UDP, -b bytes; TCP netreceive can reply [netsend-receive-help.pd].",
+      "FUDI is used between Pd's GUI and DSP processes and for saving patch files [8.topics/fudi.htm].",
+      "OSC by [oscformat] -> [netsend -u -b]; no bundles with timetags [osc-format-parse-help.pd].",
+      "-guiport connects to an existing GUI; -guicmd starts another GUI, for instance over ssh [chapter3.htm 3.4.1].",
+      "-send sends a message at startup [chapter3.htm 3.4.1]."
+    ],
+    "names": [
+      "[netsend]",
+      "[netreceive]",
+      "FUDI",
+      "pdsend",
+      "pdreceive",
+      "[oscformat]",
+      "[oscparse]",
+      "-guiport",
+      "-guicmd"
+    ],
+    "sources": [
+      "Documentation/5.reference/netsend-receive-help.pd",
+      "Documentation/8.topics/fudi.htm",
+      "Documentation/5.reference/osc-format-parse-help.pd",
+      "Documentation/1.manual/resources/chapter3.htm"
+    ],
+    "what_a_max_user_would_notice": "Because files and network share one text format, any program that can write 'freq 440;' to a socket can drive a patch. There is no built-in clock sync between machines.",
+    "confidence": "medium",
+    "open_questions": ""
+  },
+  {
+    "id": 18,
+    "dimension": "Deployment",
+    "summary": "Pd runs as an app, headless from the command line (-nogui, -batch, -send), or embedded through libpd. plugdata runs the same .pd files as a standalone, as VST3/AU/CLAP/LV2 plugins in three flavours, and on iOS. The Heavy compiler, built into plugdata, turns a patch made of supported objects into C/C++, DPF plugins, Daisy firmware, a Pd external, WASM and more, with no Pd runtime.",
+    "details": [
+      "libpd embeds Pd as an audio library [chapter2.htm 2.1].",
+      "-nogui, -batch, -send, -open [chapter3.htm 3.4.1].",
+      "plugdata: standalone, VST3, AU, CLAP, LV2, iOS; plugdata, plugdata-fx, plugdata-midi [plugdata.org; https://plugdata.org/docs/book/DAWIntegration.html].",
+      "Externals beyond the bundled libraries work only in the standalone, not the plugin [https://plugdata.org/docs/book/FAQ.html].",
+      "Heavy exports C++, Daisy, DPF (VST2/VST3/LV2/CLAP/JACK), Pd external; OWL and WASM added in 0.9.2 [https://plugdata.org/docs/book/CompilingPatches.html; https://github.com/plugdata-team/plugdata/releases v0.9.2].",
+      "Heavy supports about 100 control and 65 signal vanilla objects; not clone, text, arrays, data structures, switch~ [https://wasted-audio.github.io/hvcc/latest/reference/objects/supported/].",
+      "plugdata store and Library panel; meta.json for plugin patches [https://github.com/plugdata-team/plugdata/releases v0.9.2, v0.9.3].",
+      "Licences: plugdata source GPL-3.0, compiled app AGPL-3.0 because of JUCE [plugdata README]."
+    ],
+    "names": [
+      "libpd",
+      "-nogui",
+      "-batch",
+      "plugdata-fx",
+      "plugdata-midi",
+      "hvcc",
+      "Heavy",
+      "Compiled Mode",
+      "DPF",
+      "Daisy",
+      "meta.json"
+    ],
+    "sources": [
+      "Documentation/1.manual/resources/chapter2.htm",
+      "Documentation/1.manual/resources/chapter3.htm",
+      "https://plugdata.org/",
+      "https://plugdata.org/docs/book/DAWIntegration.html",
+      "https://plugdata.org/docs/book/FAQ.html",
+      "https://plugdata.org/docs/book/CompilingPatches.html",
+      "https://wasted-audio.github.io/hvcc/latest/reference/objects/supported/",
+      "https://github.com/plugdata-team/plugdata/releases",
+      "https://raw.githubusercontent.com/plugdata-team/plugdata/develop/README.md"
+    ],
+    "what_a_max_user_would_notice": "The whole editor runs inside the DAW plugin, and a patch can leave Pd entirely as generated code; the catch is that only a subset of objects compiles.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 19,
+    "dimension": "Extending",
+    "summary": "New objects are compiled C externals, abstractions, or (in plugdata) pdlua classes; once loaded, an external is indistinguishable from a built-in. A library can be one binary holding many objects or a folder of separate ones, and a later library can override a built-in, which stays reachable as name_aliased. deken, built into vanilla Pd, finds and installs externals. The editor itself is extended with Tcl GUI plugins.",
+    "details": [
+      "Externals: compiled binaries or abstractions; libraries as single pack or separate binaries [chapter4.htm 4.1].",
+      "Once in memory, an external is no different from a native object [chapter4.htm 4.5].",
+      "Overriding a built-in keeps the old as [name_aliased] [chapter4.htm 4.5.1].",
+      "deken, Help > Find externals, installs to ~/Documents/Pd/externals [chapter4.htm 4.3.2].",
+      "Tcl GUI plugins such as completion-plugin [chapter4.htm 4.2].",
+      "pdlua: a .pd_lua file on the path becomes an object [pdlua-help.pd].",
+      "C external examples and makefile in 6.externs [6.externs/0.README.txt].",
+      "Adding externals to plugdata's plugin needs recompiling plugdata [plugdata README]."
+    ],
+    "names": [
+      "deken",
+      "[declare -lib]",
+      "_aliased",
+      "pdlua",
+      ".pd_lua",
+      "completion-plugin"
+    ],
+    "sources": [
+      "Documentation/1.manual/resources/chapter4.htm",
+      "Documentation/13.pdlua/pdlua-help.pd",
+      "Documentation/6.externs/0.README.txt",
+      "https://raw.githubusercontent.com/plugdata-team/plugdata/develop/README.md"
+    ],
+    "what_a_max_user_would_notice": "Lua is the in-app language rather than JavaScript, and an object can be written in Lua with signals and graphics without a wrapper box.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 20,
+    "dimension": "Media and files",
+    "summary": "Files are found along search paths: [declare] paths for this patch, the patch's own folder, the user's paths, then Pd's extra folder. Files are written next to the patch by default, paths use forward slashes everywhere, and ~ expands. Small data can live inside the .pd file (array contents, [text define -k]); there is no collect or project step. plugdata finds patches by their place in its Patches folder when a DAW project moves to another machine.",
+    "details": [
+      "Search order: loaded objects, [declare -path], patch folder, user paths, standard paths; files skip the first step [chapter4.htm 4.6].",
+      "Writes go to the patch's directory by default [chapter2.htm 2.1.4].",
+      "Forward slashes on all systems; ~ expands [chapter3.htm 3.4].",
+      "[declare] is best practice; a loaded library stays loaded for every patch [chapter4.htm 4.4.1; declare-help.pd].",
+      "Sound files: wave, aiff, caf, next via [soundfiler], [readsf~], [writesf~] [chapter2.htm 2.5.1].",
+      "[file] family for the file system [file-help.pd].",
+      "plugdata Patches folder lets DAWs locate patches across computers [https://github.com/plugdata-team/plugdata/releases v0.9.2]."
+    ],
+    "names": [
+      "[declare]",
+      "-path",
+      "-stdpath",
+      "[soundfiler]",
+      "[readsf~]",
+      "[file which]",
+      "[text define -k]"
+    ],
+    "sources": [
+      "Documentation/1.manual/resources/chapter2.htm",
+      "Documentation/1.manual/resources/chapter3.htm",
+      "Documentation/1.manual/resources/chapter4.htm",
+      "Documentation/5.reference/declare-help.pd",
+      "Documentation/5.reference/file-help.pd",
+      "https://github.com/plugdata-team/plugdata/releases"
+    ],
+    "what_a_max_user_would_notice": "The patch says what it needs with [declare]; there is no project window or collective that gathers media.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 21,
+    "dimension": "Patch as message script",
+    "summary": "Why system-level: it ties the file format, object creation and scripting into one mechanism. A .pd file is a sequence of plain-text Pd messages (#N canvas, #X obj, #X connect, #A for array data), and an object box's text is literally a creation message to Pd. The same messages sent at run time edit a live patch.",
+    "details": [
+      "Object box text is a message passed to Pd once to create the object [chapter2.htm 2.7.1].",
+      "Raw file: '#X obj 90 80 osc~ 440;' and '#X connect 0 0 1 0;' [plugdata.org home page example; 2.control.examples/gop-abs.pd].",
+      "Graph-on-parent is a '#X coords' line; array data is '#A' lines [gop-abs.pd; 16.more.arrays.pd].",
+      "Connections refer to objects by creation index [pd-messages.pd].",
+      "FUDI is the shared format for files and network [8.topics/fudi.htm]."
+    ],
+    "names": [
+      "#N canvas",
+      "#X obj",
+      "#X msg",
+      "#X connect",
+      "#X coords",
+      "#A",
+      "FUDI"
+    ],
+    "sources": [
+      "Documentation/1.manual/resources/chapter2.htm",
+      "Documentation/2.control.examples/gop-abs.pd",
+      "Documentation/2.control.examples/16.more.arrays.pd",
+      "Documentation/5.reference/pd-messages.pd",
+      "https://plugdata.org/"
+    ],
+    "what_a_max_user_would_notice": "A .pd file is readable and hand-editable line by line, and nothing in it is hidden state; Max's JSON format stores much more per box.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 22,
+    "dimension": "Behaviour versioning",
+    "summary": "Why system-level: it governs how every object's behaviour is kept stable across releases. When a Pd release fixes an object's behaviour, the old behaviour stays selectable with a compatibility version, sent as '; pd compatibility 0.52' or given as -compatibility at startup. Help files document which objects changed.",
+    "details": [
+      "'compatibility' sets some objects back to an older version's behaviour [pd-messages.pd].",
+      "-compatibility <f> startup flag [chapter3.htm 3.4.1].",
+      "IEM GUI range clipping changed in 0.46 and can be toggled back [sliders-help.pd].",
+      "[declare -path] scoping inside abstractions reverts to the old buggy behaviour under compatibility 0.46 [declare-help.pd]."
+    ],
+    "names": [
+      "compatibility",
+      "-compatibility"
+    ],
+    "sources": [
+      "Documentation/5.reference/pd-messages.pd",
+      "Documentation/1.manual/resources/chapter3.htm",
+      "Documentation/5.reference/sliders-help.pd",
+      "Documentation/5.reference/declare-help.pd"
+    ],
+    "what_a_max_user_would_notice": "A patch can ask for an older engine behaviour explicitly instead of relying on the version it was made in.",
+    "confidence": "high",
+    "open_questions": "Compatibility is global to the Pd instance, not per patch, as far as the help shows."
+  },
+  {
+    "id": 23,
+    "dimension": "Engine and GUI split",
+    "summary": "Why system-level: it shapes performance, remote use and how plugdata exists at all. Vanilla Pd's engine and its Tcl GUI are separate processes that talk over a socket, so Pd can run with no GUI, with a GUI on another machine, or with a different GUI. plugdata is exactly that: Pd's engine with minimal changes and a new JUCE interface, which is what lets it run inside a plugin.",
+    "details": [
+      "The GUI runs as a separate process [chapter2.htm 2.6.2].",
+      "FUDI is the protocol between the GUI process and the DSP process, and also the patch file format [8.topics/fudi.htm].",
+      "-nogui, -guiport, -guicmd [chapter3.htm 3.4.1].",
+      "plugdata is a plugin wrapper around Pd with a new GUI made with JUCE [plugdata README].",
+      "plugdata is based on pd-vanilla with minimal modifications; same .pd format [plugdata.org].",
+      "Closed sub-windows stop receiving GUI updates [chapter2.htm 2.6.2]."
+    ],
+    "names": [
+      "-nogui",
+      "-guiport",
+      "-guicmd",
+      "JUCE",
+      "libpd"
+    ],
+    "sources": [
+      "Documentation/1.manual/resources/chapter2.htm",
+      "Documentation/1.manual/resources/chapter3.htm",
+      "https://raw.githubusercontent.com/plugdata-team/plugdata/develop/README.md",
+      "https://plugdata.org/",
+      "Documentation/8.topics/fudi.htm"
+    ],
+    "what_a_max_user_would_notice": "The editor is replaceable; plugdata and vanilla Pd are two faces on one engine and one file format.",
+    "confidence": "medium",
+    "open_questions": "Whether plugdata keeps a socket between engine and GUI or links libpd in-process was not documented in what was read."
+  }
+]

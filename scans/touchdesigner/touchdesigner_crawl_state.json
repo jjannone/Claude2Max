@@ -5,7 +5,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": ".toe",
@@ -29,7 +29,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": ".tox",
@@ -75,9 +75,9 @@
    "Components"
   ],
   "group": "concepts",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (2002 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "3D Parenting",
   "url": "https://docs.derivative.ca/3D_Parenting"
  },
@@ -170,7 +170,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Absolute Time",
@@ -452,9 +452,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (358 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Analyze CHOP",
   "url": "https://docs.derivative.ca/Analyze_CHOP"
  },
@@ -946,9 +946,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (739 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Audio Band EQ CHOP",
   "url": "https://docs.derivative.ca/Audio_Band_EQ_CHOP"
  },
@@ -968,9 +968,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1070 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Audio Device In CHOP",
   "url": "https://docs.derivative.ca/Audio_Device_In_CHOP"
  },
@@ -979,9 +979,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1740 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Audio Device Out CHOP",
   "url": "https://docs.derivative.ca/Audio_Device_Out_CHOP"
  },
@@ -1001,9 +1001,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 1900 of 2168 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Audio Dynamics CHOP",
   "url": "https://docs.derivative.ca/Audio_Dynamics_CHOP"
  },
@@ -1012,9 +1012,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1674 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Audio File In CHOP",
   "url": "https://docs.derivative.ca/Audio_File_In_CHOP"
  },
@@ -1034,9 +1034,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1667 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Audio Filter CHOP",
   "url": "https://docs.derivative.ca/Audio_Filter_CHOP"
  },
@@ -1045,9 +1045,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (441 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Audio Movie CHOP",
   "url": "https://docs.derivative.ca/Audio_Movie_CHOP"
  },
@@ -1067,9 +1067,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 1900 of 3088 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Audio Oscillator CHOP",
   "url": "https://docs.derivative.ca/Audio_Oscillator_CHOP"
  },
@@ -1078,9 +1078,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1663 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Audio Para EQ CHOP",
   "url": "https://docs.derivative.ca/Audio_Para_EQ_CHOP"
  },
@@ -1089,9 +1089,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 1900 of 2401 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Audio Play CHOP",
   "url": "https://docs.derivative.ca/Audio_Play_CHOP"
  },
@@ -1111,9 +1111,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 1900 of 2021 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Audio Spectrum CHOP",
   "url": "https://docs.derivative.ca/Audio_Spectrum_CHOP"
  },
@@ -1468,9 +1468,9 @@
    "COMPs"
   ],
   "group": "COMP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (229 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Base COMP",
   "url": "https://docs.derivative.ca/Base_COMP"
  },
@@ -1514,7 +1514,7 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: partly read: first 1700 of 4416 characters after wiki markup was removed.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Beat CHOP",
@@ -1558,7 +1558,7 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: read in full (1723 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Bind CHOP",
@@ -1569,7 +1569,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Binding",
@@ -1680,9 +1680,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1589 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Blend CHOP",
   "url": "https://docs.derivative.ca/Blend_CHOP"
  },
@@ -1836,9 +1836,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (655 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Blur TOP",
   "url": "https://docs.derivative.ca/Blur_TOP"
  },
@@ -2171,9 +2171,9 @@
    "OP Help Common Pages"
   ],
   "group": "COMP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 1900 of 2477 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Button COMP",
   "url": "https://docs.derivative.ca/Button_COMP"
  },
@@ -2183,9 +2183,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1247 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Bypass Flag",
   "url": "https://docs.derivative.ca/Bypass_Flag"
  },
@@ -2259,9 +2259,9 @@
    "OP Help Common Pages"
   ],
   "group": "operator help fragments",
-  "notes": "Parameter-page fragment transcluded into operator pages.",
+  "notes": "Session 3: system model",
   "session": "2026-10-02",
-  "status": "skipped",
+  "status": "extracted",
   "title": "CHOP Common Page",
   "url": "https://docs.derivative.ca/CHOP_Common_Page"
  },
@@ -2270,7 +2270,7 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: partly read: first 2000 of 3283 characters after wiki markup was removed.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "CHOP Execute DAT",
@@ -2319,9 +2319,9 @@
  "https://docs.derivative.ca/CHOP_Techniques": {
   "categories": [],
   "group": "uncategorized",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (3490 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "CHOP Techniques",
   "url": "https://docs.derivative.ca/CHOP_Techniques"
  },
@@ -2344,9 +2344,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (618 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "CHOP to DAT",
   "url": "https://docs.derivative.ca/CHOP_to_DAT"
  },
@@ -2377,9 +2377,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2200 of 2750 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "CHOP to TOP",
   "url": "https://docs.derivative.ca/CHOP_to_TOP"
  },
@@ -2388,7 +2388,7 @@
    "COMPs"
   ],
   "group": "COMP operators",
-  "notes": "Read in full; the page is a stub that lists the COMP category.",
+  "notes": "Read in full; the page is a stub that lists the COMP category. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "COMP",
@@ -2492,9 +2492,9 @@
    "OP Help Common Pages"
   ],
   "group": "operator help fragments",
-  "notes": "Parameter-page fragment transcluded into operator pages.",
+  "notes": "Session 2 (shared-concepts pass): first 5500 of 17303 characters of the page text read (parameter templates shown unparsed).",
   "session": "2026-10-02",
-  "status": "skipped",
+  "status": "extracted",
   "title": "COMP Instance 2 Page",
   "url": "https://docs.derivative.ca/COMP_Instance_2_Page"
  },
@@ -2514,9 +2514,9 @@
    "OP Help Common Pages"
   ],
   "group": "operator help fragments",
-  "notes": "Parameter-page fragment transcluded into operator pages.",
+  "notes": "Session 2 (shared-concepts pass): first 5500 of 11702 characters of the page text read (parameter templates shown unparsed).",
   "session": "2026-10-02",
-  "status": "skipped",
+  "status": "extracted",
   "title": "COMP Instance Page",
   "url": "https://docs.derivative.ca/COMP_Instance_Page"
  },
@@ -2547,9 +2547,9 @@
    "OP Help Common Pages"
   ],
   "group": "operator help fragments",
-  "notes": "Parameter-page fragment transcluded into operator pages.",
+  "notes": "Session 3: system model",
   "session": "2026-10-02",
-  "status": "skipped",
+  "status": "extracted",
   "title": "COMP Other Common Page",
   "url": "https://docs.derivative.ca/COMP_Other_Common_Page"
  },
@@ -2824,9 +2824,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (358 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Cache Select TOP",
   "url": "https://docs.derivative.ca/Cache_Select_TOP"
  },
@@ -2835,7 +2835,7 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: partly read: first 2000 of 2815 characters after wiki markup was removed.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Cache TOP",
@@ -2880,9 +2880,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (460 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Callback",
   "url": "https://docs.derivative.ca/Callback"
  },
@@ -2936,7 +2936,7 @@
    "COMPs"
   ],
   "group": "COMP operators",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: partly read: first 2200 of 9296 characters after wiki markup was removed.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Camera COMP",
@@ -3108,9 +3108,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (435 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Channel Mix TOP",
   "url": "https://docs.derivative.ca/Channel_Mix_TOP"
  },
@@ -3212,9 +3212,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (892 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Chroma Key TOP",
   "url": "https://docs.derivative.ca/Chroma_Key_TOP"
  },
@@ -3431,9 +3431,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2600 of 4677 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Clock CHOP",
   "url": "https://docs.derivative.ca/Clock_CHOP"
  },
@@ -3443,7 +3443,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: partly read: first 2300 of 4255 characters after wiki markup was removed. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Clone",
@@ -3508,7 +3508,7 @@
    "Touch Glossary"
   ],
   "group": "COMP operators",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Component",
@@ -3532,7 +3532,7 @@
    "Time"
   ],
   "group": "concepts",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Component Time",
@@ -3544,9 +3544,9 @@
    "Time"
   ],
   "group": "concepts",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (867 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Component Timeline",
   "url": "https://docs.derivative.ca/Component_Timeline"
  },
@@ -3555,9 +3555,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1708 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Component Variables",
   "url": "https://docs.derivative.ca/Component_Variables"
  },
@@ -3601,9 +3601,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (904 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Composite TOP",
   "url": "https://docs.derivative.ca/Composite_TOP"
  },
@@ -3701,9 +3701,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2300 of 4110 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Constant CHOP",
   "url": "https://docs.derivative.ca/Constant_CHOP"
  },
@@ -3712,9 +3712,9 @@
    "MATs"
   ],
   "group": "MAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (489 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Constant MAT",
   "url": "https://docs.derivative.ca/Constant_MAT"
  },
@@ -3815,9 +3815,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (764 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Convert DAT",
   "url": "https://docs.derivative.ca/Convert_DAT"
  },
@@ -3893,7 +3893,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: read in full (6353 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions). Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Cook",
@@ -3905,9 +3905,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (837 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions). Re-read in Session 3: system model.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Cooking Flag",
   "url": "https://docs.derivative.ca/Cooking_Flag"
  },
@@ -3951,9 +3951,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1708 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Copy CHOP",
   "url": "https://docs.derivative.ca/Copy_CHOP"
  },
@@ -4019,9 +4019,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2600 of 2993 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Count CHOP",
   "url": "https://docs.derivative.ca/Count_CHOP"
  },
@@ -4212,9 +4212,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (551 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Cross CHOP",
   "url": "https://docs.derivative.ca/Cross_CHOP"
  },
@@ -4223,9 +4223,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (750 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Cross TOP",
   "url": "https://docs.derivative.ca/Cross_TOP"
  },
@@ -4366,7 +4366,7 @@
  "https://docs.derivative.ca/Custom_Operators": {
   "categories": [],
   "group": "uncategorized",
-  "notes": "Partly read: first 9000 of 12499 characters of the cleaned page (operator pages: summary plus parameter list).",
+  "notes": "Partly read: first 9000 of 12499 characters of the cleaned page (operator pages: summary plus parameter list). Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Custom Operators",
@@ -4375,7 +4375,7 @@
  "https://docs.derivative.ca/Custom_Parameters": {
   "categories": [],
   "group": "uncategorized",
-  "notes": "Partly read: first 9000 of 14259 characters of the cleaned page (operator pages: summary plus parameter list).",
+  "notes": "Partly read: first 9000 of 14259 characters of the cleaned page (operator pages: summary plus parameter list). | Session 2 (shared-concepts pass, 2026-10-02) re-read: partly read: first 7000 of 14177 characters after wiki markup was removed. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Custom Parameters",
@@ -4442,9 +4442,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2300 of 4676 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "DAT Execute DAT",
   "url": "https://docs.derivative.ca/DAT_Execute_DAT"
  },
@@ -4503,9 +4503,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2000 of 2789 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "DAT to CHOP",
   "url": "https://docs.derivative.ca/DAT_to_CHOP"
  },
@@ -4728,9 +4728,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (649 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Delay CHOP",
   "url": "https://docs.derivative.ca/Delay_CHOP"
  },
@@ -4819,7 +4819,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Dependency",
@@ -4889,9 +4889,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1708 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Depth TOP",
   "url": "https://docs.derivative.ca/Depth_TOP"
  },
@@ -4900,7 +4900,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Designer Mode",
@@ -4936,9 +4936,9 @@
    "TDPages"
   ],
   "group": "concepts",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 3: system model",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Dialogs:Preferences Dialog",
   "url": "https://docs.derivative.ca/Dialogs:Preferences_Dialog"
  },
@@ -5093,9 +5093,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2200 of 3999 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Displace TOP",
   "url": "https://docs.derivative.ca/Displace_TOP"
  },
@@ -5105,9 +5105,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 3: system model",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Display Flag",
   "url": "https://docs.derivative.ca/Display_Flag"
  },
@@ -5362,7 +5362,7 @@
    "COMPs"
   ],
   "group": "COMP operators",
-  "notes": "Partly read: first 3000 of 7494 characters of the cleaned page (operator pages: summary plus parameter list).",
+  "notes": "Partly read: first 3000 of 7494 characters of the cleaned page (operator pages: summary plus parameter list). Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Engine COMP",
@@ -5385,9 +5385,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1248 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Envelope CHOP",
   "url": "https://docs.derivative.ca/Envelope_CHOP"
  },
@@ -5440,7 +5440,7 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: read in full (1830 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions). Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Error DAT",
@@ -5453,9 +5453,9 @@
    "TDPages"
   ],
   "group": "concepts",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (189 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions). Re-read in Session 3: system model.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Errors Dialog",
   "url": "https://docs.derivative.ca/Errors_Dialog"
  },
@@ -5522,7 +5522,7 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: partly read: first 1700 of 7607 characters after wiki markup was removed.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Evaluate DAT",
@@ -5533,7 +5533,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Event",
@@ -5556,7 +5556,7 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: partly read: first 1700 of 5858 characters after wiki markup was removed.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Event CHOP",
@@ -5602,7 +5602,7 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: read in full (3640 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions). Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Execute DAT",
@@ -5615,7 +5615,7 @@
    "TouchDesigner Tips"
   ],
   "group": "glossary",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Export",
@@ -5660,9 +5660,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (921 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Expression",
   "url": "https://docs.derivative.ca/Expression"
  },
@@ -5683,9 +5683,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1397 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Expression CHOP",
   "url": "https://docs.derivative.ca/Expression_CHOP"
  },
@@ -5731,7 +5731,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Partly read: first 9000 of 24451 characters of the cleaned page (operator pages: summary plus parameter list).",
+  "notes": "Partly read: first 9000 of 24451 characters of the cleaned page (operator pages: summary plus parameter list). | Session 2 (shared-concepts pass, 2026-10-02) re-read: partly read: first 4500 of 24007 characters after wiki markup was removed. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Extensions",
@@ -5932,9 +5932,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1833 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Fan CHOP",
   "url": "https://docs.derivative.ca/Fan_CHOP"
  },
@@ -5989,9 +5989,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1225 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Feedback CHOP",
   "url": "https://docs.derivative.ca/Feedback_CHOP"
  },
@@ -6012,7 +6012,7 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: read in full (924 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Feedback TOP",
@@ -6046,9 +6046,9 @@
    "COMPs"
   ],
   "group": "COMP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 1900 of 2162 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Field COMP",
   "url": "https://docs.derivative.ca/Field_COMP"
  },
@@ -6102,9 +6102,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 1700 of 1897 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "File In CHOP",
   "url": "https://docs.derivative.ca/File_In_CHOP"
  },
@@ -6113,9 +6113,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (666 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "File In DAT",
   "url": "https://docs.derivative.ca/File_In_DAT"
  },
@@ -6333,9 +6333,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2400 of 2718 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Filter CHOP",
   "url": "https://docs.derivative.ca/Filter_CHOP"
  },
@@ -6344,9 +6344,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (837 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Filter per Sample",
   "url": "https://docs.derivative.ca/Filter_per_Sample"
  },
@@ -6436,9 +6436,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2200 of 2402 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Fit TOP",
   "url": "https://docs.derivative.ca/Fit_TOP"
  },
@@ -6448,7 +6448,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Flag",
@@ -6513,9 +6513,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (965 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions). Re-read in Session 3: system model.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Folder",
   "url": "https://docs.derivative.ca/Folder"
  },
@@ -6673,9 +6673,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2600 of 4033 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Frame",
   "url": "https://docs.derivative.ca/Frame"
  },
@@ -6684,7 +6684,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Frame Rate",
@@ -6771,9 +6771,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2400 of 2581 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Function CHOP",
   "url": "https://docs.derivative.ca/Function_CHOP"
  },
@@ -6793,9 +6793,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2200 of 4587 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Function TOP",
   "url": "https://docs.derivative.ca/Function_TOP"
  },
@@ -6884,9 +6884,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2200 of 3680 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "GLSL Multi TOP",
   "url": "https://docs.derivative.ca/GLSL_Multi_TOP"
  },
@@ -6926,7 +6926,7 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "Partly read: first 3000 of 7280 characters of the cleaned page (operator pages: summary plus parameter list).",
+  "notes": "Partly read: first 3000 of 7280 characters of the cleaned page (operator pages: summary plus parameter list). | Session 2 (shared-concepts pass, 2026-10-02) re-read: partly read: first 5000 of 5776 characters after wiki markup was removed.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "GLSL TOP",
@@ -7022,7 +7022,7 @@
    "Touch Glossary"
   ],
   "group": "COMP operators",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: partly read: first 1500 of 3917 characters after wiki markup was removed.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Geometry COMP",
@@ -7441,9 +7441,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2000 of 2577 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "HSV Adjust TOP",
   "url": "https://docs.derivative.ca/HSV_Adjust_TOP"
  },
@@ -7657,9 +7657,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1073 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Hold CHOP",
   "url": "https://docs.derivative.ca/Hold_CHOP"
  },
@@ -7735,9 +7735,9 @@
    "Input Devices"
   ],
   "group": "concepts",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (2288 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "IOS and OSC",
   "url": "https://docs.derivative.ca/IOS_and_OSC"
  },
@@ -7800,9 +7800,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 1700 of 4057 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Import Select CHOP",
   "url": "https://docs.derivative.ca/Import_Select_CHOP"
  },
@@ -7991,9 +7991,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (767 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "In CHOP",
   "url": "https://docs.derivative.ca/In_CHOP"
  },
@@ -8046,9 +8046,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (229 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "In TOP",
   "url": "https://docs.derivative.ca/In_TOP"
  },
@@ -8104,7 +8104,7 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: partly read: first 1700 of 1749 characters after wiki markup was removed.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Info CHOP",
@@ -8167,9 +8167,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1133 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Insert DAT",
   "url": "https://docs.derivative.ca/Insert_DAT"
  },
@@ -8222,7 +8222,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: read in full (1154 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Instance",
@@ -8253,7 +8253,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Partly read: first 5500 of 7585 characters of the cleaned page (operator pages: summary plus parameter list).",
+  "notes": "Partly read: first 5500 of 7585 characters of the cleaned page (operator pages: summary plus parameter list). | Session 2 (shared-concepts pass, 2026-10-02) re-read: partly read: first 2600 of 7537 characters after wiki markup was removed.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Internal Parameters",
@@ -8287,9 +8287,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (909 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Interpolate CHOP",
   "url": "https://docs.derivative.ca/Interpolate_CHOP"
  },
@@ -8496,9 +8496,9 @@
  "https://docs.derivative.ca/JSONPath": {
   "categories": [],
   "group": "uncategorized",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2000 of 2182 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "JSONPath",
   "url": "https://docs.derivative.ca/JSONPath"
  },
@@ -8542,9 +8542,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2000 of 2944 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Join CHOP",
   "url": "https://docs.derivative.ca/Join_CHOP"
  },
@@ -8634,9 +8634,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 1900 of 3120 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Keyboard In CHOP",
   "url": "https://docs.derivative.ca/Keyboard_In_CHOP"
  },
@@ -8645,9 +8645,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 1900 of 2648 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Keyboard In DAT",
   "url": "https://docs.derivative.ca/Keyboard_In_DAT"
  },
@@ -8915,9 +8915,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2400 of 3344 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "LFO CHOP",
   "url": "https://docs.derivative.ca/LFO_CHOP"
  },
@@ -9002,9 +9002,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2400 of 3030 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Lag CHOP",
   "url": "https://docs.derivative.ca/Lag_CHOP"
  },
@@ -9123,9 +9123,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2200 of 3764 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Layer Mix TOP",
   "url": "https://docs.derivative.ca/Layer_Mix_TOP"
  },
@@ -9134,9 +9134,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (449 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Layer TOP",
   "url": "https://docs.derivative.ca/Layer_TOP"
  },
@@ -9156,9 +9156,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1865 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Layout",
   "url": "https://docs.derivative.ca/Layout"
  },
@@ -9326,9 +9326,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1339 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Level TOP",
   "url": "https://docs.derivative.ca/Level_TOP"
  },
@@ -9417,9 +9417,9 @@
    "TDPages"
   ],
   "group": "concepts",
-  "notes": "Licensing and purchasing, out of scope for a capability scan.",
+  "notes": "Session 3: system model",
   "session": "2026-10-02",
-  "status": "skipped",
+  "status": "extracted",
   "title": "Licensing",
   "url": "https://docs.derivative.ca/Licensing"
  },
@@ -9441,7 +9441,7 @@
    "Pages using duplicate arguments in template calls"
   ],
   "group": "COMP operators",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: partly read: first 2200 of 6770 characters after wiki markup was removed.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Light COMP",
@@ -9498,9 +9498,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2400 of 2631 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Limit CHOP",
   "url": "https://docs.derivative.ca/Limit_CHOP"
  },
@@ -9766,9 +9766,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 3: system model",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Link",
   "url": "https://docs.derivative.ca/Link"
  },
@@ -9886,9 +9886,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2400 of 3978 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Logic CHOP",
   "url": "https://docs.derivative.ca/Logic_CHOP"
  },
@@ -9944,9 +9944,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2400 of 3177 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Lookup CHOP",
   "url": "https://docs.derivative.ca/Lookup_CHOP"
  },
@@ -9967,9 +9967,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1008 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Lookup DAT",
   "url": "https://docs.derivative.ca/Lookup_DAT"
  },
@@ -9978,9 +9978,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2200 of 3503 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Lookup TOP",
   "url": "https://docs.derivative.ca/Lookup_TOP"
  },
@@ -10205,7 +10205,7 @@
    "Touch Glossary"
   ],
   "group": "operator topics",
-  "notes": "Partly read: first 5500 of 9580 characters of the cleaned page (operator pages: summary plus parameter list).",
+  "notes": "Partly read: first 5500 of 9580 characters of the cleaned page (operator pages: summary plus parameter list). | Session 2 (shared-concepts pass, 2026-10-02) re-read: partly read: first 3800 of 9452 characters after wiki markup was removed.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "MIDI",
@@ -10216,9 +10216,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (3306 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "MIDI Event DAT",
   "url": "https://docs.derivative.ca/MIDI_Event_DAT"
  },
@@ -10227,9 +10227,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 3800 of 15799 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "MIDI In CHOP",
   "url": "https://docs.derivative.ca/MIDI_In_CHOP"
  },
@@ -10238,9 +10238,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 3800 of 4799 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "MIDI In DAT",
   "url": "https://docs.derivative.ca/MIDI_In_DAT"
  },
@@ -10249,9 +10249,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (2298 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "MIDI In Map CHOP",
   "url": "https://docs.derivative.ca/MIDI_In_Map_CHOP"
  },
@@ -10262,7 +10262,7 @@
    "TDPages"
   ],
   "group": "concepts",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: read in full (3146 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "MIDI Mapper Dialog",
@@ -10273,9 +10273,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 3800 of 7288 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "MIDI Out CHOP",
   "url": "https://docs.derivative.ca/MIDI_Out_CHOP"
  },
@@ -10355,9 +10355,9 @@
  "https://docs.derivative.ca/MacOS_Environment_Variables": {
   "categories": [],
   "group": "uncategorized",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 3: system model",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "MacOS Environment Variables",
   "url": "https://docs.derivative.ca/MacOS_Environment_Variables"
  },
@@ -10496,9 +10496,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2400 of 6124 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Math CHOP",
   "url": "https://docs.derivative.ca/Math_CHOP"
  },
@@ -10550,9 +10550,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2200 of 2290 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Math TOP",
   "url": "https://docs.derivative.ca/Math_TOP"
  },
@@ -10728,9 +10728,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2300 of 2686 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Merge CHOP",
   "url": "https://docs.derivative.ca/Merge_CHOP"
  },
@@ -10739,9 +10739,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1987 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Merge DAT",
   "url": "https://docs.derivative.ca/Merge_DAT"
  },
@@ -11150,9 +11150,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 1900 of 3335 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Mouse In CHOP",
   "url": "https://docs.derivative.ca/Mouse_In_CHOP"
  },
@@ -11196,7 +11196,7 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "Partly read: first 3000 of 10841 characters of the cleaned page (operator pages: summary plus parameter list).",
+  "notes": "Partly read: first 3000 of 10841 characters of the cleaned page (operator pages: summary plus parameter list). | Session 2 (shared-concepts pass, 2026-10-02) re-read: read in full (7330 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Movie File In TOP",
@@ -11219,7 +11219,7 @@
    "TOP Topics"
   ],
   "group": "operator topics",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: partly read: first 4500 of 7180 characters after wiki markup was removed.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Movie Playback",
@@ -11667,9 +11667,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 3: system model",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Network Editor",
   "url": "https://docs.derivative.ca/Network_Editor"
  },
@@ -11678,9 +11678,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2600 of 3079 characters after wiki markup was removed. Re-read in Session 3: system model.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Network Path",
   "url": "https://docs.derivative.ca/Network_Path"
  },
@@ -11698,9 +11698,9 @@
  "https://docs.derivative.ca/Network_Utilities:_Comments,_Network_Boxes,_Annotates": {
   "categories": [],
   "group": "uncategorized",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (3935 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Network Utilities: Comments, Network Boxes, Annotates",
   "url": "https://docs.derivative.ca/Network_Utilities:_Comments,_Network_Boxes,_Annotates"
  },
@@ -11721,9 +11721,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 3: system model",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Node",
   "url": "https://docs.derivative.ca/Node"
  },
@@ -11790,9 +11790,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2400 of 8828 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Noise CHOP",
   "url": "https://docs.derivative.ca/Noise_CHOP"
  },
@@ -11823,9 +11823,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2400 of 6168 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Noise TOP",
   "url": "https://docs.derivative.ca/Noise_TOP"
  },
@@ -12094,9 +12094,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (973 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions). Re-read in Session 3: system model.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Null CHOP",
   "url": "https://docs.derivative.ca/Null_CHOP"
  },
@@ -12105,9 +12105,9 @@
    "COMPs"
   ],
   "group": "COMP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1177 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Null COMP",
   "url": "https://docs.derivative.ca/Null_COMP"
  },
@@ -12116,9 +12116,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (269 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Null DAT",
   "url": "https://docs.derivative.ca/Null_DAT"
  },
@@ -12160,9 +12160,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (372 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Null TOP",
   "url": "https://docs.derivative.ca/Null_TOP"
  },
@@ -12399,9 +12399,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2300 of 3541 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "OP Execute DAT",
   "url": "https://docs.derivative.ca/OP_Execute_DAT"
  },
@@ -12475,7 +12475,7 @@
    "TDPages"
   ],
   "group": "concepts",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: read in full (743 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "OSC",
@@ -12486,9 +12486,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (3977 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "OSC In CHOP",
   "url": "https://docs.derivative.ca/OSC_In_CHOP"
  },
@@ -12497,9 +12497,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (4212 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "OSC In DAT",
   "url": "https://docs.derivative.ca/OSC_In_DAT"
  },
@@ -12508,9 +12508,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (3279 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "OSC Out CHOP",
   "url": "https://docs.derivative.ca/OSC_Out_CHOP"
  },
@@ -12519,9 +12519,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (3771 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "OSC Out DAT",
   "url": "https://docs.derivative.ca/OSC_Out_DAT"
  },
@@ -12609,9 +12609,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2200 of 4840 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Object CHOP",
   "url": "https://docs.derivative.ca/Object_CHOP"
  },
@@ -12926,7 +12926,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Operator",
@@ -12937,7 +12937,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Operator Family",
@@ -12959,9 +12959,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (2220 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions). Re-read in Session 3: system model.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Operator Shortcuts",
   "url": "https://docs.derivative.ca/Operator_Shortcuts"
  },
@@ -13039,7 +13039,7 @@
    "TouchDesigner Tips"
   ],
   "group": "concepts",
-  "notes": "Partly read: first 5500 of 12064 characters of the cleaned page (operator pages: summary plus parameter list).",
+  "notes": "Partly read: first 5500 of 12064 characters of the cleaned page (operator pages: summary plus parameter list). Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Optimize",
@@ -13064,9 +13064,9 @@
    "Optimize"
   ],
   "group": "concepts",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 5000 of 5738 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Optimized Python Expressions",
   "url": "https://docs.derivative.ca/Optimized_Python_Expressions"
  },
@@ -13355,9 +13355,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (328 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Out CHOP",
   "url": "https://docs.derivative.ca/Out_CHOP"
  },
@@ -13410,9 +13410,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (308 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Out TOP",
   "url": "https://docs.derivative.ca/Out_TOP"
  },
@@ -13465,9 +13465,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1824 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Over TOP",
   "url": "https://docs.derivative.ca/Over_TOP"
  },
@@ -13488,9 +13488,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1842 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Override CHOP",
   "url": "https://docs.derivative.ca/Override_CHOP"
  },
@@ -13602,9 +13602,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1666 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "POP to CHOP",
   "url": "https://docs.derivative.ca/POP_to_CHOP"
  },
@@ -13635,9 +13635,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1378 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "POP to TOP",
   "url": "https://docs.derivative.ca/POP_to_TOP"
  },
@@ -13681,7 +13681,7 @@
    "Touch Glossary"
   ],
   "group": "palette",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Palette",
@@ -13699,9 +13699,9 @@
  "https://docs.derivative.ca/Palette/moviePlayer": {
   "categories": [],
   "group": "uncategorized",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 4500 of 6828 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Palette/moviePlayer",
   "url": "https://docs.derivative.ca/Palette/moviePlayer"
  },
@@ -13770,9 +13770,9 @@
    "Palette"
   ],
   "group": "palette",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1477 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Palette:arcBallCamera",
   "url": "https://docs.derivative.ca/Palette:arcBallCamera"
  },
@@ -13814,7 +13814,7 @@
    "Palette"
   ],
   "group": "palette",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: read in full (656 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Palette:audioAnalysis",
@@ -13836,9 +13836,9 @@
    "Palette"
   ],
   "group": "palette",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1132 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Palette:autoMediaPlayer",
   "url": "https://docs.derivative.ca/Palette:autoMediaPlayer"
  },
@@ -14028,9 +14028,9 @@
    "Palette"
   ],
   "group": "palette",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2000 of 4505 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Palette:blendModes",
   "url": "https://docs.derivative.ca/Palette:blendModes"
  },
@@ -14092,9 +14092,9 @@
    "Palette"
   ],
   "group": "palette",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 1700 of 8079 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Palette:cameraViewport",
   "url": "https://docs.derivative.ca/Palette:cameraViewport"
  },
@@ -14264,9 +14264,9 @@
    "Palette"
   ],
   "group": "palette",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1576 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Palette:debugControl",
   "url": "https://docs.derivative.ca/Palette:debugControl"
  },
@@ -14352,9 +14352,9 @@
    "Palette"
   ],
   "group": "palette",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (734 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Palette:feedback",
   "url": "https://docs.derivative.ca/Palette:feedback"
  },
@@ -14517,9 +14517,9 @@
  "https://docs.derivative.ca/Palette:initializeStart": {
   "categories": [],
   "group": "uncategorized",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2300 of 5266 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Palette:initializeStart",
   "url": "https://docs.derivative.ca/Palette:initializeStart"
  },
@@ -14624,9 +14624,9 @@
    "Palette"
   ],
   "group": "palette",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 1700 of 7186 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Palette:logger",
   "url": "https://docs.derivative.ca/Palette:logger"
  },
@@ -14710,9 +14710,9 @@
  "https://docs.derivative.ca/Palette:movieBlender": {
   "categories": [],
   "group": "uncategorized",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 4500 of 6235 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Palette:movieBlender",
   "url": "https://docs.derivative.ca/Palette:movieBlender"
  },
@@ -14770,9 +14770,9 @@
    "Palette"
   ],
   "group": "palette",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2000 of 2490 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Palette:moviePlaylist",
   "url": "https://docs.derivative.ca/Palette:moviePlaylist"
  },
@@ -14792,9 +14792,9 @@
    "Palette"
   ],
   "group": "palette",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1371 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Palette:multiMix",
   "url": "https://docs.derivative.ca/Palette:multiMix"
  },
@@ -14823,9 +14823,9 @@
    "Palette"
   ],
   "group": "palette",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2000 of 3272 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Palette:noise",
   "url": "https://docs.derivative.ca/Palette:noise"
  },
@@ -15044,7 +15044,7 @@
  "https://docs.derivative.ca/Palette:presets": {
   "categories": [],
   "group": "uncategorized",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: read in full (948 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Palette:presets",
@@ -15143,9 +15143,9 @@
    "Palette"
   ],
   "group": "palette",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 1700 of 6066 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Palette:recorder",
   "url": "https://docs.derivative.ca/Palette:recorder"
  },
@@ -15220,9 +15220,9 @@
    "Palette"
   ],
   "group": "palette",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (353 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Palette:search",
   "url": "https://docs.derivative.ca/Palette:search"
  },
@@ -15851,9 +15851,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 3: system model",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Pane",
   "url": "https://docs.derivative.ca/Pane"
  },
@@ -15886,7 +15886,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Panel",
@@ -15931,9 +15931,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1319 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Panel CHOP",
   "url": "https://docs.derivative.ca/Panel_CHOP"
  },
@@ -15999,9 +15999,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 1900 of 3469 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Panel Execute DAT",
   "url": "https://docs.derivative.ca/Panel_Execute_DAT"
  },
@@ -16034,7 +16034,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Partly read: first 9000 of 10348 characters of the cleaned page (operator pages: summary plus parameter list).",
+  "notes": "Partly read: first 9000 of 10348 characters of the cleaned page (operator pages: summary plus parameter list). | Session 2 (shared-concepts pass, 2026-10-02) re-read: partly read: first 2000 of 10209 characters after wiki markup was removed.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Panel Value",
@@ -16167,9 +16167,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2300 of 2430 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "ParGroup Execute DAT",
   "url": "https://docs.derivative.ca/ParGroup_Execute_DAT"
  },
@@ -16191,7 +16191,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Parameter",
@@ -16260,9 +16260,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2600 of 3223 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Parameter DAT",
   "url": "https://docs.derivative.ca/Parameter_DAT"
  },
@@ -16271,9 +16271,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 1700 of 6619 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Parameter Dialog",
   "url": "https://docs.derivative.ca/Parameter_Dialog"
  },
@@ -16291,7 +16291,7 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: partly read: first 2000 of 3561 characters after wiki markup was removed.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Parameter Execute DAT",
@@ -16313,7 +16313,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Parameter Mode",
@@ -16324,9 +16324,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1338 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Parameter Reference",
   "url": "https://docs.derivative.ca/Parameter_Reference"
  },
@@ -16345,9 +16345,9 @@
  "https://docs.derivative.ca/Parametric_EQ_CHOP": {
   "categories": [],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (181 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Parametric EQ CHOP",
   "url": "https://docs.derivative.ca/Parametric_EQ_CHOP"
  },
@@ -16401,9 +16401,9 @@
    "TDPages"
   ],
   "group": "concepts",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1299 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Particle",
   "url": "https://docs.derivative.ca/Particle"
  },
@@ -16480,9 +16480,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2400 of 5669 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Pattern CHOP",
   "url": "https://docs.derivative.ca/Pattern_CHOP"
  },
@@ -16491,9 +16491,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2000 of 2382 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Pattern Expansion",
   "url": "https://docs.derivative.ca/Pattern_Expansion"
  },
@@ -16502,7 +16502,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Partly read: first 5500 of 9320 characters of the cleaned page (operator pages: summary plus parameter list).",
+  "notes": "Partly read: first 5500 of 9320 characters of the cleaned page (operator pages: summary plus parameter list). | Session 2 (shared-concepts pass, 2026-10-02) re-read: partly read: first 4500 of 9291 characters after wiki markup was removed. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Pattern Matching",
@@ -16513,9 +16513,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 4500 of 8364 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Pattern Matching Support",
   "url": "https://docs.derivative.ca/Pattern_Matching_Support"
  },
@@ -16536,9 +16536,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1440 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Pattern Replacement",
   "url": "https://docs.derivative.ca/Pattern_Replacement"
  },
@@ -16631,7 +16631,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Perform Mode",
@@ -16645,7 +16645,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Partly read: first 5500 of 10542 characters of the cleaned page (operator pages: summary plus parameter list).",
+  "notes": "Partly read: first 5500 of 10542 characters of the cleaned page (operator pages: summary plus parameter list). Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Performance Monitor",
@@ -16658,9 +16658,9 @@
    "TDPages"
   ],
   "group": "concepts",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 3: system model",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Performance Monitor Dialog",
   "url": "https://docs.derivative.ca/Performance_Monitor_Dialog"
  },
@@ -16805,9 +16805,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2300 of 4083 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Pipe In CHOP",
   "url": "https://docs.derivative.ca/Pipe_In_CHOP"
  },
@@ -17055,9 +17055,9 @@
    "MATs"
   ],
   "group": "MAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2000 of 4385 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Point Sprite MAT",
   "url": "https://docs.derivative.ca/Point_Sprite_MAT"
  },
@@ -17454,9 +17454,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (809 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Pre-Filling",
   "url": "https://docs.derivative.ca/Pre-Filling"
  },
@@ -17642,7 +17642,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Procedural",
@@ -17719,7 +17719,7 @@
  "https://docs.derivative.ca/Project_Packager": {
   "categories": [],
   "group": "uncategorized",
-  "notes": "Partly read: first 5500 of 9195 characters of the cleaned page (operator pages: summary plus parameter list).",
+  "notes": "Partly read: first 5500 of 9195 characters of the cleaned page (operator pages: summary plus parameter list). Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Project Packager",
@@ -17843,9 +17843,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2000 of 4332 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Pulse CHOP",
   "url": "https://docs.derivative.ca/Pulse_CHOP"
  },
@@ -17865,7 +17865,7 @@
    "Pages with syntax highlighting errors"
   ],
   "group": "uncategorized",
-  "notes": "Partly read: first 5500 of 12070 characters of the cleaned page (operator pages: summary plus parameter list).",
+  "notes": "Partly read: first 5500 of 12070 characters of the cleaned page (operator pages: summary plus parameter list). Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Python",
@@ -17917,9 +17917,9 @@
    "TouchDesigner Tips"
   ],
   "group": "concepts",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (395 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Python Tips",
   "url": "https://docs.derivative.ca/Python_Tips"
  },
@@ -17937,16 +17937,16 @@
    "Python"
   ],
   "group": "concepts",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1268 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Python f-strings",
   "url": "https://docs.derivative.ca/Python_f-strings"
  },
  "https://docs.derivative.ca/Python_threading_in_TouchDesigner": {
   "categories": [],
   "group": "uncategorized",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Python threading in TouchDesigner",
@@ -18118,9 +18118,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2200 of 2420 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Ramp TOP",
   "url": "https://docs.derivative.ca/Ramp_TOP"
  },
@@ -18300,9 +18300,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 1900 of 2853 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Record CHOP",
   "url": "https://docs.derivative.ca/Record_CHOP"
  },
@@ -18392,9 +18392,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1711 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Reference",
   "url": "https://docs.derivative.ca/Reference"
  },
@@ -18746,9 +18746,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2200 of 3018 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Remap TOP",
   "url": "https://docs.derivative.ca/Remap_TOP"
  },
@@ -18769,9 +18769,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (720 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Rename CHOP",
   "url": "https://docs.derivative.ca/Rename_CHOP"
  },
@@ -18835,9 +18835,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 3: system model",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Render Flag",
   "url": "https://docs.derivative.ca/Render_Flag"
  },
@@ -18890,9 +18890,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2200 of 2237 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Render Simple TOP",
   "url": "https://docs.derivative.ca/Render_Simple_TOP"
  },
@@ -19078,9 +19078,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1816 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Reorder DAT",
   "url": "https://docs.derivative.ca/Reorder_DAT"
  },
@@ -19089,9 +19089,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1183 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Reorder TOP",
   "url": "https://docs.derivative.ca/Reorder_TOP"
  },
@@ -19136,7 +19136,7 @@
    "Touch Glossary"
   ],
   "group": "COMP operators",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: read in full (6131 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions). Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Replicator COMP",
@@ -19182,9 +19182,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1185 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Resample CHOP",
   "url": "https://docs.derivative.ca/Resample_CHOP"
  },
@@ -19217,9 +19217,9 @@
    "Touch Glossary"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (165 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Resolution TOP",
   "url": "https://docs.derivative.ca/Resolution_TOP"
  },
@@ -19342,7 +19342,7 @@
    "Time"
   ],
   "group": "concepts",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Root Time",
@@ -19365,9 +19365,9 @@
    "TouchDesigner Tips"
   ],
   "group": "concepts",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 7000 of 11829 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Run Command Examples",
   "url": "https://docs.derivative.ca/Run_Command_Examples"
  },
@@ -19501,9 +19501,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2300 of 2697 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "SOP to CHOP",
   "url": "https://docs.derivative.ca/SOP_to_CHOP"
  },
@@ -19608,9 +19608,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1156 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "S Curve CHOP",
   "url": "https://docs.derivative.ca/S_Curve_CHOP"
  },
@@ -19619,7 +19619,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Safe Mode",
@@ -19818,7 +19818,7 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: read in full (1279 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Script CHOP",
@@ -20000,9 +20000,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (2594 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions). Re-read in Session 3: system model.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Select CHOP",
   "url": "https://docs.derivative.ca/Select_CHOP"
  },
@@ -20022,9 +20022,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 3800 of 4470 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Select DAT",
   "url": "https://docs.derivative.ca/Select_DAT"
  },
@@ -20066,9 +20066,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (296 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Select TOP",
   "url": "https://docs.derivative.ca/Select_TOP"
  },
@@ -20078,9 +20078,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 3: system model",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Selected Flag",
   "url": "https://docs.derivative.ca/Selected_Flag"
  },
@@ -20179,7 +20179,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Partly read: first 5500 of 8568 characters of the cleaned page (operator pages: summary plus parameter list).",
+  "notes": "Partly read: first 5500 of 8568 characters of the cleaned page (operator pages: summary plus parameter list). | Session 2 (shared-concepts pass, 2026-10-02) re-read: partly read: first 1700 of 8455 characters after wiki markup was removed.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Sequential Parameters",
@@ -20465,9 +20465,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (526 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Shuffle CHOP",
   "url": "https://docs.derivative.ca/Shuffle_CHOP"
  },
@@ -20569,9 +20569,9 @@
    "COMPs"
   ],
   "group": "COMP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1224 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Slider COMP",
   "url": "https://docs.derivative.ca/Slider_COMP"
  },
@@ -20604,9 +20604,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1405 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Slope CHOP",
   "url": "https://docs.derivative.ca/Slope_CHOP"
  },
@@ -20633,9 +20633,9 @@
  "https://docs.derivative.ca/Smooth_Operator": {
   "categories": [],
   "group": "uncategorized",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (94 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Smooth Operator",
   "url": "https://docs.derivative.ca/Smooth_Operator"
  },
@@ -20768,9 +20768,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (827 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Sort DAT",
   "url": "https://docs.derivative.ca/Sort_DAT"
  },
@@ -20799,9 +20799,9 @@
  "https://docs.derivative.ca/Specialization_Constants": {
   "categories": [],
   "group": "uncategorized",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1122 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Specialization Constants",
   "url": "https://docs.derivative.ca/Specialization_Constants"
  },
@@ -20844,9 +20844,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2600 of 4039 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Speed CHOP",
   "url": "https://docs.derivative.ca/Speed_CHOP"
  },
@@ -20960,9 +20960,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1272 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Spring CHOP",
   "url": "https://docs.derivative.ca/Spring_CHOP"
  },
@@ -21097,9 +21097,9 @@
    "Troubleshooting"
   ],
   "group": "concepts",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 3: system model",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Startup Errors Dialog",
   "url": "https://docs.derivative.ca/Startup_Errors_Dialog"
  },
@@ -21145,7 +21145,7 @@
    "Touch Glossary"
   ],
   "group": "operator topics",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: read in full (1266 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions). Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Storage",
@@ -21189,9 +21189,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (564 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Stretch CHOP",
   "url": "https://docs.derivative.ca/Stretch_CHOP"
  },
@@ -21378,9 +21378,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2000 of 4158 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Substitute DAT",
   "url": "https://docs.derivative.ca/Substitute_DAT"
  },
@@ -21575,9 +21575,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1137 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Switch CHOP",
   "url": "https://docs.derivative.ca/Switch_CHOP"
  },
@@ -21586,9 +21586,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (222 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Switch DAT",
   "url": "https://docs.derivative.ca/Switch_DAT"
  },
@@ -21630,9 +21630,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (188 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Switch TOP",
   "url": "https://docs.derivative.ca/Switch_TOP"
  },
@@ -21693,7 +21693,7 @@
  "https://docs.derivative.ca/Syncing_Multiple_Computers": {
   "categories": [],
   "group": "uncategorized",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Syncing Multiple Computers",
@@ -21920,9 +21920,9 @@
    "TDPages"
   ],
   "group": "python reference",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 3: system model",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "TDJSON",
   "url": "https://docs.derivative.ca/TDJSON"
  },
@@ -22189,7 +22189,7 @@
    "Touch Glossary"
   ],
   "group": "DAT operators",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: partly read: first 1700 of 5166 characters after wiki markup was removed.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Table DAT",
@@ -22398,9 +22398,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1980 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Text DAT",
   "url": "https://docs.derivative.ca/Text_DAT"
  },
@@ -22440,9 +22440,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2000 of 10003 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Text TOP",
   "url": "https://docs.derivative.ca/Text_TOP"
  },
@@ -22535,9 +22535,9 @@
    "Texturing"
   ],
   "group": "concepts",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1179 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Texture Extend Modes",
   "url": "https://docs.derivative.ca/Texture_Extend_Modes"
  },
@@ -22548,9 +22548,9 @@
    "Texturing"
   ],
   "group": "concepts",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 1700 of 3816 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Texture Filtering",
   "url": "https://docs.derivative.ca/Texture_Filtering"
  },
@@ -22583,9 +22583,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1467 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Texture Sampling Parameters",
   "url": "https://docs.derivative.ca/Texture_Sampling_Parameters"
  },
@@ -22647,9 +22647,9 @@
    "Palette"
   ],
   "group": "palette",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 3: system model",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Thread Manager",
   "url": "https://docs.derivative.ca/Thread_Manager"
  },
@@ -22670,9 +22670,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (560 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Threshold TOP",
   "url": "https://docs.derivative.ca/Threshold_TOP"
  },
@@ -22693,9 +22693,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (629 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Tile TOP",
   "url": "https://docs.derivative.ca/Tile_TOP"
  },
@@ -22716,7 +22716,7 @@
    "COMPs"
   ],
   "group": "COMP operators",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Time COMP",
@@ -22749,9 +22749,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1612 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Time Slice CHOP",
   "url": "https://docs.derivative.ca/Time_Slice_CHOP"
  },
@@ -22763,7 +22763,7 @@
    "Touch Glossary"
   ],
   "group": "operator topics",
-  "notes": "Partly read: first 9000 of 9456 characters of the cleaned page (operator pages: summary plus parameter list).",
+  "notes": "Partly read: first 9000 of 9456 characters of the cleaned page (operator pages: summary plus parameter list). Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Time Slicing",
@@ -22841,7 +22841,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Timeline",
@@ -22888,7 +22888,7 @@
    "Time"
   ],
   "group": "concepts",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Timepath",
@@ -22911,7 +22911,7 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "Partly read: first 3000 of 15740 characters of the cleaned page (operator pages: summary plus parameter list).",
+  "notes": "Partly read: first 3000 of 15740 characters of the cleaned page (operator pages: summary plus parameter list). | Session 2 (shared-concepts pass, 2026-10-02) re-read: partly read: first 12000 of 12566 characters after wiki markup was removed.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Timer CHOP",
@@ -23152,7 +23152,7 @@
  "https://docs.derivative.ca/TouchEngine": {
   "categories": [],
   "group": "uncategorized",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "TouchEngine",
@@ -23179,16 +23179,16 @@
  "https://docs.derivative.ca/TouchOSC": {
   "categories": [],
   "group": "uncategorized",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1539 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "TouchOSC",
   "url": "https://docs.derivative.ca/TouchOSC"
  },
  "https://docs.derivative.ca/TouchPlayer": {
   "categories": [],
   "group": "uncategorized",
-  "notes": "Partly read: first 5500 of 6472 characters of the cleaned page (operator pages: summary plus parameter list).",
+  "notes": "Partly read: first 5500 of 6472 characters of the cleaned page (operator pages: summary plus parameter list). Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "TouchPlayer",
@@ -23219,9 +23219,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (676 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Touch In DAT",
   "url": "https://docs.derivative.ca/Touch_In_DAT"
  },
@@ -23241,9 +23241,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1667 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Touch Out CHOP",
   "url": "https://docs.derivative.ca/Touch_Out_CHOP"
  },
@@ -23426,7 +23426,7 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "Read in full.",
+  "notes": "Read in full. | Session 2 (shared-concepts pass, 2026-10-02) re-read: read in full (784 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Trail CHOP",
@@ -23540,9 +23540,9 @@
    "TOPs"
   ],
   "group": "TOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2200 of 2645 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Transform TOP",
   "url": "https://docs.derivative.ca/Transform_TOP"
  },
@@ -23576,7 +23576,7 @@
    "TouchDesigner Tips"
   ],
   "group": "concepts",
-  "notes": "Partly read: first 5500 of 20035 characters of the cleaned page (operator pages: summary plus parameter list).",
+  "notes": "Partly read: first 5500 of 20035 characters of the cleaned page (operator pages: summary plus parameter list). | Session 2 (shared-concepts pass, 2026-10-02) re-read: partly read: first 5000 of 19912 characters after wiki markup was removed.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Transparency",
@@ -23599,9 +23599,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (128 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Transpose DAT",
   "url": "https://docs.derivative.ca/Transpose_DAT"
  },
@@ -23667,9 +23667,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2600 of 2664 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Trigger CHOP",
   "url": "https://docs.derivative.ca/Trigger_CHOP"
  },
@@ -23702,9 +23702,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (824 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Trim CHOP",
   "url": "https://docs.derivative.ca/Trim_CHOP"
  },
@@ -23756,9 +23756,9 @@
    "Troubleshooting"
   ],
   "group": "concepts",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 6000 of 17753 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Troubleshooting in TouchDesigner",
   "url": "https://docs.derivative.ca/Troubleshooting_in_TouchDesigner"
  },
@@ -23943,9 +23943,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (2181 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "UDP In DAT",
   "url": "https://docs.derivative.ca/UDP_In_DAT"
  },
@@ -23954,9 +23954,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (2236 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "UDP Out DAT",
   "url": "https://docs.derivative.ca/UDP_Out_DAT"
  },
@@ -24111,9 +24111,9 @@
    "TouchDesigner Tips"
   ],
   "group": "concepts",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (1573 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions). Re-read in Session 3: system model.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Undo",
   "url": "https://docs.derivative.ca/Undo"
  },
@@ -24294,7 +24294,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Partly read: first 5500 of 12723 characters of the cleaned page (operator pages: summary plus parameter list).",
+  "notes": "Partly read: first 5500 of 12723 characters of the cleaned page (operator pages: summary plus parameter list). Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Variables",
@@ -24498,7 +24498,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Viewer",
@@ -24576,7 +24576,7 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "Read in full.",
+  "notes": "Read in full. Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Virtual File System",
@@ -24654,9 +24654,9 @@
    "CHOPs"
   ],
   "group": "CHOP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2000 of 2117 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Wave CHOP",
   "url": "https://docs.derivative.ca/Wave_CHOP"
  },
@@ -24859,9 +24859,9 @@
    "TDPages"
   ],
   "group": "concepts",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2200 of 3442 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Why is My Render Black",
   "url": "https://docs.derivative.ca/Why_is_My_Render_Black"
  },
@@ -24882,9 +24882,9 @@
    "COMPs"
   ],
   "group": "COMP operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): read in full (668 characters after wiki markup was removed; operator pages are the summary plus parameter labels and one-line descriptions).",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Widget COMP",
   "url": "https://docs.derivative.ca/Widget_COMP"
  },
@@ -24938,7 +24938,7 @@
    "OP Help Common Pages"
   ],
   "group": "COMP operators",
-  "notes": "Partly read: first 3000 of 6293 characters of the cleaned page (operator pages: summary plus parameter list).",
+  "notes": "Partly read: first 3000 of 6293 characters of the cleaned page (operator pages: summary plus parameter list). Re-read in Session 3: system model.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Window COMP",
@@ -24970,9 +24970,9 @@
    "Touch Glossary"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 3: system model",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Wire",
   "url": "https://docs.derivative.ca/Wire"
  },
@@ -25029,9 +25029,9 @@
    "TouchDesigner Tips"
   ],
   "group": "concepts",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2300 of 4599 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Working with CHOPs in Python",
   "url": "https://docs.derivative.ca/Working_with_CHOPs_in_Python"
  },
@@ -25042,9 +25042,9 @@
    "TouchDesigner Tips"
   ],
   "group": "concepts",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2000 of 2538 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Working with DATs in Python",
   "url": "https://docs.derivative.ca/Working_with_DATs_in_Python"
  },
@@ -25088,9 +25088,9 @@
    "TDPages"
   ],
   "group": "concepts",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 3: system model",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Write a CPlusPlus Plugin",
   "url": "https://docs.derivative.ca/Write_a_CPlusPlus_Plugin"
  },
@@ -25130,9 +25130,9 @@
    "TouchDesigner Tips"
   ],
   "group": "glossary",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 5000 of 54427 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "Write a GLSL MAT",
   "url": "https://docs.derivative.ca/Write_a_GLSL_MAT"
  },
@@ -25153,7 +25153,7 @@
    "TouchDesigner Tips"
   ],
   "group": "concepts",
-  "notes": "Partly read: first 5500 of 20596 characters of the cleaned page (operator pages: summary plus parameter list).",
+  "notes": "Partly read: first 5500 of 20596 characters of the cleaned page (operator pages: summary plus parameter list). | Session 2 (shared-concepts pass, 2026-10-02) re-read: partly read: first 9000 of 20233 characters after wiki markup was removed.",
   "session": "2026-10-02",
   "status": "extracted",
   "title": "Write a GLSL TOP",
@@ -25219,9 +25219,9 @@
    "DATs"
   ],
   "group": "DAT operators",
-  "notes": "",
-  "session": null,
-  "status": "pending",
+  "notes": "Session 2 (shared-concepts pass): partly read: first 2000 of 4242 characters after wiki markup was removed.",
+  "session": "2026-10-02",
+  "status": "extracted",
   "title": "XML DAT",
   "url": "https://docs.derivative.ca/XML_DAT"
  },

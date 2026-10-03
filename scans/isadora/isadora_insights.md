@@ -683,10 +683,221 @@ Source: Manual p.21–22, p.199–210, p.216–217; KB Isadora 4 release notes
 
 ---
 
-## Not read this session
+## 10. Shared concepts, different approaches
 
-Listed so their absence here is not taken as absence from Isadora: the getting-
-started tutorials (Manual p.50–134), the two IzzyMap tutorials (p.259–276),
-troubleshooting (p.325–335), the property lists of most actors and all
-controls, the 148 add-on pages, the IzzyCast feature pages, and most
+Added in session 2 (2026-10-02). Session 1 looked for what Max lacks. This
+section looks at things both tools have and asks what a Max patcher should take
+from how Isadora does them. Each entry names the manual page it rests on. The
+Max side of every entry was checked against Max's refpages this session; the
+checks are written out per item in `isadora_max_gap_candidates.json` (items 42
+to 89).
+
+Sources read in full for this section: 221 actor entries of the Actors
+Reference, all 21 entries of the Controls Reference (Manual p.829–887),
+Tutorial 8 (Manual p.115–119), and nine knowledge-base articles, listed in
+`ISADORA_CRAWL_LOG.md`.
+
+### How a patch runs
+
+- **Inputs hold values; Max inlets hold nothing until told.** Every Isadora
+  input always has a current value, shown on the actor and saved with the file
+  (Manual p.118). When a Scene is left, values are remembered; an *Init* value
+  on the input overrides that on the next entry. In Max an inlet has only what
+  its object's argument gave it.
+- **Init now executes.** Until version 2, an Init value was stored without
+  running the actor, so nothing downstream changed. The author's KB article
+  explains why that was wrong and what replaced it: on activation, initial
+  values are pushed through the patch (KB *Understanding the new Isadora v2.0
+  actor processing mode*). A Max creation argument still behaves the old way.
+  That is the reason a `loadmess` through a control is sometimes owed and
+  sometimes clutter.
+- **Order comes from pulling, with screen position as the tie-break.** The same
+  article gives the algorithm: start at the end of each chain, execute what is
+  upstream of each input, and where several links meet one input, run the
+  upstream actors top to bottom and keep the last value. Max pushes each
+  message depth-first and orders fan-out right to left. Position decides
+  nothing safe in Max; `trigger` does.
+- **A trigger is a type, and any value fires it.** Linking a number output to a
+  trigger input fires the trigger on every new number (Manual p.115). Most
+  watchers and many generators also have a separate trigger output beside
+  their value. In Max the conversion is explicit: `t b`.
+- **Routing can stop the upstream.** Gate, Router and Selector have a hidden
+  `exec src` input; set to *gated*, everything upstream of a closed path stops
+  executing (KB *Making your patch more efficient…*). Most video actors have
+  `bypass`, Projector has `active` (Manual p.652), and Movie Player's `visible`
+  unloads the movie (p.603). Max is push-driven, so the saving only comes from
+  closing the path above the expensive part or stopping its clock.
+- **A sub-patch can switch itself off.** `User Actor On/Off` (p.795) stops every
+  actor inside. Max's `pcontrol enable 0` covers MIDI and audio, `mute~` covers
+  signals; messages and Jitter keep running.
+
+### Small logic and timing actors
+
+Each of these is one Isadora actor where Max needs two or three objects, or
+where the Max object behaves differently in a way that bites.
+
+- **Comparisons report edges.** `Comparator`, `Text Comparator` and `Inside
+  Range` have *true* and *false* (or *enter* and *exit*) trigger outputs and a
+  change-only mode (p.448, p.770, p.521). Max's `>` outputs on every input;
+  `togedge` or `change` has to follow it.
+- **A threshold with a dead band.** `Compare Guarded` (p.449). Max core has
+  none; `dot.schmitt` and `mo.schmitt` are in installed packages.
+- **Selector re-sends on change.** When `select` changes, the newly chosen
+  input's current value is sent at once (p.697, p.804). Max's `switch` stores
+  nothing and stays silent until the new inlet receives a message.
+- **Counter.** Step size, limit or wrap, floats, and a `cur value` input that
+  can be preset or given an Init (p.452, p.497). Max splits this between
+  `counter` (integers by one, richer direction and carry options) and `accum`.
+- **Value Changed** has a minimum change amount and sends its current value
+  once when the Scene starts (p.802). Max's `change` has neither.
+- **Running range.** `Hold Range`, `Max Value Hold`, `Min Value Hold` (p.518,
+  p.590, p.597), and `Calc Brightness` with its measure-then-rescale trigger
+  (p.420). Max has `peak` and `trough`; `trough` starts at 128, and `scale`
+  does not clip.
+- **Time-based filters.** `Trigger Delay` restarts on each trigger and so
+  detects silence (p.791). `Multi Blocker` drops values that come too soon
+  (p.610). `Simultaneity` fires when all inputs fire within a window (p.727).
+  Max has `speedlim` and `buddy`; nothing covers the last one in one object.
+- **Generators.** `Pulse Generator` pauses in place and can fire several
+  outputs in turn (p.655). `Wave Generator` is a message-rate LFO with phase
+  and one-shot (p.825). `Envelope Generator` can step one segment per trigger
+  (p.484). `Ease In-Out` has a rate cap and a completion trigger (p.474).
+  `Seek Target Value` moves at a fixed rate (p.697). `Smoother` and `Decay
+  Generator` run on their own clock (p.735, p.465). `Timer` pauses (p.789).
+  `Tap Tempo` averages (p.764). In Max: `metro` with `cycle`, `function` with
+  sustain points and `next`, `line` with the `ease` package, and `slide`
+  driven by a `metro`. A message-rate LFO, a fixed-rate seek, a pausable
+  stopwatch and a tap tempo are each a small object worth building.
+- **Toggle** declares its start state: on, off, or as saved (p.789).
+- **Shuffle** deals a range without repeats, reports how many are left and can
+  reshuffle itself (p.726). Max's `urn` does the dealing and bangs when empty;
+  the reshuffle is one cord back to `clear`.
+
+### Sub-patches, sends and stored values
+
+- **Ports are declared.** `User Input` and `User Output` set a port's name,
+  type, range and hover text, and port order is set in a dialog (p.796–797,
+  p.175). A Max `inlet` has a hover comment and its position.
+- **Broadcaster and Listener** use channel numbers, carry any type including
+  video, and reach only active Scenes; a Listener states its output type and
+  has a trigger output (p.415, p.566). Max's `s` and `r` use names and reach
+  every open patcher.
+- **Global values announce themselves.** A `Get Global Values` actor outputs
+  whenever the matching `Set` is triggered (p.501, p.719). A Max `value` waits
+  to be banged.
+- **Data Array** ties a table to a tab-separated file with a read-on-start,
+  write-on-exit mode and a keep-a-copy-in-the-document switch (p.457). Max's
+  `coll` loads a file of its own name at load and has `embed`; writing back is
+  a `closebang` into `writeagain`.
+- **Text is a link type** with its own small actors (p.769–779). Max 9's
+  `string.*` family is the counterpart, and is easy to overlook in favour of
+  symbols and `sprintf`.
+
+### Watchers
+
+- **Keyboard.** A key range, key names such as `'right-arrow'`, and press,
+  release or both (p.553); `Key Table Watcher` turns a set of keys into an
+  index (p.552). Max's `key` reports everything and is filtered afterwards.
+- **Mouse.** Position as a percentage of a chosen region, gated by modifier
+  keys (p.601); the Stage version adds clicks, wheel and inside/outside
+  (p.755).
+- **MIDI.** Every watcher filters by a range on each field and has a trigger
+  output (p.451, p.617–618). `Send Note` owns its note-off and `All Notes Off`
+  silences only what is sounding (p.705, p.390). Max's `makenote` and `flush`
+  are the same idea and must be wired in.
+- **OSC.** `OSC Address Listener` takes wildcards, outputs JSON, and makes the
+  drop-or-queue choice explicit with a backlog count (p.633). Incoming
+  messages must carry type tags (p.635).
+- **Sound level.** A floor that rescales the range above it, and a trigger
+  level (p.739). The FFT is switched on per capture channel in settings, and
+  actors read its bands (p.736).
+- **Live video.** Devices are assigned to four channels once; patches read a
+  channel number (p.807, p.426).
+
+### Video
+
+- **Play segment.** Start and length as percentages; `position` works inside
+  the segment; a trigger per new frame and per loop end (p.603). Two helper
+  actors convert seconds to percent for a given file (p.592–593).
+- **Alpha.** Streams carry a premultiplied flag; `Alpha Tool` fixes halos
+  (p.392). Keyers can output transparency instead of a mix (p.435, p.573).
+  `Add Alpha Channel` attaches any stream as alpha (p.389).
+- **Projector.** Three blend choices and one `intensity` input whose meaning
+  follows the blend; layer numbers decide order (p.652, p.242).
+- **Sizes.** One preference says which of two mismatched streams is scaled, and
+  `Video Mixer` can override it (p.809). The manual's advice is to keep every
+  stream the same size (p.327).
+- **Codecs.** HAP, ProRes or Photo JPEG for anything scrubbed, reversed or
+  speed-changed; H.264 only for straight playback (KB *Mixed format media
+  warning*; Manual p.327–328).
+- **Text.** `Text Draw` can report the size and position of what it rendered
+  (p.772).
+- **Pictures** send one frame when something changes, not a stream (p.644).
+
+### The operator's panel
+
+- Controls are tied to inputs by ID, not by links. *Show Value of Linked
+  Properties* makes a control follow its input when something else changes it
+  (p.829–887, every control).
+- `Popup Menu` and `List Selector` can fill themselves from the option list of
+  the input they are linked to (p.855, p.865).
+- `Button` has its own on and off values, momentary or toggle, *Don't Send
+  Off*, and *Display-Only* (p.838). `Slider` can hide its thumb and act as a
+  meter (p.875).
+- `Edit Text` has a key filter, a length limit, single-line, read-only and
+  password options (p.850).
+- `Show-Hide Control` matches control addresses with wildcards (p.725).
+- `Monitor` and `Stage Preview` have a frame-rate cap, since reading the
+  output back costs time (p.859, p.880).
+- `Background` and `Comment` actors whose name starts with `#` appear in a
+  *Show Tagged Actors* list, which works as bookmarks in a large patch (p.407).
+  Whether Max has an equivalent was not checked.
+
+### Where Max is ahead
+
+Checked this session, on the same shared ground.
+
+- **Maths.** `Calculator` does five operations on two numbers and `Math` one
+  function on one number (p.424, p.576). Max's `expr` and `v8` take whole
+  expressions; Isadora's answer to anything larger is its Javascript actor.
+- **Structured data.** `JSON Parser` reads values by a `key:index:key` path and
+  `JSON Bundler` builds one level at a time (p.545–546). Max's `dict` family
+  holds the structure itself, with `dict.unpack` and `dict.pack` at the edges.
+- **Lists.** The manual's table of property types (p.115) has no list type.
+  Several values travel as separate links,
+  as a Data Array line, or as JSON text (KB *Grouping, ungrouping and passing
+  JSON values with Javascript*).
+- **Blend modes.** Projector has three (p.652). Max's GL objects have eight
+  named `blend` modes and free source and destination factors.
+- **3D.** `3D Player` reads only `.3ds` files, lighting is set by one actor per
+  Stage and channel, and `3D Renderer` is deprecated in favour of a Virtual
+  Stage
+  (p.361, p.339, p.373). Max's `jit.gl.model` reads several formats, and
+  `jit.gl.node` groups and captures a sub-scene.
+- **Counting.** `counter` has up-and-down mode and carry outlets that Isadora's
+  Counter lacks.
+- **Envelope editing.** `function` is drawn with the mouse; Isadora's envelope
+  is typed into pairs of inputs.
+- **Audio voices and routing.** `poly~` and `matrix~` go well beyond 16 sampler
+  channels and a routing string (p.742). The v4.0 manual describes no audio
+  links between actors outside Core Audio.
+- **MIDI detail.** Max has `nrpnin` and `nrpnout` with a `hires` mode, and
+  `sxformat` with expressions per byte. Isadora's `Send NonReg Param` has four
+  value-scaling modes (p.704) and `Send Sys Ex` nine plain parameters (p.714).
+- **Key and MIDI binding without patching.** Max 9's Mappings bind keys and
+  MIDI to parameter-enabled objects, with pickup and relative modes. Isadora's
+  Go Triggers bind only the four scene-stepping actions.
+- **Debugging.** Max has watchpoints and stepping through messages, and probes
+  on cords. Isadora's manual offers a hover preview on video links, the Status
+  Window and Pause Engine.
+---
+
+## Not read
+
+Listed so their absence here is not taken as absence from Isadora. After
+session 2: the getting-started tutorials other than Tutorial 8 (Manual
+p.50–114, p.120–134), the two IzzyMap tutorials (p.259–276), the rest of
+troubleshooting (p.331–335), the property lists of about 90 actors (the
+IzzyCast, tracking, 3D particle, Art-Net, serial and TCP actors and the
+deprecated ones), the 148 add-on pages, the IzzyCast feature pages, and most
 knowledge-base tutorials. See `ISADORA_CRAWL_LOG.md`.

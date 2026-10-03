@@ -1,0 +1,1749 @@
+[
+  {
+    "capability": "Copies of an ordinary abstraction as voices ([clone])",
+    "category": "audio",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "clone",
+      "poly",
+      "next",
+      "this",
+      "all",
+      "resize",
+      "-di",
+      "-do",
+      "-s",
+      "-x"
+    ],
+    "what_it_does": "[clone] loads N copies of any abstraction, with no special inlet or outlet objects inside. Each copy gets its own number as $1; a list starting with a number goes to that copy, and outlets tag what they send with the copy number. Voice allocation is a separate object, [poly], wired in front.",
+    "source_urls": [
+      "Documentation/5.reference/clone-help.pd",
+      "Documentation/5.reference/poly-help.pd",
+      "Documentation/3.audio.examples/D11.sampler.poly.pd",
+      "Documentation/1.manual/resources/chapter2.htm"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "poly~",
+      "thispoly~",
+      "mc.poly~",
+      "poly",
+      "in~",
+      "out~"
+    ],
+    "max_check": "Read the poly~, thispoly~, mc.poly~, in~ and out~ refpages and the userguide polyphony page. poly~ needs in/in~/out/out~ inside the voice patcher; routes by target, note and midinote; has steal, mute/busy through thispoly~, up/down sampling, a voices message and parallel threads. thispoly~ bang reports the instance number. Max also has a separate poly allocator object.",
+    "advice": "The Pd split is worth copying in Max when the built-in routing fights you: keep allocation outside (Max's own poly object) and address voices by number with poly~'s target. Inside a voice, read the voice number once with thispoly~ bang, the way a clone copy reads $1. Keep poly~ for what clone lacks: muting idle voices and voice stealing.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Switching DSP off for one subpatch ([switch~])",
+    "category": "audio",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "switch~",
+      "block~"
+    ],
+    "what_it_does": "A [switch~] in a window turns audio computation for that window and everything inside it on or off with a number. One object per window; it nests.",
+    "source_urls": [
+      "Documentation/5.reference/block~-help.pd",
+      "Documentation/1.manual/resources/chapter2.htm"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "mute~",
+      "pass~",
+      "pcontrol",
+      "poly~",
+      "thispoly~",
+      "begin~"
+    ],
+    "max_check": "Read refpages mute~ (disables signal objects in a connected subpatcher), pass~ (zero signal out of a muted subpatcher), pcontrol, thispoly~ (mute message), begin~ (marked OBSOLETE, does nothing since Max 6, 'please use poly~'). No switch~ or block~ in the registry.",
+    "advice": "In Max the switch lives outside the subpatcher (mute~ wired to it) or in thispoly~. For a patch with heavy optional sections, wrap each in a subpatcher with mute~ and pass~, or make it a poly~ voice; do not use begin~/gate~.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Per-subpatch block size, overlap and sample rate ([block~])",
+    "category": "audio",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "block~",
+      "switch~",
+      "inlet~",
+      "outlet~",
+      "hold",
+      "pad",
+      "lin"
+    ],
+    "what_it_does": "[block~ size overlap resample] sets the block size, an overlap factor and an up- or down-sampling factor for one window and its children. [inlet~] and [outlet~] convert at the boundary, with a choice of hold, zero-pad or linear resampling, and overlap-add on the way out.",
+    "source_urls": [
+      "Documentation/5.reference/block~-help.pd",
+      "Documentation/5.reference/inlet-outlet-help.pd",
+      "Documentation/3.audio.examples/J07.oversampling.pd",
+      "Documentation/1.manual/resources/chapter2.htm"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "poly~",
+      "pfft~",
+      "gen~"
+    ],
+    "max_check": "poly~ refpage: vs attribute (signal vector size for the loaded patch), up and down arguments/messages, resampling attribute (high-quality filters, on by default). pfft~ handles FFT size and overlap. No per-subpatcher block control outside poly~/pfft~ found in the registry (no 'block' names).",
+    "advice": "To run part of a Max patch at another vector size or oversampled, load it in poly~ with vs / up. Max filters the resampling for you; Pd leaves the anti-alias filter to the patcher.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "One-sample feedback loops by setting block size to 1",
+    "category": "audio",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "block~ 1",
+      "delread~",
+      "delwrite~",
+      "send~",
+      "receive~",
+      "fexpr~"
+    ],
+    "what_it_does": "A subpatch with [block~ 1] computes one sample at a time, so a delay or send/receive loop inside it has a one-sample delay. Recursive filters and Karplus-Strong strings are built this way with ordinary objects.",
+    "source_urls": [
+      "Documentation/3.audio.examples/G04.control.blocksize.pd",
+      "Documentation/5.reference/send-receive-tilde-help.pd",
+      "Documentation/5.reference/block~-help.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "gen~",
+      "gen.codebox~",
+      "poly~"
+    ],
+    "max_check": "gen~ refpage and the repo's forum insights (history operator for IIR filters). poly~ has a vs attribute; whether vs 1 is allowed was not checked.",
+    "advice": "In Max, do single-sample feedback in gen~ with history. It compiles to native code; Pd's block~ 1 pays the per-block overhead on every sample.",
+    "confidence": "medium",
+    "notes": "poly~ @vs 1 not verified."
+  },
+  {
+    "capability": "Compute exactly one DSP block on demand (bang to [switch~])",
+    "category": "audio",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "switch~",
+      "bang"
+    ],
+    "what_it_does": "A bang to a switched-off [switch~] runs one block of that subpatch's audio and stops. The help uses it to fill a table with a window function or noise without leaving that audio running.",
+    "source_urls": [
+      "Documentation/5.reference/block~-help.pd"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "buffer~",
+      "peek~",
+      "uzi"
+    ],
+    "max_check": "Registry has no switch~ or block~. Read poly~, mute~ and pcontrol message lists: none steps DSP by one vector. buffer~ has a fill message for functions; peek~ writes samples from messages.",
+    "advice": "",
+    "confidence": "medium",
+    "notes": "Tables in Max are filled from the message side (buffer~ fill, uzi into peek~) or in a v8 script."
+  },
+  {
+    "capability": "FFT processing in an ordinary subpatch",
+    "category": "audio",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "rfft~",
+      "rifft~",
+      "fft~",
+      "ifft~",
+      "block~",
+      "tabreceive~",
+      "lrshift~"
+    ],
+    "what_it_does": "There is no FFT wrapper. FFT objects work on whatever block the window has, so a subpatch with [block~ 512 4] is a 512-point, overlap-4 analysis; the Hann window, normalisation and overlap-add are patched by hand.",
+    "source_urls": [
+      "Documentation/5.reference/fft~-help.pd",
+      "Documentation/3.audio.examples/I03.resynthesis.pd",
+      "Documentation/3.audio.examples/I07.phase.vocoder.pd",
+      "Documentation/1.manual/resources/chapter2.htm"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "pfft~",
+      "fftin~",
+      "fftout~",
+      "fft~",
+      "ifft~"
+    ],
+    "max_check": "pfft~ refpage: manages windowing, overlap and add with fftin~/fftout~. fft~ refpage: takes FFT size, interval and offset as arguments. Userguide frequency_domain page says pfft~ is the easier route.",
+    "advice": "Use pfft~ in Max. The Pd example patches (I03 graphic EQ, I07 phase vocoder) are worth reading as recipes: every step pfft~ hides is visible in them.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Multichannel signals through ordinary objects ([snake~])",
+    "category": "audio",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "snake~ in",
+      "snake~ out",
+      "clone -d",
+      "adc~ -m",
+      "send~",
+      "catch~"
+    ],
+    "what_it_does": "Any signal cord can carry several channels. [snake~ in] bundles and [snake~ out] splits; stateless objects such as [*~] and [cos~] process every channel under their normal name, and [clone -di / -do] spreads channels over copies.",
+    "source_urls": [
+      "Documentation/5.reference/snake-tilde-help.pd",
+      "Documentation/5.reference/binops-tilde-help.pd",
+      "Documentation/5.reference/clone-help.pd",
+      "Documentation/1.manual/resources/chapter2.htm"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "mc.pack~",
+      "mc.unpack~",
+      "mc.combine~",
+      "mc.separate~",
+      "mc.poly~"
+    ],
+    "max_check": "Read refpages mc.pack~, mc.unpack~, mc.combine~, mc.separate~, mc.poly~. Max keeps multichannel in a parallel mc. family; mc.poly~ gives per-instance inputs and a multichannel output.",
+    "advice": "No change for Max. When porting a Pd patch, a [snake~] cord becomes an mc. cord and every object on it needs its mc. name.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Summing signal bus as its own object pair ([throw~] / [catch~])",
+    "category": "audio",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "throw~",
+      "catch~",
+      "send~",
+      "receive~"
+    ],
+    "what_it_does": "[throw~] adds into a named bus and one [catch~] reads the sum. [send~] / [receive~] is the opposite shape: exactly one sender, any number of receivers; a second [send~] of the same name is an error.",
+    "source_urls": [
+      "Documentation/5.reference/throw~-catch~-help.pd",
+      "Documentation/5.reference/send-receive-tilde-help.pd",
+      "Documentation/1.manual/resources/chapter2.htm"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "send~",
+      "receive~"
+    ],
+    "max_check": "send~ refpage: 'When two or more send~ objects are aimed at the same receive~ object, the signals add together.' No throw~ or catch~ in the registry.",
+    "advice": "Max's send~ already sums, so one pair does both jobs (see patching/MAX_PATCHING.md on mix buses). When porting, [throw~ x] becomes s~ x and [catch~ x] becomes r~ x.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "A stated rule for the delay and ordering of wireless signal connections",
+    "category": "audio",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "send~",
+      "receive~",
+      "delwrite~",
+      "delread~",
+      "throw~",
+      "catch~"
+    ],
+    "what_it_does": "If the reader is sorted before the writer the signal is exactly one block late, otherwise not at all. DSP order follows cords between subpatches, so putting writer and reader in two subpatches joined by a dummy cord fixes the order.",
+    "source_urls": [
+      "Documentation/3.audio.examples/G05.execution.order.pd",
+      "Documentation/5.reference/send-receive-tilde-help.pd",
+      "Documentation/5.reference/delay-tilde-objects-help.pd",
+      "Documentation/1.manual/resources/chapter2.htm"
+    ],
+    "max_status": "better-elsewhere",
+    "max_closest": [
+      "send~",
+      "receive~",
+      "tapin~",
+      "tapout~"
+    ],
+    "max_check": "send~ and receive~ refpages: 'can introduce a delay of varying lengths', depending on the number of objects, feedback loops and multiprocessing between top-level patchers. No rule for forcing an order is given there.",
+    "advice": "In Max, do not carry a timing-critical or feedback signal over send~/receive~. Use a cord, tapin~/tapout~ for delay loops, or gen~. Keep send~/receive~ for mixes and meters where a vector of delay does not matter.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Delay lines linked by name, with any number of remote taps",
+    "category": "audio",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "delwrite~",
+      "delread~",
+      "delread4~",
+      "vd~"
+    ],
+    "what_it_does": "[delwrite~ name ms] writes a delay line; any [delread~] or [delread4~] with that name, in any window, reads it. A signal sets the delay time of [delread4~].",
+    "source_urls": [
+      "Documentation/5.reference/delay-tilde-objects-help.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "tapin~",
+      "tapout~",
+      "delay~"
+    ],
+    "max_check": "tapout~ refpage: the outlet of tapin~ must be cabled to tapout~ for the delay line to work. delay~ refpage read.",
+    "advice": "No change for Max; note when porting that the name link becomes a cord from tapin~.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Sub-sample-accurate ramps scheduled from one message ([vline~])",
+    "category": "audio",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "vline~",
+      "line~"
+    ],
+    "what_it_does": "[vline~] takes target, ramp time and start delay, places breakpoints between samples, and queues several segments from one message box. [line~] rounds to block edges.",
+    "source_urls": [
+      "Documentation/5.reference/vline~-help.pd",
+      "Documentation/3.audio.examples/C04.control.to.signal.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "line~",
+      "curve~",
+      "zigzag~"
+    ],
+    "max_check": "line~ refpage: 'sample-accurate when Scheduler in Audio Interrupt is enabled'; takes lists of value/time pairs. zigzag~ and curve~ refpages read. None takes a per-segment start delay in the form vline~ does.",
+    "advice": "For tight envelopes in Max, turn on Scheduler in Audio Interrupt, or generate the envelope at signal rate (gen~, function into line~). A Pd message like '1 10, 0 300 150' becomes a single line~ list with the hold as a segment.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "One-line signal expressions, per block and per sample ([expr~], [fexpr~])",
+    "category": "audio",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "expr~",
+      "fexpr~",
+      "$v1",
+      "$x1[-1]",
+      "$y1[-1]"
+    ],
+    "what_it_does": "[expr~] evaluates a C-style expression on whole signal blocks. [fexpr~] evaluates per sample and can read earlier input and output samples, so a difference equation or a small chaotic system is typed in one box.",
+    "source_urls": [
+      "Documentation/5.reference/expr-help.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "gen~",
+      "gen.codebox~"
+    ],
+    "max_check": "No expr~ or fexpr~ in the registry. gen~ and gen.codebox~ refpages: an embedded Gen patcher or GenExpr text compiled to native code.",
+    "advice": "Use gen~ (or gen.codebox~ for the typed form). It is faster than fexpr~, which the Pd help itself warns is expensive. The fexpr~ notation $y1[-1] maps to a history in gen.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Different smoothing speed for rising and falling input ([slop~])",
+    "category": "audio",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "slop~"
+    ],
+    "what_it_does": "[slop~] is a lowpass with separate cutoffs for the linear region and for large upward and downward moves. The documents build a slew limiter, an instant-attack peak meter and a compressor-limiter from it.",
+    "source_urls": [
+      "Documentation/5.reference/slop~-help.pd",
+      "Documentation/8.topics/slop-tilde.htm"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "slide~",
+      "rampsmooth~",
+      "deltaclip~"
+    ],
+    "max_check": "Refpages: slide~ ('envelope following and lowpass filtering', separate up and down), rampsmooth~ (linear ramp over n samples), deltaclip~ (limits slope). None has slop~'s three-region response in one object.",
+    "advice": "",
+    "confidence": "medium",
+    "notes": "slop~ help and the topic page were read only in part."
+  },
+  {
+    "capability": "Sinusoidal analysis and pitch tracking in the base install ([sigmund~])",
+    "category": "audio",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "sigmund~",
+      "pitch",
+      "env",
+      "notes",
+      "peaks",
+      "tracks",
+      "-t"
+    ],
+    "what_it_does": "[sigmund~] reports pitch, level, note onsets, the loudest sinusoidal peaks, or peaks joined into continuous tracks for resynthesis. With -t it analyses a stored array instead of live input.",
+    "source_urls": [
+      "Documentation/5.reference/sigmund~-help.pd",
+      "Documentation/4.data.structures/17.partialtracer.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "fzero~",
+      "fluid.pitch~"
+    ],
+    "max_check": "No sigmund~, fiddle~ or bonk~ in the Max registry. fzero~ refpage: fundamental frequency estimator. query_packages.py: 'sigmund' no match; fluid.pitch~ (FluCoMa) is installed.",
+    "advice": "",
+    "confidence": "medium",
+    "notes": "The partial-tracking output (tracks) has no core Max match; FluCoMa's sine objects were not looked up."
+  },
+  {
+    "capability": "Percussion attack detection with learned templates ([bonk~])",
+    "category": "sensors/tracking/ML",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "bonk~",
+      "learn",
+      "thresh",
+      "mask"
+    ],
+    "what_it_does": "[bonk~] watches 11 frequency bands for sudden growth and reports an attack with its spectrum and loudness. It can learn templates and say which of several instruments was struck.",
+    "source_urls": [
+      "Documentation/5.reference/bonk~-help.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "thresh~",
+      "edge~",
+      "2threshattack~",
+      "dk.cvonset~"
+    ],
+    "max_check": "No bonk~ in the registry. query_packages.py 'onset': 58 matches in installed packages, including CNMAT 2threshattack~ and Data Knot dk.cvonset~. No template matching in the entries read.",
+    "advice": "",
+    "confidence": "low",
+    "notes": ""
+  },
+  {
+    "capability": "Sample-and-hold triggered by a falling control signal",
+    "category": "audio",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "samphold~"
+    ],
+    "what_it_does": "[samphold~] samples its left input whenever its right input decreases, so a [phasor~] triggers it at each wrap with no extra object.",
+    "source_urls": [
+      "Documentation/5.reference/samphold~-help.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "sah~"
+    ],
+    "max_check": "sah~ refpage: samples when the trigger crosses a threshold, with a triggermode attribute (default Ascending).",
+    "advice": "When porting, the trigger sense flips: Pd fires on a drop, Max's default on a rise past the threshold. Set sah~'s triggermode rather than inverting the signal.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Signal threshold detector that outputs bangs, with debounce",
+    "category": "audio",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "threshold~"
+    ],
+    "what_it_does": "[threshold~ high high-ms low low-ms] is a Schmitt trigger: a bang out the left when the signal reaches the high level, a bang out the right when it falls below the low one, each with its own debounce time.",
+    "source_urls": [
+      "Documentation/5.reference/threshold~-help.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "thresh~",
+      "edge~"
+    ],
+    "max_check": "thresh~ refpage: outputs a 0/1 signal with low and high thresholds. edge~ refpage: bangs on zero/non-zero transitions. No debounce time on either.",
+    "advice": "In Max chain thresh~ into edge~ for the two bangs, and add debounce with onebang or a delay.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "A bang for every DSP block ([bang~])",
+    "category": "audio",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "bang~"
+    ],
+    "what_it_does": "[bang~] outputs a bang after each block of audio is computed, at the same logical time. Used to poll analysis objects in step with the audio.",
+    "source_urls": [
+      "Documentation/5.reference/bang~-help.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "snapshot~",
+      "metro",
+      "dspstate~"
+    ],
+    "max_check": "No bang~ in the registry. snapshot~ refpage: has its own interval attribute and reports periodically without an external clock.",
+    "advice": "In Max the polling clock is built into the readers: give snapshot~ (and the meters) an interval instead of banging them.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Arrays: one drawable, editable table shared by control and audio",
+    "category": "audio",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "array",
+      "graph",
+      "tabread4~",
+      "tabwrite~",
+      "tabosc4~",
+      "sinesum",
+      "cosinesum",
+      "normalize",
+      "array define -k"
+    ],
+    "what_it_does": "A Pd array is drawn in the patch, edited by dragging, read and written by both control and signal objects, filled by messages such as sinesum, and optionally saved inside the patch.",
+    "source_urls": [
+      "Documentation/1.manual/resources/chapter2.htm",
+      "Documentation/2.control.examples/15.array.pd",
+      "Documentation/2.control.examples/16.more.arrays.pd",
+      "Documentation/5.reference/array-object-help.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "buffer~",
+      "waveform~",
+      "table",
+      "itable",
+      "multislider"
+    ],
+    "max_check": "buffer~ refpage: fill (constant or function), normalize, read/write. waveform~ refpage: a draw mode with a pencil tool that changes the buffer~ samples. table/itable refpages: integer tables with embed. Pd's manual says buffer~ cannot be drawn into; waveform~'s refpage says otherwise.",
+    "advice": "Max splits this in two: buffer~ (+ waveform~ in draw mode) for audio, table/itable or multislider for control data. For a small hand-drawn transfer curve used at audio rate, buffer~ + waveform~ is the match. buffer~ has no 'save in patch' option in its attribute list; table and itable have embed.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Offline rendering by message (pd fast-forward)",
+    "category": "audio",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "fast-forward",
+      "pd",
+      "-batch",
+      "-nogui"
+    ],
+    "what_it_does": "Sending 'fast-forward <ms>' to pd runs the scheduler as fast as the CPU allows for that much patch time. A patch can render to an array or a file faster than real time and then carry on live.",
+    "source_urls": [
+      "Documentation/5.reference/pd-messages.pd",
+      "Documentation/3.audio.examples/B16.long-varispeed.pd",
+      "Documentation/1.manual/resources/chapter5.htm"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "adstatus",
+      "dsptime~",
+      "sfrecord~"
+    ],
+    "max_check": "Userguide non_realtime page: select the NonRealTime driver in Audio Status; hardware I/O is off; poll dsptime~; record with sfrecord~.",
+    "advice": "Max's way is a driver switch, not a message with a duration. For an automated render, switch the driver, start DSP, watch dsptime~, stop.",
+    "confidence": "high",
+    "notes": "Whether adstatus can switch to the NonRealTime driver by message was not checked."
+  },
+  {
+    "capability": "A second Pd process for another CPU core ([pd~])",
+    "category": "audio",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "pd~",
+      "stdout"
+    ],
+    "what_it_does": "[pd~] starts another Pd as a subprocess with its own patch and exchanges audio and messages with it. There is also a Max external of the same name that runs Pd inside Max.",
+    "source_urls": [
+      "Documentation/5.reference/pd~-help.pd",
+      "Documentation/5.reference/stdout-help.pd",
+      "Documentation/1.manual/resources/chapter2.htm"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "poly~",
+      "mc.poly~"
+    ],
+    "max_check": "poly~ refpage: parallel attribute and threadcount message spread voices over threads. No pd~ in this Max install's registry.",
+    "advice": "In Max, parallelism is per poly~ (@parallel 1). The Max [pd~] external, if installed, would let a Pd patch run inside Max; it is not installed here.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Decibel scale where 100 dB is full scale",
+    "category": "audio",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "dbtorms",
+      "rmstodb",
+      "dbtopow",
+      "env~"
+    ],
+    "what_it_does": "Pd's dB objects and [env~] put amplitude 1 at 100 dB and clip 0 dB to silence, so a level control runs 0 to 100.",
+    "source_urls": [
+      "Documentation/5.reference/acoustics-help.pd",
+      "Documentation/5.reference/env~-help.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "dbtoa",
+      "atodb",
+      "live.gain~"
+    ],
+    "max_check": "dbtoa and atodb refpage digests read (decibels to a linear value and back). Recorded as a porting trap, not a capability.",
+    "advice": "When porting a Pd patch to Max, subtract 100 from every dB value before using Max's dB objects.",
+    "confidence": "medium",
+    "notes": "Only the digests of the Max dB objects were read, not where they put 0 dB."
+  },
+  {
+    "capability": "User-defined graphical data structures",
+    "category": "data/tables/scripting",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "struct",
+      "scalar",
+      "pointer",
+      "get",
+      "set",
+      "append",
+      "element",
+      "getsize",
+      "setsize",
+      "drawpolygon",
+      "filledpolygon",
+      "drawcurve",
+      "plot",
+      "drawnumber",
+      "drawsymbol",
+      "drawtext"
+    ],
+    "what_it_does": "A template declares named fields (float, symbol, text, nested arrays) and drawing instructions that use the fields as coordinates and colours. Each datum is drawn on a canvas, and dragging a drawn point edits the field behind it. Patches walk the data with pointers.",
+    "source_urls": [
+      "Documentation/1.manual/resources/chapter2.htm",
+      "Documentation/4.data.structures/01.scalars.pd",
+      "Documentation/4.data.structures/06.array.pd",
+      "Documentation/5.reference/struct-help.pd",
+      "Documentation/5.reference/pointer-help.pd",
+      "Documentation/5.reference/draw-shapes-help.pd",
+      "Documentation/5.reference/plot-help.pd"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "dict",
+      "jit.cellblock",
+      "v8ui",
+      "jsui",
+      "function",
+      "nodes"
+    ],
+    "max_check": "Registry searched for 'struct', 'draw': none (lcd exists and its digest says deprecated). dict holds nested data with no drawing. v8ui/jsui refpages: a script draws and handles the mouse, so the pairing of data and picture has to be written by hand each time.",
+    "advice": "",
+    "confidence": "high",
+    "notes": "The closest Max route is a v8ui script over a dict."
+  },
+  {
+    "capability": "A drawn score that is also the sequence",
+    "category": "timeline/cueing/show control",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "struct",
+      "plot",
+      "pointer traverse",
+      "sort",
+      "clone"
+    ],
+    "what_it_does": "The data-structure tutorial builds a score window where each event is a shape with pitch and loudness curves; the same data is walked by a pointer and played. Events are dragged, copied and re-sorted by x.",
+    "source_urls": [
+      "Documentation/4.data.structures/09.sequencer.pd",
+      "Documentation/4.data.structures/voice.pd",
+      "Documentation/4.data.structures/data-array.pd",
+      "Documentation/1.manual/resources/chapter2.htm"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "function",
+      "live.step",
+      "bach.roll",
+      "mtr",
+      "seq"
+    ],
+    "max_check": "Preferred-objects table in CLAUDE.md (live.step, function). query_packages.py 'bach.roll': bach is installed and has a proportional score editor. No core object pairs free-form drawn shapes with user-defined fields.",
+    "advice": "",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Mouse interaction reports from drawn data",
+    "category": "control surface/UI building",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "struct",
+      "click",
+      "change",
+      "select",
+      "displace"
+    ],
+    "what_it_does": "[struct] has an outlet that reports click, change, select, deselect and displace together with a pointer to the datum touched, so a patch reacts to edits of drawn data.",
+    "source_urls": [
+      "Documentation/4.data.structures/10.interaction.pd",
+      "Documentation/4.data.structures/12.onoff.pd",
+      "Documentation/5.reference/struct-help.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "v8ui",
+      "jsui"
+    ],
+    "max_check": "v8ui and jsui refpages: mouse handlers in script. Nothing declarative.",
+    "advice": "",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Stored message lists with search and sequencing ([text])",
+    "category": "data/tables/scripting",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "text define",
+      "text get",
+      "text set",
+      "text insert",
+      "text delete",
+      "text size",
+      "text tolist",
+      "text fromlist",
+      "text search",
+      "text sequence"
+    ],
+    "what_it_does": "A text is a list of messages kept in the patch. Lines and items are read and written by number, the best-matching line is found by key with exact, greater, less or nearest tests, and [text sequence] plays the lines as timed messages with $ arguments.",
+    "source_urls": [
+      "Documentation/5.reference/text-object-help.pd",
+      "Documentation/2.control.examples/23.sequencing.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "coll",
+      "text",
+      "qlist",
+      "dict",
+      "array",
+      "string"
+    ],
+    "max_check": "Refpages: coll (store by index or symbol, sort, min/max, embed; no key search with comparisons), text (lines of text: line, query, read, write), qlist (timed message lines with tempo), dict, and Max 9's array and string.",
+    "advice": "Max splits the job: coll or dict for stored records, qlist for timed message lists. Pd's 'nearest match' search has no one-object match; do it in v8.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Array objects that treat a table as a histogram",
+    "category": "data/tables/scripting",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "array quantile",
+      "array random",
+      "array sum",
+      "array min",
+      "array max",
+      "array get",
+      "array set"
+    ],
+    "what_it_does": "[array random] draws an index with probability proportional to the stored values, and [array quantile] is the same with your own random source. The family also sums, finds min and max, and gets or sets ranges as lists.",
+    "source_urls": [
+      "Documentation/5.reference/array-object-help.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "table",
+      "histo",
+      "prob"
+    ],
+    "max_check": "table refpage: bang outputs a random quantile; quantile and fquantile messages; sum, min, max; integer values. histo and prob are in the registry (not read).",
+    "advice": "Same idea in both: Max's table bang is Pd's [array random]. Note table holds ints, so scale weights.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "One number type",
+    "category": "data/tables/scripting",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "float",
+      "int",
+      "/"
+    ],
+    "what_it_does": "Pd has only floats. [/ 4] of 5 is 1.25, and '1' and '1.' are the same atom. [int] exists to truncate on purpose.",
+    "source_urls": [
+      "Documentation/1.manual/resources/chapter2.htm",
+      "Documentation/2.control.examples/04.messages.pd",
+      "Documentation/5.reference/int-help.pd"
+    ],
+    "max_status": "better-elsewhere",
+    "max_closest": [
+      "/",
+      "scale",
+      "float",
+      "number"
+    ],
+    "max_check": "Userguide integers_vs_floats page: objects run in integer or float mode depending on whether the argument has a decimal point; it calls this 'a common source of bugs'.",
+    "advice": "In Max, write the decimal point on every arithmetic argument that should not truncate ('/ 4.', 'scale 0 127 0. 1.'). A check for integer-mode arithmetic feeding a float display is a candidate rule for the Claude2Max verifier.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Expressions with several outputs, named variables and strings ([expr])",
+    "category": "data/tables/scripting",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "expr",
+      "value",
+      "var()",
+      "if()",
+      "strcat",
+      "symbol()"
+    ],
+    "what_it_does": "[expr] takes several expressions separated by semicolons, one outlet each. It reads and assigns [value] variables by name, reads and writes arrays, and has if(), random() and string functions.",
+    "source_urls": [
+      "Documentation/5.reference/expr-help.pd",
+      "Documentation/5.reference/value-help.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "expr",
+      "vexpr",
+      "v8",
+      "pv",
+      "value"
+    ],
+    "max_check": "expr refpage: one expression; $i/$f/$s inlets; functions listed (min, max, pow, random, table size/sum/avg/store...). No mention of semicolon-separated expressions, value variables or string functions.",
+    "advice": "For multi-output or stateful arithmetic in Max, use v8 rather than a cluster of expr boxes (CLAUDE.md's preferred-objects table already says so for branching).",
+    "confidence": "medium",
+    "notes": "That Max expr rejects semicolons was not tested in Max, only inferred from the refpage's silence."
+  },
+  {
+    "capability": "Per-patch unique names that work at the top level ($0)",
+    "category": "workflow/authoring",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "$0",
+      "$1",
+      "send",
+      "receive",
+      "array define",
+      "value"
+    ],
+    "what_it_does": "$0 in an object box is a number unique to the patch, in any patch, so local names need no abstraction. It does not expand in message boxes; the value is passed in through [f $0].",
+    "source_urls": [
+      "Documentation/1.manual/resources/chapter2.htm",
+      "Documentation/2.control.examples/13.locality.pd",
+      "Documentation/2.control.examples/dollarsign.pd",
+      "Documentation/5.reference/send-receive-help.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "#0",
+      "pv",
+      "patcherargs",
+      "---"
+    ],
+    "max_check": "Userguide abstractions page: #0 is replaced by a number unique to each abstraction instance, and in a message box only at the start of a word. CLAUDE.md table 'Every Global Name Inside a Copied Thing Is Per-Instance'. Pd manual 2.11.1 states Max's #0 works only inside abstractions.",
+    "advice": "No change: the repo's per-instance naming rule already covers Max. Porting note: Pd's $0 in a top-level patch has no Max twin; use pv or plain names there.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Destination set on the sender, and 'send' built into storage objects",
+    "category": "data/tables/scripting",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "send",
+      "float",
+      "int",
+      "value",
+      "list store",
+      "pointer"
+    ],
+    "what_it_does": "[send] with no argument has an inlet for the destination name. [float], [int], [value], [list store] and [pointer] take 'send name' and deliver their content to that receiver. A name can be a receive, a value, an array, a GUI object or a window.",
+    "source_urls": [
+      "Documentation/5.reference/send-receive-help.pd",
+      "Documentation/5.reference/float-help.pd",
+      "Documentation/5.reference/value-help.pd",
+      "Documentation/1.manual/resources/chapter2.htm"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "forward",
+      "receive",
+      "send"
+    ],
+    "max_check": "Refpages: forward ('destination can be changed with each message', send message), receive (set message), send (no set).",
+    "advice": "In Max use forward when the destination changes, and receive's set when the listener should retune.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "An abstraction saves its own state inside the parent patch ([savestate])",
+    "category": "workflow/authoring",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "savestate"
+    ],
+    "what_it_does": "[savestate] in an abstraction bangs when the parent patch is saved, takes lists in reply, stores them in the parent's file, and hands them back when the parent loads. Each copy keeps its own.",
+    "source_urls": [
+      "Documentation/5.reference/savestate-help.pd",
+      "Documentation/5.reference/savestate-ex1.pd",
+      "Documentation/5.reference/savestate-ex2.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "pattr",
+      "autopattr",
+      "pattrstorage",
+      "savebang"
+    ],
+    "max_check": "pattr refpage: autorestore outputs the last-saved value on load. savebang refpage: bangs when its patcher window is saved. Userguide snapshots page: patcher snapshots are embedded and save subpatcher parameters. Whether a pattr inside an abstraction file is stored per instance in the parent was not established from these pages.",
+    "advice": "",
+    "confidence": "low",
+    "notes": ""
+  },
+  {
+    "capability": "No preset system, by design",
+    "category": "workflow/authoring",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "loadbang",
+      "message",
+      "text"
+    ],
+    "what_it_does": "Pd has no preset or pattr objects. The manual says this is intentional: state is restored by explicit sends from message boxes or text files.",
+    "source_urls": [
+      "Documentation/1.manual/resources/chapter2.htm",
+      "Documentation/7.stuff/synth/preset.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "preset",
+      "pattrstorage",
+      "pattr",
+      "autopattr"
+    ],
+    "max_check": "Refpages preset, pattrstorage (store, recall, interp, recallmulti), autopattr. Userguide presets_and_interpolation and snapshots pages.",
+    "advice": "Max is ahead here; keep using pattrstorage and snapshots. The Pd habit that transfers is making startup state visible in the patch (loadmess with the values in view).",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "File-system objects ([file])",
+    "category": "data/tables/scripting",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "file handle",
+      "file define",
+      "file stat",
+      "file glob",
+      "file which",
+      "file mkdir",
+      "file delete",
+      "file copy",
+      "file move",
+      "file split",
+      "file join",
+      "file splitext",
+      "file splitname",
+      "file patchpath",
+      "file normalize",
+      "file isabsolute",
+      "file cwd",
+      "file size",
+      "file isfile",
+      "file isdirectory"
+    ],
+    "what_it_does": "One family reads and writes bytes, lists folders with wildcards, tests, makes, copies, moves and deletes files and folders, takes paths apart, and finds the patch's own folder.",
+    "source_urls": [
+      "Documentation/5.reference/file-help.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "filein",
+      "folder",
+      "absolutepath",
+      "relativepath",
+      "strippath",
+      "conformpath",
+      "filedate",
+      "filewatch",
+      "filepath",
+      "opendialog",
+      "savedialog",
+      "text",
+      "v8",
+      "node.script"
+    ],
+    "max_check": "Registry names containing 'file' or 'path': dropfile filedate filein filepath filewatch absolutepath conformpath relativepath strippath. Refpages read for filein (read binary), folder (list), strippath, conformpath, filepath. No object for mkdir, delete, copy, move or writing bytes was found.",
+    "advice": "",
+    "confidence": "medium",
+    "notes": "File changes in Max go through script (v8 File, node.script); those APIs were not looked up here."
+  },
+  {
+    "capability": "Per-patch declaration of what the patch needs ([declare])",
+    "category": "workflow/authoring",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "declare -path",
+      "declare -lib",
+      "declare -stdpath",
+      "else/knob"
+    ],
+    "what_it_does": "[declare -path folder -lib name] in a patch adds search folders and loads libraries for that patch alone, so the patch states its own dependencies. A 'library/object' prefix picks which library an object comes from.",
+    "source_urls": [
+      "Documentation/5.reference/declare-help.pd",
+      "Documentation/1.manual/resources/chapter4.htm"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "filepath",
+      "Projects",
+      "Package Manager"
+    ],
+    "max_check": "Userguide search_path, package_manager and externals pages: paths are global (File Preferences, Packages folder) or per Project. filepath refpage: manages the search path, 'or manage paths specific to a single patch'. No in-patch dependency declaration or name prefix found.",
+    "advice": "",
+    "confidence": "medium",
+    "notes": "filepath's per-patch mode was read only as one sentence."
+  },
+  {
+    "capability": "Variable-length abstraction arguments as one list ([pdcontrol])",
+    "category": "workflow/authoring",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "pdcontrol",
+      "args",
+      "dir",
+      "browse",
+      "isvisible",
+      "sendcanvas"
+    ],
+    "what_it_does": "[pdcontrol] answers 'args' with all the creation arguments of its patch as a list, 'dir' with the patch folder, 'isvisible' with the window state, and opens a URL with 'browse'.",
+    "source_urls": [
+      "Documentation/5.reference/pdcontrol-help.pd",
+      "Documentation/2.control.examples/dollarsign2.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "patcherargs",
+      "thispatcher"
+    ],
+    "max_check": "patcherargs refpage: plain arguments out the left, attribute-style arguments out the right, with defaults as its own arguments.",
+    "advice": "Max's patcherargs does more (named @arguments with defaults); see CLAUDE.md 'An Abstraction Reads Its Box Through patcherargs'.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Fan-out order that cannot be seen, and an editor command that fixes it (Triggerize)",
+    "category": "workflow/authoring",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "trigger",
+      "t",
+      "Triggerize"
+    ],
+    "what_it_does": "When one outlet feeds several inlets, Pd fires in the order the cords were made, which the patch does not show. Triggerize (Ctrl+T) on the source object inserts a [t a a ...] with the cords in their current order.",
+    "source_urls": [
+      "Documentation/1.manual/resources/chapter2.htm",
+      "Documentation/2.control.examples/03.connections.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "trigger"
+    ],
+    "max_check": "patching/MAX_PATCHING.md: Max fires several cords from one outlet right to left by position; trigger refpage. No Max menu command of this kind was looked for.",
+    "advice": "In Max the order is visible but still easy to get wrong when boxes move. A converter or verifier step that replaces order-dependent fan-outs with an explicit trigger is the Max version of Triggerize and worth building.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Message trace with backtrace ([trace])",
+    "category": "workflow/authoring",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "trace",
+      "set-tracing"
+    ],
+    "what_it_does": "[trace] armed with a count prints every message caused by the next messages through it and then the chain of messages that led there. Clicking a line selects the object.",
+    "source_urls": [
+      "Documentation/5.reference/trace-help.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "print",
+      "capture"
+    ],
+    "max_check": "Userguide debugging_and_probing page: watchpoints on cords (monitor, print, break), stepping in the Debug Window, event and signal probes.",
+    "advice": "Max is ahead: use watchpoints and probing instead of temporary print boxes.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Behaviour pinned to an older version (pd compatibility)",
+    "category": "workflow/authoring",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "compatibility"
+    ],
+    "what_it_does": "'compatibility 0.52' sent to pd restores the pre-fix behaviour of objects changed since, and each affected object's help says which version changed it.",
+    "source_urls": [
+      "Documentation/5.reference/pd-messages.pd",
+      "Documentation/5.reference/cos~-help.pd",
+      "Documentation/5.reference/line-help.pd",
+      "Documentation/5.reference/sigmund~-help.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "fft~",
+      "pfft~",
+      "poly~"
+    ],
+    "max_check": "Per-object attributes found in refpages: fft~ and pfft~ 'legacy', poly~ 'legacynotemode'. No global version switch found in the userguide pages read.",
+    "advice": "",
+    "confidence": "low",
+    "notes": ""
+  },
+  {
+    "capability": "Building and editing patches by messages to a window",
+    "category": "workflow/authoring",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "pd-name",
+      "obj",
+      "msg",
+      "connect",
+      "disconnect",
+      "clear",
+      "vis",
+      "namecanvas",
+      "pdcontrol sendcanvas",
+      "menusave",
+      "loadbang"
+    ],
+    "what_it_does": "Any window accepts 'obj x y name args', 'msg', 'connect', 'disconnect', 'clear' and 'vis' at the receiver pd-<name>, so one patch can write another. Objects are addressed by creation order.",
+    "source_urls": [
+      "Documentation/5.reference/pd-messages.pd",
+      "Documentation/5.reference/namecanvas-help.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "thispatcher"
+    ],
+    "max_check": "thispatcher refpage: the script message gives 'dynamic control over object creation, deletion, sizing and positioning, and patching', with objects addressed by scripting name.",
+    "advice": "Max's scripting names are safer than Pd's creation-order numbers. No change.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Plain-text patch file",
+    "category": "workflow/authoring",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      ".pd",
+      "#X obj",
+      "#X connect",
+      "FUDI"
+    ],
+    "what_it_does": "A .pd file is lines of '#X obj x y name args;' and '#X connect a out b in;' in the same message format Pd uses on the network. plugdata reads and writes the same file as Pd.",
+    "source_urls": [
+      "https://plugdata.org/",
+      "Documentation/8.topics/fudi.htm"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      ".maxpat"
+    ],
+    "max_check": "The repo's own converter writes .maxpat JSON; Pd's manual 2.11.1 says Pd opens the old Max .pat/.mxt text formats but not .maxpat.",
+    "advice": "Nothing to change in Max. For Claude2Max, a .pd file is easy to parse (boxes are numbered by line order), so reading Pd help patches as a source of worked examples is cheap.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Help-file convention: every help patch carries a 'reference' subpatch",
+    "category": "workflow/authoring",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "pd reference",
+      "-help.pd"
+    ],
+    "what_it_does": "Each vanilla help patch holds a [pd reference] subpatch listing inlets, outlets, arguments, flags and messages in a fixed layout, next to live examples.",
+    "source_urls": [
+      "Documentation/5.reference/float-help.pd",
+      "Documentation/5.reference/clone-help.pd",
+      "Documentation/1.manual/resources/chapter2.htm"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      ".maxhelp",
+      ".maxref.xml"
+    ],
+    "max_check": "Max keeps the same facts in a separate refpage file read by the reference window; help patches hold only examples.",
+    "advice": "Nothing to change in Max. A Butter_tools help file can borrow the idea: one fixed-layout tab that lists inlets, outlets, arguments and messages, next to the live demos.",
+    "confidence": "medium",
+    "notes": "Recorded as a contrast; no action."
+  },
+  {
+    "capability": "GUI objects with built-in send and receive names",
+    "category": "control surface/UI building",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "bng",
+      "tgl",
+      "nbx",
+      "hsl",
+      "vsl",
+      "hradio",
+      "vradio",
+      "vu",
+      "cnv",
+      "send",
+      "receive"
+    ],
+    "what_it_does": "Every GUI object has a send name and a receive name in its properties. With them set it needs no cords, and the names can contain $0 or $1.",
+    "source_urls": [
+      "Documentation/5.reference/bng-help.pd",
+      "Documentation/5.reference/gui-boxes-help.pd",
+      "Documentation/5.reference/cnv-help.pd",
+      "Documentation/1.manual/resources/chapter2.htm"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "send",
+      "receive",
+      "pattr",
+      "toggle",
+      "number",
+      "slider",
+      "dial"
+    ],
+    "max_check": "Refpages of toggle, number, slider and dial list no send or receive attribute. They do list param_connect; the userguide param_connect page says it binds a UI object, without cords, to a named parameter of gen~, rnbo~ and other supplier objects, both ways.",
+    "advice": "In Max keep the control on the cord (CLAUDE.md 'Put the Display in the Path'); use s/r only for distance, and param_connect where the target is a gen~ or rnbo~ parameter. When porting, each named Pd GUI becomes a control plus an s and an r.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "An abstraction that shows its own controls on its box (graph-on-parent)",
+    "category": "control surface/UI building",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "graph on parent",
+      "pd",
+      "coords"
+    ],
+    "what_it_does": "With graph-on-parent set, an abstraction's GUI objects appear on its box wherever it is used. The setting and the visible area are saved in the abstraction.",
+    "source_urls": [
+      "Documentation/1.manual/resources/chapter2.htm",
+      "Documentation/2.control.examples/gop-abs.pd",
+      "Documentation/4.data.structures/07.graph.on.parent.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "bpatcher"
+    ],
+    "max_check": "Userguide bpatchers page (extracted, not read line by line); CLAUDE.md 'An Abstraction Has No UI of Its Own'.",
+    "advice": "The repo's rule is the opposite of Pd's habit: in Max keep UI in the parent. Porting a graph-on-parent abstraction means a bpatcher or moving the controls out.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Move a GUI object and read its position by message",
+    "category": "control surface/UI building",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "pos",
+      "delta",
+      "get_pos",
+      "cnv"
+    ],
+    "what_it_does": "IEM GUI objects take 'pos x y' and 'delta dx dy'; [cnv] answers 'get_pos' with its coordinates, so a dragged canvas works as a 2-D control.",
+    "source_urls": [
+      "Documentation/5.reference/cnv-help.pd",
+      "Documentation/5.reference/bng-help.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "thispatcher",
+      "pictslider",
+      "nodes"
+    ],
+    "max_check": "patching/MAX_PATCHING.md: box attributes change with 'sendbox <attr> <value>'. thispatcher script messages move boxes.",
+    "advice": "In Max, move a box with a sendbox message (see patching/MAX_PATCHING.md) or thispatcher script; for a draggable 2-D control use an object made for it rather than a moving box.",
+    "confidence": "low",
+    "notes": ""
+  },
+  {
+    "capability": "TCP and UDP message objects with a plain-text protocol (FUDI)",
+    "category": "networking/sync",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "netsend",
+      "netreceive",
+      "-u",
+      "-b",
+      "-f",
+      "fudiformat",
+      "fudiparse",
+      "pdsend",
+      "pdreceive"
+    ],
+    "what_it_does": "[netsend] and [netreceive] carry Pd messages as text ending in a semicolon over TCP or UDP, both directions on TCP, with IPv6 and multicast. Any program that can write a line to a socket can drive a patch, and Pd ships pdsend and pdreceive for the shell.",
+    "source_urls": [
+      "Documentation/5.reference/netsend-receive-help.pd",
+      "Documentation/5.reference/fudi-format-parse-help.pd",
+      "Documentation/8.topics/fudi.htm"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "udpsend",
+      "udpreceive",
+      "sadam.tcpClient",
+      "sadam.tcpSender",
+      "sadam.tcpReceiver",
+      "node.script",
+      "mxj"
+    ],
+    "max_check": "Registry search for 'tcp' and 'net': nothing in core. udpsend/udpreceive refpages: UDP. query_packages.py 'tcp': Sadam Library tcp objects are installed.",
+    "advice": "",
+    "confidence": "medium",
+    "notes": "TCP in Max core means node.script or mxj; neither API was looked up here."
+  },
+  {
+    "capability": "OSC built and parsed as explicit bytes",
+    "category": "networking/sync",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "oscformat",
+      "oscparse",
+      "netsend -u -b",
+      "netreceive -u -b"
+    ],
+    "what_it_does": "[oscformat] turns a list into OSC bytes and [oscparse] turns bytes back into a list; the network objects only move bytes. Type tags are set with a format string.",
+    "source_urls": [
+      "Documentation/5.reference/osc-format-parse-help.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "udpsend",
+      "udpreceive",
+      "osc.packet",
+      "osc.codebox",
+      "param.osc",
+      "o.route"
+    ],
+    "max_check": "patching/MAX_PATCHING.md: udpreceive decodes simple OSC into Max messages. Registry has osc.packet, osc.codebox, param.osc; refpages read for osc.packet and osc.codebox. CNMAT odot is installed.",
+    "advice": "Max is simpler here: udpsend and udpreceive speak OSC themselves.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "A script file on the path becomes an object by its own name (pdlua)",
+    "category": "data/tables/scripting",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "pdlua",
+      "pd.Class:new():register",
+      "initialize",
+      "in_1_float",
+      "outlet",
+      "pd.Clock",
+      "pd.Receive",
+      "pd.Table"
+    ],
+    "what_it_does": "A file foo.pd_lua defines a class in Lua and is then typed as [foo], with no wrapper box. Methods are named by inlet and selector.",
+    "source_urls": [
+      "Documentation/13.pdlua/pdlua-help.pd",
+      "Documentation/13.pdlua/pdlua/hello.pd_lua",
+      "https://agraef.github.io/pd-lua/tutorial/pd-lua-intro.html"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "v8",
+      "js",
+      "v8.codebox"
+    ],
+    "max_check": "v8 refpage: instantiated with a JavaScript filename. CLAUDE.md (Butter_tools): a package's init object mappings let a name such as butter_keys stand for 'v8ui @filename butter_keys.js'.",
+    "advice": "Max needs the wrapper box or a package mapping file. For reusable script objects keep doing what Butter_tools does: one mapping line per object so the patch shows the object's own name.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Audio processing written in the scripting language (pdlua dsp / perform)",
+    "category": "audio",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "dsp",
+      "perform",
+      "SIGNAL",
+      "DATA",
+      "signal_setmultiout"
+    ],
+    "what_it_does": "A Lua object declares signal inlets and outlets and a perform function that receives each block as a table of samples and returns tables. Multichannel is supported.",
+    "source_urls": [
+      "Documentation/13.pdlua/pdlua/examples/sig-example/lua_sig.pd_lua",
+      "Documentation/13.pdlua/pdlua/examples/multichannel/test~.pd_lua",
+      "https://agraef.github.io/pd-lua/tutorial/pd-lua-intro.html"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "gen.codebox~",
+      "gen~",
+      "mxj~"
+    ],
+    "max_check": "v8 refpage describes no signal inlets. gen.codebox~ refpage: GenExpr text compiled to native code. mxj~ is in the registry (not read).",
+    "advice": "Use gen.codebox~ for typed DSP in Max. It is compiled, so it does not have the cost of an interpreted per-sample loop.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "GUI objects drawn in script with layers and SVG (pdlua graphics)",
+    "category": "control surface/UI building",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "paint",
+      "paint_layer_2",
+      "repaint",
+      "mouse_down",
+      "mouse_drag",
+      "set_size",
+      "draw_svg",
+      "Path",
+      "set_args"
+    ],
+    "what_it_does": "Defining paint(g) turns a Lua object into a GUI: shapes, paths, text and inline SVG, with mouse callbacks. Extra paint_layer_n functions are cached layers repainted one at a time. set_args stores state in the object's saved arguments.",
+    "source_urls": [
+      "Documentation/13.pdlua/pdlua-help.pd",
+      "Documentation/13.pdlua/pdlua/hello-gui.pd_lua",
+      "https://agraef.github.io/pd-lua/tutorial/pd-lua-intro.html"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "v8ui",
+      "jsui"
+    ],
+    "max_check": "v8ui and jsui refpages: JavaScript with mgraphics and sketch drawing. Whether mgraphics has separately cached layers or SVG drawing was not looked up.",
+    "advice": "The layer idea is worth copying in a heavy v8ui: draw the static face once to an offscreen image and redraw only the moving part.",
+    "confidence": "low",
+    "notes": "mgraphics image caching not verified here."
+  },
+  {
+    "capability": "Reload every script object with one message, state kept (pdx.lua)",
+    "category": "workflow/authoring",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "pdluax reload",
+      "pdx.lua",
+      "prereload",
+      "postreload",
+      "pd-remote"
+    ],
+    "what_it_does": "The message '; pdluax reload' reloads the code of all Lua objects in all open patches without re-running their constructors, so their state survives. A text editor can send it over UDP on save.",
+    "source_urls": [
+      "https://agraef.github.io/pd-lua/tutorial/pd-lua-intro.html",
+      "Extra/pdlua/pdx.lua"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "v8",
+      "js"
+    ],
+    "max_check": "CLAUDE.md 'Embed the Script in Every v8 Box': autowatch reloads a v8 script from its file; Max caches scripts for the session. Whether a v8 reload keeps object state was not checked.",
+    "advice": "In Max rely on autowatch for v8 files and restart Max for cached abstractions. One global 'reload scripts' receiver is cheap to add to a package's script objects if live-coding matters.",
+    "confidence": "low",
+    "notes": ""
+  },
+  {
+    "capability": "The patcher itself runs as a plugin in any DAW",
+    "category": "deployment",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "plugdata",
+      "plugdata-fx",
+      "plugdata-midi",
+      "VST3",
+      "AU",
+      "CLAP",
+      "LV2"
+    ],
+    "what_it_does": "plugdata loads as an instrument, effect or MIDI plugin in VST3, AU, CLAP and LV2 hosts, with the full patch editor in the plugin window. The same patch opens in the standalone app and in Pd.",
+    "source_urls": [
+      "https://plugdata.org/",
+      "https://plugdata.org/docs/book/DAWIntegration.html",
+      "https://raw.githubusercontent.com/plugdata-team/plugdata/develop/README.md"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "amxd~",
+      "plugin~",
+      "plugout~",
+      "rnbo~",
+      "vst~"
+    ],
+    "max_check": "Userguide plugins page: Max hosts VST/AU/AMXD plugins; plugin~ 'is for authoring Max for Live devices'. Userguide rnbo page: RNBO exports VST and Audio Unit plugins and is a paid add-on. Nothing describes Max itself loading as a plugin outside Live.",
+    "advice": "",
+    "confidence": "high",
+    "notes": "Max for Live covers Ableton Live only; RNBO exports a fixed patch, not an editable one."
+  },
+  {
+    "capability": "DAW automation parameters declared from the patch ([param])",
+    "category": "deployment",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "param",
+      "create",
+      "range",
+      "mode",
+      "name-gui-s",
+      "name-gui-r"
+    ],
+    "what_it_does": "[param name] sends and receives one host automation parameter. Messages create it and set its range and curve (float, integer, logarithmic, exponential); an argument makes GUI touches report automation write state.",
+    "source_urls": [
+      "Documentation/5.reference/param-help.pd",
+      "Abstractions/param.pd",
+      "https://raw.githubusercontent.com/wiki/plugdata-team/plugdata/Basic-operation.md"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "live.dial",
+      "live.numbox",
+      "pattr",
+      "param"
+    ],
+    "max_check": "m4l userguide live_parameters page: parameter types (integer, float, enum, blob), stored and automated by Live. Max's own param object refpage: 'Define a polyphonic-compatible parameter in poly~'.",
+    "advice": "In Max for Live the UI object is the parameter (live.dial and friends). Max's param object is something else: a poly~ parameter. Do not confuse the two when porting.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Host transport as one object ([playhead])",
+    "category": "deployment",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "playhead"
+    ],
+    "what_it_does": "[playhead] outputs playing, recording, loop points, tempo, time signature, bar and position (ppq, samples, seconds) from the DAW.",
+    "source_urls": [
+      "Documentation/5.reference/playhead-help.pd",
+      "Abstractions/playhead.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "plugsync~",
+      "plugphasor~",
+      "transport"
+    ],
+    "max_check": "plugsync~ refpage: host synchronisation information from Live. m4l live_timing page: unnamed transport objects in a device follow the Live transport.",
+    "advice": "In a Max for Live device use plugsync~ or an unnamed transport; there is no single object outside Live.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Arbitrary patch data saved in the DAW session ([daw_storage])",
+    "category": "deployment",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "daw_storage"
+    ],
+    "what_it_does": "[daw_storage tag] stores a float, symbol or list in the host session and returns it on load. Arrays and [text] contents are stored by converting them to lists.",
+    "source_urls": [
+      "Documentation/5.reference/daw_storage-help.pd",
+      "Abstractions/daw_storage.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "pattr"
+    ],
+    "max_check": "m4l live_parameters page: 'blob' parameters cannot be automated but are stored, and may be any data a pattr can hold. live_limitations page: a pattr is saved by the Live Set only with Parameter Mode enabled.",
+    "advice": "In a Max for Live device, store such data in a pattr with Parameter Mode enabled (a blob parameter).",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Report plugin latency to the host from the patch ([plugin_latency])",
+    "category": "deployment",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "plugin_latency"
+    ],
+    "what_it_does": "A number sent to [plugin_latency] tells the DAW how much delay to compensate.",
+    "source_urls": [
+      "Abstractions/plugin_latency.pd",
+      "Documentation/5.reference/plugin_latency-help.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "live.thisdevice"
+    ],
+    "max_check": "m4l live_audiodevices page has the headings 'Defining Latency For A Device' and 'Setting Device Latency'; the body was not read.",
+    "advice": "In Max for Live, set the device's latency as the userguide section 'Defining Latency For A Device' describes; read that section before relying on it.",
+    "confidence": "low",
+    "notes": "The Pd help file is empty; the behaviour is read from the three-box abstraction."
+  },
+  {
+    "capability": "Compile a patch to C++, plugins and microcontroller firmware (Heavy / hvcc)",
+    "category": "deployment",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "Compile...",
+      "C++ Code",
+      "Electro-Smith Daisy",
+      "DPF Audio Plugin",
+      "Pd External",
+      "hvcc"
+    ],
+    "what_it_does": "plugdata's Compile window turns a patch into C/C++ source, a Daisy binary flashed to the board, a VST2/VST3/LV2/CLAP/JACK plugin, or a Pd external. hvcc has further generators for Unity, Wwise, FMOD, JavaScript and OWL.",
+    "source_urls": [
+      "https://plugdata.org/docs/book/CompilingPatches.html",
+      "https://wasted-audio.github.io/hvcc/latest/",
+      "https://wasted-audio.github.io/hvcc/latest/generators/",
+      "https://wasted-audio.github.io/hvcc/latest/generators/daisy/",
+      "https://wasted-audio.github.io/hvcc/latest/generators/dpf/"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "rnbo~",
+      "gen~"
+    ],
+    "max_check": "Userguide rnbo page: export to Raspberry Pi, VST and Audio Unit plugins, C++ and JavaScript; 'RNBO is a paid add-on'. gen~ refpage: exportcode message and export attributes.",
+    "advice": "For Max users the route is RNBO (paid) or gen~ exportcode (DSP only). Heavy is free and covers Daisy, CLAP, LV2 and game audio engines, which the RNBO page does not list.",
+    "confidence": "medium",
+    "notes": "RNBO's own site was not read; target list is from Max's userguide page only."
+  },
+  {
+    "capability": "An editor mode that checks the patch against the export subset (Compiled Mode)",
+    "category": "workflow/authoring",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "Compiled Mode"
+    ],
+    "what_it_does": "With Compiled Mode on, objects the compiler cannot handle are outlined and reported, and autocomplete offers only objects that export.",
+    "source_urls": [
+      "https://plugdata.org/docs/book/CompilingPatches.html",
+      "https://wasted-audio.github.io/hvcc/latest/reference/objects/supported/",
+      "https://wasted-audio.github.io/hvcc/latest/reference/objects/unsupported/"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "rnbo~"
+    ],
+    "max_check": "Userguide rnbo page: RNBO runs in rnbo~, 'a subpatcher with its own family of objects', so the subset is enforced by being a separate patcher type.",
+    "advice": "RNBO gets the same safety from a separate patcher type. For Claude2Max the idea maps to the verifier: check a patch against a named target subset before export.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Plugin parameters declared by annotating a receive object (@hv_param)",
+    "category": "deployment",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "@hv_param",
+      "@hv_event",
+      "@hv_table",
+      "__hv_dpf_bpm"
+    ],
+    "what_it_does": "In a patch meant for Heavy, [r gain @hv_param 0 1 0.5] becomes a plugin parameter with range and default; @hv_event makes a trigger and @hv_table exposes a table. The patch still runs normally in Pd.",
+    "source_urls": [
+      "https://wasted-audio.github.io/hvcc/latest/getting-started/patching/",
+      "https://wasted-audio.github.io/hvcc/latest/generators/dpf/",
+      "Documentation/11.heavylib/hv.filter~-help.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "param",
+      "rnbo~"
+    ],
+    "max_check": "Not checked beyond the userguide rnbo page; RNBO's param object lives in the RNBO object set, which is documented on the RNBO site.",
+    "advice": "When writing a patch for RNBO export, declare parameters with RNBO's own param object; read the RNBO docs first, they were not part of this scan.",
+    "confidence": "low",
+    "notes": ""
+  },
+  {
+    "capability": "Embeddable engine and several instances in one process (libpd)",
+    "category": "deployment",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "libpd"
+    ],
+    "what_it_does": "The manual says Pd can be used as an embeddable audio library through libpd, and that since 0.46 several Pd instances can live in one address space, which is what plugin wrappers such as plugdata build on.",
+    "source_urls": [
+      "Documentation/1.manual/resources/chapter2.htm",
+      "Documentation/1.manual/resources/chapter5.htm"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "standalone",
+      "rnbo~"
+    ],
+    "max_check": "Userguide standalones_and_collectives page: a patch can be built into a standalone application. rnbo page: exported C++/JavaScript for embedding.",
+    "advice": "",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Command-line and headless operation",
+    "category": "deployment",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "-nogui",
+      "-batch",
+      "-send",
+      "-open",
+      "-noprefs",
+      "pdsend"
+    ],
+    "what_it_does": "Pd starts from a command line with flags for audio and MIDI devices, opening patches, sending a startup message, running without a GUI, and running as a batch job.",
+    "source_urls": [
+      "Documentation/1.manual/resources/chapter3.htm"
+    ],
+    "max_status": "unsure",
+    "max_closest": [],
+    "max_check": "No command-line or headless mode was found in the Max userguide pages read (scheduler, non_realtime, standalones). Not searched exhaustively.",
+    "advice": "",
+    "confidence": "low",
+    "notes": ""
+  },
+  {
+    "capability": "Output safety limiter in the editor",
+    "category": "audio",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "safety limiter"
+    ],
+    "what_it_does": "plugdata's site lists a safety limiter that protects the listener's ears as a feature. No page read says how it works.",
+    "source_urls": [
+      "https://plugdata.org/"
+    ],
+    "max_status": "unsure",
+    "max_closest": [
+      "limi~",
+      "omx.peaklim~",
+      "live.gain~"
+    ],
+    "max_check": "Registry has limi~ and omx.peaklim~ as objects a patch must include. No always-on output limiter was looked for in Max's audio settings.",
+    "advice": "",
+    "confidence": "low",
+    "notes": "One phrase on the home page is the only source."
+  },
+  {
+    "capability": "Best match of a list against stored vectors ([choice])",
+    "category": "data/tables/scripting",
+    "tool": "plugdata (Pd vanilla)",
+    "tool_names": [
+      "choice"
+    ],
+    "what_it_does": "[choice] stores vectors of up to ten numbers and, given a list, outputs the index of the stored vector pointing most nearly the same way. An argument makes it avoid repeating itself.",
+    "source_urls": [
+      "Documentation/5.reference/choice-help.pd"
+    ],
+    "max_status": "unsure",
+    "max_closest": [
+      "zl",
+      "vexpr"
+    ],
+    "max_check": "Not searched in Max beyond noting no object of that name; the installed FluCoMa package has nearest-neighbour objects (not looked up).",
+    "advice": "",
+    "confidence": "low",
+    "notes": ""
+  }
+]

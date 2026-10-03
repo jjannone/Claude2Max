@@ -12,7 +12,8 @@ the docs spell them.
 
 Companion files: `TOUCHDESIGNER_CRAWL_LOG.md` (what was read),
 `touchdesigner_crawl_state.json` (per-page status),
-`touchdesigner_max_gap_candidates.json` (things Max may lack).
+`touchdesigner_max_gap_candidates.json` (things Max may lack, and from
+session 2, things both tools have that TouchDesigner does differently).
 
 ---
 
@@ -608,3 +609,370 @@ These are observations from the pages above, not a ranking.
   exist.
 - TouchDesigner's audio is thin next to MSP, and its own docs point to
   Ableton Live, Bitwig and VST plug-ins for serious audio work.
+
+---
+
+## 16. Shared concepts, different approaches
+
+Added in session 2 (2026-10-02). Session 1 looked for things Max lacks. This
+section looks at things both tools have and asks how TouchDesigner does them,
+and what a Max patcher should take from that. Each entry names the wiki pages
+it came from. The Max half of each comparison was checked against Max's own
+refpages, object registry and userguide; the details of those checks are in
+the matching entries of `touchdesigner_max_gap_candidates.json` (the 50 items
+added in session 2; they are the ones with an `advice` field).
+
+Two things were assembled from documentation and not run in Max: the custom
+texture-feedback wiring, and driving several movies by frame number. They are
+marked where they appear.
+
+### OSC
+
+Sources: `OSC In CHOP`, `OSC Out CHOP`, `OSC In DAT`, `OSC Out DAT`, `OSC`,
+`IOS and OSC`, `TouchOSC`.
+
+- Incoming addresses turn into named channels by themselves. There is no
+  routing step: a channel appears the first time a control moves. A scope
+  pattern keeps or drops addresses, and a setting strips leading address
+  segments.
+- A second operator keeps a first-in-first-out table of whole messages, with
+  type tags, optional bundle timestamps, and a callback per message. The docs
+  suggest running both side by side: channels to use, table to look at.
+- On the way out, one toggle decides between "send everything every frame"
+  and "send only what changed".
+- For Max: Max 9 now does the naming too. Any parameter-mode object gets an
+  OSC address from its parameter name once OSC is switched on for the patcher
+  or a `param.osc` is added. Hand-built `udpreceive` → `route` chains are the
+  older way. `osc.codebox` is the message monitor. A `change` before `udpsend`
+  is the "only what changed" toggle.
+
+### MIDI
+
+Sources: `MIDI`, `MIDI Mapper Dialog`, `MIDI In CHOP`, `MIDI In Map CHOP`,
+`MIDI Out CHOP`, `MIDI In DAT`, `MIDI Event DAT`.
+
+- TouchDesigner puts a map between the hardware and the patch. A per-device
+  table names sliders `s1…` and buttons `b1…`; patches read those names. Maps
+  ship for known controllers. The docs say there is no auto-learn.
+- Output works by channel name: a channel called `ch14c7` is controller 7 on
+  channel 14, `ch3n60` is note 60 on channel 3.
+- The input log can join coarse and fine controller messages into one 14-bit
+  value, and both logs carry operating-system timestamps.
+- Saved projects keep the last controller values, and the docs warn that the
+  values jump when a physical control is in a different place on reopening.
+  The `Bind CHOP` (read in session 1, re-read here) has a pickup option that
+  holds a source off until it crosses the current value.
+- For Max: keep controller numbers in one place, and add pickup where a
+  hardware fader meets a saved value.
+
+### Presets and saved state
+
+Sources: `Palette:presets`, `Storage`, `Parameter DAT`, `Custom Parameters`.
+
+- The palette's Presets component was dropped in build 2022.29530. What
+  remains in the pages read is the raw material: custom parameters on a
+  component, a Python storage dictionary saved with the file (with a start-up
+  value option), and `Parameter DAT`, which lists any operator's parameters as
+  a table.
+- For Max: this is an area where Max is ahead (see the end of this section).
+  The idea worth taking is the table view of an object's settings.
+
+### Components, arguments and scope
+
+Sources: `In CHOP`, `Out CHOP`, `In TOP`, `Out TOP`, `Custom Parameters`,
+`Internal Parameters`, `Component Variables`, `Network Path`,
+`Operator Shortcuts`, `Reference`, `Parameter Reference`, `Clone`,
+`Select CHOP`, `Select TOP`, `Select DAT`, `Null CHOP`, `Null TOP`,
+`Null DAT`. Also read: `Base COMP`, `Replicator COMP`.
+
+- A component's interface is a set of typed, named parameters with label,
+  range, default and help text. Max's nearest things are `patcherargs` names
+  for an abstraction and `param` objects for `poly~`.
+- A component input can check what it receives: an `In CHOP` can demand a
+  channel count and raise an error. A Max `inlet` has a hover comment and
+  nothing more.
+- Names are scoped by default. A reference is a path, relative or absolute, or
+  a named parent. In Max a name is global unless you scope it (`pv`, `#0`,
+  `---`).
+- A wireless link is visible. `Select` operators pull data from a named
+  operator and the editor draws a dashed line. Max's `s` / `r` draw nothing.
+- The habit of ending a chain in a `Null` gives consumers one stable thing to
+  point at. The Max equivalent is ending a chain in one named terminal.
+- A clone keeps its own top-level parameter values while its insides follow
+  the master. That is the split a Max abstraction makes between its box
+  arguments and its file.
+
+### Instancing
+
+Sources: `Geometry COMP`, `COMP Instance Page`, `COMP Instance 2 Page`,
+`Instance`.
+
+- One geometry object draws N copies. The count is the length of a data
+  source. Each attribute picks its own source and its own channel or column by
+  name, so position can come from a table and colour from an image.
+- "Rotate to vector" aims each copy along a direction, with a choice of which
+  axis counts as forward and where in the transform order it applies.
+- For Max: `jit.gl.multiple` takes one matrix per attribute by message name.
+  `jit.gl.mesh` with instanced `jit.gl.buffer` objects is the route for large
+  counts. Neither aims copies along a vector for you.
+
+### Time: frames, cooks and scripts
+
+Sources: `Cook`, `Frame`, `Execute DAT`, `Run Command Examples`, `Callback`,
+`CHOP Execute DAT`, `Parameter Execute DAT`, `OP Execute DAT`,
+`DAT Execute DAT`, `ParGroup Execute DAT`. Also read: `Time Slice CHOP`,
+`Component Timeline`.
+
+- Everything is computed at most once per frame, and only when something
+  downstream asks. The `Cook` page lists what counts as a request and what
+  counts as a reason, and says plainly that changing an upstream value does
+  not push a recalculation.
+- Scripts hook into this with callbacks for frame start and frame end, and
+  delayed calls counted in frames or milliseconds. A delayed call waits while
+  the timeline is paused unless it is tied to an independent clock.
+- Change callbacks choose their edge from a list: off to on, while on, on to
+  off, while off, any change. A table-change callback is handed a list of what
+  was added, removed and changed.
+- For Max: the frame tick is `jit.world`'s draw bang. Edge detection belongs
+  in boxes (`togedge`, `change`) before a script, not inside it.
+
+### Ramps, smoothing, envelopes and easing
+
+Sources: `Lag CHOP`, `Filter CHOP`, `Filter per Sample`, `Time Slice CHOP`,
+`Slope CHOP`, `Speed CHOP`, `Spring CHOP`, `Trigger CHOP`, `Count CHOP`,
+`Logic CHOP`, `Interpolate CHOP`, `Pulse CHOP`, `Join CHOP`, `Timer CHOP`,
+`Limit CHOP`, `Function CHOP`. Also read: `S Curve CHOP`, `Envelope CHOP`,
+`Hold CHOP`, `Delay CHOP`, `LFO CHOP`, `Wave CHOP`, `Pattern CHOP`,
+`Lookup CHOP`, `Math CHOP`, `Expression CHOP`, `Analyze CHOP`.
+
+- Smoothing operators run on the render frame and make up skipped frames, so
+  a smoothed value never beats against the picture. In Max, `line` runs on its
+  own 20 ms timer; `jit.line` is the frame-synced replacement.
+- `Lag CHOP` has rise and fall times, overshoot, and caps on speed and
+  acceleration. `Filter CHOP` has several filter shapes, including spike
+  removal, and can filter every element of a list separately.
+- `Speed CHOP` and `Slope CHOP` are integrate and differentiate. The docs
+  suggest editing speed and integrating back to position.
+- `Spring CHOP` makes a value follow its input like a mass on a spring. Max
+  has this only for 3D objects (`jit.anim.drive`, `springto`).
+- Thresholds carry a release level and a re-trigger delay as settings.
+- Easing is a menu wherever one value moves to another.
+- `Limit CHOP` clamps, loops or mirrors a value and quantises it. Max's `pong`
+  does the first three with a `mode` attribute.
+- The maths operator has an error page that replaces infinite or undefined
+  results. What Max's `expr` does with such a value was not confirmed here.
+
+### Noise and randomness
+
+Sources: `Noise CHOP`, `Noise TOP`, `Palette:noise`.
+
+- Noise is a continuous curve with a seed, a period and harmonics, not a
+  stream of unrelated numbers. It keeps going across timeline loops. The image
+  version runs on the GPU and takes a per-pixel coordinate input.
+- For Max: the nearest frame-synced source is `jit.mo.time` with
+  `@mode function @function perlin`. `rand~` is the signal-rate version.
+  `jit.gl.bfg` makes noise textures on the GPU.
+
+### Tables, names and text
+
+Sources: `Table DAT`, `Select DAT`, `Merge DAT`, `Sort DAT`, `Convert DAT`,
+`Substitute DAT`, `Lookup DAT`, `Insert DAT`, `Reorder DAT`, `Transpose DAT`,
+`DAT to CHOP`, `CHOP to DAT`, `Working with DATs in Python`, `Text DAT`,
+`File In DAT`, `XML DAT`, `JSONPath`, `Python f-strings`, `Pattern Matching`,
+`Pattern Expansion`, `Pattern Replacement`, `Pattern Matching Support`,
+`Rename CHOP`, `Constant CHOP`.
+
+- Cells are read by the names in the first row and column. Rows are selected
+  by name, index, value list or a condition.
+- One pattern language is used wherever a name is wanted: `chan[1-16]`,
+  `t[xyz]`, `^` to exclude, `*` and `?`. The same brackets generate names.
+  `Pattern Matching Support` is a long table of every parameter that accepts
+  patterns.
+- JSON is filtered with a path query and XML with element scopes. In Max,
+  JSON goes into a `dict`; a query or XML needs `v8`.
+- For Max: use `dict` keys where TouchDesigner would use row and column
+  names, and the Max 9 `string.*` objects for text.
+
+### Movies
+
+Sources: `Movie File In TOP`, `Movie Playback`, `Audio Movie CHOP`,
+`Palette/moviePlayer`, `Palette:movieBlender`, `Palette:moviePlaylist`,
+`Palette:autoMediaPlayer`, `Cache TOP`, `Cache Select TOP`, `Pre-Filling`,
+`Switch TOP`, `Cross TOP`.
+
+- A movie has three play modes: locked to the timeline, driven by an index
+  you supply, or free-running. The index has a unit menu and can come from
+  timecode. This makes several movies stay together by construction.
+- `Movie Playback` separates reading from disk, decoding and uploading, and
+  explains why a file that only plays smoothly the second time is being served
+  from the operating system's file cache and is not safe for a show.
+- Finished player components handle preload, crossfade, still-image duration
+  and what happens at the end.
+- `Cache TOP` is a frame store on the GPU that serves as delay, freeze and
+  loop.
+- For Max: `jit.polymovie` preloads and switches; `jit.fx.tr.xfade` blends;
+  `jit.fx.tp.delay` and `jit.gl.textureset` cover the frame store. Driving
+  several `jit.movie` objects by frame number is the analogue of index mode
+  (not tested in Max).
+
+### Image processing chains, feedback and compositing
+
+Sources: `Resolution TOP`, `Texture Sampling Parameters`,
+`Texture Extend Modes`, `Texture Filtering`, `Remap TOP`, `Displace TOP`,
+`Fit TOP`, `Feedback TOP`, `Palette:feedback`, `Feedback CHOP`,
+`Composite TOP`, `Over TOP`, `Layer Mix TOP`, `Layer TOP`,
+`Palette:blendModes`, `Palette:multiMix`, `Transparency`. Also read, for the
+map of the family: `Level TOP`, `Blur TOP`, `Transform TOP`, `Math TOP`,
+`Function TOP`, `Lookup TOP`, `Ramp TOP`, `Threshold TOP`, `Chroma Key TOP`,
+`HSV Adjust TOP`, `Channel Mix TOP`, `Reorder TOP`, `Tile TOP`, `Text TOP`.
+
+- Every image operator has the same settings for output size, pixel format,
+  filtering and edge behaviour. The warp page warns that an 8-bit map gives
+  jagged results.
+- Feedback is one operator that names the node whose last frame it outputs,
+  with a reset. No cycle is drawn.
+- Compositing N layers is one node. `Layer Mix TOP` gives each layer its own
+  fit, transform, opacity and blend mode and compiles one shader for the
+  stack.
+- Transparency in 3D is either a draw-priority number per object or an
+  order-independent mode that renders the scene in several passes. The
+  `Transparency` page says how many passes typical scenes need.
+- For Max: `jit.fx.wake` for simple feedback; a `jit.gl.layer` per source
+  inside a capturing `jit.gl.node` for a layer stack; `jit.world`
+  `@transparency 1` before sorting by hand. The custom feedback loop through a
+  named texture was not tested in Max.
+
+### Shaders
+
+Sources: `GLSL TOP`, `GLSL Multi TOP`, `Write a GLSL TOP`,
+`Write a GLSL MAT`, `Specialization Constants`.
+
+- Uniforms are listed on parameter pages by kind, including arrays filled
+  from a channel operator and compile-time constants for rarely changed
+  modes. Inputs arrive as ready-declared sampler arrays. Helper functions and
+  uniforms supplied by TouchDesigner start with `TD`, `uTD` and `sTD`.
+- For Max: the JXS `<param>` tag is the declaration, and `param_connect`
+  links a UI object to it in both directions.
+
+### 3D scene
+
+Sources: `3D Parenting`, `Null COMP`, `Object CHOP`, `Light COMP`,
+`Why is My Render Black`. Also read: `Camera COMP`, `Constant MAT`,
+`Point Sprite MAT`, `Depth TOP`, `Render Simple TOP`, `Particle`,
+`Palette:cameraViewport`, `Palette:arcBallCamera`.
+
+- Objects are parented by wiring them or nesting them, and one mechanism
+  covers both transform inheritance and scene grouping. Max splits these into
+  `jit.anim.node` and `jit.gl.node`.
+- `Object CHOP` reports position, bearing and distance between two objects as
+  channels.
+- `Why is My Render Black` is a short ordered checklist. Max's docs have no
+  such page among those read; it would be a useful addition to
+  `patching/MAX_PATCHING.md`.
+- A light with its dimmer below 0.001 is skipped by the renderer, which is the
+  documented way to switch lights off cheaply.
+
+### Audio for visuals
+
+Sources: `Palette:audioAnalysis`, `Audio Spectrum CHOP`,
+`Audio Device Out CHOP`. Also read: `Audio Filter CHOP`, `Audio Band EQ CHOP`,
+`Audio Para EQ CHOP`, `Audio Dynamics CHOP`, `Audio Device In CHOP`,
+`Audio File In CHOP`, `Audio Oscillator CHOP`, `Audio Play CHOP`,
+`Resample CHOP`.
+
+- The analysis component hands over low, mid, high, kick, snare, rhythm and
+  spectral centroid as channels. The spectrum operator can output one sample
+  per hertz.
+- The `Audio Device Out CHOP` page lists four remedies for clicks, all of
+  which come down to frames taking too long, and ends with "put audio in a
+  separate process". Audio shares the frame loop.
+
+### Interface building and input
+
+Sources: `Panel Value`, `Panel CHOP`, `Panel Execute DAT`, `Button COMP`,
+`Slider COMP`, `Keyboard In DAT`, `Keyboard In CHOP`. Also read: `Field COMP`
+(deprecated in favour of `Text COMP`), `Widget COMP` (an empty page),
+`Mouse In CHOP`, `Layout`, `Parameter Dialog`.
+
+- Every panel carries states (pressed, rollover, position, drag-out, focus)
+  that can be read as channels. Max UI objects output their value only.
+- Radio groups are made by giving buttons the same group label.
+- Keyboard events are a filtered table of key-down and key-up rows.
+
+### Start-up, errors and files
+
+Sources: `Execute DAT`, `Storage`, `Palette:initializeStart`, `Error DAT`,
+`Errors Dialog`, `Troubleshooting in TouchDesigner`, `Bypass Flag`,
+`Cooking Flag`, `Text DAT`, `File In DAT`, `Folder`. Also read:
+`Palette:logger`, `Palette:debugControl`, `Undo`,
+`Network Utilities: Comments, Network Boxes, Annotates`.
+
+- Start-up scripts have separate callbacks for project start and node
+  creation, and several of them run in the alphanumeric order of their names.
+- An error marker on a node also appears on every component that contains it,
+  so a fault deep inside is visible from the top. An error table logs faults
+  with a callback.
+- Every node has a bypass. A component can be stopped from computing as a
+  whole.
+- Text operators can stay in step with a file edited elsewhere.
+- `initializeStart` is a template that gives every time-based component the
+  same Initialize / Start / Play / Speed / Cue controls and the same output
+  channels.
+
+### Converting between kinds of data
+
+Sources: `CHOP to TOP`, `DAT to CHOP`, `CHOP to DAT`, `SOP to CHOP`,
+`POP to CHOP`, `POP to TOP`, `CHOP Techniques`. Also read: `Shuffle CHOP`,
+`Fan CHOP`, `Merge CHOP`.
+
+- Because a wire only joins one family, every crossing is a named operator
+  with layout settings. `CHOP to TOP` writes channels into a 32-bit float
+  image by default and can pack them into a square for point data.
+- For Max: the same crossings exist (`jit.fill`, `jit.spill`, `jit.catch~`,
+  `snapshot~`, `jit.gl.asyncread`); nothing forces you to make them visible,
+  so make them visible.
+
+### Networking
+
+Sources: `UDP In DAT`, `UDP Out DAT`, `Touch In DAT`, `Touch Out CHOP`,
+`Pipe In CHOP`.
+
+- A UDP input can reply to whoever last sent to it. `Touch Out` / `Touch In`
+  pairs send whole channel sets or whole tables between TouchDesigner
+  processes over TCP, with an option to keep several streams on the same
+  frame.
+
+### Where Max is ahead
+
+These came up while checking the Max side. They are not candidates.
+
+- **MIDI learn.** Max 9's Mapping binds a MIDI control or a key to any
+  parameter-mode object by moving the control. The `MIDI Mapper Dialog` page
+  says TouchDesigner has no auto-learn. (Max userguide `Mapping`.)
+- **Presets.** `preset`, `pattrstorage` and Snapshots store, recall and
+  interpolate state; a fractional preset number blends two presets and
+  `recallmulti` blends several. TouchDesigner's palette Presets component was
+  dropped in 2022 (`Palette:presets`).
+- **Event timing.** Max's scheduler delivers MIDI and timer events at their
+  own times, apart from the frame. TouchDesigner samples the world once per
+  frame and needs a special 1000-samples-per-second mode to see MIDI events
+  closer together than that (`MIDI In CHOP`).
+- **Tempo.** Max's time values can be bars, beats and note values tied to a
+  transport. TouchDesigner's unit menus offer samples, frames and seconds
+  (`Lag CHOP`, `Timer CHOP`).
+- **Audio.** Signals have their own graph and thread. In TouchDesigner a slow
+  frame makes audio click (`Audio Device Out CHOP`).
+- **Stepping through a patch.** Max has watchpoints on cords and a step
+  button. The TouchDesigner troubleshooting page offers error markers, info
+  operators and print statements (`Troubleshooting in TouchDesigner`).
+- **Recording a control.** `mtr @bindto` records and replays a UI object by
+  its scripting name with no cords (`Record CHOP` is wired by hand).
+- **Presentation mode.** A Max patch gets an interface by marking boxes.
+  A TouchDesigner interface is a separate tree of panel components.
+- **Parameters over OSC.** Max 9 gives every parameter an OSC address and
+  can describe them with OSCQuery. TouchDesigner's OSC operators carry
+  channels or messages and leave the mapping to parameters to you
+  (`OSC In CHOP`, `OSC In DAT`).
+- **Strings and arrays as data types.** Max 9 has `string.*` and `array.*`
+  object families. TouchDesigner does this work in Python (`Python f-strings`,
+  `Working with DATs in Python`).

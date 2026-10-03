@@ -17,7 +17,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/1.-introduction/madmapper-at-a-glance": {
     "group": "1.-introduction",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "MadMapper at a Glance",
@@ -49,7 +49,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/1.-introduction/what's-new/madmapper-v6": {
     "group": "1.-introduction",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "MadMapper v6",
@@ -97,7 +97,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/10.-timelines/creating-and-editing-timelines": {
     "group": "10.-timelines",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "Creating & Editing Timelines",
@@ -113,7 +113,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/10.-timelines/scenes-and-cues": {
     "group": "10.-timelines",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "Scenes & Cues",
@@ -121,7 +121,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/10.-timelines/time-markers-and-follow-actions": {
     "group": "10.-timelines",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "Time Markers & Follow Actions",
@@ -129,7 +129,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/10.-timelines/timelines-overview-and-the-conductor": {
     "group": "10.-timelines",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "Timelines Overview & The Conductor",
@@ -137,7 +137,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/10.-timelines/track-types-and-inspectors": {
     "group": "10.-timelines",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "Track Types & Inspectors",
@@ -145,7 +145,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control": {
     "group": "11.-live-performance-and-control",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "11. Live Performance & Control",
@@ -153,7 +153,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control/osc-commands-and-channels-list": {
     "group": "11.-live-performance-and-control",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "OSC Commands & Channels List",
@@ -177,7 +177,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/12.-advanced/mad-ai-extension": {
     "group": "12.-advanced",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "Mad AI Extension",
@@ -193,7 +193,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/12.-advanced/performance-optimization": {
     "group": "12.-advanced",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "Performance Optimization",
@@ -201,7 +201,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/12.-advanced/project-backup-and-recovery": {
     "group": "12.-advanced",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "Project Backup & Recovery",
@@ -345,7 +345,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/15.-troubleshooting": {
     "group": "15.-troubleshooting",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "15. Troubleshooting",
@@ -385,7 +385,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/2.-the-interface/interface-overview": {
     "group": "2.-the-interface",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "Interface Overview",
@@ -393,7 +393,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/2.-the-interface/keyboard-shortcuts": {
     "group": "2.-the-interface",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "Keyboard Shortcuts",
@@ -401,7 +401,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences": {
     "group": "2.-the-interface",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "MadMapper Preferences",
@@ -409,7 +409,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences/expert-mode": {
     "group": "2.-the-interface",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "Expert Mode",
@@ -425,7 +425,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-project-file-structure": {
     "group": "2.-the-interface",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "MadMapper Project File Structure",
@@ -441,7 +441,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/2.-the-interface/toolbar-and-workspace": {
     "group": "2.-the-interface",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "Toolbar & Workspace",
@@ -457,7 +457,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/3.-media/media-bin": {
     "group": "3.-media",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "Media Bin",
@@ -489,7 +489,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/4.-surfaces": {
     "group": "4.-surfaces",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "4. Surfaces",
@@ -529,7 +529,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/4.-surfaces/surface-inspector": {
     "group": "4.-surfaces",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "Surface Inspector",
@@ -601,7 +601,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/5.-dmx-and-led-mapping/dmx-fundamentals": {
     "group": "5.-dmx-and-led-mapping",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "DMX Fundamentals",
@@ -625,7 +625,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/6.-outputs": {
     "group": "6.-outputs",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "6. Outputs",
@@ -633,7 +633,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/6.-outputs/loopback-and-advanced-output-techniques": {
     "group": "6.-outputs",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "Loopback & Advanced Output Techniques",
@@ -641,7 +641,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/6.-outputs/minimad": {
     "group": "6.-outputs",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "MiniMad",
@@ -657,7 +657,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/6.-outputs/timeline-export": {
     "group": "6.-outputs",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "Timeline Export",
@@ -729,7 +729,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/8.-modules": {
     "group": "8.-modules",
-    "notes": "Read in full. Most modules get one line each; the PDF guide 09-Modules has more.",
+    "notes": "Read in full. Most modules get one line each; the PDF guide 09-Modules has more. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "8. Modules",
@@ -737,7 +737,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/9.-master-settings": {
     "group": "9.-master-settings",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "9. Master Settings",
@@ -745,7 +745,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/9.-master-settings/audio-input-and-beat-detection": {
     "group": "9.-master-settings",
-    "notes": "Read in full from the page text.",
+    "notes": "Read in full from the page text. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "Audio Input & Beat Detection",
@@ -785,7 +785,7 @@
   },
   "https://docs.madmapper.com/madmapper/6/glossary-of-terms": {
     "group": "glossary-of-terms",
-    "notes": "Read in full. Its 'Conductor' entry (a grid-based cueing system) disagrees with the Timelines chapter (the master timeline); the 'RDM' entry does not say MadMapper supports RDM.",
+    "notes": "Read in full. Its 'Conductor' entry (a grid-based cueing system) disagrees with the Timelines chapter (the master timeline); the 'RDM' entry does not say MadMapper supports RDM. Session 3: system model. Re-read 2026-10-03 for the system-level dimensions.",
     "session": "2026-10-02",
     "status": "extracted",
     "title": "Glossary of Terms",
@@ -809,17 +809,17 @@
   },
   "https://download.madmapper.com/minimad/minimad-userguide.pdf": {
     "group": "pdf-guide",
-    "notes": "Downloaded, not read. Older, longer MiniMad guide (24 pages); MiniMad_3_User_Guide was read instead.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 2: read in full as extracted text (24 pages). The button-map pages extract as fragments.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "minimad-userguide",
     "url": "https://download.madmapper.com/minimad/minimad-userguide.pdf"
   },
   "https://madmapper.com": {
     "group": "website",
-    "notes": "Not fetched this session.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 2: read in full. Product landing page; one line of content (MadMapper 6 has built-in Timelines) and links.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "home",
     "url": "https://madmapper.com"
   },
@@ -833,9 +833,9 @@
   },
   "https://madmapper.com/extensions/FAQ": {
     "group": "website",
-    "notes": "Fetched. Read the MadAI sections and the MadLaser general questions; the MadLaser \"Technical Help\" and \"Tips and Tricks\" sections and the MadProjectorControl section were not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 2: read in full, including the MadLaser Technical Help and Tips and Tricks sections and the MadProjectorControl section left unread in session 1.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "extensions/FAQ",
     "url": "https://madmapper.com/extensions/FAQ"
   },
@@ -881,17 +881,17 @@
   },
   "https://madmapper.com/extensions/tutorials": {
     "group": "website",
-    "notes": "Fetched only to collect PDF links; video tutorials not watched.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 2: read in full. An index of video tutorial titles and PDF guide links; the videos were not watched.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "extensions/tutorials",
     "url": "https://madmapper.com/extensions/tutorials"
   },
   "https://madmapper.com/files/01-Introduction%20to%20the%20User%20Interface.pdf": {
     "group": "pdf-guide",
-    "notes": "Downloaded, not read. 29 pages on the user interface (pre-v6 layout).",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 2: read in full as text extracted with PDFKit (29 pages, written for version 5). Screenshots carry part of the content and were not seen.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "01-Introduction to the User Interface",
     "url": "https://madmapper.com/files/01-Introduction%20to%20the%20User%20Interface.pdf"
   },
@@ -905,17 +905,17 @@
   },
   "https://madmapper.com/files/02-My%20First%20Video%20Mapping.pdf": {
     "group": "pdf-guide",
-    "notes": "Downloaded, not read. Beginner walkthrough.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 2: read in full as extracted text (15 pages).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "02-My First Video Mapping",
     "url": "https://madmapper.com/files/02-My%20First%20Video%20Mapping.pdf"
   },
   "https://madmapper.com/files/03-My%20First%20MiniMad%20Video%20Export.pdf": {
     "group": "pdf-guide",
-    "notes": "Downloaded, not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 2: read in full as extracted text (9 pages).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "03-My First MiniMad Video Export",
     "url": "https://madmapper.com/files/03-My%20First%20MiniMad%20Video%20Export.pdf"
   },
@@ -969,9 +969,9 @@
   },
   "https://madmapper.com/files/10-Arduino%20Firmata.pdf": {
     "group": "pdf-guide",
-    "notes": "Downloaded, not read. The manual page arduino-and-firmata-integration covers the same module.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 2: read in full as extracted text (8 pages). Wiring diagrams are pictures and were not seen.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "10-Arduino Firmata",
     "url": "https://madmapper.com/files/10-Arduino%20Firmata.pdf"
   },
@@ -1073,9 +1073,9 @@
   },
   "https://madmapper.com/learning/tutorials": {
     "group": "website",
-    "notes": "Fetched only to collect PDF links; video tutorials not watched.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 2: read in full. An index of video tutorial titles and PDF guide links; the videos were not watched.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "learning/tutorials",
     "url": "https://madmapper.com/learning/tutorials"
   },
@@ -1097,17 +1097,17 @@
   },
   "https://madmapper.com/madcompendium": {
     "group": "website",
-    "notes": "Fetched, not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 2: read in full. A call for entries to a printed book; no documentation content.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "madcompendium",
     "url": "https://madmapper.com/madcompendium"
   },
   "https://madmapper.com/madmapper/faq": {
     "group": "website",
-    "notes": "Fetched (about 27 kB of text), not read. The manual's troubleshooting page appears to cover the same questions.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 2: read in full. Much of it repeats the manual's troubleshooting page; still written for MadMapper 5.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "madmapper/faq",
     "url": "https://madmapper.com/madmapper/faq"
   },
@@ -1137,25 +1137,25 @@
   },
   "https://madmapper.com/madmapper/tutorials": {
     "group": "website",
-    "notes": "Fetched only to collect PDF links. The page is an index of video tutorials and PDF guides; the videos were not watched.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 2: read in full. An index of video tutorial titles and PDF guide links; the videos were not watched.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "madmapper/tutorials",
     "url": "https://madmapper.com/madmapper/tutorials"
   },
   "https://madmapper.com/minimad/faq": {
     "group": "website",
-    "notes": "Fetched, not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 2: read in full.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "minimad/faq",
     "url": "https://madmapper.com/minimad/faq"
   },
   "https://madmapper.com/minimad/product": {
     "group": "website",
-    "notes": "Fetched, not read. The manual page extensions-and-companions describes MiniMad.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 2: read in full. Specifications and feature list.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "minimad/product",
     "url": "https://madmapper.com/minimad/product"
   },
@@ -1169,17 +1169,17 @@
   },
   "https://madmapper.com/minimad/tutorials": {
     "group": "website",
-    "notes": "Fetched only to collect PDF links; video tutorials not watched.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 2: read in full. An index of three video titles and three PDF links; the videos were not watched.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "minimad/tutorials",
     "url": "https://madmapper.com/minimad/tutorials"
   },
   "https://madmapper.com/minimad/userguides": {
     "group": "website",
-    "notes": "Fetched only to collect PDF links.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 2: read in full. Links to the three MiniMad guides only.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "minimad/userguides",
     "url": "https://madmapper.com/minimad/userguides"
   },
@@ -1225,17 +1225,17 @@
   },
   "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/Libraries/MadNoise.md": {
     "group": "github-materials",
-    "notes": "Fetched, not read. The function list is also in the manual page glsl-shader-functions-reference, which was read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 2: read in full. A list of function declarations.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Libraries/MadNoise.md",
     "url": "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/Libraries/MadNoise.md"
   },
   "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/Libraries/MadSDF.md": {
     "group": "github-materials",
-    "notes": "Fetched, not read. The function list is also in the manual page glsl-shader-functions-reference, which was read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 2: read as text with the images removed and the longest lines cut at about 400 characters; the last few lines of the final example were not reached. The images, which show each example's result, were not seen.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Libraries/MadSDF.md",
     "url": "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/Libraries/MadSDF.md"
   },
@@ -1249,17 +1249,17 @@
   },
   "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/Materials/Demos/SDF/README.md": {
     "group": "github-materials",
-    "notes": "Not fetched this session.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 2: fetched and read in full (two lines; points to MadSDF.md).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Materials/Demos/SDF/README.md",
     "url": "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/Materials/Demos/SDF/README.md"
   },
   "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/Materials/README.md": {
     "group": "github-materials",
-    "notes": "Fetched (165 bytes), not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 2: read in full (three lines).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Materials/README.md",
     "url": "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/Materials/README.md"
   },

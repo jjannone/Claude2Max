@@ -1,9 +1,9 @@
 {
   "https://support.troikatronix.com/support/solutions/articles/13000014834-making-your-patch-more-efficient-using-the-gate-selector-and-router-actors": {
     "group": "kb/Tutorials/Performance Optimization",
-    "notes": "Fetched to scratch 2026-10-02, not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Making Your Patch More Efficient using the Gate, Selector and Router Actors",
     "url": "https://support.troikatronix.com/support/solutions/articles/13000014834-making-your-patch-more-efficient-using-the-gate-selector-and-router-actors"
   },
@@ -25,9 +25,9 @@
   },
   "https://support.troikatronix.com/support/solutions/articles/13000014933-getting-started-with-javascript": {
     "group": "kb/Tutorials/Tutorials - Scripting, Sensors and Interfacing",
-    "notes": "Partly read 2026-10-02: first 6000 of about 12335 characters.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 3: system model. Read in full.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Getting started with Javascript",
     "url": "https://support.troikatronix.com/support/solutions/articles/13000014933-getting-started-with-javascript"
   },
@@ -41,9 +41,9 @@
   },
   "https://support.troikatronix.com/support/solutions/articles/13000014935-grouping-ungrouping-and-passing-json-values-with-javascript": {
     "group": "kb/Tutorials/Tutorials - Scripting, Sensors and Interfacing",
-    "notes": "Fetched to scratch 2026-10-02, not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Grouping, Ungrouping and Passing JSON Values With Javascript",
     "url": "https://support.troikatronix.com/support/solutions/articles/13000014935-grouping-ungrouping-and-passing-json-values-with-javascript"
   },
@@ -65,9 +65,9 @@
   },
   "https://support.troikatronix.com/support/solutions/articles/13000014938-understanding-preloading-safely-using-the-preload-actors": {
     "group": "kb/Tutorials/Performance Optimization",
-    "notes": "Partly read 2026-10-02: first 5000 of about 7239 characters.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 3: system model. Read in full.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Understanding Preloading & Safely Using the Preload Actors",
     "url": "https://support.troikatronix.com/support/solutions/articles/13000014938-understanding-preloading-safely-using-the-preload-actors"
   },
@@ -81,9 +81,9 @@
   },
   "https://support.troikatronix.com/support/solutions/articles/13000014940-making-the-stage-frontmost-when-using-login-items-on-macos": {
     "group": "kb/Tutorials/How To",
-    "notes": "Fetched to scratch 2026-10-02, not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 3: system model. Read in full.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Making the Stage Frontmost When Using Login Items on macOS",
     "url": "https://support.troikatronix.com/support/solutions/articles/13000014940-making-the-stage-frontmost-when-using-login-items-on-macos"
   },
@@ -153,7 +153,7 @@
   },
   "https://support.troikatronix.com/support/solutions/articles/13000016422-isadora-3-4-working-with-multiple-displays": {
     "group": "kb/Tutorials/How To",
-    "notes": "Partly read 2026-10-02: first 4500 of about 13182 characters.",
+    "notes": "Session 3: system model. Read all but about 3,000 characters in the middle (macOS display setup steps).",
     "session": null,
     "status": "pending",
     "title": "Isadora 3 & 4: Working with Multiple Displays",
@@ -329,9 +329,9 @@
   },
   "https://support.troikatronix.com/support/solutions/articles/13000025645-glsl-shader-actor-tutorial": {
     "group": "kb/Tutorials/Tutorials - Scripting, Sensors and Interfacing",
-    "notes": "Partly read 2026-10-02: first 5000 of about 30151 characters.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 3: system model. Read in full.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "GLSL Shader Actor Tutorial",
     "url": "https://support.troikatronix.com/support/solutions/articles/13000025645-glsl-shader-actor-tutorial"
   },
@@ -369,9 +369,9 @@
   },
   "https://support.troikatronix.com/support/solutions/articles/13000026371-understanding-the-new-isadora-v2-0-actor-processing-mode": {
     "group": "kb/Tutorials/Performance Optimization",
-    "notes": "Fetched to scratch 2026-10-02, not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Understanding the New Isadora v2.0 Actor Processing Mode",
     "url": "https://support.troikatronix.com/support/solutions/articles/13000026371-understanding-the-new-isadora-v2-0-actor-processing-mode"
   },
@@ -417,9 +417,9 @@
   },
   "https://support.troikatronix.com/support/solutions/articles/13000029166-slow-performance-may-be-caused-by-third-party-software": {
     "group": "kb/Tutorials/Performance Optimization",
-    "notes": "Fetched to scratch 2026-10-02, not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Slow Performance May Be Caused by Third Party Software",
     "url": "https://support.troikatronix.com/support/solutions/articles/13000029166-slow-performance-may-be-caused-by-third-party-software"
   },
@@ -465,9 +465,9 @@
   },
   "https://support.troikatronix.com/support/solutions/articles/13000032804-arranging-multiple-stages-for-best-performance": {
     "group": "kb/Tutorials/Performance Optimization",
-    "notes": "Fetched to scratch 2026-10-02, not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 3: system model. Read in full.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Arranging Multiple Stages for Best Performance",
     "url": "https://support.troikatronix.com/support/solutions/articles/13000032804-arranging-multiple-stages-for-best-performance"
   },
@@ -505,9 +505,9 @@
   },
   "https://support.troikatronix.com/support/solutions/articles/13000041154-can-i-move-an-isadora-show-from-macos-to-windows-or-vice-versa-": {
     "group": "kb/Tutorials/How To",
-    "notes": "Fetched to scratch 2026-10-02, not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Can I move an Isadora show from macOS to Windows or vice-versa?",
     "url": "https://support.troikatronix.com/support/solutions/articles/13000041154-can-i-move-an-isadora-show-from-macos-to-windows-or-vice-versa-"
   },
@@ -689,9 +689,9 @@
   },
   "https://support.troikatronix.com/support/solutions/articles/13000068654-what-to-do-if-plugins-are-listed-as-missing": {
     "group": "kb/Technical Support/Troubleshooting",
-    "notes": "Not fetched.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 3: system model. Read in full.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "What to Do If Plugins Are Listed as Missing",
     "url": "https://support.troikatronix.com/support/solutions/articles/13000068654-what-to-do-if-plugins-are-listed-as-missing"
   },
@@ -1049,9 +1049,9 @@
   },
   "https://support.troikatronix.com/support/solutions/articles/13000077349-using-the-json-parser-and-json-bundler-actors": {
     "group": "kb/Tutorials/Tutorials - Scripting, Sensors and Interfacing",
-    "notes": "Fetched to scratch 2026-10-02, not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Using the JSON Parser and JSON Bundler Actors",
     "url": "https://support.troikatronix.com/support/solutions/articles/13000077349-using-the-json-parser-and-json-bundler-actors"
   },
@@ -1073,9 +1073,9 @@
   },
   "https://support.troikatronix.com/support/solutions/articles/13000081815-using-virtual-midi-ports": {
     "group": "kb/Tutorials/Tutorials - Scripting, Sensors and Interfacing",
-    "notes": "Fetched to scratch 2026-10-02, not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Using Virtual MIDI Ports",
     "url": "https://support.troikatronix.com/support/solutions/articles/13000081815-using-virtual-midi-ports"
   },
@@ -1097,9 +1097,9 @@
   },
   "https://support.troikatronix.com/support/solutions/articles/13000085286-keeping-global-user-actors-in-sync-when-collaborating": {
     "group": "kb/Tutorials/How To",
-    "notes": "Partly read 2026-10-02: first 3000 of about 6670 characters.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 3: system model. Read in full.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Keeping Global User Actors In Sync When Collaborating",
     "url": "https://support.troikatronix.com/support/solutions/articles/13000085286-keeping-global-user-actors-in-sync-when-collaborating"
   },
@@ -1321,9 +1321,9 @@
   },
   "https://support.troikatronix.com/support/solutions/articles/13000092349-mixed-format-media-warning": {
     "group": "kb/Technical Support/Best Practices",
-    "notes": "Fetched to scratch 2026-10-02, not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Mixed Format Media Warning",
     "url": "https://support.troikatronix.com/support/solutions/articles/13000092349-mixed-format-media-warning"
   },
@@ -1553,7 +1553,7 @@
   },
   "https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes": {
     "group": "kb/Technical Support/Isadora Release Notes",
-    "notes": "Partly read 2026-10-02: first 7000 of about 145449 characters plus a scan of its NEW: lines.",
+    "notes": "Session 3: system model. Read the opening, the 4.5 VST and audio-type sections, the Control Panel (Show-Hide Control, Set Control Focus) and Pythoner sections, plus a keyword scan of the rest. Not read in full.",
     "session": null,
     "status": "pending",
     "title": "Isadora 4 Release Notes",
@@ -1793,17 +1793,17 @@
   },
   "https://support.troikatronix.com/support/solutions/articles/5000692142-optimizing-for-speed-making-isadora-run-faster": {
     "group": "kb/Tutorials/Performance Optimization",
-    "notes": "Fetched to scratch 2026-10-02, not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Optimizing for Speed: Making Isadora Run Faster",
     "url": "https://support.troikatronix.com/support/solutions/articles/5000692142-optimizing-for-speed-making-isadora-run-faster"
   },
   "https://support.troikatronix.com/support/solutions/articles/5000692144-how-to-move-an-isadora-show-to-another-computer": {
     "group": "kb/Tutorials/How To",
-    "notes": "Fetched to scratch 2026-10-02, not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "How to Move an Isadora Show to Another Computer",
     "url": "https://support.troikatronix.com/support/solutions/articles/5000692144-how-to-move-an-isadora-show-to-another-computer"
   },
@@ -3545,89 +3545,89 @@
   },
   "manual#p0076-tutorial-7-working-with-scenes": {
     "group": "manual/ISADORA TUTORIAL SECTION",
-    "notes": "Getting-started tutorials; not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 3: system model. Read in full. Manual p.76-114 (Tutorial 7).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Tutorial 7: Working With Scenes",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=76"
   },
   "manual#p0115-tutorial-8-fine-tuning-links-and-actors": {
     "group": "manual/ISADORA TUTORIAL SECTION",
-    "notes": "Getting-started tutorials; not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (p.115-119): property types, triggers, value scaling, Init.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Tutorial 8: Fine Tuning Links and Actors",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=115"
   },
   "manual#p0120-tutorial-9-more-real-time-video-processing": {
     "group": "manual/ISADORA TUTORIAL SECTION",
-    "notes": "Getting-started tutorials; not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 3: system model. Read in full.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Tutorial 9: More Real Time Video Processing",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=120"
   },
   "manual#p0123-tutorial-10-making-your-own-actors": {
     "group": "manual/ISADORA TUTORIAL SECTION",
-    "notes": "Getting-started tutorials; not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 3: system model. Read in full.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Tutorial 10: Making Your Own Actors",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=123"
   },
   "manual#p0130-tutorial-11-getting-the-most-from-the-projector": {
     "group": "manual/ISADORA TUTORIAL SECTION",
-    "notes": "Getting-started tutorials; not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 3: system model. Read in full.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Tutorial 11: Getting the Most from the Projector",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=130"
   },
   "manual#p0134-contacting-troikatronix-support": {
     "group": "manual/CONTACTING TROIKATRONIX SUPPORT",
-    "notes": "Getting-started tutorials; not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 3: system model. Read in full.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "CONTACTING TROIKATRONIX SUPPORT",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=134"
   },
   "manual#p0134-isadora-forum": {
     "group": "manual/ISADORA FORUM",
-    "notes": "Getting-started tutorials; not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 3: system model. Read in full.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "ISADORA FORUM",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=134"
   },
   "manual#p0134-knowledge-base": {
     "group": "manual/KNOWLEDGE BASE",
-    "notes": "Getting-started tutorials; not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 3: system model. Read in full.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "KNOWLEDGE BASE",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=134"
   },
   "manual#p0134-online-resources": {
     "group": "manual/ONLINE RESOURCES",
-    "notes": "Getting-started tutorials; not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 3: system model. Read in full.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "ONLINE RESOURCES",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=134"
   },
   "manual#p0134-online-video-tutorials": {
     "group": "manual/ONLINE VIDEO TUTORIALS",
-    "notes": "Getting-started tutorials; not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 3: system model. Read in full.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "ONLINE VIDEO TUTORIALS",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=134"
   },
   "manual#p0134-tutorial-files": {
     "group": "manual/TUTORIAL FILES",
-    "notes": "Getting-started tutorials; not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Session 3: system model. Read in full.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "TUTORIAL FILES",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=134"
   },
@@ -4953,49 +4953,49 @@
   },
   "manual#p0325-optimizing-for-speed": {
     "group": "manual/OPTIMIZING FOR SPEED",
-    "notes": "Troubleshooting and support policy; not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (p.325-330).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "OPTIMIZING FOR SPEED",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=325"
   },
   "manual#p0325-troubleshooting-guide": {
     "group": "manual/TROUBLESHOOTING GUIDE",
-    "notes": "Troubleshooting and support policy; not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (p.325-330).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "TROUBLESHOOTING GUIDE",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=325"
   },
   "manual#p0329-macos": {
     "group": "manual/RESETTING THE ISADORA PREFERENCES",
-    "notes": "Troubleshooting and support policy; not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (p.325-330).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "macOS",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=329"
   },
   "manual#p0329-resetting-the-isadora-preferences": {
     "group": "manual/RESETTING THE ISADORA PREFERENCES",
-    "notes": "Troubleshooting and support policy; not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (p.325-330).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "RESETTING THE ISADORA PREFERENCES",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=329"
   },
   "manual#p0329-windows": {
     "group": "manual/RESETTING THE ISADORA PREFERENCES",
-    "notes": "Troubleshooting and support policy; not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (p.325-330).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Windows",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=329"
   },
   "manual#p0330-windows-option-2": {
     "group": "manual/RESETTING THE ISADORA PREFERENCES",
-    "notes": "Troubleshooting and support policy; not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (p.325-330).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Windows Option 2:",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=330"
   },
@@ -5009,7 +5009,7 @@
   },
   "manual#p0331-installing-multiple-versions-of-isadora": {
     "group": "manual/INSTALLING MULTIPLE VERSIONS OF ISADORA",
-    "notes": "Troubleshooting and support policy; not read.",
+    "notes": "Session 2 read p.331 only; the section continues on p.332, not read.",
     "session": null,
     "status": "pending",
     "title": "INSTALLING MULTIPLE VERSIONS OF ISADORA",
@@ -5057,9 +5057,9 @@
   },
   "manual#p0336-2d-velocity": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (739 of 1120 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "2D Velocity",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=336"
   },
@@ -5073,9 +5073,9 @@
   },
   "manual#p0337-3d-ambient-light": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (187 of 1351 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "3D Ambient Light",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=337"
   },
@@ -5089,9 +5089,9 @@
   },
   "manual#p0339-3d-light-orientation": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (1229 of 2213 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "3D Light Orientation",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=339"
   },
@@ -5137,17 +5137,17 @@
   },
   "manual#p0361-3d-player": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (1500 of 5090 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "3D Player",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=361"
   },
   "manual#p0364-3d-projector": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (679 of 4772 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "3D Projector",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=364"
   },
@@ -5169,9 +5169,9 @@
   },
   "manual#p0373-3d-renderer": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (613 of 1873 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "3D Renderer",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=373"
   },
@@ -5185,41 +5185,41 @@
   },
   "manual#p0382-3d-stage-options": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (231 of 1627 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "3D Stage Options",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=382"
   },
   "manual#p0383-3d-stage-orientation": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (280 of 731 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "3D Stage Orientation",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=383"
   },
   "manual#p0384-3d-trackball": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (432 of 893 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "3D Trackball",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=384"
   },
   "manual#p0385-3d-velocity": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (640 of 1072 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "3D Velocity",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=385"
   },
   "manual#p0386-absolute-value": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (64 of 170 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Absolute Value",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=386"
   },
@@ -5241,41 +5241,41 @@
   },
   "manual#p0389-add-alpha-channel": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (1180 of 1719 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Add Alpha Channel",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=389"
   },
   "manual#p0390-all-notes-off": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (424 of 580 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "All Notes Off",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=390"
   },
   "manual#p0391-alpha-mask": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (1034 of 2180 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Alpha Mask",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=391"
   },
   "manual#p0392-alpha-tool": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (732 of 1492 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Alpha Tool",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=392"
   },
   "manual#p0393-anything": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (132 of 1571 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Anything",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=393"
   },
@@ -5305,9 +5305,9 @@
   },
   "manual#p0406-auto-fade": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (526 of 955 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Auto Fade",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=406"
   },
@@ -5321,9 +5321,9 @@
   },
   "manual#p0407-background-color": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (238 of 1033 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Background Color",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=407"
   },
@@ -5369,65 +5369,65 @@
   },
   "manual#p0415-broadcaster": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (774 of 1275 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Broadcaster",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=415"
   },
   "manual#p0416-buffer": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (1500 of 3529 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Buffer",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=416"
   },
   "manual#p0418-calc-angle": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (75 of 447 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Calc Angle",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=418"
   },
   "manual#p0419-calc-angle-3d": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (77 of 570 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Calc Angle 3D",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=419"
   },
   "manual#p0420-calc-brightness": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (1500 of 2241 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Calc Brightness",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=420"
   },
   "manual#p0421-calc-mbt": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (605 of 1641 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Calc MBT",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=421"
   },
   "manual#p0422-calc-rectangle": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (276 of 1141 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Calc Rectangle",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=422"
   },
   "manual#p0424-calculator": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (58 of 642 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Calculator",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=424"
   },
@@ -5441,9 +5441,9 @@
   },
   "manual#p0426-capture-control": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (255 of 2140 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Capture Control",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=426"
   },
@@ -5465,25 +5465,25 @@
   },
   "manual#p0430-character-to-number": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (74 of 269 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Character to Number",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=430"
   },
   "manual#p0431-chop-pixels": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 2652 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Chop Pixels",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=431"
   },
   "manual#p0432-chopper": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 3102 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Chopper",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=432"
   },
@@ -5497,9 +5497,9 @@
   },
   "manual#p0435-chroma-key": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 5154 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Chroma Key",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=435"
   },
@@ -5521,9 +5521,9 @@
   },
   "manual#p0439-clock": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (51 of 233 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Clock",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=439"
   },
@@ -5537,9 +5537,9 @@
   },
   "manual#p0441-color-maker-hsba": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (82 of 704 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Color Maker HSBA",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=441"
   },
@@ -5553,9 +5553,9 @@
   },
   "manual#p0442-color-maker-rgba": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (85 of 401 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Color Maker RGBA",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=442"
   },
@@ -5569,9 +5569,9 @@
   },
   "manual#p0444-color-to-hsba": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (86 of 456 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Color To HSBA",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=444"
   },
@@ -5585,17 +5585,17 @@
   },
   "manual#p0445-color-to-rgba": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (90 of 406 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Color To RGBA",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=445"
   },
   "manual#p0446-colorizer": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (393 of 1090 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Colorizer",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=446"
   },
@@ -5609,41 +5609,41 @@
   },
   "manual#p0448-comparator": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (22 of 1552 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Comparator",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=448"
   },
   "manual#p0449-compare-guarded": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (395 of 939 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Compare Guarded",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=449"
   },
   "manual#p0450-contrast-adjust": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (436 of 998 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Contrast Adjust",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=450"
   },
   "manual#p0451-control-watcher": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (479 of 1662 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Control Watcher",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=451"
   },
   "manual#p0452-counter": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (463 of 2860 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Counter",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=452"
   },
@@ -5657,41 +5657,41 @@
   },
   "manual#p0454-cpu-to-gpu-video-converter": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (498 of 947 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "CPU to GPU Video Converter",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=454"
   },
   "manual#p0455-crop": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (93 of 1044 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Crop",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=455"
   },
   "manual#p0456-current-scene-number": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (41 of 150 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Current Scene Number",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=456"
   },
   "manual#p0456-curvature": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (560 of 977 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Curvature",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=456"
   },
   "manual#p0457-data-array": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Partly read 2026-10-02: first 3300 of 7426 characters. Finish before citing property details.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Data Array",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=457"
   },
@@ -5705,49 +5705,49 @@
   },
   "manual#p0464-deactivate-scene": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (213 of 1607 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Deactivate Scene",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=464"
   },
   "manual#p0465-decay-generator": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 2086 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Decay Generator",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=465"
   },
   "manual#p0466-desaturate": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (50 of 609 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Desaturate",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=466"
   },
   "manual#p0467-difference": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (499 of 1608 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Difference",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=467"
   },
   "manual#p0468-displace": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (605 of 1750 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Displace",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=468"
   },
   "manual#p0470-dots": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (110 of 1181 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Dots",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=470"
   },
@@ -5769,17 +5769,17 @@
   },
   "manual#p0474-ease-in-out": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (138 of 1019 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Ease In-Out",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=474"
   },
   "manual#p0475-ease-in-out-2d": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (204 of 1531 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Ease In-Out 2D",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=475"
   },
@@ -5793,33 +5793,33 @@
   },
   "manual#p0480-effect-mixer": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 2064 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Effect Mixer",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=480"
   },
   "manual#p0483-enter-scene-trigger": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (162 of 247 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Enter Scene Trigger",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=483"
   },
   "manual#p0483-enter-scene-value": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (168 of 370 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Enter Scene Value",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=483"
   },
   "manual#p0484-envelope-generator": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (491 of 2834 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Envelope Generator",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=484"
   },
@@ -5833,9 +5833,9 @@
   },
   "manual#p0487-explode": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (125 of 1054 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Explode",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=487"
   },
@@ -5857,9 +5857,9 @@
   },
   "manual#p0494-file-reader": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (44 of 1392 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "File Reader",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=494"
   },
@@ -5873,49 +5873,49 @@
   },
   "manual#p0496-flip": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (56 of 458 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Flip",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=496"
   },
   "manual#p0497-float-counter": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (485 of 2438 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Float Counter",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=497"
   },
   "manual#p0498-float-to-integer": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (80 of 464 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Float to Integer",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=498"
   },
   "manual#p0499-freeze": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (75 of 595 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Freeze",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=499"
   },
   "manual#p0500-gate": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (628 of 1046 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Gate",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=500"
   },
   "manual#p0501-gaussian-blur": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (44 of 490 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Gaussian Blur",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=501"
   },
@@ -5929,41 +5929,41 @@
   },
   "manual#p0503-get-media-count": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (60 of 521 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Get Media Count",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=503"
   },
   "manual#p0503-get-media-file-name": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (58 of 282 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Get Media File Name",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=503"
   },
   "manual#p0504-get-media-index": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (366 of 861 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Get Media Index",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=504"
   },
   "manual#p0504-get-scene-name": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (124 of 1249 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Get Scene Name",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=504"
   },
   "manual#p0505-get-stage-size": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (60 of 529 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Get Stage Size",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=505"
   },
@@ -5977,9 +5977,9 @@
   },
   "manual#p0506-get-video-size": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (69 of 368 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Get Video Size",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=506"
   },
@@ -6009,17 +6009,17 @@
   },
   "manual#p0514-go-backward": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (347 of 424 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Go Backward",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=514"
   },
   "manual#p0514-go-forward": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (344 of 420 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Go Forward",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=514"
   },
@@ -6033,57 +6033,57 @@
   },
   "manual#p0515-gpu-to-cpu-video-converter": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (633 of 1245 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "GPU to CPU Video Converter",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=515"
   },
   "manual#p0516-grapher": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (201 of 1262 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Grapher",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=516"
   },
   "manual#p0517-hid-value-listener": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (392 of 610 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "HID Value Listener",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=517"
   },
   "manual#p0518-hold-range": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (97 of 754 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Hold Range",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=518"
   },
   "manual#p0519-hsb-to-rgb": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (130 of 1018 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "HSB to RGB",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=519"
   },
   "manual#p0520-hsl-adjust": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (79 of 891 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "HSL Adjust",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=520"
   },
   "manual#p0521-inside-range": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (60 of 1332 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Inside Range",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=521"
   },
@@ -6145,17 +6145,17 @@
   },
   "manual#p0545-json-bundler": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (381 of 1799 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "JSON Bundler",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=545"
   },
   "manual#p0546-json-parser": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (55 of 1239 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "JSON Parser",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=546"
   },
@@ -6193,17 +6193,17 @@
   },
   "manual#p0552-key-table-watcher": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (404 of 1086 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Key Table Watcher",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=552"
   },
   "manual#p0553-keyboard-watcher": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (474 of 1941 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Keyboard Watcher",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=553"
   },
@@ -6249,17 +6249,17 @@
   },
   "manual#p0562-limit-scale-value": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 1558 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Limit-Scale Value",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=562"
   },
   "manual#p0563-lines": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (107 of 1658 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Lines",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=563"
   },
@@ -6273,65 +6273,65 @@
   },
   "manual#p0566-listener": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (555 of 1413 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Listener",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=566"
   },
   "manual#p0567-live-drawing": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (354 of 4558 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Live Drawing",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=567"
   },
   "manual#p0569-logical-calculator": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (62 of 1061 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Logical Calculator",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=569"
   },
   "manual#p0570-lookup": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (699 of 1933 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Lookup",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=570"
   },
   "manual#p0571-loop-calculator": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (443 of 1986 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Loop Calculator",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=571"
   },
   "manual#p0573-luminance-key": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 3838 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Luminance Key",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=573"
   },
   "manual#p0575-macro": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 2197 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Macro",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=575"
   },
   "manual#p0576-math": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (81 of 617 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Math",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=576"
   },
@@ -6361,73 +6361,73 @@
   },
   "manual#p0586-matte": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (519 of 1785 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Matte",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=586"
   },
   "manual#p0588-matte": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 3567 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Matte++",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=588"
   },
   "manual#p0590-max-value-hold": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (71 of 559 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Max Value Hold",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=590"
   },
   "manual#p0591-maximum": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (56 of 524 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Maximum",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=591"
   },
   "manual#p0591-measure-color": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (175 of 1518 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Measure Color",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=591"
   },
   "manual#p0592-media-percent-to-time": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (264 of 688 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Media Percent to Time",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=592"
   },
   "manual#p0593-media-time-to-percent": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (248 of 764 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Media Time to Percent",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=593"
   },
   "manual#p0594-midi-enable": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (181 of 460 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "MIDI Enable",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=594"
   },
   "manual#p0595-midi-player": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 2821 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "MIDI Player",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=595"
   },
@@ -6441,49 +6441,49 @@
   },
   "manual#p0597-min-value-hold": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (71 of 562 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Min Value Hold",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=597"
   },
   "manual#p0598-mini-sequencer": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 1667 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Mini Sequencer",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=598"
   },
   "manual#p0599-minimum": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (56 of 533 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Minimum",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=599"
   },
   "manual#p0599-mono-pressure-watcher": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (503 of 1537 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Mono Pressure Watcher",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=599"
   },
   "manual#p0600-motion-blur": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 1523 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Motion Blur",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=600"
   },
   "manual#p0601-mouse-watcher": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (133 of 2500 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Mouse Watcher",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=601"
   },
@@ -6521,25 +6521,25 @@
   },
   "manual#p0610-multi-blocker": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 1210 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Multi Blocker",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=610"
   },
   "manual#p0611-multimix": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (578 of 708 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "MultiMix",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=611"
   },
   "manual#p0612-multivid": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (552 of 1209 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "MultiVid",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=612"
   },
@@ -6553,9 +6553,9 @@
   },
   "manual#p0615-negative": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (104 of 325 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Negative",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=615"
   },
@@ -6569,17 +6569,17 @@
   },
   "manual#p0617-note-off-watcher": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (472 of 1874 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Note Off Watcher",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=617"
   },
   "manual#p0618-note-on-watcher": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (469 of 1870 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Note On Watcher",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=618"
   },
@@ -6601,41 +6601,41 @@
   },
   "manual#p0633-osc-address-listener": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Partly read 2026-10-02: first 2600 of 3658 characters. Finish before citing property details.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "OSC Address Listener",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=633"
   },
   "manual#p0635-osc-listener": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (662 of 1664 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "OSC Listener",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=635"
   },
   "manual#p0636-osc-multi-listener": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (139 of 1216 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "OSC Multi Listener",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=636"
   },
   "manual#p0637-osc-multi-transmit": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (598 of 2407 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "OSC Multi Transmit",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=637"
   },
   "manual#p0638-osc-transmit": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (492 of 1454 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "OSC Transmit",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=638"
   },
@@ -6649,57 +6649,57 @@
   },
   "manual#p0640-panner": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 2117 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Panner",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=640"
   },
   "manual#p0642-pass-value": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (89 of 541 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Pass Value",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=642"
   },
   "manual#p0643-performance-monitor": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (138 of 979 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Performance Monitor",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=643"
   },
   "manual#p0644-picture-player": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (511 of 836 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Picture Player",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=644"
   },
   "manual#p0645-picture-preload": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (105 of 1409 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Picture Preload",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=645"
   },
   "manual#p0646-pitch-bend-watcher": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (493 of 1603 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Pitch Bend Watcher",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=646"
   },
   "manual#p0647-pitch-yaw-roll-to-rotation": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (382 of 1583 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Pitch/Yaw/Roll to Rotation",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=647"
   },
@@ -6713,9 +6713,9 @@
   },
   "manual#p0649-poly-pressure-watcher": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (499 of 1866 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Poly Pressure Watcher",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=649"
   },
@@ -6729,39 +6729,39 @@
   },
   "manual#p0651-program-change-watcher": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (498 of 1561 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Program Change Watcher",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=651"
   },
   "manual#p0652-projector": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Partly read 2026-10-02: first 2700 of 5241 characters. Finish before citing property details.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Projector",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=652"
   },
   "manual#p0655-pulse-generator": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (312 of 1767 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Pulse Generator",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=655"
   },
   "manual#p0656-pulse-values": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (74 of 553 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Pulse Values",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=656"
   },
   "manual#p0657-pythoner": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Partly read 2026-10-02: first 4200 of 38187 characters. Finish before citing property details.",
+    "notes": "Session 3: system model. Read p.657-661 (install, security, interpreter lifespan, python_main/init/finalize); the rest of the entry to p.675 not read.",
     "session": null,
     "status": "pending",
     "title": "Pythoner",
@@ -6769,41 +6769,41 @@
   },
   "manual#p0676-random": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (26 of 245 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Random",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=676"
   },
   "manual#p0677-read-text-from-file": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (558 of 4045 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Read Text From File",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=677"
   },
   "manual#p0679-real-time-watcher": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (57 of 547 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Real Time Watcher",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=679"
   },
   "manual#p0680-recall-snapshot": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (154 of 629 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Recall Snapshot",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=680"
   },
   "manual#p0680-reflector": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (98 of 520 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Reflector",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=680"
   },
@@ -6817,9 +6817,9 @@
   },
   "manual#p0682-rgb-to-hsb": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (97 of 721 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "RGB to HSB",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=682"
   },
@@ -6841,9 +6841,9 @@
   },
   "manual#p0685-router": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 1898 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Router",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=685"
   },
@@ -6857,33 +6857,33 @@
   },
   "manual#p0691-scale-value": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (98 of 287 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Scale Value",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=691"
   },
   "manual#p0692-scaler": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (50 of 503 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Scaler",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=692"
   },
   "manual#p0692-scanner": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 1609 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Scanner",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=692"
   },
   "manual#p0694-scene-intensity": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (447 of 526 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Scene Intensity",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=694"
   },
@@ -6897,49 +6897,49 @@
   },
   "manual#p0696-seeded-random": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (249 of 759 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Seeded Random",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=696"
   },
   "manual#p0697-seek-target-value": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (159 of 542 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Seek Target Value",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=697"
   },
   "manual#p0697-selector": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 1310 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Selector",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=697"
   },
   "manual#p0698-send-bank-select": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (66 of 524 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Send Bank Select",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=698"
   },
   "manual#p0699-send-control": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (69 of 535 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Send Control",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=699"
   },
   "manual#p0700-send-hires-control": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (53 of 568 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Send HiRes Control",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=700"
   },
@@ -6953,33 +6953,33 @@
   },
   "manual#p0703-send-mono-pressure": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (94 of 535 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Send Mono Pressure",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=703"
   },
   "manual#p0704-send-nonreg-param": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (588 of 1941 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Send NonReg Param",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=704"
   },
   "manual#p0705-send-note": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (151 of 1421 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Send Note",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=705"
   },
   "manual#p0706-send-pitch-bend": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (65 of 489 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Send Pitch Bend",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=706"
   },
@@ -6993,25 +6993,25 @@
   },
   "manual#p0709-send-poly-pressure": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (94 of 609 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Send Poly Pressure",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=709"
   },
   "manual#p0710-send-program-change": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (69 of 498 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Send Program Change",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=710"
   },
   "manual#p0711-send-raw-midi": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 1615 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Send Raw MIDI",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=711"
   },
@@ -7033,17 +7033,17 @@
   },
   "manual#p0714-send-sys-ex": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 1476 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Send Sys Ex",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=714"
   },
   "manual#p0715-sequential-trigger": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (53 of 758 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Sequential Trigger",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=715"
   },
@@ -7065,33 +7065,33 @@
   },
   "manual#p0718-set-control-focus": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 1357 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Set Control Focus",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=718"
   },
   "manual#p0719-set-global-values": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 1987 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Set Global Values",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=719"
   },
   "manual#p0720-set-modified": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (123 of 222 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Set Modified",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=720"
   },
   "manual#p0721-shapes": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (217 of 3555 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Shapes",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=721"
   },
@@ -7105,41 +7105,41 @@
   },
   "manual#p0724-shimmer": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (75 of 849 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Shimmer",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=724"
   },
   "manual#p0725-show-hide-control": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (530 of 1411 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Show-Hide Control",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=725"
   },
   "manual#p0726-show-hide-stages": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (162 of 282 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Show-Hide Stages",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=726"
   },
   "manual#p0726-shuffle": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (411 of 1308 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Shuffle",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=726"
   },
   "manual#p0727-simultaneity": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (479 of 920 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Simultaneity",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=727"
   },
@@ -7169,49 +7169,49 @@
   },
   "manual#p0734-slit-scan": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (367 of 947 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Slit Scan",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=734"
   },
   "manual#p0735-smoother": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (400 of 1340 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Smoother",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=735"
   },
   "manual#p0736-sound-frequency-bands": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (514 of 1282 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Sound Frequency Bands",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=736"
   },
   "manual#p0737-sound-frequency-watcher": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 3393 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Sound Frequency Watcher",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=737"
   },
   "manual#p0739-sound-level-watcher": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 3165 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Sound Level Watcher",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=739"
   },
   "manual#p0741-sound-level-watcher": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (402 of 1757 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Sound Level Watcher++",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=741"
   },
@@ -7225,9 +7225,9 @@
   },
   "manual#p0745-sound-preload": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (641 of 1874 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Sound Preload",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=745"
   },
@@ -7241,9 +7241,9 @@
   },
   "manual#p0747-spinner": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (36 of 557 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Spinner",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=747"
   },
@@ -7289,17 +7289,17 @@
   },
   "manual#p0755-stage-mouse-watcher": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (293 of 3838 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Stage Mouse Watcher",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=755"
   },
   "manual#p0758-stage-scaling": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (395 of 1134 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Stage Scaling",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=758"
   },
@@ -7345,25 +7345,25 @@
   },
   "manual#p0763-table": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (60 of 619 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Table",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=763"
   },
   "manual#p0763-take-snapshot": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (286 of 513 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Take Snapshot",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=763"
   },
   "manual#p0764-tap-tempo": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (41 of 658 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Tap Tempo",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=764"
   },
@@ -7401,41 +7401,41 @@
   },
   "manual#p0768-text": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (427 of 644 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Text",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=768"
   },
   "manual#p0769-text-accumulator": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (63 of 367 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Text Accumulator",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=769"
   },
   "manual#p0769-text-chopper": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (173 of 1133 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Text Chopper",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=769"
   },
   "manual#p0770-text-comparator": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (380 of 1588 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Text Comparator",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=770"
   },
   "manual#p0772-text-draw": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Partly read 2026-10-02: first 1500 of 6848 characters. Finish before citing property details.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Text Draw",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=772"
   },
@@ -7449,33 +7449,33 @@
   },
   "manual#p0777-text-formatter": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (341 of 1233 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Text Formatter",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=777"
   },
   "manual#p0778-text-parser": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (293 of 867 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Text Parser",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=778"
   },
   "manual#p0779-text-ure": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 3363 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Text/ure",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=779"
   },
   "manual#p0779-text-wrapper": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (119 of 282 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Text Wrapper",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=779"
   },
@@ -7489,9 +7489,9 @@
   },
   "manual#p0783-threshold": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (175 of 1016 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Threshold",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=783"
   },
@@ -7537,97 +7537,97 @@
   },
   "manual#p0789-timer": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (23 of 237 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Timer",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=789"
   },
   "manual#p0789-toggle": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (60 of 743 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Toggle",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=789"
   },
   "manual#p0790-tone-generator": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (108 of 1697 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Tone Generator",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=790"
   },
   "manual#p0791-trigger-delay": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (736 of 1002 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Trigger Delay",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=791"
   },
   "manual#p0792-trigger-divider": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (498 of 976 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Trigger Divider",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=792"
   },
   "manual#p0793-trigger-text": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (77 of 374 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Trigger Text",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=793"
   },
   "manual#p0793-trigger-value": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (47 of 350 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Trigger Value",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=793"
   },
   "manual#p0794-update-snapshot": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (301 of 631 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Update Snapshot",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=794"
   },
   "manual#p0794-user-actor": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 2171 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "User Actor",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=794"
   },
   "manual#p0795-user-actor-on-off": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (612 of 753 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "User Actor On/Off",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=795"
   },
   "manual#p0796-user-input": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 1572 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "User Input",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=796"
   },
   "manual#p0797-user-output": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 1590 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "User Output",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=797"
   },
@@ -7641,49 +7641,49 @@
   },
   "manual#p0802-value-changed": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (473 of 1541 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Value Changed",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=802"
   },
   "manual#p0803-value-delay-line": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (410 of 812 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Value Delay Line",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=803"
   },
   "manual#p0804-value-select": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 1221 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Value Select",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=804"
   },
   "manual#p0805-value-to-text": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (110 of 268 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Value To Text",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=805"
   },
   "manual#p0805-video-delay": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (345 of 903 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Video Delay",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=805"
   },
   "manual#p0806-video-fader": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (92 of 539 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Video Fader",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=806"
   },
@@ -7697,25 +7697,25 @@
   },
   "manual#p0807-video-in-watcher": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (750 of 1400 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Video In Watcher",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=807"
   },
   "manual#p0808-video-inverter": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (410 of 1048 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Video Inverter",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=808"
   },
   "manual#p0809-video-mixer": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (150 of 1211 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Video Mixer",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=809"
   },
@@ -7729,9 +7729,9 @@
   },
   "manual#p0811-video-noise": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (23 of 475 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Video Noise",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=811"
   },
@@ -7753,17 +7753,17 @@
   },
   "manual#p0824-warp": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (578 of 1580 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Warp",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=824"
   },
   "manual#p0825-wave-generator": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (451 of 1573 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Wave Generator",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=825"
   },
@@ -7777,17 +7777,17 @@
   },
   "manual#p0827-zoomer": {
     "group": "manual/ACTORS REFERENCE",
-    "notes": "Opening description read 2026-10-02 (630 of 2421 characters); property list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and property list), for the shared-concepts pass.",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Zoomer",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=827"
   },
   "manual#p0829-2d-slider": {
     "group": "manual/CONTROLS REFERENCE",
-    "notes": "First 650 of 3354 characters read 2026-10-02; settings list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and settings list).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "2D Slider",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=829"
   },
@@ -7801,161 +7801,161 @@
   },
   "manual#p0832-background": {
     "group": "manual/CONTROLS REFERENCE",
-    "notes": "First 650 of 2165 characters read 2026-10-02; settings list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and settings list).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Background",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=832"
   },
   "manual#p0833-bin-picker": {
     "group": "manual/CONTROLS REFERENCE",
-    "notes": "First 650 of 5558 characters read 2026-10-02; settings list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and settings list).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Bin Picker",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=833"
   },
   "manual#p0838-button": {
     "group": "manual/CONTROLS REFERENCE",
-    "notes": "First 650 of 5829 characters read 2026-10-02; settings list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and settings list).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Button",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=838"
   },
   "manual#p0843-color": {
     "group": "manual/CONTROLS REFERENCE",
-    "notes": "First 650 of 2510 characters read 2026-10-02; settings list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and settings list).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Color",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=843"
   },
   "manual#p0845-comment": {
     "group": "manual/CONTROLS REFERENCE",
-    "notes": "First 650 of 1454 characters read 2026-10-02; settings list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and settings list).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Comment",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=845"
   },
   "manual#p0847-dial": {
     "group": "manual/CONTROLS REFERENCE",
-    "notes": "First 650 of 2812 characters read 2026-10-02; settings list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and settings list).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Dial",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=847"
   },
   "manual#p0850-edit-text": {
     "group": "manual/CONTROLS REFERENCE",
-    "notes": "First 650 of 4435 characters read 2026-10-02; settings list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and settings list).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Edit Text",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=850"
   },
   "manual#p0854-fps": {
     "group": "manual/CONTROLS REFERENCE",
-    "notes": "First 650 of 1290 characters read 2026-10-02; settings list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and settings list).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "FPS",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=854"
   },
   "manual#p0855-list-selector": {
     "group": "manual/CONTROLS REFERENCE",
-    "notes": "First 650 of 5688 characters read 2026-10-02; settings list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and settings list).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "List Selector",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=855"
   },
   "manual#p0859-monitor": {
     "group": "manual/CONTROLS REFERENCE",
-    "notes": "First 650 of 2159 characters read 2026-10-02; settings list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and settings list).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Monitor",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=859"
   },
   "manual#p0861-next-cue": {
     "group": "manual/CONTROLS REFERENCE",
-    "notes": "First 650 of 2171 characters read 2026-10-02; settings list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and settings list).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Next Cue",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=861"
   },
   "manual#p0863-number": {
     "group": "manual/CONTROLS REFERENCE",
-    "notes": "First 650 of 3018 characters read 2026-10-02; settings list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and settings list).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Number",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=863"
   },
   "manual#p0865-popup-menu": {
     "group": "manual/CONTROLS REFERENCE",
-    "notes": "First 650 of 5014 characters read 2026-10-02; settings list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and settings list).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Popup Menu",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=865"
   },
   "manual#p0868-prev-cue": {
     "group": "manual/CONTROLS REFERENCE",
-    "notes": "First 650 of 2183 characters read 2026-10-02; settings list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and settings list).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Prev Cue",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=868"
   },
   "manual#p0870-radio-button": {
     "group": "manual/CONTROLS REFERENCE",
-    "notes": "First 650 of 2955 characters read 2026-10-02; settings list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and settings list).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Radio Button",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=870"
   },
   "manual#p0872-scene-select": {
     "group": "manual/CONTROLS REFERENCE",
-    "notes": "First 650 of 2768 characters read 2026-10-02; settings list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and settings list).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Scene Select",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=872"
   },
   "manual#p0875-slider": {
     "group": "manual/CONTROLS REFERENCE",
-    "notes": "First 650 of 8289 characters read 2026-10-02; settings list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and settings list).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Slider",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=875"
   },
   "manual#p0880-stage-preview": {
     "group": "manual/CONTROLS REFERENCE",
-    "notes": "First 650 of 1469 characters read 2026-10-02; settings list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and settings list).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Stage Preview",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=880"
   },
   "manual#p0882-timecode": {
     "group": "manual/CONTROLS REFERENCE",
-    "notes": "First 650 of 1878 characters read 2026-10-02; settings list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and settings list).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Timecode",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=882"
   },
   "manual#p0884-video-picker-deprecated": {
     "group": "manual/CONTROLS REFERENCE",
-    "notes": "First 650 of 3724 characters read 2026-10-02; settings list not read.",
-    "session": null,
-    "status": "pending",
+    "notes": "Read in full in session 2 (description and settings list).",
+    "session": "2026-10-02",
+    "status": "extracted",
     "title": "Video Picker (Deprecated)",
     "url": "https://troikatronix.com/files/isadora-manual.pdf#page=884"
   }

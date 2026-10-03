@@ -1,0 +1,2402 @@
+[
+ {
+  "capability": "One inlet layout for every oscillator: frequency, sync, phase modulation",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "sine~",
+   "cosine~",
+   "saw~",
+   "saw2~",
+   "tri~",
+   "square~",
+   "vsaw~",
+   "pulse~",
+   "impulse~",
+   "imp~",
+   "parabolic~",
+   "gaussian~",
+   "wavetable~"
+  ],
+  "what_it_does": "Every ELSE oscillator has the same three inlets: frequency (negative values run backwards), a sync inlet that resets phase on an impulse, and a phase-offset inlet for phase modulation. Flags add a soft-sync mode (-soft, the wave reverses direction instead of jumping) and MIDI-pitch input (-midi).",
+  "source_urls": [
+   "Documentation/9.else/sine~-help.pd",
+   "Documentation/9.else/saw~-help.pd",
+   "Documentation/9.else/square~-help.pd",
+   "Documentation/9.else/vsaw~-help.pd",
+   "Documentation/9.else/impulse~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.03-Sound.Generators/12-Oscillators/2.Sync/1.HardSync.pd",
+   "Documentation/12.live-electronics-tutorial/Part.03-Sound.Generators/12-Oscillators/2.Sync/3.Soft-sync_2.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "cycle~",
+   "phasor~",
+   "saw~",
+   "tri~",
+   "rect~"
+  ],
+  "max_check": "Read the refpages. cycle~: inlets are frequency and phase, plus a 'reset' message; no signal sync inlet. saw~: inlets 'frequency' and 'sync trigger', message synctrig. tri~: frequency, duty cycle, sync input. rect~: has synctrig. phasor~: a 'reset' message and a phaseoffset attribute. None lists a soft-sync mode or a MIDI-pitch input.",
+  "advice": "In Max, signal-rate hard sync is built in only on saw~, tri~ and rect~; phase modulation is built in only on cycle~ (right inlet). For a synced or phase-modulated version of any other shape, drive a lookup from one phasor~ so sync and PM are just arithmetic on the phase. Soft sync (reverse direction at each master period) has to be built, for instance in gen~. Worth copying in any Max oscillator abstraction: keep the same inlet order on every member of the family.",
+  "confidence": "high",
+  "notes": "Whether phasor~ accepts a signal for reset was not checked."
+ },
+ {
+  "capability": "Ideal and band-limited oscillators as named twins",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "bl.saw~",
+   "bl.saw2~",
+   "bl.tri~",
+   "bl.square~",
+   "bl.vsaw~",
+   "bl.imp~",
+   "bl.imp2~",
+   "bl.osc~",
+   "bl.wavetable~"
+  ],
+  "what_it_does": "Each classic wave exists twice: a mathematically exact one that aliases (saw~, tri~, square~) and a band-limited one with the same inlets and a bl. prefix. The help files say to use the exact one for LFO work and the bl. one for audible synthesis. The tutorial says bl.saw~, bl.tri~, bl.square~ and bl.vsaw~ use PolyBLEP and bl.imp~ uses BLIT.",
+  "source_urls": [
+   "Documentation/9.else/bl.saw~-help.pd",
+   "Documentation/9.else/bl.square~-help.pd",
+   "Documentation/9.else/bl.tri~-help.pd",
+   "Documentation/9.else/bl.vsaw~-help.pd",
+   "Documentation/9.else/bl.osc~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.03-Sound.Generators/12-Oscillators/3.Band.Limited(Anti-Aliased)/5.BLIT.BLEP&more.objects.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "saw~",
+   "tri~",
+   "rect~",
+   "phasor~",
+   "triangle~",
+   "train~"
+  ],
+  "max_check": "Refpage digests: saw~ 'Antialiased sawtooth oscillator', tri~ 'Antialiased triangular oscillator' (with a duty-cycle argument), rect~ 'Antialiased rectangular (pulse) oscillator'. phasor~'s refpage says to use it for sample-accurate control and to use saw~ for smoother sound. triangle~ and trapezoid~ are lookup shapes driven by a phasor~.",
+  "advice": "Max draws the same line with different names: saw~ / tri~ / rect~ are the anti-aliased ones, and the exact shapes come from phasor~ (plus triangle~, or a comparison for a square). Use the phasor~-based shapes for LFOs, clocks and anything that must hit exact values, and the anti-aliased objects for sound. A band-limited variable saw-to-triangle is covered by tri~'s duty cycle.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Multichannel oscillator from a list of frequencies in the box",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "sine~ -mc",
+   "saw~ -mc",
+   "imp~ -mc",
+   "white~ -ch",
+   "dust~ -ch",
+   "sigs~",
+   "nchs~"
+  ],
+  "what_it_does": "A generator typed with -mc and a list of frequencies outputs one multichannel cord with an oscillator per value; 'set <channel> <freq>' changes one of them, and noise sources take -ch <n> for a channel count. A multichannel frequency input does the same thing, so one sine~ can be a whole additive bank with per-partial sync and phase modulation.",
+  "source_urls": [
+   "Documentation/9.else/sine~-help.pd",
+   "Documentation/9.else/impulse~-help.pd",
+   "Documentation/9.else/white~-help.pd",
+   "Documentation/9.else/dust~-help.pd",
+   "Documentation/9.else/sigs~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.05-Synthesis(Basic)/23-Additive.Synthesis/7.[sine~].and.others.pd",
+   "Documentation/12.live-electronics-tutorial/Part.04-Control/14-Trigger-LFO-LFNoise/9.Multichannel.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "mc.cycle~",
+   "mc.sig~",
+   "mc.list~",
+   "mc.evolve~",
+   "mc.range~"
+  ],
+  "max_check": "Registry: mc.cycle~, mc.saw~, mc.sig~, mc.list~, mc.range~, mc.gradient~, mc.evolve~ all exist. Refpages: mc.list~ 'Create a multichannel signal from a list of values'; mc.sig~ takes a list; every mc. object has a chans attribute.",
+  "advice": "The Max idiom is 'mc.list~ 220 330 440' (or mc.sig~) into the frequency inlet of mc.cycle~, with @chans setting the count. That is two boxes where ELSE uses a flag, and it reads just as clearly. Prefer it over N copies of cycle~.",
+  "confidence": "medium",
+  "notes": "The MC 'function' messages that spread values across channels (deviate, spread and so on) are described in the Max user guide and were not re-read here."
+ },
+ {
+  "capability": "Phase-locked clock multiplication and division at signal rate",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "pimp~",
+   "pimpmul~",
+   "polymetro~",
+   "phaseseq~",
+   "pulsediv~",
+   "pulsecount~",
+   "tempo~"
+  ],
+  "what_it_does": "pimp~ is a phasor that also outputs an impulse at every wrap, in either direction. pimpmul~ multiplies the phase of such a ramp by any ratio, so a derived clock can never drift from its master, and fractions give polyrhythms. phaseseq~ fires an impulse as the phase passes each value in a list.",
+  "source_urls": [
+   "Documentation/9.else/pimp~-help.pd",
+   "Documentation/9.else/pimpmul~-help.pd",
+   "Documentation/9.else/polymetro~-help.pd",
+   "Documentation/9.else/phaseseq~-help.pd",
+   "Documentation/9.else/pulsediv~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.04-Control/14-Trigger-LFO-LFNoise/6.clock.metronome/7.[pimpmul~].Phase.Sync.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "phasor~",
+   "rate~",
+   "subdiv~",
+   "what~",
+   "swing~",
+   "where~",
+   "ramp~"
+  ],
+  "max_check": "Refpages read. rate~: 'Time-scale the output of a phasor~', with a sync mode. subdiv~: integer subdivision of a phasor, with pattern and probability attributes. what~: impulses when the input crosses each value in a list, plus an index outlet. swing~: splits one ramp into two unequal ones. where~: elapsed and remaining time of a ramp. phasor~ has a lock attribute and tempo-relative rates.",
+  "advice": "Max has this family and it is larger than ELSE's: one master phasor~, then rate~ for any ratio, subdiv~ for integer divisions with probability, what~ for impulses at chosen phases (the direct equal of phaseseq~), swing~ and where~. The lesson both libraries teach is the same and worth stating as a rule: derive every clock from one phase ramp by multiplying phase, never run two free oscillators and expect them to stay together.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Tempo generator whose 'swing' is random timing deviation",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "tempo",
+   "tempo~"
+  ],
+  "what_it_does": "A metronome set in BPM, ms or Hz that outputs bangs (tempo) or impulses (tempo~). Its swing value is a percentage of random deviation per beat, not a long-short pattern; a seed makes the pattern repeatable. A multiplier/divider gives subdivisions.",
+  "source_urls": [
+   "Documentation/9.else/tempo-help.pd",
+   "Documentation/9.else/tempo~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.04-Control/14-Trigger-LFO-LFNoise/6.clock.metronome/3.[tempo].[tempo~].pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "metro",
+   "phasor~",
+   "swing~",
+   "transport"
+  ],
+  "max_check": "Refpages. phasor~ has a 'jitter' attribute: random frequency variation on each phase reset, with a 'limit'. swing~ outputs two unequal ramps per input ramp, with a swing proportion from 0.15 to 0.85. metro takes tempo-relative intervals and a quantize attribute.",
+  "advice": "The word means two things. In Max, swing~ is the musical long-short swing, and random timing looseness is phasor~ @jitter. ELSE's swing is the second kind. When porting an ELSE patch, map its swing to jitter, not to swing~.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Signal-rate step sequencers stepped by impulses",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "impseq~",
+   "sequencer~"
+  ],
+  "what_it_does": "On each incoming trigger the object outputs the next value of a list, as a held signal (sequencer~) or as a one-sample impulse of that height (impseq~, where 0 is a rest and the values work as accents). Both send an impulse when the list ends.",
+  "source_urls": [
+   "Documentation/9.else/impseq~-help.pd",
+   "Documentation/9.else/sequencer~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.04-Control/19-Sequencing/5.Rhythmic/4.[impseq~].[phaseseq~].pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "stash~",
+   "table~",
+   "seq~",
+   "techno~",
+   "mc.pattern~"
+  ],
+  "max_check": "Refpages. stash~: 'Store and Recall Audio Signal Values', described as usable as an audio-rate step sequencer, with advance-trigger and sample-trigger inlets. table~: signal lookup of a table, with a trigger mode. techno~: signal-driven step sequencer with pitch and amplitude per step. seq~: event sequencer driven by a phasor~.",
+  "advice": "stash~ is the nearest Max object to sequencer~: a list as contents and an advance trigger. For accents as impulses, multiply the trigger by the stash~ output. Sample-accurate sequencing in Max should start from these, not from metro and counter.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Discrete-summation (DSF) band-limited oscillator",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "blip~"
+  ],
+  "what_it_does": "Generates a sum of cosine partials in closed form: fundamental, number of partials, lowest harmonic and a multiplier that scales each next partial. Cost does not grow with the partial count. Based on Csound's gbuzz.",
+  "source_urls": [
+   "Documentation/9.else/blip~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.03-Sound.Generators/12-Oscillators/3.Band.Limited(Anti-Aliased)/2.[blip~].DSF.pd"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "oscbank~",
+   "ioscbank~",
+   "gen~"
+  ],
+  "max_check": "Registry and package search. No object named for buzz or DSF in obj-qlookup.json. query_packages.py 'band-limited' returned CNMAT sinusoids~ and unrelated objects. oscbank~ and ioscbank~ are additive banks whose cost grows with the number of oscillators.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "Could be written in gen~ from the formula. The tutorial's comments call the object gbuzz~ while the box is blip~."
+ },
+ {
+  "capability": "Wavetable oscillator that scans frames, in one or two dimensions",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "wavetable~",
+   "wt~",
+   "wt2d~",
+   "bl.wavetable~",
+   "tabreader~",
+   "tabgen"
+  ],
+  "what_it_does": "wavetable~ reads a table of any size with a choice of interpolation, and with -n <frames> treats the table as a row of frames that a 0-1 inlet crossfades through. wt2d~ adds a second axis for a grid of frames. No guard points are needed. tabgen fills tables with partial lists, windows or noise.",
+  "source_urls": [
+   "Documentation/9.else/wavetable~-help.pd",
+   "Documentation/9.else/wt2d~-help.pd",
+   "Documentation/9.else/tabreader~-help.pd",
+   "Documentation/9.else/tabgen-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.05-Synthesis(Basic)/22-Wavetable/2.Wavetable.scan.pd",
+   "Documentation/12.live-electronics-tutorial/Part.05-Synthesis(Basic)/22-Wavetable/4.2D.scanning.[wt2d~].pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "wave~",
+   "2d.wave~",
+   "cycle~",
+   "buffer~"
+  ],
+  "max_check": "Refpages. wave~: reads a start-to-end portion of a buffer~ by a 0-1 signal, with an interp attribute and Hermite bias and tension. 2d.wave~: 'similar to wave~, but with an additional axis'; a range of the file is divided into rows and a Y phase picks the row or rows. buffer~ has fill and apply messages for sine, cosine, sinc and window shapes.",
+  "advice": "For frame scanning in Max use 2d.wave~: put the frames end to end in one buffer~, set rows to the frame count, and drive Y with the scan position. That is the same idea as wavetable~ -n. A true two-axis grid like wt2d~ needs two 2d.wave~ readers and a crossfade.",
+  "confidence": "medium",
+  "notes": "Whether 2d.wave~ crossfades between neighbouring rows or switches was not confirmed beyond the refpage's 'row(s)'."
+ },
+ {
+  "capability": "Oscillator and resonator banks set by lists, one channel per partial",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "oscbank~",
+   "resonbank~",
+   "resonbank2~",
+   "bpbank~"
+  ],
+  "what_it_does": "A bank whose size is the length of the lists it is given: partial ratios, amplitudes, phases or decay times, and a ramp time per element. One inlet multiplies all frequencies, so it acts as the fundamental. With -mc each partial goes out on its own channel. The resonator banks take an excitation signal and are meant for modal synthesis.",
+  "source_urls": [
+   "Documentation/9.else/oscbank~-help.pd",
+   "Documentation/9.else/resonbank~-help.pd",
+   "Documentation/9.else/resonbank2~-help.pd",
+   "Documentation/9.else/bpbank~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.11-Synthesis(Advanced)/39-Physical-Modeling/1.modal/1.introduction.[resonbak~].pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "oscbank~",
+   "ioscbank~",
+   "fffb~",
+   "mc.cycle~",
+   "resonators~ (CNMAT)",
+   "abl.dsp.modalresonator~"
+  ],
+  "max_check": "Refpages. oscbank~ and ioscbank~: fixed number of oscillators as the first argument, frequency and magnitude set by index, with smoothing factors. fffb~: fixed filter bank with freq, gain and Q messages. Package search: CNMAT resonators~ (installed) and the bundled abl.dsp.modalresonator~.",
+  "advice": "For a bank whose partials are ratios of one fundamental, the MC route is clearer in Max than oscbank~: mc.list~ of ratios times a fundamental into mc.cycle~, then mc.mixdown~. For modal synthesis use CNMAT resonators~ (frequency, gain, decay triples) or abl.dsp.modalresonator~. The idea worth copying from ELSE is the single 'fundamental' multiplier inlet over a list of ratios.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Matrix phase-modulation synthesizer with 2, 4 or 6 operators",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "pm2~",
+   "pm4~",
+   "pm6~",
+   "pm~",
+   "fm~",
+   "pm6.m~"
+  ],
+  "what_it_does": "Sine operators with a ratio, detune, level and pan each, and a full modulation matrix: every operator can modulate every other and itself. The tutorial says one pm6~ can reproduce any of the DX7's 32 routings. pm~ and fm~ are the two-oscillator versions.",
+  "source_urls": [
+   "Documentation/9.else/pm6~-help.pd",
+   "Documentation/9.else/pm4~-help.pd",
+   "Documentation/9.else/pm2~-help.pd",
+   "Documentation/9.else/pm~-help.pd",
+   "Documentation/9.else/fm~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.05-Synthesis(Basic)/24-Modulation.Synthesis/2.FM_PM/8.DX7.pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "cycle~",
+   "abl.dsp.simplefm~",
+   "abl.dsp.fmbass~",
+   "abl.dsp.harmonicfm~",
+   "gen~"
+  ],
+  "max_check": "Registry and bundled packages. The Ableton DSP package that ships with Max 9.1.5 has abl.dsp.simplefm~ ('Two-operator FM oscillator'), abl.dsp.fmbass~ ('Three operator FM oscillator') and abl.dsp.harmonicfm~. No object with a free N-by-N modulation matrix was found. cycle~'s right inlet is a phase input, so operator chains can be patched; self-modulation needs a one-sample loop, which a Max patcher cannot make outside gen~.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "A matrix PM voice would be a good gen~ abstraction: N phase accumulators, an N-by-N index matrix with the diagonal as feedback, and the two-sample average the tutorial describes to tame feedback noise."
+ },
+ {
+  "capability": "Feedback and cross-modulated sine oscillators",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "fbsine~",
+   "xmod~",
+   "xmod2~"
+  ],
+  "what_it_does": "fbsine~ feeds a sine's output back into its own phase, with an averaging filter in the loop that can be switched off. xmod~ is two sines that modulate each other, by frequency or by phase, with both outputs available.",
+  "source_urls": [
+   "Documentation/9.else/fbsine~-help.pd",
+   "Documentation/9.else/xmod~-help.pd",
+   "Documentation/9.else/xmod2~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.05-Synthesis(Basic)/24-Modulation.Synthesis/2.FM_PM/7.Feedback.Cross.Modulation/1.Feedback.pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "gen~",
+   "cycle~",
+   "abl.dsp.foldfm~"
+  ],
+  "max_check": "No such object in obj-qlookup.json. The technique needs feedback of one sample. In a Max patcher a signal feedback loop needs a delay of at least one signal vector (tapin~/tapout~), so this has to be done in gen~ with history.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "The tutorial's point for anyone building it: the result depends on the sample rate, because one sample is a different time at each rate."
+ },
+ {
+  "capability": "Chaotic map generators with a rate in hertz",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "lorenz~",
+   "henon~",
+   "logistic~",
+   "gbman~",
+   "cusp~",
+   "quad~",
+   "standard~",
+   "ikeda~",
+   "latoocarfian~",
+   "lincong~",
+   "crackle~",
+   "fbsine2~"
+  ],
+  "what_it_does": "A set of iterated-map generators taken from SuperCollider. Each takes its equation's parameters and start values, runs the map at a given rate in Hz (Nyquist by default), and is neither random nor seeded.",
+  "source_urls": [
+   "Documentation/9.else/lorenz~-help.pd",
+   "Documentation/9.else/henon~-help.pd",
+   "Documentation/9.else/logistic~-help.pd",
+   "Documentation/9.else/gbman~-help.pd",
+   "Documentation/9.else/cusp~-help.pd",
+   "Documentation/9.else/crackle~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.03-Sound.Generators/13-Noise-Chaos/9.Chaotic.pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "gen~",
+   "abl.dsp.crackle~",
+   "xy.attractors~ (XY Coordinates Generator Pack)"
+  ],
+  "max_check": "Registry: no lorenz~, henon~ or similar. Bundled: abl.dsp.crackle~ ('Crackle sound generator'). query_packages.py 'lorenz' found xy.attractors~ in an installed third-party package. Any of the maps is a few lines of gen~ codebox.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "A full noise palette with seeds",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "white~",
+   "pink~",
+   "brown~",
+   "gray~",
+   "velvet~",
+   "dust~",
+   "dust2~",
+   "perlin~",
+   "lfnoise~",
+   "stepnoise~",
+   "rampnoise~"
+  ],
+  "what_it_does": "Beyond white and pink: brown noise as a bounded random walk with a settable step, gray noise, velvet noise, sparse random impulses with a density (dust~), 1-D Perlin noise, and held or ramped low-rate noise. Every one takes a -seed flag and a seed message, and picks a fresh seed on each load otherwise. pink~ takes the number of octaves.",
+  "source_urls": [
+   "Documentation/9.else/white~-help.pd",
+   "Documentation/9.else/pink~-help.pd",
+   "Documentation/9.else/brown~-help.pd",
+   "Documentation/9.else/velvet~-help.pd",
+   "Documentation/9.else/dust~-help.pd",
+   "Documentation/9.else/perlin~-help.pd",
+   "Documentation/9.else/lfnoise~-help.pd",
+   "Documentation/9.else/stepnoise~-help.pd",
+   "Documentation/9.else/rampnoise~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.03-Sound.Generators/13-Noise-Chaos/2.[white~].pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "noise~",
+   "pink~",
+   "rand~",
+   "sah~",
+   "abl.dsp.velvetnoise~",
+   "abl.dsp.pulsate~"
+  ],
+  "max_check": "Refpages. noise~: white, with a 'classic' attribute. pink~: no arguments or messages. rand~: random values at a rate, linearly interpolated. Bundled Ableton DSP: abl.dsp.velvetnoise~ and abl.dsp.pulsate~ ('Random pulse emitter'). No brown~, dust~ or perlin object in the registry. No seed message is listed for noise~, pink~ or rand~.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "What a Max patcher can do meanwhile: Held low-rate noise in Max is noise~ into sah~ clocked by a phasor~; ramped is rand~. Brown noise is noise~ scaled and summed in a leaky accumulator. What Max lacks most here is a seed on its signal noise sources, so a repeatable random patch needs the randomness made at control rate (random and drunk have a seed attribute) or in gen~."
+ },
+ {
+  "capability": "Xenakis-style dynamic stochastic synthesis",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "gendyn~",
+   "gendyn.m~"
+  ],
+  "what_it_does": "A waveform made of a few breakpoints whose positions and amplitudes each move by random walk on every cycle, with a choice of distributions, step sizes, a frequency range or centre frequency with bandwidth, and interpolation.",
+  "source_urls": [
+   "Documentation/9.else/gendyn~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.11-Synthesis(Advanced)/38-Stochastic/1.gendyn~.pd"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "gen~"
+  ],
+  "max_check": "No object of that kind in obj-qlookup.json. query_packages.py 'gendy' returned nothing.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Karplus-Strong plucked string as one object",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "pluck~",
+   "pluck.m~"
+  ],
+  "what_it_does": "A string model with its own noise burst: frequency in Hz or MIDI, decay as a 60 dB time in ms, and a cutoff for the lowpass in the feedback loop. Triggered by an impulse or a list.",
+  "source_urls": [
+   "Documentation/9.else/pluck~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.11-Synthesis(Advanced)/39-Physical-Modeling/2.Karplus-Strong/6.[pluck~].pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "plucked~ (PeRColate)",
+   "dk.karplus~ (Data Knot)",
+   "gen~"
+  ],
+  "max_check": "No Karplus-Strong object in obj-qlookup.json. query_packages.py 'karplus' and 'pluck' found plucked~ and stif_karp~ (PeRColate), dk.karplus~ (Data Knot) and ts.karplus (TS.Modular) among installed packages. A patcher version with tapin~/tapout~ cannot reach high notes, because the loop is at least one signal vector long; gen~ can.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Port of the Mutable Instruments Plaits macro-oscillator",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "plaits~",
+   "plaits.m~"
+  ],
+  "what_it_does": "Twenty-four synthesis engines behind one object, with timbre, harmonics and morph inputs, a trigger and a level input, and pitch in Hz, MIDI or a -1 to 1 control voltage.",
+  "source_urls": [
+   "Documentation/9.else/plaits~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.04-Control/18-MIDI-CV-OSC-Net/2.CV/5.[plaits~].pd"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "abl.dsp.meldosc~",
+   "vst~"
+  ],
+  "max_check": "No plaits object in the registry; query_packages.py 'plaits' returned nothing. The bundled abl.dsp.meldosc~ ('Meta-oscillator') is a different multi-engine oscillator.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Analog circuit simulation from a netlist typed in the box",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "circuit~"
+  ],
+  "what_it_does": "The box text is a list of components (resistor, capacitor, diode, transistor, op-amp, tube, potentiometer, voltage source, probe), each with numbered nodes. Signal inlets can drive any value, each probe becomes an outlet, and named part models (for instance 12AX7 or 2N3904) can be chosen.",
+  "source_urls": [
+   "Documentation/9.else/circuit~-help.pd"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "gen~",
+   "abl.device.autofilter~"
+  ],
+  "max_check": "No circuit simulator in obj-qlookup.json. query_packages.py 'circuit' returned only objects whose descriptions mention circuits (for instance Abl.AutoFilter~), none that takes a netlist.",
+  "advice": "",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "SoundFont and SFZ sample players",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "sfont~",
+   "sfz~",
+   "sfont.m~"
+  ],
+  "what_it_does": "sfont~ plays SoundFont files and reports the banks and presets inside. sfz~ plays SFZ instruments and can be retuned with a scale in cents, a Scala file or a different A4.",
+  "source_urls": [
+   "Documentation/9.else/sfont~-help.pd",
+   "Documentation/9.else/sfz~-help.pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "sfizz~",
+   "vst~"
+  ],
+  "max_check": "Registry and refpage: sfizz~ exists, digest 'Sfz format sample player', with scale, scalename, map and base attributes and a midievent message. No SoundFont (.sf2) player was found in the registry or in query_packages.py ('soundfont', 'fluidsynth': nothing).",
+  "advice": "",
+  "confidence": "high",
+  "notes": "SFZ is covered by sfizz~. SoundFont files need a plug-in in vst~ or conversion to SFZ."
+ },
+ {
+  "capability": "Resonance stated as Q, bandwidth or decay time, on every filter",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "lowpass~",
+   "highpass~",
+   "bandpass~",
+   "resonant~",
+   "resonator~",
+   "bandstop~",
+   "eq~",
+   "lowshelf~",
+   "highshelf~",
+   "allpass.2nd~",
+   "svfilter~"
+  ],
+  "what_it_does": "One object per filter type, all with signal-rate frequency and resonance. A message switches the resonance unit between Q, bandwidth in octaves and t60 (ms for the ringing to fall 60 dB). All take 'bypass' and 'clear'. bandpass~ keeps its peak at 0 dB while resonant~ gets louder with resonance, and the help files say which is which.",
+  "source_urls": [
+   "Documentation/9.else/lowpass~-help.pd",
+   "Documentation/9.else/bandpass~-help.pd",
+   "Documentation/9.else/resonant~-help.pd",
+   "Documentation/9.else/resonator~-help.pd",
+   "Documentation/9.else/eq~-help.pd",
+   "Documentation/9.else/lowshelf~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.06-Filters(Basic)/27-Filters.types/2.Filter.Types/2.Resonant/2.Bandpass/4.[resonant~].pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "biquad~",
+   "filtercoeff~",
+   "filtergraph~",
+   "svf~",
+   "lores~",
+   "reson~",
+   "onepole~"
+  ],
+  "max_check": "Refpages. filtercoeff~: 'Signal-rate filter coefficient generator' with the same type list (lowpass, highpass, bandpass, bandstop, peaknotch, lowshelf, highshelf, resonant, allpass) and gain variants. filtergraph~ offers the same types plus display. reson~, lores~ and svf~ take signal inputs. None of them accepts a decay time as the resonance value.",
+  "advice": "Max splits the job: filtercoeff~ (or filtergraph~) makes the coefficients and biquad~ filters. For audio-rate sweeps use filtercoeff~. The unit Max lacks is decay time. When a patch thinks in ring time (modal sounds, pinged filters), convert first: the tutorial gives bandwidth in Hz = ln(1000) / (pi * t60 in seconds), and Q = frequency / bandwidth.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Biquad coefficient tools, and the order trap between Pd and Max",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "bicoeff",
+   "bicoeff2",
+   "biquads~",
+   "biplot",
+   "zbiplot",
+   "coeff2pz",
+   "pz2coeff"
+  ],
+  "what_it_does": "bicoeff is a draggable response graph that outputs biquad coefficients; bicoeff2 does the same from numbers. biquads~ runs up to 50 sections from one list. biplot draws the response of a coefficient list, zbiplot draws its poles and zeros, and two converters go between coefficients and pole/zero coordinates.",
+  "source_urls": [
+   "Documentation/9.else/bicoeff-help.pd",
+   "Documentation/9.else/bicoeff2-help.pd",
+   "Documentation/9.else/biquads~-help.pd",
+   "Documentation/9.else/biplot-help.pd",
+   "Documentation/9.else/zbiplot-help.pd",
+   "Documentation/9.else/coeff2pz-help.pd",
+   "Documentation/9.else/pz2coeff-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.10-Filters&Reverb/36-Filters(Advanced)/1.Basic.Theory/5.[biquad~].pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "filtergraph~",
+   "filtercoeff~",
+   "cascade~",
+   "zplane~",
+   "filterdesign"
+  ],
+  "max_check": "Refpages. filtergraph~: 'Filter editor' with cascade support and display mode. cascade~: 'Cascaded series of biquad filters' from lists of five. zplane~: 'Graph filter poles and zeros on the Z-plane'. biquad~: y[n] = a0*x[n] + a1*x[n-1] + a2*x[n-2] - b1*y[n-1] - b2*y[n-2], list order a0 a1 a2 b1 b2.",
+  "advice": "Max has an equal for each of these. The thing to take away is a porting trap: the tutorial states that Pd's biquad~ takes its five numbers as feedback first (fb1 fb2 ff0 ff1 ff2) and adds the feedback terms, while Max's takes a0 a1 a2 b1 b2 and subtracts them. A coefficient list copied from a Pd patch must be reordered and its two feedback values negated.",
+  "confidence": "high",
+  "notes": "The Pd order is as the tutorial states it; it was not checked against Pd's own reference."
+ },
+ {
+  "capability": "Butterworth filters of any even order from one argument",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "lop.bw~",
+   "hip.bw~",
+   "brickwall~",
+   "crossover~"
+  ],
+  "what_it_does": "Lowpass and highpass Butterworth filters whose order (2 to 100) is the second argument, built on the biquad cascade. brickwall~ is a fixed 10th-order lowpass and crossover~ a third-order split with both outputs.",
+  "source_urls": [
+   "Documentation/9.else/lop.bw~-help.pd",
+   "Documentation/9.else/hip.bw~-help.pd",
+   "Documentation/9.else/brickwall~-help.pd",
+   "Documentation/9.else/crossover~-help.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "filterdesign",
+   "cascade~",
+   "cross~"
+  ],
+  "max_check": "Refpages. filterdesign: 'Create a filter specification' with order, response, topology, frequency, passband_ripple and stopband_attenuation attributes, output as a dictionary that cascade~ and biquad~ accept. cross~: 'Third-order crossover filter'.",
+  "advice": "Max is stronger here: filterdesign covers more than Butterworth and feeds cascade~ directly. Use it instead of chaining biquad~ objects by hand.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Smoothers that take milliseconds, with separate up and down times",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "glide~",
+   "glide2~",
+   "lag~",
+   "lag2~",
+   "smooth~",
+   "smooth2~",
+   "slew~",
+   "slew2~",
+   "glide",
+   "lag",
+   "smooth",
+   "slew"
+  ],
+  "what_it_does": "Four kinds of signal smoother with one naming scheme: glide~ (fixed time, linear or a power curve), lag~ (one-pole filter, time to settle), smooth~ (fixed time with a curve factor shared with the envelope objects), slew~ (fixed speed in units per second). A 2 suffix gives separate rising and falling values, and each has a control-rate twin without the tilde.",
+  "source_urls": [
+   "Documentation/9.else/glide~-help.pd",
+   "Documentation/9.else/glide2~-help.pd",
+   "Documentation/9.else/lag~-help.pd",
+   "Documentation/9.else/lag2~-help.pd",
+   "Documentation/9.else/smooth~-help.pd",
+   "Documentation/9.else/slew~-help.pd",
+   "Documentation/9.else/slew2~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.04-Control/16-Lines/2.[glide~].[lag~].[slew~].[slop~].pd",
+   "Documentation/12.live-electronics-tutorial/Part.10-Filters&Reverb/36-Filters(Advanced)/8.Lag.slew/1.Lag.pd"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "rampsmooth~",
+   "slide~",
+   "deltaclip~",
+   "line~",
+   "onepole~"
+  ],
+  "max_check": "Refpages. rampsmooth~: arguments are ramp-up and ramp-down in samples. slide~: 'Filter a signal logarithmically' with slide-up and slide-down values. deltaclip~: limits the change per sample between a minimum and maximum slope. line~ takes times in ms but only follows messages, not a signal.",
+  "advice": "The Max objects do the same four jobs but count in samples: rampsmooth~ is glide2~, slide~ is close to lag2~, deltaclip~ is slew2~. Convert with mstosamps~, and for a slew limit in units per second divide by the sample rate, or the patch changes behaviour when the sample rate does. A small set of abstractions that take ms would remove a common source of error. The tutorial's lag formula: coefficient = exp(ln(0.001) / (ms * sample rate in kHz)).",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "ADSR with velocity-scaled gate, curve choice, retrigger inlet and a status outlet",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "adsr~",
+   "asr~",
+   "decay~"
+  ],
+  "what_it_does": "The gate's value sets the peak, and a float gate is read as MIDI velocity (0-127 becomes 0-1). Curves can be exponential with a factor, linear, or a one-pole 'lag' shape. A second inlet retriggers without closing the gate. A right outlet is 1 while the envelope is sounding, meant for switching a voice's DSP on and off. Multichannel gates give one envelope per channel.",
+  "source_urls": [
+   "Documentation/9.else/adsr~-help.pd",
+   "Documentation/9.else/asr~-help.pd",
+   "Documentation/9.else/decay~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.04-Control/17-Envelopes/2.Classic.Types/04.ADSR/1.ADSR.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "adsr~",
+   "function",
+   "line~",
+   "curve~",
+   "thispoly~"
+  ],
+  "max_check": "adsr~ refpage: signal-controllable attack, decay, sustain, release; a non-zero number triggers with that amplitude; attributes legato, retrigger, maxsustain, triggermode; outlets include a 'mute outlet' and a 'new envelope trigger'. No curve attribute is listed.",
+  "advice": "Max's adsr~ already has the status idea: its mute outlet is made to drive thispoly~ so an idle poly~ voice stops computing. Use it. What it lacks is a curve setting; for a shaped envelope use function with curve~, or twist~ after a ramp. The velocity convention (gate value is the peak) is the same in both.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "One breakpoint envelope object with sustain point, loop, per-segment curves and legato",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "envgen~",
+   "function",
+   "function~",
+   "envelope~"
+  ],
+  "what_it_does": "envgen~ takes a list of duration-target pairs (up to 1024 segments) and runs it on a bang, gate or impulse. It can hold at a chosen breakpoint until the gate closes, loop, restart from the current level (legato) or ramp to the start over a set retrigger time, and each segment can have its own curve: a factor, a power, a one-pole lag, sine or hann. function is the drawing GUI for it and function~ reads the same list by a 0-1 phase.",
+  "source_urls": [
+   "Documentation/9.else/envgen~-help.pd",
+   "Documentation/9.else/function-help.pd",
+   "Documentation/9.else/function~-help.pd",
+   "Documentation/9.else/envelope~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.04-Control/16-Lines/5.[envgen~].pd",
+   "Documentation/12.live-electronics-tutorial/Part.04-Control/17-Envelopes/2.Classic.Types/5.AHDSR.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "function",
+   "line~",
+   "curve~",
+   "zigzag~",
+   "shape~",
+   "ramp~",
+   "twist~"
+  ],
+  "max_check": "Refpages. function: breakpoint editor with sustain points (sustain, clearsustain, next) and a setcurve message. curve~: 'Exponential ramp generator' taking target, time and curve factor. zigzag~: 'Linked list function editor' with loopmode, speed and jump. shape~: 'Time-scaled Breakpoint Envelope Generator' read by a phasor ramp, same list format as line~. ramp~: one ramp triggered by a signal.",
+  "advice": "Max spreads this over function (drawing and sustain points), line~ or curve~ (playing), zigzag~ (looping and stepping) and shape~ (phase-driven, the equal of function~). The combination function into curve~ covers most of envgen~. Two things to watch when porting: ELSE lists are duration then target, Max's are target then time; and an ELSE list only arms the envelope, where a Max list sent to line~ starts it.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Fade curves by name, and a gate-driven auto fade",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "fader~",
+   "autofade~",
+   "autofade2~",
+   "autofade.mc~",
+   "xfade~"
+  ],
+  "what_it_does": "fader~ turns a 0-1 value into a gain through one of seven lookup curves (quartic, sin, sqrt, hann, lin, hannsin, linsin). autofade~ fades its inputs in when a gate goes above zero and out when it returns, over a time in ms, with the gate's value as the top gain. The tutorial maps the curves to pan laws: linear and hann give 6 dB, sine and square-root 3 dB, the two mixed ones 4.5 dB.",
+  "source_urls": [
+   "Documentation/9.else/fader~-help.pd",
+   "Documentation/9.else/autofade~-help.pd",
+   "Documentation/9.else/autofade2~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.02-Basic-Processing/10-Signal-Routing/2.Pan/2.Pan.Law.pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "line~",
+   "selector~",
+   "gate~",
+   "matrix~",
+   "live.gain~"
+  ],
+  "max_check": "Refpages. selector~ and gate~ have a ramptime attribute that fades when the open input or outlet changes. matrix~ has a ramp attribute. No object in the registry maps a 0-1 value through a named fade curve.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "What a Max patcher can do meanwhile: For switching, use selector~ @ramptime or gate~ @ramptime instead of hand-built fades. For a mute with a fade, line~ into *~ is linear; for an equal-power or quartic law, shape the line with a lookup (cycle~ used as a quarter-sine, or pow~). A tiny abstraction that takes a curve name would be worth having. The shape of the selector~ and gate~ fade (linear or equal power) is not stated in the refpage passage that was read."
+ },
+ {
+  "capability": "Gate and trigger housekeeping at signal rate",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "timed.gate~",
+   "gatehold~",
+   "gaterelease~",
+   "gatedelay~",
+   "trig.delay~",
+   "trig.delay2~",
+   "toggleff~",
+   "gate2imp~",
+   "trighold~",
+   "float2imp~"
+  ],
+  "what_it_does": "Small single-purpose objects that work on gate and impulse signals with sample accuracy: turn an impulse into a gate of fixed length, hold a gate open for a while after it closes, close it a set time after it opened, delay only the gate-on edge, delay an impulse with or without restart, flip between 0 and 1 on each trigger. Most also exist as control-rate twins.",
+  "source_urls": [
+   "Documentation/9.else/timed.gate~-help.pd",
+   "Documentation/9.else/gatehold~-help.pd",
+   "Documentation/9.else/gaterelease~-help.pd",
+   "Documentation/9.else/gatedelay~-help.pd",
+   "Documentation/9.else/trig.delay~-help.pd",
+   "Documentation/9.else/trig.delay2~-help.pd",
+   "Documentation/9.else/toggleff~-help.pd",
+   "Documentation/9.else/gate2imp~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.04-Control/14-Trigger-LFO-LFNoise/2.trig.gate.delay.pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "ramp~",
+   "sah~",
+   "delay~",
+   "edge~",
+   "train~",
+   "dk.triggerdelay~ (Data Knot)",
+   "dk.triggerlength~ (Data Knot)"
+  ],
+  "max_check": "Refpages. ramp~: one ramp started by a signal change, with duration, retrigger and reset attributes and a bang when done. sah~ has a 'duration' attribute (output duration in samples). edge~ reports transitions as bangs, so it leaves the signal domain. Package search: Data Knot (installed) has dk.triggerdelay~, dk.triggerlength~, dk.triggershape~ and others.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "What a Max patcher can do meanwhile: A fixed-length gate from a trigger in Max is ramp~ with a duration, compared against 1 (the ramp is below 1 while it runs). A trigger delay is delay~ on the impulse. Keep these in the signal domain; going through edge~ and delay loses sample accuracy."
+ },
+ {
+  "capability": "Event detectors that answer with impulses, not bangs",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "status~",
+   "changed~",
+   "changed2~",
+   "zerocross~",
+   "above~",
+   "match~",
+   "schmitt~",
+   "detect~",
+   "trig2bang~"
+  ],
+  "what_it_does": "Detectors for change, direction change, zero crossing (three outlets: up, down, either), threshold crossing in each direction, equality with listed values and time between triggers. Each outputs a one-sample impulse on a separate outlet per event kind, so the result can drive other signal-rate objects directly.",
+  "source_urls": [
+   "Documentation/9.else/status~-help.pd",
+   "Documentation/9.else/changed~-help.pd",
+   "Documentation/9.else/changed2~-help.pd",
+   "Documentation/9.else/zerocross~-help.pd",
+   "Documentation/9.else/above~-help.pd",
+   "Documentation/9.else/match~-help.pd",
+   "Documentation/9.else/schmitt~-help.pd",
+   "Documentation/9.else/detect~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.01-The.Basics/01-Pd.Quickstart/6.Audio.DSP.Pd/4.AudioXControl-Rate/7.Control.Rate2.pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "edge~",
+   "change~",
+   "zerox~",
+   "thresh~",
+   "delta~",
+   "spike~",
+   "what~",
+   "sah~"
+  ],
+  "max_check": "Refpages. edge~: bangs on zero/non-zero transitions. change~: outputs 1, -1 or 0 for direction. zerox~: count of crossings per vector and a click outlet. thresh~: Schmitt trigger with low and high levels (signal out). spike~: reports the interval between transitions as a float. what~: impulse when the input crosses listed values.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "What a Max patcher can do meanwhile: Most detectors exist in Max but several answer at control rate (edge~, spike~). To stay sample-accurate, build the impulse from signal objects: delta~ then a comparison gives an impulse on change; thresh~ then delta~ gives threshold crossings. The tutorial measured the cost of leaving the signal domain: a bang lands on a block edge, so a 500 ms pulse no longer measures as 500 ms."
+ },
+ {
+  "capability": "Randomness triggered by impulses, with weights",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "chance~",
+   "rand.i~",
+   "rand.f~",
+   "drunkard~",
+   "randpulse~",
+   "randpulse2~"
+  ],
+  "what_it_does": "chance~ sends each incoming impulse to one of several outlets chosen by weights given as arguments (the weights are counts, not percentages). rand.i~ and rand.f~ output a new random value in a range on each trigger, drunkard~ takes a bounded random step, and all accept a seed and multichannel triggers.",
+  "source_urls": [
+   "Documentation/9.else/chance~-help.pd",
+   "Documentation/9.else/rand.i~-help.pd",
+   "Documentation/9.else/rand.f~-help.pd",
+   "Documentation/9.else/drunkard~-help.pd",
+   "Documentation/9.else/randpulse~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.04-Control/20-Stochastic/3.[chance~].pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "sah~",
+   "noise~",
+   "subdiv~",
+   "gate~",
+   "stash~"
+  ],
+  "max_check": "Refpages. sah~ on noise~ gives a new random value per trigger. subdiv~ has prob and lockprob attributes: a probability per subdivision of a phasor. No object routes a signal trigger to weighted outlets.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "What a Max patcher can do meanwhile: A random value per trigger is noise~ into sah~. For probabilistic rhythm, subdiv~ @prob does at the clock what chance~ does after it. Weighted routing of one trigger to several destinations has to be patched (a held random value compared against thresholds)."
+ },
+ {
+  "capability": "Selectors and gates that crossfade over a set time",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "xselect~",
+   "xgate~",
+   "xselect.mc~",
+   "xgate.mc~",
+   "select~"
+  ],
+  "what_it_does": "xselect~ picks one of N inputs and xgate~ sends one input to one of N outlets, both with an equal-power crossfade whose time in ms is an argument. A status outlet reports when a channel has finished fading out. The cyclone help files call these 'much better' than selector~ and gate~.",
+  "source_urls": [
+   "Documentation/9.else/xselect~-help.pd",
+   "Documentation/9.else/xgate~-help.pd",
+   "Documentation/10.cyclone/selector~-help.pd",
+   "Documentation/10.cyclone/gate~-help.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "selector~",
+   "gate~",
+   "mc.selector~",
+   "matrix~"
+  ],
+  "max_check": "Refpages and the defaults registry. selector~ and gate~ both have a ramptime attribute ('Sets the ramp time to use for fading connections in milliseconds... will crossfade between inputs when the active input is switched'); its default in transform-defaults.json is 0.",
+  "advice": "Max's own selector~ and gate~ already crossfade: the attribute is ramptime and it is off by default. Write 'selector~ 4 @ramptime 20' instead of building a crossfade around it. The cyclone note is about the cloned Max 7 object; the current Max object has the feature.",
+  "confidence": "high",
+  "notes": "The refpage does not say whether the fade is linear or equal power."
+ },
+ {
+  "capability": "Panning and spreading across any number of channels with a spread control",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "pan~",
+   "pan.mc~",
+   "spread~",
+   "spread.mc~",
+   "rotate~",
+   "rotate.mc~",
+   "xgate2~",
+   "xselect2~"
+  ],
+  "what_it_does": "pan~ places one input on a ring of N outputs by an azimuth from 0 to 1 that wraps, with a spread value that widens or narrows how many neighbours receive it. spread~ distributes M inputs evenly over N outputs, rotate~ turns a whole N-channel field, and xgate2~ / xselect2~ take a fractional index so a signal can sweep across channels.",
+  "source_urls": [
+   "Documentation/9.else/pan~-help.pd",
+   "Documentation/9.else/spread~-help.pd",
+   "Documentation/9.else/rotate~-help.pd",
+   "Documentation/9.else/xgate2~-help.pd",
+   "Documentation/9.else/xselect2~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.02-Basic-Processing/10-Signal-Routing/2.Pan/4.[pan~].[pan.mc~].pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "mc.mixdown~",
+   "mc.stereo~",
+   "matrix~",
+   "abc.vbap~ (abclib)",
+   "Panning Tools package"
+  ],
+  "max_check": "Refpage: mc.mixdown~ 'performs N-way panning' of each input channel to an output count, with pancontrolmode, linearpanmode and autogain attributes; in mode 0 the pan value is a circular map. Registry: no pan~ or rotate object. Packages: Panning Tools and abclib (abc.vbap~) are installed.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "What a Max patcher can do meanwhile: For N-channel panning in Max use mc.mixdown~: its pan input is the azimuth and its pan modes cover circular and linear layouts. It has no spread control and nothing rotates a whole field, so those two still need a package or a matrix~ driven by computed gains."
+ },
+ {
+  "capability": "Small equal-power pan, balance and crossfade objects",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "pan2~",
+   "pan4~",
+   "balance~",
+   "xfade~",
+   "xfade.mc~"
+  ],
+  "what_it_does": "pan2~ and balance~ take a position from -1 to 1 so that an audio signal can drive them; pan4~ takes x and y; xfade~ crossfades two sources of N channels each, equal power by default and linear with a flag.",
+  "source_urls": [
+   "Documentation/9.else/pan2~-help.pd",
+   "Documentation/9.else/pan4~-help.pd",
+   "Documentation/9.else/balance~-help.pd",
+   "Documentation/9.else/xfade~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.02-Basic-Processing/10-Signal-Routing/1.Crossfade/2.SinCos-EqualPower-Crossfade.pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "mc.mixdown~",
+   "mc.stereo~",
+   "matrix~",
+   "*~"
+  ],
+  "max_check": "Registry: there is no pan~, pan2 or xfade~ object in obj-qlookup.json (the only names containing 'pan' or 'fade' are panel, jit.xfade and unrelated ones). mc.mixdown~ 2 pans to stereo.",
+  "advice": "",
+  "confidence": "high",
+  "notes": "What a Max patcher can do meanwhile: Max has no plain stereo panner or crossfader object, which surprises people. Use mc.mixdown~ 2 for a pan, or the tutorial's recipe for either job: position 0-1, divided by 4, into cos~ and a sine lookup, giving two gains whose squares add to 1."
+ },
+ {
+  "capability": "An output object with fader, mute and DSP switch built in",
+  "category": "workflow/authoring",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "out~",
+   "out4~",
+   "out8~",
+   "out.mc~",
+   "gain~",
+   "gain2~",
+   "level~",
+   "setdsp~"
+  ],
+  "what_it_does": "out~ is the audio output with a level slider, a mute button and a DSP toggle in one box; moving the slider turns audio on. The fader law is quartic by default, with dB and linear as options, and a maximum gain can be set. gain~ and level~ are the same faders without the output, with MIDI learn and state saving.",
+  "source_urls": [
+   "Documentation/9.else/out~-help.pd",
+   "Documentation/9.else/out.mc~-help.pd",
+   "Documentation/9.else/gain~-help.pd",
+   "Documentation/9.else/level~-help.pd",
+   "Documentation/9.else/setdsp~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.01-The.Basics/05-Gain.Adjustment/3.Quartic.[gain~].[out~].pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "ezdac~",
+   "live.gain~",
+   "gain~"
+  ],
+  "max_check": "Refpages. ezdac~: output and on/off button, no level control. live.gain~: 'Decibel volume slider and monitor', range -70 to 6 dB, with metering. gain~: slider with interp and scale attributes.",
+  "advice": "The repo's rule already gives the Max answer: a long live.gain~ before ezdac~. That is two boxes for what out~ does in one, and it adds a meter. Nothing to change; the point is that an example patch should always end in a level control, which ELSE enforces by making it the output object.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Tools for multichannel cords: pick, remap, slice, merge, interleave",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "get~",
+   "pick~",
+   "slice~",
+   "merge~",
+   "unmerge~",
+   "lace~",
+   "delace~",
+   "repeat~",
+   "sum~",
+   "nchs~",
+   "sigs~"
+  ],
+  "what_it_does": "get~ builds a new multichannel signal from a list of channel numbers, so channels can be reordered or repeated the way dollar arguments reorder a list. The others take one channel, split at a point, join cords of different widths, interleave, repeat, sum to mono and report the channel count.",
+  "source_urls": [
+   "Documentation/9.else/get~-help.pd",
+   "Documentation/9.else/pick~-help.pd",
+   "Documentation/9.else/slice~-help.pd",
+   "Documentation/9.else/merge~-help.pd",
+   "Documentation/9.else/unmerge~-help.pd",
+   "Documentation/9.else/lace~-help.pd",
+   "Documentation/9.else/delace~-help.pd",
+   "Documentation/9.else/repeat~-help.pd",
+   "Documentation/9.else/sum~-help.pd",
+   "Documentation/9.else/nchs~-help.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "mc.resize~",
+   "mc.unpack~",
+   "mc.combine~",
+   "mc.separate~",
+   "mc.interleave~",
+   "mc.deinterleave~",
+   "mc.dup~",
+   "mc.channelcount~",
+   "mc.mixdown~"
+  ],
+  "max_check": "Refpages. mc.resize~: 'Resize a multichannel signal using selected channels', with select and replicate attributes. mc.unpack~ also has select. mc.combine~, mc.separate~, mc.interleave~, mc.deinterleave~, mc.dup~ and mc.channelcount~ match the other ELSE tools one for one.",
+  "advice": "Each ELSE tool has a Max equal. The one to remember is channel remapping: mc.resize~ with its select attribute picks or reorders channels, which is what get~ does.",
+  "confidence": "medium",
+  "notes": "The exact form of the select attribute's value was not read."
+ },
+ {
+  "capability": "Polyphony as multichannel pitch and gate signals",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "voices~",
+   "voices",
+   "mono~",
+   "synth~"
+  ],
+  "what_it_does": "voices~ turns MIDI notes into two multichannel signals, pitch and gate, one channel per voice, so a single oscillator and a single envelope object process every voice and no voice subpatch is needed. The tutorial notes it costs somewhat more CPU than cloning a voice patch.",
+  "source_urls": [
+   "Documentation/9.else/voices~-help.pd",
+   "Documentation/9.else/voices-help.pd",
+   "Documentation/9.else/synth~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.04-Control/18-MIDI-CV-OSC-Net/1.MIDI/3.Monophony.Polyphony/4.[voices~].pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "mc.noteallocator~",
+   "mc.voiceallocator~",
+   "mc.target",
+   "poly~",
+   "mc.adsr~"
+  ],
+  "max_check": "Refpages. mc.noteallocator~: 'Manage voice numbers for MIDI note events' with voices, steal, hires and mpemode attributes. mc.voiceallocator~ does the same for general events with release and busy-state handling. mc.target formats messages for a chosen MC voice.",
+  "advice": "Same design in Max: mc.noteallocator~ assigns voices, and mc. objects carry all voices on one cord. Prefer it to poly~ when the voice is simple, and poly~ when voices need their own patch logic or should stop computing when idle.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Feedback set as a decay time on delays, combs and allpasses",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "fbdelay~",
+   "allpass.rev~",
+   "comb.filt~",
+   "comb.rev~",
+   "ffdelay~",
+   "del~"
+  ],
+  "what_it_does": "The feedback amount on these objects is, by default, a time: how many ms the repeats take to fall 60 dB. A -gain flag switches to a plain coefficient. Delay time is in ms with -samps for samples, all have 'clear', and the plain delays have 'freeze'.",
+  "source_urls": [
+   "Documentation/9.else/fbdelay~-help.pd",
+   "Documentation/9.else/allpass.rev~-help.pd",
+   "Documentation/9.else/comb.filt~-help.pd",
+   "Documentation/9.else/comb.rev~-help.pd",
+   "Documentation/9.else/ffdelay~-help.pd",
+   "Documentation/9.else/del~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.10-Filters&Reverb/36-Filters(Advanced)/5.Resonators/4.[comb.filt~].pd"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "comb~",
+   "allpass~",
+   "teeth~",
+   "tapin~",
+   "tapout~",
+   "delay~"
+  ],
+  "max_check": "Refpages. comb~: arguments max delay, delay, gain, feedforward and feedback coefficients. allpass~: max delay, delay, gain. teeth~: separate feedforward and feedback delays with gains. tapin~ has a freeze message. delay~ counts in samples or tempo-relative values. None takes a decay time.",
+  "advice": "Thinking in decay time is the better interface, because a fixed coefficient rings for a different time at every delay length. In Max compute the coefficient first: the tutorial gives gain = exp(ln(0.001) * delay / t60), with both times in the same unit. Send that to comb~ or allpass~ whenever the delay time changes.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Ready-made delay effects: reverse, filtered-and-limited, ping-pong",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "revdelay~",
+   "filterdelay~",
+   "ping.pong~",
+   "delay.m~"
+  ],
+  "what_it_does": "revdelay~ plays its delay line backwards in segments. filterdelay~ puts a resonant lowpass, a DC blocker and a soft clipper inside the feedback loop, so feedback above 1 is safe. ping.pong~ is a stereo bouncing delay.",
+  "source_urls": [
+   "Documentation/9.else/revdelay~-help.pd",
+   "Documentation/9.else/filterdelay~-help.pd",
+   "Documentation/9.else/ping.pong~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.07-Sampling.Delay.Granulation/30-Delay(Ring-Buffer)/6.Filtered.delay.pd",
+   "Documentation/12.live-electronics-tutorial/Part.07-Sampling.Delay.Granulation/30-Delay(Ring-Buffer)/5.Reverse.delay.pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "tapin~",
+   "tapout~",
+   "abl.device.delay~",
+   "abl.device.echo~",
+   "upshot_reversedelay (Upshot)"
+  ],
+  "max_check": "Bundled Ableton DSP: abl.device.delay~ ('Stereo delay') and abl.device.echo~ ('Modulation delay'). No reverse-delay object in the registry; query_packages.py 'reverse delay' found upshot_reversedelay in an installed package.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "What a Max patcher can do meanwhile: The filtered-delay recipe is the part to copy into any Max feedback delay: inside the loop put a lowpass, a DC blocker and a soft clipper (tanh~ or overdrive~). Then no feedback setting can blow it up. The tutorial's reverse-delay recipe: sweep the tap from 0 to the line length at twice the rate of 1 / line length."
+ },
+ {
+  "capability": "Classic effects as single objects",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "chorus~",
+   "flanger~",
+   "phaser~",
+   "tremolo~",
+   "rm~",
+   "vibrato~",
+   "crusher~",
+   "drive~",
+   "vocoder~",
+   "freq.shift~",
+   "pitch.shift~"
+  ],
+  "what_it_does": "One box each for chorus, flanger, phaser with a settable number of stages, tremolo, ring modulation, vibrato, bit crusher with decimation, three kinds of soft clipping, an N-band channel vocoder, frequency shifter and granular pitch shifter. The tutorial shows the patch behind each one.",
+  "source_urls": [
+   "Documentation/9.else/chorus~-help.pd",
+   "Documentation/9.else/flanger~-help.pd",
+   "Documentation/9.else/phaser~-help.pd",
+   "Documentation/9.else/tremolo~-help.pd",
+   "Documentation/9.else/rm~-help.pd",
+   "Documentation/9.else/vibrato~-help.pd",
+   "Documentation/9.else/crusher~-help.pd",
+   "Documentation/9.else/drive~-help.pd",
+   "Documentation/9.else/vocoder~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.06-Filters(Basic)/28-Filter.FX/2.Multiband-Processing/5.Vocoder/2.Vocoder.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "abl.dsp.chorus~",
+   "abl.dsp.flanger~",
+   "abl.dsp.phaser~",
+   "abl.dsp.ringmod~",
+   "abl.dsp.vibrato~",
+   "abl.device.redux~",
+   "overdrive~",
+   "degrade~",
+   "freqshift~",
+   "pitchshift~",
+   "BEAP modules"
+  ],
+  "max_check": "Bundled packages in Max 9.1.5. Ableton DSP has abl.dsp.chorus~, abl.dsp.flanger~, abl.dsp.phaser~, abl.dsp.ringmod~, abl.dsp.vibrato~, abl.dsp.overdrive~, abl.dsp.saturator~, abl.device.redux~. Core MSP has overdrive~, degrade~, freqshift~ and pitchshift~. No channel vocoder object was found in the registry.",
+  "advice": "Since Max 9 bundles the Ableton DSP objects, reach for abl.dsp.* before building a chorus, flanger or phaser from tapin~ and LFOs. A channel vocoder still has to be built: the tutorial's version is N bands, each a bandpass on the carrier multiplied by the running RMS of the modulator, followed by a normalizer.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Plain compressor, ducker, expander, gate and normalizer objects",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "compress~",
+   "duck~",
+   "expand~",
+   "noisegate~",
+   "norm~"
+  ],
+  "what_it_does": "Dynamics as small objects with threshold, ratio, attack and release. duck~ takes a second signal as the side chain. norm~ holds a running RMS at a target level. The tutorial builds each from a moving RMS, a gain computed in dB and an up/down smoother.",
+  "source_urls": [
+   "Documentation/9.else/compress~-help.pd",
+   "Documentation/9.else/duck~-help.pd",
+   "Documentation/9.else/expand~-help.pd",
+   "Documentation/9.else/noisegate~-help.pd",
+   "Documentation/9.else/norm~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.02-Basic-Processing/11-Dynamics/5.Compressor.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "abl.device.compressor~",
+   "abl.dsp.compander~",
+   "abl.device.limiter~",
+   "omx.comp~",
+   "omx.peaklim~",
+   "limi~"
+  ],
+  "max_check": "Refpages. omx.comp~: many-message OctiMax compressor with gating and a side-chain filter. limi~: lookahead peak limiter. Bundled Ableton DSP: abl.device.compressor~, abl.dsp.compander~, abl.device.limiter~, abl.dsp.transientdesign~.",
+  "advice": "Max is well covered. For teaching, the tutorial's compressor arithmetic is clean and ports directly: overshoot = level in dB - threshold; gain change = -overshoot * (1 - 1/ratio), never above 0; smooth with a different time down (attack) and up (release); convert to linear.",
+  "confidence": "medium",
+  "notes": "Whether the Ableton compressor object exposes a side-chain inlet was not read."
+ },
+ {
+  "capability": "A reverb toolkit from building blocks to finished units",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "echo.rev~",
+   "fdn.rev~",
+   "mono.rev~",
+   "stereo.rev~",
+   "free.rev~",
+   "giga.rev~",
+   "plate.rev~",
+   "allpass.rev~",
+   "comb.rev~"
+  ],
+  "what_it_does": "Separate objects for each classic design: a feedforward early-reflection stage with a settable number of stages, a feedback delay network whose line count and lengths can be set, freeverb, gigaverb, a Dattorro plate, and the single comb and allpass units they are made of.",
+  "source_urls": [
+   "Documentation/9.else/echo.rev~-help.pd",
+   "Documentation/9.else/fdn.rev~-help.pd",
+   "Documentation/9.else/free.rev~-help.pd",
+   "Documentation/9.else/giga.rev~-help.pd",
+   "Documentation/9.else/plate.rev~-help.pd",
+   "Documentation/9.else/mono.rev~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.10-Filters&Reverb/37-Reverberation/2.[echo.rev~].pd",
+   "Documentation/12.live-electronics-tutorial/Part.10-Filters&Reverb/37-Reverberation/3.FDN/1.FDN.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "abl.device.reverb~",
+   "abl.dsp.darkhall~",
+   "abl.dsp.prism~",
+   "abl.dsp.quartz~",
+   "abl.dsp.shimmer~",
+   "abl.dsp.tides~",
+   "cverb~",
+   "bp.Gigaverb (BEAP)",
+   "bp.Freeverb (BEAP)"
+  ],
+  "max_check": "Bundled: Ableton DSP has abl.device.reverb~ ('Plate reverb') and five abl.dsp reverbs; cverb~ is 'A simple monaural reverberator'; the repo's preferred-objects table lists BEAP's bp.Gigaverb and bp.Freeverb. No configurable feedback-delay-network object was found.",
+  "advice": "For a finished reverb Max has more choice than ELSE. What ELSE adds is the kit for building one. The tutorial's rules for the builder: early reflections from feedforward delays whose times are not multiples of each other (primes); four to sixteen feedback lines mixed through sums and differences; a lowpass in the loop for damping.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "File players that read compressed formats and stream from a URL",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "play.file~",
+   "sfload",
+   "sample~",
+   "player~",
+   "sfinfo"
+  ],
+  "what_it_does": "play.file~ plays AAC, AIF, CAF, FLAC, MP3, OGG, OPUS and WAV from disk and can also stream a file or a live radio stream from a web link. sfload loads the same formats into arrays, in a background thread if asked, and can download from a link.",
+  "source_urls": [
+   "Documentation/9.else/play.file~-help.pd",
+   "Documentation/9.else/sfload-help.pd",
+   "Documentation/9.else/sample~-help.pd",
+   "Documentation/9.else/player~-help.pd",
+   "Documentation/9.else/sfinfo-help.pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "sfplay~",
+   "buffer~",
+   "playlist~",
+   "maxurl"
+  ],
+  "max_check": "sfplay~ refpage: 'Supported formats include AIFF, WAVE, MP3, OGG, FLAC, M4A, CAF, WF64, WAVE64, and Raw Data'. buffer~ has read, import and writeflac messages. Nothing in either refpage mentions opening a URL.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "Local formats are covered. Streaming audio from a web address is the gap; maxurl could download a file first."
+ },
+ {
+  "capability": "Sampler voices that read sustain-loop points from the file",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "susloop~",
+   "sfinfo",
+   "tabplayer~",
+   "player~"
+  ],
+  "what_it_does": "sfinfo reads the instrument chunk of an AIFF file (reference pitch and loop points). susloop~ makes a read index that plays from the start, then loops between two sample points while the gate is held and plays on after release.",
+  "source_urls": [
+   "Documentation/9.else/susloop~-help.pd",
+   "Documentation/9.else/sfinfo-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.07-Sampling.Delay.Granulation/29-Sampling(buffer)/5.Sample-Synth/1.Sampler-Synth.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "info~",
+   "groove~",
+   "buffer~"
+  ],
+  "max_check": "Refpages. info~: outlets for sampling rate, 'Sample Instrument Info (list)', sustain loop start and end, release loop start and end, total time; 'Looping and tuning information is found in AIFF files'. groove~: loop, loopstart, loopend, loopinterp attributes and setloop, startloop, endloop messages.",
+  "advice": "Max has both halves: info~ reports the loop points stored in the file, and groove~ plays with a loop that startloop and endloop control. Wire info~'s sustain-loop outlets into groove~ rather than typing loop points by hand.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Faster-than-real-time rendering from inside the patch",
+  "category": "workflow/authoring",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "batch.rec~",
+   "batch.write~"
+  ],
+  "what_it_does": "Send a duration and the object runs the audio engine as fast as the CPU allows, recording the result to a sound file or into an array, then returns to normal. Built on Pd's fast-forward message.",
+  "source_urls": [
+   "Documentation/9.else/batch.rec~-help.pd",
+   "Documentation/9.else/batch.write~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.07-Sampling.Delay.Granulation/29-Sampling(buffer)/4.Record/3.Batch.record.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "sfrecord~",
+   "dsptime~",
+   "adstatus"
+  ],
+  "max_check": "Max user guide topic 'Non-real-time Processing': select the NonRealTime driver in the Audio Status window; hardware input and output are disabled and the audio thread runs as fast as possible; a patch needs a way to start audio, a way to watch progress (dsptime~) and a way to stop.",
+  "advice": "Max does this by switching the audio driver, not by a message to one object, so the whole patch renders offline and there is no sound while it runs. Record with sfrecord~ and stop from dsptime~.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Independent pitch and time on files and on live input",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "gran.player~",
+   "pvoc.player~",
+   "pvoc.live~",
+   "stretch.shift~",
+   "pitch.shift~"
+  ],
+  "what_it_does": "Players with separate speed and transposition, in a granular version and a phase-vocoder version, plus the same pair for live input through a ring buffer.",
+  "source_urls": [
+   "Documentation/9.else/gran.player~-help.pd",
+   "Documentation/9.else/pvoc.player~-help.pd",
+   "Documentation/9.else/pvoc.live~-help.pd",
+   "Documentation/9.else/stretch.shift~-help.pd",
+   "Documentation/9.else/pitch.shift~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.09-Spectral.Processing/35-Advanced/3.Phase.Vocoder/1.TimeStretch-PitchShift/2.Cartesian.[pvoc.player~].pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "groove~",
+   "sfplay~",
+   "playlist~",
+   "stretch~",
+   "pitchshift~",
+   "retune~",
+   "abl.dsp.pitchshifter~"
+  ],
+  "max_check": "Refpages. groove~, sfplay~ and playlist~ all carry timestretch, pitchshift, pitchshiftcent, formant and quality attributes. pitchshift~: 'Ztx-based real-time pitchshifting'. stretch~ changes a buffer offline. retune~ detects and corrects pitch.",
+  "advice": "Max is ahead: time-stretch and pitch-shift are attributes on the players themselves (groove~ @timestretch 1 @pitchshiftcent 300), and pitchshift~ handles live input. No separate object or patch is needed.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Grain clouds from one bang",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "grain.sampler~",
+   "grain.live~",
+   "grain.synth~"
+  ],
+  "what_it_does": "One trigger plays a cloud of up to 256 grains over a set duration, each with random size, position, transposition, level and pan inside ranges given as min-max pairs. Grains can be reversed by probability, started together or scattered, shaped by a chosen window, and snapped to a scale in cents.",
+  "source_urls": [
+   "Documentation/9.else/grain.sampler~-help.pd",
+   "Documentation/9.else/grain.live~-help.pd",
+   "Documentation/9.else/grain.synth~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.07-Sampling.Delay.Granulation/31-Granulation/3.Cloud.granulation/1.[grain.synth~].pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "mubu.granular~ (MuBu)",
+   "grainflow package",
+   "az.granulate~ (Auzzie)",
+   "petra package",
+   "poly~"
+  ],
+  "max_check": "No granular object in obj-qlookup.json. query_packages.py 'granular' found mubu.granular~, the grainflow objects, az.granulate~ and others among installed packages.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "Core Max needs a package or a poly~ of grain voices. The tutorial's voice design ports directly: each voice picks random values at its start, and turns its own DSP off when its window ends."
+ },
+ {
+  "capability": "Spectral freeze as an object",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "pvoc.freeze~",
+   "freeze~"
+  ],
+  "what_it_does": "A gate freezes the input's spectrum and holds it as a steady sound until released. One version is a phase vocoder at speed zero with a crossfade in and out; the other holds the last frame of a tracked-partial analysis in an oscillator bank.",
+  "source_urls": [
+   "Documentation/9.else/pvoc.freeze~-help.pd",
+   "Documentation/9.else/freeze~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.09-Spectral.Processing/35-Advanced/3.Phase.Vocoder/4.[pvoc.freeze~].pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "pfft~",
+   "abl.device.spectraltime~",
+   "fftz.residency~ (FFTease)",
+   "dk.onsetfreeze~ (Data Knot)"
+  ],
+  "max_check": "No freeze object in core MSP; it is a pfft~ patch. Bundled abl.device.spectraltime~ ('Spectral delay') and several ABL reverbs were returned by a package search for 'freeze'. FFTease and Data Knot (installed) have dedicated objects.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Partitioned convolution with a table as the impulse response",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "conv~"
+  ],
+  "what_it_does": "Convolves the input with an impulse response held in an array, cut into partitions of a chosen size so the latency is one partition. The cyclone help file calls it 'much better and more powerful' than buffir~.",
+  "source_urls": [
+   "Documentation/9.else/conv~-help.pd",
+   "Documentation/10.cyclone/buffir~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.09-Spectral.Processing/35-Advanced/2.Convolution/3.Partitioned.pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "buffir~",
+   "hirt.convolver~ (HISSTools)",
+   "multiconvolve~ (HISSTools)",
+   "hirt.convolutionreverb~ (HISSTools)"
+  ],
+  "max_check": "buffir~ refpage: an FIR filter that convolves with samples from a buffer, with a read offset and length; meant for short responses. query_packages.py 'convolution' found the HISSTools objects, installed here; the repo's preferred-objects table already names hirt.convolutionreverb~.",
+  "advice": "",
+  "confidence": "high",
+  "notes": "Core Max has no long-response convolver; HISSTools is the standard answer."
+ },
+ {
+  "capability": "Spectral morph between two sounds",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "morph~"
+  ],
+  "what_it_does": "Crossfades the magnitudes and, separately, the phases of two inputs in the frequency domain, so it can cross-synthesize either way or morph fully.",
+  "source_urls": [
+   "Documentation/9.else/morph~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.09-Spectral.Processing/35-Advanced/1.Cross.Synthesis/3.[morph~].pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "pfft~",
+   "fftz.morphine~ (FFTease)",
+   "fluid.audiotransport~ (FluCoMa)"
+  ],
+  "max_check": "No such object in core MSP; it is a small pfft~ patch. Package search 'spectral morph' found FFTease's morphine~ and FluCoMa's audio transport, both installed.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "The tutorial's cheaper cross-synthesis: divide A's real and imaginary parts by A's magnitude, multiply both by B's magnitude; no polar conversion."
+ },
+ {
+  "capability": "Waveshaper that builds a Chebyshev function from harmonic weights",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "shaper~",
+   "power~",
+   "drive~",
+   "fold~",
+   "wrap2~"
+  ],
+  "what_it_does": "shaper~ either looks up a table or, given a list of weights, builds the polynomial that turns a full-level sine into exactly those harmonic levels; it wraps out-of-range input and blocks DC. power~ raises a signal to a power while keeping its sign.",
+  "source_urls": [
+   "Documentation/9.else/shaper~-help.pd",
+   "Documentation/9.else/power~-help.pd",
+   "Documentation/9.else/fold~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.05-Synthesis(Basic)/25-Waveshaping/7.Chebyshev.polinomials/2.[shaper~].pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "lookup~",
+   "buffer~",
+   "pong~",
+   "abl.dsp.waveshaper~",
+   "gen17 (PeRColate)"
+  ],
+  "max_check": "Refpages. lookup~: 'Transfer function lookup table' reading a buffer~. pong~: folding, wrapping and clipping with a mode attribute. No object generates Chebyshev transfer functions in the registry; PeRColate's gen17 (installed) fills a table with one.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Named main and synced clocks, and a metronome that understands compound and additive time signatures",
+  "category": "timeline/cueing/show control",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "clock",
+   "metronome",
+   "metronome~",
+   "polymetro",
+   "speed"
+  ],
+  "what_it_does": "clock is a master clock by name; other clock objects marked -s follow it at a ratio that can be a fraction, and stay locked when the ratio changes. metronome takes a time signature (including additive ones such as 3/4 + 3/8, grouped ones such as 15/8 in 5 groups, and non-power-of-two denominators), a beat length, and outputs bar, sub-bar, beat and sub-beat counts plus a 0-1 beat phase. speed produces an accelerando or ritardando over a number of beats.",
+  "source_urls": [
+   "Documentation/9.else/clock-help.pd",
+   "Documentation/9.else/metronome-help.pd",
+   "Documentation/9.else/polymetro-help.pd",
+   "Documentation/9.else/speed-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.04-Control/14-Trigger-LFO-LFNoise/6.clock.metronome/5.[clock].[polymetro].pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "transport",
+   "metro",
+   "timepoint",
+   "when",
+   "translate",
+   "phasor~",
+   "rate~"
+  ],
+  "max_check": "Refpages. transport: 'Control a clock', named, with tempo, a timesig message and outlets for bars, beats, units, resolution, tempo, time signature and state. metro: tempo-relative interval, quantize and transport attributes. timepoint: bang at a transport time. when: report transport time. No reference to additive or grouped signatures was found; timesig is a single numerator/denominator.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "What a Max patcher can do meanwhile: Max's transport is the master clock, and any number of metro objects with note-value intervals (4n, 8nt) stay locked to it; that covers clock and polymetro. What it does not have is additive or grouped signatures or a sub-bar count, so a 7/8 grouped 2+2+3 needs its own counter logic after the transport. A tempo ramp is a line object into the transport's tempo. How a transport handles a signature change in mid-bar was not read."
+ },
+ {
+  "capability": "Tap tempo and tempo detection as objects",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "tap",
+   "beat~",
+   "bpm",
+   "detect~"
+  ],
+  "what_it_does": "tap measures the time between two bangs (or the length of a gate) and outputs a tempo in BPM or ms. beat~ listens to audio and reports a detected BPM. bpm converts between BPM and ms or samples.",
+  "source_urls": [
+   "Documentation/9.else/tap-help.pd",
+   "Documentation/9.else/beat~-help.pd",
+   "Documentation/9.else/bpm-help.pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "timer",
+   "translate",
+   "pnp.bpm~ (PnP.Maxtools)",
+   "abl.dsp.pitchestimator~"
+  ],
+  "max_check": "No tap-tempo or beat-tracking object in obj-qlookup.json. timer (in the registry) measures the interval between two bangs. query_packages.py 'tap tempo' and 'beat' found helper patches in Max for the Visual Arts and Upshot, and pnp.bpm~.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Sequences and rhythms written as text with their own notation",
+  "category": "data/tables/scripting",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "sequencer",
+   "pattern",
+   "score",
+   "score2",
+   "list.seq",
+   "notedur2ratio"
+  ],
+  "what_it_does": "sequencer steps through a typed list in which '-' joins items into a chord, a lone '-' is a rest, '_' is a tie and '|' a barline; items can be note names. pattern takes durations as fractions of a whole note (1/8, 1/12 for a triplet, negative for rests) and runs them at a tempo. score and score2 are text scores with bars, time signatures, tempo changes and events placed by beat position or by duration.",
+  "source_urls": [
+   "Documentation/9.else/sequencer-help.pd",
+   "Documentation/9.else/pattern-help.pd",
+   "Documentation/9.else/score-help.pd",
+   "Documentation/9.else/list.seq-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.04-Control/19-Sequencing/6.[qlist].[text].[score].[score2]/7.[score].pd",
+   "Documentation/12.live-electronics-tutorial/Part.04-Control/19-Sequencing/5.Rhythmic/6.[pattern].pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "seq",
+   "detonate",
+   "coll",
+   "text",
+   "qlist",
+   "live.step",
+   "bach.score (bach)",
+   "bach.roll (bach)",
+   "mtr"
+  ],
+  "max_check": "Max's sequencing objects store MIDI or timed messages (seq, detonate, mtr, qlist) or steps (live.step). None reads a typed rhythm-and-pitch notation. The bach package (installed) has full notation objects.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "The design worth borrowing for a small Max abstraction or v8 script: keep rhythm (a list of fractions) and pitch (a list of names) as two separate lists that can be recombined, as pattern and sequencer do."
+ },
+ {
+  "capability": "Note-length symbols with arbitrary tuplets and ties",
+  "category": "data/tables/scripting",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "notedur2ratio",
+   "makenote2",
+   "pattern",
+   "metronome"
+  ],
+  "what_it_does": "Converts symbols such as 4n, 8nt, 16nd to a fraction of a whole note. Beyond dotted and triplet forms it accepts quintuplet, septuplet and nonuplet letters, an explicit [x:y] tuplet, double dots and tied values joined with '_'.",
+  "source_urls": [
+   "Documentation/9.else/notedur2ratio-help.pd",
+   "Documentation/9.else/makenote2-help.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "translate",
+   "metro",
+   "makenote",
+   "transport"
+  ],
+  "max_check": "Max user guide 'Time Value Syntax': tempo-relative note values run from 1n to 128n with dotted (d) and triplet (t) forms; the names found in the page are 1n 1nd 1nt 2n 2nd 2nt 4n 4nd 4nt 8n 8nd 8nt 16n 16nd 16nt 32n 32nd 32nt 64n 64nd 128n. translate converts between time formats. Ticks and bars.beats.units are the other tempo-relative forms.",
+  "advice": "Max's note values are built into the time attribute of every timing object, which is better than a converter object, but they stop at dotted and triplet. For a quintuplet or any other division, give the interval in ticks or compute ms from the tempo.",
+  "confidence": "medium",
+  "notes": "The same user guide page gives one tick as 1/480; the sentence around it was not read in full, so check what the 480 divides before relying on it."
+ },
+ {
+  "capability": "Euclidean rhythm from a step number",
+  "category": "data/tables/scripting",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "euclid"
+  ],
+  "what_it_does": "Given steps, hits and rotation, answers for any step number whether it is a hit or a rest, on separate outlets and as 1 or 0.",
+  "source_urls": [
+   "Documentation/9.else/euclid-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.04-Control/19-Sequencing/5.Rhythmic/3.[euclid].pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "abl.dsp.euclid~",
+   "rtt.euclidean~ (Rhythm and Time Toolkit)",
+   "ts.euclideanSeq (TS.Modular)"
+  ],
+  "max_check": "Bundled Ableton DSP: abl.dsp.euclid~, 'Euclidean rhythm ramp generator', a signal object with frequency, steps and pulses inlets. No control-rate Euclidean object in the registry. Installed packages have rtt.euclidean~ and ts.euclideanSeq.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "At control rate this is a short script in v8. A common formula (general knowledge, not from the help file): step i is a hit when ((i * hits) % steps) < hits."
+ },
+ {
+  "capability": "Markov chains of any order, learned from input",
+  "category": "data/tables/scripting",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "markov",
+   "histogram",
+   "rand.hist"
+  ],
+  "what_it_does": "Feed markov a stream of numbers, symbols or lists; 'create' builds a chain of the chosen order from what it heard, and each bang outputs the next item. Lists make polyphonic chains, the order can be changed and the chain rebuilt, and the chain can be saved with the patch. The cyclone help files point to it as the alternative to prob and anal.",
+  "source_urls": [
+   "Documentation/9.else/markov-help.pd",
+   "Documentation/10.cyclone/prob-help.pd",
+   "Documentation/10.cyclone/anal-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.04-Control/20-Stochastic/7.Markov.Chain/2.MIDI-File.pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "prob",
+   "anal",
+   "markov (RTC-lib)",
+   "gtm.markov (gtm.markov)",
+   "cage.markov.analysis (cage)"
+  ],
+  "max_check": "Refpages. prob: 'Create a weighted transition table'; anal: 'Make a histogram of number pairs'. Together they are a first-order chain over integers. query_packages.py 'markov' found RTC-lib, gtm.markov and cage objects among installed packages.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "Core Max stops at first order and integers."
+ },
+ {
+  "capability": "Weighted and non-repeating random choice objects",
+  "category": "data/tables/scripting",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "chance",
+   "rand.hist",
+   "rand.dist",
+   "rand.u",
+   "rand.list",
+   "rand.i",
+   "rand.f",
+   "spread"
+  ],
+  "what_it_does": "chance sends a bang to one of several outlets by weight. rand.hist picks an index from a list of weights and has a mode that uses each weighted item up before repeating. rand.dist treats an array as a probability curve. rand.u is an urn. All take a -seed flag and a seed message, and a bare 'seed' asks for a fresh one; with no seed each object gets a new one every time the patch loads.",
+  "source_urls": [
+   "Documentation/9.else/chance-help.pd",
+   "Documentation/9.else/rand.hist-help.pd",
+   "Documentation/9.else/rand.dist-help.pd",
+   "Documentation/9.else/rand.u-help.pd",
+   "Documentation/9.else/rand.i-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.04-Control/20-Stochastic/5.[histogram].[rand.hist].pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "random",
+   "urn",
+   "drunk",
+   "decide",
+   "table",
+   "histo",
+   "prob"
+  ],
+  "max_check": "Refpages. random and drunk have a seed attribute; urn and decide take a seed argument or message. table: a bang gives 'Output a random quantile', that is, a random index weighted by the stored values, and quantile and fquantile do the same from a given number.",
+  "advice": "Max's weighted random is a table used as a histogram: store weights, send bang. It is easy to miss because nothing in the name says so. For weighted outlets, follow it with select. urn is the non-repeating one.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Control-rate oscillators and noise that run without audio",
+  "category": "control surface/UI building",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "lfo",
+   "phasor",
+   "impulse",
+   "pulse",
+   "pimp",
+   "lfnoise",
+   "stepnoise",
+   "rampnoise",
+   "randpulse"
+  ],
+  "what_it_does": "Control versions of the signal generators: an LFO with five waveforms, a phase ramp, a pulse and bang generators, and three kinds of slow noise. They take a frequency in Hz and a refresh rate in ms, run with DSP off, and output in the MIDI range 0-127 by default. A frequency change takes effect at once, which the help file contrasts with a metronome.",
+  "source_urls": [
+   "Documentation/9.else/lfo-help.pd",
+   "Documentation/9.else/phasor-help.pd",
+   "Documentation/9.else/impulse-help.pd",
+   "Documentation/9.else/pulse-help.pd",
+   "Documentation/9.else/lfnoise-help.pd",
+   "Documentation/9.else/stepnoise-help.pd",
+   "Documentation/9.else/rampnoise-help.pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "metro",
+   "line",
+   "snapshot~",
+   "drunk",
+   "random"
+  ],
+  "max_check": "No control-rate oscillator object in obj-qlookup.json (lfo: not present). The usual Max ways are a signal LFO read by snapshot~, which needs audio on, or metro driving line, expr or a counter.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "A control LFO that needs no audio would be a small v8 or abstraction job: metro at a refresh rate, accumulate phase from the elapsed time, look up the shape."
+ },
+ {
+  "capability": "Tuning tools: Scala import, retuning by scale, equal divisions, fraction and cents converters",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "scala",
+   "retune",
+   "autotune",
+   "autotune2",
+   "eqdiv",
+   "scale2freq",
+   "midi2freq",
+   "freq2midi",
+   "cents2ratio",
+   "frac2cents",
+   "cents2frac",
+   "scales"
+  ],
+  "what_it_does": "scala reads a .scl file into a list of cents. retune maps successive keys to successive scale steps; autotune snaps a pitch to the nearest step. eqdiv divides any interval into equal steps. Converters go between cents, ratios, fraction symbols and scale steps, and midi2freq takes the A4 frequency.",
+  "source_urls": [
+   "Documentation/9.else/scala-help.pd",
+   "Documentation/9.else/retune-help.pd",
+   "Documentation/9.else/autotune-help.pd",
+   "Documentation/9.else/eqdiv-help.pd",
+   "Documentation/9.else/scale2freq-help.pd",
+   "Documentation/9.else/midi2freq-help.pd",
+   "Documentation/9.else/cents2ratio-help.pd",
+   "Documentation/9.else/frac2cents-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.01-The.Basics/03-Intervals-Tuning/8.[retune].pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "mtof",
+   "ftom",
+   "sfizz~",
+   "retune~"
+  ],
+  "max_check": "mtof refpage: attributes base (reference frequency, default 440), ref and mid (reference and middle note numbers), scale ('a set of values... for a scale described using the Scala format', cents or ratios such as 5/4), scalename ('a valid scale name from the Scala archive'), map and mapname (Scala keyboard maps). ftom has the same set plus round. sfizz~ has them too.",
+  "advice": "Max builds microtuning into mtof itself: 'mtof @scalename <name>' or '@scale <count> <steps>' retunes by a Scala scale with no other object, and @base moves A4. Use that instead of arithmetic around mtof. retune's key-to-step mapping is what mtof with a scale does; autotune's snap-to-nearest is ftom with the same scale and @round.",
+  "confidence": "high",
+  "notes": "That ftom @round snaps to the nearest scale step was inferred from the attribute list, not tested."
+ },
+ {
+  "capability": "Note names to MIDI and back, with quarter tones",
+  "category": "data/tables/scripting",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "note2midi",
+   "midi2note",
+   "scales"
+  ],
+  "what_it_does": "Converts names such as C4, Eb3 or double sharps to MIDI numbers and back, with '+' and '-' for quarter tones, a choice of sharps or flats, and list handling. Several ELSE sequencing objects accept note names directly.",
+  "source_urls": [
+   "Documentation/9.else/note2midi-help.pd",
+   "Documentation/9.else/midi2note-help.pd",
+   "Documentation/9.else/scales-help.pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "number",
+   "kslider",
+   "bach.n2mc (bach)",
+   "bach.mc2n (bach)",
+   "och.mtos (The QAC Toolkit)"
+  ],
+  "max_check": "No conversion object in the registry. A number box can display MIDI numbers as note names. query_packages.py 'note name' found bach.n2mc, bach.mc2n and och.mtos among installed packages.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "That the number box has a note-name display format is from general Max knowledge, not from a refpage read in this session."
+ },
+ {
+  "capability": "Monophonic note handling with priority, legato and glide",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "mono",
+   "mono~"
+  ],
+  "what_it_does": "Remembers held notes and outputs one at a time with last, highest or lowest priority; releasing a note returns to the one still held. A legato mode keeps the first velocity, a glide time is built in, and mono~ outputs pitch and velocity as signals plus an impulse for retriggering envelopes.",
+  "source_urls": [
+   "Documentation/9.else/mono-help.pd",
+   "Documentation/9.else/mono~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.04-Control/18-MIDI-CV-OSC-Net/1.MIDI/3.Monophony.Polyphony/1.Monophonic.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "ddg.mono",
+   "poly"
+  ],
+  "max_check": "ddg.mono refpage: 'Monophonic Synth Controller for Virtual Synths... implements last/high/low note priority and legato/retrigger phrasing', with mode and legatomode attributes.",
+  "advice": "Max ships this as ddg.mono, which few people know because of its name. Use it instead of patching note memory by hand; add glide with a line~ or slide~ on the pitch.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Voice allocator with release hold, retrigger modes and per-voice message routing",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "voices",
+   "synth~"
+  ],
+  "what_it_does": "Like a poly allocator, but a voice can stay reserved for a release time after its note-off, repeated notes have three policies (new voice, same voice, or sent to an 'extra' outlet), stealing is optional, and any other message whose first value is a sounding pitch is routed to that note's voice, which is how polyphonic aftertouch reaches the right voice.",
+  "source_urls": [
+   "Documentation/9.else/voices-help.pd",
+   "Documentation/9.else/synth~-help.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "poly",
+   "poly~",
+   "thispoly~",
+   "mc.noteallocator~",
+   "mc.voiceallocator~"
+  ],
+  "max_check": "Refpages. poly: voices and a steal-mode argument. poly~: steal, midimode, mpemode, legacynotemode attributes. thispoly~: 'Control poly~ voice allocation and muting'. mc.voiceallocator~: release, releaseevent, holdevent messages and a busy map.",
+  "advice": "In Max the voice itself reports when it is free (thispoly~ busy and mute, driven by the envelope), so no release time has to be guessed in the allocator. That is the more robust design. Per-note expression routing is what poly~ @mpemode and mc.noteallocator~ @mpemode are for.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Sustain pedal with a sostenuto-like mode",
+  "category": "audio",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "suspedal"
+  ],
+  "what_it_does": "Holds note-offs while the pedal is down. A 'tonal' mode sustains only the notes already held when the pedal went down, so new notes play normally. Four policies for repeated notes are offered.",
+  "source_urls": [
+   "Documentation/9.else/suspedal-help.pd",
+   "Documentation/10.cyclone/sustain-help.pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "sustain"
+  ],
+  "max_check": "sustain refpage: holds note-offs until released; repeatmode 0 (historical), 1 (re-trigger), 2 (stop last). No mode that sustains only the notes held at pedal-down.",
+  "advice": "",
+  "confidence": "high",
+  "notes": "A sostenuto needs a little logic around sustain: at pedal-down, capture the set of held notes; let later note-offs pass unless the note is in that set."
+ },
+ {
+  "capability": "MIDI learn as an object that saves what it learned in the patch",
+  "category": "control surface/UI building",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "midi.learn",
+   "knob",
+   "gain~"
+  ],
+  "what_it_does": "Bang it (or control-click a knob), move a controller, and it remembers which message and channel to listen to; the binding is stored with the patch. ELSE's knob and gain~ have the gesture built in.",
+  "source_urls": [
+   "Documentation/9.else/midi.learn-help.pd",
+   "Documentation/9.else/knob-help.pd",
+   "Extra/else/about.MERDA.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "live.dial",
+   "ctlin",
+   "Mappings (Max feature)"
+  ],
+  "max_check": "Max user guide topic 'Mapping': 'The Mappings system allows you to connect MIDI controllers and the computer keyboard directly to user interface objects', for parameter-enabled objects, with min, max, exponent, steps, relative, trigger and pickup modes, and maps can be saved and loaded.",
+  "advice": "Max does this at application level, with no objects: enable Parameter Mode on the control and use Mappings. It also covers computer keys. Prefer it to ctlin plumbing when the goal is 'this knob follows that hardware knob'.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Range mapping that clips by default and has log and exponential modes",
+  "category": "data/tables/scripting",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "rescale",
+   "rescale~"
+  ],
+  "what_it_does": "Maps an input range (0-127 by default, the MIDI range) to an output range. It clips to the output range unless told not to. An exponent bends the curve, and a log mode makes the midpoint the geometric mean, which suits frequencies. The cyclone help files call it 'much simpler and more powerful' than scale.",
+  "source_urls": [
+   "Documentation/9.else/rescale-help.pd",
+   "Documentation/9.else/rescale~-help.pd",
+   "Documentation/10.cyclone/scale-help.pd",
+   "Documentation/10.cyclone/scale~-help.pd"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "scale",
+   "zmap",
+   "clip",
+   "scale~"
+  ],
+  "max_check": "scale refpage: maps ranges with an optional exponent; a 'classic' attribute. Its description of out-of-range input is in cyclone's clone ('will not clip'). zmap: maps ranges, no exponent argument. clip limits a range.",
+  "advice": "In Max, scale does not clip, so follow it with clip (or use zmap when no curve is needed). For a frequency control, an exponential mapping with the right base gives the same result as ELSE's log mode. See also the separate entry on scale's classic mode.",
+  "confidence": "medium",
+  "notes": "That Max's scale does not clip is stated in cyclone's help file for its clone, not in the Max refpage text that was read."
+ },
+ {
+  "capability": "An in-path monitor that shows any message and passes it on",
+  "category": "workflow/authoring",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "display",
+   "numbox~",
+   "note"
+  ],
+  "what_it_does": "display is a box that prints whatever message passes through it, resizes to fit, and sends the message on unchanged from its outlet. numbox~ does the same for a signal value and can also generate one.",
+  "source_urls": [
+   "Documentation/9.else/display-help.pd",
+   "Documentation/9.else/numbox~-help.pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "message",
+   "number",
+   "print",
+   "number~"
+  ],
+  "max_check": "No 'display' object in obj-qlookup.json. A message box shows a message set through its right inlet but does not pass it on; number boxes pass numbers through; print writes to the console (it has a popup attribute); number~ shows a signal.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "What a Max patcher can do meanwhile: The repo's rule 'put the display in the path' is easy for numbers (number box) and awkward for lists and symbols, because the message box is a dead end. A two-outlet idiom covers it: trigger the message to the consumer and to 'prepend set' into a message box. An abstraction or v8ui that does both in one box would be a useful Butter tool."
+ },
+ {
+  "capability": "Knob with its own number readout, typed entry, parameter prefix and variable binding",
+  "category": "control surface/UI building",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "knob"
+  ],
+  "what_it_does": "A knob whose options include a log scale, a settable arc start that double-click returns to, discrete steps with ticks, a number readout that can show always, when active or when typing, entry of a value by typing and Enter, a 'param' name that is put in front of the output so it can go straight into an object, a 'var' name that writes the value into a named variable, and bangs on named sends for tab, enter and MIDI learn.",
+  "source_urls": [
+   "Documentation/9.else/knob-help.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "live.dial",
+   "dial",
+   "pattr",
+   "attrui"
+  ],
+  "max_check": "Refpages. live.dial: showname, shownumber, appearance, parameter_mappable. dial: min, mult, size, degrees, mode. Max user guide 'Parameter Mode' lists Range/Enum, Initial Value, Unit Style (including custom units) and Exponent as parameter attributes. pattr binds a control to a name.",
+  "advice": "live.dial with Parameter Mode gives the readout, units, exponent, initial value and mapping. The idea Max lacks is the 'param' prefix: an ELSE knob outputs 'cutoff 440' ready for the receiving object, where Max needs a prepend. In Max the cleaner route is attrui for real attributes, which is the repo's rule already.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Presets addressed by receive names, with timed morphing built in",
+  "category": "control surface/UI building",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "presets",
+   "presets.m",
+   "retrieve",
+   "interpolate",
+   "morph"
+  ],
+  "what_it_does": "presets is given a list of receive names. Saving reads the current value of whatever is attached to each name; loading sends the values back. It keeps presets in a text file or in the patch, can glide from the current state to a preset over a set time with an exponent, or interpolate under a slider, and each copy of an abstraction can have its own set.",
+  "source_urls": [
+   "Documentation/9.else/presets-help.pd",
+   "Documentation/9.else/retrieve-help.pd",
+   "Documentation/9.else/interpolate-help.pd",
+   "Documentation/9.else/morph-help.pd",
+   "Extra/else/presets.m-help.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "pattrstorage",
+   "autopattr",
+   "pattr",
+   "preset"
+  ],
+  "max_check": "pattrstorage refpage: recall with a float recalls an interpolated preset; 'recall' with 3 or 4 arguments interpolates between two presets at a position; messages include fade, interp, priority, storagewindow, read, write, writejson. preset has a pattrstorage attribute.",
+  "advice": "pattrstorage is the richer system: named clients, per-client interpolation modes, files. What it does not do by itself is move over time; drive 'recall <a> <b> $1' from a line object for a timed morph. ELSE's built-in morph time is the convenience to copy into a wrapper.",
+  "confidence": "medium",
+  "notes": "The pattrstorage 'fade' message was seen in the method list but its description was not read."
+ },
+ {
+  "capability": "An abstraction that can read and rewrite its own box arguments",
+  "category": "workflow/authoring",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "args",
+   "dollsym",
+   "sender",
+   "receiver"
+  ],
+  "what_it_does": "args outputs the arguments typed on the abstraction's box, optionally split at a marker symbol, and can also replace them, so the box text changes and is saved. dollsym, sender and receiver expand the instance number of a parent patch from inside a child.",
+  "source_urls": [
+   "Documentation/9.else/args-help.pd",
+   "Documentation/9.else/dollsym-help.pd",
+   "Documentation/9.else/sender-help.pd",
+   "Documentation/9.else/receiver-help.pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "patcherargs",
+   "thispatcher",
+   "pattr"
+  ],
+  "max_check": "patcherargs refpage: 'Retrieves patcher arguments and parses attribute style arguments'; normal arguments from the left outlet and @-style ones from the right; methods are bang only. Nothing in it writes arguments back.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "Reading is covered by patcherargs, which the repo already requires. Writing back the box text from inside is not a Max idiom; state belongs in pattr."
+ },
+ {
+  "capability": "A box abstraction that reacts to being clicked",
+  "category": "workflow/authoring",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "click",
+   "properties"
+  ],
+  "what_it_does": "Placed inside an abstraction, click sends a bang when the abstraction's box is clicked in the parent patch, and properties does the same when its Properties menu item is chosen. ELSE uses this so that clicking player~ opens a file dialog and clicking a table object opens its data.",
+  "source_urls": [
+   "Documentation/9.else/click-help.pd",
+   "Documentation/9.else/properties-help.pd"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "bpatcher",
+   "ubutton",
+   "hover",
+   "mousestate"
+  ],
+  "max_check": "No object in obj-qlookup.json reports clicks on the box of the abstraction that contains it. In Max, double-clicking an abstraction's box opens its patcher. A bpatcher can hold a ubutton, but that is a UI, which the repo's rules say an abstraction should not have.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Load-time bangs before the parent's cords exist, and after everything else",
+  "category": "workflow/authoring",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "loadbanger",
+   "lb",
+   "initmess"
+  ],
+  "what_it_does": "loadbanger sends N bangs right to left at load, and again on any message or click. With -init it fires earlier, inside abstractions first and before the parent's connections are made, which lets an abstraction build its own inlets. With -fin it fires after all ordinary load bangs.",
+  "source_urls": [
+   "Documentation/9.else/loadbanger-help.pd",
+   "Documentation/9.else/initmess-help.pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "loadbang",
+   "loadmess",
+   "bangbang",
+   "patcherargs",
+   "closebang",
+   "deferlow"
+  ],
+  "max_check": "Refpages. loadbang: bang when the patcher is loaded. loadmess: message at load, with a defer attribute ('output is deferred through the lower priority main thread'). No object offers a choice of load phase.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "In Max, 'after everything else' is loadbang into deferlow, or loadmess @defer 1. The order between an abstraction's and its parent's loadbangs is covered in the repo's user-guide notes, not here."
+ },
+ {
+  "capability": "Objects that report the state of the patcher window",
+  "category": "workflow/authoring",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "canvas.edit",
+   "canvas.vis",
+   "canvas.active",
+   "canvas.zoom",
+   "canvas.bounds",
+   "canvas.pos",
+   "canvas.name",
+   "canvas.mouse",
+   "fontsize"
+  ],
+  "what_it_does": "A family that reports, for the current window or a parent at a given depth: whether it is in edit mode, visible, frontmost or zoomed, its bounds on screen, a subpatch's position in its parent, its name, and mouse position inside it.",
+  "source_urls": [
+   "Documentation/9.else/canvas.edit-help.pd",
+   "Documentation/9.else/canvas.vis-help.pd",
+   "Documentation/9.else/canvas.active-help.pd",
+   "Documentation/9.else/canvas.bounds-help.pd",
+   "Documentation/9.else/canvas.mouse-help.pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "active",
+   "thispatcher",
+   "mousestate",
+   "hover",
+   "v8"
+  ],
+  "max_check": "Refpages. active: 1 when the patcher window is active. thispatcher: sends messages to a patcher. mousestate and hover report the mouse. No object reports edit (unlocked) state or zoom.",
+  "advice": "",
+  "confidence": "low",
+  "notes": "Lock state and window geometry are reachable from JavaScript through the patcher object; that was not verified in this session."
+ },
+ {
+  "capability": "Colour picker that also converts between colour formats",
+  "category": "control surface/UI building",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "colors"
+  ],
+  "what_it_does": "Opens a colour picker and converts between RGB, hexadecimal, HSL, HSV, CMYK and grey values, remembering recent colours.",
+  "source_urls": [
+   "Documentation/9.else/colors-help.pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "colorpicker",
+   "swatch",
+   "jit.rgb2hsl"
+  ],
+  "max_check": "Refpages. colorpicker: 'Select and output a color'. swatch: 'Choose a color'. Conversion objects in the registry are Jitter matrix operators (jit.rgb2hsl). No list-level converter between RGB, hex and HSL was found.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Eurorack-style modules with attenuverters, automatic state saving and one-click MIDI learn",
+  "category": "control surface/UI building",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "vco.m~",
+   "vcf.m~",
+   "vca.m~",
+   "adsr.m~",
+   "lfo.m~",
+   "seq8.m~",
+   "plaits.m~",
+   "pm6.m~",
+   "presets.m"
+  ],
+  "what_it_does": "MERDA is a set of ELSE abstractions that look and behave like modules: knobs for each value, signal inlets whose amount is set by an attenuverter knob (noon is zero, right adds, left subtracts and inverts), state saved with the patch with nothing to wire, a presets.m module that captures every module in the patch, and control-click MIDI learn on every knob.",
+  "source_urls": [
+   "Extra/else/about.MERDA.pd",
+   "Extra/else/presets.m-help.pd",
+   "Extra/else/seq8.m~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.04-Control/18-MIDI-CV-OSC-Net/2.CV/6.MERDA.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "BEAP modules (bundled)",
+   "abl.device.* (bundled)",
+   "bpatcher",
+   "pattrstorage"
+  ],
+  "max_check": "Max bundles BEAP (C74/packages/BEAP), a module library loaded in bpatchers, and the Ableton DSP devices. The repo's preferred-objects table already uses BEAP's bp.Gigaverb and bp.Freeverb.",
+  "advice": "BEAP is the Max counterpart. The convention worth copying into any modulation input is the attenuverter: one bipolar knob per modulation inlet, centre is off, and the modulation is added to the panel value.",
+  "confidence": "medium",
+  "notes": "BEAP's own conventions were not read in this session."
+ },
+ {
+  "capability": "Link two patches on a network by a shared name, for messages or audio",
+  "category": "networking/sync",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "pdlink",
+   "pdlink~"
+  ],
+  "what_it_does": "Two objects with the same name find each other on the local network with no address or port, across machines and across Pd versions and forks. pdlink carries messages; pdlink~ carries audio, optionally Opus-compressed, with up to 16 senders per receiver. A -local flag keeps it on one machine.",
+  "source_urls": [
+   "Documentation/9.else/pdlink-help.pd",
+   "Documentation/9.else/pdlink~-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.04-Control/18-MIDI-CV-OSC-Net/4.Network/2.[pdlink].[pdlink~].pd"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "udpsend",
+   "udpreceive",
+   "zero.announce (zero)",
+   "zero.browse (zero)",
+   "aoo.send~ / aoo.receive~ (AOO for Max)",
+   "link.audio.send~ (Link)"
+  ],
+  "max_check": "Refpages. udpsend takes a host and port; udpreceive a port. Nothing in core Max discovers peers by name. Installed packages: zero (zeroconf announce, browse, resolve), AOO for Max (audio over the network) and Link (link.audio.send~ / receive~).",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "Name-based discovery in Max needs the zero package; network audio needs AOO or Link."
+ },
+ {
+  "capability": "OSC routing by address level",
+  "category": "networking/sync",
+  "tool": "plugdata (ELSE)",
+  "tool_names": [
+   "osc.route",
+   "osc.send",
+   "osc.receive",
+   "osc.format",
+   "osc.parse"
+  ],
+  "what_it_does": "osc.send and osc.receive take ordinary messages that start with a slash address and need only a port (and optionally a host). osc.route matches one level of the address and passes the rest, so '/hz' also matches '/hz/1'.",
+  "source_urls": [
+   "Documentation/9.else/osc.route-help.pd",
+   "Documentation/9.else/osc.send-help.pd",
+   "Documentation/9.else/osc.receive-help.pd",
+   "Documentation/9.else/osc.format-help.pd",
+   "Documentation/12.live-electronics-tutorial/Part.04-Control/18-MIDI-CV-OSC-Net/3.OSC/2.ELSE.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "udpsend",
+   "udpreceive",
+   "route",
+   "o.route (odot)",
+   "osc.codebox",
+   "osc.packet",
+   "param.osc"
+  ],
+  "max_check": "Refpages. udpsend / udpreceive carry OSC. route 'tries to match a message's first argument' to its own arguments, so it matches a whole address symbol, not a level of it. Max 9 has osc.codebox, osc.packet and param.osc. The repo's preferred-objects table names CNMAT's o.route.",
+  "advice": "Sending and receiving are the same in Max. For routing by level, plain route only works when the whole address is listed; use o.route (odot is installed), as the repo already advises.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "scale: 'classic' exponential mode is the default in Max, and cyclone changed it",
+  "category": "data/tables/scripting",
+  "tool": "plugdata (cyclone)",
+  "tool_names": [
+   "scale",
+   "scale~",
+   "linedrive"
+  ],
+  "what_it_does": "cyclone's clone of scale uses the modern exponential formula by default. Its help file says Max's scale defaults to the older 'classic' formula while scale~ defaults to the modern one, calls that an inconsistency, and calls classic mode buggy. It also notes that before Max 6.0.4 the modern exponent was inverted.",
+  "source_urls": [
+   "Documentation/10.cyclone/scale-help.pd",
+   "Documentation/10.cyclone/scale~-help.pd",
+   "Documentation/10.cyclone/linedrive-help.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "scale",
+   "scale~"
+  ],
+  "max_check": "Max 9.1.5. transform-defaults.json gives scale {'classic': [1]} and scale~ {'classic': [0]}, so the two objects do load with different defaults, as cyclone says. The scale refpage's classic attribute text: classic 1 'is compatible with legacy IRCAM linedrive scaling. This mode is not recommended for new work'; classic 2 keeps the curve shape when the output range is inverted.",
+  "advice": "When a Max scale box uses its fifth argument, write '@classic 0' on it. Otherwise it uses the legacy formula, in which an exponent of 2 does not mean a square law and typical values are near 1.06, and it will not match scale~ given the same numbers. With no exponent the mode makes no difference.",
+  "confidence": "high",
+  "notes": "The 'buggy' claim is cyclone's wording; the Max refpage says only 'not recommended for new work'."
+ },
+ {
+  "capability": "seq with pause, continue and a text editor",
+  "category": "timeline/cueing/show control",
+  "tool": "plugdata (cyclone)",
+  "tool_names": [
+   "seq"
+  ],
+  "what_it_does": "cyclone's seq adds 'pause' and 'continue' messages, opens an editor window on click that shows the sequence as lines of time and raw MIDI bytes, and reads and writes that same text format as .txt files. It lacks Max's 'dump', and still merges all tracks when writing.",
+  "source_urls": [
+   "Documentation/10.cyclone/seq-help.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "seq",
+   "mtr",
+   "detonate"
+  ],
+  "max_check": "seq refpage method list: bang, int, float, addeventdelay, append, clear, delay, dump, hook, print, read, record, start, stop, tick, write. No pause or continue. Attributes: overridetempo, sequencetempo, tempo.",
+  "advice": "Max's seq cannot pause. To pause and resume, run it from an external clock: 'start -1' and feed 'tick' messages (24 per quarter note), then stop and restart the ticks. That is the mechanism cyclone's help file documents for tempo control, and it gives pause for free.",
+  "confidence": "medium",
+  "notes": "That 'start -1' plus tick works this way in Max is taken from cyclone's description of the cloned behaviour and the presence of 'tick' in Max's method list."
+ },
+ {
+  "capability": "mtr: what the clone leaves out shows what Max's mtr can do",
+  "category": "timeline/cueing/show control",
+  "tool": "plugdata (cyclone)",
+  "tool_names": [
+   "mtr"
+  ],
+  "what_it_does": "cyclone's help file lists the Max 7 mtr features it has not implemented: event editing messages (addevent, cleareventat, deleteeventat), playat and playatms, touch recording, definelengthandstop, dictionary and JSON output, and every transport-related attribute (transport, sync, bindto, autostart, autostarttime, quantize), plus length, selection, mode and nextmode.",
+  "source_urls": [
+   "Documentation/10.cyclone/mtr-help.pd"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "mtr"
+  ],
+  "max_check": "mtr refpage attributes: autostart, autostarttime, bindto, embed, length, loop, mode, nextmode, quantize, selection, speed, sync, trackspeed, transport. All the attributes cyclone names are present in Max 9.1.5.",
+  "advice": "Max's mtr is a transport-aware, quantizing, loopable message recorder, not just the simple recorder older patches use it as. Before building a looper for control data, read its refpage: sync, quantize, length and loop cover most of it.",
+  "confidence": "high",
+  "notes": ""
+ }
+]

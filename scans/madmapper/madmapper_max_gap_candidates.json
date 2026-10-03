@@ -1403,5 +1403,882 @@
     "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'autosave': only pattrstorage and plug-in refpages. Max has standalones (userguide topic) and fullscreen windows; quitting or shutting down the computer by message, and crash recovery of a running patch, were not looked up.",
     "confidence": "low",
     "notes": ""
+  },
+  {
+    "capability": "Draw order is the list order, so it is never undefined",
+    "category": "projection mapping",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Surfaces List",
+      "Group",
+      "Mask"
+    ],
+    "what_it_does": "Surfaces are drawn in the order of the list: the first row is in front, the last is at the back. Dragging a row changes the stacking, and there is no way for two surfaces to have an unknown order.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces",
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/surface-groups-and-masks",
+      "https://madmapper.com/files/01-Introduction%20to%20the%20User%20Interface.pdf"
+    ],
+    "max_status": "better-elsewhere",
+    "max_closest": [
+      "layer (attribute of every jit.gl object)",
+      "depth_enable",
+      "jit.gl.layer",
+      "jit.gl.videoplane"
+    ],
+    "max_check": "Read jit.group-gl.maxref.xml (the shared attributes of the jit.gl objects): 'layer' defaults to 0, rendering goes from low to high, and objects in the same layer have no guaranteed order. Read the userguide topic jitter/depth_layer_blend: every object starts in layer 0 so the order is indeterminate, higher layers draw on top, and layering only works when depth testing is off (@depth_enable 0); jit.gl.layer turns depth testing off and blending on by default.",
+    "advice": "Give every overlapping plane its own @layer number and never leave two at 0. Use jit.gl.layer for flat video stacks, since it already has depth testing off. Note the direction: in Max the higher number is in front, the opposite of MadMapper's top-of-list.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Levels multiply down a chain: surface, group, video master, master",
+    "category": "control surface/UI building",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Master",
+      "Video Master",
+      "DMX Master",
+      "Audio Master",
+      "Group",
+      "Opacity"
+    ],
+    "what_it_does": "Each surface has its own opacity. A group has one too, and the surface's value is multiplied by it. Above that sit separate masters for video, DMX, audio and laser, and one master over all of them, each multiplying what is below.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/9.-master-settings",
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/surface-inspector",
+      "https://madmapper.com/files/01-Introduction%20to%20the%20User%20Interface.pdf",
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control/osc-commands-and-channels-list"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "color (attribute of every jit.gl object)",
+      "jit.gl.node"
+    ],
+    "max_check": "Read jit.group-gl.maxref.xml: 'color' is red green blue alpha per object, default 1 1 1 1. Read jit.gl.node's refpage: it groups child objects so they can be rendered and captured to a texture together (@capture 1); it lists no opacity of its own. Nothing in either page multiplies one object's level by a parent's.",
+    "advice": "Patch the chain on purpose: each layer's alpha is its own fader times its group fader times a master, one `*` per level, with the master fader shown in the presentation. To fade a whole group at once, capture it with jit.gl.node @capture 1 and fade the one captured texture.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Blend mode is a named menu on each layer, and a group keeps blending inside itself",
+    "category": "projection mapping",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Blend Mode",
+      "Appearance",
+      "Shadow Groups",
+      "Additive"
+    ],
+    "what_it_does": "Every surface has a blend mode chosen by name next to its opacity. Putting surfaces in a group keeps their blend modes and masks from affecting surfaces outside the group.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/surface-inspector",
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/surface-groups-and-masks",
+      "https://madmapper.com/files/01-Introduction%20to%20the%20User%20Interface.pdf"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "blend",
+      "blend_enable",
+      "blend_mode",
+      "jit.gl.node"
+    ],
+    "max_check": "Read jit.group-gl.maxref.xml: 'blend' takes a name (add, multiply, screen, exclusion, colorblend, alphablend, coloradd, alphaadd), each equal to a 'blend_mode' pair of numbers; 'blend_enable' defaults to 0. The userguide topic jitter/depth_layer_blend says blending is off by default except on jit.gl.layer. jit.gl.node's refpage: children can be captured together to a texture.",
+    "advice": "Write `@blend screen`, not `@blend_mode 4 1`, so the box says what it does, and remember `@blend_enable 1` on anything that is not a jit.gl.layer. To stop a group's blending reaching the layers under it, render the group into jit.gl.node @capture 1 and place the result as one layer.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Crop the source by a rectangle first, then shape the output",
+    "category": "projection mapping",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Input View",
+      "Input Rectangle",
+      "Stage Preview",
+      "Texture coordinates"
+    ],
+    "what_it_does": "Which part of the media a surface shows is set by a rectangle drawn over the source. Where that part lands on the projector is set separately. Changing one never disturbs the other.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/assigning-content-to-surfaces",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/interface-overview",
+      "https://madmapper.com/files/01-Introduction%20to%20the%20User%20Interface.pdf"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.fx.subtexture (Jitter Tools)",
+      "jit.gl.cornerpin",
+      "jit.butter_crop (Butter_tools)"
+    ],
+    "max_check": "Read jit.fx.subtexture's refpage (bundled Jitter Tools package): it references a sub-region of a texture without copying, with 'offset' and 'dim' in pixels. Read jit.gl.cornerpin's refpage: four corner attributes place a texture in the window. Read the Butter_tools README section on jit.butter_crop: a crop rectangle drawn on the picture passing through it; its README says the cropping inside the box has not yet been tried in Max.",
+    "advice": "Keep the two steps as two objects in series: a crop (jit.fx.subtexture, or jit.butter_crop to draw it) feeding a jit.gl.cornerpin or jit.gl.meshwarp. Do not try to crop by pulling the output corners.",
+    "confidence": "high",
+    "notes": "Session 1's candidate on the surface list said Max has no input-crop view; jit.fx.subtexture supplies the crop itself, without a view."
+  },
+  {
+    "capability": "Movie loop behaviour is a named choice: loop, play once and hold, ping-pong, random frames",
+    "category": "video I/O & playback",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Playback Mode",
+      "Movies Inspector",
+      "Loop in",
+      "Loop out",
+      "Speed"
+    ],
+    "what_it_does": "A movie's inspector has transport buttons, a playback mode chosen by name, a speed in percent, and loop in and out points that limit playback to part of the file.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/3.-media/media-bin"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.movie",
+      "jit.playlist"
+    ],
+    "max_check": "Read jit.movie's refpage: 'loop' is an integer whose only described value is the default 1 (start to end); 'loopreport' mentions a palindrome mode; 'looppoints', 'loopstart', 'loopend' and 'rate' cover the in and out points and the speed. Read jit.playlist's refpage: 'loop' is on or off per clip, 'selection' sets a clip's start and end, and any jit.movie attribute can be set per clip with 'setclip'. The refpage does not list what each 'loop' number means, and holding the last frame was not found in it.",
+    "advice": "Do not leave a bare number box on `loop`. Put an `attrui` on it so the mode shows its own name, and label the control with the behaviour (loop, once, back and forth). For random frames, drive the `frame` message from `random`.",
+    "confidence": "medium",
+    "notes": "The meaning of each jit.movie 'loop' value should be confirmed in the help file before writing labels."
+  },
+  {
+    "capability": "One plain codec rule: HAP for scrubbing and many layers, H.264 only for straight playback",
+    "category": "video I/O & playback",
+    "tool": "MadMapper",
+    "tool_names": [
+      "HAP",
+      "HAP Alpha",
+      "HAP Q",
+      "ProRes",
+      "Keyframe Distance",
+      "Use Hardware Acceleration"
+    ],
+    "what_it_does": "The manual says which codec to use for what. HAP is decoded on the graphics card and suits scrubbing, reverse and many layers, but needs a fast drive. H.264 and similar are for forward playback only; if they must be scrubbed, export them with a keyframe on every frame. It also says to add up the data rates of all clips and check the drive can deliver them.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/3.-media/media-formats-and-video-codecs",
+      "https://docs.madmapper.com/madmapper/6/3.-media/media-bin",
+      "https://docs.madmapper.com/madmapper/6/12.-advanced/performance-optimization",
+      "https://madmapper.com/madmapper/faq"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.movie",
+      "jit.playlist",
+      "hap (bundled package)"
+    ],
+    "max_check": "Read the userguide topics jitter/video and jitter/video_engine: both video engines play HAP natively; the video page suggests HAP, or loading the file into memory, for random access and resequencing. The bundled 'hap' package describes itself as a HAP video engine for efficient realtime playback. Max's pages give no keyframe or drive-speed advice.",
+    "advice": "Same rule in Max: transcode to HAP anything that is scrubbed, reversed, retriggered or layered. If a file must stay H.264, export it all-intra. Check the drive's read speed against the sum of the clips playing at once.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "The manual says when hardware decoding breaks audio routing",
+    "category": "video I/O & playback",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Use Hardware Acceleration",
+      "FFMPEG Player",
+      "Audio Routing"
+    ],
+    "what_it_does": "On macOS, hardware decoding of H.264 and HEVC sends the movie's sound to the system's default output and ignores the program's own audio settings. The manual says so and recommends leaving it off when the sound matters.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/3.-media/media-formats-and-video-codecs",
+      "https://docs.madmapper.com/madmapper/6/3.-media/media-bin"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.movie",
+      "jit.movie~ (VIDDLL)",
+      "mc.jit.movie~"
+    ],
+    "max_check": "Read the userguide topic jitter/video: jit.movie plays audio directly through the video engine, not through Max; jit.movie~ brings the audio tracks into MSP, and mc.jit.movie~ gives them as multichannel audio. jit.movie~'s refpage (bundled VIDDLL package): plays a movie and routes its audio into MSP.",
+    "advice": "When a movie's sound has to pass through the patch, for a level, a mute, an effect or a chosen output, use jit.movie~ and not jit.movie. With jit.movie the sound goes out of the computer without ever reaching a cord.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "A movie's sound level can follow its layer's opacity",
+    "category": "video I/O & playback",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Audio Linked To Opacity",
+      "Audio Routing"
+    ],
+    "what_it_does": "A switch on each movie ties its audio level to the opacity of the surface it is on, so fading the picture fades the sound. The FAQ gives this as the way to fade audio between cues.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/3.-media/media-bin",
+      "https://docs.madmapper.com/madmapper/6/15.-troubleshooting",
+      "https://madmapper.com/madmapper/faq"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.movie (vol)",
+      "jit.movie~"
+    ],
+    "max_check": "Read jit.movie's refpage: 'vol' is the movie sound volume. No attribute links it to any drawing object's colour or alpha.",
+    "advice": "Send one fader to both places: the layer's alpha and the movie's `vol` (or a `live.gain~` after jit.movie~). A video crossfade that leaves the old clip's sound at full level is the usual result of forgetting this.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "A folder of numbered stills plays as a movie, with frame rate, cache and auto scan",
+    "category": "video I/O & playback",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Images Folders",
+      "Image Folder Inspector",
+      "Cache Size",
+      "Auto Scan",
+      "Sizing Mode"
+    ],
+    "what_it_does": "A folder of numbered images is one media item that plays like a movie. It has its own frames per second, a setting for how many frames to preload, the same loop modes as movies, and it picks up files added to the folder while running.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/3.-media/media-bin",
+      "https://docs.madmapper.com/madmapper/6/3.-media/media-formats-and-video-codecs",
+      "https://madmapper.com/files/01-Introduction%20to%20the%20User%20Interface.pdf"
+    ],
+    "max_status": "better-elsewhere",
+    "max_closest": [
+      "jit.gl.textureset (Jitter Tools)",
+      "jit.matrixset",
+      "jit.movie"
+    ],
+    "max_check": "Read jit.gl.textureset's refpage (bundled Jitter Tools package): it keeps a set of textures for storage and resequencing, written by 'index' and read with 'outputtexture', the texture version of jit.matrixset. jit.movie's refpage has nothing about image sequences. No object that takes a folder and plays it was found; a folder-watching object was not searched for.",
+    "advice": "For a short sequence, load the frames into jit.gl.textureset once and step through them with a counter at the wanted rate. For a long one, turn the stills into a HAP movie first; that is less patching and plays better.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Shader drawn once at a set size, or drawn per surface at output resolution: the user chooses",
+    "category": "GPU compute/shaders",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Generators",
+      "Materials",
+      "Render To Texture",
+      "Resolution"
+    ],
+    "what_it_does": "The same shader can run two ways. As a Generator it is rendered once into a texture of a size you type in, and every surface using it shares that picture. As a Material it is rendered again on each surface, at the projector's resolution, which is sharper and costs more. Dragging a Material into the Generators list switches it.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/3.-media/media-bin",
+      "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/MaterialsDoc.md",
+      "https://madmapper.com/files/01-Introduction%20to%20the%20User%20Interface.pdf"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.gl.slab",
+      "jit.gl.pix",
+      "jit.gl.shader"
+    ],
+    "max_check": "Read jit.gl.slab's refpage: it renders a shader into a texture; 'adapt' (default 1) takes the size from the input, and 'dim' (default 256 256) is used when adapt is off; 'dimscale' scales the output. Read jit.gl.shader's refpage: it compiles a shader and binds it to an object, so it is drawn with that object's geometry. jit.gl.pix's refpage calls it essentially a jit.gl.slab whose shader comes from a Gen patcher.",
+    "advice": "Make the choice on purpose. Give a shader that has no input an explicit size, `@adapt 0 @dim <w> <h>`: the refpage only defines the output size for that case, and its default is 256 x 256. Use the slab (one render, shared by every plane) for heavy shaders shown in several places, and jit.gl.shader on the plane itself when one surface must stay sharp at any size.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Changing a layer's media crossfades; changing its effect cannot",
+    "category": "video I/O & playback",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Fade Time",
+      "FX",
+      "Visual"
+    ],
+    "what_it_does": "When a cue with a fade time swaps the media on a surface, MadMapper draws the surface twice during the fade, old media and new, at changing opacity. It does not do this for effects: a different effect just switches, and the FAQ says to use two surfaces to fade between effects.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/15.-troubleshooting",
+      "https://madmapper.com/madmapper/faq"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.fx.tr.xfade (Jitter Tools)",
+      "jit.xfade",
+      "jit.playlist"
+    ],
+    "max_check": "Read jit.fx.tr.xfade's refpage (bundled Jitter Tools package): a crossfade between two textures set by 'xfade', 0 to 1. The same folder holds other transitions (jit.fx.tr.dissolve, slide, gridwipe, zoomfade and more). jit.xfade's registry digest: crossfade between two matrices. jit.playlist's refpage shows no crossfade between clips.",
+    "advice": "Build clip changes as A/B: two players into jit.fx.tr.xfade, a `line` on `xfade`, and load the next clip into whichever side is at zero. Fading between two effect chains works the same way in Max, which MadMapper cannot do on one surface.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "A warp grid with masks, undo and its own save file (Max has one: jit.gl.meshwarp)",
+    "category": "projection mapping",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Mesh Warping",
+      "Bezier",
+      "Add Warping Point",
+      "Link Input and Output Mesh",
+      "Feathering"
+    ],
+    "what_it_does": "A surface can be given a grid of warp points. Points are added one at a time or by subdivision, each can have Bézier handles, masks can be drawn on the same surface, and by default the input mesh follows the output mesh so the picture is not stretched.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/warping-and-geometry",
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/surface-inspector",
+      "https://madmapper.com/files/05-Mesh%20Warping.pdf"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.gl.meshwarp (Jitter Tools)",
+      "jit.gl.cornerpin"
+    ],
+    "max_check": "Read jit.gl.meshwarp's refpage in the bundled Jitter Tools package (it is not in the main obj-qlookup.json, which is why session 1's search for 'warp' found no object): a draggable mesh set by 'meshdim', curvature through 'nurbs_order' / 'curvature', a 'mask_mode' for drawing masks with 'invert_mask' and 'apply_mask', 'save' and 'read' of the whole state as a JSON file, undo and redo, 'layer', and 'output_texture'. It lists no free-placed points, per-point Bézier handles, linked input mesh or feathering.",
+    "advice": "Reach for jit.gl.meshwarp before building a warp editor. Save its state with `save` to a JSON file beside the patch and `read` it at load: a warp is calibration for one room, so it belongs in its own file, not in the piece's presets.",
+    "confidence": "high",
+    "notes": "Corrects session 1's candidate 'Mesh warping with free points, Bézier handles and a linked input mesh', whose Max check did not find this object."
+  },
+  {
+    "capability": "The mapping stage is kept apart from the content and locked for the show",
+    "category": "projection mapping",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Publish Internal Loopback",
+      "Video Buffer",
+      "Lock",
+      "Lock Surfaces Movement",
+      "Loopbacks"
+    ],
+    "what_it_does": "The manual's advice for anything beyond one projector: compose the content on an off-screen buffer, publish it as a loopback, and map that one source onto the projectors. Cues then change the content and never touch the projector mapping. Surfaces and outputs can be locked against accidental edits.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/6.-outputs/loopback-and-advanced-output-techniques",
+      "https://docs.madmapper.com/madmapper/6/6.-outputs",
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/interface-overview"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.world (output_texture, enable_cornerpin)",
+      "jit.gl.cornerpin (enable_mouse, drawcorners)",
+      "jit.gl.meshwarp (show_ui)",
+      "jit.gl.node"
+    ],
+    "max_check": "Read jit.world's refpage: 'output_texture' captures the scene to a texture and 'enable_cornerpin' shows an internal cornerpin. Read jit.gl.cornerpin's refpage: 'enable_mouse' and 'drawcorners' turn the handles off. jit.gl.meshwarp's refpage has 'show_ui'. The repo's own table (CLAUDE.md, Preferred Objects) already recommends a first jit.world captured to a texture and a second stage that maps it.",
+    "advice": "Build two stages: everything creative renders into one texture, and a separate mapping stage places that texture. Give the mapping stage one 'calibrate' toggle that sets `enable_mouse` and `drawcorners` (or `show_ui`), off by default, so a stray click during the show cannot move a corner.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Corner and warp points can be moved from the keyboard",
+    "category": "projection mapping",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Tab",
+      "Arrow Keys",
+      "Shift + Arrow Keys",
+      "Handle"
+    ],
+    "what_it_does": "Tab steps to the next corner handle. The arrow keys move the selected point by one pixel, and by ten with Shift. The manual says the mouse is too coarse for the last few pixels of an alignment.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/warping-and-geometry",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/interface-overview",
+      "https://madmapper.com/files/02-My%20First%20Video%20Mapping.pdf"
+    ],
+    "max_status": "better-elsewhere",
+    "max_closest": [
+      "jit.gl.cornerpin",
+      "jit.gl.meshwarp (Jitter Tools)",
+      "key"
+    ],
+    "max_check": "Read jit.gl.cornerpin's refpage: corners move by mouse in the window or by setting 'upper_left', 'upper_right', 'lower_left', 'lower_right'; it lists no keyboard control. jit.gl.meshwarp's refpage lists keyboard shortcuts for undo and redo only. key's refpage: reports key presses, no inlets.",
+    "advice": "Add a small nudge patch to any cornerpin: `key` picks the corner (or Tab cycles), the arrows add or subtract one pixel's worth (1 / window width) to that corner's attribute, Shift makes it ten. It is a handful of objects and saves real time in front of a projector.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Each output knows its display; fullscreen is one switch for all of them",
+    "category": "deployment",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Destination",
+      "Output Size",
+      "Full Screen Mode",
+      "Desktop Mode",
+      "Desktop Window",
+      "Fullscreen video mode"
+    ],
+    "what_it_does": "An output has a Destination menu naming a real display, a size that can be copied from that display, and its own Desktop Window button. One command sends every output fullscreen on its display and another brings them back. The project can be set to open fullscreen. The FAQ lists the system settings that break this: mirrored displays, and a maximised interface window on macOS.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/6.-outputs",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/keyboard-shortcuts",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences",
+      "https://madmapper.com/madmapper/faq",
+      "https://madmapper.com/files/02-My%20First%20Video%20Mapping.pdf"
+    ],
+    "max_status": "better-elsewhere",
+    "max_closest": [
+      "jit.world (fullscreen, fsmenubar, esc_fullscreen, rect, windowposition)",
+      "jit.window",
+      "jit.displays"
+    ],
+    "max_check": "Read jit.world's and jit.window's refpages: 'fullscreen', 'fsmenubar', 'rect', 'windowposition' / 'pos', 'size', 'border' and 'floating' are separate attributes; neither has an attribute that names a display. Read jit.displays' refpage: 'count' and 'coords <index>' report each display's rectangle, and on Mac it can mirror and unmirror. Which display a fullscreen window lands on is not stated in the refpages.",
+    "advice": "Do in the patch what MadMapper does in its menu: at load, ask jit.displays for the projector display's coords, move the window there with `rect`, then set `fullscreen 1`, all from one 'show' toggle that drives every jit.world. Check for mirroring first and tell the operator if it is on.",
+    "confidence": "medium",
+    "notes": "That a Max window goes fullscreen on the display it sits on is the common practice, but it was not confirmed in a refpage here."
+  },
+  {
+    "capability": "Each output has a frame delay to line up slow and fast projectors",
+    "category": "video I/O & playback",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Delay",
+      "Frame Delay"
+    ],
+    "what_it_does": "Every video output has a delay, counted in frames, so a fast display can be held back to match a slower projector in the same setup.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/6.-outputs"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.fx.delay (Jitter Tools)"
+    ],
+    "max_check": "Read jit.fx.delay's refpage (bundled Jitter Tools package): delays a texture by 'delay' frames, up to 'max_delay' (default 30), with 'interp' (default 1) blending between the current and the delayed frame.",
+    "advice": "Put jit.fx.delay on the texture going to the faster display and set `@interp 0` so frames are delayed, not blended. One object per output, placed in the mapping stage.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "The engine's frame rate is a project setting",
+    "category": "rendering/3D",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Engine FPS",
+      "Auto",
+      "Manual"
+    ],
+    "what_it_does": "The frame rate of the whole engine is either left on Auto, following the display, or set to a fixed number in the project's preferences. The FAQ uses it to limit the rate of an NDI output.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences",
+      "https://madmapper.com/madmapper/faq"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.world (fps, interval, displaylink, sync)"
+    ],
+    "max_check": "Read jit.world's refpage: 'fps' and 'interval' only take effect when 'enable' is 1 and 'displaylink' is 0; 'displaylink' (default 1, Mac only) ties drawing to the display's refresh; 'sync' is vertical sync; 'running_fps' reports the real rate.",
+    "advice": "On a Mac, `@fps` does nothing until `@displaylink 0` is also set. Decide per patch whether the display or a number sets the rate, write both attributes on the jit.world, and show `running_fps` somewhere the operator can see.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "One master speed and one freeze act on everything that moves",
+    "category": "timeline/cueing/show control",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Master Speed",
+      "Freeze Engine",
+      "Freeze Video Output",
+      "engine_speed",
+      "CLOCK_TIME"
+    ],
+    "what_it_does": "Master Settings has a speed that scales every animated thing at once, shaders and audio included, a Freeze Engine that stops it all, and a Freeze Video Output that holds the picture while playback carries on underneath. Shaders that must ignore the speed read wall-clock time instead.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/9.-master-settings",
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control/osc-commands-and-channels-list",
+      "https://madmapper.com/files/01-Introduction%20to%20the%20User%20Interface.pdf",
+      "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/MaterialsDoc.md"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.mo.time (jit.mo)",
+      "transport",
+      "jit.world (enable)"
+    ],
+    "max_check": "Read jit.mo.time's refpage (bundled jit.mo package): outputs accumulated time, frame delta or a function, in step with jit.world, with a 'speed' multiplier and an 'interval' in Max time format. transport's refpage: one tempo for everything tempo-relative. jit.world's 'enable' stops all rendering. Nothing found scales every animation in a patch at once.",
+    "advice": "Give a patch one time source: a single jit.mo.time (or the transport) whose output every shader and animation reads, with one speed control in front of it. Then 'slow everything down' and 'freeze' are one control each instead of a hunt through the patch.",
+    "confidence": "medium",
+    "notes": "How to hold the last rendered frame in Max while the scene keeps running was not looked up."
+  },
+  {
+    "capability": "Global tempo has a source menu: audio beat detection, Ableton Link, MIDI clock, manual and tap",
+    "category": "networking/sync",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Global BPM",
+      "BPM Source",
+      "Audio Beat Detection",
+      "Ableton Link",
+      "MIDI Clock",
+      "TAP",
+      "Resync"
+    ],
+    "what_it_does": "One tempo drives everything tempo-aware. Its source is picked from a menu: detected from the audio input, Ableton Link, MIDI clock, or typed and tapped by hand. There is a Resync button. The FAQ notes that animations stop when the tempo is zero or its source is disconnected.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/9.-master-settings/audio-input-and-beat-detection",
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control/osc-commands-and-channels-list",
+      "https://docs.madmapper.com/madmapper/6/15.-troubleshooting",
+      "https://madmapper.com/madmapper/faq"
+    ],
+    "max_status": "better-elsewhere",
+    "max_closest": [
+      "transport (tempo, clocksource, getclocksources)",
+      "link.session / link.beat / link.phasor~ (Link package)",
+      "pnp.bpm~ (PnP.Maxtools)",
+      "metro (quantize)"
+    ],
+    "max_check": "Read transport's refpage: 'tempo', and 'clocksource' with a 'getclocksources' message that lists the active sources at run time; the page does not name them. The installed Link package has link.session (start, stop and tempo of the shared session), link.beat and link.phasor~ refpages, and an extensions folder holding link.clocksource. The package library lists pnp.bpm~ as a tempo estimator. No tap-tempo object was found.",
+    "advice": "Keep one `transport` as the only tempo in the patch and feed it from a single selector (a `umenu` of sources). Read `getclocksources` to see what this machine offers. Show the tempo and warn when it is 0, because everything written in note values stops with it.",
+    "confidence": "medium",
+    "notes": "Settles part of session 1's open question: transport's sources are reported by getclocksources, and Link ships a clock source extension. The source names were not read, since that needs Max running."
+  },
+  {
+    "capability": "Audio analysis arrives as a few named channels: amplitude, bass, medium, treble, beat counts",
+    "category": "audio",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Audio Analysis Channels",
+      "amplitude",
+      "bass",
+      "medium",
+      "treble",
+      "bpm",
+      "beatCount",
+      "4_beats"
+    ],
+    "what_it_does": "The audio input is analysed once, on channels chosen in the preferences, and offered everywhere as named values. Any slider can be tied to one from its right-click menu.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/9.-master-settings/audio-input-and-beat-detection",
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "peakamp~",
+      "fffb~",
+      "snapshot~",
+      "slide"
+    ],
+    "max_check": "Read the refpages: peakamp~ reports a signal's peak amplitude; fffb~ is a fixed bank of bandpass filters with one outlet per band; snapshot~ turns a signal into numbers at an interval; slide smooths a stream of values. Max has far more analysis than MadMapper, but nothing arrives pre-named.",
+    "advice": "Build the analysis once, in one place: input, a three-band split, an envelope per band, then `s AMP`, `s BASS`, `s MID`, `s TREBLE`. Every visual reads those names. Analysing the same input separately beside each effect is the usual Max mistake this avoids.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Two ways in for every parameter: a direct address for the raw value, a mapped Control for range, filter and curve",
+    "category": "networking/sync",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Copy OSC Address",
+      "Controls",
+      "Source Range",
+      "Target Range",
+      "Filter",
+      "OSC Query"
+    ],
+    "what_it_does": "Every parameter has a fixed OSC address built from the names of things in the project, such as /surfaces/Quad-1/opacity. A value sent there is applied as it is. A Control mapped to the same parameter adds a source range, a target range, a filter and a curve. Renaming a surface changes its address.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control/osc-commands-and-channels-list",
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "param.osc",
+      "Parameter OSC addresses (userguide topic 'OSC')",
+      "Mappings (userguide topic 'mapping')"
+    ],
+    "max_check": "Read the userguide topic OSC: with OSC enabled, parameter-enabled objects get addresses of the form /<patcher name>/param/<parameter name>, with /raw and /normalized under each; OSCQuery can be switched on in the preferences. Read param.osc's refpage: 'info' and 'allparams' output every parameter's details and values as OSC. Wildcards in addresses, which MadMapper accepts, are not mentioned in either.",
+    "advice": "Treat patcher names and parameter names as a public interface: choose them before giving addresses to anyone, because a rename breaks every remote. Send 0 to 1 to /normalized from generic controllers and real units to /raw from show control. In a hand-built patch, give a parameter the same two entries: a plain set, and a scaled and smoothed one.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Controllers get the current values sent back",
+    "category": "control surface/UI building",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Feedback Device",
+      "Feedback Port",
+      "Feedback IP",
+      "handle feedback"
+    ],
+    "what_it_does": "Each MIDI input can be paired with a feedback device, and OSC has a feedback port and address. When a value changes inside MadMapper, motor faders, button lights and tablet layouts are updated to match.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences",
+      "https://madmapper.com/files/09-Modules.pdf"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "Mappings (userguide topic 'mapping')",
+      "param.osc (auto, set)",
+      "udpsend"
+    ],
+    "max_check": "Read the userguide topic mapping: if Map is enabled for a MIDI output port, every MIDI-mapped interface object sends its control change or note to that port with no midiout object. Read param.osc's refpage: 'auto' reports parameter changes as OSC, and 'set' dispatches incoming OSC to parameters without triggering output. udpsend's refpage: sends messages and OSC packets to a host and port.",
+    "advice": "Turn on Map for the controller's output port in MIDI Setup; that is the whole of MIDI feedback. For a tablet, `param.osc @auto 1` into `udpsend`, and bring incoming values in through its `set` message so they are not echoed straight back.",
+    "confidence": "high",
+    "notes": "Max is level with MadMapper here; the Max feature is easy to miss because it lives in the MIDI Setup window."
+  },
+  {
+    "capability": "A preset shows when the live values no longer match what it stored",
+    "category": "timeline/cueing/show control",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Update Scene",
+      "Update Cue",
+      "Update from current values",
+      "Record",
+      "Edit"
+    ],
+    "what_it_does": "After a cue is recalled and then changed by hand, the changed controls are outlined, so the operator can see the cue is no longer what is on stage. One command writes the live values back into the cue, and several cues can be updated at once.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/10.-timelines/scenes-and-cues",
+      "https://madmapper.com/files/06-Scenes%20and%20Cues.pdf"
+    ],
+    "max_status": "better-elsewhere",
+    "max_closest": [
+      "pattrstorage (getedited, getcurrent, storeagain, lock)"
+    ],
+    "max_check": "Read pattrstorage's refpage: 'getedited' reports 1 when the data of the current preset has been edited, 'getcurrent' reports the active preset, 'storeagain' stores into the last-used slot, and 'lock' protects a slot from being overwritten. Nothing marks which control changed.",
+    "advice": "Poll `getedited` after any change and light one indicator beside the preset control; put an 'Update' button on `storeagain`. Lock finished presets so a stray store cannot overwrite them.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Presets leave playing media alone unless told to restart it",
+    "category": "timeline/cueing/show control",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Scenes",
+      "Cues",
+      "Cue Inspector",
+      "Replay"
+    ],
+    "what_it_does": "A Scene stores everything and so tends to restart media when recalled; the manual warns about this and steers operators to Cues, which store only chosen parameters. The FAQ's fix for audio that restarts on a cue is to untick the player's Replay value inside that cue.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/10.-timelines/scenes-and-cues",
+      "https://docs.madmapper.com/madmapper/6/15.-troubleshooting",
+      "https://madmapper.com/madmapper/faq"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "pattrstorage (active, subscribemode, subscribe, priority)"
+    ],
+    "max_check": "Read pattrstorage's refpage: 'active <client> 0' leaves a client out of every recall; 'subscribemode' with 'subscribe' makes the object manage only a listed set of clients; 'priority' sets the order clients are restored in.",
+    "advice": "Decide which controls are state and which are actions. Leave play, restart and file-load controls out of pattrstorage (`active <name> 0`, or `@subscribemode 1` with an explicit list), or every preset recall will restart the clips. Use one pattrstorage per concern (looks, media, mix) the way MadMapper uses one row per concern.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "A project is a folder, and one command collects every outside file into it",
+    "category": "workflow/authoring",
+    "tool": "MadMapper",
+    "tool_names": [
+      ".madproject",
+      "Collect External Resources...",
+      "Export Project To",
+      "Resources Folder"
+    ],
+    "what_it_does": "A project is a folder holding the project files, auto-saves and a resources folder. Collect External Resources copies every referenced movie, sound and image into it, so the folder can be moved to the show computer or archived whole.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-project-file-structure",
+      "https://docs.madmapper.com/madmapper/6/12.-advanced/project-backup-and-recovery"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "Projects (userguide topic 'projects')"
+    ],
+    "max_check": "Read the userguide topic projects: a Max Project collects patchers, media, code and externals, is saved automatically, and puts its own files ahead of the global search path. Manage Project offers Consolidate (copy all dependencies into the project folder) and Archive (one .maxzip file). Whether a media file named only inside a message box counts as a dependency was not checked.",
+    "advice": "For anything that will run on another machine, save it as a Project and Consolidate before moving it. Keep media in the project folder and load it by file name, not by an absolute path, so the copy still finds it.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Settings are split in two: this computer, and this project",
+    "category": "workflow/authoring",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Application",
+      "Project",
+      "Preferences"
+    ],
+    "what_it_does": "Preferences have two tabs. Application holds what belongs to the machine: audio device, capture devices, graphics options. Project holds what belongs to the piece and travels with it: MIDI devices, OSC ports, DMX routing, engine frame rate, whether to open fullscreen.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "Max preferences",
+      "patcher inspector",
+      "pattrstorage",
+      "dict"
+    ],
+    "max_check": "Read the userguide topic OSC: the UDP server is switched on either for the whole application in the preferences or for one patcher in the patcher inspector. The video_engine topic: the video engine is an application preference that an object can override with @engine. The mapping topic: mappings belong to a patcher. So Max has both levels, but a patch's own machine choices (which display, which port, which camera) have no set home.",
+    "advice": "Keep machine-specific choices out of the piece's presets. Put display index, audio device, MIDI port names and camera names in one small config file (a `dict` read at load) so that moving to another computer means editing one file, and the presets stay about the piece.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Saving during a show is treated as a risk: a countdown, a pause button, and rotating backups",
+    "category": "workflow/authoring",
+    "tool": "MadMapper",
+    "tool_names": [
+      "AutoSave",
+      "Max Backup Count",
+      "Project Backup",
+      "Crash Recovery"
+    ],
+    "what_it_does": "AutoSave writes recovery files, never over the project itself, and shows a ten-second countdown first so a performer can cancel it; the manual gives a drop in frame rate during the save as one reason. A toolbar button pauses it until quit. Each manual save keeps the previous version, up to a set number.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/12.-advanced/project-backup-and-recovery",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/interface-overview"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "pattrstorage (savemode, backupmode)",
+      "Projects",
+      "Max crash recovery (preference)"
+    ],
+    "max_check": "Read pattrstorage's refpage: 'savemode' chooses between prompting and saving the preset file automatically when the patcher is saved or freed; 'backupmode' keeps a set number of rotating backup files. The userguide says projects are saved automatically, and a page on messages to Max mentions crash recovery as a Max preference.",
+    "advice": "Set `@backupmode` on pattrstorage so a bad store during rehearsal can be undone from the previous file. Do not write files while performing: trigger preset saves from an explicit button used between pieces, not from a timer.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Sources that are not on screen stop working unless marked 'keep running'",
+    "category": "video I/O & playback",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Keep running (uses more CPU)",
+      "Preview",
+      "Low Bandw."
+    ],
+    "what_it_does": "A network video source is only processed while a visible surface uses it; a tick box keeps it running in the background for instant availability, and is labelled as costing more. The media preview and the two editing views can be switched off to save rendering.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control",
+      "https://docs.madmapper.com/madmapper/6/3.-media/media-bin",
+      "https://madmapper.com/files/01-Introduction%20to%20the%20User%20Interface.pdf"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.movie (start, stop)",
+      "jit.grab (open, close)",
+      "enable (jit.gl objects and jit.fx objects)",
+      "jit.pwindow"
+    ],
+    "max_check": "Read the refpages: jit.movie has 'start' and 'stop'; jit.grab has 'open' and 'close'; the shared jit.gl attribute 'enable' turns an object's drawing off; the jit.fx objects have 'enable' and 'bypass'. Nothing stops a source by itself when its layer becomes invisible.",
+    "advice": "When a layer's opacity reaches 0, also stop what feeds it: `stop` the movie, `enable 0` on its effects. Where an instant return matters more than the cost, leave it running and say so in a comment. Give every preview a toggle; a preview is a second render.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Hover help: a status line explains whatever is under the mouse",
+    "category": "control surface/UI building",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Tooltip"
+    ],
+    "what_it_does": "A line at the bottom of the window describes the control the mouse is over, for every control in the program.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/interface-overview",
+      "https://madmapper.com/files/01-Introduction%20to%20the%20User%20Interface.pdf"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "annotation",
+      "hint"
+    ],
+    "max_check": "Read the userguide topic objects, section Annotations and Hints: @annotation sets the text the Clue bar shows when hovering over an object, and @hint adds a pop-up that appears only when the patcher is locked.",
+    "advice": "Give every presentation control a `hint`. It costs one attribute per control and is the only documentation an operator sees in the middle of a show.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "An LFO is a ready-made module: shape, free or tempo-synced, speed, phase, range, and a bank of ten with spread",
+    "category": "timeline/cueing/show control",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Oscillator",
+      "Oscillator 2D",
+      "Oscillator Bank",
+      "Signal",
+      "Timing",
+      "Phase",
+      "Offset"
+    ],
+    "what_it_does": "An Oscillator module outputs a value between 0 and 1 with a chosen wave shape, running at a set speed or locked to the tempo, with phase and range. The 2D version gives two related values; the Bank gives ten whose phases are spread by one Offset control. Any parameter can take one as its control.",
+    "source_urls": [
+      "https://madmapper.com/files/09-Modules.pdf",
+      "https://docs.madmapper.com/madmapper/6/8.-modules"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.mo.time (jit.mo)",
+      "jit.mo.func (jit.mo)"
+    ],
+    "max_check": "Read jit.mo.time's refpage (bundled jit.mo package): in 'mode function' it outputs line, sin, saw or perlin values in step with the render context, with 'freq', 'phase', 'speed', 'scale', 'offset', and an 'interval' in Max time format so it can be tempo-relative. Read jit.mo.func's refpage: the same functions spread across the cells of a matrix, with 'freq' and 'phase', which gives many phase-offset values at once.",
+    "advice": "For values that drive visuals, use jit.mo.time @mode function; it ticks with the render, so there is no metro to keep in step. Its `interval` takes Max time values, so a note value locks it to the transport's tempo. For a spread of related values, read them from one jit.mo.func matrix.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Mixing two control sources on one parameter is done by a module that says how",
+    "category": "control surface/UI building",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Controls Combiner",
+      "Macro Module"
+    ],
+    "what_it_does": "A parameter takes one Control per kind of source. To let several inputs act on it, a Controls Combiner module mixes them using a chosen combination mode. A Macro module does the reverse: one widget that many Controls point at.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/8.-modules",
+      "https://docs.madmapper.com/madmapper/6/15.-troubleshooting",
+      "https://madmapper.com/madmapper/faq"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "maximum",
+      "* (times)",
+      "+ (plus)"
+    ],
+    "max_check": "Read maximum's refpage: outputs the greater of the incoming value and its stored one. In Max several message cords into one inlet do not combine: each message simply replaces the last (the repo's CLAUDE.md notes that only signal cords sum). So Max allows any number of sources, which MadMapper does not, but states no rule for how they meet.",
+    "advice": "When two things drive one parameter, an LFO and a fader, audio and a preset, put the rule in the patch as a visible object: `maximum`, `*` or `+`. Two cords into one inlet is 'last one wins', and it looks deliberate when it is not.",
+    "confidence": "medium",
+    "notes": "The combination modes the Controls Combiner offers are not listed in the documents read."
+  },
+  {
+    "capability": "Two clips kept frame-locked by putting them side by side in one file",
+    "category": "video I/O & playback",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Input Rectangle",
+      "Synchronize two videos"
+    ],
+    "what_it_does": "The documented way to keep two videos in step is to make one wide file with both side by side, then let two surfaces each crop their half. One decoder cannot drift from itself.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/15.-troubleshooting",
+      "https://madmapper.com/madmapper/faq"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.movie",
+      "jit.fx.subtexture (Jitter Tools)"
+    ],
+    "max_check": "Read jit.fx.subtexture's refpage: a sub-region of a texture by 'offset' and 'dim', without copying. jit.movie's refpage offers 'time' and 'frame' for seeking but nothing that slaves one movie to another.",
+    "advice": "For clips that must stay in step, including one picture split across projectors, play one wide movie and cut it with jit.fx.subtexture. Do not start two jit.movie objects together and hope.",
+    "confidence": "medium",
+    "notes": "Not tested in Max; the reasoning is MadMapper's, applied to Max objects whose refpages were read."
+  },
+  {
+    "capability": "Game controllers arrive with named buttons, sticks and triggers",
+    "category": "sensors/tracking/ML",
+    "tool": "MadMapper",
+    "tool_names": [
+      "Gamepad",
+      "Left Stick X/Y",
+      "Triggers",
+      "D-Pad"
+    ],
+    "what_it_does": "PlayStation and Xbox controllers and generic USB HID devices are control sources. Their inputs are offered by name, and each mapping has the same range, filter, curve and toggle settings as any other Control.",
+    "source_urls": [
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "gamepad",
+      "hi"
+    ],
+    "max_check": "Read gamepad's refpage: reports button, joystick, trigger and sensor events from all connected controllers through the SDL library's mapped names, can load extra controller mappings, and sends rumble and LED colour back with 'senddevice'. The registry digest for hi calls it legacy.",
+    "advice": "Use `gamepad`, not `hi`, for controllers: the inputs come out already named, and it can drive rumble and the light bar, which MadMapper's page does not offer.",
+    "confidence": "high",
+    "notes": "Max is at least level here."
   }
 ]

@@ -1620,5 +1620,1411 @@
   "max_check": "Searched refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for affinity, multi-gpu: no match. Not looked for in OS-level settings.",
   "confidence": "low",
   "notes": ""
+ },
+ {
+  "capability": "OSC input that names itself",
+  "category": "networking/sync",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "OSC In CHOP",
+   "OSC In DAT"
+  ],
+  "what_it_does": "Each incoming OSC address becomes a named channel with no routing step. A scope pattern keeps or drops addresses and a setting strips leading address segments. A second operator logs every message as a table row, with type tags and bundle timestamps, and can run a callback per message.",
+  "source_urls": [
+   "https://docs.derivative.ca/OSC_In_CHOP",
+   "https://docs.derivative.ca/OSC_In_DAT",
+   "https://docs.derivative.ca/OSC",
+   "https://docs.derivative.ca/IOS_and_OSC",
+   "https://docs.derivative.ca/TouchOSC"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "udpreceive",
+   "route",
+   "o.route (odot package)",
+   "osc.codebox",
+   "param.osc"
+  ],
+  "max_check": "udpreceive refpage: attributes defer, outputformat (message, osc_packet, fullpacket, rawbytes) and quiet; it has no address filter, so routing is a second object. route refpage: matches the first element of a message, one outlet per argument. Userguide topic 'OpenSoundControl (OSC)': in Max 9 every parameter-mode object gets an address of the form /<patcher>/param/<name>/<attribute> through a built-in UDP server or param.osc, osc.codebox shows a packet as a dictionary, and OSCQuery can describe the patch. Package library: o.route (odot) is the current address router and OSC-route is marked deprecated.",
+  "advice": "For control coming in from an app, use parameter-mode UI objects with Max's built-in OSC (or param.osc) so addresses come from parameter names and no route chain is needed. When routing by hand, put an osc.codebox beside udpreceive as the message monitor.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "OSC output that sends only what changed",
+  "category": "networking/sync",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "OSC Out CHOP",
+   "OSC Out DAT"
+  ],
+  "what_it_does": "Channels are sent under their own names. One toggle chooses between sending every channel on every frame and sending only the channels whose value changed. The script version sends a list of messages as one bundle, and the number format (int, float, double) is a menu.",
+  "source_urls": [
+   "https://docs.derivative.ca/OSC_Out_CHOP",
+   "https://docs.derivative.ca/OSC_Out_DAT"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "udpsend",
+   "param.osc",
+   "osc.packet",
+   "change"
+  ],
+  "max_check": "udpsend refpage: messages host, port, maxpacketsize, maxqueuesize, FullPacket, osc_packet, rawbytes; it sends whatever message arrives. param.osc refpage: attribute auto reports parameter changes, outputmode chooses what is sent. change refpage: passes a number only when it differs from the stored one. Userguide OSC topic: a FullPacket message is transient and must not be stored in a message box or zl.reg.",
+  "advice": "Put change before udpsend (or use param.osc @auto 1) so a stream of repeated values does not flood the network. Never park a FullPacket in a message box or zl.reg.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "A device map between controller numbers and the patch",
+  "category": "control surface/UI building",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "MIDI Mapper Dialog",
+   "MIDI In Map CHOP",
+   "MIDI In CHOP"
+  ],
+  "what_it_does": "A per-device table names sliders s1, s2… and buttons b1, b2… and records which MIDI message each one is. Maps ship for known controllers and users can add their own. A patch reads s1 or b3, so changing controller means editing the map and not the patch. The page says there is no auto-learn.",
+  "source_urls": [
+   "https://docs.derivative.ca/MIDI_Mapper_Dialog",
+   "https://docs.derivative.ca/MIDI_In_Map_CHOP",
+   "https://docs.derivative.ca/MIDI_In_CHOP",
+   "https://docs.derivative.ca/MIDI"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "Mapping (MIDI and key learn)",
+   "ctlin",
+   "midiinfo"
+  ],
+  "max_check": "Userguide topic 'Mapping': MIDI and key learn straight onto parameter-mode UI objects, stored per patcher, not available in Max for Live; a Map column in MIDI Setup chooses which ports take part, and mapped objects can send their value back out. ctlin refpage: controller number and channel are typed as arguments. Userguide 'MIDI': ports get a letter abbreviation and a channel offset in MIDI Setup.",
+  "advice": "Max is ahead on learn, TouchDesigner on the indirection. Use Mapping for a one-off rig. For a patch that must survive a controller swap, keep every controller number in one place (one subpatcher of ctlin objects feeding named s buses, or a dict) and never scatter ctlin arguments through the patch.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "14-bit controller pairs joined into one value",
+  "category": "control surface/UI building",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "MIDI In DAT",
+   "MIDI Event DAT"
+  ],
+  "what_it_does": "The MIDI input log can join a coarse controller (numbers 0–31) and its fine partner (the same number plus 32) into one 14-bit value. The page states what happens when one half is missing. The event log keeps the two messages separate, with operating-system timestamps in milliseconds.",
+  "source_urls": [
+   "https://docs.derivative.ca/MIDI_In_DAT",
+   "https://docs.derivative.ca/MIDI_Event_DAT"
+  ],
+  "max_status": "unsure",
+  "max_closest": [
+   "ctlin",
+   "midiparse",
+   "xbendin"
+  ],
+  "max_check": "midiparse refpage: the hires attribute is 'High-resolution Pitch Bend' only. xbendin refpage: 14-bit pitch bend. ctlin refpage: no 14-bit option. No object in obj-qlookup.json is named for controller pairs. Package search for '14-bit' and '14 bit' returned only an unrelated MPE object. Not checked: Max help patches.",
+  "advice": "If a controller sends high-resolution CCs, pair CC n with CC n+32 in a few lines of v8 (coarse × 128 + fine, output when the fine half arrives). A small Butter utility would save doing it per patch.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Latest-source-wins merge with pickup",
+  "category": "control surface/UI building",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Bind CHOP",
+   "Override CHOP"
+  ],
+  "what_it_does": "Several sources (a MIDI fader, an OSC app, the on-screen control) feed one value. Whichever changed most recently wins and the others are brought into line. A pickup option ignores a source until it crosses the current value, so a hardware fader in the wrong place does not make the value jump.",
+  "source_urls": [
+   "https://docs.derivative.ca/Bind_CHOP",
+   "https://docs.derivative.ca/Override_CHOP"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "Mapping",
+   "param_connect",
+   "pattr @bindto"
+  ],
+  "max_check": "Userguide 'Mapping': MIDI and keys set a parameter directly, and an output-mapped port sends the value back to the controller. Userguide 'Connecting Parameters': param_connect is a two-way link between a UI object and a Gen, RNBO, poly~ or jit.gl.slab parameter. pattr refpage: bindto. No object named pickup or takeover in obj-qlookup.json; package searches for 'pickup' and 'soft takeover' found nothing relevant.",
+  "advice": "Make the UI object the one merge point: every source sets it and it alone feeds the patch. Where a hardware fader is involved, add pickup in a few lines of v8. A butter.pickup object is worth building.",
+  "confidence": "medium",
+  "notes": "Session 1's 'Expression, export and two-way binding on every parameter' covers binding in general; this entry is the merge-and-pickup behaviour only."
+ },
+ {
+  "capability": "Any object's settings as a live table",
+  "category": "data/tables/scripting",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Parameter DAT"
+  ],
+  "what_it_does": "One operator lists another operator's parameters as rows: name, value, mode, expression, type, range, default and menu items. The table updates as the parameters change.",
+  "source_urls": [
+   "https://docs.derivative.ca/Parameter_DAT"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "getattr",
+   "attrui",
+   "pattrhub",
+   "pattrstorage"
+  ],
+  "max_check": "getattr refpage: attributes attr, listen and prefix, message getattrlist. pattrhub refpage: getstate and getattributes report every pattr object in a patcher. pattrstorage refpage: dump and getclientlist. Userguide 'Parameter Mode': the Parameters Window lists all parameters of a patcher.",
+  "advice": "For a readable dump of a patch's state, send getstate to pattrhub or dump to pattrstorage and collect the result in a dict or butter_table. For one attribute of one object, use getattr with listen on instead of polling.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Component inputs that state and check what they expect",
+  "category": "workflow/authoring",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "In CHOP",
+   "Out CHOP",
+   "In TOP",
+   "Out TOP"
+  ],
+  "what_it_does": "The input operator inside a component has a label shown on hover. It can require a set number of channels and raise an error when the input does not match, and it can keep only the channels with given names.",
+  "source_urls": [
+   "https://docs.derivative.ca/In_CHOP",
+   "https://docs.derivative.ca/Out_CHOP",
+   "https://docs.derivative.ca/In_TOP",
+   "https://docs.derivative.ca/Out_TOP"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "inlet",
+   "outlet",
+   "print"
+  ],
+  "max_check": "inlet and outlet refpages: attributes comment, cool (inlet), style and tricolor; nothing that checks what arrives. Userguide 'Abstractions' and 'Subpatchers': the comment attribute becomes the hover text. print refpage: level 2 (Error) messages also reach any error object in the patcher.",
+  "advice": "In an abstraction, check the input directly under the inlet (route by message type, zl.len for list length) and report a bad input with print @level 2, so it does not fail silently further down.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Component-local settings read from anywhere inside",
+  "category": "workflow/authoring",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Internal Parameters",
+   "Component Variables"
+  ],
+  "what_it_does": "A component can hold a private block of typed parameters that any operator inside it reads by a short name. The lookup climbs through parent components until it finds the name. The values are saved with the file.",
+  "source_urls": [
+   "https://docs.derivative.ca/Internal_Parameters",
+   "https://docs.derivative.ca/Component_Variables"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "pv",
+   "value",
+   "pattr",
+   "patcherargs"
+  ],
+  "max_check": "pv refpage: a named value shared only within one patcher and its subpatches. value refpage: shared by every object of that name. pattr refpage: stores a value with the patcher (autorestore, initial). patcherargs refpage: outputs the arguments and @attribute pairs typed on the box.",
+  "advice": "Use pv NAME for state that belongs to one abstraction and its subpatchers, and keep value or s / r for sharing that is meant to cross patchers. Add a pattr when the value must be saved.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Addresses are paths, with names scoped by default",
+  "category": "workflow/authoring",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Network Path",
+   "Operator Shortcuts",
+   "Reference",
+   "Parameter Reference"
+  ],
+  "what_it_does": "Every operator has a path. A reference can be relative, can name a parent component, or can use one global shortcut. The editor draws a dashed line for each reference, and one form of lookup raises an error when the target is missing.",
+  "source_urls": [
+   "https://docs.derivative.ca/Network_Path",
+   "https://docs.derivative.ca/Operator_Shortcuts",
+   "https://docs.derivative.ca/Reference",
+   "https://docs.derivative.ca/Parameter_Reference"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "send",
+   "receive",
+   "pvar",
+   "pattrforward"
+  ],
+  "max_check": "send and receive refpages: one name reaches every patcher window. pvar refpage: reaches a named object in the same patcher only. pattrforward refpage: sends a message to a named object, including one inside a subpatcher, abstraction or bpatcher. Userguide 'Abstractions': the #0 prefix gives a number unique to each instance.",
+  "advice": "Max's default is the reverse of TouchDesigner's: a name is global unless you scope it. Inside anything loaded more than once, prefix names with #0 (or --- in a Live device). To reach one object inside a nested patcher, use pattrforward with its path instead of a global send.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Fetching data by reference with a visible link",
+  "category": "workflow/authoring",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Select CHOP",
+   "Select TOP",
+   "Select DAT",
+   "Null CHOP",
+   "Null TOP",
+   "Null DAT"
+  ],
+  "what_it_does": "A consumer names the operator it wants, with name patterns and renaming, and the editor draws a dashed line to it. A Null at the end of a chain gives consumers one stable thing to point at while the chain above it changes. Selecting an image shares the texture and does not copy it.",
+  "source_urls": [
+   "https://docs.derivative.ca/Select_CHOP",
+   "https://docs.derivative.ca/Select_TOP",
+   "https://docs.derivative.ca/Select_DAT",
+   "https://docs.derivative.ca/Null_CHOP",
+   "https://docs.derivative.ca/Null_TOP",
+   "https://docs.derivative.ca/Null_DAT",
+   "https://docs.derivative.ca/Instance"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "send",
+   "receive",
+   "jit.gl.texture",
+   "jit.gl.slab @out_name"
+  ],
+  "max_check": "send and receive refpages (no visible link). Userguide 'Textures': every texture has a name and objects pass jit_gl_texture <name>. jit.gl.slab, jit.gl.node and jit.gl.camera refpages: out_name / out_names attributes name the output texture.",
+  "advice": "End each chain in one named terminal (an s NAME, or a named jit.gl.texture or out_name) and have consumers attach to that name only. Max draws no line for a wireless link, so say in a comment at the receiving end where the sender is.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Instancing from any data, one attribute at a time",
+  "category": "rendering/3D",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Geometry COMP",
+   "Instance"
+  ],
+  "what_it_does": "One geometry object draws many copies. The count comes from the number of samples, table rows, pixels or points in a source. Each attribute (translate, rotate, scale, rotate towards a vector, colour, texture) picks its own source and its own channel or column by name. Each copy's id is available to shaders and to picking.",
+  "source_urls": [
+   "https://docs.derivative.ca/Geometry_COMP",
+   "https://docs.derivative.ca/COMP_Instance_Page",
+   "https://docs.derivative.ca/COMP_Instance_2_Page",
+   "https://docs.derivative.ca/Instance"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "jit.gl.multiple",
+   "jit.gl.mesh",
+   "jit.gl.buffer",
+   "jit.gl.picker"
+  ],
+  "max_check": "jit.gl.multiple refpage: draws a named target repeatedly from position_matrix, rotate_matrix, rotatexyz_matrix, scale_matrix, color_matrix and texture_matrix (attributes targetname, glparams, dimparam). jit.gl.buffer refpage: instanced passes a different value to each drawn instance of a jit.gl.mesh, instance_div groups them. jit.gl.picker refpage: reports the name of the object under the mouse, not an instance number. patching/MAX_PATCHING.md records three pitfalls with jit.gl.multiple and jit.gl.buffer.",
+  "advice": "For tens to hundreds of copies use jit.gl.multiple with one matrix per attribute. For thousands use jit.gl.mesh with jit.gl.buffer @instanced 1, one buffer per inlet. Aiming copies along a vector has to be computed (jit.gen). A helper that builds these matrices from a dict or table by column name is worth building.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Frame start and frame end as script hooks",
+  "category": "workflow/authoring",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Execute DAT",
+   "Run Command Examples"
+  ],
+  "what_it_does": "A script operator has callbacks for the start and end of every frame, for project start, node creation, exit, play and pause, and devices being plugged in. A delayed call can be set in frames or milliseconds, at the end of the current frame, on wall-clock time, and in a named group that can be cancelled.",
+  "source_urls": [
+   "https://docs.derivative.ca/Execute_DAT",
+   "https://docs.derivative.ca/Run_Command_Examples",
+   "https://docs.derivative.ca/Frame",
+   "https://docs.derivative.ca/Callback"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.world",
+   "delay",
+   "pipe",
+   "deferlow",
+   "qmetro"
+  ],
+  "max_check": "jit.world refpage: attribute drawbang (prerender or postrender) sets when its middle outlet sends the draw bang; fps and interval apply only when displaylink is off. delay and pipe refpages: time-value syntax, quantize, transport. deferlow refpage: puts a message at the tail of the low-priority queue. Userguide 'Scheduler and Priority'.",
+  "advice": "In a Jitter patch, treat jit.world's draw bang as the frame tick. Drive per-frame work from it (drawbang chooses before or after rendering) and not from a separate metro whose phase drifts against the frames. Keep delay and pipe for clock time and deferlow for 'after this event has finished'.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Ramps and smoothing that run on the render frame",
+  "category": "rendering/3D",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Lag CHOP",
+   "Filter CHOP",
+   "Time Slice CHOP"
+  ],
+  "what_it_does": "All control data is computed once per rendered frame, and time-sliced operators fill in the frames that were skipped. A ramp that feeds a picture therefore never beats against the frame rate.",
+  "source_urls": [
+   "https://docs.derivative.ca/Lag_CHOP",
+   "https://docs.derivative.ca/Filter_CHOP",
+   "https://docs.derivative.ca/Time_Slice_CHOP",
+   "https://docs.derivative.ca/Cook",
+   "https://docs.derivative.ca/Frame"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "line",
+   "jit.line",
+   "jit.mo.time",
+   "jit.world @fixed_delta"
+  ],
+  "max_check": "line refpage: grain is the output interval, 20 ms by default, on Max's own timer. jit.line refpage: a drop-in replacement for line whose output is timed by the render context, described as removing the stutter of unsynchronised output. jit.mo.time refpage: mode delta gives the time between frames, accum gives running time. jit.world refpage: fixed_delta locks the delta for non-realtime capture.",
+  "advice": "For any value that ends up on screen, use jit.line and not line, and scale per-frame motion by jit.mo.time @mode delta. Keep line and line~ for control and audio.",
+  "confidence": "high",
+  "notes": "patching/MAX_PATCHING.md ('Prefer smooth transitions…') currently names `line 0.` for Jitter/GL float parameters; jit.line looks like the better default there. Not tested in Max."
+ },
+ {
+  "capability": "Lag with separate rise and fall, overshoot and speed limits",
+  "category": "timeline/cueing/show control",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Lag CHOP"
+  ],
+  "what_it_does": "One operator slows changes with different times for rising and falling, can overshoot the target, and can cap the speed and the acceleration of a value. It can treat several channels as one vector so a point moves along a straight line.",
+  "source_urls": [
+   "https://docs.derivative.ca/Lag_CHOP"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "slide",
+   "slide~",
+   "rampsmooth~",
+   "deltaclip~"
+  ],
+  "max_check": "slide refpage: logarithmic smoothing with slide-up and slide-down arguments. rampsmooth~ refpage: linear ramps of a set number of samples up and down. deltaclip~ refpage: limits the change between samples, a speed limit for signals. None has overshoot, an acceleration limit or a vector mode. No lag object in obj-qlookup.json.",
+  "advice": "Use slide for rise and fall smoothing of a number and deltaclip~ for a speed limit on a signal. Overshoot and acceleration limits need gen~ or v8; a butter.lag with those four settings is worth building.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Smoothing a whole list at once",
+  "category": "timeline/cueing/show control",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Filter CHOP",
+   "Filter per Sample"
+  ],
+  "what_it_does": "One filter smooths every channel, and with a per-sample option every element of a long channel gets its own filter. Filter shapes include Gaussian, box, spike removal and one that keeps ramps. The width is given in samples, frames or seconds.",
+  "source_urls": [
+   "https://docs.derivative.ca/Filter_CHOP",
+   "https://docs.derivative.ca/Filter_per_Sample"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.slide",
+   "jit.fill",
+   "jit.spill",
+   "mc.slide~",
+   "mc.line~",
+   "zl.median"
+  ],
+  "max_check": "slide refpage: one number at a time. jit.slide refpage: cell-by-cell smoothing with slide_up and slide_down. jit.fill and jit.spill refpages: list into a matrix plane and back. mc.slide~, mc.rampsmooth~ and mc.line~ are in obj-qlookup.json as multichannel versions. zl.median refpage: median of a list.",
+  "advice": "To smooth a list, do not unpack it into N slide objects. Write it into a matrix (jit.fill), run jit.slide, and read it back (jit.spill), or at signal rate send it through one mc.line~ or mc.slide~. For spikes, collect a short history with zl.stream and take zl.median.",
+  "confidence": "medium",
+  "notes": "The jit.fill → jit.slide → jit.spill chain is assembled from the refpages and has not been run in Max."
+ },
+ {
+  "capability": "Spring follower for any value",
+  "category": "timeline/cueing/show control",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Spring CHOP"
+  ],
+  "what_it_does": "A value follows its input as if on a spring, with settings for spring constant, mass and damping. The input can be a target position or a force.",
+  "source_urls": [
+   "https://docs.derivative.ca/Spring_CHOP"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "jit.anim.drive"
+  ],
+  "max_check": "jit.anim.drive refpage: springto moves a 3D object with a mass-spring simulation (spring_stiff, spring_mass, spring_damp), for transforms only. A name search of obj-qlookup.json for 'spring' found only jit.phys objects; package search for 'spring' found nothing relevant.",
+  "advice": "For a 3D object use jit.anim.drive springto. For a plain number, a mass-spring step is a few lines in gen or v8, and is worth packaging once as a Butter tool.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Integrate a rate, differentiate a position",
+  "category": "timeline/cueing/show control",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Speed CHOP",
+   "Slope CHOP"
+  ],
+  "what_it_does": "One operator adds up a rate over time to give a position, with reset and limits. Its partner gives the rate of change of a value. Together they let you edit speed and get position back.",
+  "source_urls": [
+   "https://docs.derivative.ca/Speed_CHOP",
+   "https://docs.derivative.ca/Slope_CHOP"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "accum",
+   "jit.mo.time",
+   "jit.anim.drive",
+   "delta~"
+  ],
+  "max_check": "accum refpage: stores a number and adds or multiplies into it. jit.mo.time refpage: mode accum outputs accumulated running time, with a speed attribute. jit.anim.drive refpage: move, turn and grow apply relative motion over time. delta~ refpage: sample-to-sample difference of a signal.",
+  "advice": "Drive continuous motion from a rate that is accumulated every frame (jit.anim.drive turn, or jit.mo.time accum with speed), so changing the speed never makes the position jump. A ramp to an absolute value does jump.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Thresholds with a release level and a re-trigger delay",
+  "category": "timeline/cueing/show control",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Count CHOP",
+   "Trigger CHOP",
+   "Logic CHOP"
+  ],
+  "what_it_does": "Trigger operators take a trigger threshold, a separate release threshold, a re-trigger delay and a minimum trigger length as plain settings. A logic operator turns a value into on/off by bounds and offers rising edge, falling edge, toggle and radio-button behaviour from a menu.",
+  "source_urls": [
+   "https://docs.derivative.ca/Count_CHOP",
+   "https://docs.derivative.ca/Trigger_CHOP",
+   "https://docs.derivative.ca/Logic_CHOP"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "thresh~",
+   "past",
+   "togedge",
+   "edge~",
+   "onebang",
+   "speedlim"
+  ],
+  "max_check": "thresh~ refpage: low (reset) and high (set) thresholds for a signal. past refpage: bangs when a number rises above a value. togedge and edge~ refpages: bangs on zero / non-zero transitions. onebang and speedlim refpages: gate or rate-limit repeated events. Package search: Digital Orchestra Toolbox dot.schmitt~ (digest: 'Detect triggers from envelope of a signal') and CNMAT 2threshattack~ (a two-threshold attack detector).",
+  "advice": "For a signal use thresh~. At message rate build the two thresholds explicitly and add speedlim or onebang as the re-trigger guard. Never put a bare `>` on a noisy sensor.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Envelope from an event, with shaped segments",
+  "category": "timeline/cueing/show control",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Trigger CHOP"
+  ],
+  "what_it_does": "A pulse starts a delay, attack, peak, decay, sustain and release envelope. Each segment has a length and a shape, and several overlapping envelopes can be added together.",
+  "source_urls": [
+   "https://docs.derivative.ca/Trigger_CHOP"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "function",
+   "line",
+   "curve~",
+   "adsr~"
+  ],
+  "max_check": "function refpage: breakpoint editor with sustain points; next continues from a sustain point; mode Curve adds a curve factor per segment and its output then suits curve~. adsr~ refpage: signal envelope with legato, retrigger and triggermode. line refpage: takes the list function produces.",
+  "advice": "function into line (jit.line for a picture) gives an editable envelope with sustain through the next message. Use adsr~ when the envelope must be a signal.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Smooth, seedable noise as a control source",
+  "category": "timeline/cueing/show control",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Noise CHOP"
+  ],
+  "what_it_does": "One operator makes a continuous irregular curve that never repeats. Settings include type (smooth, Brownian, white and others), seed, period, harmonics and roughness. It keeps running across timeline loops and can be sampled at any point of a 3D noise space.",
+  "source_urls": [
+   "https://docs.derivative.ca/Noise_CHOP"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "random",
+   "drunk",
+   "rand~",
+   "jit.mo.time",
+   "jit.mo.func",
+   "jit.bfg"
+  ],
+  "max_check": "random refpage: attributes seed, range, cycle. drunk refpage: random walk with seed and stepsize. rand~ refpage: band-limited random signal that interpolates between values at a set frequency. jit.mo.time refpage: mode function with function perlin gives a Perlin-noise value in step with the render. jit.mo.func refpage: functions line, sin, saw, tri, perlin. jit.bfg refpage: basis functions in any number of dimensions.",
+  "advice": "For organic drift use jit.mo.time @mode function @function perlin (frame-synced) or rand~ into snapshot~, not random into line. Set @seed on random or drunk when a show has to repeat exactly.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Noise textures made on the GPU",
+  "category": "GPU compute/shaders",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Noise TOP",
+   "Palette:noise"
+  ],
+  "what_it_does": "A generator makes Perlin, simplex, sparse, cell and random noise images, several of them computed on the GPU, with seed, period, harmonics and a transform of the noise space. A second input can supply the noise coordinate for each pixel.",
+  "source_urls": [
+   "https://docs.derivative.ca/Noise_TOP",
+   "https://docs.derivative.ca/Palette:noise"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.gl.bfg",
+   "jit.bfg",
+   "jit.noise"
+  ],
+  "max_check": "jit.gl.bfg refpage: procedural basis functions (noise, fractal, distorted) run as GLSL shaders, with attributes basis, scale, offset, zoom, time and others. jit.bfg refpage: the same family on the CPU. jit.noise refpage: white noise matrices with a seed.",
+  "advice": "Use jit.gl.bfg for noise textures and animate its own attributes, instead of jit.noise followed by blurs and scaling.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "A units menu beside every time value",
+  "category": "timeline/cueing/show control",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Lag CHOP",
+   "Filter CHOP",
+   "Timer CHOP",
+   "Movie File In TOP"
+  ],
+  "what_it_does": "Almost every time setting has a menu beside it for samples, frames or seconds, and movie and timer positions add a fraction or index unit. The same operator can therefore be set in frames for a picture and in seconds for a cue.",
+  "source_urls": [
+   "https://docs.derivative.ca/Lag_CHOP",
+   "https://docs.derivative.ca/Filter_CHOP",
+   "https://docs.derivative.ca/Timer_CHOP",
+   "https://docs.derivative.ca/Movie_File_In_TOP",
+   "https://docs.derivative.ca/Frame"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "Time Value Syntax",
+   "metro",
+   "translate",
+   "transport"
+  ],
+  "max_check": "Userguide 'Time Value Syntax': fixed units ms, hh:mm:ss, samples and hz, and tempo-relative units ticks, bars.beats.units and note values. metro refpage: interval in that syntax, quantize, transport. translate refpage: converts between the time formats. No frames unit is listed.",
+  "advice": "Max's time values are tempo-aware where TouchDesigner's are frame-aware. For anything musical write note values and use a transport. For anything counted in frames, count jit.world draw bangs, because Max has no frames unit.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Curves and lookup tables as data",
+  "category": "data/tables/scripting",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Lookup CHOP",
+   "Pattern CHOP",
+   "S Curve CHOP",
+   "Lookup TOP",
+   "Ramp TOP"
+  ],
+  "what_it_does": "A 0-to-1 index reads an interpolated value out of any stored curve, with settings for what happens outside the range and for cyclic curves. Generators make sine, ramp, pulse and S-shaped curves as arrays. The image version remaps colours through a gradient whose keys live in a table.",
+  "source_urls": [
+   "https://docs.derivative.ca/Lookup_CHOP",
+   "https://docs.derivative.ca/Pattern_CHOP",
+   "https://docs.derivative.ca/S_Curve_CHOP",
+   "https://docs.derivative.ca/Lookup_TOP",
+   "https://docs.derivative.ca/Ramp_TOP"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "function",
+   "table",
+   "scale",
+   "jit.charmap",
+   "jit.gradient.ui"
+  ],
+  "max_check": "function refpage: 'You can also get an interpolated y value for any x value', with domain and range attributes. scale refpage: optional exponent argument. jit.charmap refpage: 256-point input-to-output map for matrices. jit.gradient.ui refpage: an editor that outputs one-dimensional four-plane gradient matrices.",
+  "advice": "For a transfer curve, send x into function and take y, instead of chaining scale and expr. For a colour remap on the GPU, sample a gradient texture (jit.gradient.ui into jit.gl.texture) inside jit.gl.pix.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Easing shape as a menu choice",
+  "category": "timeline/cueing/show control",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Interpolate CHOP",
+   "Pulse CHOP",
+   "Timer CHOP",
+   "S Curve CHOP",
+   "Join CHOP"
+  ],
+  "what_it_does": "Operators that move between values offer the shape of the move as a menu: linear, ease in and out, cubic and others. The timer can ease its custom channels between segments in the same way.",
+  "source_urls": [
+   "https://docs.derivative.ca/Interpolate_CHOP",
+   "https://docs.derivative.ca/Pulse_CHOP",
+   "https://docs.derivative.ca/Timer_CHOP",
+   "https://docs.derivative.ca/S_Curve_CHOP",
+   "https://docs.derivative.ca/Join_CHOP"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "line",
+   "curve~",
+   "function",
+   "jit.anim.drive",
+   "butter_ease.js (Butter_tools)"
+  ],
+  "max_check": "line refpage: linear ramps only. curve~ refpage: exponential ramps, signal only. function refpage: per-segment curve factor in Curve mode. jit.anim.drive refpage: easefunc linear, quadratic or cubic, for 3D transforms only. Package search for 'easing' found a demo patch in Max for the Visual Arts and nothing reusable. Butter_tools/javascript/butter_ease.js exists (file listed, not read this session).",
+  "advice": "Run a 0-to-1 line through an easing function (butter_ease.js, or function used as a lookup) and scale afterwards. A butter.ease object, a line with an @ease menu, is worth building.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Cells addressed by row and column names",
+  "category": "data/tables/scripting",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Table DAT",
+   "Select DAT",
+   "Lookup DAT",
+   "Merge DAT",
+   "DAT to CHOP"
+  ],
+  "what_it_does": "A table cell is read by the names in its first row and first column, in scripts and in operators alike. Rows can be selected by name, by index, by a list of values or by a condition, and tables can be merged by matching names.",
+  "source_urls": [
+   "https://docs.derivative.ca/Table_DAT",
+   "https://docs.derivative.ca/Select_DAT",
+   "https://docs.derivative.ca/Lookup_DAT",
+   "https://docs.derivative.ca/Merge_DAT",
+   "https://docs.derivative.ca/DAT_to_CHOP",
+   "https://docs.derivative.ca/Working_with_DATs_in_Python",
+   "https://docs.derivative.ca/Reorder_DAT",
+   "https://docs.derivative.ca/Insert_DAT",
+   "https://docs.derivative.ca/Sort_DAT",
+   "https://docs.derivative.ca/Transpose_DAT",
+   "https://docs.derivative.ca/Convert_DAT"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "dict",
+   "array",
+   "coll",
+   "jit.cellblock"
+  ],
+  "max_check": "coll refpage: an index or symbol maps to a list, fields inside the list are positional. dict refpage: keys with get, set, getkeys, plus pull_from_coll and push_to_coll. Userguide 'Arrays': arrays can hold dictionaries. jit.cellblock refpage: cells addressed by column and row number.",
+  "advice": "Store records as a dict (or an array of dicts) so fields are read by name. coll rows with positional fields break the first time a column is inserted.",
+  "confidence": "high",
+  "notes": "Session 1's 'Tables as a dataflow type' covers the operator family; this entry is the naming habit."
+ },
+ {
+  "capability": "Name patterns that select and generate",
+  "category": "data/tables/scripting",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Pattern Matching",
+   "Pattern Expansion",
+   "Pattern Replacement",
+   "Select CHOP",
+   "Rename CHOP"
+  ],
+  "what_it_does": "One small pattern language is used everywhere a name is wanted: wildcards, character sets, number ranges with a step, and exclusion. The same brackets generate lists of names, and a replacement form reuses what a wildcard matched when renaming.",
+  "source_urls": [
+   "https://docs.derivative.ca/Pattern_Matching",
+   "https://docs.derivative.ca/Pattern_Expansion",
+   "https://docs.derivative.ca/Pattern_Replacement",
+   "https://docs.derivative.ca/Pattern_Matching_Support",
+   "https://docs.derivative.ca/Select_CHOP",
+   "https://docs.derivative.ca/Rename_CHOP",
+   "https://docs.derivative.ca/Constant_CHOP"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "route",
+   "regexp",
+   "sprintf"
+  ],
+  "max_check": "route refpage: exact matches against typed arguments. regexp refpage: PCRE matching and substitution on symbols and lists. sprintf refpage: builds a symbol from a format. No name-range syntax appears in any of them.",
+  "advice": "Name families with a numeric suffix (LEVEL_1 … LEVEL_8), generate the names with sprintf from a counter, and select with regexp. When you design a reusable object that takes names, let it accept a pattern.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Text handling without a symbol table",
+  "category": "data/tables/scripting",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Python f-strings",
+   "Substitute DAT",
+   "Convert DAT",
+   "Evaluate DAT"
+  ],
+  "what_it_does": "Text is edited with Python string expressions in any parameter or table cell, and with operators that substitute patterns or split text into cells.",
+  "source_urls": [
+   "https://docs.derivative.ca/Python_f-strings",
+   "https://docs.derivative.ca/Substitute_DAT",
+   "https://docs.derivative.ca/Convert_DAT",
+   "https://docs.derivative.ca/Evaluate_DAT",
+   "https://docs.derivative.ca/Text_DAT"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "string",
+   "string.replace",
+   "string.regexp",
+   "string.split",
+   "string.sprintf",
+   "sprintf",
+   "regexp"
+  ],
+  "max_check": "obj-qlookup.json lists 40 string.* objects (replace, replaceall, regexp, split, slice, sprintf, trim, tolower, toarray and others). Userguide 'Strings': a String is UTF-8 text held outside the symbol table, and the page says the purpose-built string objects are easier and more efficient than symbols for text work.",
+  "advice": "In Max 9 do text editing with string.* objects, not by juggling symbols through sprintf, regexp and zl. Move to v8 when it turns into logic.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Movie position driven by an index",
+  "category": "video I/O & playback",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Movie File In TOP",
+   "Audio Movie CHOP"
+  ],
+  "what_it_does": "A movie has three play modes: locked to the timeline, driven by an index you supply, or free-running. The index can be in frames, seconds or a 0-to-1 fraction, or come from a timecode. A separate audio operator follows whichever movie it is pointed at.",
+  "source_urls": [
+   "https://docs.derivative.ca/Movie_File_In_TOP",
+   "https://docs.derivative.ca/Audio_Movie_CHOP",
+   "https://docs.derivative.ca/Movie_Playback"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.movie",
+   "jit.movie~"
+  ],
+  "max_check": "jit.movie refpage: attributes position (0 to 1), time, rate, loop points, autostart, unique; messages frame, jump, frame_coarse, start, stop, asyncread. jit.movie~ refpage: frame_true ('slower, more accurate'), loadram, cache_size. Userguide 'Video': files are encoded for linear playback, and loadram (viddll engine) or HAP makes jumping cheaper.",
+  "advice": "When several clips must stay locked together, do not start them and hope. Drive each one's frame or position from one counter on the render tick, and use HAP or loadram so seeking is cheap.",
+  "confidence": "medium",
+  "notes": "Advice assembled from the refpages; not tested in Max. Session 1's 'Tunable high-rate movie playback' covers decoding and read-ahead, not play modes."
+ },
+ {
+  "capability": "Gapless clip switching with preload and crossfade",
+  "category": "video I/O & playback",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Palette:movieBlender",
+   "Palette/moviePlayer",
+   "Palette:moviePlaylist",
+   "Palette:autoMediaPlayer",
+   "Switch TOP",
+   "Cross TOP"
+  ],
+  "what_it_does": "Ready-made player components take a file or a folder and handle the rest: preload before playing, crossfade or fade through a colour, still-image duration, what to do at the end (loop, hold, fade, play next), and Initialize / Start controls. A switch operator can blend between neighbouring inputs.",
+  "source_urls": [
+   "https://docs.derivative.ca/Palette:movieBlender",
+   "https://docs.derivative.ca/Palette/moviePlayer",
+   "https://docs.derivative.ca/Palette:moviePlaylist",
+   "https://docs.derivative.ca/Palette:autoMediaPlayer",
+   "https://docs.derivative.ca/Switch_TOP",
+   "https://docs.derivative.ca/Cross_TOP",
+   "https://docs.derivative.ca/Pre-Filling"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.polymovie",
+   "jit.playlist",
+   "jit.movie",
+   "jit.fx.tr.xfade",
+   "jit.xfade"
+  ],
+  "max_check": "jit.polymovie refpage: manages several jit.movie instances and 'allows for fast file switching by preloading the files'; messages readfolder, appendmovie, play <index>; attribute target addresses several outputs at once; a jit.gl.polymovie form outputs textures. jit.playlist refpage: clips with selections, next, loop. jit.movie refpage: asyncread. jit.fx.tr.xfade refpage: crossfade between two textures; Jitter Tools has eight more jit.fx.tr transitions.",
+  "advice": "Where a cut must be clean, play preloaded clips from jit.gl.polymovie on two targets into jit.fx.tr.xfade, instead of reading a new file into one jit.movie. A clip-player abstraction with preload, crossfade time, end behaviour and a done bang is worth building.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "A frame cache on the GPU for delay, freeze and loop",
+  "category": "video I/O & playback",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Cache TOP",
+   "Cache Select TOP"
+  ],
+  "what_it_does": "One operator stores the last N images in graphics memory. Reading it with a negative index is a delay, switching capture off is a freeze, animating the index is a loop, and it can fill itself on load. A companion reads any stored image by index.",
+  "source_urls": [
+   "https://docs.derivative.ca/Cache_TOP",
+   "https://docs.derivative.ca/Cache_Select_TOP",
+   "https://docs.derivative.ca/Pre-Filling"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.fx.tp.delay",
+   "jit.gl.textureset",
+   "jit.matrixset"
+  ],
+  "max_check": "jit.fx.tp.delay refpage: delays a texture by a number of frames, with max_delay and frame interpolation. jit.gl.textureset refpage: a set of textures written and read by index. jit.matrixset refpage: the same for matrices on the CPU.",
+  "advice": "Pick by job in Max: jit.fx.tp.delay for a delay, jit.gl.textureset for a frame store read by index (and for a freeze, by no longer writing to the slot you are showing).",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Texture feedback as one explicit operator",
+  "category": "GPU compute/shaders",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Feedback TOP",
+   "Palette:feedback",
+   "Feedback CHOP"
+  ],
+  "what_it_does": "A feedback operator names the downstream node whose last frame it should output, so a loop is drawn with ordinary wires and no cycle error. It has a reset that passes its input through, and a pulse to clear. The control-data version does the same for channels and can add the time since the last frame.",
+  "source_urls": [
+   "https://docs.derivative.ca/Feedback_TOP",
+   "https://docs.derivative.ca/Palette:feedback",
+   "https://docs.derivative.ca/Feedback_CHOP"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "jit.fx.wake",
+   "jit.fx.tp.delay",
+   "jit.gl.pix",
+   "jit.gl.texture"
+  ],
+  "max_check": "jit.fx.wake refpage: video feedback with a convolution stage; attributes fb, ff, gain, bleed. jit.fx.tp.delay refpage. No object with 'feedback' in its name is in obj-qlookup.json or the Jitter Tools list. scans/c74-forum/forum_insights.md describes a capture → matrix → gen route for trails. patching/MAX_PATCHING.md: a message feedback loop overflows the stack unless broken with delay, pipe or deferlow.",
+  "advice": "Use jit.fx.wake for trails. For a custom loop, feed a jit.gl.pix its own previous output through a named jit.gl.texture, and always give the loop a reset. A small abstraction with reset and bypass, like the TouchDesigner operator, is worth building.",
+  "confidence": "medium",
+  "notes": "The custom-loop wiring is not tested in Max."
+ },
+ {
+  "capability": "Size, pixel format and edge behaviour on every image operator",
+  "category": "GPU compute/shaders",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Resolution TOP",
+   "Texture Sampling Parameters",
+   "Texture Extend Modes",
+   "Texture Filtering",
+   "Remap TOP"
+  ],
+  "what_it_does": "Every image operator carries the same settings for output resolution, pixel format, input filtering and what happens past the edge (hold, zero, repeat, mirror). The warp operator's page warns that an 8-bit map gives jagged results and asks for 16-bit or float.",
+  "source_urls": [
+   "https://docs.derivative.ca/Resolution_TOP",
+   "https://docs.derivative.ca/Texture_Sampling_Parameters",
+   "https://docs.derivative.ca/Texture_Extend_Modes",
+   "https://docs.derivative.ca/Texture_Filtering",
+   "https://docs.derivative.ca/Remap_TOP",
+   "https://docs.derivative.ca/Displace_TOP"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.gl.slab",
+   "jit.gl.pix",
+   "jit.gl.texture"
+  ],
+  "max_check": "jit.gl.slab and jit.gl.pix refpages: attributes adapt, dim, dimscale, type, rectangle, filter. jit.gl.texture refpage: adapt, dim, type, wrap, filter, mipmap, anisotropy. Userguide 'Textures': adapt copies the size and type of the input unless dim is set.",
+  "advice": "Fix @dim (with @adapt 0) at the head of a chain so the working size is a decision. Give any texture that holds coordinates or data a float16 or float32 @type, for the same reason TouchDesigner's warp page gives. Set @wrap on the jit.gl.texture when a shader reads past the edge.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Many layers composited in one node",
+  "category": "video I/O & playback",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Composite TOP",
+   "Layer Mix TOP",
+   "Layer TOP",
+   "Over TOP",
+   "Fit TOP",
+   "Palette:blendModes",
+   "Palette:multiMix"
+  ],
+  "what_it_does": "One operator composites any number of inputs with one blend operation. A newer one gives every layer its own crop, fit, justify, transform, opacity, level and blend mode and builds a single shader for the whole stack. Inputs can be wired or named by pattern.",
+  "source_urls": [
+   "https://docs.derivative.ca/Composite_TOP",
+   "https://docs.derivative.ca/Layer_Mix_TOP",
+   "https://docs.derivative.ca/Layer_TOP",
+   "https://docs.derivative.ca/Over_TOP",
+   "https://docs.derivative.ca/Fit_TOP",
+   "https://docs.derivative.ca/Palette:blendModes",
+   "https://docs.derivative.ca/Palette:multiMix"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "jit.gl.layer",
+   "jit.gl.videoplane",
+   "jit.gl.node",
+   "jit.fx.co.*",
+   "jit.gl.slab"
+  ],
+  "max_check": "Userguide 'Depth Testing and Layering': layer, depth_enable, blend_enable and blend on every drawn object; jit.gl.layer turns depth testing off and blending on by default. jit.gl.node refpage: capture 1 renders its children to a texture. Jitter Tools has 27 jit.fx.co refpages, each a two-input composite. jit.gl.slab refpage: up to 32 inputs for a custom shader. jit.gl.videoplane refpage: preserve_aspect.",
+  "advice": "For a stack of N layers, draw each source on a jit.gl.layer with its own @layer inside a jit.gl.node @capture 1 and take one texture out. Chaining two-input jit.fx.co objects grows with every layer. Fit and justify are done by hand.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Draw order and correct transparency",
+  "category": "rendering/3D",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Transparency",
+   "Geometry COMP",
+   "Render TOP"
+  ],
+  "what_it_does": "Transparent objects are either sorted by a draw-priority number per object with blending turned on in the material, or rendered with an order-independent mode that peels the scene in several passes. The page explains how many passes typical scenes need and what the mode costs.",
+  "source_urls": [
+   "https://docs.derivative.ca/Transparency"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.world @transparency",
+   "jit.world @depth_sort",
+   "@layer",
+   "@depth_enable",
+   "@blend_enable"
+  ],
+  "max_check": "jit.world refpage: transparency 'adds objects with a colour alpha below 1 or blend_enable 1 to a transparency pass composited with the opaque objects with proper depth buffering'; depth_sort sorts objects by distance from the camera before each frame. Userguide 'Depth Testing and Layering': to use layer, turn depth testing off on the object, otherwise depth testing overrides it.",
+  "advice": "Before ordering transparent 3D objects by hand, try jit.world @transparency 1 and @depth_sort 1. For flat layers turn depth testing off and use @layer.",
+  "confidence": "medium",
+  "notes": "The repo holds two notes that disagree: scans/c74-forum/forum_insights.md says @depth_enable 1 on jit.world, patching/MAX_PATCHING.md says @depth_enable 0. The userguide page read here supports turning it off for layering."
+ },
+ {
+  "capability": "Shader uniforms as parameter pages",
+  "category": "GPU compute/shaders",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "GLSL TOP",
+   "GLSL Multi TOP"
+  ],
+  "what_it_does": "A shader operator lists its uniforms on pages by kind: colours, vectors, arrays filled from a channel operator, matrices and compile-time constants. A button loads the uniform names from the code. Inputs arrive as ready-declared sampler arrays, and compile errors appear in an attached info table.",
+  "source_urls": [
+   "https://docs.derivative.ca/GLSL_TOP",
+   "https://docs.derivative.ca/GLSL_Multi_TOP",
+   "https://docs.derivative.ca/Write_a_GLSL_TOP",
+   "https://docs.derivative.ca/Specialization_Constants",
+   "https://docs.derivative.ca/Write_a_GLSL_MAT"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.gl.slab",
+   "jit.gl.shader",
+   "JXS <param>",
+   "param_connect"
+  ],
+  "max_check": "Userguide 'The JXS File Format': a <param> tag declares each uniform with type, default and description. jit.gl.slab refpage: param message, getparamlist, getparamdefault, file, embed, autowatch. Userguide 'Connecting Parameters': jit.gl.slab shader parameters are suppliers for param_connect, a two-way link to a UI object. No array-from-list uniform is described.",
+  "advice": "Declare every uniform as a <param> with a default and a description, and control it from a UI object through param_connect instead of `param name $1` message boxes. Pass a list of values to a shader as a one-row float texture.",
+  "confidence": "medium",
+  "notes": "Session 1 has 'Compute shaders as an operator'; this entry is about how uniforms are exposed."
+ },
+ {
+  "capability": "Transform hierarchy by wiring objects",
+  "category": "rendering/3D",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "3D Parenting",
+   "Null COMP",
+   "Object CHOP"
+  ],
+  "what_it_does": "3D objects become parent and child by wiring one under another or by nesting. An empty object serves as a shared parent or as a look-at target. A separate operator reports the position, rotation, bearing and distance of one object relative to another.",
+  "source_urls": [
+   "https://docs.derivative.ca/3D_Parenting",
+   "https://docs.derivative.ca/Null_COMP",
+   "https://docs.derivative.ca/Object_CHOP",
+   "https://docs.derivative.ca/Camera_COMP",
+   "https://docs.derivative.ca/Light_COMP"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.anim.node",
+   "jit.gl.node",
+   "jit.gl.camera"
+  ],
+  "max_check": "jit.anim.node refpage: a transform that GL objects bind to, with parent-child relationships; attributes lookat, locklook, inherit_position / rotate / scale, worldpos, worldquat; messages localtoworld, worldtolocal. jit.gl.node refpage: a render group that can be captured. jit.gl.camera refpage: lookat, locklook.",
+  "advice": "Max splits what TouchDesigner joins: use jit.anim.node for parent-child transforms and jit.gl.node for render grouping. For the distance between two objects, read each jit.anim.node's worldpos and compute it in expr.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "A checklist for a black render",
+  "category": "workflow/authoring",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Why is My Render Black"
+  ],
+  "what_it_does": "A short docs page walks through a black render in order: show a checker background to see whether anything draws, add a light or a constant material, render a cube map to look in every direction, check near and far planes, check the render flags at each level, check alpha.",
+  "source_urls": [
+   "https://docs.derivative.ca/Why_is_My_Render_Black"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "jit.world @erase_color",
+   "jit.gl.camera @near_clip / @far_clip",
+   "jit.gl.material"
+  ],
+  "max_check": "No equivalent page among the Jitter userguide topics read (video, video_engine, textures, graphics_processing, render_passes, depth_layer_blend, jxs_file_format, geometry). jit.world refpage: erase_color, enable. jit.gl.camera refpage: near_clip, far_clip, lens_angle. patching/JITTER_JS_PATCHING.md is cited in CLAUDE.md as listing four silent black-render traps for JS matrix code.",
+  "advice": "Write the same kind of ordered checklist into patching/MAX_PATCHING.md: a non-black erase_color to see whether anything draws, the context name each object draws to, enable, near and far clip, texture size, lighting.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Audio analysis delivered as ready control channels",
+  "category": "audio",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Palette:audioAnalysis",
+   "Audio Spectrum CHOP",
+   "Analyze CHOP",
+   "Envelope CHOP",
+   "CHOP to TOP"
+  ],
+  "what_it_does": "A ready component outputs low, mid and high levels, kick and snare detection, rhythm and spectral centroid as channels, each with an on/off switch to save time. The spectrum operator can output one sample per hertz, and any channel set can be written into a float texture.",
+  "source_urls": [
+   "https://docs.derivative.ca/Palette:audioAnalysis",
+   "https://docs.derivative.ca/Audio_Spectrum_CHOP",
+   "https://docs.derivative.ca/Analyze_CHOP",
+   "https://docs.derivative.ca/Envelope_CHOP",
+   "https://docs.derivative.ca/CHOP_to_TOP"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "peakamp~",
+   "average~",
+   "snapshot~",
+   "pfft~",
+   "jit.catch~",
+   "zsa.centroid~ (package)"
+  ],
+  "max_check": "peakamp~, average~ (bipolar, absolute or rms) and snapshot~ refpages. fft~ and pfft~ refpages. spectroscope~ refpage: a display, with no data outlet listed. jit.catch~ refpage: signal into matrices in four modes. Package search: zsa.centroid~ and pnp.centroid~ for spectral centroid, CNMAT 2threshattack~ and Data Knot dk.cvonset~ for onsets.",
+  "advice": "For band levels use filters or pfft~ into average~ rms and snapshot~. For a spectrum as a texture use jit.catch~ into jit.gl.texture. An abstraction that outputs low, mid, high and onset as plain numbers would give students what the TouchDesigner component gives.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Panel states as readable values",
+  "category": "control surface/UI building",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Panel Value",
+   "Panel CHOP",
+   "Panel Execute DAT",
+   "Button COMP",
+   "Slider COMP"
+  ],
+  "what_it_does": "Every interface element carries a set of states: pressed (per mouse button), rollover, position, drag-out, focus, key. They are read as channels or through callbacks, and fast events can be queued so none are missed.",
+  "source_urls": [
+   "https://docs.derivative.ca/Panel_Value",
+   "https://docs.derivative.ca/Panel_CHOP",
+   "https://docs.derivative.ca/Panel_Execute_DAT",
+   "https://docs.derivative.ca/Button_COMP",
+   "https://docs.derivative.ca/Slider_COMP",
+   "https://docs.derivative.ca/Field_COMP"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "hover",
+   "mousestate",
+   "ubutton",
+   "v8ui"
+  ],
+  "max_check": "hover refpage: sends the scripting name of the object under the cursor. mousestate refpage: button state and cursor position, polled. ubutton refpage: a transparent click region with hilite and toggle. Standard UI objects output their value only.",
+  "advice": "For rollover, give objects scripting names and use hover. For press, drag and hover states inside one control, write a v8ui, as the Butter tools do.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Keyboard events as a filtered table",
+  "category": "control surface/UI building",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Keyboard In DAT",
+   "Keyboard In CHOP"
+  ],
+  "what_it_does": "One operator logs every key down and key up with its modifiers as table rows, can be limited to listed keys or to named shortcuts, and can be tied to the panels that have focus. The older channel version makes one on/off channel per key.",
+  "source_urls": [
+   "https://docs.derivative.ca/Keyboard_In_DAT",
+   "https://docs.derivative.ca/Keyboard_In_CHOP",
+   "https://docs.derivative.ca/Mouse_In_CHOP"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "key",
+   "keyup",
+   "modifiers",
+   "Key Mapping"
+  ],
+  "max_check": "key, keyup and modifiers refpages. Userguide 'Mapping': Key Mapping binds a key to any parameter-mode UI object, per patcher, shown with an orange outline.",
+  "advice": "Use Key Mapping to bind a key straight to a control. Keep key into select chains for keys that are not controls.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Start-up order you can state",
+  "category": "workflow/authoring",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Execute DAT",
+   "Storage"
+  ],
+  "what_it_does": "Script operators have separate callbacks for project start, node creation, exit and a device being plugged in or removed. Several start scripts run in the alphanumeric order of their names. Stored values can be given a start-up value that overrides whatever was saved.",
+  "source_urls": [
+   "https://docs.derivative.ca/Execute_DAT",
+   "https://docs.derivative.ca/Storage",
+   "https://docs.derivative.ca/OP_Execute_DAT",
+   "https://docs.derivative.ca/Cache_TOP"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "loadbang",
+   "loadmess",
+   "patcherargs",
+   "pattr",
+   "closebang",
+   "freebang",
+   "midiinfo"
+  ],
+  "max_check": "Userguide 'Patcher Lifecycle': objects, then cords, then parameter initial values, then pattr restore, then loadbang and loadmess, then live.thisdevice, window, patcherargs output, DSP; subpatchers before parents within a phase; closebang and freebang on closing; the page advises not to assume order and to use trigger. midiinfo refpage: autopollinput and autopolloutput report device list changes.",
+  "advice": "Use one loadbang into a trigger for anything that depends on order, and rely on the documented phases only between kinds of object. For devices that come and go, midiinfo's autopoll attributes are the MIDI equivalent of a device-change callback.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "One control interface for every time-based component",
+  "category": "timeline/cueing/show control",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Palette:initializeStart"
+  ],
+  "what_it_does": "A template gives any time-based component the same controls (Initialize, Start, Play, Speed, Cue, go to done) and the same output channels (ready, running, done, fraction). The page explains three ways to install it into your own component.",
+  "source_urls": [
+   "https://docs.derivative.ca/Palette:initializeStart",
+   "https://docs.derivative.ca/Timer_CHOP"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "transport",
+   "jit.movie",
+   "playlist~",
+   "mtr",
+   "jit.anim.path"
+  ],
+  "max_check": "Refpages: jit.movie uses start, stop, rate, position; playlist~ uses a clip number, pause, resume; mtr uses play, stop, rewind, speed; jit.anim.path uses start, stop, play, rate; transport uses its own state. Each object has its own verbs.",
+  "advice": "Adopt one convention for your own abstractions and Butter tools: messages init, start, play 0/1, speed and cue, and outlets for ready, running, done and fraction. A patch that mixes five players then reads the same way everywhere.",
+  "confidence": "medium",
+  "notes": "Session 1's 'Timing engine with segments, states and callbacks' covers the Timer CHOP itself."
+ },
+ {
+  "capability": "Errors collected as data",
+  "category": "workflow/authoring",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Error DAT",
+   "Errors Dialog",
+   "Troubleshooting in TouchDesigner"
+  ],
+  "what_it_does": "A node with an error shows a marker, and so does every component that contains it. A dialog lists all current errors and jumps to each one. A table operator logs errors with severity, type and source, filtered by pattern, with a callback per error.",
+  "source_urls": [
+   "https://docs.derivative.ca/Error_DAT",
+   "https://docs.derivative.ca/Errors_Dialog",
+   "https://docs.derivative.ca/Troubleshooting_in_TouchDesigner"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "error",
+   "console",
+   "print"
+  ],
+  "max_check": "error refpage: 'Listens for and reports Max errors as message output', for cases where the Max window is not shown. console refpage: mirrors the Max Console inside a patcher with classfilter, patcherfilter, textfilter and showonlyerrors. print refpage: level 2 posts in the Error style and reaches error objects. Userguide 'Debugging and Probing': watchpoints on cords that print, monitor or break, with stepping.",
+  "advice": "In a show patch, put a console @showonlyerrors 1 (or error into a display) where the operator can see it, so a failure is not hidden in a window nobody has open. In your own abstractions report problems with print @level 2.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Bypass on every node, and stopping a whole component",
+  "category": "workflow/authoring",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Bypass Flag",
+   "Cooking Flag"
+  ],
+  "what_it_does": "Every operator has a bypass switch that passes its first input straight through, for testing a network without rewiring. A component has a switch that stops everything inside it from computing while keeping its last outputs.",
+  "source_urls": [
+   "https://docs.derivative.ca/Bypass_Flag",
+   "https://docs.derivative.ca/Cooking_Flag",
+   "https://docs.derivative.ca/Troubleshooting_in_TouchDesigner"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "@bypass on jit.gl.slab / jit.gl.pix / jit.fx.*",
+   "mute~",
+   "pcontrol",
+   "poly~"
+  ],
+  "max_check": "jit.gl.slab, jit.gl.pix and jit.fx refpages list a bypass attribute. mute~ refpage: turns off the signal objects in a subpatcher, and notes that pcontrol disables all objects. poly~ refpage: mute and bypass messages. Ordinary Max objects have no bypass.",
+  "advice": "Use @bypass on GPU effects for a quick comparison and mute~ for audio subpatchers. Give your own abstractions a bypass message, since Max will not supply one.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Text that stays in step with an external editor",
+  "category": "workflow/authoring",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Text DAT",
+   "File In DAT",
+   "Folder"
+  ],
+  "what_it_does": "A text or table operator can be tied to a file: edits in an outside editor reload into the project and edits in the project write back. File settings also accept web addresses.",
+  "source_urls": [
+   "https://docs.derivative.ca/Text_DAT",
+   "https://docs.derivative.ca/File_In_DAT",
+   "https://docs.derivative.ca/Folder",
+   "https://docs.derivative.ca/Execute_DAT"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "filewatch",
+   "jit.gl.slab @autowatch",
+   "jit.gl.shader @autowatch",
+   "node.script @watch",
+   "dict",
+   "coll"
+  ],
+  "max_check": "filewatch refpage: bangs when a named file changes. jit.gl.slab and jit.gl.shader refpages: autowatch recompiles when the file is edited. node.script refpage: watch attribute. dict and coll refpages: read and readagain.",
+  "advice": "Scripts and shaders already watch their files in Max. For data files, wire filewatch into readagain on the dict, coll or text that holds them.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Named converters at every boundary between kinds of data",
+  "category": "data/tables/scripting",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "CHOP to TOP",
+   "DAT to CHOP",
+   "CHOP to DAT",
+   "SOP to CHOP",
+   "POP to CHOP",
+   "POP to TOP"
+  ],
+  "what_it_does": "Wires only join operators of one family, so every crossing is a visible operator named for it. Each has settings for layout: how channels become rows of pixels, which table rows become channels, which point attributes become channels.",
+  "source_urls": [
+   "https://docs.derivative.ca/CHOP_to_TOP",
+   "https://docs.derivative.ca/DAT_to_CHOP",
+   "https://docs.derivative.ca/CHOP_to_DAT",
+   "https://docs.derivative.ca/SOP_to_CHOP",
+   "https://docs.derivative.ca/POP_to_CHOP",
+   "https://docs.derivative.ca/POP_to_TOP",
+   "https://docs.derivative.ca/CHOP_Techniques",
+   "https://docs.derivative.ca/Shuffle_CHOP"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.fill",
+   "jit.spill",
+   "jit.iter",
+   "jit.catch~",
+   "jit.release~",
+   "jit.poke~",
+   "jit.buffer~",
+   "snapshot~",
+   "jit.gl.asyncread"
+  ],
+  "max_check": "Userguide 'Conversion Cheat Sheet': patches for message to audio, audio to message, signal to event and unit conversions. Refpages: jit.fill and jit.spill (list to matrix and back), jit.iter, jit.catch~ and jit.release~ (signal to matrix and back), jit.poke~, jit.buffer~, snapshot~, jit.gl.asyncread (texture read back to the CPU without blocking).",
+  "advice": "The same boundaries exist in Max, they are just not enforced. Cross each one once, with one visible converter, and stay on the GPU once you are there: reading a texture back costs a frame of latency even with jit.gl.asyncread.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Change callbacks with a choice of edge",
+  "category": "data/tables/scripting",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "CHOP Execute DAT",
+   "Parameter Execute DAT",
+   "OP Execute DAT",
+   "ParGroup Execute DAT"
+  ],
+  "what_it_does": "A script is attached to a value and runs on the events you tick: off to on, while on, on to off, while off, any change. Other versions watch parameters (value, expression, mode, pulse) and whole operators (cooked, renamed, rewired, deleted).",
+  "source_urls": [
+   "https://docs.derivative.ca/CHOP_Execute_DAT",
+   "https://docs.derivative.ca/Parameter_Execute_DAT",
+   "https://docs.derivative.ca/OP_Execute_DAT",
+   "https://docs.derivative.ca/ParGroup_Execute_DAT",
+   "https://docs.derivative.ca/Callback"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "togedge",
+   "change",
+   "select",
+   "edge~",
+   "getattr",
+   "v8"
+  ],
+  "max_check": "togedge refpage: bangs for 0-to-1 and 1-to-0. change refpage: passes only a new value. edge~ refpage: the same for signals. getattr refpage: listen reports attribute changes. v8 refpage: function names answer messages.",
+  "advice": "Detect the edge in boxes (togedge, change) and send only the event into v8. A script that receives every value and tests it itself is the TouchDesigner habit carried over, and in Max it runs code at control rate for nothing.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "A table that reports what changed",
+  "category": "data/tables/scripting",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "DAT Execute DAT"
+  ],
+  "what_it_does": "A callback runs when a table changes and is handed the old table, the new one and lists of the rows, columns and cells that were added, removed or changed.",
+  "source_urls": [
+   "https://docs.derivative.ca/DAT_Execute_DAT"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "dict",
+   "coll",
+   "dict.compare",
+   "pattr"
+  ],
+  "max_check": "dict and coll refpages list no change notification. dict.compare is in obj-qlookup.json (not read in detail). pattr refpage: a bound pattr outputs when its value changes, for single values.",
+  "advice": "Send every write to a shared dict or coll through one subpatcher that also sends a `changed <key>` message, so readers know when to refresh. butter_table could report changes the same way.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Recording control gestures",
+  "category": "timeline/cueing/show control",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Record CHOP",
+   "Trail CHOP"
+  ],
+  "what_it_does": "One operator records incoming channels while an Active input is on and then outputs the recording. Another shows the recent history of any channel as a scrolling graph.",
+  "source_urls": [
+   "https://docs.derivative.ca/Record_CHOP",
+   "https://docs.derivative.ca/Trail_CHOP"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "mtr",
+   "seq",
+   "capture",
+   "multislider"
+  ],
+  "max_check": "mtr refpage: records and plays back messages on tracks; bindto ties a track to a UI object by scripting name with no cords; sync follows a transport; loop, speed, write and read. seq refpage: MIDI. multislider refpage: 'Displays data as either an array of sliders or a scrolling display'. capture refpage: stores values for viewing.",
+  "advice": "Max is strong here: mtr @bindto records a control and plays the gesture back into it without a single cord. For a history graph, set a multislider to its scrolling display.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Blending between N inputs with a fractional index",
+  "category": "video I/O & playback",
+  "tool": "TouchDesigner",
+  "tool_names": [
+   "Cross CHOP",
+   "Switch TOP",
+   "Blend CHOP",
+   "Cross TOP",
+   "Switch CHOP"
+  ],
+  "what_it_does": "A fractional index selects among several inputs and blends the two nearest: 1.5 is half of input 2 and half of input 3. It exists for channels and for images. A weighted version mixes all inputs at once.",
+  "source_urls": [
+   "https://docs.derivative.ca/Cross_CHOP",
+   "https://docs.derivative.ca/Switch_TOP",
+   "https://docs.derivative.ca/Blend_CHOP",
+   "https://docs.derivative.ca/Cross_TOP",
+   "https://docs.derivative.ca/Switch_CHOP"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "selector~",
+   "matrix~",
+   "jit.fx.tr.xfade",
+   "pattrstorage",
+   "preset"
+  ],
+  "max_check": "selector~ refpage: ramptime attribute for a click-free switch. matrix~ refpage: ramp attribute. jit.fx.tr.xfade and jit.xfade refpages: two inputs. pattrstorage and preset refpages: a float such as 1.5 interpolates between presets 1 and 2, and recallmulti mixes several by weight.",
+  "advice": "For audio use selector~ @ramptime. For whole sets of settings Max already has the fractional index: send pattrstorage or preset a float. For N textures there is no single object, so chain two-input crossfades or write one jit.gl.pix.",
+  "confidence": "high",
+  "notes": ""
  }
 ]

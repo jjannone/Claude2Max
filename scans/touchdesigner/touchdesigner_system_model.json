@@ -1,0 +1,896 @@
+[
+  {
+    "id": 1,
+    "dimension": "Evaluation",
+    "summary": "TouchDesigner is a pull system. Each frame, the outputs that need data (displays, audio devices, network and device outputs, visible viewers) ask for it, and the request travels upstream. An operator cooks only when something asks for its data and something it depends on has changed. A changed value only marks a node dirty; nothing is pushed downstream. A second, push side exists: event operators run Python callbacks, which usually change parameters that are then pulled as normal.",
+    "details": [
+      "Cooking needs two things: a cook request and a reason to cook [Cook].",
+      "Cook requests come from a downstream node that wants to cook, a node referring to it through a parameter, a visible viewer, an export target, or a script calling cook() [Cook].",
+      "Reasons to cook include a cooked input, a changed parameter, a changed expression result, a referenced node cooking, being time dependent, or panel interaction [Cook].",
+      "The docs call it a common misconception that cooking starts upstream; changing a Constant CHOP makes it dirty but it waits until something asks [Cook].",
+      "A node nobody looks at, references or outputs does not cook [Cook].",
+      "Output operators such as Movie File Out TOP and the Out OPs cook every frame; Render TOP and the In OPs always cook when asked, because checking whether they should is costlier [Cook].",
+      "The docs describe TouchDesigner as both a pull system (procedural) and a push system (events) [Procedural], [Event].",
+      "Event operators: the Execute DATs, Panel Execute DAT, device and network DATs, Timer CHOP callbacks, pulse parameters [Event].",
+      "Script operators (Script CHOP, Script TOP …) are not event nodes; they are part of the pull system [Event].",
+      "Python data is not dependable by default; Dependency objects let Python values trigger downstream cooks [Dependency].",
+      "The Cooking flag on a component stops its whole inside from cooking, at zero cost [Cooking Flag].",
+      "Null CHOP's Cook Type can stop downstream cooks when its output does not change (Selective) or force them every frame [Null CHOP]."
+    ],
+    "names": [
+      "Cook",
+      "cook()",
+      "Dependency",
+      "Procedural",
+      "Event",
+      "Cooking Flag",
+      "Null CHOP",
+      "Cook Type",
+      "Selective",
+      "Execute DAT",
+      "CHOP Execute DAT",
+      "Parameter Execute DAT",
+      "Panel Execute DAT"
+    ],
+    "sources": [
+      "https://docs.derivative.ca/Cook",
+      "https://docs.derivative.ca/Dependency",
+      "https://docs.derivative.ca/Procedural",
+      "https://docs.derivative.ca/Event",
+      "https://docs.derivative.ca/Cooking_Flag",
+      "https://docs.derivative.ca/Null_CHOP"
+    ],
+    "what_a_max_user_would_notice": "Nothing runs because a value arrived. You set a value and the result appears only because a viewer, a window or an output is asking for it. Turning a viewer off can stop a chain from computing at all.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 2,
+    "dimension": "Ordering",
+    "summary": "Within a frame, order is decided by dependency: a node asks its inputs to cook before it cooks, so the graph's shape fixes the order. There is no left-to-right or right-to-left firing rule because nothing fires. Where order between independent scripts matters, the docs give explicit rules, such as several Execute DATs running in the alphanumeric order of their names.",
+    "details": [
+      "When a node gets a cook request it first requests that all its inputs cook, then decides whether it must cook [Cook].",
+      "The Performance Monitor shows the order nodes cooked in a frame and nests each node's bar inside the node that requested it [Performance Monitor Dialog].",
+      "Several Execute DATs with Start and Create callbacks run in numbered-alphanumeric order of their names [Execute DAT].",
+      "Execute DAT callbacks can run at frame start and frame end, which gives scripts a place before and after the cook [Execute DAT].",
+      "Inputs and outputs of a component are ordered alphanumerically by the names of the In and Out operators inside [Component].",
+      "Wires only say where to get data; the destination fetches it [Wire]."
+    ],
+    "names": [
+      "onFrameStart",
+      "onFrameEnd",
+      "Performance Monitor",
+      "In CHOP",
+      "Out CHOP"
+    ],
+    "sources": [
+      "https://docs.derivative.ca/Cook",
+      "https://docs.derivative.ca/Performance_Monitor_Dialog",
+      "https://docs.derivative.ca/Execute_DAT",
+      "https://docs.derivative.ca/Component",
+      "https://docs.derivative.ca/Wire"
+    ],
+    "what_a_max_user_would_notice": "There is no firing order to manage and no trigger object to enforce one. The question \"which happens first?\" mostly disappears inside the graph and comes back only in scripts.",
+    "confidence": "medium",
+    "open_questions": "The pages read do not state how ties are broken between two independent branches pulled by the same output, or the order Execute DAT frame callbacks run relative to each other."
+  },
+  {
+    "id": 3,
+    "dimension": "Time",
+    "summary": "Time is frame-based. A timeline with a frame rate (default 60), start and end range, tempo and time signature drives the project. Any component can have its own local timeline, which everything inside inherits, and it can run independently of its parents. Absolute time counts up from launch and never loops. CHOPs that need continuity are time-sliced: each cook covers exactly the samples since the last cooked frame.",
+    "details": [
+      "The Timeline has transport controls, a frames or beats display, fps, BPM and time signature [Timeline].",
+      "Every component can have its own timeline through a Time COMP at local/time; that is Component Time [Component Time], [Time COMP].",
+      "The Timepath of a node is the path to the nearest Component Time above it; root time has timepath / [Timepath], [Root Time].",
+      "A Time COMP has Play, Rate, Start, End, Range Limit (loop or hold), Tempo, Signature and Run Independently [Time COMP].",
+      "The global rate is project.cookRate; non-audio CHOPs default to that sample rate [Frame Rate].",
+      "Absolute Time starts at 0 at launch, always increases, and pauses if the root timeline is paused or the Power button is off [Absolute Time].",
+      "A time slice is the span from the last cooked frame to the current one; if frames are skipped the slice is longer, so no samples are lost [Time Slicing].",
+      "Maximum time slice size is a preference, 200 ms by default per the Time Slicing page [Time Slicing].",
+      "Parameters that take a time accept samples, frames or seconds [Units] (session 1).",
+      "Realtime can be turned off so the process never skips a frame; the docs use this for deterministic multi-machine work and offline movie export [Syncing Multiple Computers], [Movie File Out TOP] (session 1)."
+    ],
+    "names": [
+      "Timeline",
+      "Time COMP",
+      "Component Time",
+      "Timepath",
+      "Root Time",
+      "Absolute Time",
+      "absTime",
+      "cookRate",
+      "Time Slice",
+      "Run Independently",
+      "Beat CHOP",
+      "Timer CHOP"
+    ],
+    "sources": [
+      "https://docs.derivative.ca/Timeline",
+      "https://docs.derivative.ca/Component_Time",
+      "https://docs.derivative.ca/Time_COMP",
+      "https://docs.derivative.ca/Timepath",
+      "https://docs.derivative.ca/Root_Time",
+      "https://docs.derivative.ca/Frame_Rate",
+      "https://docs.derivative.ca/Absolute_Time",
+      "https://docs.derivative.ca/Time_Slicing",
+      "https://docs.derivative.ca/Syncing_Multiple_Computers"
+    ],
+    "what_a_max_user_would_notice": "There is one clock tick, the frame, and everything happens on it. Time is also scoped like a variable: a subpatch can carry its own clock, its own range and loop, and be paused while the rest plays.",
+    "confidence": "high",
+    "open_questions": "The Time Slicing page says 200 ms; the Preferences Dialog page says the CHOPs preference is in frames with a default of 6. The two pages disagree."
+  },
+  {
+    "id": 4,
+    "dimension": "Data types",
+    "summary": "Data types are operator families. TOPs carry GPU images, CHOPs named channels of float samples, SOPs and POPs geometry, DATs text or tables, MATs materials, and COMPs hold networks. A wire can only join two operators of the same family, so each family is a separate typed graph. Crossing families needs a named converter operator, a parameter that names another operator, or a CHOP or DAT export to a parameter.",
+    "details": [
+      "Families: COMP, TOP, CHOP, POP, DAT, MAT, SOP; each has its own colour [Operator Family].",
+      "Only operators of the same family can be wired together [Operator Family], [Wire].",
+      "Converters: TOP to CHOP, CHOP to TOP, CHOP to DAT, CHOP to SOP, DAT to CHOP, DAT to SOP, SOP to CHOP, SOP to DAT, Object CHOP [Operator].",
+      "Within a family, generators have no inputs and filters have one or more [Operator Family].",
+      "CHOP channels carry names, a start–end range and a sample rate; channel names drive selection, scoping and export [CHOP] (session 1), [CHOP Common Page].",
+      "POP attributes are named and typed; DAT tables are read by row and column names [POP], [Table DAT] (session 1).",
+      "Parameters can hold Python objects, but those must be self-contained [Parameter].",
+      "Exporting sends CHOP channels (numbers) or DAT cells (including strings) to parameters of any family [Export]."
+    ],
+    "names": [
+      "TOP",
+      "CHOP",
+      "SOP",
+      "POP",
+      "DAT",
+      "MAT",
+      "COMP",
+      "TOP to CHOP",
+      "CHOP to TOP",
+      "CHOP to DAT",
+      "DAT to CHOP",
+      "Export"
+    ],
+    "sources": [
+      "https://docs.derivative.ca/Operator_Family",
+      "https://docs.derivative.ca/Operator",
+      "https://docs.derivative.ca/Wire",
+      "https://docs.derivative.ca/Export",
+      "https://docs.derivative.ca/CHOP_Common_Page",
+      "https://docs.derivative.ca/Parameter"
+    ],
+    "what_a_max_user_would_notice": "There is no universal message that every node accepts. The editor will not let you connect an image to a channel operator; every change of kind is a visible converter node.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 5,
+    "dimension": "Rates and channels",
+    "summary": "Everything cooks on the frame. Rate is a property of CHOP data, not of a separate graph: each CHOP has its own sample rate, and an audio CHOP at 44100 Hz simply delivers a slice of many samples per frame. Many channels are the normal case: a CHOP is a bundle of named channels, and operators act on all of them or on a name pattern (Scope).",
+    "details": [
+      "Audio, control and motion are all CHOP data in one graph [Time Slicing].",
+      "At 60 fps a 44100 Hz audio CHOP cooks 735 samples per frame, more if frames were skipped [Time Slicing] (session 1).",
+      "When CHOPs with different rates combine, Sample Rate Match resamples to the first, highest or lowest rate, or errors [CHOP Common Page].",
+      "Scope limits which channels an operator affects, using patterns [CHOP Common Page], [Pattern Matching].",
+      "Time-sliced and non-time-sliced CHOPs mix in one network [Time Slicing].",
+      "Audio shares the frame loop, so slow frames make audio click; the docs suggest a separate process for audio [Audio Device Out CHOP] (session 2).",
+      "Each component can run at its own frame rate through its Time COMP [Frame Rate]."
+    ],
+    "names": [
+      "Sample Rate Match",
+      "Scope",
+      "Time Slice",
+      "Audio Device Out CHOP",
+      "Rate"
+    ],
+    "sources": [
+      "https://docs.derivative.ca/Time_Slicing",
+      "https://docs.derivative.ca/CHOP_Common_Page",
+      "https://docs.derivative.ca/Pattern_Matching",
+      "https://docs.derivative.ca/Frame_Rate",
+      "https://docs.derivative.ca/Audio_Device_Out_CHOP"
+    ],
+    "what_a_max_user_would_notice": "There is no separate signal world with its own thread. Audio and a slider live in the same kind of node, and a slow frame affects both.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 6,
+    "dimension": "State and saving",
+    "summary": "A project saves as a .toe file and a component as a .tox. The file holds the network, every parameter in whatever mode it is in, flags, and per-operator Python storage. Node outputs are not saved unless the node's Lock flag is on, which freezes its data into the file. Components can load their contents from an external .tox at start. The Presets palette component was dropped in 2022, so there is no built-in preset system.",
+    "details": [
+      ".toe saves the whole project; .tox saves one component; media can be embedded with the Virtual File System [.toe], [.tox], [Virtual File System].",
+      "A .toe can be expanded to ASCII with toeexpand and rebuilt with toecollapse [.toe].",
+      "Lock flag: output frozen in memory and saved in the .toe/.tox [Flag].",
+      "Storage is a Python dictionary on each operator, saved with the file; storeStartupValue gives a fixed value on start [Storage].",
+      "Extensions re-initialise on load and on other events; StorageManager keeps values across that, though the docs say custom parameters are often better [Extensions].",
+      "A component with the Cooking flag off reloads with empty, undefined outputs inside [Cooking Flag].",
+      "External .tox Path, Enable External .tox, Reload Custom Parameters, Reload Built-In Parameters and Save Backup of External control file-backed components [COMP Other Common Page].",
+      "Execute DAT has onStart, onCreate and onExit callbacks for load-time work [Execute DAT].",
+      "Opening a CrashAutoSave file starts Safe Mode, where nothing cooks [Safe Mode].",
+      "The Presets palette component was dropped in build 2022.29530 [Palette:presets] (session 2)."
+    ],
+    "names": [
+      ".toe",
+      ".tox",
+      "Lock flag",
+      "Storage",
+      "storeStartupValue",
+      "StorageManager",
+      "External .tox Path",
+      "toeexpand",
+      "toecollapse",
+      "Safe Mode",
+      "CrashAutoSave.toe"
+    ],
+    "sources": [
+      "https://docs.derivative.ca/.toe",
+      "https://docs.derivative.ca/.tox",
+      "https://docs.derivative.ca/Flag",
+      "https://docs.derivative.ca/Storage",
+      "https://docs.derivative.ca/Extensions",
+      "https://docs.derivative.ca/Cooking_Flag",
+      "https://docs.derivative.ca/COMP_Other_Common_Page",
+      "https://docs.derivative.ca/Execute_DAT",
+      "https://docs.derivative.ca/Safe_Mode",
+      "https://docs.derivative.ca/Virtual_File_System"
+    ],
+    "what_a_max_user_would_notice": "Saving keeps settings, not results. A node's output comes back only by cooking again, unless you lock it. Presets are something you build from parameters and storage.",
+    "confidence": "high",
+    "open_questions": "Whether CHOP values driven by a device survive a save was only noted for MIDI (values jump on reopen) in session 2."
+  },
+  {
+    "id": 7,
+    "dimension": "Parameters",
+    "summary": "Every setting of every operator is a named, typed parameter on a page of the parameter dialog. Each parameter can be in one of four modes: Constant, Expression (Python), Export (a CHOP channel or DAT cell drives it) or Bind (two-way link to another value). Parameters carry label, default, range, clamp, menu entries, enable expression and read-only state. Components get custom parameters, which are their whole outside interface.",
+    "details": [
+      "Parameters only exist on operators; types include numbers, tuples, toggles, menus, strings, operator paths, pulses and Python objects [Parameter].",
+      "Every parameter holds a constant, and can also hold an expression; the mode can be switched at any time, keeping both values [Parameter Mode].",
+      "Export mode exists only once an export targets the parameter; exports are shown as dotted links and can be switched off in bulk [Parameter Mode], [Export].",
+      "Mass export by naming channels path:parameter [Export], [CHOP Common Page].",
+      "Binding stores the value in one place, the bind master; table cells, Bind CHOP channels, panel values and Dependency objects can be masters [Binding].",
+      "The docs say exports and expressions now perform the same, because expressions are compiled [Export].",
+      "Attributes: name, label, default, min, max, clamp, menu entries, enable flag and expression, read-only, section divider [Parameter].",
+      "Custom parameter names start with a capital letter; built-ins are all lower case [Custom Parameters].",
+      "Custom parameters are made in the Component Editor or with appendCustomPage / appendFloat … in Python [Custom Parameters].",
+      "Parameters can be read as channels with Parameter CHOP and watched with Parameter Execute DAT [Custom Parameters].",
+      "Engine COMP lifts a loaded .tox's custom parameters onto itself [Engine COMP]."
+    ],
+    "names": [
+      "Parameter",
+      "Parameter Mode",
+      "Constant",
+      "Expression",
+      "Export",
+      "Bind",
+      "bind master",
+      "Custom Parameters",
+      "Component Editor",
+      "ParGroup",
+      "Pulse",
+      "Parameter CHOP",
+      "Parameter Execute DAT",
+      "eval()"
+    ],
+    "sources": [
+      "https://docs.derivative.ca/Parameter",
+      "https://docs.derivative.ca/Parameter_Mode",
+      "https://docs.derivative.ca/Export",
+      "https://docs.derivative.ca/Binding",
+      "https://docs.derivative.ca/Custom_Parameters",
+      "https://docs.derivative.ca/CHOP_Common_Page",
+      "https://docs.derivative.ca/Engine_COMP"
+    ],
+    "what_a_max_user_would_notice": "A setting is not set by a message arriving; it is defined. Any setting can be a live formula, an incoming channel or a two-way link, and the dialog colour shows which.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 8,
+    "dimension": "Encapsulation and reuse",
+    "summary": "The component (COMP) is the unit of structure and reuse. In and Out operators inside become its ports; custom parameters become its arguments; a .tox file saves it. Copies are kept in step by cloning, where clones follow a master's insides while keeping their own top-level parameter values. A Replicator COMP makes one copy per table row or count. Components can load from an external .tox at start, and the Palette is a library of ready components.",
+    "details": [
+      "Components contain networks and nest into a path hierarchy [Component].",
+      "In and Out operators inside give a component inputs and outputs, ordered alphanumerically [Component].",
+      "RMB Save Component writes a .tox [Component].",
+      "A clone's Clone Master parameter points at a master; insides match the master, top-level parameter values stay independent [Clone].",
+      "Immune nodes inside a clone are left alone, so each clone can hold its own table [Clone].",
+      "Clones can differ through inputs, top-level parameters and expressions using parent().digits [Clone].",
+      "The Replicator COMP is the \"for-loop\" of operators; it adds and deletes replicants as a table changes and runs callbacks per replicant [Replicator COMP].",
+      "Replicator can stagger creation across frames (Incremental Update) [Replicator COMP].",
+      "External .tox Path loads a component's contents from disk on start; if missing, the saved contents are used [COMP Other Common Page].",
+      "Load on Demand loads a component only when needed [COMP Other Common Page].",
+      "Extensions attach Python classes to a component; capitalised members can be promoted onto the component [Extensions].",
+      "The Palette is a drag-and-drop library; users add their own components under My Components [Palette]."
+    ],
+    "names": [
+      "COMP",
+      "Base COMP",
+      "In TOP",
+      "Out CHOP",
+      ".tox",
+      "Clone",
+      "Clone Master",
+      "Immune",
+      "Replicator COMP",
+      "External .tox Path",
+      "Load on Demand",
+      "Extensions",
+      "Palette",
+      "Component Editor"
+    ],
+    "sources": [
+      "https://docs.derivative.ca/Component",
+      "https://docs.derivative.ca/Clone",
+      "https://docs.derivative.ca/Replicator_COMP",
+      "https://docs.derivative.ca/COMP_Other_Common_Page",
+      "https://docs.derivative.ca/Extensions",
+      "https://docs.derivative.ca/Palette",
+      "https://docs.derivative.ca/.tox"
+    ],
+    "what_a_max_user_would_notice": "A reusable part is a container with typed parameters, not a file with numbered arguments. Many copies are kept identical by pointing them at one master, and a table can grow or shrink the number of copies while it runs.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 9,
+    "dimension": "Names and scope",
+    "summary": "Every operator has a path in the component hierarchy, like a file path: absolute from root (/project1/geo1) or relative (../button3). References are paths in parameters, in Python expressions (op('...')) or in exports. Names are therefore scoped by position, not global. Shortcuts make references survive moves: Parent Shortcut, Global OP Shortcut and internal operator shortcuts. References are drawn as dashed lines in the editor.",
+    "details": [
+      "Absolute paths start with /; relative paths use the node name or .. for the parent [Network Path].",
+      "Paths appear in operator parameters (Select TOP), expressions, scripts, OP Find DAT tables and exports (transform:tx) [Network Path].",
+      "Shortcuts: op / opex / ops for paths and patterns, parent for ancestors, iop and ipar for a component's internal operators and parameters [Operator Shortcuts].",
+      "Parent Shortcut works anywhere inside a component; Global OP Shortcut works anywhere at all [COMP Other Common Page].",
+      "A reference (link) is a dashed line for exports, path parameters, expressions and Execute DATs watching another node [Link].",
+      "ext searches up the hierarchy for a named extension [Extensions].",
+      "One pattern language (*, ?, ^, [xyz], [1-5:2]) selects operators, channels and points; 2025 builds unified it [Pattern Matching].",
+      "Variables come in several scopes: system environment, built-in, root, component; most Tscript ones are deprecated in favour of Python [Variables].",
+      "Network path is separate from file system folders, which the docs call Folders [Network Path], [Folder]."
+    ],
+    "names": [
+      "Network Path",
+      "op()",
+      "opex",
+      "ops",
+      "parent()",
+      "Parent Shortcut",
+      "Global OP Shortcut",
+      "iop",
+      "ipar",
+      "ext",
+      "Link",
+      "Reference",
+      "Pattern Matching",
+      "Select CHOP",
+      "Select TOP"
+    ],
+    "sources": [
+      "https://docs.derivative.ca/Network_Path",
+      "https://docs.derivative.ca/Operator_Shortcuts",
+      "https://docs.derivative.ca/COMP_Other_Common_Page",
+      "https://docs.derivative.ca/Link",
+      "https://docs.derivative.ca/Extensions",
+      "https://docs.derivative.ca/Pattern_Matching",
+      "https://docs.derivative.ca/Variables",
+      "https://docs.derivative.ca/Folder"
+    ],
+    "what_a_max_user_would_notice": "A name lives at an address. You point at \"the noise inside the component next to me\" with a path, and the editor draws a line for each such reference, so wireless links are visible.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 10,
+    "dimension": "Show structure",
+    "summary": "A work is one component hierarchy under root, normally /project1, with output windows such as /perform. There are no scenes or cues built in. Parts are switched off by the Cooking flag on a component, by Bypass, by simply not being pulled, or by Load on Demand. Sequencing is built from Timer CHOP segments, local timelines per component, keyframe Animation COMPs and Python callbacks.",
+    "details": [
+      "The project is a tree of components; root is / [Network Path], [Component].",
+      "Cooking flag stops a component's inside from cooking; Bypass passes the first input through, and on a component bypasses everything inside [Cooking Flag], [Flag].",
+      "Nodes not pulled by an output do not cook, so unused branches cost nothing [Cook].",
+      "Component Time lets one part be paused or looped while others play [Component Time].",
+      "Timer CHOP runs segments from a table in series or parallel, with callbacks; the docs describe cue lists and state machines with it [Timer CHOP] (session 1).",
+      "Initialize / Start is a shared control scheme on many time-based operators [Initialize Start] (session 1).",
+      "Load on Demand keeps rarely used components out of memory [COMP Other Common Page]."
+    ],
+    "names": [
+      "/project1",
+      "/perform",
+      "Cooking Flag",
+      "Bypass Flag",
+      "Component Time",
+      "Timer CHOP",
+      "Initialize Start",
+      "Animation COMP",
+      "Load on Demand"
+    ],
+    "sources": [
+      "https://docs.derivative.ca/Network_Path",
+      "https://docs.derivative.ca/Cooking_Flag",
+      "https://docs.derivative.ca/Flag",
+      "https://docs.derivative.ca/Cook",
+      "https://docs.derivative.ca/Component_Time",
+      "https://docs.derivative.ca/Timer_CHOP",
+      "https://docs.derivative.ca/Initialize_Start",
+      "https://docs.derivative.ca/COMP_Other_Common_Page"
+    ],
+    "what_a_max_user_would_notice": "Turning a section off is a flag on a container, and anything not being watched is off by itself. Cues are something you build from timers and local clocks.",
+    "confidence": "medium",
+    "open_questions": "No dedicated scene or cue system appeared in the pages read; palette components not yet read might offer one."
+  },
+  {
+    "id": 11,
+    "dimension": "Interface",
+    "summary": "The interface is a separate tree of panel components (Container, Button, Slider, Text, List …) that you build like any network. A panel's look is usually a TOP; its state is a set of panel values. A Window COMP shows a panel or any node viewer in an OS window. Perform Mode shows only one chosen window and closes the editor. Any operator's parameter dialog can also be shown as a panel (Parameter COMP), and autoUI builds widgets from custom parameters.",
+    "details": [
+      "Panels are built from Panel Components; look comes from Text COMP and TOPs; behaviour from panel settings, Panel Execute DAT, extensions and Panel CHOP [Panel].",
+      "Panel components parent by vertical wiring, like 3D objects [Component].",
+      "Window COMP displays any panel or node viewer; /perform is the default perform window [Window COMP].",
+      "Perform Mode renders one Window COMP; Designer Mode is where networks are edited; F1 and Esc switch [Perform Mode], [Designer Mode].",
+      "A project can be set to start in Perform Mode, which skips the editor's memory [Perform Mode].",
+      "A private project cannot leave Perform Mode [Perform Mode].",
+      "Controls bind to values by export, expression or Bind mode, including panel values as bind masters [Binding].",
+      "Parameter COMP and autoUI build interfaces from parameters [Parameter COMP], [Palette:autoUI] (session 1)."
+    ],
+    "names": [
+      "Panel Component",
+      "Container COMP",
+      "Button COMP",
+      "Slider COMP",
+      "Text COMP",
+      "Panel Value",
+      "Panel CHOP",
+      "Panel Execute DAT",
+      "Window COMP",
+      "Perform Mode",
+      "Designer Mode",
+      "Parameter COMP",
+      "autoUI"
+    ],
+    "sources": [
+      "https://docs.derivative.ca/Panel",
+      "https://docs.derivative.ca/Component",
+      "https://docs.derivative.ca/Window_COMP",
+      "https://docs.derivative.ca/Perform_Mode",
+      "https://docs.derivative.ca/Designer_Mode",
+      "https://docs.derivative.ca/Binding"
+    ],
+    "what_a_max_user_would_notice": "The operator's screen is not a view of the patch; it is its own network of panel nodes. The running show and the editor are two modes of the program, not two views of one patch.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 12,
+    "dimension": "Editing while running",
+    "summary": "The project keeps running while you edit; the network editor is live, wires animate when upstream nodes cook, and every node's viewer shows its current output. Undo covers node creation and deletion, wiring, renaming, flags, parameter changes, copy and paste, DAT editing and keyframes. Scripts do not create undo steps unless they use the Undo class. Safe Mode opens a crashed file with nothing cooking.",
+    "details": [
+      "Animated dashed wires show which nodes are cooking [Wire], [Cook].",
+      "Middle-click on any node shows its cook count and last cook time [Cook].",
+      "Undo supports node operations, parameter changes, copy and paste, DAT text and table editing, and keyframes; not node selection or geometry editing [Undo].",
+      "Scripts do not create undo actions by default [Undo].",
+      "Undo in Perform Mode is limited [Undo].",
+      "Exports can be paused by switching a parameter to Constant and back [Parameter Mode].",
+      "Extensions re-initialise automatically when their code changes; the docs ask that they be written to survive re-init at any time [Extensions].",
+      "Replicators can stagger creation over frames to avoid drops [Replicator COMP].",
+      "Safe Mode: a CrashAutoSave file opens static, with no cooking [Safe Mode]."
+    ],
+    "names": [
+      "Network Editor",
+      "Undo",
+      "Undo Class",
+      "Safe Mode",
+      "Re-Init Extensions",
+      "Viewer"
+    ],
+    "sources": [
+      "https://docs.derivative.ca/Network_Editor",
+      "https://docs.derivative.ca/Wire",
+      "https://docs.derivative.ca/Cook",
+      "https://docs.derivative.ca/Undo",
+      "https://docs.derivative.ca/Parameter_Mode",
+      "https://docs.derivative.ca/Extensions",
+      "https://docs.derivative.ca/Safe_Mode"
+    ],
+    "what_a_max_user_would_notice": "You build inside the running thing and see each node's result as you go. Wire animation tells you what is computing right now.",
+    "confidence": "high",
+    "open_questions": "The pages read do not describe a blind or staged edit mode beyond turning cooking off on a component."
+  },
+  {
+    "id": 13,
+    "dimension": "Scripting",
+    "summary": "Python 3.11 is built in and used everywhere: parameter expressions, callbacks in DATs, extensions on components, Script operators that produce a family's data, and the Textport console. Scripts can build and rewire networks, create custom parameters, and react to events. Scripts live in DATs inside the network. Python runs on the main thread, so slow code drops frames; a Thread Manager exists for background work.",
+    "details": [
+      "TouchDesigner ships a custom Python build with standard modules, the td module, utility modules and third-party packages [Python].",
+      "External packages are added through a Preferences search path, PYTHONPATH or sys.path in an Execute DAT onStart [Python].",
+      "Event callbacks live in Execute-type DATs; Script CHOP/TOP/SOP/DAT/POP produce data when pulled [Event].",
+      "Extensions attach classes to components; promoted capitalised members are called on the component itself [Extensions].",
+      "Custom parameters can be created by script [Custom Parameters].",
+      "Python threads must not touch TouchDesigner objects; Thread Manager (2023.31500+) wraps the threading library [Python threading in TouchDesigner], [Thread Manager].",
+      "The docs warn Python is often slower than operators and suggest replacing scripts with CHOP or DAT networks [Optimize], [Extensions].",
+      "Parameter expressions are pre-compiled and marked Optimized or Un-optimized [Optimize].",
+      "Tscript is a legacy language kept for old files [Variables], [Python] (session 1)."
+    ],
+    "names": [
+      "Python",
+      "td",
+      "Textport",
+      "Execute DAT",
+      "Script CHOP",
+      "Script TOP",
+      "Extensions",
+      "Thread Manager",
+      "TDFunctions",
+      "TDStoreTools",
+      "Tscript"
+    ],
+    "sources": [
+      "https://docs.derivative.ca/Python",
+      "https://docs.derivative.ca/Event",
+      "https://docs.derivative.ca/Extensions",
+      "https://docs.derivative.ca/Custom_Parameters",
+      "https://docs.derivative.ca/Python_threading_in_TouchDesigner",
+      "https://docs.derivative.ca/Thread_Manager",
+      "https://docs.derivative.ca/Optimize"
+    ],
+    "what_a_max_user_would_notice": "Scripting is one language spread through the whole system rather than a box you add. Any setting can be a line of Python, and any component can carry a class.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 14,
+    "dimension": "Errors and debugging",
+    "summary": "Errors and warnings appear on the node that raised them, and the marker also appears on every component that contains it, so a fault deep inside shows at the top. Every node has a built-in viewer of its output. The Errors dialog lists errors and jumps to them; the Error DAT logs them as a table with a callback. Cook times are on every node and in the Performance Monitor and the Probe.",
+    "details": [
+      "Each node has a viewer showing its current output (WYSIWID) [Viewer] (session 1).",
+      "Error markers propagate up to containing components [Troubleshooting in TouchDesigner] (session 2).",
+      "Errors Dialog lists operator errors and jumps to the operator [Errors Dialog].",
+      "Startup Errors Dialog shows errors and warnings from start-up; a preference sets how much shows [Startup Errors Dialog], [Dialogs:Preferences Dialog].",
+      "Error DAT keeps a FIFO table of recent errors with severity, family, source path and frame, and can run a callback per message [Error DAT].",
+      "Info CHOP and Info DAT expose an operator's internal state [Info CHOP] (session 1).",
+      "Middle-click info shows cook count and time; the Performance Monitor shows one frame's cook order and times and can wait for a slow frame [Cook], [Performance Monitor Dialog].",
+      "A console can show low-level print and error output [Dialogs:Preferences Dialog].",
+      "Session 2 noted there is no step-through debugger in the pages read [Troubleshooting in TouchDesigner]."
+    ],
+    "names": [
+      "Viewer",
+      "Node Viewer",
+      "Errors Dialog",
+      "Startup Errors Dialog",
+      "Error DAT",
+      "Info CHOP",
+      "Info DAT",
+      "Performance Monitor",
+      "Probe",
+      "Textport"
+    ],
+    "sources": [
+      "https://docs.derivative.ca/Viewer",
+      "https://docs.derivative.ca/Errors_Dialog",
+      "https://docs.derivative.ca/Startup_Errors_Dialog",
+      "https://docs.derivative.ca/Error_DAT",
+      "https://docs.derivative.ca/Performance_Monitor_Dialog",
+      "https://docs.derivative.ca/Cook",
+      "https://docs.derivative.ca/Dialogs:Preferences_Dialog",
+      "https://docs.derivative.ca/Troubleshooting_in_TouchDesigner"
+    ],
+    "what_a_max_user_would_notice": "You rarely add something to see data: every node already shows it. Errors sit on the node and bubble up to the containers, rather than only scrolling past in a console.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 15,
+    "dimension": "Rendering",
+    "summary": "Rendering is an operator: a Render TOP takes a camera, lights and geometry components and outputs an image, which is then just another TOP to composite. 3D objects are components parented by vertical wires. Whether an object is drawn depends on its Render flag, its container's Render flag and being listed in the Render TOP. Image work is GPU-based TOP chains; the graphics API is Vulkan.",
+    "details": [
+      "Render TOP renders listed cameras, lights and geometry into an image [Rendering], [Render TOP] (session 1).",
+      "Object components parent in a hierarchy by connecting top and bottom connectors [Component].",
+      "Render flag on the SOP and on its Geometry COMP, plus listing in the Render TOP, are all needed to draw [Render Flag].",
+      "Display flag decides what shows in viewers and camera views [Display Flag].",
+      "Render Pass TOP adds passes sharing depth; transparency is sorted by draw priority or order-independent depth peeling [Render Pass TOP], [Transparency] (session 1–2).",
+      "Instancing draws one copy per sample, row, pixel or point from a Geometry COMP [Geometry COMP] (session 1–2).",
+      "Render TOP always cooks when asked, since a scene has too many inputs to track [Cook].",
+      "TOP work runs on the GPU and mostly does not appear in CPU cook times [Performance Monitor Dialog].",
+      "Graphics API is Vulkan, through MoltenVK on macOS [Vulkan] (session 1)."
+    ],
+    "names": [
+      "Render TOP",
+      "Render Pass TOP",
+      "Geometry COMP",
+      "Camera COMP",
+      "Light COMP",
+      "Render Flag",
+      "Display Flag",
+      "MAT",
+      "Vulkan"
+    ],
+    "sources": [
+      "https://docs.derivative.ca/Render_Flag",
+      "https://docs.derivative.ca/Display_Flag",
+      "https://docs.derivative.ca/Component",
+      "https://docs.derivative.ca/Cook",
+      "https://docs.derivative.ca/Performance_Monitor_Dialog",
+      "https://docs.derivative.ca/Rendering",
+      "https://docs.derivative.ca/Render_TOP"
+    ],
+    "what_a_max_user_would_notice": "A 3D scene is a node whose output is a picture. What gets drawn is decided by flags and a list on the renderer, not by which objects are in a shared context.",
+    "confidence": "medium",
+    "open_questions": "Draw order within one Render TOP beyond transparency settings was not read in full (Render TOP page partly read)."
+  },
+  {
+    "id": 16,
+    "dimension": "Performance and concurrency",
+    "summary": "One main thread cooks the network and runs the interface and Python; the GPU does TOP and POP work. Cost is visible per node (cook time, cook count, GPU time) and per frame. More concurrency comes from more processes: the Engine COMP runs a .tox in a separate TouchDesigner process and exchanges TOPs, CHOPs and DATs with it. Python work can move to threads through the Thread Manager, without touching operators.",
+    "details": [
+      "The main thread runs the interface and moves the timeline; blocking it drops frames [Python threading in TouchDesigner].",
+      "The docs say to find whether CPU or GPU is the bottleneck first: add a Hog CHOP, or drop TOP resolution [Optimize].",
+      "Per-node info shows cook time, cook count and GPU time [Optimize], [Cook].",
+      "Performance Monitor logs one frame's cooks in order, with nesting, and can trigger on frames over a time limit [Performance Monitor Dialog].",
+      "Probe in the palette watches CPU and GPU time and memory live [Optimize].",
+      "Perform CHOP gives frame time, cook time and dropped frames as channels [Optimize].",
+      "Engine COMP runs a .tox in a separate process; only TOP, CHOP and DAT ports are supported; clock can be Synchronized or Independent; input and output buffers absorb rate differences [Engine COMP].",
+      "Several TouchDesigner instances can share work through Touch In/Out operators [Optimize].",
+      "Thread Manager runs a worker pool of Python threads; threads must not access operators [Thread Manager]."
+    ],
+    "names": [
+      "Engine COMP",
+      "TouchEngine",
+      "Thread Manager",
+      "Hog CHOP",
+      "Perform CHOP",
+      "Probe",
+      "Performance Monitor",
+      "Touch In TOP",
+      "Touch Out TOP"
+    ],
+    "sources": [
+      "https://docs.derivative.ca/Python_threading_in_TouchDesigner",
+      "https://docs.derivative.ca/Optimize",
+      "https://docs.derivative.ca/Performance_Monitor_Dialog",
+      "https://docs.derivative.ca/Engine_COMP",
+      "https://docs.derivative.ca/Thread_Manager",
+      "https://docs.derivative.ca/Cook"
+    ],
+    "what_a_max_user_would_notice": "There is no separate audio thread. To split work, you move a component into another process and wire its inputs and outputs as if it were local.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 17,
+    "dimension": "Several machines",
+    "summary": "The docs treat multi-machine work as levels of sync, from none to software sync plus hardware frame lock. The aim is a deterministic project driven by one frame index or one set of control channels. Sync Out CHOP and Sync In CHOP make machines wait for each other each frame (Pro licence); NVIDIA Quadro Sync cards then lock display swaps. Touch In/Out operators move channels, tables and video between processes, and many network protocols are operators.",
+    "details": [
+      "Sync errors come from content generation, transmission and display; a deterministic project makes the same output from the same commands [Syncing Multiple Computers].",
+      "Sync Out CHOP is the server; it waits for the clients to finish a frame before sending the next [Syncing Multiple Computers].",
+      "For perfect sync with particle systems, run server and clients with realtime off so no frame is skipped [Syncing Multiple Computers].",
+      "Sync In/Out and hardware frame lock need a Pro licence [Licensing].",
+      "Frame lock in the Window COMP is deprecated in favour of Direct Display Out TOP [Window COMP].",
+      "Touch In/Out send whole channel sets, tables and video between instances [Touch In/Out Synced Ports] (session 1–2).",
+      "Network operators cover HTTP, WebSocket, TCP, UDP, MQTT, WebRTC, OSC, NDI and more [Network Protocols] (session 1)."
+    ],
+    "names": [
+      "Sync Out CHOP",
+      "Sync In CHOP",
+      "Touch In CHOP",
+      "Touch Out CHOP",
+      "Touch In TOP",
+      "Touch Out TOP",
+      "Direct Display Out TOP",
+      "TDSynchro"
+    ],
+    "sources": [
+      "https://docs.derivative.ca/Syncing_Multiple_Computers",
+      "https://docs.derivative.ca/Licensing",
+      "https://docs.derivative.ca/Window_COMP",
+      "https://docs.derivative.ca/Touch_In/Out_Synced_Ports"
+    ],
+    "what_a_max_user_would_notice": "Sync is a built-in operator pair that holds machines on the same frame, not a protocol you assemble. The docs push you to design the show so every machine computes the same thing from the same frame number.",
+    "confidence": "medium",
+    "open_questions": "The synchro palette components (synchroServer, synchroClient) were not read."
+  },
+  {
+    "id": 18,
+    "dimension": "Deployment",
+    "summary": "TouchPlayer runs any .toe or .tox in Perform Mode only, with no editor. Licence tiers gate features: Non-Commercial is free but limited to 1280×1280 and non-paying work; Commercial and Pro unlock resolution, more operators, sync, privacy and more. Pro can make a project or component private so it runs but cannot be opened. TouchEngine lets other programs run a .tox; Project Packager builds a Windows installer around a project.",
+    "details": [
+      "TouchPlayer runs in Perform Mode only; Non-Commercial is free, Commercial $300 and Pro $800 [TouchPlayer].",
+      "TouchPlayer Non-Commercial asks permission before using cameras, microphones and network access [TouchPlayer].",
+      "A machine running TouchPlayer can be edited by adding a TouchDesigner licence or dongle without restarting the file [TouchPlayer].",
+      "Licence comparison: Non-Commercial 1280×1280; Pro adds sync, hardware frame lock, privacy, some trackers and calibration [Licensing].",
+      "Private .toe files and components can be made with Pro and run on any licence [Licensing], [Privacy] (session 1).",
+      "TouchEngine is free to embed; it needs a paid TouchDesigner or TouchPlayer licence on the end-user machine; hosts include Unreal, VDMX, Resolume via FFGL and media servers [TouchEngine].",
+      "Project Packager builds a Windows installer with Inno Setup; Derivative must consent to bundling [Project Packager].",
+      "A project can be set to start in Perform Mode [Perform Mode]."
+    ],
+    "names": [
+      "TouchPlayer",
+      "Perform Mode",
+      "Non-Commercial",
+      "Educational",
+      "Commercial",
+      "Pro",
+      "Privacy",
+      "TouchEngine",
+      "Project Packager",
+      "License Dongle"
+    ],
+    "sources": [
+      "https://docs.derivative.ca/TouchPlayer",
+      "https://docs.derivative.ca/Licensing",
+      "https://docs.derivative.ca/TouchEngine",
+      "https://docs.derivative.ca/Project_Packager",
+      "https://docs.derivative.ca/Perform_Mode",
+      "https://docs.derivative.ca/Privacy"
+    ],
+    "what_a_max_user_would_notice": "The runtime is the same program in a mode that hides the editor, and what a project may do depends on the licence on the machine it runs on.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 19,
+    "dimension": "Extending",
+    "summary": "New parts come in three layers. Components with custom parameters and Python extensions are the everyday way, and they look like any other operator from outside. Script operators produce a family's data from Python. C++ plug-ins load into CPlusPlus operators or install as Custom Operators that appear in the operator menu, with their own parameters and Info CHOP/DAT output. GLSL shaders run in GLSL TOP, MAT and POP.",
+    "details": [
+      "Custom OPs are third-party C++ operators for TOP, CHOP, SOP, POP and DAT that behave like built-ins and show under a Custom tab [Custom Operators], [Operator Family].",
+      "Before loading a new binary the first time, TouchDesigner asks permission [Custom Operators].",
+      "CPlusPlus OPs inherit from a base class; plug-ins build as DLLs on Windows and .plugin bundles on macOS [Write a CPlusPlus Plugin].",
+      "C++ operators can define custom parameters and output Info CHOP / Info DAT data; Python access works only when installed as a Custom Operator [Write a CPlusPlus Plugin].",
+      "Script operators define custom parameters in a setupParameters callback [Custom Parameters].",
+      "Extensions add methods and properties to a component [Extensions].",
+      "GLSL TOP runs pixel or compute shaders; GLSL POP runs compute shaders over attributes [GLSL TOP], [GLSL POP] (session 1)."
+    ],
+    "names": [
+      "Custom Operators",
+      "CPlusPlus TOP",
+      "CPlusPlus CHOP",
+      "CPlusPlus POP",
+      "Script CHOP",
+      "Script TOP",
+      "Extensions",
+      "GLSL TOP",
+      "GLSL MAT",
+      "GLSL POP"
+    ],
+    "sources": [
+      "https://docs.derivative.ca/Custom_Operators",
+      "https://docs.derivative.ca/Write_a_CPlusPlus_Plugin",
+      "https://docs.derivative.ca/Custom_Parameters",
+      "https://docs.derivative.ca/Extensions",
+      "https://docs.derivative.ca/Operator_Family"
+    ],
+    "what_a_max_user_would_notice": "Most extending is done by building a component and giving it parameters, not by writing code. A compiled plug-in becomes a new node in a family, with the same parameter dialog as a built-in.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 20,
+    "dimension": "Media and files",
+    "summary": "File-reading operators take a file path parameter, which can be absolute, relative, a URL, or a vfs: path into the Virtual File System embedded in a .toe or .tox. Components can source their contents from external .tox files, with a setting for whether relative paths inside resolve from the .toe or the .tox. Folder DAT lists and watches folders. Text DATs can sync to files on disk. Preloading is a per-operator concern, explained in detail for movies.",
+    "details": [
+      "A Folder always means an OS folder; a Path means a place in the network [Folder], [Network Path].",
+      "File parameters accept http URLs, which are downloaded to a temporary file [Folder].",
+      "VFS embeds images, movies, audio, fonts and some DLLs inside .toe/.tox; addressed as vfs:/comp:file [Virtual File System].",
+      "VFS files keep their own compression; locked TOPs are saved LZW-compressed instead [Virtual File System].",
+      "Relative File Path Behavior: relative to the .toe, to the external .tox, or the parent's choice [COMP Other Common Page].",
+      "Save Backup of External keeps a copy of an external .tox in the .toe in case the file is missing [COMP Other Common Page].",
+      "Engine COMP resolves relative paths inside a loaded .tox from the .tox location by default [Engine COMP].",
+      "Execute and Text DATs can load a file on start, watch it and write it on save [Execute DAT].",
+      "Movie File In TOP exposes pre-read and decode settings; the docs warn about the OS file cache [Movie Playback] (session 2).",
+      "Project Packager needs all assets under one root folder [Project Packager]."
+    ],
+    "names": [
+      "Folder",
+      "Virtual File System",
+      "vfs:",
+      "Folder DAT",
+      "External .tox Path",
+      "Relative File Path Behavior",
+      "Save Backup of External",
+      "Movie File In TOP",
+      "File In DAT"
+    ],
+    "sources": [
+      "https://docs.derivative.ca/Folder",
+      "https://docs.derivative.ca/Virtual_File_System",
+      "https://docs.derivative.ca/COMP_Other_Common_Page",
+      "https://docs.derivative.ca/Engine_COMP",
+      "https://docs.derivative.ca/Execute_DAT",
+      "https://docs.derivative.ca/Project_Packager",
+      "https://docs.derivative.ca/Movie_Playback"
+    ],
+    "what_a_max_user_would_notice": "Media can live inside the project file itself. Each component decides where its relative paths start, so a component moved between projects can carry its own media.",
+    "confidence": "medium",
+    "open_questions": "No project-wide search path or collect-for-export tool appeared in the pages read."
+  },
+  {
+    "id": 21,
+    "dimension": "What a connection is",
+    "why_system_level": "It fixes the meaning of every line in every network: what moves, when, and which kinds of line exist.",
+    "summary": "A wire does not move data. When a node cooks, the wire only tells the next node where to get its input. There are two kinds of line: wires, which join nodes of one family left to right (plus hierarchy wires for 3D and panel parenting), and links, the dashed lines drawn for every reference by path, expression or export. So the editor shows wireless dependencies as lines too.",
+    "details": [
+      "A wire does not pass or copy data; it informs the destination where to get it [Wire].",
+      "Hierarchy wires on top and bottom connectors form parent-child relations of 3D and panel components [Wire].",
+      "Links are dashed lines for path parameters, expressions referring to nodes, CHOP and DAT exports, and Execute DATs watching a node [Link].",
+      "A reference to a TOP shares the image, it is not copied [Link].",
+      "Wires animate when the upstream node cooks [Wire]."
+    ],
+    "names": [
+      "Wire",
+      "Link",
+      "Reference",
+      "Hierarchy Wire",
+      "Connector"
+    ],
+    "sources": [
+      "https://docs.derivative.ca/Wire",
+      "https://docs.derivative.ca/Link",
+      "https://docs.derivative.ca/Node"
+    ],
+    "what_a_max_user_would_notice": "A cord is not a pipe that messages travel down. It is a declared dependency, and references made by name get drawn too.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 22,
+    "dimension": "Flags as a second state layer",
+    "why_system_level": "Every node in every family carries flags, and they control viewing, cooking, freezing, bypass, cloning and rendering separately from parameters.",
+    "summary": "Each node has flags, on/off states that are not parameters: Viewer, Viewer Active, Lock, Bypass, Cooking, Immune, Current, Selected, Expose, and for some families Render, Display, Pickable, Export, Compare, Template. Changing a flag does not itself make a node cook, and you cannot export to a flag. Flags decide much of the system's behaviour: what is shown, what is frozen, what is rendered and what follows its clone master.",
+    "details": [
+      "Flags are not parameters; changing a flag does not cause a cook and flags cannot be exported to [Flag].",
+      "Flags on all nodes: Viewer, Viewer Active, Lock, Bypass, Cooking, Immune, Current, Selected, Expose [Flag].",
+      "3D objects add Render, Display and Pickable; CHOPs add Export; SOPs add Compare and Template [Flag].",
+      "Flags are set from Python, for instance op('name').lock = True [Flag].",
+      "Table View in the network editor shows all flags as columns [Flag]."
+    ],
+    "names": [
+      "Flag",
+      "Viewer Flag",
+      "Lock Flag",
+      "Bypass Flag",
+      "Cooking Flag",
+      "Immune",
+      "Render Flag",
+      "Display Flag",
+      "Export Flag"
+    ],
+    "sources": [
+      "https://docs.derivative.ca/Flag",
+      "https://docs.derivative.ca/Lock_Flag",
+      "https://docs.derivative.ca/Bypass_Flag",
+      "https://docs.derivative.ca/Cooking_Flag",
+      "https://docs.derivative.ca/Render_Flag",
+      "https://docs.derivative.ca/Display_Flag"
+    ],
+    "what_a_max_user_would_notice": "Some of a node's behaviour lives in small switches on the node, outside its settings. Freezing, bypassing or hiding a node is a click, not a rewire.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 23,
+    "dimension": "The network as queryable data",
+    "why_system_level": "Any part of the system can read the structure and state of the rest as ordinary data, which shapes how tools and interfaces are built.",
+    "summary": "The project describes itself in its own data types. OP Find DAT lists operators matching type, name, tags or parameter values as a table. Parameter DAT and Parameter CHOP turn any operator's parameters into a table or channels. Info CHOP and Info DAT expose internal state, Error DAT logs errors, and Perform CHOP reports frame timing. These feed Replicators, panels and scripts like any other data.",
+    "details": [
+      "OP Find DAT outputs a table of operator paths matching criteria [Network Path], [OP Find DAT] (session 1).",
+      "Parameter CHOP fetches parameters by name or category as channels [Custom Parameters].",
+      "Parameter DAT lists any operator's parameters as a table [Parameter DAT] (session 2).",
+      "Error DAT logs errors as a table with a callback [Error DAT].",
+      "Perform CHOP gives frame time and cook time as channels [Optimize].",
+      "Replicator COMP builds nodes from table rows, so a query table can drive structure [Replicator COMP]."
+    ],
+    "names": [
+      "OP Find DAT",
+      "Parameter DAT",
+      "Parameter CHOP",
+      "Info CHOP",
+      "Info DAT",
+      "Error DAT",
+      "Perform CHOP"
+    ],
+    "sources": [
+      "https://docs.derivative.ca/Network_Path",
+      "https://docs.derivative.ca/Custom_Parameters",
+      "https://docs.derivative.ca/Error_DAT",
+      "https://docs.derivative.ca/Optimize",
+      "https://docs.derivative.ca/Replicator_COMP",
+      "https://docs.derivative.ca/OP_Find_DAT",
+      "https://docs.derivative.ca/Parameter_DAT"
+    ],
+    "what_a_max_user_would_notice": "Inspecting the patch itself does not need scripting: the list of objects, their settings and their errors arrive as tables and channels you can wire.",
+    "confidence": "medium",
+    "open_questions": ""
+  }
+]

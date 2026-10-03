@@ -1,0 +1,782 @@
+[
+  {
+    "id": 1,
+    "dimension": "Evaluation",
+    "summary": "MadMapper is a frame-loop renderer. Every engine frame it draws the surface stack into each output; there is no event pushed down a graph. Values reach parameters from Controls, cues, timelines and modules, and the next frame simply draws with them. Some work is skipped when nothing uses it: an NDI source is processed only while a visible surface shows it.",
+    "details": [
+      "The engine runs at a frame rate set per project: Auto (follow the display) or locked to a value [2.-the-interface/madmapper-preferences].",
+      "With Engine FPS set to Manual, the whole engine tries to run at that rate [15.-troubleshooting].",
+      "A Generator renders once into a texture however many surfaces use it; a Material renders again on each surface that uses it [3.-media/media-bin].",
+      "An NDI source is only processed while a visible surface uses it, unless Keep running is ticked [11.-live-performance-and-control].",
+      "Freeze Engine stops activity; Freeze Video and DMX Output stops the output but not playback [9.-master-settings].",
+      "A Montage track's empty stretches can make the surface Skip Rendering [10.-timelines/track-types-and-inspectors]."
+    ],
+    "names": [
+      "Engine FPS",
+      "Auto",
+      "Manual",
+      "Freeze Engine",
+      "Keep running (uses more CPU)",
+      "Skip Rendering",
+      "Generators",
+      "Materials"
+    ],
+    "sources": [
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences",
+      "https://docs.madmapper.com/madmapper/6/15.-troubleshooting",
+      "https://docs.madmapper.com/madmapper/6/3.-media/media-bin",
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control",
+      "https://docs.madmapper.com/madmapper/6/9.-master-settings",
+      "https://docs.madmapper.com/madmapper/6/10.-timelines/track-types-and-inspectors"
+    ],
+    "what_a_max_user_would_notice": "Nothing is triggered. You set values and the next frame shows them. There is no bang, no hot inlet, and no way to make something compute 'now' apart from the frame clock.",
+    "confidence": "high",
+    "open_questions": "Whether hidden or zero-opacity surfaces still render their media is not stated."
+  },
+  {
+    "id": 2,
+    "dimension": "Ordering",
+    "summary": "Within a frame, the lists set the order. The surface list is the draw order, first item in front, and DMX fixture lists work the same way. When several things try to set the same value, the docs give specific rules rather than a general one: a new cue on a parameter cancels the earlier transition, a new item in a grid row stops the one playing, and between two schedulers the one lower in the module list wins.",
+    "details": [
+      "Surfaces work as layers in a stack; the first in the list is in the foreground [4.-surfaces].",
+      "Fixtures are layers too, but one placed over another overwrites it, since fixtures have no opacity [5.-dmx-and-led-mapping/dmx-fundamentals].",
+      "Starting a new Scene, Cue or Timeline in a row stops the one already playing in that row [11.-live-performance-and-control/osc-commands-and-channels-list].",
+      "A cue started on a parameter cancels any earlier transition on it (session 1) [10.-timelines/scenes-and-cues].",
+      "If two schedulers fire on the same output at once, the one lower in the module list wins (session 1) [9.-master-settings/scheduling-and-automation].",
+      "Masks inside a surface: their order decides whether one adds to or subtracts from the others (session 1) [4.-surfaces/surface-groups-and-masks]."
+    ],
+    "names": [
+      "Surfaces List",
+      "DMX Fixtures List",
+      "grid exclusivity"
+    ],
+    "sources": [
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces",
+      "https://docs.madmapper.com/madmapper/6/5.-dmx-and-led-mapping/dmx-fundamentals",
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control/osc-commands-and-channels-list",
+      "https://docs.madmapper.com/madmapper/6/10.-timelines/scenes-and-cues",
+      "https://docs.madmapper.com/madmapper/6/9.-master-settings/scheduling-and-automation",
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/surface-groups-and-masks"
+    ],
+    "what_a_max_user_would_notice": "There is no message order to reason about, because there are no messages. Order means draw order, and you see it as the list. Conflicts between two sources are settled by fixed rules, not by which cord fired last.",
+    "confidence": "high",
+    "open_questions": "The order in which Controls, modules, cues and timelines are applied within one frame is not documented."
+  },
+  {
+    "id": 3,
+    "dimension": "Time",
+    "summary": "Several clocks sit side by side: the engine frame rate, a Global BPM, timelines with their own FPS and BPM setup, wall-clock schedules, and external timecode. Master Speed scales every animation and the audio at once, and Freeze stops them. Timelines can follow their own clock, a set speed, the Global BPM or external sync. Export can render a timeline slower than real time.",
+    "details": [
+      "Global BPM comes from Audio Beat Detection, Ableton Link, MIDI Clock, or manual entry and tap [9.-master-settings/audio-input-and-beat-detection].",
+      "Timeline settings define FPS, master BPM and signature; Playback Mode is Default, Controlled Speed, Global BPM or External Sync [10.-timelines/timelines-overview-and-the-conductor].",
+      "External sync sources named: Ableton Live, LTC, MTC, ArtNet [9.-master-settings/audio-input-and-beat-detection].",
+      "Rulers show seconds, frames, or beat divisions from 1/32 note to 4 bars [10.-timelines/timelines-overview-and-the-conductor].",
+      "Master Speed affects audio too; Freeze Engine sets it to 0 except while Link or BPM is running [9.-master-settings].",
+      "In shaders, TIME is scaled by engine speed and CLOCK_TIME is wall-clock time (session 1) [MaterialsDoc.md].",
+      "Cue launch can be quantized to the beat [10.-timelines/scenes-and-cues].",
+      "Cue Scheduler, Calendar Scheduler and Timeline Scheduler work in wall-clock dates and times [8.-modules].",
+      "Timeline export renders without needing real time [6.-outputs/timeline-export]."
+    ],
+    "names": [
+      "Global BPM",
+      "Master Speed",
+      "Freeze Engine",
+      "Playback Mode",
+      "Default",
+      "Controlled Speed",
+      "External Sync",
+      "Launch Quantize",
+      "TIME",
+      "CLOCK_TIME",
+      "ltc_time"
+    ],
+    "sources": [
+      "https://docs.madmapper.com/madmapper/6/9.-master-settings/audio-input-and-beat-detection",
+      "https://docs.madmapper.com/madmapper/6/10.-timelines/timelines-overview-and-the-conductor",
+      "https://docs.madmapper.com/madmapper/6/9.-master-settings",
+      "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/MaterialsDoc.md",
+      "https://docs.madmapper.com/madmapper/6/10.-timelines/scenes-and-cues",
+      "https://docs.madmapper.com/madmapper/6/8.-modules",
+      "https://docs.madmapper.com/madmapper/6/6.-outputs/timeline-export"
+    ],
+    "what_a_max_user_would_notice": "Time is a set of named global settings, not objects you place. One Master Speed fader changes the pace of everything, which a patch only gets if every animation reads one shared clock.",
+    "confidence": "high",
+    "open_questions": "How the engine frame clock relates to timeline FPS when they differ is not stated."
+  },
+  {
+    "id": 4,
+    "dimension": "Data types",
+    "summary": "The user never sees typed data on a wire. Instead there are kinds of thing: media (pixels, from files, generators, live inputs, loopbacks), vector paths for lasers, DMX channel values, and parameter values. Parameters have a small set of types, the same ones used by OSC. Conversion between domains happens at fixed points: a fixture samples pixels into DMX, a Laser Quad traces pixels into paths, a loopback turns an output back into media.",
+    "details": [
+      "OSC value types: BOOL, FLOAT, INT, STRING, Color, and nil for triggers [11.-live-performance-and-control/osc-commands-and-channels-list].",
+      "Shader inputs: float, int, bool, color, long, point2D, event, floatRange; audio and audioFFT arrive as one-pixel-high textures (session 1) [MaterialsDoc.md].",
+      "DMX fixtures sample the output composition to get their colour channels [5.-dmx-and-led-mapping/dmx-fundamentals].",
+      "Laser surfaces hand coloured polylines to the Laser Output; pixel media must be traced (session 1) [MadLaser Guide.pdf].",
+      "Video buffers take a pixel format: 8-bit, 16-bit float or 32-bit float formats [6.-outputs].",
+      "A laser loopback carries paths, not pixels (session 1) [6.-outputs/loopback-and-advanced-output-techniques]."
+    ],
+    "names": [
+      "Media",
+      "Live Input",
+      "Loopbacks",
+      "BOOL",
+      "FLOAT",
+      "INT",
+      "STRING",
+      "PF_U8_BGRA",
+      "PF_F16_RGBA",
+      "PF_F32_RGBA"
+    ],
+    "sources": [
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control/osc-commands-and-channels-list",
+      "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/MaterialsDoc.md",
+      "https://docs.madmapper.com/madmapper/6/5.-dmx-and-led-mapping/dmx-fundamentals",
+      "https://madmapper.com/files/MadLaser%20Guide.pdf",
+      "https://docs.madmapper.com/madmapper/6/6.-outputs",
+      "https://docs.madmapper.com/madmapper/6/6.-outputs/loopback-and-advanced-output-techniques"
+    ],
+    "what_a_max_user_would_notice": "You choose what something is (a media item, a fixture, a laser surface) and the type follows. There is nothing like a message, a signal or a matrix travelling between parts, and no conversion objects to place.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 5,
+    "dimension": "Rates and channels",
+    "summary": "Rates are tied to output domains, not chosen per part. Video runs at the engine frame rate. DMX output has its own maximum frame rate. A laser output has its own points per second and desired FPS. Audio is played and analysed by its own engine. Many channels are handled as a count on one thing: many DMX universes, many audio channels to one interface, many outputs.",
+    "details": [
+      "Engine FPS is per project, Auto or locked [2.-the-interface/madmapper-preferences].",
+      "DMX output can cap its Maximum FPS [2.-the-interface/madmapper-preferences].",
+      "Laser Output: PPS, Desired FPS, and ILDA FPS = PPS / Point Count [6.-outputs].",
+      "Image Folders get their own FPS because stills have none [3.-media/media-bin].",
+      "Audio: one input and output interface, sample rate and buffer size, chosen analysis channels [2.-the-interface/madmapper-preferences].",
+      "Controls carry analysed audio into the frame world as amplitude, bass, medium, treble and beat values [9.-master-settings/audio-input-and-beat-detection]."
+    ],
+    "names": [
+      "Engine FPS",
+      "Maximum FPS",
+      "PPS",
+      "Desired FPS",
+      "Audio Analysis Channels"
+    ],
+    "sources": [
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences",
+      "https://docs.madmapper.com/madmapper/6/6.-outputs",
+      "https://docs.madmapper.com/madmapper/6/3.-media/media-bin",
+      "https://docs.madmapper.com/madmapper/6/9.-master-settings/audio-input-and-beat-detection"
+    ],
+    "what_a_max_user_would_notice": "There is no choice between control rate and audio rate. Audio only enters the visual side as a handful of analysed values at frame rate.",
+    "confidence": "medium",
+    "open_questions": "Whether DMX and laser output run on their own threads or inside the engine frame is not stated."
+  },
+  {
+    "id": 6,
+    "dimension": "State and saving",
+    "summary": "The project file holds the whole document: surfaces, fixtures, outputs, media references, cues, timelines and controls. What you see when you save is what reopens, since parameters are document fields. Preferences are split: Application settings belong to the machine, Project settings travel with the file. Scenes and Cues are the preset system and live in the project.",
+    "details": [
+      "Preferences have an Application tab (this computer) and a Project tab (saved in the .mad file) [2.-the-interface/madmapper-preferences].",
+      "Project Startup can open fullscreen and arm lasers; Restore Master Settings from Project is a choice [2.-the-interface/madmapper-preferences].",
+      "A Scene stores the whole project state; a Cue stores only chosen parameters [10.-timelines/scenes-and-cues].",
+      "Live changes to a scene or cue are not saved into it until Record, Update or drag-and-drop [10.-timelines/scenes-and-cues].",
+      "Update Startup Values is offered on a scene or cue [10.-timelines/scenes-and-cues].",
+      "AutoSave writes recovery files without overwriting the project, with a 10-second countdown; saving keeps backups of earlier versions [12.-advanced/project-backup-and-recovery]."
+    ],
+    "names": [
+      ".madproject",
+      ".mad",
+      "Application",
+      "Project",
+      "Scenes",
+      "Cues",
+      "Update Startup Values",
+      "AutoSave",
+      "Max Backup Count"
+    ],
+    "sources": [
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences",
+      "https://docs.madmapper.com/madmapper/6/10.-timelines/scenes-and-cues",
+      "https://docs.madmapper.com/madmapper/6/12.-advanced/project-backup-and-recovery"
+    ],
+    "what_a_max_user_would_notice": "Every value you can see is saved, because the project is a document, not a program. There is no load-time initialisation to write; what matters is choosing which values a cue owns.",
+    "confidence": "high",
+    "open_questions": "What 'Update Startup Values' sets exactly, and whether a cue or scene is applied at load, is not explained."
+  },
+  {
+    "id": 7,
+    "dimension": "Parameters",
+    "summary": "Almost every slider, button and menu is a parameter with a fixed OSC address built from the names in the project. Any parameter can also get one Control per source type (MIDI, OSC, DMX, keyboard, audio, gamepad, internal modules) with ranges, a filter and a curve. Parameters are what cues store and timelines keyframe. Shader inputs declared in a header become parameters like the built-in ones.",
+    "details": [
+      "Right-click > Add Control, or Learn mode, binds an input to a widget [11.-live-performance-and-control].",
+      "Control List tabs: Keyboard, MIDI, DMX, OSC, Audio, Gamepad, MadMapper, Other, All [11.-live-performance-and-control].",
+      "Each Control has Source Range, Target Range, Filter, Curve and Toggle [9.-master-settings/audio-input-and-beat-detection].",
+      "Sending to a predefined OSC address bypasses ranges and filters [11.-live-performance-and-control/osc-commands-and-channels-list].",
+      "Addresses read like paths, depend on user names, accept * wildcards, and can be queried with Get [11.-live-performance-and-control].",
+      "OSCQuery exposes the whole parameter tree [11.-live-performance-and-control/osc-commands-and-channels-list].",
+      "One Control per source type per parameter; the Controls Combiner module mixes several (session 1) [8.-modules].",
+      "Shader header INPUTS become inspector controls available to Controls, cues and timelines (session 1) [MaterialsDoc.md].",
+      "Expert Mode adds mappable output toggles such as publish_to_ndi [2.-the-interface/madmapper-preferences/expert-mode]."
+    ],
+    "names": [
+      "Add Control",
+      "Learn",
+      "Control List",
+      "Source Range",
+      "Target Range",
+      "Filter",
+      "Curve",
+      "Toggle",
+      "Copy OSC Address",
+      "OSCQuery",
+      "Controls Combiner",
+      "Macro"
+    ],
+    "sources": [
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control",
+      "https://docs.madmapper.com/madmapper/6/9.-master-settings/audio-input-and-beat-detection",
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control/osc-commands-and-channels-list",
+      "https://docs.madmapper.com/madmapper/6/8.-modules",
+      "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/MaterialsDoc.md",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences/expert-mode"
+    ],
+    "what_a_max_user_would_notice": "Exposure is automatic: nothing has to be wired or published to be reachable from outside. The cost is that a rename changes the address, and mapping logic is limited to range, filter and curve.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 8,
+    "dimension": "Encapsulation and reuse",
+    "summary": "There is no subpatch or component. Grouping is visual and multiplicative: a group of surfaces or fixtures scales its children's opacity and colour. Reuse happens at the level of whole items and files: duplicate surfaces, share one media on many surfaces, fixture definitions shared by many fixtures, Materials and FX shared through the Library, and Merge Project to bring in another project.",
+    "details": [
+      "Groups hold any number of surfaces; a child's percentage is multiplied by the group's [4.-surfaces, 4.-surfaces/surface-inspector].",
+      "Modules cannot be grouped [8.-modules].",
+      "Duplicate surfaces with Cmd/Ctrl + D [4.-surfaces].",
+      "One fixture definition (.mmfl) serves many fixtures; LED Strip Mode and Matrix Mode let each set its own size (session 1) [14.-technical-notes/dmx-fixture-definitions].",
+      "The Library installs and publishes Materials and FX [2.-the-interface/toolbar-and-workspace].",
+      "Merge Project imports surfaces, fixtures, media, scenes, cues and controls (session 1) [2.-the-interface/merging-projects].",
+      "Templates start a project from a pattern, e.g. SoftEdge Blending 4 Outputs Example [6.-outputs/loopback-and-advanced-output-techniques]."
+    ],
+    "names": [
+      "Groups",
+      "Merge Project...",
+      "Library",
+      "From Template",
+      "Fixture Editor"
+    ],
+    "sources": [
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces",
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/surface-inspector",
+      "https://docs.madmapper.com/madmapper/6/8.-modules",
+      "https://docs.madmapper.com/madmapper/6/14.-technical-notes/dmx-fixture-definitions",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/toolbar-and-workspace",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/merging-projects",
+      "https://docs.madmapper.com/madmapper/6/6.-outputs/loopback-and-advanced-output-techniques"
+    ],
+    "what_a_max_user_would_notice": "You cannot package your own logic into a reusable box with arguments and ports. Reuse means copying items, sharing media, or writing a shader.",
+    "confidence": "medium",
+    "open_questions": "Whether a shared Material instance keeps separate parameter values per surface is not stated."
+  },
+  {
+    "id": 9,
+    "dimension": "Names and scope",
+    "summary": "Things are referred to by their item names in one project-wide tree. The OSC address of a parameter is its path through that tree, so names are global and unique within their list. Media is assigned by picking it; cues and timelines refer to parameters directly. Scope is the project, with banks as a second level for timelines.",
+    "details": [
+      "Double-click to rename a surface or fixture [4.-surfaces].",
+      "Addresses such as /surfaces/Quad-1/opacity depend on user-given names [11.-live-performance-and-control].",
+      "/media/[media_name]/... uses the exact media name [11.-live-performance-and-control/osc-commands-and-channels-list].",
+      "Timelines are addressed by bank, column and row, or a marker by name [11.-live-performance-and-control/osc-commands-and-channels-list].",
+      "Clicking the use-count on a media thumbnail selects every surface using it [3.-media/media-bin]."
+    ],
+    "names": [
+      "/surfaces",
+      "/media",
+      "/master",
+      "/outputs",
+      "/timelines",
+      "Bank",
+      "col_current"
+    ],
+    "sources": [
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces",
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control",
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control/osc-commands-and-channels-list",
+      "https://docs.madmapper.com/madmapper/6/3.-media/media-bin"
+    ],
+    "what_a_max_user_would_notice": "There is one tree of names and every part of it is public. There is nothing like a local name, a per-instance prefix or a private send.",
+    "confidence": "medium",
+    "open_questions": "What happens to existing Controls and remote OSC users when an item is renamed is not stated."
+  },
+  {
+    "id": 10,
+    "dimension": "Show structure",
+    "summary": "A show is a grid of Scenes and Cues organised in banks, plus timelines. A Scene is a full snapshot, a Cue a partial one, and in version 6 either can be animated into a timeline. The Conductor is the master timeline that places scenes and cues in time alongside montage, audio, OSC and MIDI tracks, with markers that pause, loop or jump. Turning things on and off is done by cues, row exclusivity and schedulers.",
+    "details": [
+      "Scenes are global snapshots; Cues store a selection of parameters [10.-timelines/scenes-and-cues].",
+      "Only one item per row plays; starting another stops it, with audio and montage crossfaded over the new fade time [11.-live-performance-and-control/osc-commands-and-channels-list].",
+      "Any scene or cue can be given a timeline with Animate [10.-timelines/scenes-and-cues].",
+      "Conductor tracks: Timeline Player, Montage, Audio, OSC, MIDI [10.-timelines/track-types-and-inspectors].",
+      "Markers: Pause, Continue, Loop, Go to Marker, plus Follow Actions [10.-timelines/time-markers-and-follow-actions].",
+      "Expert Mode allows nested Timeline Players and per-timeline external sync [2.-the-interface/madmapper-preferences/expert-mode].",
+      "Schedulers and Startup / Idle Timeline modules start things by date, time or inactivity [8.-modules]."
+    ],
+    "names": [
+      "Scenes",
+      "Cues",
+      "Bank",
+      "Conductor",
+      "Timeline Player",
+      "Montage",
+      "Animate",
+      "Time Markers",
+      "Follow Actions",
+      "Auto Play"
+    ],
+    "sources": [
+      "https://docs.madmapper.com/madmapper/6/10.-timelines/scenes-and-cues",
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control/osc-commands-and-channels-list",
+      "https://docs.madmapper.com/madmapper/6/10.-timelines/track-types-and-inspectors",
+      "https://docs.madmapper.com/madmapper/6/10.-timelines/time-markers-and-follow-actions",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences/expert-mode",
+      "https://docs.madmapper.com/madmapper/6/8.-modules"
+    ],
+    "what_a_max_user_would_notice": "Show structure is a built-in layer above the content, not something you build. A cue grid and a timeline exist in every project from the start.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 11,
+    "dimension": "Interface",
+    "summary": "The editing interface is the interface: lists on the left, an inspector for the selected item, the Input View and Stage Preview in the middle, and tools such as the timeline and Control List at the bottom. There is no separate operator panel to design. Performers work through the cue grid, hardware controllers and Stream Deck, or remote OSC tablets. Shader headers generate their own controls.",
+    "details": [
+      "Three main parts: Media and project tabs, Input and Stage views, and the advanced toolbar [2.-the-interface/interface-overview].",
+      "Advanced tools: Timelines, Control List, Library, AI / Code Editor, Fixture Editor, MadLight Recorder, DMX Monitor, Notes; panels can be undocked to other screens [2.-the-interface/toolbar-and-workspace].",
+      "Multi-select shows only the common parameters in the inspector [4.-surfaces/surface-inspector].",
+      "Grid buttons take a colour, an image and an operator comment [10.-timelines/scenes-and-cues].",
+      "Control Surface module shows the cue grid on APC or Launchpad pads [8.-modules].",
+      "Macro module makes widgets that can be mapped to several Controls [8.-modules].",
+      "A tooltip line describes whatever is under the mouse [2.-the-interface/interface-overview]."
+    ],
+    "names": [
+      "Inspector",
+      "Input View",
+      "Stage Preview",
+      "Control List",
+      "Control Surface",
+      "Macro",
+      "Tooltip"
+    ],
+    "sources": [
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/interface-overview",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/toolbar-and-workspace",
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/surface-inspector",
+      "https://docs.madmapper.com/madmapper/6/10.-timelines/scenes-and-cues",
+      "https://docs.madmapper.com/madmapper/6/8.-modules"
+    ],
+    "what_a_max_user_would_notice": "There is no presentation view to build and no UI objects to place. The trade-off is that the operator sees the same dense editor you do, or a hardware grid.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 12,
+    "dimension": "Editing while running",
+    "summary": "The project is always live: surfaces are dragged and warped while the output plays. Safety comes from locks and modes, not from a separate run state. Surfaces, fixtures and outputs can be locked, the grid has a Live mode that only triggers, and Edit mode is entered explicitly to change what cues store. Undo exists, and AutoSave counts down so a save does not hit mid-show.",
+    "details": [
+      "Lock / Unlock on surfaces and fixtures avoids accidents [4.-surfaces, 5.-dmx-and-led-mapping/dmx-fundamentals].",
+      "Lock Surfaces Movement and Object Isolation are toolbar toggles [2.-the-interface/interface-overview].",
+      "Disabling an active output during a show closes its fullscreen at once [6.-outputs].",
+      "Edit mode shows editable widgets in red; edited values get a red line; orange marks selection or differing values [10.-timelines/scenes-and-cues].",
+      "A Live mode disables editing in the grid so a touch only triggers (session 1) [06-Scenes and Cues.pdf].",
+      "Undo and Redo: Cmd/Ctrl + Z, Shift + Cmd/Ctrl + Z [2.-the-interface/keyboard-shortcuts].",
+      "AutoSave shows a 10-second countdown so it can be cancelled live [12.-advanced/project-backup-and-recovery]."
+    ],
+    "names": [
+      "Lock",
+      "Lock Surfaces Movement",
+      "Object Isolation",
+      "Edit",
+      "Record",
+      "Live",
+      "AutoSave"
+    ],
+    "sources": [
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces",
+      "https://docs.madmapper.com/madmapper/6/5.-dmx-and-led-mapping/dmx-fundamentals",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/interface-overview",
+      "https://docs.madmapper.com/madmapper/6/6.-outputs",
+      "https://docs.madmapper.com/madmapper/6/10.-timelines/scenes-and-cues",
+      "https://madmapper.com/files/06-Scenes%20and%20Cues.pdf",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/keyboard-shortcuts",
+      "https://docs.madmapper.com/madmapper/6/12.-advanced/project-backup-and-recovery"
+    ],
+    "what_a_max_user_would_notice": "There is no locked versus unlocked patch; editing and performing happen in the same view at once. Every edit shows on the projector immediately, so safety is about locking things.",
+    "confidence": "high",
+    "open_questions": "Whether undo covers cue and timeline edits as well as geometry is not stated."
+  },
+  {
+    "id": 13,
+    "dimension": "Scripting",
+    "summary": "There is no general scripting language. Logic is limited to Controls, modules (Oscillator, Macro, Controls Combiner, schedulers), timeline markers with follow actions, and GLSL. GLSL is a real language inside MadMapper, but it computes pixels, laser paths or DMX expression values, not show logic. Outside control goes through the OSC API.",
+    "details": [
+      "Markers bring 'basic logic and interactivity' to timelines [1.-introduction/what's-new/madmapper-v6].",
+      "Materials, Surface FX and Laser Materials are GLSL, edited in the AI / Code Editor [2.-the-interface/toolbar-and-workspace].",
+      "DMX Expression channels are GLSL expressions over sampled colour, index, position and time (session 1) [14.-technical-notes/dmx-fixture-definitions].",
+      "The OSC API sets and gets values for almost every aspect of the software [11.-live-performance-and-control].",
+      "MadAI turns a text prompt into a Material, Laser Material or Surface 2D FX [12.-advanced/mad-ai-extension].",
+      "The 'robust scripting capabilities' mentioned are for mass deployment, not show logic [1.-introduction/madmapper-at-a-glance]."
+    ],
+    "names": [
+      "AI / Code Editor",
+      "Follow Actions",
+      "Expression",
+      "OSC API",
+      "MadAI"
+    ],
+    "sources": [
+      "https://docs.madmapper.com/madmapper/6/1.-introduction/what's-new/madmapper-v6",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/toolbar-and-workspace",
+      "https://docs.madmapper.com/madmapper/6/14.-technical-notes/dmx-fixture-definitions",
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control",
+      "https://docs.madmapper.com/madmapper/6/12.-advanced/mad-ai-extension",
+      "https://docs.madmapper.com/madmapper/6/1.-introduction/madmapper-at-a-glance"
+    ],
+    "what_a_max_user_would_notice": "Conditional logic, counters and state machines have nowhere to live inside MadMapper. They go in an outside program that sends OSC, which is the role the manual gives Max.",
+    "confidence": "high",
+    "open_questions": "The troubleshooting page says versions 1 to 4 relied on Python on macOS; whether any Python scripting was ever user-facing is not stated."
+  },
+  {
+    "id": 14,
+    "dimension": "Errors and debugging",
+    "summary": "There is no console or log. Feedback is built into specific tools: monitors, previews and highlight overlays. The DMX Monitor shows channel values, the Audio Data panel shows audio levels, laser vectorization has a Monitor, and 3D calibration reports an RMS error. On the real output, Show Info, test patterns and cursors help see what is happening.",
+    "details": [
+      "DMX Monitor shows live channel values [2.-the-interface/toolbar-and-workspace].",
+      "Audio Data is a read-only status window for audio devices and levels [2.-the-interface/madmapper-preferences].",
+      "Media Inspector has a live preview and a file info pop-up with codec, decoder and bit rate [3.-media/media-bin].",
+      "Vectorization Display shows Source Image, Processed Image, Output Polylines; a Monitor reports problems (session 1) [7.-laser-madlaser/real-time-video-vectorization].",
+      "3D calibration shows RMS Error [glossary-of-terms].",
+      "Troubleshooting advice for invisible lines is to turn on Show Info and Show Cursor [15.-troubleshooting].",
+      "A camera driver that crashed MadMapper once is not opened again until preferences are cleared [15.-troubleshooting]."
+    ],
+    "names": [
+      "DMX Monitor",
+      "Audio Data",
+      "Show Info",
+      "Test Pattern",
+      "Video Cursor",
+      "RMS Error"
+    ],
+    "sources": [
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/toolbar-and-workspace",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences",
+      "https://docs.madmapper.com/madmapper/6/3.-media/media-bin",
+      "https://docs.madmapper.com/madmapper/6/7.-laser-madlaser/real-time-video-vectorization",
+      "https://docs.madmapper.com/madmapper/6/glossary-of-terms",
+      "https://docs.madmapper.com/madmapper/6/15.-troubleshooting"
+    ],
+    "what_a_max_user_would_notice": "There is nothing to print and no probe to attach. You debug by looking at the output and at the tool's own monitors.",
+    "confidence": "medium",
+    "open_questions": "How shader compile errors are shown in the Code Editor is not documented in the pages read."
+  },
+  {
+    "id": 15,
+    "dimension": "Rendering",
+    "summary": "The render model is a fixed pipeline: media is cropped by each surface's input geometry, warped by its output geometry, drawn in list order with opacity and a blend mode, and composited into each output. Draw order is the list. Levels multiply from surface to group to master. A Material is merged into the surface's own shader and drawn straight to the output; Generators and buffers render to textures. Loopbacks and buffers make multi-stage pipelines.",
+    "details": [
+      "Input View sets texture coordinates (UVs); Stage Preview sets output geometry [2.-the-interface/interface-overview].",
+      "Appearance holds Opacity, Blend Modes, Flip, Color [4.-surfaces/surface-inspector].",
+      "One FX slot per surface; FX use the same GLSL architecture as Materials [4.-surfaces/surface-inspector].",
+      "A Material's code is merged with MadMapper's shader for the surface type, not rendered to a texture (session 1) [MaterialsDoc.md].",
+      "Video Buffers are off-screen render targets with a pixel format; loopbacks feed outputs back into the Media Bin [6.-outputs].",
+      "Fixtures sample the output composition, so the layer stack becomes light [1.-introduction/what's-new/madmapper-v6].",
+      "Output masks, MSAA, flip and frame delay are applied per output [6.-outputs]."
+    ],
+    "names": [
+      "Input View",
+      "Stage Preview",
+      "Opacity",
+      "Blend Modes",
+      "FX",
+      "Video Buffer",
+      "Publish Internal Loopback",
+      "Render To Texture"
+    ],
+    "sources": [
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/interface-overview",
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/surface-inspector",
+      "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/MaterialsDoc.md",
+      "https://docs.madmapper.com/madmapper/6/6.-outputs",
+      "https://docs.madmapper.com/madmapper/6/1.-introduction/what's-new/madmapper-v6"
+    ],
+    "what_a_max_user_would_notice": "You never build a render chain or set layer numbers. The pipeline is fixed, and anything more complex is done by rendering into a buffer and using it again as media.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 16,
+    "dimension": "Performance and concurrency",
+    "summary": "The docs talk about performance in terms of hardware, not threads: GPU decoding with HAP, fast storage, GPU sync across outputs, network bandwidth for NDI. Some choices inside the program trade quality for speed: Generator versus Material, Render To Texture, cache sizes, double-buffered previews. No per-part cost display was found.",
+    "details": [
+      "HAP is decoded on the GPU; it needs NVMe storage [12.-advanced/performance-optimization].",
+      "Consumer NVIDIA cards tear across several outputs; use Quadro Sync or a hardware splitter [12.-advanced/performance-optimization].",
+      "A 1080p60 NDI stream needs about 125 to 150 Mbps [12.-advanced/performance-optimization].",
+      "Materials render per surface at the cost of speed; Generators render once [3.-media/media-bin].",
+      "Use Double-Buffered Previews prevents tearing but costs performance [2.-the-interface/madmapper-preferences].",
+      "On Windows all processing happens on the card attached to the main display (session 2) [madmapper.com/madmapper/faq].",
+      "Media Inspector preview can be turned off to save processing [3.-media/media-bin]."
+    ],
+    "names": [
+      "HAP",
+      "Use Double-Buffered Previews",
+      "Render To Texture",
+      "Cache Size",
+      "Preview"
+    ],
+    "sources": [
+      "https://docs.madmapper.com/madmapper/6/12.-advanced/performance-optimization",
+      "https://docs.madmapper.com/madmapper/6/3.-media/media-bin",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences",
+      "https://madmapper.com/madmapper/faq"
+    ],
+    "what_a_max_user_would_notice": "You tune by choosing settings and codecs, not by restructuring work across threads. There is no profiler to say which surface is expensive.",
+    "confidence": "low",
+    "open_questions": "Threading, and whether a CPU or GPU load meter exists, are not documented."
+  },
+  {
+    "id": 17,
+    "dimension": "Several machines",
+    "summary": "MadMapper links to other machines through standard protocols rather than a cluster mode. OSC (with OSCQuery and Bonjour) controls one copy from another. NDI moves video, PONK moves laser paths, Art-Net and sACN move DMX, Ableton Link and timecode share time. MiniMad units on one network play in step with each other.",
+    "details": [
+      "One copy can be controlled from another over OSC; OSCQuery lets another copy browse the tree [11.-live-performance-and-control].",
+      "OSC Input with Bonjour discovery and feedback port; OSC Outputs list targets [2.-the-interface/madmapper-preferences].",
+      "NDI in and out; NDI bandwidth advice [11.-live-performance-and-control, 12.-advanced/performance-optimization].",
+      "Publish to PONK sends laser data over the network [6.-outputs].",
+      "Timelines can follow LTC, MTC or ArtNet timecode [9.-master-settings/audio-input-and-beat-detection].",
+      "MiniMad units on one Ethernet network start and change media together, with up to a frame of offset (session 1) [6.-outputs/minimad].",
+      "The MiniMad Controller module controls units from MadMapper [8.-modules]."
+    ],
+    "names": [
+      "OSCQuery",
+      "Bonjour",
+      "NDI",
+      "PONK",
+      "Art-Net",
+      "sACN",
+      "Ableton Link",
+      "LTC",
+      "MTC",
+      "MiniMad Controller"
+    ],
+    "sources": [
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences",
+      "https://docs.madmapper.com/madmapper/6/12.-advanced/performance-optimization",
+      "https://docs.madmapper.com/madmapper/6/6.-outputs",
+      "https://docs.madmapper.com/madmapper/6/9.-master-settings/audio-input-and-beat-detection",
+      "https://docs.madmapper.com/madmapper/6/6.-outputs/minimad",
+      "https://docs.madmapper.com/madmapper/6/8.-modules"
+    ],
+    "what_a_max_user_would_notice": "Multi-machine work is configuration: pick protocols in the preferences and the outputs. There is no networking code to write, but also no shared state beyond what OSC and timecode carry.",
+    "confidence": "medium",
+    "open_questions": "No master/backup or project-sync feature between full MadMapper copies was found."
+  },
+  {
+    "id": 18,
+    "dimension": "Deployment",
+    "summary": "A project runs in the MadMapper application itself, which needs a licence. For unattended use there are Silent Mode, open fullscreen at startup, schedulers, startup timelines, and OSC commands to quit or restart the computer. The other targets are exports: a MiniMad hardware player (video or DMX), or baked files from timeline export. There is no standalone build.",
+    "details": [
+      "Silent Mode suppresses prompts, recommended for installations [2.-the-interface/madmapper-preferences].",
+      "Project Startup: fullscreen on open, arm lasers [2.-the-interface/madmapper-preferences].",
+      "Expert Mode exposes /application/exit, /application/shutdown_computer, /application/restart_computer [2.-the-interface/madmapper-preferences/expert-mode].",
+      "Timeline Scheduler starts a timeline on project load if inside its time range [8.-modules].",
+      "MiniMad plays exported video or DMX sequences; Materials and Generators must be recorded first (session 1) [6.-outputs/minimad].",
+      "Timeline export writes video, ILDA, MadLight Sequence and audio files [6.-outputs/timeline-export].",
+      "Opening at login means adding the project to the system's startup items (session 2) [madmapper.com/madmapper/faq].",
+      "Licences can be authorised from the command line for mass deployment (session 1) [13.-setup-and-installation/software-installation/mass-deploy-installation]."
+    ],
+    "names": [
+      "Silent Mode",
+      "Startup Timeline",
+      "Timeline Scheduler",
+      "MiniMad",
+      "MiniMad Video",
+      "MiniMad Light",
+      "MadLight Sequence",
+      "Export"
+    ],
+    "sources": [
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences/expert-mode",
+      "https://docs.madmapper.com/madmapper/6/8.-modules",
+      "https://docs.madmapper.com/madmapper/6/6.-outputs/minimad",
+      "https://docs.madmapper.com/madmapper/6/6.-outputs/timeline-export",
+      "https://madmapper.com/madmapper/faq",
+      "https://docs.madmapper.com/madmapper/6/13.-setup-and-installation/software-installation/mass-deploy-installation"
+    ],
+    "what_a_max_user_would_notice": "The project is a document for one application, not a program you can build into an app. Unattended running is a set of switches in that application.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 19,
+    "dimension": "Extending",
+    "summary": "The extension points are shader files and data files, not code plug-ins. Materials, Surface FX and Laser Materials are GLSL with an ISF-style JSON header that builds their controls. ISF and Quartz Composer files load as media. Fixture definitions describe new lighting devices. Modules and paid extensions come from the makers. No C/C++ SDK was found.",
+    "details": [
+      "Materials define materialColorForPixel; Surface FX define fxColorForPixel; Laser Materials define laserMaterialFunc (session 1) [MaterialsDoc.md, MadMapperSurfaceFxDoc.md, LaserMaterialsDoc.md].",
+      "Exposed shader variables appear in the inspector as controls [3.-media/media-bin].",
+      "GLSL version up to 4.1 on Mac, 4.5 on Windows [2.-the-interface/toolbar-and-workspace].",
+      "ISF supported, but not multi-pass ISF (the release notes disagree) [3.-media/media-bin].",
+      "Library shares Materials and FX publicly or privately [2.-the-interface/toolbar-and-workspace].",
+      "Fixture definitions import and export (session 1) [14.-technical-notes/dmx-fixture-definitions].",
+      "Extensions: MadLaser, MadProjectorControl, MadAI (session 1) [1.-introduction/extensions-and-companions]."
+    ],
+    "names": [
+      "Materials",
+      "Surface FX",
+      "Laser Materials",
+      "ISFs",
+      "Quartz Composer",
+      "Library",
+      "materialColorForPixel",
+      "fxColorForPixel",
+      "laserMaterialFunc",
+      "INPUTS",
+      "GENERATORS"
+    ],
+    "sources": [
+      "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/MaterialsDoc.md",
+      "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/MadMapperSurfaceFxDoc.md",
+      "https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/LaserMaterialsDoc.md",
+      "https://docs.madmapper.com/madmapper/6/3.-media/media-bin",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/toolbar-and-workspace",
+      "https://docs.madmapper.com/madmapper/6/14.-technical-notes/dmx-fixture-definitions",
+      "https://docs.madmapper.com/madmapper/6/1.-introduction/extensions-and-companions"
+    ],
+    "what_a_max_user_would_notice": "A new part is a shader, and it shows up as a media item or an FX choice with generated sliders. You cannot add a new kind of module, input or output yourself.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 20,
+    "dimension": "Media and files",
+    "summary": "Media lives in a Media Bin sorted by kind, with an inspector per item and a count of surfaces using it. Since version 6 a project is a .madproject folder holding the .mad files, auto-saves and a resources folder. Collect External Resources copies all referenced media into it, and Export Project To copies the whole folder. Image folders watch for new files.",
+    "details": [
+      "Media Bin categories: Generators, Materials, Laser Materials, Laser Generators, ISFs, Quartz Composer, Images, Movies, Images Folders, Syphon/Spout/NDI, Live Input, Loopbacks, Montages [3.-media/media-bin].",
+      "The .madproject folder holds .mad files, an auto-saves folder and a Resources folder; default location Documents/MadMapper [2.-the-interface/madmapper-project-file-structure].",
+      "Collect External Resources copies referenced media into Resources [2.-the-interface/madmapper-project-file-structure].",
+      "Export Project To copies the project folder with optional resources [12.-advanced/project-backup-and-recovery].",
+      "Images Folders auto-update when files are added (Auto Scan); Cache Size preloads frames [3.-media/media-bin].",
+      "Media info shows the exact file path [3.-media/media-bin].",
+      "Media can be added and removed over OSC: /application/media/add, /application/media/remove [11.-live-performance-and-control/osc-commands-and-channels-list]."
+    ],
+    "names": [
+      "Media Bin",
+      "Media Inspector",
+      ".madproject",
+      "Resources",
+      "Collect External Resources...",
+      "Export Project To",
+      "Auto Scan",
+      "Cache Size"
+    ],
+    "sources": [
+      "https://docs.madmapper.com/madmapper/6/3.-media/media-bin",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-project-file-structure",
+      "https://docs.madmapper.com/madmapper/6/12.-advanced/project-backup-and-recovery",
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control/osc-commands-and-channels-list"
+    ],
+    "what_a_max_user_would_notice": "Media is a first-class list you can see, with usage counts, not paths inside object boxes. Packaging a show is one menu command.",
+    "confidence": "high",
+    "open_questions": "How missing media is reported and relinked is not described in the pages read."
+  },
+  {
+    "id": 21,
+    "dimension": "Input space and output space",
+    "summary": "Added because it shapes every edit. Each surface has two geometries: an input rectangle or mesh over the source media, and an output shape on the projector. The stage size is independent of the content, and output resolution is set by the projector. Crop and warp are separate edits, and the two meshes can be linked or edited apart.",
+    "details": [
+      "Input View chooses which part of the media is mapped (UVs); Stage Preview reshapes the surface for the real object [2.-the-interface/interface-overview].",
+      "The stage dimensions are separate from the content; resolution comes from the projector [2.-the-interface/interface-overview].",
+      "Link Input and Output Mesh is on by default; Show Input Mesh allows separate editing [4.-surfaces/surface-inspector].",
+      "Input Rectangle is the boundary over the source that is sampled [glossary-of-terms].",
+      "A laser output's size only positions surfaces in the UI, not the physical data [6.-outputs]."
+    ],
+    "names": [
+      "Input View",
+      "Stage Preview",
+      "Input Rectangle",
+      "Input Mesh",
+      "Link Input and Output Mesh",
+      "Show Input Mesh"
+    ],
+    "sources": [
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/interface-overview",
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/surface-inspector",
+      "https://docs.madmapper.com/madmapper/6/glossary-of-terms",
+      "https://docs.madmapper.com/madmapper/6/6.-outputs"
+    ],
+    "what_a_max_user_would_notice": "Mapping is not a step in a chain you build; every surface carries both sides by default and you edit them in two side-by-side views.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 22,
+    "dimension": "One composition for video, light and laser",
+    "summary": "Added because it decides what an output is. Video surfaces, DMX fixtures and laser surfaces are three kinds of layer in parallel lists, and outputs are objects of three kinds. Fixtures read the video composition, so one layer stack drives projectors and lights together. Master levels for video, DMX, laser and audio hang off one Master.",
+    "details": [
+      "Tabs: Media, Video Surfaces, Laser Surfaces, DMX Fixtures, Output, Modules, Master Settings (session 1) [2.-the-interface/interface-overview].",
+      "Output types: Video Output, Laser Output, DMX Output, Video and Laser Buffers [6.-outputs].",
+      "Since v6 fixtures sample the output composition: 'convert your layer stack to light' [1.-introduction/what's-new/madmapper-v6].",
+      "Master levels: master, video, audio, DMX, laser [11.-live-performance-and-control/osc-commands-and-channels-list].",
+      "Montage tracks can be routed to layers, lasers or DMX [10.-timelines/track-types-and-inspectors]."
+    ],
+    "names": [
+      "Video Surfaces",
+      "Laser Surfaces",
+      "DMX Fixtures",
+      "Video Output",
+      "Laser Output",
+      "DMX Output",
+      "master_level"
+    ],
+    "sources": [
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/interface-overview",
+      "https://docs.madmapper.com/madmapper/6/6.-outputs",
+      "https://docs.madmapper.com/madmapper/6/1.-introduction/what's-new/madmapper-v6",
+      "https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control/osc-commands-and-channels-list",
+      "https://docs.madmapper.com/madmapper/6/10.-timelines/track-types-and-inspectors"
+    ],
+    "what_a_max_user_would_notice": "Light and lasers are not extra systems you wire in beside the video; they are outputs of the same composition, configured rather than built.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 23,
+    "dimension": "Calibration to the physical room",
+    "summary": "Added because the work is defined against real space, not an abstract canvas. Much of the program exists to match virtual geometry to a physical object and room: test patterns, cursors drawn on the projector, background images from camera scans, 3D calibration with a reported error, LED scanning, and soft-edge auto setup. Lasers add arming and safety limits.",
+    "details": [
+      "Backgrounds can be stage plots or imported Space and Laser Scanner images, for mapping offline [6.-outputs].",
+      "Test patterns, Video Cursor and Laser Cursor appear on the real outputs [9.-master-settings, 6.-outputs].",
+      "3D calibration places model points on the real object and reports RMS Error (session 1) [4.-surfaces/advanced-3d-and-scanning].",
+      "LED Scanner places fixtures by watching each pixel with a camera (session 1) [12.-advanced/special-tools-and-auto-calibration].",
+      "Soft Edge Auto Setup works out overlaps (session 1) [6.-outputs/soft-edge-blending].",
+      "Laser masks, Max non-moving Beam Intensity and arming protect people [6.-outputs, 2.-the-interface/madmapper-preferences]."
+    ],
+    "names": [
+      "Space Scanner",
+      "LED Scanner",
+      "Laser Scanner",
+      "Test Pattern",
+      "Video Cursor",
+      "Laser Cursor",
+      "Auto Setup",
+      "RMS Error"
+    ],
+    "sources": [
+      "https://docs.madmapper.com/madmapper/6/6.-outputs",
+      "https://docs.madmapper.com/madmapper/6/9.-master-settings",
+      "https://docs.madmapper.com/madmapper/6/4.-surfaces/advanced-3d-and-scanning",
+      "https://docs.madmapper.com/madmapper/6/12.-advanced/special-tools-and-auto-calibration",
+      "https://docs.madmapper.com/madmapper/6/6.-outputs/soft-edge-blending",
+      "https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences"
+    ],
+    "what_a_max_user_would_notice": "Setup in the venue is a first-class activity with dedicated tools, rather than something you patch yourself around a cornerpin.",
+    "confidence": "high",
+    "open_questions": ""
+  }
+]

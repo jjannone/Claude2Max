@@ -18,7 +18,8 @@ Short forms used below:
 
 Companion files: `CABLES_GL_CRAWL_LOG.md` (what was read),
 `cables_gl_crawl_state.json` (per-page status), and
-`cables_gl_max_gap_candidates.json` (things Max may lack).
+`cables_gl_max_gap_candidates.json` (things Max may lack, and from
+session 2, things both tools have and do differently; see section 17).
 
 ---
 
@@ -659,3 +660,378 @@ the two tools.
   Source: `docs:faq/features/htmltexture/htmltexture`, `op:Ops.Extension.HtmlToTexture.HtmlToTexture`.
 - Projection mapping is a single quad-warp op (section 2).
 - No DMX, Art-Net, laser or lighting-fixture ops appear in the op index.
+
+---
+
+## 17. Shared concepts, different approaches
+
+Added in session 2 (2026-10-02). Sections 1 to 16 look for things Max lacks.
+This section looks at things both tools have, and asks how each one does it.
+Every entry names the cables page it comes from and the Max source that was
+read for the comparison. The matching advice for a Max patcher is in
+`cables_gl_max_gap_candidates.json`, in the items with `max_status`
+`better-elsewhere` or `different-approach`.
+
+Max sources, in short form: *refpage* means the object's `.maxref.xml` in the
+local Max 9 install; *userguide* means a topic under
+`C74/docs/userguide/content/`; *registry* means `C74/interfaces/obj-qlookup.json`.
+
+### Flow and order
+
+- **Draw order is the trigger order.** `Sequence` has numbered trigger
+  outputs, and `LayerSequence` is the same op named for layers. In Max, the
+  userguide says all 3D objects start in layer 0 "and therefore their drawing
+  order is indeterminate"; order comes from the `layer` attribute, and depth
+  testing overrides it unless `depth_enable` is 0.
+  Source: `op:Ops.Trigger.Sequence`, `op:Ops.Gl.LayerSequence`. Max: userguide
+  `jitter/depth_layer_blend`, refpage `jit.group-gl`.
+- **Fan-out order runs the other way.** `NumberSequence` sets its outputs
+  from left to right, then fires a trigger. Max's `trigger` sends from right
+  to left. Both tools use a dedicated object for order; a ported patch needs
+  its outlets reversed.
+  Source: `op:Ops.Number.NumberSequence`. Max: refpage `trigger`.
+- **Per-frame ops take the frame trigger as an input.** `Smooth`, `Spring`,
+  `SimpleAnim`, `AnimNumber`, `Bang` and `Speed` each have an update trigger,
+  normally wired to `MainLoop`. The `Interval` timer op warns against use in
+  animation that will be recorded. Max's counterpart to the frame trigger is
+  the middle outlet of `jit.world`, the "render draw bang".
+  Source: `op:Ops.Anim.Smooth`, `op:Ops.Trigger.Interval`. Max: refpage `jit.world`.
+- **A value is taken at a moment with a "trigger" form of the op.**
+  `TriggerNumber`, `TriggerVarGetNumber`, `ArrayTrigger` and `TriggerObject`
+  hold a value and release it when triggered. Max does this with the cold
+  right inlet and a bang (`float`, `zl.reg`, `jit.matrix @thru 0`).
+  Source: `op:Ops.Trigger.TriggerNumber`, `op:Ops.Array.ArrayTrigger`. Max: refpages `float`, `zl.reg`.
+- **Value ports react to change, not to every send.** The docs say `onChange`
+  is called when a port's value changes, and that arrays must be sent with
+  `setRef` so a change is registered. Max passes every message on, repeats
+  included; `change` is the filter.
+  Source: `docs:5_writing_ops/dev_ops/dev_ops`, `docs:5_writing_ops/dev_creating_ports/dev_ports_array/dev_ports_array`. Max: refpage `change`.
+- **Trigger utilities map one to one.** `TriggerOnce` is `onebang`,
+  `NthTrigger` is `counter` into `sel`, `TriggerLimiter` is `speedlim`,
+  `Threshold` is `past`, `MonoFlop` is a 1 followed by `delay` into 0.
+  `ProbabilityTrigger` has no single Max object; it is `random` and a compare.
+  Source: `op:Ops.Trigger.TriggerOnce`, `op:Ops.Trigger.NthTrigger_v2`, `op:Ops.Trigger.TriggerLimiter`, `op:Ops.Trigger.Threshold`, `op:Ops.Boolean.MonoFlop`. Max: refpages `onebang`, `counter`, `speedlim`, `past`, `delay`.
+- **Loops draw.** `Repeat`, `Repeat2d`, `GridTransform` and `RandomCluster`
+  run the ops under them many times in one frame, which draws many copies.
+  The cables performance page says to move to instancing for high counts.
+  Max goes straight to `jit.gl.multiple`, fed by matrices.
+  Source: `op:Ops.Trigger.Repeat_v2`, `op:Ops.Trigger.Repeat2d`, `docs:9_performance_optimization/02_usual_suspects/usual_suspects`. Max: refpage `jit.gl.multiple`.
+
+### Render state
+
+- **State is an op, and it applies to its children.** `Transform`,
+  `BlendMode`, `DepthTest`, `FaceCulling`, the material ops and `SetShader`
+  each have a trigger in and out and change the state for what is below.
+  `Identity` and `ResetTransform` clear the transform. In Max the same
+  settings are attributes on each GL object. The `jit.gl.node` refpage says a
+  node "can overwrite standard OB3D attributes of its child objects", which
+  is the nearest thing to a branch.
+  Source: `op:Ops.Graphics.Transform`, `op:Ops.Gl.BlendMode`, `op:Ops.Graphics.DepthTest`, `op:Ops.Gl.FaceCulling_v2`, `op:Ops.Gl.Shader.SetShader`. Max: refpages `jit.group-gl`, `jit.gl.node`.
+- **Lights are scoped by position in the chain.** The lights page says to add
+  lights before the materials. `ResetLights` removes them for the rest of a
+  branch. A Max `jit.gl.light` has no attribute that names what it lights;
+  each object has `lighting_enable`.
+  Source: `docs:7_lighting/lights/lights`, `op:Ops.Gl.Phong.ResetLights`. Max: refpages `jit.gl.light`, `jit.group-gl`.
+- **A camera is an op above the scene.** `Camera`, `LookatCamera`,
+  `Perspective` and `Orthogonal` set the view for their children.
+  `OrbitControls` and `WASDCamera` add mouse and key navigation with limits
+  and smoothing. Max has `jit.gl.camera` (with `viewport`, `layer` and
+  `capture`) and `jit.anim.drive`, whose `ui_listen` takes mouse and keys from
+  the window.
+  Source: `op:Ops.Gl.Matrix.Camera_v2`, `op:Ops.Graphics.OrbitControls_v3`, `op:Ops.Gl.Matrix.WASDCamera_v2`. Max: refpages `jit.gl.camera`, `jit.anim.drive`.
+- **Screen space has its own ops.** `PixelProjection` makes one unit one
+  pixel. `ScreenCoordinates` gives the pixel position of the current
+  transform and whether it is visible. `ScreenPosTo3d` goes the other way.
+  Max answers the same questions with `worldtoscreen` and `screentoworld`
+  messages to `jit.gl.camera`, and draws overlays with `transform_reset`.
+  Source: `op:Ops.Gl.PixelProjection_v3`, `op:Ops.Gl.Matrix.ScreenCoordinates_v2`, `op:Ops.Gl.Matrix.ScreenPosTo3d_v3`. Max: refpages `jit.gl.camera`, `jit.group-gl`.
+- **The main loop carries the frame-rate settings.** `MainLoop` has an FPS
+  limit, a pixel-density cap and "Reduce FPS unfocussed". On `jit.world`, the
+  refpage says `fps` and `interval` only work when `enable` is 1 and
+  `displaylink` is 0; `displaylink` defaults to 1 on a Mac.
+  Source: `op:Ops.Gl.MainLoop_v2`. Max: refpage `jit.world`.
+- **A scene switch routes the trigger.** `RouteTrigger`, `SwitchTrigger` and
+  `TimedSequence` send the frame trigger to one branch, and the others do not
+  run. The `TimedSequence` page suggests the `Bang` animation op for
+  transitions. In Max every GL object has an `enable` flag, and a scene can
+  be a `jit.gl.node`.
+  Source: `op:Ops.Trigger.TimedSequence`, `op:Ops.Trigger.RouteTrigger_v2`. Max: refpages `jit.group-gl`, `jit.gl.node`.
+
+### Textures and effects
+
+- **Effects share one texture and carry their own mix.** In an `ImageCompose`
+  chain most effect ops have a blend mode, an amount and a mask port:
+  `DrawImage`, `Blur`, `FastBlur`, `ColorMap`, `Color`, `Kaleidoscope`, the
+  noise ops. Max's `jit.fx.blur` has `amt`, `bypass`, `adapt`, `dim`, `drawto`
+  and `enable`, and no mix or mask; blending is a separate object
+  (`jit.fx.tr.xfade`, the `jit.fx.co.*` family).
+  Source: `op:Ops.Gl.ImageCompose.Blur`, `op:Ops.Gl.ImageCompose.ColorMap_v2`, `op:Ops.Gl.ImageCompose.Kaleidoscope_v2`. Max: refpage `jit.fx.blur` (the other 82 `jit.fx` pages were checked by name only).
+- **Size is set once, at the top.** `ImageCompose` sets size, pixel format,
+  filter and wrap for the chain. Max sets them per object: `jit.gl.slab` has
+  `adapt`, `dim`, `dimscale` and `type`.
+  Source: `op:Ops.Gl.ImageCompose.ImageCompose_v4`. Max: refpage `jit.gl.slab`.
+- **Render-to-texture gives colour and depth.** `RenderToTexture` has
+  outputs for the colour texture and the depth texture, and ports for MSAA,
+  pixel format and clearing. Max's `jit.gl.node @capture 1` gives the colour
+  texture; the userguide routes depth-based effects through `jit.gl.pass`.
+  Source: `op:Ops.Gl.RenderToTexture_v3`. Max: refpage `jit.gl.node`, userguide `jitter/render_passes`.
+- **A missing texture is a case with its own ops.** `ValidTexture` swaps in a
+  default and reports validity, `OrTexture` picks the first valid input,
+  `GateTexture` closes to "keep last" or "empty". The image loader reports
+  Loaded and Loading. Max has no object for this; a stopped source leaves the
+  last texture on screen (a pitfall recorded in `patching/MAX_PATCHING.md`).
+  Source: `op:Ops.Gl.ValidTexture`, `op:Ops.Gl.OrTexture`, `op:Ops.Gl.GateTexture`, `op:Ops.Gl.Texture_v3`.
+- **Players report state on ports.** `VideoTexture` outputs duration,
+  progress, Loading, Playing, an Ended trigger, Has Error and an error
+  message. `jit.movie` has two outlets; reports such as `loopreport` are
+  switched on and read from the right outlet.
+  Source: `op:Ops.Gl.Textures.VideoTexture_v4`. Max: refpage `jit.movie`.
+
+### Shaders
+
+- **A uniform is a port.** In `CustomShader`, `UNI float x;` makes a number
+  port and a sampler makes a texture port. A Max JXS file needs a `<param>`
+  tag and a `<bind>` tag for each uniform, and values are sent as
+  `param <name> <value>` messages; `getparamlist` reports the names.
+  Source: `op:Ops.Gl.Shader.CustomShader_v2`. Max: userguide `jitter/jxs_file_format`, refpages `jit.gl.slab`, `jit.gl.shader`.
+- **Uniforms and defines can be set from outside the shader op.**
+  `SetUniformFloat`, `SetUniformTexture` and `ShaderDefine` act on the shader
+  that is active at that point, and report Found. `ShaderInfoUniforms` reads
+  all values back.
+  Source: `op:Ops.Gl.Shader.SetUniformFloat_v2`, `op:Ops.Gl.Shader.ShaderDefine`, `op:Ops.Gl.Shader.ShaderInfoUniforms_v2`.
+- **Typed GLSL per channel.** `RgbMathExpression` takes one expression each
+  for r, g, b and a, with number inputs x, y, z, w and textures texA, texB.
+  Max's short path to the same thing is `jit.gl.pix`.
+  Source: `op:Ops.Gl.ImageCompose.Math.RgbMathExpression`. Max: refpage `jit.gl.pix`.
+
+### Geometry
+
+- **Geometry is a value.** Mesh ops output a geometry object and have a
+  render switch (an op guideline). `TransformGeometry`, `GeometryMerge`,
+  `CalculateNormals` and `GeometryFromArrays` work on it, and
+  `RenderGeometry` draws it. Max's Jitter Geometry package has the same
+  shape: `jit.geom.shape`, 26 `jit.geom.*` objects, and `jit.geom.tomesh` to
+  draw.
+  Source: `docs:5_writing_ops/guidelines/guidelines`, `op:Ops.Gl.RenderGeometry_v2`, `op:Ops.Graphics.Geometry.TransformGeometry_v2`. Max: refpages `jit.geom.shape`, `jit.geom.tomesh`.
+
+### Animation
+
+- **Easing is a dropdown on most ops.** `MapRange`, `AnimNumber`,
+  `SimpleAnim`, `BoolAnim`, `Crossfade`, `RandomAnim`, `DelayedNumber`,
+  `AnimArray` and `MeshMorph` each have an easing port. Max's `line` is
+  linear and `scale` has only an exponent. Easing curves are in the `ease`
+  package (`ease`, `list.ease`, `ease~`, `jit.ease`), installed on this
+  machine and not part of the base registry.
+  Source: `op:Ops.Math.MapRange`, `op:Ops.Anim.AnimNumber`, `op:Ops.Math.Ease`. Max: refpages `line`, `scale`, `ease`.
+- **Animation ops say when they are done.** The guidelines ask for a
+  finished flag and a finished trigger. Max's `line` and `bline` have a
+  done outlet; `jit.anim.path` and `jit.anim.drive` report when `endreport` or
+  `evalreport` is on.
+  Source: `docs:5_writing_ops/guidelines/guidelines`, `op:Ops.Anim.SimpleAnim`. Max: refpages `line`, `jit.anim.path`.
+- **Follow ops.** `AnimNumber` glides to whatever arrives, `Smooth` has
+  separate rise and fall factors, `Spring` has damping and stiffness. Max
+  has `slide` for the second. The registry has no object with "spring" in
+  its name; `jit.anim.drive` has `springto` for 3D transforms only.
+  Source: `op:Ops.Anim.AnimNumber`, `op:Ops.Anim.Smooth`, `op:Ops.Anim.Spring`. Max: refpages `slide`, `jit.anim.drive`.
+- **LFO and time.** `LFO` takes a time and gives a wave by type, frequency,
+  phase and range. `Timer` has play, reset and speed. The Max match is
+  `jit.mo.time`, whose function mode gives line, sin, saw or perlin in step
+  with the render, and whose delta mode gives the time between frames.
+  Source: `op:Ops.Anim.LFO_v3`, `op:Ops.Anim.Timer_v2`. Max: refpage `jit.mo.time`.
+
+### Math, logic and data
+
+- **Ports are typed and conversions are ops.** The guidelines ask that a
+  conversion op carry both type names (`NumberToString`). `StringToNumber`
+  has a "Not a number" output. Max converts between int and float without a
+  visible object, and the userguide calls integer mode "a common source of
+  bugs".
+  Source: `docs:5_writing_ops/guidelines/guidelines`, `op:Ops.String.StringToNumber`. Max: userguide `integers_vs_floats`.
+- **One expression idea, three data types.** `MathExpression` (inputs a to
+  d), `ArrayMathExpression` (arrays, plus i and len) and `RgbMathExpression`.
+  Max's set is `expr`, `vexpr`, `jit.expr` and `jit.gl.pix`.
+  Source: `op:Ops.Math.MathExpression`, `op:Ops.Array.Math.ArrayMathExpression`. Max: refpages `expr`, `vexpr`, `jit.expr`.
+- **Ops report failure on a port.** `Expression Valid`, `Found`,
+  `Valid Index`, `Not a number`, `Has Errors`, `Has Error`. `setUiError`
+  puts a hint, warning or error on the op itself. Max reports to the
+  console; the `error` object turns console errors into messages.
+  Source: `op:Ops.Math.MathExpression`, `op:Ops.Json.ObjectGetNumber_v2`, `op:Ops.Array.ArrayGetNumber`, `docs:5_writing_ops/dev_callbacks/dev_callbacks`. Max: refpage `error`.
+- **Arrays are copied.** The guidelines ask array ops to copy their input,
+  and `ArraySetNumber` says the original is untouched. In Max a list is
+  copied with each message, but the userguide says two `dict` objects with
+  one name "reference the same dictionary", and arrays are "stored in memory
+  by name".
+  Source: `docs:5_writing_ops/guidelines/guidelines`, `op:Ops.Array.ArraySetNumber_v3`. Max: userguide `dictionaries`, `arrays`.
+- **Paths into nested data.** `ObjectGetNumberByPath` reads
+  `data.numbers.1` and has a Found output. Max's `dict` uses `::` for keys
+  and `[n]` for array items.
+  Source: `op:Ops.Data.JsonPath.ObjectGetNumberByPath`. Max: userguide `dictionaries`.
+- **Gates have a closed value.** `GateNumber`, `GateString` and
+  `GateTexture` choose between "keep last" and a set value when closed.
+  `RouteNumber` can reset its unused outputs to a default. Max's `gate` and
+  `switch` send nothing when they close.
+  Source: `op:Ops.Number.GateNumber`, `op:Ops.Number.RouteNumber`. Max: refpages `gate`, `switch`.
+- **Point data is a flat array read in steps.** `ArraySwizzle` reorders
+  components by stride, `ArrayPack3` and `ArrayUnpack3` join and split x, y,
+  z, and `Array3Iterator` steps through triplets. Max keeps the same data as
+  planes of a `jit.matrix`.
+  Source: `op:Ops.Array.ArraySwizzle`, `op:Ops.Array.ArrayPack3`, `op:Ops.Array.Array3Iterator`.
+
+### Variables and sub-patches
+
+- **Variables are typed, and can be read as one object.** There are set and
+  get ops for numbers, strings, arrays, objects and textures, and trigger
+  forms of each. `VariablesAsObject` returns all of them, filtered by a name
+  prefix. The pages read do not say how far a variable's name reaches.
+  Source: `op:Ops.Vars.VariablesAsObject`, `op:Ops.Vars.VariablesFromObject`, `op:Ops.Vars.VarSetTexture_v2`.
+- **Named triggers can be heard as a group.** `TriggerReceiveFilter` relays
+  every named trigger whose name starts with a prefix and outputs the name.
+  `TriggerSendNamed` takes the name as a string. Max's `receive` has one
+  name; `forward` changes destination per message.
+  Source: `op:Ops.Trigger.TriggerReceiveFilter`, `op:Ops.Trigger.TriggerSendNamed`. Max: refpages `receive`, `forward`.
+- **Sub-patch ports come from the cable.** A port is made by dragging a
+  cable to "create port", so it has a type and a name from the start. A Max
+  `inlet` has a hover comment that the author must write.
+  Source: `op:Ops.Ui.SubPatch`, `op:Ops.Ui.PatchInput`. Max: refpage `inlet`.
+- **A value can be frozen into the patch.** `FreezeNumber` and
+  `FreezeString` keep the captured value across a reload. Max's `pattr`
+  restores its saved value on load when `autorestore` is on, which is the
+  default.
+  Source: `op:Ops.Number.FreezeNumber`. Max: refpage `pattr`.
+
+### Input
+
+- **Mouse.** `Mouse` has a coordinate dropdown (-1 to 1, pixels, 0 to 1),
+  flip y, click triggers and a button state. `MouseDrag`, `MouseWheel` and
+  `PointerLock` are separate ops. In Max, `mousestate` works in patcher
+  windows; the render window reports the mouse from the dump outlet of
+  `jit.world`, in pixels.
+  Source: `op:Ops.Devices.Mouse.Mouse_v4`, `op:Ops.Devices.Mouse.MouseDrag`. Max: refpages `mousestate`, `jit.world`.
+- **Keyboard.** `KeyPressLearn` learns a key and triggers on press and
+  release. `CursorKeys` gives held state and pressed triggers. Max has `key`
+  and `keyup`, which only report while their patcher window has focus.
+  Source: `op:Ops.Devices.Keyboard.KeyPressLearn`, `op:Ops.Devices.Keyboard.CursorKeys`. Max: refpage `key`.
+- **MIDI.** Events travel as objects from `MidiInputDevice` through
+  `MidiNote`, `MidiCC` and `MidiNoteFilter`, each with Learn and a
+  normalise dropdown. Max splits MIDI at the input object (`notein`,
+  `ctlin`). Learn is in the Mappings system, which binds a controller to a
+  UI object's parameter.
+  Source: `op:Ops.Devices.Midi.MidiCC_v3`, `op:Ops.Devices.Midi.MidiNote`. Max: refpages `notein`, `ctlin`, userguide `mapping`.
+
+### Audio
+
+- **Analysis for visuals is one op.** `AudioAnalyzer` gives FFT and waveform
+  arrays, bin frequencies and RMS, with smoothing and a dB range.
+  `FFTAreaAverage` reads one region of the spectrum as a number. In Max the
+  same result takes several objects: `fffb~` or `pfft~`, then `peakamp~` or
+  `snapshot~`. `spectroscope~` is a display and outputs no data.
+  Source: `op:Ops.WebAudio.AudioAnalyzer_v2`, `op:Ops.WebAudio.FFTAreaAverage_v3`. Max: refpages `spectroscope~`, `fffb~`, `peakamp~`.
+- **Players and effects are thin wrappers.** `AudioBufferPlayer`, `Gain`,
+  `BiquadFilter`, `Delay` and `Convolver` each describe the Web Audio node
+  they wrap. `Delay` has a BPM-based time and `Convolver` a dry/wet port.
+  Source: `op:Ops.WebAudio.AudioBufferPlayer_v2`, `op:Ops.WebAudio.Delay`, `op:Ops.WebAudio.Convolver_v2`.
+
+### UI and debugging
+
+- **Debug displays pass data through.** The `Viz` ops have an output that
+  repeats the input, so they sit on the cable. `VizTexture` can show values
+  outside 0 to 1, single channels and a pixel's value. `VizTextureTable`
+  lists pixel values. Max's `jit.pwindow` has none of those options; numbers
+  from a texture need a read-back to a matrix and `jit.cellblock`.
+  Source: `op:Ops.Ui.VizTexture`, `op:Ops.Ui.VizTextureTable`, `op:Ops.Ui.VizObject`. Max: refpages `jit.pwindow`, `jit.cellblock`.
+- **Presets.** `Number.Preset` binds a port by dragging to it, and fades
+  through its list with one number or blends two presets. Max's
+  `pattrstorage` recalls a fractional preset number as an interpolation and
+  has `recallmulti` for weighted blends.
+  Source: `op:Ops.Number.Preset`. Max: refpage `pattrstorage`.
+- **Sidebar controls have an input and a default.** `Slider`, `Toggle`,
+  `NumberInput` and `DropDown` each have an Input port to set the control
+  from the patch, a Set Default trigger, and Grey Out and Visible switches.
+  Source: `op:Ops.Sidebar.Slider_v3`, `op:Ops.Sidebar.Toggle_v4`, `op:Ops.Sidebar.DropDown_v2`.
+- **Cable tidying is done with pass-through ops.** `Ui.Routing.RouteNumber`,
+  `RouteTrigger` and `TriggerExtender` only repeat their input; they exist
+  to route long cables.
+  Source: `op:Ops.Ui.Routing.RouteNumber`, `op:Ops.Trigger.TriggerExtender`.
+- **Branch timing ops.** `PerformanceMeasure` and `StopWatch` report the time
+  taken by the ops under them. `TriggersPerSecond` and `TriggerCounter` say
+  how often a branch runs.
+  Source: `op:Ops.Gl.PerformanceMeasure`, `op:Ops.Debug.StopWatch`, `op:Ops.Trigger.TriggersPerSecond`.
+
+### Loading and lifecycle
+
+- **Loading is a value.** `LoadingStatus` gives Loading, Progress, a list of
+  jobs and a finished trigger. `LoadingJob` lets the patch add a job.
+  `FontFile`, `Texture` and `AudioPlayer` each report their own loading. Max
+  fires `loadbang` in a fixed phase of patch loading and has no patch-wide
+  progress; `buffer~` bangs its right outlet when a file read is complete.
+  Source: `op:Ops.Cables.LoadingStatus_v2`, `op:Ops.Cables.LoadingJob`, `op:Ops.Html.FontFile_v2`. Max: refpages `loadbang`, `buffer~`; `patching/MAX_PATCHING.md` on the patcher lifecycle.
+- **The browser needs a click before sound.** `PlayButton` shows a button,
+  resumes the audio context when clicked and then keeps triggering.
+  `MicrophoneIn` and `VideoTexture` have similar switches. Max has no such
+  step.
+  Source: `op:Ops.Html.Utils.PlayButton`, `op:Ops.WebAudio.MicrophoneIn_v2`.
+- **Op code has load and delete callbacks.** `onLoaded` runs after the whole
+  patch is loaded, not when an op is added by hand. `init` is called twice on
+  load. In Max, a `v8` script's `loadbang` function is called when the file
+  is loaded.
+  Source: `docs:5_writing_ops/dev_callbacks/dev_callbacks`. Max: refpage `v8`.
+- **A patch can tell where it runs.** `UIMode` reports whether the patch is
+  in the editor, in the standalone, or embedded, so debug displays can be
+  hidden outside the editor.
+  Source: `op:Ops.Cables.UIMode`.
+
+### Where Max is ahead
+
+Each of these comes from comparing a cables page with a Max refpage or
+userguide topic read the same day.
+
+- **Mixing audio needs no mixer.** The cables audio page says two sources
+  should meet in a `Mixer` op. In Max, cords landing on one signal inlet
+  sum. Source: `docs:8_audio/0_basic_setup/basic_setup`, `op:Ops.WebAudio.Mixer`.
+- **Every effect stage can be tapped.** A Max effect outputs a texture on a
+  cord, which can also go somewhere else. In an `ImageCompose` chain the
+  texture is shared, and `ImageComposeSnapshot` exists to copy it out at one
+  point. Source: `op:Ops.Gl.ImageCompose.ImageComposeSnapshot`.
+- **Latching is part of the language.** Hot and cold inlets do what cables
+  needs a second family of "trigger" ops for.
+  Source: `op:Ops.Trigger.TriggerNumber`. Max: refpage `float`.
+- **Presets interpolate per parameter.** `pattrstorage` sets an
+  interpolation mode for each client, and blends any number of presets by
+  weight. `Number.Preset` has two modes for the whole set.
+  Source: `op:Ops.Number.Preset`. Max: refpage `pattrstorage`.
+- **Name scope is defined.** Max's `value` is global and `pv` is limited to
+  one patcher and its subpatches. The cables variable pages do not state a
+  scope. Source: `op:Ops.Vars.VarSetNumber_v2`. Max: refpages `value`, `pv`.
+- **Gamepads.** Max 9's `gamepad` reports events from all controllers and
+  sends rumble and LED messages. The cables `GamePads` op lists pads and must
+  be triggered to update. Source: `op:Ops.Devices.GamePad.GamePads`. Max: refpage `gamepad`.
+- **Tempo-relative time is built into the timing objects.** `metro` has
+  `quantize` and `transport` attributes and accepts tempo-relative intervals.
+  cables has `ClockSequencer`, a BPM number and division triggers.
+  Source: `op:Ops.WebAudio.ClockSequencer`. Max: refpage `metro`.
+- **MIDI learn works on any parameter.** Max's Mappings bind a controller to
+  a UI object with no MIDI objects in the patch. In cables, Learn is on the
+  MIDI ops. Source: `op:Ops.Devices.Midi.MidiCC_v3`. Max: userguide `mapping`.
+- **Geometry and trigger utilities are level.** Neither tool is ahead on
+  CPU geometry ops or on trigger shaping; the names differ.
+
+### Not settled in this pass
+
+- **Texture feedback in cables.** No page read describes it. `ImageCompose`
+  and `RenderToTexture` both have a Clear switch, and the `AlphaMask` page
+  mentions an ImageCompose that is "not cleared", which suggests a frame can
+  be kept and drawn over. That is a reading of port names, not of
+  documentation. Max's pattern is documented in this repo
+  (`scans/packages/tutorials_insights.md`): capture with `jit.gl.node`, and
+  put a `jit.gl.slab` or `jit.gl.pix` in the loop to copy the texture.
+  Source: `op:Ops.Gl.ImageCompose.ImageCompose_v4`, `op:Ops.Gl.ImageCompose.AlphaMask_v2`.
+- **Particles.** The op index has three ops whose name or summary mentions
+  particles: `ArraySpray` (a spray simulation that outputs points),
+  `ArrayPathFollowParticles` (points following a spline) and
+  `Ops.Extension.GlParticles.VelocityBoundaries`, whose page has no
+  documentation text. No general particle system op was found, and no
+  comparison with Max was made.
+  Source: ops index, `op:Ops.Extension.GlParticles.VelocityBoundaries`.
+- **207 of the 380 op pages read in this pass have no documentation text.**
+  For those, what is written here rests on the one-line summary and the
+  port list.

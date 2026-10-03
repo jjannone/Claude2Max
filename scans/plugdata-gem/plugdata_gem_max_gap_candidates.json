@@ -1,0 +1,1409 @@
+[
+  {
+    "capability": "Render chain: drawing state is a visible path of objects",
+    "category": "rendering/3D",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "gemhead",
+      "color",
+      "colorRGB",
+      "translateXYZ",
+      "rotateXYZ",
+      "scaleXYZ",
+      "square",
+      "cube"
+    ],
+    "what_it_does": "A shape is drawn by a chain: gemhead at the top, then objects that each change one piece of state (transform, colour, texture), then the shape. Every object changes what follows it on the cord, so the whole recipe can be read top to bottom in the patch.",
+    "source_urls": [
+      "Documentation/14.gem/examples/Documentation/manual/BasicObj.html",
+      "Documentation/14.gem/gemhead-help.pd",
+      "Documentation/14.gem/Gem-help.pd",
+      "Documentation/14.gem/examples/01.basic/01.redSquare.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.world",
+      "jit.gl.gridshape",
+      "jit.anim.node",
+      "jit.gl.node"
+    ],
+    "max_check": "Read jit.world, jit.gl.gridshape, jit.anim.node and the common OB3D refpage jit.group-gl.maxref.xml. In Jitter position, rotatexyz, scale, color, texture, layer and blend are attributes of each drawing object; objects join a context by name (drawto) or by sitting in the same patcher as jit.world. Nothing is wired between a transform and a shape unless a jit.anim.node is used.",
+    "advice": "A Jitter scene's recipe is hidden in attributes. Put the attributes that matter in the box text or on attrui boxes, and when several objects share a transform, use a named jit.anim.node wired to them so the sharing can be seen.",
+    "confidence": "high",
+    "notes": "The Gem way costs a box per state change; the Jitter way costs readability. Neither is wrong."
+  },
+  {
+    "capability": "Draw order as one number on the head of each chain, changeable while running",
+    "category": "rendering/3D",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "gemhead",
+      "alpha",
+      "depth"
+    ],
+    "what_it_does": "Each gemhead takes a priority (default 50): lower is drawn first. The number is an argument or a 'set' message, so a patch can re-order transparent objects as they pass each other. Depth testing and blending are separate objects placed in the chain where they are wanted.",
+    "source_urls": [
+      "Documentation/14.gem/gemhead-help.pd",
+      "Documentation/14.gem/alpha-help.pd",
+      "Documentation/14.gem/depth-help.pd",
+      "Documentation/14.gem/examples/02.advanced/14.RenderOrder.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "layer",
+      "depth_enable",
+      "depth_write",
+      "blend_enable",
+      "jit.gl.layer",
+      "jit.world"
+    ],
+    "max_check": "Read the common OB3D refpage jit.group-gl.maxref.xml (layer: 'determines the rendering order (low to high)', same layer has no guaranteed order; depth_enable default 1; depth_write; blend_enable default 0), the userguide topic 'Depth Testing and Layering' (says to turn depth_enable off when layering, 'otherwise depth testing will override the layer value'; jit.gl.layer turns depth off and blending on by default) and jit.world (depth_sort attribute). This repo's own forum notes give two opposite instructions about depth_enable with layers, which shows how easily it is got wrong.",
+    "advice": "Treat order in Jitter as two settings, not one: give every renderable an explicit @layer, and decide @depth_enable per object. For a flat stack use @depth_enable 0 @blend_enable 1 (or jit.gl.layer); for transparent objects inside a 3D scene use @depth_write 0 with a higher @layer, as the userguide says.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Overlay chains that ignore the camera",
+    "category": "rendering/3D",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "gemhead",
+      "text2d"
+    ],
+    "what_it_does": "A gemhead with a negative priority is drawn after every positive one and is not affected by changes of viewpoint. It is the stock way to keep a logo, a caption or a help text fixed on screen over a moving scene.",
+    "source_urls": [
+      "Documentation/14.gem/gemhead-help.pd",
+      "Documentation/14.gem/examples/02.advanced/03.View_OSD.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "transform_reset",
+      "layer",
+      "depth_enable",
+      "jit.gl.layer",
+      "jit.gl.text"
+    ],
+    "max_check": "Read the common OB3D refpage jit.group-gl.maxref.xml: transform_reset 1 or 2 sets the modelview and projection to identity before drawing the object, 'useful for sprite or billboard overlays'. The userguide topic 'Depth Testing and Layering' gives the overlay recipe: depth_enable 0, blend_enable 1 and a higher layer. jit.gl.text has screenmode for fixed-size 2D text.",
+    "advice": "For a heads-up overlay in Jitter, set three things on the overlay object: @transform_reset 2, @depth_enable 0 and a @layer above the scene. Gem needs one number; Jitter needs all three, so write them in the box.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Scope for transforms: separator",
+    "category": "rendering/3D",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "separator",
+      "pix_separator",
+      "pix_buf"
+    ],
+    "what_it_does": "When a chain branches, a transform in one branch affects the other. separator saves the matrices when the frame reaches it and restores them when everything below has been drawn, so branches are independent. It does not restore colour. pix_separator does the same job for image chains.",
+    "source_urls": [
+      "Documentation/14.gem/separator-help.pd",
+      "Documentation/14.gem/pix_buf-help.pd",
+      "Documentation/14.gem/examples/02.advanced/01.Separator.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.anim.node",
+      "jit.gl.node",
+      "jit.gl.sketch"
+    ],
+    "max_check": "Read jit.anim.node (parent and child nodes; inherit_position, inherit_rotate, inherit_scale; worldpos) and jit.gl.node (hierarchical rendering groups). Jitter objects do not leak transforms into each other, so nothing like separator is needed; shared transforms are opt-in. jit.gl.sketch has glpushmatrix and glpopmatrix messages for hand-drawn command lists.",
+    "advice": "Nothing to copy, but know the difference when porting a Gem patch: a Gem branch below one rotate becomes, in Jitter, several objects bound to one jit.anim.node (anim attribute) or placed in one jit.gl.node.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Drawing one shape many times by re-sending the frame",
+    "category": "rendering/3D",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "gemlist",
+      "gemrepeat",
+      "until",
+      "separator"
+    ],
+    "what_it_does": "gemlist stores the frame message and sends it again on a bang, so a loop draws the same shape many times, each pass adding a little more translate, rotate or scale. gemrepeat does it in one box. A hundred circles in a spiral is five boxes.",
+    "source_urls": [
+      "Documentation/14.gem/gemlist-help.pd",
+      "Documentation/14.gem/examples/02.advanced/19.pointer.pd",
+      "Documentation/14.gem/examples/02.advanced/20.double-gemhead_vs_repeat.pd",
+      "Documentation/14.gem/examples/02.advanced/22.double-iterative.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.gl.multiple",
+      "jit.gl.mesh",
+      "jit.gl.sketch"
+    ],
+    "max_check": "Read jit.gl.multiple (draws a named jit.gl object repeatedly from matrices; glparams position, rotate, rotatexyz, scale, color, texture), jit.gl.mesh (instances attribute, undocumented text) and jit.gl.sketch (drawobject message draws a named object inside a command list). OB3D objects also take draw / drawraw with automatic 0.",
+    "advice": "In Jitter the copies come from data, not from a loop: fill position / rotate / scale matrices (jit.gen or jit.expr make a spiral in one object) and give them to jit.gl.multiple. It scales to thousands, which a Gem loop does not; Gem's loop is easier to read for a dozen.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Recursive scene graphs",
+    "category": "rendering/3D",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "gemhead",
+      "separator",
+      "nrepeat",
+      "nnrepeat",
+      "stack"
+    ],
+    "what_it_does": "Because a frame is an ordinary message, a subpatch can send it back into itself with a depth counter. The example set draws branching trees this way, and supplies small abstractions (a repeat with a built-in counter, a stack) that make the recursion safe.",
+    "source_urls": [
+      "Documentation/14.gem/examples/13.recursion/03.recursive_spiral.pd",
+      "Documentation/14.gem/examples/13.recursion/04.binary_tree.pd",
+      "Documentation/14.gem/examples/13.recursion/05.n-ary_tree.pd",
+      "Documentation/14.gem/examples/13.recursion/06.breaking_symmetry.pd",
+      "Documentation/14.gem/examples/13.recursion/nrepeat-help.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.gl.multiple",
+      "jit.gl.sketch",
+      "jit.gl.lua",
+      "v8"
+    ],
+    "max_check": "Read jit.gl.multiple, jit.gl.sketch (command lists with glpushmatrix / glpopmatrix and drawobject) and jit.gl.lua (scripts OpenGL in Lua). No Jitter object draws by recursion through patch cords; a branching structure has to be computed first (in a script or gen) and handed over as matrices or a command list.",
+    "advice": "",
+    "confidence": "medium",
+    "notes": "The Gem examples need gemrepeat and plain Pd objects; the README of the example folder also lists the Zexy library as a requirement."
+  },
+  {
+    "capability": "Reading back the transform that has built up on a chain",
+    "category": "rendering/3D",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "gemlist_info",
+      "gemlist_matrix"
+    ],
+    "what_it_does": "Placed anywhere on a chain, gemlist_info outputs the accumulated transform at that point as translation, rotation, scale and shear; gemlist_matrix outputs the 16-number matrix. The examples use them to pass a transform to a shader and to export vertex positions.",
+    "source_urls": [
+      "Documentation/14.gem/gemlist_info-help.pd",
+      "Documentation/14.gem/gemlist_matrix-help.pd",
+      "Documentation/14.gem/examples/15.GLSL4/02.transformation.pd",
+      "Documentation/14.gem/examples/11.obj-exporter/obj_exporter-help.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.anim.node",
+      "jit.gl.camera"
+    ],
+    "max_check": "Read jit.anim.node: attributes transform ('get and set the full local 4x4 matrix'), worldpos, worldquat, worldrot, worldscale, worldtransform, and the messages localtoworld / worldtolocal. jit.gl.camera has view_matrix, proj_matrix and viewproj_matrix attributes.",
+    "advice": "To learn where a nested Jitter object really is, bind it to a jit.anim.node and query getworldpos / getworldtransform there; do not recompute the parent chain by hand.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "One object per OpenGL call in the render path",
+    "category": "rendering/3D",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "GEMglBegin",
+      "GEMglEnd",
+      "GEMglVertex3f",
+      "GEMglColor4f",
+      "GEMglPushMatrix",
+      "GEMglPopMatrix",
+      "GEMglLoadIdentity",
+      "GEMglClear",
+      "GEMglGenLists",
+      "GEMglNewList",
+      "GEMglEndList",
+      "GEMglCallList",
+      "GLdefine"
+    ],
+    "what_it_does": "Gem wraps nearly every OpenGL 1.2 function as an object named GEM plus the function name (the manual counts more than 250), and GLdefine turns a constant's name into its number. They sit in a chain like any other object, so a patch can draw vertex by vertex, compile a display list, or clear just the depth buffer in the middle of a frame.",
+    "source_urls": [
+      "Documentation/14.gem/examples/Documentation/manual/ListObjects.html",
+      "Documentation/14.gem/GLdefine-help.pd",
+      "Documentation/14.gem/GEMglBegin-help.pd",
+      "https://github.com/umlaeute/Gem/blob/HEAD/help/GEMgl-help.pd",
+      "Documentation/14.gem/examples/09.openGL/01.primQuad.pd",
+      "Documentation/14.gem/examples/09.openGL/02.displayList.pd",
+      "Documentation/14.gem/examples/09.openGL/04.clearZ.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.gl.sketch",
+      "jit.gl.lua",
+      "depth_clear"
+    ],
+    "max_check": "Read jit.gl.sketch ('simple turtle graphics to the majority of the OpenGL API'; messages glbegin, glend, glvertex, glcolor, glpushmatrix, glpopmatrix, glenable, gldisable and about 50 more, kept as a command list) and jit.gl.lua (OpenGL through Lua). the common OB3D refpage jit.group-gl.maxref.xml has depth_clear to clear the depth buffer before one object. The userguide topic 'Graphics Engine' says immediate-mode drawing is deprecated in the default glcore engine; whether jit.gl.sketch's gl* messages still work there was not checked.",
+    "advice": "",
+    "confidence": "medium",
+    "notes": "Gem's wrappers are legacy OpenGL too; upstream has a newer example folder (15.openGL3.2) that was not read."
+  },
+  {
+    "capability": "Stencil-buffer masking",
+    "category": "rendering/3D",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "GEMglStencilFunc",
+      "GEMglStencilOp",
+      "GEMglClearStencil",
+      "GEMglEnable",
+      "GEMglDisable",
+      "GLdefine"
+    ],
+    "what_it_does": "Using the OpenGL wrapper objects, one example draws a shape into the stencil buffer and then draws two other objects only where the stencil is, or is not, set. It is a way to cut one 3D object to the outline of another without textures.",
+    "source_urls": [
+      "Documentation/14.gem/examples/09.openGL/03.stencilBuffer.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.gl.sketch",
+      "jit.gl.lua",
+      "jit.gl.node",
+      "jit.gl.pix"
+    ],
+    "max_check": "Searched every refpage in the Max install and the installed packages for 'stencil': no hits. jit.gl.sketch's message list has no stencil call. jit.gl.lua exposes OpenGL to Lua and may reach it; that was not tested. The usual Jitter route to the same picture is to capture each object to a texture (jit.gl.node @capture 1) and combine them with a mask in jit.gl.pix or jit.gl.slab.",
+    "advice": "",
+    "confidence": "low",
+    "notes": ""
+  },
+  {
+    "capability": "Plain GLSL files, uniforms found automatically and set by their own names",
+    "category": "GPU compute/shaders",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "glsl_vertex",
+      "glsl_fragment",
+      "glsl_program",
+      "glsl"
+    ],
+    "what_it_does": "Each shader stage is loaded from an ordinary .vert or .frag file and compiled by its own object; glsl_program links them and becomes a state object in the chain. It discovers the shader's uniform variables itself, and a uniform called bla is set by sending the message 'bla 0.5'. Uniform values are kept across a re-link. Upstream adds one object, glsl, that takes a base name and finds the files.",
+    "source_urls": [
+      "Documentation/14.gem/glsl_program-help.pd",
+      "Documentation/14.gem/glsl_fragment-help.pd",
+      "Documentation/14.gem/glsl_vertex-help.pd",
+      "Documentation/14.gem/examples/02.advanced/18.gl_shading_language.pd",
+      "Documentation/14.gem/examples/10.glsl/01.simple_texture.pd",
+      "https://github.com/umlaeute/Gem/blob/HEAD/help/glsl-help.pd"
+    ],
+    "max_status": "better-elsewhere",
+    "max_closest": [
+      "jit.gl.shader",
+      "jit.gl.slab",
+      "jit.gl.pix"
+    ],
+    "max_check": "Read jit.gl.shader (file is 'the shader description file (JXS)'; param 'sets the given shader parameter ... as defined in a JXS file'; getparamlist) and jit.gl.slab, and the userguide topic 'The JXS File Format': a JXS file is XML that must declare each parameter with a param tag and bind it to a program with a bind tag, with the GLSL inside program tags. The description says programs can also be 'submitted individually' but no message for that is listed.",
+    "advice": "A shader found online will not load in Jitter as it is. Keep a minimal JXS template: one param tag and one bind tag per uniform, the GLSL pasted into the program tags, then send 'param <name> <value>'. Use getparamlist to confirm Jitter sees the uniforms; an undeclared uniform is silently never set.",
+    "confidence": "high",
+    "notes": "glsl_program can also fill a uniform array from a Pd table by name; whether a JXS param can be an array was not checked."
+  },
+  {
+    "capability": "Geometry shaders as a separate stage object",
+    "category": "GPU compute/shaders",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "glsl_geometry",
+      "glsl_program"
+    ],
+    "what_it_does": "glsl_geometry loads a geometry shader file; glsl_program is then told the input primitive type, the output type and the number of vertices produced. The examples draw forty circles from one primitive and turn each triangle into a fan.",
+    "source_urls": [
+      "Documentation/14.gem/glsl_geometry-help.pd",
+      "Documentation/14.gem/glsl_program-help.pd",
+      "Documentation/14.gem/examples/10.glsl/11.geometry.pd",
+      "Documentation/14.gem/examples/10.glsl/12.tri2fan.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.gl.shader",
+      "jit.gl.tf"
+    ],
+    "max_check": "Read the userguide topic 'The JXS File Format' ('there can be an optional geometry shader') and jit.gl.shader (program_param: 'a geometry shader program parameter'). jit.gl.tf (Jitter Tools package) runs transform feedback on a jit.gl.mesh with a jit.gl.shader.",
+    "advice": "Jitter supports the stage inside the JXS file, as a third program tag. Set its input and output types with program_param before expecting it to draw.",
+    "confidence": "medium",
+    "notes": "Upstream's glsl help lists compute and tessellation file endings in brackets; whether JXS accepts those stages was not checked."
+  },
+  {
+    "capability": "Render any chain into a texture with an explicit size, format and frustum",
+    "category": "rendering/3D",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "gemframebuffer",
+      "pix_texture"
+    ],
+    "what_it_does": "Everything below a gemframebuffer is drawn into a texture instead of the window. Messages set the texture's size, pixel type (byte, int, float), format (including 32-bit float RGBA), background colour, its own frustum and the texture unit. Several chains can draw into the same framebuffer.",
+    "source_urls": [
+      "Documentation/14.gem/gemframebuffer-help.pd",
+      "Documentation/14.gem/examples/07.texture/10.framebuffer.pd",
+      "Documentation/14.gem/examples/07.texture/11.multiples_gemhead_in_a_framebuffer.pd",
+      "Documentation/14.gem/examples/07.texture/12.floatingpoint_framebuffer.pd",
+      "Documentation/14.gem/examples/02.advanced/23.SplitScreen.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.gl.node",
+      "jit.gl.camera",
+      "jit.world",
+      "jit.gl.texture"
+    ],
+    "max_check": "Read jit.gl.node (capture: 'rendering is captured to a texture and the texture name is output'; values above 1 give multiple render targets; adapt, dim, type, erase_color, fsaa), jit.gl.camera (capture, out_name, viewport, ortho) and jit.world (output_texture / capture).",
+    "advice": "The Jitter equivalent is jit.gl.node @capture 1 with @adapt 0 @dim set by hand when the size matters, plus a jit.gl.camera inside the node when the captured view should differ from the window's. The porting trap runs the other way: a Gem framebuffer's camera is at the origin, a Jitter node inherits the context's camera.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Render a scene straight into the six faces of a cube map",
+    "category": "rendering/3D",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "gemcubeframebuffer",
+      "glsl_program"
+    ],
+    "what_it_does": "gemcubeframebuffer renders the chain below it once per cube face into a cube-map texture. Its help then shows the result three ways: on a cube, on a sphere, and unwrapped to a flat equirectangular image, using two shaders that ship beside the help file.",
+    "source_urls": [
+      "Documentation/14.gem/gemcubeframebuffer-help.pd",
+      "Documentation/14.gem/cubemaptosphere.frag",
+      "Documentation/14.gem/cubemaptocube.frag"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.gl.cubemap",
+      "jit.gl.camera",
+      "jit.gl.environment",
+      "jit.gl.skybox"
+    ],
+    "max_check": "Read jit.gl.cubemap ('maintains a cubemap texture target ... 6 inputs, one for each face'; equirect_matrix and panorama_matrix messages), jit.gl.environment and jit.gl.skybox. No Jitter refpage describes rendering a live scene into all six faces in one object; six jit.gl.camera @capture 1 views feeding the six inlets would be the assembly.",
+    "advice": "",
+    "confidence": "medium",
+    "notes": "The two cube-map shader files were listed but not read."
+  },
+  {
+    "capability": "Multi-pass shader pipelines built from framebuffers",
+    "category": "GPU compute/shaders",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "gemframebuffer",
+      "glsl_program",
+      "mesh_square",
+      "single_blur"
+    ],
+    "what_it_does": "A pass is a framebuffer with a shader drawing a full-size quad; the next pass uses its texture. The examples build a two-input distortion-and-mix pipeline and a separable blur made of fourteen small passes, each pass an abstraction.",
+    "source_urls": [
+      "Documentation/14.gem/examples/10.glsl/08.multi_pass_rendering.pd",
+      "Documentation/14.gem/examples/10.glsl/14.blur.pd",
+      "Documentation/14.gem/examples/10.glsl/single_blur.pd",
+      "Documentation/14.gem/examples/10.glsl/07.framebuffer_and_shader.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.gl.slab",
+      "jit.gl.pix",
+      "jit.gl.pass",
+      "jit.fx.cf.gaussian"
+    ],
+    "max_check": "Read jit.gl.slab ('process texture data ... using fragment shaders'; inputs, outputs, dim, type), jit.gl.pix, jit.gl.pass (sub-passes defined in a JXP file; 'chaining multiple jit.gl.pass objects') and the userguide topic 'Render Passes'. A slab is the framebuffer, the quad and the shader in one box, and passes connect with a texture cord.",
+    "advice": "Jitter is ahead here: one jit.gl.slab per pass, wired in order. What Gem's version teaches is what a slab hides, which helps when a slab chain misbehaves: each pass has its own size, pixel type and filter, so set @dim, @type and @adapt on each slab that must not inherit them.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Grab the window into a texture for feedback",
+    "category": "GPU compute/shaders",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "pix_snap2tex",
+      "pix_snap"
+    ],
+    "what_it_does": "pix_snap2tex copies the current window contents straight into a texture and applies it to the shape below, so last frame's picture can be drawn into this frame. The examples use it for video feedback, full-screen motion blur and a shader game of life. pix_snap does the same but returns a CPU image.",
+    "source_urls": [
+      "Documentation/14.gem/pix_snap2tex-help.pd",
+      "Documentation/14.gem/pix_snap-help.pd",
+      "Documentation/14.gem/examples/07.texture/07.feedback.pd",
+      "Documentation/14.gem/examples/07.texture/08.MotionBlur.pd",
+      "Documentation/14.gem/examples/10.glsl/04.game_of_life.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.world",
+      "jit.gl.node",
+      "jit.gl.texture",
+      "jit.gl.slab",
+      "jit.fx.conway"
+    ],
+    "max_check": "Read jit.world (output_texture: 'all rendering is captured to texture and the texture name is output'), jit.gl.node (capture), jit.gl.texture and jit.gl.slab. A captured texture can be wired back to an object in the same context. jit.fx.conway (Jitter Tools package) 'performs Conway's Game of Life ... on incoming textures'.",
+    "advice": "In Jitter, take the frame from jit.world @output_texture 1 (or a jit.gl.node capture) and wire it back through a jit.gl.slab or jit.gl.pix that mixes it with new content. Give the loop its own jit.gl.texture so the frame being read is not the one being written.",
+    "confidence": "medium",
+    "notes": "That a separate texture is needed to break the loop comes from this repo's forum notes, not from a refpage."
+  },
+  {
+    "capability": "Physics computed in shaders with float framebuffers",
+    "category": "GPU compute/shaders",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "gemframebuffer",
+      "glsl_program",
+      "mesh_square"
+    ],
+    "what_it_does": "One example runs a cloth-like mass and spring model entirely on the graphics card: positions live in float textures, a shader computes forces and new positions, and a vertex shader reads the texture to move a mesh. Its comment gives 64 x 92 masses and twelve links per mass.",
+    "source_urls": [
+      "Documentation/14.gem/examples/10.glsl/10.GPGPU_Physical_model.pd",
+      "Documentation/14.gem/examples/10.glsl/09.vertex_texture_fetching.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.gl.pix",
+      "jit.gl.slab",
+      "jit.gl.tf",
+      "jit.gl.buffer",
+      "jit.gp.world"
+    ],
+    "max_check": "Read jit.gl.pix and jit.gl.slab (type attribute for float textures), jit.gl.tf and jit.gl.buffer (transform feedback on a mesh, Jitter Tools package), and the Compute package's jit.gp.world. The repo's forum notes describe the same texture-feedback pattern.",
+    "advice": "The same design works in Jitter with float32 textures: one jit.gl.pix for the state update in a feedback loop, and a jit.gl.mesh whose shader reads that texture. Treat the Gem example as a worked plan for it.",
+    "confidence": "low",
+    "notes": "The shader sources (mass.frag, link.frag and others) were not read, only the patch."
+  },
+  {
+    "capability": "Image chains that are only recomputed when something changed",
+    "category": "video I/O & playback",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "pix_buf",
+      "pix_separator",
+      "pix_image",
+      "pix_film"
+    ],
+    "what_it_does": "Gem reprocesses a pix chain only when the source image changes or a parameter of a pix object changes; otherwise the cached result is used. pix_buf stores a result so the expensive objects above it are skipped, and 'profile 2' on the window turns caching off to measure the real cost.",
+    "source_urls": [
+      "Documentation/14.gem/examples/Documentation/manual/Pixes.html",
+      "Documentation/14.gem/examples/Documentation/manual/Texture.html",
+      "Documentation/14.gem/pix_buf-help.pd",
+      "Documentation/14.gem/examples/Documentation/manual/GemFaq.html"
+    ],
+    "max_status": "better-elsewhere",
+    "max_closest": [
+      "jit.movie",
+      "jit.change",
+      "jit.matrix",
+      "jit.world"
+    ],
+    "max_check": "Read jit.movie (unique: 'only new frames from the movie are output when the object receives a bang') and jit.change ('only pass different frames'). A Jitter matrix chain does its work every time a matrix arrives; nothing caches by default, and jit.world sends a draw bang every frame.",
+    "advice": "Do not drive a CPU matrix chain from the render bang when its input changes rarely. Use jit.movie @unique 1, or jit.change after the source, and let the last result sit in a jit.matrix or a texture. A still image through a jit.gl.slab chain needs one bang, not thirty a second.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Explicit colour space on every image",
+    "category": "video I/O & playback",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "pix_rgba",
+      "pix_yuv",
+      "pix_grey",
+      "pix_convert",
+      "pix_film",
+      "pix_chroma_key"
+    ],
+    "what_it_does": "A pix is RGBA, YUV or grey, and the default from a movie file differs by operating system. Objects that take a colour as a parameter then behave differently, and some effects silently do nothing on the wrong format. The help files tell the reader to convert explicitly before such objects.",
+    "source_urls": [
+      "Documentation/14.gem/pix_film-help.pd",
+      "Documentation/14.gem/pix_chroma_key-help.pd",
+      "Documentation/14.gem/pix_convert-help.pd",
+      "Documentation/14.gem/pix_yuv-help.pd",
+      "Documentation/14.gem/examples/04.pix/05.film.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.movie",
+      "jit.grab",
+      "jit.colorspace",
+      "jit.gl.videoplane"
+    ],
+    "max_check": "Read jit.movie and jit.grab (colormode: 'the output matrix's color encoding', default argb on jit.grab) and jit.colorspace (converts a 4-plane char matrix between colour spaces). Jitter's default is the same on every platform, and the plane order is ARGB, not RGBA.",
+    "advice": "When porting numbers from Gem, remember the plane order differs (Gem RGBA, Jitter ARGB) and that a uyvy colormode in Jitter changes what a matrix's planes mean exactly as YUV does in Gem. Write @colormode in the box whenever a later object takes a colour or a plane index.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Frame-addressed movie playback",
+    "category": "video I/O & playback",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "pix_film",
+      "pix_movie"
+    ],
+    "what_it_does": "pix_film outputs the frame whose number is sent to it; it does not play unless told 'auto 1', and in auto mode it does not loop but bangs at the end. pix_movie is the same decoder writing straight to a texture. The patch therefore owns the clock: any counter, ramp or audio phase can drive the frame.",
+    "source_urls": [
+      "Documentation/14.gem/pix_film-help.pd",
+      "Documentation/14.gem/pix_movie-help.pd",
+      "Documentation/14.gem/examples/04.pix/05.film.pd",
+      "Documentation/14.gem/examples/04.pix/05.movie.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.movie",
+      "jit.playlist"
+    ],
+    "max_check": "Read jit.movie: autostart default 1, loop default 1, rate, the frame and jump messages, framedump, and output_texture ('an OpenGL texture is output instead of a Jitter matrix').",
+    "advice": "For scrubbing or audio-locked playback in Jitter, turn the transport off (@autostart 0, or rate 0) and send frame numbers, as Gem does by default; leaving the movie playing while also sending frames makes the two fight. Use @output_texture 1 unless a CPU object needs the pixels.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Choosing the decoding or capture backend per object, and listing its properties",
+    "category": "video I/O & playback",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "pix_film",
+      "pix_video",
+      "pix_image",
+      "pix_record",
+      "model",
+      "pix_buffer"
+    ],
+    "what_it_does": "Film reading, camera capture, image loading and saving, movie writing and model loading all go through plugins. Each object answers a 'backend' query with what is available, takes 'backend <name>' to force one, and lists readable and writable properties with enumProps. setProps queues several property changes and applyProps applies them together.",
+    "source_urls": [
+      "Documentation/14.gem/pix_film-help.pd",
+      "Documentation/14.gem/pix_video-help.pd",
+      "Documentation/14.gem/pix_record-help.pd",
+      "Documentation/14.gem/model-help.pd",
+      "Documentation/14.gem/pix_buffer-help.pd",
+      "Documentation/14.gem/_backendinfo.pd",
+      "https://github.com/umlaeute/Gem/blob/HEAD/README.md"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.movie",
+      "jit.grab",
+      "jit.record"
+    ],
+    "max_check": "Read jit.movie, jit.grab and jit.record: engine is 'video engine backend ... can only be set in the max box', with values avf, qt, viddll, otherwise taken from the Video Engine preference. jit.grab reports devices and formats with getvdevlist, getformatlist, getinputlist and getframeratelist. No generic property enumeration or atomic multi-property set is listed.",
+    "advice": "",
+    "confidence": "medium",
+    "notes": "Which plugins the plugdata build includes was not found in any file read."
+  },
+  {
+    "capability": "Capture from industrial cameras, NDI, DeckLink, VNC and VLC through plugins",
+    "category": "video I/O & playback",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "pix_video"
+    ],
+    "what_it_does": "The upstream README lists optional capture plugins for V4L2, FireWire, Blackmagic DeckLink, NDI, VNC screens, anything VLC can open, and three industrial camera SDKs (AVT, Halcon, Pylon) plus OptiTrack, all behind the one pix_video object.",
+    "source_urls": [
+      "https://github.com/umlaeute/Gem/blob/HEAD/README.md",
+      "Documentation/14.gem/pix_video-help.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.grab",
+      "jit.desktop",
+      "jit.net.recv"
+    ],
+    "max_check": "Read jit.grab ('digitize video from any video digitizer') and jit.desktop (screen capture). Searched the installed-package library for NDI (no hits), and for Syphon (present: jit.gl.syphonclient / jit.gl.syphonserver). Nothing in the Max install names DeckLink, NDI, VNC or GigE cameras.",
+    "advice": "",
+    "confidence": "low",
+    "notes": "This is a statement about upstream Gem's build options. Whether plugdata's build includes any of these plugins is unknown."
+  },
+  {
+    "capability": "Save the window to an image file at a chosen resolution",
+    "category": "workflow/authoring",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "pix_write",
+      "pix_writer",
+      "pix_snap",
+      "snapshotHD",
+      "gemframebuffer"
+    ],
+    "what_it_does": "pix_write saves the window to a numbered TIFF or JPEG on a bang or automatically every frame. The snapshotHD example abstraction replaces the gemhead and renders the same scene through a framebuffer at any size, for instance 4000 x 2000, to a file.",
+    "source_urls": [
+      "Documentation/14.gem/pix_write-help.pd",
+      "Documentation/14.gem/pix_writer-help.pd",
+      "Documentation/14.gem/examples/02.advanced/09.SnapshotSave.pd",
+      "Documentation/14.gem/examples/02.advanced/09.SnapshotSaveHD.pd",
+      "Documentation/14.gem/examples/02.advanced/snapshotHD.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.world",
+      "jit.gl.node",
+      "jit.gl.asyncread",
+      "jit.matrix"
+    ],
+    "max_check": "Read jit.world (output_matrix: scene 'read back to an internal matrix'), jit.gl.node (capture with adapt and dim), jit.gl.asyncread (reads the context back through pixel buffer objects), jit.gl.texture (tomatrix) and jit.matrix (exportimage: png, tiff or jpeg).",
+    "advice": "For a print-size still in Jitter: put the scene in a jit.gl.node @capture 1 @adapt 0 @dim <w> <h>, send the texture to a jit.matrix, then exportimage. Do not raise the window size to get a bigger file.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Named, indexed image store",
+    "category": "data/tables/scripting",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "pix_buffer",
+      "pix_buffer_write",
+      "pix_buffer_read",
+      "pix_buffer_filmopen"
+    ],
+    "what_it_does": "pix_buffer is a named store of numbered image slots, described in its help as like a table for images. Separate write and read objects put an image into a slot or fetch one; images can be loaded from and saved to files by slot, and an abstraction reads a whole movie into the slots at start-up.",
+    "source_urls": [
+      "Documentation/14.gem/pix_buffer-help.pd",
+      "Documentation/14.gem/pix_buffer_write-help.pd",
+      "Documentation/14.gem/pix_buffer_read-help.pd",
+      "Documentation/14.gem/pix_buffer_filmopen-help.pd",
+      "Documentation/14.gem/examples/04.pix/25.buffer.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.matrixset",
+      "jit.gl.textureset",
+      "jit.matrix"
+    ],
+    "max_check": "Read jit.matrixset ('a set of internal matrices which may be written to or read from'; index, matrixcount, importmovie, exportmovie) and jit.gl.textureset (Jitter Tools package: the same for textures). Named jit.matrix objects share one store by name.",
+    "advice": "Use jit.matrixset for a frame bank and jit.gl.textureset when the frames only go to the screen. Unlike pix_buffer, a matrixset's slots all share one size and type, so resize on the way in.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Preload an image sequence into texture memory",
+    "category": "video I/O & playback",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "pix_imageInPlace",
+      "pix_multiimage"
+    ],
+    "what_it_does": "pix_imageInPlace takes a file name with a wildcard and a count, loads the numbered images, and on 'download' sends them all to the graphics card. Switching between them is then instant. pix_multiimage is the CPU version that still allows pix processing.",
+    "source_urls": [
+      "Documentation/14.gem/pix_imageInPlace-help.pd",
+      "Documentation/14.gem/pix_multiimage-help.pd",
+      "Documentation/14.gem/examples/04.pix/04.ImageInPlace.pd",
+      "Documentation/14.gem/examples/Documentation/manual/Texture.html"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.gl.textureset",
+      "jit.matrixset",
+      "jit.gl.texture"
+    ],
+    "max_check": "Read jit.gl.textureset (index, clear, outputtexture; 'mimics the functionality of jit.matrixset but outputs textures') and jit.gl.texture (file attribute, read message). No refpage read takes a wildcard file name; the loading loop is the patch's job.",
+    "advice": "For instant image switching in Jitter, load each file once into a slot of jit.gl.textureset at start-up and change @index at run time. Reading a file on every switch is the stall Gem's object exists to avoid.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Time-axis filters with raw coefficients",
+    "category": "video I/O & playback",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "pix_tIIR",
+      "pix_biquad",
+      "pix_motionblur",
+      "pix_delay"
+    ],
+    "what_it_does": "pix_tIIR filters each pixel along time with as many feedback and feed-forward taps as its arguments ask for, one inlet per coefficient. pix_biquad is the two-pole case and takes the same six coefficients as Pd's audio biquad, so a filter designed for sound can be applied to video brightness over frames.",
+    "source_urls": [
+      "Documentation/14.gem/pix_tIIR-help.pd",
+      "Documentation/14.gem/pix_biquad-help.pd",
+      "Documentation/14.gem/pix_motionblur-help.pd",
+      "Documentation/14.gem/examples/04.pix/22.biquad.pd",
+      "Documentation/14.gem/examples/04.pix/24.time-filtering.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.fx.tp.filter",
+      "jit.slide",
+      "jit.fx.slide",
+      "jit.fx.tp.delay"
+    ],
+    "max_check": "Read jit.fx.tp.filter (Jitter Tools: 'temporal filtering to a texture using a two-pole, two-zero filter', set by filtertype, cutoff and q), jit.slide (slide_up, slide_down), and jit.fx.tp.delay (delay, max_delay). No object read takes raw coefficients or more than two poles.",
+    "advice": "",
+    "confidence": "medium",
+    "notes": "Arbitrary coefficients are a few lines in jit.gl.pix with feedback, but that is building it, not having it."
+  },
+  {
+    "capability": "Swap the time axis with the x axis (slit-scan)",
+    "category": "video I/O & playback",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "pix_rtx"
+    ],
+    "what_it_does": "pix_rtx keeps a history of frames and outputs an image in which horizontal position and time are exchanged, in real time. Its help warns about memory: width squared times height times four bytes.",
+    "source_urls": [
+      "Documentation/14.gem/pix_rtx-help.pd",
+      "Documentation/14.gem/examples/04.video/04.videoRTX.pd",
+      "Documentation/14.gem/examples/04.video/05.buffer_rtx.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.fx.tp.warp"
+    ],
+    "max_check": "Read jit.fx.tp.warp (Jitter Tools: 'distorts the flow of time by altering the playback speed or order of frames using luminance from the second input'; num_slices is the delay memory). A horizontal gradient as the second input should give a time-for-x picture; that was not tested.",
+    "advice": "",
+    "confidence": "low",
+    "notes": ""
+  },
+  {
+    "capability": "Weighted centre of brightness or of one colour channel",
+    "category": "sensors/tracking/ML",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "pix_blob"
+    ],
+    "what_it_does": "pix_blob outputs the centre of gravity of an image and a size, weighting each pixel by a chosen channel (grey, red, green, blue, alpha) or by a custom mix of channels. With pix_movement writing motion into the alpha channel it becomes a simple 'where is the movement' tracker.",
+    "source_urls": [
+      "Documentation/14.gem/pix_blob-help.pd",
+      "Documentation/14.gem/examples/04.pix/23.gravity.pd",
+      "Documentation/14.gem/examples/04.video/03.movement_detection.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.findbounds",
+      "jit.3m",
+      "cv.jit.centroids"
+    ],
+    "max_check": "Read jit.findbounds (minimum and maximum points holding values in a range) and jit.3m (min, mean, max per plane). Neither gives a centroid. The installed cv.jit package has cv.jit.centroids (centre of mass and mass of a one-plane image), per the package library entry.",
+    "advice": "",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Multiple blobs with size, bounding box and orientation, and stable IDs",
+    "category": "sensors/tracking/ML",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "pix_multiblob",
+      "pix_blobtracker"
+    ],
+    "what_it_does": "pix_multiblob finds up to N bright regions and reports for each a weighted centre, size, bounding box and the angle of its main axis. pix_blobtracker, an abstraction on top, matches blobs between frames so each keeps its number.",
+    "source_urls": [
+      "Documentation/14.gem/pix_multiblob-help.pd",
+      "Documentation/14.gem/pix_blobtracker-help.pd",
+      "Abstractions/Gem/pix_blobtracker.pd",
+      "Documentation/14.gem/examples/04.video/06.frame_diff_tracking.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "cv.jit.label",
+      "cv.jit.blobs.centroids",
+      "cv.jit.blobs.bounds",
+      "cv.jit.blobs.direction",
+      "cv.jit.touches"
+    ],
+    "max_check": "Core Jitter has no blob object in any refpage read. The installed cv.jit package covers it in pieces: cv.jit.label, then cv.jit.blobs.centroids / bounds / direction, and cv.jit.touches for persistent IDs (package library entries read).",
+    "advice": "",
+    "confidence": "high",
+    "notes": "pix_blobtracker needs the iemmatrix library, which was not checked for in plugdata."
+  },
+  {
+    "capability": "Motion and background-subtraction objects that write a mask",
+    "category": "sensors/tracking/ML",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "pix_movement",
+      "pix_movement2",
+      "pix_background",
+      "pix_diff"
+    ],
+    "what_it_does": "pix_movement compares each frame with the last and writes the change into the alpha channel. pix_movement2 uses two earlier frames and a stored background with a threshold that adapts. pix_background stores a reference frame on 'reset' and blacks out everything within a tolerance of it.",
+    "source_urls": [
+      "Documentation/14.gem/pix_movement-help.pd",
+      "Documentation/14.gem/pix_movement2-help.pd",
+      "Documentation/14.gem/pix_background-help.pd",
+      "Documentation/14.gem/examples/04.video/07.bg_subtract_tracking.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.op",
+      "jit.matrix",
+      "cv.jit.framesub",
+      "cv.jit.stddev"
+    ],
+    "max_check": "Read jit.op (per-plane operators; the object mappings file lists absdiff) and jit.matrix (thru 0 holds a reference frame). cv.jit.framesub and cv.jit.stddev are in the installed cv.jit package. No single core object stores a background and subtracts it.",
+    "advice": "Build it from two objects: a jit.matrix @thru 0 that is banged to store the background, and jit.op @op absdiff against the live frame, then a threshold. Give the store a visible 'capture background' button, as Gem's 'reset' message does.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Per-pixel colour classes and adaptive local threshold",
+    "category": "sensors/tracking/ML",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "pix_colorclassify",
+      "pix_equal",
+      "pix_threshold_bernsen"
+    ],
+    "what_it_does": "pix_colorclassify labels every pixel as red, green, blue, yellow, black, white or unsure, and outputs an image of those labels. pix_equal marks the pixels inside a colour range as white. pix_threshold_bernsen thresholds a grey image tile by tile, using each neighbourhood's own minimum and maximum.",
+    "source_urls": [
+      "Documentation/14.gem/pix_colorclassify-help.pd",
+      "Documentation/14.gem/pix_equal-help.pd",
+      "Documentation/14.gem/pix_threshold_bernsen-help.pd",
+      "Documentation/14.gem/examples/04.video/08.color_classification.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.chromakey",
+      "jit.findbounds",
+      "cv.jit.threshold",
+      "upshot_colortracking"
+    ],
+    "max_check": "Read jit.chromakey (keys on distance from one reference colour; 'an alternate mode outputs a matrix with the keying values') and jit.findbounds (range test). Nothing read classifies into several named colours. cv.jit.threshold (adaptive, local) and Upshot's upshot_colortracking are installed packages.",
+    "advice": "",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Fiducial, AR-marker, hand-contour and hit-zone objects",
+    "category": "sensors/tracking/ML",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "pix_fiducialtrack",
+      "pix_artoolkit",
+      "pix_hit",
+      "pix_mano",
+      "pix_drum"
+    ],
+    "what_it_does": "Upstream Gem's extra folder has objects that find reacTable-style fiducial markers, ARToolKit markers with their 3D pose, hands entering the frame (with fingertips and valleys), and whether bright pixels fall inside user-drawn circles, rectangles or lines.",
+    "source_urls": [
+      "https://github.com/umlaeute/Gem/blob/HEAD/extra/pix_fiducialtrack/pix_fiducialtrack-help.pd",
+      "https://github.com/umlaeute/Gem/blob/HEAD/extra/pix_artoolkit/pix_artoolkit-help.pd",
+      "https://github.com/umlaeute/Gem/blob/HEAD/extra/pix_hit/pix_hit-help.pd",
+      "https://github.com/umlaeute/Gem/blob/HEAD/extra/pix_mano/pix_mano-help.pd",
+      "https://github.com/umlaeute/Gem/blob/HEAD/extra/pix_drum/pix_drum-help.pd"
+    ],
+    "max_status": "unsure",
+    "max_closest": [
+      "cv.jit.faces",
+      "cv.jit.blobs.bounds"
+    ],
+    "max_check": "Searched the installed-package library for 'fiducial', 'marker tracking' and 'hand tracking': no hits. cv.jit has face detection and blob bounds. Max's jweb-based ML examples were not searched.",
+    "advice": "",
+    "confidence": "low",
+    "notes": "These help files are NOT in the plugdata 0.9.3 copy, so the objects are probably not in plugdata either. Listed as an upstream Gem capability only."
+  },
+  {
+    "capability": "Hosting FreeFrame and Frei0r video-effect plugins",
+    "category": "video I/O & playback",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "pix_freeframe",
+      "pix_frei0r"
+    ],
+    "what_it_does": "Each object loads a third-party effect plugin by name from the search path and grows one inlet per plugin parameter; parameters can also be set by name or number. A plugin named in the box is fixed; an empty box can load plugins by message.",
+    "source_urls": [
+      "Documentation/14.gem/pix_freeframe-help.pd",
+      "Documentation/14.gem/pix_frei0r-help.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.freeframe",
+      "jit.gl.isf"
+    ],
+    "max_check": "Read jit.freeframe ('provides support for using FreeFrame effects'; loadeffect, geteffectlist, getparamlist, param) and confirmed the external is in the Max 9.1.5 install as a universal binary. Searched all refpages for frei0r: no hits. The installed ISF package's jit.gl.isf renders ISF shader files (package library entry).",
+    "advice": "",
+    "confidence": "medium",
+    "notes": "Whether CPU FreeFrame plugins exist for Apple silicon was not checked on either side."
+  },
+  {
+    "capability": "Share images with another process through shared memory",
+    "category": "networking/sync",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "pix_share_write",
+      "pix_share_read"
+    ],
+    "what_it_does": "pix_share_write puts each image into a named shared-memory block of a declared size and colour space; pix_share_read in another Pd on the same machine reads it. It is the suggested way to split audio and graphics into two processes.",
+    "source_urls": [
+      "Documentation/14.gem/pix_share_write-help.pd",
+      "Documentation/14.gem/pix_share_read-help.pd",
+      "Documentation/14.gem/examples/Documentation/manual/GemFaq.html"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.gl.syphonserver",
+      "jit.gl.syphonclient",
+      "jit.net.send",
+      "jit.net.recv"
+    ],
+    "max_check": "Searched all refpages for 'shared memory', 'syphon' and 'spout': no core object. jit.net.send / jit.net.recv send matrices over TCP. The installed Syphon package shares GPU textures between applications on macOS (package library entries).",
+    "advice": "",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Audio signals to image rows and back, with fill modes",
+    "category": "audio",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "pix_sig2pix~",
+      "pix_pix2sig~"
+    ],
+    "what_it_does": "pix_sig2pix~ writes up to four signals into the four channels of an image; pix_pix2sig~ reads an image back as four signals. Both have modes: restart each block, continue where the last block stopped, one line per block, and a 'waterfall' that shifts earlier lines along.",
+    "source_urls": [
+      "Documentation/14.gem/pix_sig2pix~-help.pd",
+      "Documentation/14.gem/pix_pix2sig~-help.pd",
+      "Documentation/14.gem/examples/07.texture/12.floatingpoint_framebuffer.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.catch~",
+      "jit.release~",
+      "jit.poke~",
+      "jit.peek~",
+      "jit.buffer~"
+    ],
+    "max_check": "Read jit.catch~ (signals to matrices; mode, framesize), jit.release~ (matrices to signals), jit.poke~ and jit.peek~ (signal-rate write and read at signal-rate positions) and jit.buffer~ (a buffer~ as a matrix).",
+    "advice": "Jitter splits this into more objects but allows more: jit.poke~ and jit.peek~ address any cell at signal rate. Use jit.catch~ @mode 2 @framesize N for a fixed row size (this repo already records that mode 0 gives uneven sizes). A scrolling waterfall is not built in; shift the matrix yourself.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Geometry from tables, filled at audio rate",
+    "category": "rendering/3D",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "gemvertexbuffer",
+      "tabwrite~",
+      "glsl_program"
+    ],
+    "what_it_does": "gemvertexbuffer draws a vertex buffer whose positions, colours, normals, texture coordinates and named shader attributes are read from Pd tables, whole or one component at a time, with an offset. Since tables can be written by signals, a hundred thousand points can follow an audio-rate equation.",
+    "source_urls": [
+      "Documentation/14.gem/gemvertexbuffer-help.pd",
+      "Documentation/14.gem/examples/10.glsl/16.vertexbuffer_attributes.pd",
+      "Documentation/14.gem/examples/15.GLSL4/01.basic.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.gl.mesh",
+      "jit.gl.buffer",
+      "jit.catch~",
+      "jit.buffer~"
+    ],
+    "max_check": "Read jit.gl.mesh ('creates a geometric surface from a jit.matrix'; vertex_matrix, color_matrix, normal_matrix, texcoord_matrix, index_matrix, vertex_attr_matrix, draw_mode), jit.gl.buffer (named GPU buffer for jit.gl.mesh and jit.gl.tf), jit.catch~ and jit.buffer~.",
+    "advice": "In Jitter the table is a matrix: three signals into jit.catch~ give a 3-plane position matrix for jit.gl.mesh in one cord. Custom per-vertex shader inputs go in through vertex_attr_matrix.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Load a model's vertices into tables",
+    "category": "data/tables/scripting",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "modelfiler",
+      "gemvertexbuffer"
+    ],
+    "what_it_does": "modelfiler reads a 3D model file and writes its positions, normals, colours and texture coordinates into Pd tables, separate or interleaved, and reports the vertex count. The tables then feed a vertex buffer and a custom shader.",
+    "source_urls": [
+      "https://github.com/umlaeute/Gem/blob/HEAD/help/modelfiler-help.pd",
+      "Documentation/14.gem/examples/15.GLSL4/04.model.pd"
+    ],
+    "max_status": "unsure",
+    "max_closest": [
+      "jit.gl.model",
+      "jit.geom.tomatrix",
+      "matrixoutput"
+    ],
+    "max_check": "Read jit.gl.model (has index_matrixoutput among its attributes) and the common OB3D refpage jit.group-gl.maxref.xml (matrixoutput: 'output geometry matrices', 'if supported'). jit.geom.tomatrix (Jitter Geometry package) converts half-edge geometry to a mesh matrix. Whether jit.gl.model itself honours matrixoutput was not confirmed.",
+    "advice": "",
+    "confidence": "low",
+    "notes": "The help file is upstream only; the object is used in a local example."
+  },
+  {
+    "capability": "Particles assembled from small objects with shaped emitters, velocities and sinks",
+    "category": "rendering/3D",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "part_head",
+      "part_source",
+      "part_velocity",
+      "part_sink",
+      "part_gravity",
+      "part_orbitpoint",
+      "part_follow",
+      "part_damp",
+      "part_killold",
+      "part_killslow",
+      "part_targetcolor",
+      "part_targetsize",
+      "part_color",
+      "part_size",
+      "part_vertex",
+      "part_draw"
+    ],
+    "what_it_does": "A particle system is a chain: head, properties of new particles, a source, behaviours, removal, a renderer. Source, velocity and sink all take a shape from one list (point, line, triangle, plane, box, sphere, cylinder, cone, blob, disc, rectangle), so 'emit from a disc, speeds inside a cone, die at a plane' is three boxes.",
+    "source_urls": [
+      "Documentation/14.gem/part_head-help.pd",
+      "Documentation/14.gem/part_source-help.pd",
+      "Documentation/14.gem/part_velocity-help.pd",
+      "Documentation/14.gem/part_sink-help.pd",
+      "Documentation/14.gem/part_orbitpoint-help.pd",
+      "Documentation/14.gem/examples/06.particle/04.combo.pd",
+      "Documentation/14.gem/examples/06.particle/09.sink.pd",
+      "Documentation/14.gem/examples/Documentation/gem.release_notes.txt"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.p.shiva",
+      "jit.p.vishnu",
+      "jit.p.bounds",
+      "jit.gp.world",
+      "jit.gp.emitter",
+      "jit.gp.force",
+      "jit.gp.obstacle",
+      "jit.gp.render",
+      "jit.gl.mesh"
+    ],
+    "max_check": "Read jit.p.shiva (emit, life, init and their variances), jit.p.vishnu (one force; pos, speed, pitch, yaw with variances; mode 1 uses values already in the matrix as start positions) and jit.p.bounds (box limits). The Compute package installed in ~/Documents/Max 9/Packages adds jit.gp.world, jit.gp.emitter (mode, rate, life, size), jit.gp.force (fieldtype, radius) and jit.gp.obstacle (shape, action) on the GPU; it is third-party, not part of Max.",
+    "advice": "Jitter's core particle objects have no emitter shapes: to emit from a disc, write the start positions into the matrix yourself and set jit.p.vishnu @mode 1. With the Compute package, use jit.gp.emitter and jit.gp.obstacle instead. Either way, plan the system in Gem's three shapes (where born, which way, where they die) before choosing objects.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Any geometry as the particle, and per-particle data as messages",
+    "category": "rendering/3D",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "part_render",
+      "part_info",
+      "part_information",
+      "part_move"
+    ],
+    "what_it_does": "part_render draws the chain below it once per particle, so each particle can be a cube, a model or text. part_information sends every particle's position, colour, velocity, size and age out as messages once per frame, which lets a patch drive sound or anything else from individual particles.",
+    "source_urls": [
+      "Documentation/14.gem/part_render-help.pd",
+      "Documentation/14.gem/part_information-help.pd",
+      "Documentation/14.gem/part_info-help.pd",
+      "Documentation/14.gem/part_move-help.pd",
+      "Documentation/14.gem/examples/06.particle/07.render.pd",
+      "Documentation/14.gem/examples/06.particle/08.info.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.gl.multiple",
+      "jit.gl.mesh",
+      "jit.iter",
+      "jit.spill"
+    ],
+    "max_check": "Read jit.gl.multiple (draws a named object once per cell of its position / scale / color matrices) and jit.iter / jit.spill (matrix cells out as lists). In Jitter the particle data is already a matrix, so there is nothing to ask for.",
+    "advice": "Feed the particle matrix's position planes to jit.gl.multiple to draw a real object per particle. To sonify particles, read a few cells with jit.spill; do not iterate thousands of cells into the message thread every frame.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Paint mode: a window that is not cleared, drawn only on demand",
+    "category": "rendering/3D",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "gemwin",
+      "gemhead",
+      "depth"
+    ],
+    "what_it_does": "With 'buffer 1' the window is single-buffered and is not cleared between frames, and a chain draws only when its gemhead receives a bang. Moving shapes then leave trails, which the examples use for video painting and tablet drawing.",
+    "source_urls": [
+      "Documentation/14.gem/gemwin-help.pd",
+      "Documentation/14.gem/depth-help.pd",
+      "Documentation/14.gem/examples/04.video/01.VideoPaint.pd",
+      "Documentation/14.gem/examples/08.io/02.Tablet.pd",
+      "Documentation/14.gem/examples/02.advanced/07.Snapshot1.pd"
+    ],
+    "max_status": "unsure",
+    "max_closest": [
+      "jit.world",
+      "jit.gl.render",
+      "jit.gl.node",
+      "jit.gl.texture"
+    ],
+    "max_check": "Read jit.world (erase_color is 'background and clear color as RGBA'; bang / draw 'should only be called if enable is 0') and jit.gl.render (erase message) and jit.gl.texture (autoclear attribute, erase_color). No refpage read states how to keep the previous frame; the repo's forum notes do it with texture feedback.",
+    "advice": "",
+    "confidence": "low",
+    "notes": ""
+  },
+  {
+    "capability": "Stereo output modes on the window",
+    "category": "rendering/3D",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "gemwin"
+    ],
+    "what_it_does": "The window object has four stereo settings: off, two views side by side, red/green anaglyph, and hardware shutter glasses, with messages for eye separation and focal distance. The scene is rendered twice automatically.",
+    "source_urls": [
+      "Documentation/14.gem/gemwin-help.pd",
+      "Documentation/14.gem/examples/02.advanced/05.Stereo.pd",
+      "Documentation/14.gem/examples/02.advanced/06.StereoParticle.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.window",
+      "jit.gl.camera"
+    ],
+    "max_check": "Read jit.window (stereo: 'enable stereo buffers', no further text). Searched all refpages for stereoscopic, stereo mode and anaglyph: no hits. Side-by-side or anaglyph in Jitter would be two jit.gl.camera views (viewport, capture) combined by hand.",
+    "advice": "",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Several windows, and moving a chain between them by message",
+    "category": "rendering/3D",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "gemwin",
+      "gemhead"
+    ],
+    "what_it_does": "A second argument to gemwin names a context, so two gemwin objects are two windows. A chain is assigned with the message 'context <name>' to its gemhead and can be switched to the other window while running. Sharing one texture across windows works only on some systems and backends.",
+    "source_urls": [
+      "Documentation/14.gem/gemwin-help.pd",
+      "Documentation/14.gem/gemhead-help.pd",
+      "Documentation/14.gem/examples/14.multiple_windows/01.basic_example.pd",
+      "Documentation/14.gem/examples/14.multiple_windows/02.switch_context.pd",
+      "Documentation/14.gem/examples/14.multiple_windows/03.texture_sharing.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.world",
+      "drawto",
+      "jit.window",
+      "jit.gl.texture"
+    ],
+    "max_check": "Read jit.world (name as first argument; shared: 'sets the window as a shared OpenGL context'), jit.window (shared) and the common OB3D refpage jit.group-gl.maxref.xml (drawto: 'the named drawing context in which to draw'). The userguide topic 'Graphics Processing' has sections on context names and offscreen contexts.",
+    "advice": "Name every jit.world when a patch has more than one, and set @drawto on every object; do not rely on 'same patcher' to pick the context. A texture made in one context is not automatically usable in another: turn on @shared for the windows, or render once to a texture and show it in both.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Window extras: file drop, mouse lock, opacity, right-click menus",
+    "category": "control surface/UI building",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "gemsdl2window",
+      "gemglutwindow",
+      "gemmacoswindow",
+      "gemglfw3window"
+    ],
+    "what_it_does": "The window backend objects document messages beyond size and position: per-window opacity, keeping the mouse inside the window, relative mouse movement for camera control, a file dropped on the window reported as a 'drop' event, a right-click menu, hiding the menu bar, and asking for a specific OpenGL profile.",
+    "source_urls": [
+      "Documentation/14.gem/gemsdl2window-help.pd",
+      "Documentation/14.gem/gemglutwindow-help.pd",
+      "Documentation/14.gem/gemmacoswindow-help.pd",
+      "Documentation/14.gem/gemglfw3window-help.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.window",
+      "jit.world",
+      "jit.anim.drive"
+    ],
+    "max_check": "Read jit.window (mouse events out the dump outlet; idlemouse, mousewheel, pickray, floating, border, fsmenubar, fullscreen) and jit.world (the same window attributes; transparency there is render-order transparency, not window opacity). No opacity, mouse-confine, relative-mouse or file-drop item is in either attribute list. jit.anim.drive has ui_listen for camera control from the window.",
+    "advice": "",
+    "confidence": "medium",
+    "notes": "Which backend plugdata uses is not documented in the files read, so these messages may not all be available there."
+  },
+  {
+    "capability": "Bangs before and after any part of the frame",
+    "category": "rendering/3D",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "trigger",
+      "render_trigger",
+      "gemhead"
+    ],
+    "what_it_does": "Since the frame is a message, 't a b' gives a bang just before or just after the part of the chain below it is drawn. The examples use it to grab the screen after one object is drawn but before the next. A chain can also be switched off with a 0 to its gemhead, or drawn on demand with a bang.",
+    "source_urls": [
+      "Documentation/14.gem/render_trigger-help.pd",
+      "Documentation/14.gem/examples/02.advanced/08.Snapshot2.pd",
+      "Documentation/14.gem/pix_snap-help.pd",
+      "Documentation/14.gem/gemhead-help.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.world",
+      "automatic",
+      "enable",
+      "draw",
+      "layer"
+    ],
+    "max_check": "Read jit.world (drawbang: 'determines if the middle-outlet draw bang happens before or after rendering', one bang per frame) and the common OB3D refpage jit.group-gl.maxref.xml (automatic, enable, and the draw / drawraw / drawimmediate messages).",
+    "advice": "Jitter gives one hook per frame, not one per object. For work that must happen between two objects, set them @automatic 0 and send 'draw' to each in the order wanted from one trigger, or put the first in a jit.gl.node @capture 1 and use its texture.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Deforming grid shapes with built-in physics",
+    "category": "rendering/3D",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "newWave",
+      "ripple",
+      "rubber",
+      "sphere3d"
+    ],
+    "what_it_does": "newWave is a grid on a mass and spring system: it takes forces at grid points, three spring and three damping constants, and random noise, and waves travel across it. ripple and rubber are grids that are grabbed at a point and let go. sphere3d lets single vertices of a sphere be moved.",
+    "source_urls": [
+      "Documentation/14.gem/newWave-help.pd",
+      "Documentation/14.gem/ripple-help.pd",
+      "Documentation/14.gem/rubber-help.pd",
+      "Documentation/14.gem/sphere3d-help.pd",
+      "Documentation/14.gem/examples/07.texture/05.newWave.pd",
+      "Documentation/14.gem/examples/07.texture/06.ripple.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.gl.gridshape",
+      "jit.gl.mesh",
+      "jit.gen",
+      "jit.phys.world"
+    ],
+    "max_check": "Read jit.gl.gridshape (matrixoutput gives the grid as a matrix), jit.gl.mesh and jit.phys.world ('collision detection and rigid body dynamics'). Searched the package library for 'mass spring': no hits. No single Jitter object is a springy textured grid; it is built from a grid matrix and a jit.gen or shader update.",
+    "advice": "",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "Three signals drawn as a line in 3D",
+    "category": "audio",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "scopeXYZ~"
+    ],
+    "what_it_does": "scopeXYZ~ takes three audio signals as x, y and z and draws the last N samples as a line, strip or points in the scene, with a settable length and line width. It is a one-box Lissajous or phase-space scope that takes transforms and colour from the chain above it.",
+    "source_urls": [
+      "Documentation/14.gem/scopeXYZ~-help.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.catch~",
+      "jit.gl.mesh",
+      "jit.gl.graph"
+    ],
+    "max_check": "Read jit.catch~ (signals to matrices; framesize, mode), jit.gl.mesh (draw_mode; vertex matrix on the left inlet) and jit.gl.graph ('renders one-dimensional floating point data as a three-dimensional shape').",
+    "advice": "Two objects in Jitter: three signals into jit.catch~ @mode 2 @framesize N, its 3-plane matrix into jit.gl.mesh with a line draw mode. Worth keeping as a snippet, since it is asked for often.",
+    "confidence": "high",
+    "notes": ""
+  },
+  {
+    "capability": "Multi-projector examples: screen grid with soft-edge overlap, and curved-wall warp",
+    "category": "projection mapping",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "flat_projection",
+      "nfp_flat_wall",
+      "nfp_curved_wall",
+      "gemframebuffer",
+      "glsl_program"
+    ],
+    "what_it_does": "Two example abstractions render the scene to one large framebuffer and redraw it per projector. One takes the grid of screens, how they are cabled, and the overlap in pixels, and its shader fades the overlapping edges. The other warps each screen's part with four or nine control points and a shaded edge on each side, and saves the settings to a file.",
+    "source_urls": [
+      "Documentation/14.gem/examples/12.multi_screen_projection/01.flat_projection-help.pd",
+      "Documentation/14.gem/examples/12.multi_screen_projection/flat_projection.pd",
+      "Documentation/14.gem/examples/12.multi_screen_projection/soft_edge.frag",
+      "Documentation/14.gem/examples/12.multi_screen_projection/nfp_curved_wall.pd",
+      "Documentation/14.gem/examples/12.multi_screen_projection/02.nfp-help.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.gl.cornerpin",
+      "jit.gl.meshwarp",
+      "jit.world",
+      "jit.gl.slab"
+    ],
+    "max_check": "Read jit.gl.cornerpin (four corners), jit.gl.meshwarp (Jitter Tools: mesh warp with mask_mode, mesh_matrix, save and read) and jit.world (enable_cornerpin). Searched all refpages for 'soft edge' and 'edge blend': no hits. Jitter's warp tools are better than Gem's; the overlap fade is the missing piece.",
+    "advice": "",
+    "confidence": "medium",
+    "notes": "soft_edge.frag was read for its first 60 lines; the nfp shaders were not read. These are example patches, not Gem objects."
+  },
+  {
+    "capability": "Messages typed into the object box after a semicolon",
+    "category": "workflow/authoring",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "gemargs",
+      "rectangle"
+    ],
+    "what_it_does": "Any Gem object can carry start-up messages in its box, after a semicolon: 'rectangle 4 3; draw line; width 3'. They are sent when the object is made. gemargs lets an abstraction read its own arguments and such messages the same way.",
+    "source_urls": [
+      "Documentation/14.gem/Gem-help.pd",
+      "Documentation/14.gem/gemargs-help.pd",
+      "Abstractions/Gem/gemargs.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "patcherargs",
+      "loadmess",
+      "attrui"
+    ],
+    "max_check": "No refpage was needed for the Max side of this: Max object boxes take @attribute value pairs, which the repo's CLAUDE.md covers (attributes in the box; patcherargs for abstractions; loadmess for messages). A message that is not an attribute cannot be typed into a Max box.",
+    "advice": "Gem's form works for any message; Max's works only for attributes, but those can be read back and shown in attrui. When a Max object needs a start-up message that is not an attribute, that is the case for a loadmess, and one loadmess can carry several values.",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "A receive with a priority, giving ordered delivery",
+    "category": "data/tables/scripting",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "gemreceive"
+    ],
+    "what_it_does": "gemreceive is a named receive with a number: among receivers of the same name, lower numbers get the message first. Gem's whole render order is built on it (gemhead is an abstraction around 'gemreceive __gem_render 50'), and it can be used for any ordered broadcast.",
+    "source_urls": [
+      "Documentation/14.gem/gemreceive-help.pd",
+      "Abstractions/Gem/gemhead.pd"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "receive",
+      "trigger"
+    ],
+    "max_check": "Read receive.maxref.xml: no arguments or attributes beyond the name, one message (set). Nothing gives an order among receivers of one name. In Max, order is stated with trigger and cords.",
+    "advice": "",
+    "confidence": "medium",
+    "notes": "Not a graphics feature, but it is what makes Gem's render order a plain number."
+  },
+  {
+    "capability": "Test-pattern image source",
+    "category": "video I/O & playback",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "pix_test"
+    ],
+    "what_it_does": "pix_test makes a test image of any size and colour space: colour bars, two grey ramps and a strip of noise. Most of Gem's help files use it as the input, so every effect can be tried without a file or a camera.",
+    "source_urls": [
+      "Documentation/14.gem/pix_test-help.pd"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.noise",
+      "jit.gl.bfg",
+      "av.testpattern"
+    ],
+    "max_check": "Searched all refpages for 'test pattern', 'color bars' and 'SMPTE': no core object. jit.noise and jit.gl.bfg generate noise and procedural textures. The third-party av-toolbox package installed on this machine has av.testpattern ('display a testpattern image on a layer ... also outputs the texture').",
+    "advice": "",
+    "confidence": "medium",
+    "notes": ""
+  },
+  {
+    "capability": "The texture upload as its own visible step",
+    "category": "rendering/3D",
+    "tool": "plugdata (Gem)",
+    "tool_names": [
+      "pix_texture",
+      "pix_coordinate",
+      "pix_multitexture"
+    ],
+    "what_it_does": "pix_texture is the point where a CPU image becomes a texture, and its messages are the texture's settings: filtering, repeat, rectangle or normalised coordinates, how it combines with the surface colour, and the texture unit. pix_coordinate sets the four texture-coordinate pairs of the shape below from one list.",
+    "source_urls": [
+      "Documentation/14.gem/pix_texture-help.pd",
+      "Documentation/14.gem/pix_coordinate-help.pd",
+      "Documentation/14.gem/pix_multitexture-help.pd",
+      "Documentation/14.gem/examples/Documentation/manual/Texture.html",
+      "Documentation/14.gem/examples/07.texture/02.TexCoord.pd",
+      "Documentation/14.gem/examples/10.glsl/05.multitexture.pd"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.gl.texture",
+      "texture",
+      "tex_map",
+      "jit.gl.mesh"
+    ],
+    "max_check": "Read jit.gl.texture (filter, wrap, rectangle default 1: 'must be referenced using sampler2DRect'; type; adapt), the common OB3D refpage jit.group-gl.maxref.xml (texture attribute, 'if multiple textures are specified, uses multi-texturing'; tex_map, tex_plane_s, tex_plane_t) and jit.gl.mesh (texcoord_matrix). jit.gl.videoplane's attribute list has no texture-coordinate setting.",
+    "advice": "Both systems default to rectangle textures, and both break shaders and repeating in the same way. In Jitter, put an explicit jit.gl.texture @rectangle 0 in front of anything that needs 0-to-1 coordinates or wrapping, instead of letting the object convert the matrix for you. For custom coordinates on a quad, use jit.gl.mesh with a texcoord matrix.",
+    "confidence": "high",
+    "notes": ""
+  }
+]

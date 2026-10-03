@@ -1130,5 +1130,1416 @@
   "max_check": "refpage names and digests (1,940 .maxref.xml files under C74): jit.cellblock ('edit rows and columns of data'), dict.view, coll. 'spreadsheet' and 'csv' match no name or digest. This repo's CLAUDE.md lists butter_table, a jit.cellblock replacement with sorting, filtering and lookups, in John's own package.",
   "confidence": "low",
   "notes": "Covered well enough in Max, more so with butter_table. CSV import and export were not found as a built-in."
+ },
+ {
+  "capability": "Draw order set by trigger order",
+  "category": "rendering/3D",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Gl.MainLoop_v2",
+   "Ops.Trigger.Sequence",
+   "Ops.Trigger.SequenceMultiPort_v2",
+   "Ops.Gl.LayerSequence"
+  ],
+  "what_it_does": "Things are drawn in the order their trigger arrives. A Sequence op has numbered trigger outputs that fire in turn, so the patch itself shows what is drawn first and what is drawn on top. LayerSequence is the same idea named for layers.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Trigger.Sequence",
+   "https://cables.gl/op/Ops.Trigger.SequenceMultiPort_v2",
+   "https://cables.gl/op/Ops.Gl.LayerSequence",
+   "https://cables.gl/op/Ops.Gl.MainLoop_v2",
+   "https://cables.gl/docs/5_writing_ops/guidelines/guidelines"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "layer (OB3D attribute)",
+   "depth_enable (OB3D attribute)",
+   "jit.world",
+   "jit.gl.node"
+  ],
+  "max_check": "Userguide jitter/depth_layer_blend.json: every 3D object is in layer 0 by default 'and therefore their drawing order is indeterminate'; lower layers draw first; depth testing overrides the layer unless depth_enable is 0. jit.group-gl refpage, layer: 'Objects in the same layer have no guarantee which will be rendered first.' Repo patching/MAX_PATCHING.md lines 225 and 288 say the same and call it a common stacking bug.",
+  "advice": "In Max nothing about the patch layout sets draw order, so give every overlapping GL object its own @layer number, and set @depth_enable 0 on flat overlays. Number the layers in the same order the boxes sit on screen so the patch reads like a cables Sequence.",
+  "confidence": "high",
+  "notes": "The cables pages do not say what happens with two cables from one trigger output. Sequence exists so the order is never left to that."
+ },
+ {
+  "capability": "One frame trigger drives every per-frame op",
+  "category": "rendering/3D",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Gl.MainLoop_v2",
+   "Ops.Anim.Smooth",
+   "Ops.Anim.Spring",
+   "Ops.Anim.SimpleAnim",
+   "Ops.Trigger.Interval"
+  ],
+  "what_it_does": "MainLoop fires once per frame, and anything that must update each frame has a trigger input wired back to it: smoothing, springs, animations, timers. A separate timer op, Interval, exists, and its page warns not to use it for animation that will be recorded.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Gl.MainLoop_v2",
+   "https://cables.gl/op/Ops.Anim.Smooth",
+   "https://cables.gl/op/Ops.Anim.Spring",
+   "https://cables.gl/op/Ops.Anim.SimpleAnim",
+   "https://cables.gl/op/Ops.Trigger.Interval",
+   "https://cables.gl/docs/5_writing_ops/dev_creating_ports/dev_ports_trigger/dev_ports_trigger"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.world (middle outlet)",
+   "qmetro",
+   "metro"
+  ],
+  "max_check": "jit.world refpage: outlet 1 is the 'render draw bang'; @drawbang sets whether it fires before or after rendering (default prerender). metro and qmetro refpages: free-running clocks with their own interval. Repo scans/packages/tutorials_insights.md line 138: the Jitter Recipes send that draw bang to 's draw' and hang every per-frame update on 'r draw'.",
+  "advice": "Use jit.world's middle outlet as the one frame clock for a visual patch and drive counters, slide, line-style ramps and matrix feedback from it. A separate metro runs at its own rate and drifts against the picture.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Render state scoped to the ops under it",
+  "category": "rendering/3D",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Graphics.Transform",
+   "Ops.Gl.BlendMode",
+   "Ops.Graphics.DepthTest",
+   "Ops.Gl.FaceCulling_v2",
+   "Ops.Gl.Shader.BasicMaterial_v3",
+   "Ops.Gl.Shader.SetShader",
+   "Ops.Gl.Identity"
+  ],
+  "what_it_does": "A transform, blend mode, depth test, culling mode or material is an op in the trigger chain. It applies to everything triggered below it and to nothing else. Two Transform ops in series make a parent and a child. Identity and ResetTransform clear the transform for a branch.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Graphics.Transform",
+   "https://cables.gl/op/Ops.Gl.BlendMode",
+   "https://cables.gl/op/Ops.Graphics.DepthTest",
+   "https://cables.gl/op/Ops.Gl.FaceCulling_v2",
+   "https://cables.gl/op/Ops.Gl.Shader.BasicMaterial_v3",
+   "https://cables.gl/op/Ops.Gl.Shader.SetShader",
+   "https://cables.gl/op/Ops.Gl.Identity",
+   "https://cables.gl/op/Ops.Gl.ResetTransform",
+   "https://cables.gl/docs/1_beginner/beginner2_transformations/beginner2_transformations"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.gl.node",
+   "jit.anim.node",
+   "blend_enable / depth_enable / cull_face (OB3D attributes)",
+   "jit.gl.material"
+  ],
+  "max_check": "jit.group-gl refpage: blend_enable, blend, depth_enable, depth_write, cull_face, poly_mode, shader, texture and anim are attributes on every GL object, each set per object. jit.gl.node refpage discussion: a node 'can overwrite standard OB3D attributes of its child objects', for example poly_mode set on the node replaces it on every child. jit.anim.node refpage: GL objects bind to it for position, rotate and scale, and nodes can be parents of other nodes.",
+  "advice": "When several Max GL objects must share a state, do not copy the attribute onto each box. Put them in one jit.gl.node and set the attribute on the node, and for a shared or nested transform bind them to a jit.anim.node. That is Max's version of a cables branch.",
+  "confidence": "medium",
+  "notes": "Which attributes a jit.gl.node overwrites was read from the refpage only, not tested in Max."
+ },
+ {
+  "capability": "Drawing one mesh many times with a loop op",
+  "category": "rendering/3D",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Trigger.Repeat_v2",
+   "Ops.Trigger.Repeat2d",
+   "Ops.Gl.GridTransform",
+   "Ops.Gl.RandomCluster",
+   "Ops.Array.ArrayIteratorNumbers"
+  ],
+  "what_it_does": "A loop op triggers the ops below it N times in one frame and gives the index. Feed the index into a transform and the same mesh is drawn N times. Repeat2d and GridTransform do rows and columns. The cables performance page says to switch to instancing when the count gets high.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Trigger.Repeat_v2",
+   "https://cables.gl/op/Ops.Trigger.Repeat2d",
+   "https://cables.gl/op/Ops.Gl.GridTransform",
+   "https://cables.gl/op/Ops.Gl.RandomCluster",
+   "https://cables.gl/op/Ops.Array.ArrayIteratorNumbers",
+   "https://cables.gl/docs/9_performance_optimization/02_usual_suspects/usual_suspects"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.gl.multiple",
+   "jit.gl.mesh",
+   "uzi"
+  ],
+  "max_check": "jit.gl.multiple refpage: draws a named GL object repeatedly from matrices (position_matrix, rotate_matrix, scale_matrix, color_matrix; @glparams lists which). jit.group-gl refpage: with @automatic 1 an object draws once when the renderer is banged; a bang or draw message draws it by hand. uzi refpage: sends many bangs with an index. Drawing one object several times per frame by hand with uzi was not tested.",
+  "advice": "In Max go straight to jit.gl.multiple: fill a 3-plane float32 matrix with positions and it draws every copy. There is no cheap 'sketch it with a loop first' step as in cables, so plan the per-copy data as matrices from the start.",
+  "confidence": "medium",
+  "notes": "Session 1 already lists GPU instancing from textures as a candidate. This one is about the loop idiom."
+ },
+ {
+  "capability": "Lights apply only to what is triggered after them",
+  "category": "rendering/3D",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Gl.Phong.PointLight_v5",
+   "Ops.Gl.Phong.DirectionalLight_v5",
+   "Ops.Gl.Phong.SpotLight_v5",
+   "Ops.Gl.Phong.AmbientLight_v4",
+   "Ops.Gl.Phong.ResetLights"
+  ],
+  "what_it_does": "A light is an op in the chain. Materials placed under it are lit by it. ResetLights removes all lights for the rest of a branch, so part of a scene can be left out of the lighting.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Gl.Phong.PointLight_v5",
+   "https://cables.gl/op/Ops.Gl.Phong.DirectionalLight_v5",
+   "https://cables.gl/op/Ops.Gl.Phong.AmbientLight_v4",
+   "https://cables.gl/op/Ops.Gl.Phong.ResetLights",
+   "https://cables.gl/docs/7_lighting/lights/lights"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.gl.light",
+   "lighting_enable (OB3D attribute)",
+   "jit.gl.node"
+  ],
+  "max_check": "jit.gl.light refpage: 18 attributes (type, diffuse, specular, attenuation, spot, shadows); none names the objects it lights, and its only outlet is dumpout. jit.group-gl refpage: lighting_enable is a per-object flag, default 0. jit.gl.material refpage: adapts to 'the number of active lights'.",
+  "advice": "In Max a light belongs to the whole context, and each object opts in or out. To leave one object unlit, set @lighting_enable 0 on it or give it a material that ignores lights, instead of looking for a way to aim the light at chosen objects.",
+  "confidence": "medium",
+  "notes": "Whether a jit.gl.light inside a jit.gl.node lights only that node's children was not checked."
+ },
+ {
+  "capability": "Shader uniforms become ports automatically",
+  "category": "GPU compute/shaders",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Gl.Shader.CustomShader_v2",
+   "UNI",
+   "Ops.Gl.Shader.SetUniformFloat_v2",
+   "Ops.Gl.Shader.ShaderDefine",
+   "Ops.Gl.Shader.ShaderInfoUniforms_v2"
+  ],
+  "what_it_does": "Write 'UNI float name;' in a custom shader and the op grows a number port called name. A sampler uniform becomes a texture port. The op also has a Has Errors output. Other ops set a uniform or a #define on whichever shader is active, and read all uniform values back.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Gl.Shader.CustomShader_v2",
+   "https://cables.gl/op/Ops.Gl.Shader.SetUniformFloat_v2",
+   "https://cables.gl/op/Ops.Gl.Shader.SetUniformTexture_v2",
+   "https://cables.gl/op/Ops.Gl.Shader.ShaderDefine",
+   "https://cables.gl/op/Ops.Gl.Shader.ShaderInfoUniforms_v2",
+   "https://cables.gl/docs/5_writing_ops/shader/shader"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "jit.gl.slab",
+   "jit.gl.shader",
+   "jit.gl.pix",
+   "JXS <param> and <bind> tags"
+  ],
+  "max_check": "Userguide jitter/jxs_file_format.json: a uniform must also be declared in the JXS file with a <param name type default> tag and tied to a program with a <bind> tag. jit.gl.slab and jit.gl.shader refpages: values are set with a 'param <name> <values>' message; getparamlist, getparamtype, getparamdefault and getparamdescription report what the file declares. Neither object gains inlets or attributes for its params. jit.gl.pix refpage: params come from the gen patcher.",
+  "advice": "After loading a JXS, send getparamlist and build the controls from the answer instead of typing param names from memory. A small v8 helper that asks a slab for its param list, types and defaults and makes one labelled control per param would give Max the cables behaviour, and is worth building once.",
+  "confidence": "high",
+  "notes": "For shaders written as a gen patcher, jit.gl.pix already keeps the parameter and the code in one place."
+ },
+ {
+  "capability": "Every image effect has its own blend mode, amount and mask",
+  "category": "GPU compute/shaders",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Gl.ImageCompose.ImageCompose_v4",
+   "Ops.Gl.ImageCompose.DrawImage_v3",
+   "Ops.Gl.ImageCompose.Blur",
+   "Ops.Gl.ImageCompose.ColorMap_v2",
+   "Ops.Gl.ImageCompose.Kaleidoscope_v2",
+   "Ops.Gl.ImageCompose.Noise.PerlinNoise_v2"
+  ],
+  "what_it_does": "Effects in an ImageCompose chain all work on one texture, in order. Most of them carry the same three extras: a blend mode, an amount, and a mask texture that limits where the effect lands. Dry/wet and masking need no extra ops.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Gl.ImageCompose.ImageCompose_v4",
+   "https://cables.gl/op/Ops.Gl.ImageCompose.DrawImage_v3",
+   "https://cables.gl/op/Ops.Gl.ImageCompose.Blur",
+   "https://cables.gl/op/Ops.Gl.ImageCompose.FastBlur_v2",
+   "https://cables.gl/op/Ops.Gl.ImageCompose.ColorMap_v2",
+   "https://cables.gl/op/Ops.Gl.ImageCompose.Kaleidoscope_v2",
+   "https://cables.gl/op/Ops.Gl.ImageCompose.Color_v2",
+   "https://cables.gl/op/Ops.Gl.ImageCompose.Noise.PerlinNoise_v2",
+   "https://cables.gl/docs/2_intermediate/image_composition/image_composition"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "jit.fx.* (83 objects)",
+   "jit.gl.slab",
+   "jit.fx.tr.xfade",
+   "jit.fx.co.alphablend",
+   "jit.gl.pix"
+  ],
+  "max_check": "jit.fx.blur refpage (Jitter Tools package): attributes are adapt, amt, bypass, dim, drawto, enable; no blend, mix or mask. jit.gl.slab refpage: 18 attributes, none for mixing with the input. Mixing is done by separate objects: jit.fx.tr.xfade ('a traditional cross fade'), the jit.fx.co.* compositing family, jit.xfade for matrices. Only jit.fx.blur's attribute list was read in full; the other 82 jit.fx refpages were checked by name.",
+  "advice": "In Max, wrap an effect and a crossfade into one abstraction with an amount inlet and a mask inlet, and reuse it for every effect. Each Max effect outputs a new texture, so keep the dry cord and blend it back yourself.",
+  "confidence": "medium",
+  "notes": "Max's side has one real plus: every stage's output is a cord that can be tapped or sent elsewhere. In cables that needs ImageComposeSnapshot."
+ },
+ {
+  "capability": "Effect chain resolution set once at the head",
+  "category": "GPU compute/shaders",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Gl.ImageCompose.ImageCompose_v4",
+   "Ops.Gl.ImageCompose.ImageComposeAspectRatio",
+   "Ops.Gl.Textures.CopyTexture_v3"
+  ],
+  "what_it_does": "The ImageCompose op at the top of a chain sets the size, pixel format, filter and wrap of the texture, and every effect under it works at that size. The performance guide's fix for a slow blur is to make that one ImageCompose smaller.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Gl.ImageCompose.ImageCompose_v4",
+   "https://cables.gl/op/Ops.Gl.ImageCompose.ImageComposeAspectRatio",
+   "https://cables.gl/op/Ops.Gl.Textures.CopyTexture_v3",
+   "https://cables.gl/docs/9_performance_optimization/02_usual_suspects/usual_suspects"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.gl.slab @adapt / @dim / @dimscale / @type",
+   "jit.gl.texture",
+   "jit.gl.pix"
+  ],
+  "max_check": "jit.gl.slab refpage: adapt (default 1, output size follows the input), dim, dimscale ('Useful for upsampling or downsampling texture output'), type (default auto, taken from the input). jit.gl.texture refpage: adapt, dim, type. Each object in a chain carries its own size settings.",
+  "advice": "In Max the size follows the first texture in the chain, so set it there: one jit.gl.texture or slab with @adapt 0 @dim, and leave the rest on @adapt 1. For a heavy blur put @dimscale 0.5 0.5 on the slab before it, which is the same trick the cables guide gives.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Render-to-texture as a branch with depth and format choices",
+  "category": "rendering/3D",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Gl.RenderToTexture_v3",
+   "Ops.Gl.Shader.ShaderToTexture_v2",
+   "Ops.Gl.ImageCompose.DepthTexture_v2"
+  ],
+  "what_it_does": "RenderToTexture draws its children into a texture. Its ports choose the size, MSAA level, pixel format, wrap and whether to clear. It gives the colour texture and the depth texture as two outputs, ready for depth-based effects.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Gl.RenderToTexture_v3",
+   "https://cables.gl/op/Ops.Gl.Shader.ShaderToTexture_v2",
+   "https://cables.gl/op/Ops.Gl.ImageCompose.DepthTexture_v2",
+   "https://cables.gl/op/Ops.Gl.ImageCompose.DepthTextureFocus_v2",
+   "https://cables.gl/docs/2_intermediate/post-processing_3d_scenes/post-processing_3d_scenes"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.gl.node @capture",
+   "jit.gl.camera @capture",
+   "jit.gl.pass",
+   "jit.world @output_texture"
+  ],
+  "max_check": "jit.gl.node refpage: @capture 1 sends the texture out the left outlet; values above 1 give several render targets; adapt, dim, type and fsaa set the texture; children join by drawto name, by the middle outlet, or by being in the same patcher. jit.gl.camera has the same capture attribute. Userguide jitter/render_passes.json: jit.gl.pass works on 'intermediate render targets like the depth buffer' and sets the node's capture itself.",
+  "advice": "Use jit.gl.node @capture 1 for a scene you want as a texture, and name it so objects join it by @drawto. For anything that needs the depth buffer use jit.gl.pass on that node instead of trying to pull a depth texture out by hand.",
+  "confidence": "medium",
+  "notes": "How to get a plain depth texture from jit.gl.node without jit.gl.pass was not found in the pages read."
+ },
+ {
+  "capability": "Texture validity, fallback and gating ops",
+  "category": "video I/O & playback",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Gl.ValidTexture",
+   "Ops.Gl.OrTexture",
+   "Ops.Gl.GateTexture",
+   "Ops.Gl.Textures.TextureInfo_v2",
+   "Ops.Gl.Texture_v3"
+  ],
+  "what_it_does": "ValidTexture passes a texture or swaps in a default and reports Is Valid. OrTexture outputs the first valid one of several inputs. GateTexture closes to either the last texture or an empty one. The loader reports Loaded and Loading, and TextureInfo says whether a texture is the built-in default.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Gl.ValidTexture",
+   "https://cables.gl/op/Ops.Gl.OrTexture",
+   "https://cables.gl/op/Ops.Gl.GateTexture",
+   "https://cables.gl/op/Ops.Gl.Textures.TextureInfo_v2",
+   "https://cables.gl/op/Ops.Gl.Texture_v3"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "texture (OB3D attribute)",
+   "gate",
+   "jit.fpsgui",
+   "jit.noise fallback"
+  ],
+  "max_check": "C74/interfaces/obj-qlookup.json: no object name contains 'valid', 'default' or 'fallback'. Repo patching/MAX_PATCHING.md, Common Pitfalls: a texture cord sets the receiving object's texture attribute, and the attribute stays after the cord is removed or the source stops, so the last frame keeps showing. Same file line 228: any media input should have a generative fallback. gate refpage: a closed gate passes nothing.",
+  "advice": "In Max a missing source is silent: the last texture stays up. Wire a fallback texture on purpose and switch to it when the source reports a failed load or stops sending frames. A small 'first valid of N textures' abstraction would be worth having.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Loading status as values and triggers",
+  "category": "workflow/authoring",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Cables.LoadingStatus_v2",
+   "Ops.Cables.LoadingJob",
+   "Ops.Cables.Ops.OpsLoadingStatus",
+   "Ops.Html.Utils.LoadingIndicator_v2",
+   "Ops.Html.FontsLoaded"
+  ],
+  "what_it_does": "One op reports whether anything in the patch is still loading, a progress number, the list of open jobs, and a trigger when the first load is finished. A patch can add its own job while some condition is true. Loader ops each have Loaded or Loading outputs.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Cables.LoadingStatus_v2",
+   "https://cables.gl/op/Ops.Cables.LoadingJob",
+   "https://cables.gl/op/Ops.Cables.Ops.OpsLoadingStatus",
+   "https://cables.gl/op/Ops.Html.Utils.LoadingIndicator_v2",
+   "https://cables.gl/op/Ops.Html.FontsLoaded",
+   "https://cables.gl/op/Ops.Html.FontFile_v2",
+   "https://cables.gl/op/Ops.Gl.Texture_v3"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "loadbang",
+   "loadmess",
+   "buffer~ (right outlet)",
+   "jit.movie asyncread",
+   "dspstate~"
+  ],
+  "max_check": "Repo patching/MAX_PATCHING.md (from the userguide's patcher_lifecycle topic): loading runs in eight phases and loadbang fires fifth; a buffer~ with a file argument loads during object creation, later replace messages are asynchronous. buffer~ refpage: right outlet sends a bang 'when File Read or File Write operation completed'. jit.movie refpage: asyncread reads in the background. loadbang and loadmess refpages: fire when the patch opens, with no notion of media still loading. No patch-wide progress object was found.",
+  "advice": "Do not start a piece from loadbang alone. Collect each loader's own 'done' signal (buffer~'s right outlet, jit.movie's read report) and open a gate when all have arrived. A reusable 'wait for N loads' abstraction with a progress outlet would cover what LoadingStatus does.",
+  "confidence": "medium",
+  "notes": "The exact message jit.movie sends when a read finishes was not read from its refpage; check it before wiring."
+ },
+ {
+  "capability": "Media players report their state on output ports",
+  "category": "video I/O & playback",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Gl.Textures.VideoTexture_v4",
+   "Ops.Audio.AudioPlayer",
+   "Ops.WebAudio.AudioBufferPlayer_v2"
+  ],
+  "what_it_does": "The video op has always-on outputs for duration, progress, current time, Loading, Playing, Can Play Through, an Ended trigger, a Texture Updated trigger, Has Error and an error message. The audio player has Playing, Duration, Current Time and a Has Ended trigger.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Gl.Textures.VideoTexture_v4",
+   "https://cables.gl/op/Ops.Audio.AudioPlayer",
+   "https://cables.gl/op/Ops.WebAudio.AudioBufferPlayer_v2"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.movie",
+   "jit.playlist",
+   "playlist~",
+   "sfplay~"
+  ],
+  "max_check": "jit.movie refpage: two outlets, frames and dumpout. State is asked for and switched on: @loopreport sends loopnotify at the loop point, @framereport sends timing per frame, and attributes such as duration, time and position are read with get messages. jit.playlist refpage: @loopreport and @reportprogress.",
+  "advice": "In Max turn the reports on (@loopreport 1, @reportprogress 1) and route the right outlet, so the patch reacts to 'ended' and 'position' instead of guessing with timers. Show those values next to the player, since Max does not show them by default.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Finished trigger on every animation op",
+  "category": "timeline/cueing/show control",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Anim.AnimNumber",
+   "Ops.Anim.SimpleAnim",
+   "Ops.Anim.BoolAnim",
+   "Ops.Anim.InOutInAnim",
+   "Ops.Boolean.MonoFlop"
+  ],
+  "what_it_does": "The op guidelines ask every animation op for a finished flag, and put a finished trigger to the right of the normal trigger output. InOutInAnim also has Started and Middle triggers. MonoFlop has Activated and Ended. Steps chain by wiring one op's finished trigger to the next op's start.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Anim.AnimNumber",
+   "https://cables.gl/op/Ops.Anim.SimpleAnim",
+   "https://cables.gl/op/Ops.Anim.BoolAnim",
+   "https://cables.gl/op/Ops.Anim.InOutInAnim",
+   "https://cables.gl/op/Ops.Anim.RandomAnim_v2",
+   "https://cables.gl/op/Ops.Boolean.MonoFlop",
+   "https://cables.gl/docs/5_writing_ops/guidelines/guidelines"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "line (right outlet)",
+   "bline",
+   "jit.anim.path @endreport",
+   "jit.anim.drive @evalreport",
+   "delay"
+  ],
+  "max_check": "line refpage: outlet 1 'Signals End of Ramp'. bline refpage: outlet 1 bangs when it reaches the destination. jit.anim.path refpage: endreport and loopreport attributes. jit.anim.drive refpage: evalreport, off by default, reports progress of moveto, rotateto and scaleto out the dumpout.",
+  "advice": "Chain Max animation steps from the 'done' outlet of the step before (line's right outlet), not from a delay set to the same number of milliseconds. On the Jitter animation objects the report is off by default, so switch on @endreport or @evalreport first.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Easing choice built into mapping and animation ops",
+  "category": "timeline/cueing/show control",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Math.MapRange",
+   "Ops.Math.Ease",
+   "Ops.Anim.AnimNumber",
+   "Ops.Anim.SimpleAnim",
+   "Ops.Anim.Crossfade",
+   "Ops.Array.EaseArray",
+   "Ops.Math.SchlickBias"
+  ],
+  "what_it_does": "An Easing dropdown sits on the range-mapping op and on nearly every animation op: AnimNumber, SimpleAnim, BoolAnim, Crossfade, RandomAnim, DelayedNumber, AnimArray, MeshMorph. Ease and EaseArray apply a curve to a number or an array. The Ease page points to easings.net for the shapes.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Math.MapRange",
+   "https://cables.gl/op/Ops.Math.Ease",
+   "https://cables.gl/op/Ops.Anim.AnimNumber",
+   "https://cables.gl/op/Ops.Anim.SimpleAnim",
+   "https://cables.gl/op/Ops.Anim.BoolAnim",
+   "https://cables.gl/op/Ops.Anim.Crossfade",
+   "https://cables.gl/op/Ops.Number.DelayedNumber",
+   "https://cables.gl/op/Ops.Array.AnimArray_v2",
+   "https://cables.gl/op/Ops.Array.EaseArray",
+   "https://cables.gl/op/Ops.Math.SchlickBias"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "line",
+   "scale",
+   "function",
+   "ease (ease package)",
+   "jit.anim.drive @easefunc"
+  ],
+  "max_check": "line refpage: 'Generate ramps and line segments'; attributes compatmode, floatoutput, grain, maxpoints; no curve. scale refpage: a sixth inlet for an exponential base only. function refpage: a curve mode whose output suits curve~. jit.anim.drive refpage: easefunc, easein, easeout, for 3D transforms. The ease package (installed in ~/Documents/Max 9/Packages, not in the base registry) has ease, list.ease, ease~, jit.ease and ease.xfade, each with function, input_range and output_range attributes.",
+  "advice": "For an eased move in Max, run a plain line from 0 to 1 and pass it through [ease] from the ease package, then scale to the range; do not approximate it with scale's exponent. A wrapper abstraction 'line with an easing argument' would save that three-box chain everywhere.",
+  "confidence": "high",
+  "notes": "The ease package comes from Cycling '74 through the Package Manager. A patch that uses it needs it installed."
+ },
+ {
+  "capability": "Follow-the-input animation ops: ease to value, smooth, spring",
+  "category": "timeline/cueing/show control",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Anim.AnimNumber",
+   "Ops.Anim.Smooth",
+   "Ops.Anim.Spring",
+   "Ops.Anim.BoolAnim"
+  ],
+  "what_it_does": "AnimNumber glides to whatever number arrives, over a set duration. Smooth filters jumps, with separate factors for rising and falling. Spring chases the target with damping and stiffness. BoolAnim turns a true/false into an eased move between two values.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Anim.AnimNumber",
+   "https://cables.gl/op/Ops.Anim.Smooth",
+   "https://cables.gl/op/Ops.Anim.Spring",
+   "https://cables.gl/op/Ops.Anim.BoolAnim"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "slide",
+   "line",
+   "rampsmooth~",
+   "jit.anim.drive springto"
+  ],
+  "max_check": "slide refpage: 'Smooth values logarithmically', with slide-up and slide-down inlets, which matches Smooth. line refpage: needs a target and a time in one message, so following an input takes a message box in front. C74/interfaces/obj-qlookup.json: no object name contains 'spring'. jit.anim.drive refpage: springto with spring_stiff, spring_damp and spring_mass, for 3D transforms only. packages/query_packages.py search 'spring' and 'easing' returned nothing usable for a plain number.",
+  "advice": "Use slide for smoothing with different rise and fall, and a '$1 200' message box into line for glide-to-value. Max has no spring for a plain number, so a small v8 or gen object with stiffness and damping, driven by the frame bang, is worth building.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "LFO and timer ops for control values",
+  "category": "timeline/cueing/show control",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Anim.LFO_v3",
+   "Ops.Anim.SineAnim",
+   "Ops.Anim.Timer_v2",
+   "Ops.Anim.TimeDelta"
+  ],
+  "what_it_does": "LFO takes a time value and gives a wave by type, frequency, phase and output range. Timer is a clock with play, reset and a speed multiplier, and can follow the timeline. TimeDelta gives the time since the last frame.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Anim.LFO_v3",
+   "https://cables.gl/op/Ops.Anim.SineAnim",
+   "https://cables.gl/op/Ops.Anim.Timer_v2",
+   "https://cables.gl/op/Ops.Anim.TimeDelta"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.mo.time",
+   "clocker",
+   "timer",
+   "cycle~ with snapshot~"
+  ],
+  "max_check": "C74/interfaces/obj-qlookup.json: no object name contains 'lfo'. jit.mo.time refpage (jit.mo package, shipped in Max): modes accum, function and delta; in function mode the function attribute is line, sin, saw or perlin, with freq, phase, scale, offset and speed; the page says it makes 'float LFOs and ramps in sync with the animation graph'. clocker and timer refpages: elapsed time in milliseconds.",
+  "advice": "For a control-rate LFO in a Jitter patch use jit.mo.time @mode function, which is frame-locked like the cables op. Its delta mode is the Max answer to TimeDelta, and is what keeps motion speed the same when the frame rate changes.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Smooth noise and seeded random as number ops",
+  "category": "data/tables/scripting",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Math.PerlinNoise_v2",
+   "Ops.Math.RandomNumbers_v4",
+   "Ops.Math.RandomNumbersFromString",
+   "Ops.Math.TriggerRandomNumber_v3"
+  ],
+  "what_it_does": "PerlinNoise gives one smooth noise value for an x, y, z position and a seed. RandomNumbers gives four fixed random numbers for a seed, so a look stays the same on reload. RandomNumbersFromString seeds from text. TriggerRandomNumber has a switch for 'no consecutive duplicates'.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Math.PerlinNoise_v2",
+   "https://cables.gl/op/Ops.Math.RandomNumbers_v4",
+   "https://cables.gl/op/Ops.Math.RandomNumbersFromString",
+   "https://cables.gl/op/Ops.Math.TriggerRandomNumber_v3"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "random @seed",
+   "urn",
+   "drunk",
+   "jit.mo.time @function perlin"
+  ],
+  "max_check": "random refpage: seed (0 means time-based, non-zero gives the same sequence), cycle (repeat after N outputs), range. urn refpage: no repeats until all values are used. drunk refpage: random walk. C74/interfaces/obj-qlookup.json: no name contains 'perlin'; jit.mo.time has a perlin function over time only.",
+  "advice": "For a repeatable look in Max give every random a non-zero @seed. For smooth wandering values use jit.mo.time @function perlin or drunk into slide; there is no object that samples noise at a position, so do that in v8 or gen when it is needed.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Typed ports with named conversion ops",
+  "category": "workflow/authoring",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.String.NumberToString_v2",
+   "Ops.String.StringToNumber",
+   "Ops.Boolean.ParseBoolean_v2",
+   "Ops.Boolean.BoolToNumber_v2",
+   "Ops.Number.Integer"
+  ],
+  "what_it_does": "Every port has a type, and a cable joins like to like. Changing type is always a visible op whose name carries both types, such as NumberToString. StringToNumber has a 'Not a number' output. Number ports are floats; an integer is a marked kind of number port.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.String.NumberToString_v2",
+   "https://cables.gl/op/Ops.String.StringToNumber",
+   "https://cables.gl/op/Ops.Boolean.ParseBoolean_v2",
+   "https://cables.gl/op/Ops.Boolean.BoolToNumber_v2",
+   "https://cables.gl/op/Ops.Number.Integer",
+   "https://cables.gl/op/Ops.Boolean.IfTrueThen_v2",
+   "https://cables.gl/docs/5_writing_ops/guidelines/guidelines"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "int / float message types",
+   "tosymbol",
+   "fromsymbol",
+   "sprintf",
+   "number / flonum"
+  ],
+  "max_check": "Userguide integers_vs_floats.json: many objects run in an integer mode or a float mode chosen by whether an argument has a decimal point; an integer-mode object drops the fraction, and the page calls this 'a common source of bugs', with / and scale as examples. tosymbol, fromsymbol and sprintf refpages: the conversion objects. Userguide conversion.json: a cheat sheet of conversions between messages, signals and matrices.",
+  "advice": "Max will not stop a float going into an integer object; it truncates without a word. Write a decimal point on every argument that should be float (* 1., scale 0. 127. 0. 1.), and put a flonum on the cord while testing.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Read a value only when triggered",
+  "category": "data/tables/scripting",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Trigger.TriggerNumber",
+   "Ops.Vars.TriggerVarGetNumber",
+   "Ops.Array.ArrayTrigger",
+   "Ops.Json.TriggerObject",
+   "Ops.Array.CopyArray"
+  ],
+  "what_it_does": "Value cables update whenever the value changes. Where a patch must take a value at one moment instead, a 'trigger' form of the op exists: it holds the input and passes it on only when its trigger port fires. There is one for numbers, strings, arrays, objects and variables.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Trigger.TriggerNumber",
+   "https://cables.gl/op/Ops.Vars.TriggerVarGetNumber",
+   "https://cables.gl/op/Ops.Vars.VarTriggerNumber",
+   "https://cables.gl/op/Ops.Array.ArrayTrigger",
+   "https://cables.gl/op/Ops.Json.TriggerObject",
+   "https://cables.gl/op/Ops.Array.CopyArray"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "float / int (right inlet)",
+   "zl.reg",
+   "jit.matrix @thru 0",
+   "value"
+  ],
+  "max_check": "float refpage: right inlet 'Set Value Without Output', a bang in the left outputs it. zl.reg refpage: right inlet stores a list, bang sends it. Repo scans/packages/tutorials_insights.md line 112, quoting the jit.matrix refpage: with @thru 0 a matrix is held and output only on bang.",
+  "advice": "The cold right inlet plus a bang is Max's latch, and it is built into the language, so no extra object type is needed: [f], [zl.reg], [jit.matrix @thru 0]. Use it whenever a value must be sampled at an event instead of followed.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Value cables fire only on a real change",
+  "category": "workflow/authoring",
+  "tool": "cables.gl",
+  "tool_names": [
+   "onChange",
+   "setRef",
+   "Ops.Number.TriggerOnChangeNumber_v2",
+   "Ops.Math.Delta"
+  ],
+  "what_it_does": "An op's onChange callback runs when a number or string port gets a different value. The docs say arrays and objects must be sent with setRef so that a change is seen even when it is the same array. TriggerOnChange ops turn a change into a trigger.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Number.TriggerOnChangeNumber_v2",
+   "https://cables.gl/op/Ops.Math.Delta",
+   "https://cables.gl/docs/5_writing_ops/dev_ops/dev_ops",
+   "https://cables.gl/docs/5_writing_ops/dev_callbacks/dev_callbacks",
+   "https://cables.gl/docs/5_writing_ops/dev_creating_ports/dev_ports_array/dev_ports_array"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "change",
+   "speedlim",
+   "onebang"
+  ],
+  "max_check": "change refpage: outputs a number only if it differs from the stored one; extra outlets report 0-to-non-zero and non-zero-to-0. Repo patching/MAX_PATCHING.md line 381: a fast source into v8 or file I/O needs speedlim, qlim or onebang. In Max every message is passed on, repeats included.",
+  "advice": "Max objects re-send the same value as often as they are asked to. Put a [change] after any source that repeats (a snapshot~, a sensor, a UI object banged every frame) before it reaches v8, a dict write or a Jitter object.",
+  "confidence": "medium",
+  "notes": "The cables statement 'only called if the value actually changed' is on the dev_ops page in the paragraph about unlinking a port; the setRef note supports the general reading."
+ },
+ {
+  "capability": "Explicit left-to-right value sequencing",
+  "category": "workflow/authoring",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Number.NumberSequence",
+   "Ops.Number.SequenceNumbers",
+   "Ops.String.SequenceStrings",
+   "Ops.Json.SequenceObjects_v2",
+   "Ops.Gl.Textures.SequenceTextures"
+  ],
+  "what_it_does": "NumberSequence copies one value to several output ports, setting them in order from left to right, then fires a trigger when all are set. The same op exists for strings, objects and textures. Its page says it is for cases where several ops depend on one value and the order matters.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Number.NumberSequence",
+   "https://cables.gl/op/Ops.Number.SequenceNumbers",
+   "https://cables.gl/op/Ops.Gl.Textures.SequenceTextures",
+   "https://cables.gl/op/Ops.Trigger.Sequence"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "trigger",
+   "bangbang"
+  ],
+  "max_check": "trigger refpage: 'Outputs any input received in order from right to left'. bangbang refpage: bangs out each outlet in right-to-left order. Repo patching/MAX_PATCHING.md lines 359 and 618: Max follows one path to its end before the next, which is what makes trigger's order reliable.",
+  "advice": "Both tools solve fan-out order with a dedicated object, but in opposite directions: cables counts left to right, Max right to left. When porting a patch, reverse the outlet order, and never leave order to several cords from one outlet.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Named triggers with a prefix filter",
+  "category": "data/tables/scripting",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Trigger.TriggerSend",
+   "Ops.Trigger.TriggerReceive",
+   "Ops.Trigger.TriggerSendNamed",
+   "Ops.Trigger.TriggerReceiveFilter"
+  ],
+  "what_it_does": "TriggerSend and TriggerReceive pass a trigger by name, across a patch and into subpatches. TriggerSendNamed takes the name as a string port, so the target can change. TriggerReceiveFilter hears every named trigger whose name starts with a prefix, and outputs the name too.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Trigger.TriggerSend",
+   "https://cables.gl/op/Ops.Trigger.TriggerReceive",
+   "https://cables.gl/op/Ops.Trigger.TriggerSendNamed",
+   "https://cables.gl/op/Ops.Trigger.TriggerReceiveFilter"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "send",
+   "receive",
+   "forward",
+   "route"
+  ],
+  "max_check": "send and receive refpages: one fixed name per object; receive takes a 'set <name>' message to change it. forward refpage: 'the destination receive object of forward can be changed with each message'. route refpage: sorts messages by their first item. No receive that listens to a family of names was found.",
+  "advice": "In Max, get the 'listen to a group' behaviour with one channel and a tag: send 'cue fade 2000' through [s SHOW] and split it with [route cue scene] at each receiver. Use forward when the destination has to change.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "All variables as one object",
+  "category": "data/tables/scripting",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Vars.VarSetNumber_v2",
+   "Ops.Vars.VarGetNumber_v2",
+   "Ops.Vars.VariablesAsObject",
+   "Ops.Vars.VariablesFromObject",
+   "Ops.Vars.VarSetTexture_v2"
+  ],
+  "what_it_does": "Variables are typed: number, string, array, object, texture. VariablesAsObject returns every variable in the patch as one object, with an optional name prefix as filter. VariablesFromObject writes values back into existing variables from such an object.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Vars.VarSetNumber_v2",
+   "https://cables.gl/op/Ops.Vars.VarGetNumber_v2",
+   "https://cables.gl/op/Ops.Vars.VariablesAsObject",
+   "https://cables.gl/op/Ops.Vars.VariablesFromObject",
+   "https://cables.gl/op/Ops.Vars.VarSetTexture_v2",
+   "https://cables.gl/op/Ops.Vars.VarGetTexture_v2"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "value",
+   "pv",
+   "pattr",
+   "pattrstorage",
+   "dict"
+  ],
+  "max_check": "value refpage: same-named value objects share data everywhere. pv refpage: shared only inside one patcher and its subpatches. pattrstorage refpage: methods getclientlist, store, recall, writejson and writexml, so the state it holds can be listed and saved as one file. No way to list all value objects was found in the value refpage.",
+  "advice": "Keep the state of a Max patch that must be saved, dumped or restored in pattr objects under one pattrstorage, or in one dict, not in scattered value objects. That gives the 'whole state as one object' that cables gets from VariablesAsObject.",
+  "confidence": "medium",
+  "notes": "The cables pages read do not say whether a variable is visible inside sub-patches or across patches. Max is clearer here: value is global, pv is per patcher."
+ },
+ {
+  "capability": "Sub-patch ports made by dragging a cable",
+  "category": "workflow/authoring",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Ui.SubPatch",
+   "Ops.Ui.PatchInput",
+   "Ops.Ui.PatchOutput",
+   "SubPatchOp"
+  ],
+  "what_it_does": "A sub-patch gets a new port when a cable is dragged onto its 'create port' port. The port takes its type and name from what was connected. Inside, PatchInput and PatchOutput hold the other ends.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Ui.SubPatch",
+   "https://cables.gl/op/Ops.Ui.PatchInput",
+   "https://cables.gl/op/Ops.Ui.PatchOutput",
+   "https://cables.gl/docs/5_writing_ops/patchingops/subpatchops"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "patcher",
+   "inlet",
+   "outlet",
+   "patcherargs"
+  ],
+  "max_check": "inlet refpage: the comment attribute 'Sets the mouse-over Assistance message for the inlet' and can only be set in the Inspector. patcher refpage: no attribute for port names or types. Max inlets are untyped and unnamed unless the author fills in the comment. Repo CLAUDE.md asks for that comment on every inlet and outlet.",
+  "advice": "A Max subpatcher's ports say nothing by default, so fill in the comment on every inlet and outlet with the message type and purpose. That hover text is the only place the 'type' of a Max port lives.",
+  "confidence": "high",
+  "notes": "The PatchOutput page carries the line 'Currently not working'; the SubPatch page describes it as working."
+ },
+ {
+  "capability": "Preset op that crossfades across its list",
+  "category": "control surface/UI building",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Number.Preset",
+   "Ops.Sidebar.Presets_v2"
+  ],
+  "what_it_does": "Dragging from the Preset op to a port puts that port under its control. Presets are named and picked from a dropdown. In xfade mode a single fade number moves through the whole list, so 2.25 is three quarters of preset 2 and one quarter of preset 3. In a-b mode two chosen presets are blended from 0 to 1.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Number.Preset",
+   "https://cables.gl/op/Ops.Sidebar.Presets_v2"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "pattrstorage",
+   "preset",
+   "pattr",
+   "autopattr"
+  ],
+  "max_check": "pattrstorage refpage: recall with a floating-point number recalls 'the interpolated preset' between two slots; recallmulti blends several presets by weight; interp sets the interpolation mode per client. preset refpage: also has recallmulti. Repo scans/c74-forum/forum_insights.md line 347: pattrstorage shows no visual cue of interpolation state.",
+  "advice": "Max already does both blends: send 'recall 2.25' to pattrstorage for the walk-through-the-list fade, and recallmulti for weighted mixes. What cables adds is binding by one drag; in Max use autopattr so controls join the storage without a pattr each.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Mouse op with a choice of coordinate space",
+  "category": "control surface/UI building",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Devices.Mouse.Mouse_v4",
+   "Ops.Devices.Mouse.MouseButtons",
+   "Ops.Devices.Mouse.MouseDrag",
+   "Ops.Devices.Mouse.MouseWheel_v2",
+   "Ops.Devices.Mouse.PointerLock"
+  ],
+  "what_it_does": "The Mouse op reads the pointer on the output canvas and has a dropdown for the coordinate space: -1 to 1, pixels, display pixels or 0 to 1, plus flip y. It gives click triggers and a button-down value. Separate ops give button events, drag deltas and wheel deltas, and lock the pointer for game-style control.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Devices.Mouse.Mouse_v4",
+   "https://cables.gl/op/Ops.Devices.Mouse.MouseButtons",
+   "https://cables.gl/op/Ops.Devices.Mouse.MouseDrag",
+   "https://cables.gl/op/Ops.Devices.Mouse.MouseWheel_v2",
+   "https://cables.gl/op/Ops.Devices.Mouse.PointerLock"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "jit.world (dump outlet)",
+   "jit.window @idlemouse",
+   "mousestate",
+   "jit.gl.picker",
+   "jit.gl.handle"
+  ],
+  "max_check": "mousestate refpage: reports the mouse 'when the cursor is positioned within a Max patcher window'; modes give screen or patcher coordinates in pixels. jit.world and jit.window refpages: mouse events on the render window come out the dump outlet as 'mouse x y button flags' in pixels, only while the button is down unless idlemouse is on. Repo patching/MAX_PATCHING.md: GL positions are not pixels, so the numbers need scaling by hand.",
+  "advice": "For a mouse over the render window, take it from jit.world's right outlet (with 'sendwindow idlemouse 1' for hover), not from mousestate. Scale to the space you need straight away, in one place: divide by the window size for 0 to 1, or use jit.gl.camera's screentoworld for scene coordinates.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Keyboard ops with learn, held state and release",
+  "category": "control surface/UI building",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Devices.Keyboard.KeyPress_v2",
+   "Ops.Devices.Keyboard.KeyPressLearn",
+   "Ops.Devices.Keyboard.CursorKeys"
+  ],
+  "what_it_does": "KeyPressLearn has a Learn button: press it, press a key, and the op now triggers on that key's press and release. A switch limits it to when the canvas has focus. CursorKeys gives a held true/false and a pressed trigger for each arrow key, with WASD as an option.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Devices.Keyboard.KeyPress_v2",
+   "https://cables.gl/op/Ops.Devices.Keyboard.KeyPressLearn",
+   "https://cables.gl/op/Ops.Devices.Keyboard.CursorKeys"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "key",
+   "keyup",
+   "modifiers",
+   "select"
+  ],
+  "max_check": "key refpage: four outlets (ASCII, platform key code, modifiers, platform-independent code); it only reports 'if its patcher window has focus', and its use in Max for Live is 'strongly discouraged'. keyup refpage: the same on release. Neither has a learn function or a held state; a held key is key and keyup combined by the patch.",
+  "advice": "In Max build held-key state from key and keyup with a pair of select objects into a toggle, and show the toggle. Remember key hears nothing unless its patcher window has focus, so test with the render window in front before relying on it in a show.",
+  "confidence": "medium",
+  "notes": "How jit.world reports key presses was not read; only the mouse report was."
+ },
+ {
+  "capability": "MIDI events as objects, filtered in a chain, with learn",
+  "category": "control surface/UI building",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Devices.Midi.MidiInputDevice_v2",
+   "Ops.Devices.Midi.MidiNote",
+   "Ops.Devices.Midi.MidiCC_v3",
+   "Ops.Devices.Midi.MidiNoteFilter",
+   "Ops.Devices.Midi.MidiMonitor"
+  ],
+  "what_it_does": "The device op outputs MIDI events split by kind: note, CC, NRPN, program change, clock. MidiNote and MidiCC pick one note or controller, have a Learn button, and a dropdown that rescales 0 to 127 into 0 to 1 or -1 to 1. Events pass through each op, so filters chain. MidiMonitor shows what is arriving.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Devices.Midi.MidiInputDevice_v2",
+   "https://cables.gl/op/Ops.Devices.Midi.MidiNote",
+   "https://cables.gl/op/Ops.Devices.Midi.MidiCC_v3",
+   "https://cables.gl/op/Ops.Devices.Midi.MidiNoteFilter",
+   "https://cables.gl/op/Ops.Devices.Midi.MidiMonitor",
+   "https://cables.gl/op/Ops.Devices.Midi.MidiOutputDevice"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "notein",
+   "ctlin",
+   "midiselect",
+   "Mappings (MIDI map)",
+   "scale"
+  ],
+  "max_check": "notein refpage: outlets pitch, velocity, channel; ctlin: value for a set controller and channel. midiselect refpage (m4l-ref): splits raw MIDI by attributes note, ctl, bend, pgm, touch. Userguide mapping.json: the Mappings system binds a MIDI controller straight to any UI object with a parameter, by clicking the object and moving the control; it is per patcher and not available in Max for Live. No learn message on ctlin or notein.",
+  "advice": "Max's learn lives in Mappings, not in the MIDI objects: turn on Parameter Mode for the control and use Assign MIDI Map. When wiring by hand, rescale right at the input (ctlin into scale 0 127 0. 1.) so the rest of the patch never sees 0 to 127.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Audio analysis op made for visuals",
+  "category": "audio",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.WebAudio.AudioAnalyzer_v2",
+   "Ops.WebAudio.FFTAreaAverage_v3",
+   "Ops.WebAudio.AnalyzerTexture_v2"
+  ],
+  "what_it_does": "One op takes audio and gives an FFT array, a waveform array, the frequency of each bin and RMS level, with ports for FFT size, smoothing and dB range. FFTAreaAverage averages a chosen rectangle of the spectrum into one number, for 'how much bass'. AnalyzerTexture writes a spectrogram texture.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.WebAudio.AudioAnalyzer_v2",
+   "https://cables.gl/op/Ops.WebAudio.FFTAreaAverage_v3",
+   "https://cables.gl/op/Ops.WebAudio.AnalyzerTexture_v2",
+   "https://cables.gl/docs/8_audio/2_realtime_visualization/realtime_visualization"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "pfft~",
+   "fffb~",
+   "peakamp~",
+   "snapshot~",
+   "jit.catch~",
+   "spectroscope~"
+  ],
+  "max_check": "spectroscope~ refpage: a display; its one outlet is listed as undefined, so it gives no data. pfft~ refpage: spectral processing inside a subpatch with fftin~ and fftout~. fffb~ refpage: a bank of bandpass filters with one signal outlet each. peakamp~ and snapshot~ refpages: signal level to a number at an interval. jit.catch~ refpage: signals into matrices, four modes. Getting 'a list of band levels' takes several of these wired together.",
+  "advice": "For audio-reactive visuals in Max, a filter bank is the short path: fffb~ into one peakamp~ per band, joined into a list and smoothed with slide. Package that as one abstraction with band count and smoothing as settings; it is the most reused piece in this kind of patch and Max does not ship it.",
+  "confidence": "medium",
+  "notes": "Installed third-party packages (FluCoMa, zsa and others in packages/package_objects.json) have analysis objects; they were not compared here."
+ },
+ {
+  "capability": "Debug displays that show out-of-range and per-pixel values",
+  "category": "workflow/authoring",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Ui.VizTexture",
+   "Ops.Ui.VizTextureTable",
+   "Ops.Ui.VizArrayTable_v2",
+   "Ops.Ui.VizObject",
+   "Ops.Ui.VizLogger",
+   "Ops.Ui.VizTrigger"
+  ],
+  "what_it_does": "Viz ops sit on a cable and pass the data through while showing it in the patch. VizTexture can animate colours that fall outside 0 to 1, show one channel, pick a mip level and print the value at a pixel. VizTextureTable lists pixel values as a table. VizObject shows any object with a search field. VizTrigger counts triggers.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Ui.VizTexture",
+   "https://cables.gl/op/Ops.Ui.VizTextureTable",
+   "https://cables.gl/op/Ops.Ui.VizArrayTable_v2",
+   "https://cables.gl/op/Ops.Ui.VizObject",
+   "https://cables.gl/op/Ops.Ui.VizLogger",
+   "https://cables.gl/op/Ops.Ui.VizTrigger",
+   "https://cables.gl/op/Ops.Ui.VizNumberBar"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "jit.pwindow",
+   "jit.fpsgui",
+   "jit.cellblock",
+   "dict.view",
+   "jit.gl.texture tomatrix",
+   "print"
+  ],
+  "max_check": "jit.pwindow refpage: 20 attributes (size, interp, planemap, srcrect and others); none marks out-of-range values or reads a pixel. jit.fpsgui refpage: reports fps, type, dim and planecount. jit.cellblock refpage: takes jit_matrix and shows cell values. jit.gl.texture refpage: a tomatrix message copies a texture into a matrix. dict.view refpage: shows a dictionary, no search.",
+  "advice": "When a float texture carries data (positions, velocities), a jit.pwindow tells you almost nothing. Read it back into a small float32 matrix and look at the numbers in jit.cellblock, and keep that probe in the patch marked as debug. A 'texture probe' abstraction doing this is worth building.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Errors and validity reported on the op and on output ports",
+  "category": "workflow/authoring",
+  "tool": "cables.gl",
+  "tool_names": [
+   "op.setUiError",
+   "Has Errors",
+   "Expression Valid",
+   "Found",
+   "Valid Index",
+   "Ops.Number.FilterValidNumber",
+   "Ops.Gl.Shader.ErrorMaterial"
+  ],
+  "what_it_does": "An op can show a hint, a warning or an error on its own box, with a red dot for errors. Many ops also output their own status: Has Errors on the custom shader, Expression Valid on the math expression, Found on object lookups, Valid Index on array reads, Not a number on string parsing, Has Error and a message on the video player. Filter ops keep the last valid value.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Gl.Shader.CustomShader_v2",
+   "https://cables.gl/op/Ops.Math.MathExpression",
+   "https://cables.gl/op/Ops.Json.ObjectGetNumber_v2",
+   "https://cables.gl/op/Ops.Array.ArrayGetNumber",
+   "https://cables.gl/op/Ops.String.StringToNumber",
+   "https://cables.gl/op/Ops.Gl.Textures.VideoTexture_v4",
+   "https://cables.gl/op/Ops.Number.FilterValidNumber",
+   "https://cables.gl/op/Ops.Json.ParseObject_v2",
+   "https://cables.gl/op/Ops.Gl.Shader.ErrorMaterial",
+   "https://cables.gl/op/Ops.Templates.UiTestOp",
+   "https://cables.gl/docs/5_writing_ops/dev_callbacks/dev_callbacks"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "Max Console",
+   "error",
+   "print @level",
+   "dict contains"
+  ],
+  "max_check": "error refpage: 'Listens for and reports Max errors as message output', switched on with a 1; it reports all errors, not one object's. print refpage: level attribute with Print, Warn, Error and Bug styles. dict refpage: contains answers 0 or 1 on the third outlet, a separate question from get. Repo CLAUDE.md opening section: Max accepts unknown attributes and missing files without an error at the object.",
+  "advice": "When writing a v8 or v8ui object, give it a status outlet (ok, or an error word and text) and have it say when input was rejected, the way cables ops do. In a patch that must run unattended, add one [error] object feeding a visible comment so console errors are seen.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Expression ops with named inputs and a validity output",
+  "category": "data/tables/scripting",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Math.MathExpression",
+   "Ops.Math.TriggerMathExpression",
+   "Ops.Array.Math.ArrayMathExpression",
+   "Ops.Gl.ImageCompose.Math.RgbMathExpression"
+  ],
+  "what_it_does": "The same typed-expression idea exists for a number, an array and an image. Inputs are named ports: a, b, c, d for numbers; arrays a, b, c with i for the index and len for the length; x, y, z, w and texA, texB for the image one. The functions are JavaScript's Math functions, or GLSL for the image one. The number ops have an Expression Valid output.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Math.MathExpression",
+   "https://cables.gl/op/Ops.Math.TriggerMathExpression",
+   "https://cables.gl/op/Ops.Array.Math.ArrayMathExpression",
+   "https://cables.gl/op/Ops.Gl.ImageCompose.Math.RgbMathExpression"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "expr",
+   "vexpr",
+   "jit.expr",
+   "jit.gl.pix",
+   "jit.gen"
+  ],
+  "max_check": "expr refpage: C-like expression; inlets come from $i1, $f1, $s1 style arguments, so the inlet's type is part of its name. vexpr refpage: the same for lists, with a scalarmode attribute. jit.expr refpage: expressions that fill a matrix. jit.gl.pix refpage: per-pixel shaders from a gen patcher. None has an outlet that says the expression is valid; a bad expression posts to the console.",
+  "advice": "Max has the same three levels, as four objects: expr for numbers, vexpr for lists, jit.expr for matrices, jit.gl.pix for textures. Pick by what flows on the cord, and write $f1 not $i1 unless whole numbers are wanted, since the letter decides the arithmetic.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Arrays and objects copied, not shared",
+  "category": "data/tables/scripting",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Array.ArraySetNumber_v3",
+   "Ops.Array.CopyArray",
+   "Ops.Json.CopyObject",
+   "setRef"
+  ],
+  "what_it_does": "The op guidelines say an array op must copy its input and output the copy, and output null when nothing is connected. ArraySetNumber's page says it makes a new array and leaves the original untouched. So an op further up the chain never sees its data changed by an op below.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Array.ArraySetNumber_v3",
+   "https://cables.gl/op/Ops.Array.CopyArray",
+   "https://cables.gl/op/Ops.Array.ArrayGetNumber",
+   "https://cables.gl/docs/5_writing_ops/guidelines/guidelines",
+   "https://cables.gl/docs/5_writing_ops/dev_creating_ports/dev_ports_array/dev_ports_array",
+   "https://cables.gl/docs/9_performance_optimization/03_arrays/arrays"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "dict",
+   "array",
+   "jit.matrix",
+   "zl"
+  ],
+  "max_check": "Userguide dictionaries.json: 'Two dict objects with the same name will reference the same dictionary', and what travels on a cord is the word dictionary followed by the name. Userguide arrays.json: arrays 'are stored in memory by name', like dictionaries and strings. dict refpage: a clone method. Lists, by contrast, are copied with each message.",
+  "advice": "In Max, a list is a copy but a dict, array, string, matrix or buffer on a cord is a name pointing at shared data. Before a branch changes one, clone it, or two branches will change each other's data. The cables performance page gives the other side: copying big arrays every frame is slow.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Nested data read by path with a found flag",
+  "category": "data/tables/scripting",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Data.JsonPath.ObjectGetNumberByPath",
+   "Ops.Json.ObjectGetNumber_v2",
+   "Ops.Json.ObjectDeepSearch",
+   "Ops.Json.ObjectKeys"
+  ],
+  "what_it_does": "A path such as data.numbers.1 reads a value from inside nested objects and arrays. There is one op per result type (number, string, array, object), and each has a Found output. ObjectDeepSearch looks for a value anywhere in an object.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Data.JsonPath.ObjectGetNumberByPath",
+   "https://cables.gl/op/Ops.Json.ObjectGetNumber_v2",
+   "https://cables.gl/op/Ops.Json.ObjectDeepSearch",
+   "https://cables.gl/op/Ops.Json.ObjectKeys",
+   "https://cables.gl/op/Ops.Json.ParseObject_v2"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "dict (get with ::)",
+   "dict.unpack",
+   "dict.iter",
+   "dict.codebox"
+  ],
+  "max_check": "Userguide dictionaries.json: get and set take a double colon for a nested dictionary and square brackets for an array element. dict refpage: get answers on the second outlet, contains on the third, getkeys lists keys. dict.unpack refpage: one outlet per named key, with an unmatched option. A missing key gives no output from get.",
+  "advice": "Max's path syntax is :: for keys and [n] for array items, sent as 'get farm::animals[0]' to a dict. Since a missing key is silent, send contains first, or use dict.unpack, when the patch must know the difference between 'no such key' and 'no message yet'.",
+  "confidence": "medium",
+  "notes": "The exact output of dict get for a missing key was not tested in Max; the refpage text for get is a placeholder."
+ },
+ {
+  "capability": "Building arrays, objects and strings along a trigger chain",
+  "category": "data/tables/scripting",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Data.Compose.Array.CompArray",
+   "Ops.Data.Compose.Array.CompArrayPushNumber",
+   "Ops.Data.Compose.Object.CompObject",
+   "Ops.Data.Compose.Object.CompObjectSetNumber",
+   "Ops.Data.Compose.String.CompString"
+  ],
+  "what_it_does": "A Comp op opens an empty array, object or string. Ops triggered under it push numbers, set keys or append text. When the chain is done the Comp op outputs the result. Loops under it add one item per pass.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Data.Compose.Array.CompArray",
+   "https://cables.gl/op/Ops.Data.Compose.Array.CompArrayPushNumber",
+   "https://cables.gl/op/Ops.Data.Compose.Object.CompObject",
+   "https://cables.gl/op/Ops.Data.Compose.Object.CompObjectSetNumber",
+   "https://cables.gl/op/Ops.Data.Compose.String.CompString"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "dict.pack",
+   "join",
+   "zl.group",
+   "array (append)",
+   "sprintf",
+   "combine"
+  ],
+  "max_check": "dict.pack refpage: builds a dictionary from inlets, with keys and triggers attributes. zl.group refpage: collects items and outputs a list at a set length or on bang. array refpage: append, insert and prepend messages. sprintf and combine refpages: build one symbol from several inputs; combine also has a triggers attribute.",
+  "advice": "The Max equivalents are collectors, not scopes: zl.group for a list built inside an uzi loop (bang it when the loop's done-outlet fires), dict.pack for a record from several values. Past a few fields, do it in v8, as the repo's preferred-objects table already says.",
+  "confidence": "medium",
+  "notes": "None of the Comp op pages has written documentation; the description rests on names, ports and the namespace page."
+ },
+ {
+  "capability": "Gates and routers that send a set value when closed",
+  "category": "data/tables/scripting",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Number.GateNumber",
+   "Ops.String.GateString",
+   "Ops.Gl.GateTexture",
+   "Ops.Number.RouteNumber",
+   "Ops.String.RouteString",
+   "Ops.Json.RouteObject"
+  ],
+  "what_it_does": "A closed gate has a stated output: keep the last value, or send a custom one (for textures, an empty one). A router sends the value to one output and can reset the other outputs to a default value. So nothing downstream is left holding a stale value by accident.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Number.GateNumber",
+   "https://cables.gl/op/Ops.String.GateString",
+   "https://cables.gl/op/Ops.Gl.GateTexture",
+   "https://cables.gl/op/Ops.Number.RouteNumber",
+   "https://cables.gl/op/Ops.String.RouteString",
+   "https://cables.gl/op/Ops.Json.RouteObject",
+   "https://cables.gl/op/Ops.Number.SwitchNumberMultiPort_v2"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "gate",
+   "switch",
+   "route",
+   "select"
+  ],
+  "max_check": "gate refpage: 0 closes it, a number opens that outlet; messages pass while open. switch refpage: passes messages from one chosen inlet. Neither sends anything on closing or switching, and neither has a default-value setting. The number of ports is fixed by the argument.",
+  "advice": "When a Max gate closes, whatever is downstream keeps its last value. If that is wrong for the patch (a level that should drop to 0, a layer that should go blank), send the reset yourself: take the gate's control value through 'sel 0' into a message box holding the idle value.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Trigger utilities: once, every nth, limit rate, by chance, on threshold",
+  "category": "data/tables/scripting",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Trigger.TriggerOnce",
+   "Ops.Trigger.NthTrigger_v2",
+   "Ops.Trigger.TriggerLimiter",
+   "Ops.Trigger.ProbabilityTrigger",
+   "Ops.Trigger.Threshold",
+   "Ops.Boolean.MonoFlop",
+   "Ops.Trigger.IsTriggered"
+  ],
+  "what_it_does": "Small ops shape a stream of triggers: pass only the first until reset, pass every nth, pass at most one per x milliseconds, pass by a probability with a second output for the misses, fire once when a number crosses a threshold, hold a value for x seconds after a trigger, and report whether a branch ran last frame.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Trigger.TriggerOnce",
+   "https://cables.gl/op/Ops.Trigger.NthTrigger_v2",
+   "https://cables.gl/op/Ops.Trigger.TriggerLimiter",
+   "https://cables.gl/op/Ops.Trigger.ProbabilityTrigger",
+   "https://cables.gl/op/Ops.Trigger.Threshold",
+   "https://cables.gl/op/Ops.Boolean.MonoFlop",
+   "https://cables.gl/op/Ops.Trigger.IsTriggered",
+   "https://cables.gl/op/Ops.Trigger.GateTrigger"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "onebang",
+   "counter",
+   "speedlim",
+   "qlim",
+   "decide",
+   "past",
+   "delay"
+  ],
+  "max_check": "onebang refpage: lets one bang through until re-armed at the right inlet. counter refpage: counts bangs, with carry outlets. speedlim and qlim refpages: at most one message per time. decide refpage: random 0 or 1. past refpage: bangs when a number rises past a value and re-arms when the input falls back below it. delay refpage: holds a bang for a time. All found; one Max object per cables op, except probability with a set chance, which is random plus a comparison.",
+  "advice": "Use this as a translation table when porting: TriggerOnce is onebang, NthTrigger is counter into sel, TriggerLimiter is speedlim, Threshold is past, MonoFlop is a 1 followed by delay into 0. Max is level here; the names are just harder to guess.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Camera as an op above the scene; navigation cameras",
+  "category": "rendering/3D",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Gl.Matrix.Camera_v2",
+   "Ops.Gl.Matrix.LookatCamera",
+   "Ops.Graphics.OrbitControls_v3",
+   "Ops.Gl.Matrix.WASDCamera_v2",
+   "Ops.Gl.Perspective",
+   "Ops.Gl.Orthogonal_v2"
+  ],
+  "what_it_does": "A camera is an op in the chain and views whatever is triggered below it, so two branches can have two cameras. OrbitControls adds mouse orbit, pan and zoom with distance limits, a smoothness setting and switches for each motion. WASDCamera is a first-person camera with pointer lock.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Gl.Matrix.Camera_v2",
+   "https://cables.gl/op/Ops.Gl.Matrix.LookatCamera",
+   "https://cables.gl/op/Ops.Graphics.OrbitControls_v3",
+   "https://cables.gl/op/Ops.Gl.Matrix.WASDCamera_v2",
+   "https://cables.gl/op/Ops.Gl.Perspective",
+   "https://cables.gl/op/Ops.Gl.Orthogonal_v2",
+   "https://cables.gl/op/Ops.Gl.Matrix.CameraInfo"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.gl.camera",
+   "jit.anim.drive @ui_listen",
+   "jit.gl.handle",
+   "jit.world @auto_handle"
+  ],
+  "max_check": "jit.gl.camera refpage: lookat, locklook, tripod, lens_angle, ortho, viewport, layer and capture; it views its whole context or node, and several cameras draw in layer order into viewports. jit.anim.drive refpage: ui_listen makes it take mouse and keyboard messages from the context window, mapped through a ui_map dictionary, with easing. jit.gl.handle refpage: mouse rotation and position for an object.",
+  "advice": "For mouse or key navigation in Max, attach jit.anim.drive @ui_listen 1 to the camera instead of patching mouse math by hand. For two views of one scene use two jit.gl.camera objects with different @viewport values; for two different scenes put each in its own jit.gl.node.",
+  "confidence": "medium",
+  "notes": "The default key and mouse mapping of jit.anim.drive was not read."
+ },
+ {
+  "capability": "Screen-space helpers: draw in pixels, project to screen, unproject",
+  "category": "rendering/3D",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Gl.PixelProjection_v3",
+   "Ops.Gl.Matrix.ScreenCoordinates_v2",
+   "Ops.Gl.Matrix.ScreenPosTo3d_v3",
+   "Ops.Gl.Matrix.Coordinates",
+   "Ops.Gl.Meshes.FullscreenRectangle_v2"
+  ],
+  "what_it_does": "PixelProjection makes one unit equal one pixel for the branch under it, with a choice of where 0,0 sits. ScreenCoordinates gives the pixel position of the current transform and a flag for whether it is on screen. ScreenPosTo3d turns a mouse position into a 3D position.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Gl.PixelProjection_v3",
+   "https://cables.gl/op/Ops.Gl.Matrix.ScreenCoordinates_v2",
+   "https://cables.gl/op/Ops.Gl.Matrix.ScreenPosTo3d_v3",
+   "https://cables.gl/op/Ops.Gl.Matrix.Coordinates",
+   "https://cables.gl/op/Ops.Gl.Meshes.FullscreenRectangle_v2"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.gl.camera worldtoscreen / screentoworld",
+   "transform_reset (OB3D attribute)",
+   "jit.gl.text @screenmode",
+   "jit.gl.layer"
+  ],
+  "max_check": "jit.gl.camera refpage: worldtoscreen and screentoworld messages convert between world and pixel coordinates and answer on the dump outlet; getviewportray gives a ray for a screen point. jit.group-gl refpage: transform_reset 1 or 2 draws an object in a flat orthographic space for overlays. jit.gl.text refpage: screenmode keeps text a fixed pixel size at a projected position. Repo patching/MAX_PATCHING.md: Max GL positions are normalised, not pixels.",
+  "advice": "For an overlay or HUD in Max, set @transform_reset 2 on the object so it ignores the camera, and give it a high @layer. To pin something to a 3D point or to pick with the mouse, ask jit.gl.camera with worldtoscreen or screentoworld; there is no pixel-unit drawing mode, so convert once and keep the scale in one place.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Geometry as a value separate from drawing",
+  "category": "rendering/3D",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Gl.RenderGeometry_v2",
+   "Ops.Graphics.Geometry.TransformGeometry_v2",
+   "Ops.Graphics.Geometry.GeometryMerge",
+   "Ops.Graphics.Geometry.CalculateNormals",
+   "Ops.Graphics.Geometry.GeometryAttributes",
+   "Ops.Graphics.Geometry.GeometryFromArrays"
+  ],
+  "what_it_does": "Every mesh op outputs its geometry as an object and has a Render switch. Geometry ops then transform, merge or rebuild that object on the CPU, and RenderGeometry draws the result, in as many places as wanted. Other ops turn geometry into arrays and arrays into geometry.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Gl.RenderGeometry_v2",
+   "https://cables.gl/op/Ops.Graphics.Geometry.TransformGeometry_v2",
+   "https://cables.gl/op/Ops.Graphics.Geometry.GeometryMerge",
+   "https://cables.gl/op/Ops.Graphics.Geometry.CalculateNormals",
+   "https://cables.gl/op/Ops.Graphics.Geometry.GeometryAttributes",
+   "https://cables.gl/op/Ops.Graphics.Geometry.GeometryFromArrays",
+   "https://cables.gl/op/Ops.Graphics.Geometry.GeometryInfo",
+   "https://cables.gl/op/Ops.Graphics.Meshes.Sphere_v3",
+   "https://cables.gl/docs/5_writing_ops/guidelines/guidelines"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.geom.* (26 objects)",
+   "jit.geom.tomesh",
+   "jit.gl.gridshape (matrix output)",
+   "jit.gl.mesh"
+  ],
+  "max_check": "Jitter Geometry package (ships in Max): 26 jit.geom refpages including shape, xform, join, subdivide, decimate, normgen, twist, tomatrix, todict and tomesh. jit.geom.tomesh refpage: converts geometry to a jit.gl.mesh and is the faster path when the goal is to draw it. jit.gl.gridshape refpage: left outlet is 'matrix output if enabled'. jit.gl.mesh refpage: vertex, normal, texcoord, color and index matrices in.",
+  "advice": "Max now has the same split: build shapes with jit.geom.shape, edit with the jit.geom.* objects, and draw with jit.geom.tomesh. Use that chain for anything that changes the shape itself, and keep jit.gl.gridshape for plain primitives that only need drawing.",
+  "confidence": "high",
+  "notes": "This is near parity. It is listed because older Max habits (gridshape matrix output into jit.gl.mesh) miss the newer objects."
+ },
+ {
+  "capability": "Frame rate limit and unfocused throttle on the main loop",
+  "category": "rendering/3D",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Gl.MainLoop_v2",
+   "Ops.Cables.FPS_v2",
+   "Ops.Gl.Performance"
+  ],
+  "what_it_does": "MainLoop has ports for an FPS limit, a cap on pixel density for high-resolution screens, and a switch that lowers the frame rate when the window loses focus. It outputs the canvas width, height and pixel density. FPS and Performance report the rate reached.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Gl.MainLoop_v2",
+   "https://cables.gl/op/Ops.Cables.FPS_v2",
+   "https://cables.gl/op/Ops.Gl.Performance"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.world @fps / @interval / @displaylink / @sync",
+   "jit.world @high_res",
+   "jit.fpsgui"
+  ],
+  "max_check": "jit.world refpage: fps and interval 'only have an effect if enable is 1 and displaylink is 0'; displaylink (default 1, Mac only) syncs drawing to the display; sync (default 1) is vertical sync; enable defaults to 0; a running_fps attribute and a high_res attribute exist. jit.fpsgui refpage: reports fps of what it is fed.",
+  "advice": "On a Mac, setting @fps on jit.world does nothing until @displaylink is 0. To cap or lower the frame rate, set @displaylink 0 and then @fps. To save GPU on a high-density screen, check @high_res rather than rendering at full pixel density by default.",
+  "confidence": "high",
+  "notes": "What running_fps and high_res do in detail was not read past their names."
+ },
+ {
+  "capability": "Switching scenes by routing the render trigger",
+  "category": "timeline/cueing/show control",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Trigger.TimedSequence",
+   "Ops.Trigger.RouteTrigger_v2",
+   "Ops.Trigger.RouteTriggerAnimated",
+   "Ops.Trigger.SwitchTrigger",
+   "Ops.Anim.Bang"
+  ],
+  "what_it_does": "A scene is a branch, and a scene switch is an op that sends the frame trigger to one branch by index. An unselected branch is not run at all. TimedSequence also has an always-on output, and its page says to pair it with the Bang animation op for animated transitions between scenes.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Trigger.TimedSequence",
+   "https://cables.gl/op/Ops.Trigger.RouteTrigger_v2",
+   "https://cables.gl/op/Ops.Trigger.RouteTriggerAnimated",
+   "https://cables.gl/op/Ops.Trigger.SwitchTrigger",
+   "https://cables.gl/op/Ops.Anim.Bang"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.gl.node @enable",
+   "enable (OB3D attribute)",
+   "jit.gl.node @capture",
+   "jit.fx.tr.xfade"
+  ],
+  "max_check": "jit.group-gl refpage: every GL object has an enable flag; drawing stops when it is 0. jit.gl.node refpage discussion: a node can overwrite standard OB3D attributes on its children, and with @capture 1 it outputs the scene as a texture. jit.fx.tr.xfade refpage: a cross fade between textures; the jit.fx.tr.* family has other transitions.",
+  "advice": "In Max make each scene a jit.gl.node. Switch by sending enable 0 or 1 to the nodes, and for a dissolve capture both nodes to textures and cross-fade them with a jit.fx.tr.* object, disabling the old node when the fade's done-signal arrives.",
+  "confidence": "medium",
+  "notes": "That enable set on a jit.gl.node stops all its children was inferred from the refpage discussion, not tested."
+ },
+ {
+  "capability": "Freeze a live value into the patch",
+  "category": "workflow/authoring",
+  "tool": "cables.gl",
+  "tool_names": [
+   "Ops.Number.FreezeNumber",
+   "Ops.String.FreezeString",
+   "Ops.Website.LocalStorageNumber"
+  ],
+  "what_it_does": "FreezeNumber has a button that copies the current input to its output and keeps it there, including after the patch is reloaded. FreezeString does the same for text. LocalStorageNumber keeps a number in the browser between sessions under a key.",
+  "source_urls": [
+   "https://cables.gl/op/Ops.Number.FreezeNumber",
+   "https://cables.gl/op/Ops.String.FreezeString",
+   "https://cables.gl/op/Ops.Website.LocalStorageNumber"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "pattr @autorestore",
+   "message box with prepend set",
+   "preset",
+   "dict @embed"
+  ],
+  "max_check": "pattr refpage: autorestore (default 1) outputs the last-saved value when the patcher loads; initial sets a fixed value to restore instead. dict refpage: embed saves the contents with the patcher. Repo patching/MAX_PATCHING.md: pattr restore is phase 4 of loading, before loadbang.",
+  "advice": "To keep a tuned value in a Max patch, bind the control to a pattr (autorestore is on by default) and save the patch, or capture it into a message box with 'prepend set'. A plain number box does not keep its value on reload.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Port declaration decides the control drawn",
+  "category": "workflow/authoring",
+  "tool": "cables.gl",
+  "tool_names": [
+   "op.inFloat",
+   "op.inBool",
+   "op.inDropDown",
+   "op.inTriggerButton",
+   "op.inStringEditor",
+   "setPortGroup"
+  ],
+  "what_it_does": "When an op is written, the call that creates each input also picks its control in the parameter panel: a number field or slider, a checkbox, a dropdown, a button, a text editor. Ports are grouped under headings with one call. The op pages show these groups as headings in the port list.",
+  "source_urls": [
+   "https://cables.gl/docs/5_writing_ops/dev_creating_ports/dev_creating_ports",
+   "https://cables.gl/docs/5_writing_ops/dev_gui_ui_attributes/dev_gui_ui_attributes",
+   "https://cables.gl/docs/5_writing_ops/dev_creating_ports/dev_ports_trigger/dev_ports_trigger",
+   "https://cables.gl/op/Ops.Templates.UiTestOp",
+   "https://cables.gl/op/Ops.Anim.BoolAnim"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "declareattribute (v8 / v8ui)",
+   "attrui",
+   "Inspector"
+  ],
+  "max_check": "Repo CLAUDE.md, 'Match the Generated Control to the Attribute's Value Space': in a v8 script declareattribute's style (onoff, enum, enumindex, rgba) picks the control that attrui and the Inspector draw, and with no style everything is a bare number field. Same file: the Inspector sorts by label, and grouping is done by the patch author with headers. v8 refpage: three attributes of its own (embed, parameter_enable, parameter_mappable).",
+  "advice": "Treat style on declareattribute as required, the way a cables author must choose inBool or inDropDown. Max has no call that groups attributes, so group them by a shared leading word in the label, and group the attrui boxes in the help patch.",
+  "confidence": "medium",
+  "notes": "The Max side here is from the repo's own rules, which were checked against Max when written; declareattribute was not re-read today."
+ },
+ {
+  "capability": "Op lifecycle callbacks: after patch load, on delete",
+  "category": "data/tables/scripting",
+  "tool": "cables.gl",
+  "tool_names": [
+   "op.onLoaded",
+   "op.init",
+   "op.onDelete",
+   "onLinkChanged"
+  ],
+  "what_it_does": "Top-level code in an op runs when the op is created. onLoaded runs once the whole patch is loaded and all ops are linked, and not when an op is merely added while editing. The docs warn that init is called twice on patch load. onDelete is for cleanup, and onLinkChanged fires when a cable is added or removed.",
+  "source_urls": [
+   "https://cables.gl/docs/5_writing_ops/dev_callbacks/dev_callbacks",
+   "https://cables.gl/docs/5_writing_ops/dev_ops/dev_ops"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "v8 loadbang()",
+   "freebang",
+   "patcher lifecycle"
+  ],
+  "max_check": "v8 refpage: the loadbang message 'Invokes the function named loadbang if defined. This message is sent when the file is loaded.' Repo patching/MAX_PATCHING.md: cords are connected after objects are created, so output sent while a script is still being created may go nowhere; loadbang is phase 5. Repo patching/JITTER_JS_PATCHING.md line 323: an autowatch reload reruns the script but does not fire loadbang again. freebang refpage: bangs when the patcher is freed.",
+  "advice": "In a v8 script keep own-state setup at the top level, and put anything that sends to outlets or looks up other objects in loadbang(). Add a way to run that same setup by message, because a script reload during editing will not call loadbang, the same gap cables documents for onLoaded.",
+  "confidence": "high",
+  "notes": "Max has no callback for a cord being connected, which cables has in onLinkChanged."
  }
 ]

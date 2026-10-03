@@ -968,6 +968,340 @@ Source: `M:11.-live-performance-and-control`
 
 ---
 
+## 12. Shared concepts, different approaches
+
+Added in session 2 (2026-10-02). Sections 1 to 11 describe MadMapper by itself.
+This one looks only at things Max also has, and asks what a Max patcher should
+take from how MadMapper does them. The Max side of each entry was read from the
+refpage or userguide page named in it; the matching entry in
+`madmapper_max_gap_candidates.json` (items 50 to 82) holds the full check and
+the advice. Nothing here was run in Max.
+
+### Stacking, levels and blending
+
+**Draw order is the list.** The first surface in the list is in front, always.
+Max's `layer` attribute defaults to 0 on every object, and Max's own page says
+objects sharing a layer are drawn in no guaranteed order, and that layering only
+works with depth testing off. So in Max the order has to be written down for
+each plane, and higher numbers are in front, the reverse of MadMapper's list.
+
+Source: `M:4.-surfaces`, `M:4.-surfaces/surface-groups-and-masks`. Max:
+`jit.group-gl.maxref.xml`, userguide `jitter/depth_layer_blend`.
+
+**Levels multiply down a chain.** Surface opacity times group opacity times the
+Video master times the Master. The DMX, audio and laser masters hang off the
+same Master. Max has a `color` on each object and nothing above it, so the
+chain is a few `*` objects the patcher has to add.
+
+Source: `M:9.-master-settings`, `M:4.-surfaces/surface-inspector`,
+`https://madmapper.com/files/01-Introduction%20to%20the%20User%20Interface.pdf`.
+Max: `jit.group-gl.maxref.xml`, `jit.gl.node` refpage.
+
+**Blend mode is a name on the layer.** Max has the same named modes in its
+`blend` attribute, next to the older numeric `blend_mode` pair, but blending is
+off by default on everything except `jit.gl.layer`.
+
+Source: `M:4.-surfaces/surface-inspector`. Max: `jit.group-gl.maxref.xml`.
+
+### Cropping, warping and the mapping stage
+
+**Crop first, warp second, as two edits.** MadMapper's Input View and Stage
+Preview are the same idea as a crop object feeding a cornerpin. Max's crop is
+`jit.fx.subtexture` (pixel `offset` and `dim`, no copy), which session 1 did
+not find.
+
+Source: `M:4.-surfaces/assigning-content-to-surfaces`,
+`M:2.-the-interface/interface-overview`. Max: `jit.fx.subtexture` refpage.
+
+**Max does have a warp grid: `jit.gl.meshwarp`.** It ships inside the Jitter
+Tools package in the Max application, so it is missing from the main object
+registry, and session 1's search missed it. It has a draggable mesh, curvature,
+masks drawn in the window, undo, and `save` / `read` of its whole state as
+JSON. MadMapper's version adds points placed anywhere, Bézier handles on each
+point, a linked input mesh and feathering.
+
+Source: `M:4.-surfaces/warping-and-geometry`. Max: `jit.gl.meshwarp` refpage in
+`C74/packages/Jitter Tools/docs/`.
+
+**Keyboard nudging.** Tab moves to the next handle; arrows move a point one
+pixel, ten with Shift. `jit.gl.cornerpin` is mouse-only, so this is worth
+patching onto it.
+
+Source: `M:4.-surfaces/warping-and-geometry`,
+`M:2.-the-interface/interface-overview`,
+`https://madmapper.com/files/02-My%20First%20Video%20Mapping.pdf`. Max:
+`jit.gl.cornerpin` refpage.
+
+**Content and mapping are two stages, and the mapping is locked.** The manual's
+own template composes onto a buffer, loops it back, and maps the loopback onto
+the projectors, so cues change content and never touch geometry. Surfaces and
+outputs have a lock. In Max: render to a texture, map it in a second stage, and
+switch the cornerpin's `enable_mouse` and `drawcorners` off outside calibration.
+
+Source: `M:6.-outputs/loopback-and-advanced-output-techniques`,
+`M:4.-surfaces`. Max: `jit.world`, `jit.gl.cornerpin` refpages.
+
+### Movies
+
+**Playback mode is chosen by name**: loop, play once and hold, ping-pong,
+random frames, plus speed and loop in and out. `jit.movie` has the parts
+(`loop`, `looppoints`, `rate`, `frame`) but its refpage describes `loop` only as
+a number with a default.
+
+Source: `M:3.-media/media-bin`. Max: `jit.movie`, `jit.playlist` refpages.
+
+**The codec advice is spelled out.** HAP for scrubbing, reverse and many
+layers; H.264 only for forward playback, or exported with a keyframe on every
+frame; add up the clips' data rates and test the drive. Max's userguide agrees
+about HAP and says both its video engines play it natively, but stops there.
+
+Source: `M:3.-media/media-formats-and-video-codecs`,
+`M:12.-advanced/performance-optimization`. Max: userguide `jitter/video`,
+`jitter/video_engine`.
+
+**Movie sound.** MadMapper warns that hardware decoding on macOS sends a
+movie's sound to the system output, past its own audio settings. Max has the
+same shape of problem by default: `jit.movie` plays sound through the video
+engine, not through the patch, and `jit.movie~` is the object that brings it
+into MSP. MadMapper also has a switch that ties a movie's sound level to its
+surface's opacity; in Max that is one fader sent to two places.
+
+Source: `M:3.-media/media-formats-and-video-codecs`, `M:3.-media/media-bin`,
+`M:15.-troubleshooting`. Max: userguide `jitter/video`, `jit.movie` refpage.
+
+**Image folders.** A folder of numbered stills is one media item with its own
+frame rate, a preload cache and auto scan. Max has `jit.gl.textureset` to hold
+frames, but no folder player.
+
+Source: `M:3.-media/media-bin`. Max: `jit.gl.textureset` refpage.
+
+**Media changes crossfade, effects do not.** A cue that swaps media draws the
+surface twice during the fade. In Max that is an A/B pair into
+`jit.fx.tr.xfade`.
+
+Source: `M:15.-troubleshooting`, `https://madmapper.com/madmapper/faq`. Max:
+`jit.fx.tr.xfade` refpage.
+
+**Two clips in step: one wide file, two crops.** The FAQ's answer to keeping
+two videos synchronised is to put them side by side in one movie.
+
+Source: `M:15.-troubleshooting`, `https://madmapper.com/madmapper/faq`.
+
+**Idle sources stop.** An NDI source is processed only while a visible surface
+uses it, unless *Keep running (uses more CPU)* is ticked. Max leaves that to
+the patcher: `stop` the movie and `enable 0` its effects when the layer is at
+zero.
+
+Source: `M:11.-live-performance-and-control`. Max: `jit.movie`, `jit.fx.*`
+refpages.
+
+### Shaders
+
+**Render once at a set size, or per surface.** A Generator is one texture
+shared by all its surfaces; a Material is redrawn on each. In Max the same
+choice is `jit.gl.slab` / `jit.gl.pix` (to a texture, whose size should be
+stated with `@adapt 0 @dim`) against `jit.gl.shader` bound to the plane.
+
+Source: `M:3.-media/media-bin`. Max: `jit.gl.slab`, `jit.gl.shader`,
+`jit.gl.pix` refpages.
+
+### Outputs and displays
+
+**An output names its display; fullscreen is global.** Each output's
+Destination is a real display, and one command sends all outputs fullscreen.
+Max's `jit.world` has `fullscreen` and a window position, and `jit.displays`
+reports each display's rectangle, but nothing ties the two together.
+
+Source: `M:6.-outputs`, `M:2.-the-interface/keyboard-shortcuts`,
+`https://madmapper.com/madmapper/faq`. Max: `jit.world`, `jit.window`,
+`jit.displays` refpages.
+
+**Frame delay per output** to match slow and fast projectors. Max:
+`jit.fx.delay`, with `interp` off.
+
+Source: `M:6.-outputs`. Max: `jit.fx.delay` refpage.
+
+**Engine frame rate is a project setting.** In Max, `jit.world`'s `fps` is
+ignored on a Mac until `displaylink` is turned off.
+
+Source: `M:2.-the-interface/madmapper-preferences`. Max: `jit.world` refpage.
+
+### Time, tempo and animation
+
+**One speed, one freeze.** Master Speed scales every animation and the audio;
+Freeze Engine stops everything; Freeze Video Output holds the picture while
+playback continues. Max has no single control; a patch gets one only if every
+animation reads the same time source.
+
+Source: `M:9.-master-settings`,
+`M:11.-live-performance-and-control/osc-commands-and-channels-list`. Max:
+`jit.mo.time`, `transport` refpages.
+
+**Tempo has a source menu.** Audio beat detection, Ableton Link, MIDI clock,
+manual and tap, with Resync. Max's `transport` has a `clocksource` attribute
+and a `getclocksources` message, and the Link package installs a clock source
+extension next to `link.session`, `link.beat` and `link.phasor~`. Max has no
+built-in beat detector or tap tempo object that this search found.
+
+Source: `M:9.-master-settings/audio-input-and-beat-detection`. Max: `transport`
+refpage, Link package refpages.
+
+**LFOs are modules.** Oscillator, Oscillator 2D and Oscillator Bank (ten
+values spread by one Offset). The Max match for visuals is `jit.mo.time` in
+function mode and `jit.mo.func` for a spread of phases.
+
+Source: `https://madmapper.com/files/09-Modules.pdf`. Max: `jit.mo.time`,
+`jit.mo.func` refpages.
+
+**Audio analysis comes pre-named**: `amplitude`, `bass`, `medium`, `treble`
+and beat counts, from channels chosen once in the preferences. Max can analyse
+far more, but the patcher has to build and name it.
+
+Source: `M:9.-master-settings/audio-input-and-beat-detection`. Max: `peakamp~`,
+`fffb~`, `snapshot~` refpages.
+
+### Control
+
+**Two ways in.** A value sent to a parameter's own OSC address is applied
+as it is; a Control on the same parameter adds range, filter and curve. Max 9
+is close: parameter-enabled objects get `/<patcher>/param/<name>` addresses
+with `/raw` and `/normalized` under each. In both programs the address is made
+from names the author chose, so a rename breaks remotes.
+
+Source: `M:11.-live-performance-and-control/osc-commands-and-channels-list`.
+Max: userguide `OSC`, `param.osc` refpage.
+
+**Feedback to controllers.** MIDI inputs pair with a feedback device; OSC has a
+feedback port. Max does the MIDI half when Map is enabled on an output port in
+MIDI Setup, and the OSC half with `param.osc @auto 1`.
+
+Source: `M:11.-live-performance-and-control`,
+`M:2.-the-interface/madmapper-preferences`. Max: userguide `mapping`,
+`param.osc` refpage.
+
+**Combining sources is a module.** One Control per source type per parameter;
+a Controls Combiner mixes several. Max lets any number of cords reach an inlet,
+and the last message wins, which is rarely what was meant.
+
+Source: `M:8.-modules`, `M:15.-troubleshooting`.
+
+**Game controllers.** Named inputs in both. Max's `gamepad` object also sends
+rumble and light colour back.
+
+Source: `M:11.-live-performance-and-control`. Max: `gamepad` refpage.
+
+### Presets
+
+**An edited cue is visibly edited.** Changed controls are outlined until the
+cue is updated. `pattrstorage` answers `getedited` with 1 or 0, which is enough
+for one indicator light.
+
+Source: `M:10.-timelines/scenes-and-cues`. Max: `pattrstorage` refpage.
+
+**Presets and playing media.** Scenes restart media; the manual steers people
+to Cues, and the FAQ's fix for restarting audio is to untick one stored value.
+In Max, keep play and restart controls out of `pattrstorage` with `active` or
+`subscribemode`.
+
+Source: `M:10.-timelines/scenes-and-cues`, `M:15.-troubleshooting`. Max:
+`pattrstorage` refpage.
+
+### Files and the working environment
+
+**A project is a folder with a collect command.** Max's equivalent is a
+Project with Consolidate and Archive.
+
+Source: `M:2.-the-interface/madmapper-project-file-structure`. Max: userguide
+`projects`.
+
+**Machine settings and project settings are separate tabs.** Audio device and
+capture hardware belong to the computer; MIDI devices, OSC ports and frame rate
+travel with the project.
+
+Source: `M:2.-the-interface/madmapper-preferences`.
+
+**Saving is treated as risky during a show.** AutoSave never overwrites the
+project, counts down ten seconds, and can be paused. `pattrstorage` has
+`backupmode` for rotating backups.
+
+Source: `M:12.-advanced/project-backup-and-recovery`. Max: `pattrstorage`
+refpage.
+
+**Hover help.** A status line describes whatever is under the mouse. Max's
+`hint` and `annotation` attributes do the same for a patch, if the author
+fills them in.
+
+Source: `M:2.-the-interface/interface-overview`. Max: userguide `objects`.
+
+### Where Max is ahead
+
+- **Effects.** A MadMapper surface has one FX slot, and the FAQ says it cannot
+  fade between two effects. Max chains any number of shader stages and can
+  crossfade two chains. Source: `M:4.-surfaces/surface-inspector`,
+  `M:15.-troubleshooting`.
+- **Control sources per parameter.** MadMapper allows one Control per source
+  type on a parameter. Max has no limit. Source: `M:15.-troubleshooting`.
+- **Audio.** MadMapper plays to one audio interface at a time, with a four-band
+  equaliser and a routing matrix, and analyses amplitude, three bands and tempo.
+  Max is a full audio environment. Source: `M:14.-technical-notes/audio-routing`,
+  `M:9.-master-settings/audio-input-and-beat-detection`.
+- **Logic.** MadMapper has no scripting; its outside interface is the OSC
+  address tree. Source: `M:11.-live-performance-and-control`.
+- **3D.** A 3D Surface is an imported model to calibrate and light. There is no
+  general scene, camera or physics. Source: `M:4.-surfaces/advanced-3d-and-scanning`
+  (session 1).
+- **Fixtures do not blend.** One DMX fixture over another replaces it. Source:
+  `https://madmapper.com/files/01-Introduction%20to%20the%20User%20Interface.pdf`.
+- **Recording the output.** The FAQ's three ways to record a mapping all go
+  outside the program (a Syphon or Spout recorder, an NDI recorder, a capture
+  card); version 6 adds timeline export. Max records from inside with
+  `jit.record` after `jit.gl.asyncread`. Source:
+  `https://madmapper.com/madmapper/faq`; Max: userguide `jitter/video`.
+- **Game controller output.** `gamepad` can drive rumble and LEDs. Source: Max
+  `gamepad` refpage.
+- **Opening at startup.** MadMapper's FAQ says the only way is to add the
+  project to the system's startup items and tick fullscreen-on-open. Max can
+  be built into a standalone application. Source:
+  `https://madmapper.com/madmapper/faq`; Max: userguide
+  `standalones_and_collectives`.
+
+### Other things learned from the pages first read in session 2
+
+- **Cameras that crash the program are remembered.** If opening a camera
+  driver crashes MadMapper once, it will not try that camera again until a
+  preference is cleared. Source: `https://madmapper.com/madmapper/faq`.
+- **Multiple graphics cards (Windows).** All processing happens on the card
+  attached to the main display. Source: `https://madmapper.com/madmapper/faq`.
+- **Etherdream and ShowNET want a quiet network.** The laser FAQ says not to
+  put Art-Net and an Etherdream DAC on the same network. Helios is 12-bit in X
+  and Y, Etherdream 16-bit. Source: `https://madmapper.com/extensions/FAQ`.
+- **PJLink limits.** Not every projector answers discovery, which can take 30
+  seconds; cheap projectors report wrong status and keep the lamp on when
+  muted. Source: `https://madmapper.com/extensions/FAQ`.
+- **MiniMad export settings.** Fullscreen maximum quality mode plays a movie
+  straight to the screen when the mapping is one unwarped fullscreen quad; Crop
+  media exports only the part of each movie the projector uses; every frame can
+  be exported as a keyframe; units only sync within the same Sync group.
+  Source: `https://madmapper.com/files/03-My%20First%20MiniMad%20Video%20Export.pdf`.
+- **MiniMad and power.** It restarts by itself after a power cut, but cutting
+  power while it writes its card (after a media change with "start last played
+  media", a luminosity or volume change, or an edit) can corrupt the card. It
+  can be shut down by OSC, and scheduled with a mains timer. Source:
+  `https://download.madmapper.com/minimad/minimad-userguide.pdf`,
+  `https://madmapper.com/minimad/faq`.
+- **MiniMad sync rule.** Units play in step when their movies have the same
+  frame count and frame rate, whatever the files are called. Source:
+  `https://download.madmapper.com/minimad/minimad-userguide.pdf`.
+- **Firmata boards.** Arduino Uno, Mega and (Mac only) Teensy 3.2 or 4.0; an
+  Uno cannot do PWM and Servo at once. Source:
+  `https://madmapper.com/files/10-Arduino%20Firmata.pdf`.
+- **MadSDF's domain functions.** Besides shapes and fills, the library has
+  `repeat` and `repeatRadial` with a per-cell id, so one shape becomes a grid
+  or ring at no extra cost. Source:
+  `https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/Libraries/MadSDF.md`.
+
+---
+
 ## Things the documents disagree about
 
 Recorded so a later reader does not take one page as settled.
@@ -984,6 +1318,11 @@ Recorded so a later reader does not take one page as settled.
 | MadProjectorControl | power and mute only (`M:12.-advanced/madprojectorcontrol`) | also "input switching" (`M:glossary-of-terms`) |
 | Media Tab position | on the right by default (`M:2.-the-interface/interface-overview`) | on the left by default (`M:1.-introduction/what's-new/madmapper-v6`) |
 | Where the Space Scanner image comes from | "does not create a 3D model" (`M:12.-advanced/special-tools-and-auto-calibration`) | "recognizes a 3D volume" (`M:1.-introduction/what-is-madmapper/madmapper-history`) |
+| Recommended codec | HAP "highly recommended", H.264 costly (`M:3.-media/media-formats-and-video-codecs`) | H264 "the standard", HAP for very high resolutions (`https://madmapper.com/madmapper/faq`, `M:15.-troubleshooting`) |
+| USB DMX devices supported | garageCube, ShowJockey, Enttec DMX USB Pro and Pro MK2, DMX King eDMX2 Pro (`M:2.-the-interface/madmapper-preferences`) | garageCube, Enttec Open USB DMX, Enttec DMX USB Pro MKII only (`https://madmapper.com/madmapper/faq`) |
+| MiniMad size | 10 x 9 x 3 cm (`https://madmapper.com/minimad/product`) | 9 x 6 x 3 cm (`https://madmapper.com/minimad/faq`, `https://download.madmapper.com/minimad/minimad-userguide.pdf`) |
+| MiniMad video limit | mapped video up to 1080p25, unmapped up to 1080p30 (`https://madmapper.com/minimad/product`) | HDMI output up to 1080p60 (`https://madmapper.com/minimad/faq`) |
+| Which version the site describes | MadMapper 6 (`M:faqs`, `https://madmapper.com`) | MadMapper 5 throughout (`https://madmapper.com/madmapper/faq`, `https://madmapper.com/extensions/FAQ`) |
 
 The appendices page lists seven appendices by title, with a line each and
 nothing behind them. One manual page still carries an editor's note left in by

@@ -1,0 +1,768 @@
+[
+  {
+    "id": 1,
+    "dimension": "Evaluation",
+    "summary": "Isadora works from the ends of chains backwards. For each actor at the end of a chain, it executes the actors linked into each input, then passes the result on. Video is rendered at a target frame rate, and time-based actors are serviced at a rate set as a multiple of that frame rate. Work nobody uses can be stopped: a whole Scene stops when it is left, and a closed Gate, Selector or Router set to 'gated' stops everything upstream of it.",
+    "details": [
+      "The v2.0 processing pseudo-code: for every actor at the end of a chain, loop through its inputs; an unlinked input uses its Init value or current value; a linked input first executes all upstream actors and keeps the last new value [https://support.troikatronix.com/support/solutions/articles/13000026371-understanding-the-new-isadora-v2-0-actor-processing-mode].",
+      "Video output is rendered at the Target Frame Rate preference [https://troikatronix.com/files/isadora-manual.pdf p.199].",
+      "The General Service Task services all non-movie actors in active Scenes (envelopes, wave and pulse generators) at a multiple of the frame rate; the Movie Service Task services playing movies, once per frame by default [https://troikatronix.com/files/isadora-manual.pdf p.200].",
+      "'Cycles' in the status bar is how many times per second Isadora can process all active Scenes in all open files [https://troikatronix.com/files/isadora-manual.pdf p.22, https://troikatronix.com/files/isadora-manual.pdf p.216].",
+      "Links are red when no data flows and green when it does, so execution is visible on the cord [https://troikatronix.com/files/isadora-manual.pdf p.157].",
+      "With 'exec src' set to 'gated', a closed Gate, Selector or Router stops every actor upstream; the links turn red and those actors go dormant [https://support.troikatronix.com/support/solutions/articles/13000014834-making-your-patch-more-efficient-using-the-gate-selector-and-router-actors].",
+      "Activating a Scene starts its actors communicating; deactivating it stops all its output [https://troikatronix.com/files/isadora-manual.pdf p.140, https://troikatronix.com/files/isadora-manual.pdf p.141, https://troikatronix.com/files/isadora-manual.pdf p.142].",
+      "User Actor On/Off switches off every actor inside a User Actor or Macro to save processor time [https://troikatronix.com/files/isadora-manual.pdf p.795]. Movie Player 'visible' off unloads and stops the movie [https://troikatronix.com/files/isadora-manual.pdf p.604]. Most video actors have 'bypass' [https://troikatronix.com/files/isadora-manual.pdf p.513].",
+      "Pause Engine disables all internal timers and messaging [https://troikatronix.com/files/isadora-manual.pdf p.222].",
+      "A Javascript actor's main() runs when an input value is updated [https://support.troikatronix.com/support/solutions/articles/13000014933-getting-started-with-javascript]."
+    ],
+    "names": [
+      "2.0 Actor Processing Mode",
+      "Target Frame Rate",
+      "General Service Task",
+      "Movie Service Task",
+      "Cycles",
+      "exec src",
+      "gated",
+      "always",
+      "User Actor On/Off",
+      "Pause Engine",
+      "bypass",
+      "visible"
+    ],
+    "sources": [
+      "https://support.troikatronix.com/support/solutions/articles/13000026371-understanding-the-new-isadora-v2-0-actor-processing-mode",
+      "https://support.troikatronix.com/support/solutions/articles/13000014834-making-your-patch-more-efficient-using-the-gate-selector-and-router-actors",
+      "https://troikatronix.com/files/isadora-manual.pdf p.22, 140-142, 157, 199-200, 216, 222, 513, 604, 795"
+    ],
+    "what_a_max_user_would_notice": "Nothing is pushed by a source the way a message leaves an outlet. A chain does work because something at its end wants a value, so cutting the end off (a closed gated Gate) quietly stops the whole branch above it.",
+    "confidence": "medium",
+    "open_questions": "The pseudo-code is given in an article about Init values on Scene activation. Whether exactly the same pull runs every service cycle, or only when values change, is not stated in what was read."
+  },
+  {
+    "id": 2,
+    "dimension": "Ordering",
+    "summary": "Order comes from the pull: upstream actors run before the input that needs them. Where several links meet one input, the upstream actors run from top to bottom by their position on screen, and the last new value wins. There is no trigger-style object for ordering, and no ordering rule was found for one output fanning out to many inputs.",
+    "details": [
+      "When multiple actors are linked to the same input, their vertical position decides execution order: top to bottom [https://support.troikatronix.com/support/solutions/articles/13000026371-understanding-the-new-isadora-v2-0-actor-processing-mode].",
+      "The input keeps the value from the last actor that produced a new value [https://support.troikatronix.com/support/solutions/articles/13000026371-understanding-the-new-isadora-v2-0-actor-processing-mode].",
+      "Any new value at a trigger input fires it, so ordering steps are often made by linking a value output to a trigger input [https://troikatronix.com/files/isadora-manual.pdf p.115].",
+      "Broadcaster values go to every active Listener on the channel; no order between Listeners is given [https://troikatronix.com/files/isadora-manual.pdf p.415]."
+    ],
+    "names": [
+      "trigger",
+      "Broadcaster",
+      "Listener"
+    ],
+    "sources": [
+      "https://support.troikatronix.com/support/solutions/articles/13000026371-understanding-the-new-isadora-v2-0-actor-processing-mode",
+      "https://troikatronix.com/files/isadora-manual.pdf p.115, 415"
+    ],
+    "what_a_max_user_would_notice": "Moving an actor up or down can change which value an input ends up with. The order question is \"which upstream actors run first\", not \"which outlet fires first\".",
+    "confidence": "medium",
+    "open_questions": "The order in which one output feeds several inputs, and the order of Listeners, are not documented in the pages read."
+  },
+  {
+    "id": 3,
+    "dimension": "Time",
+    "summary": "There is a frame clock (the Target Frame Rate), a service rate for time-based actors tied to it, and an internal clock that the recorder can slow down. Time-based actors each run on their own while their Scene is active; there is no global timeline or transport. Times are in seconds, movie positions in percent of the file, and timecode is its own data type.",
+    "details": [
+      "Target Frame Rate, General Service Task (a multiple of it) and Movie Service Task are preferences, not patch objects [https://troikatronix.com/files/isadora-manual.pdf p.199, https://troikatronix.com/files/isadora-manual.pdf p.200].",
+      "Render Speed below 100% slows Isadora's internal clock, so media and time-based actors run slower while video processing does not; Isadora then does not run in real time [https://troikatronix.com/files/isadora-manual.pdf p.245].",
+      "Scene fade times and Jump fades are in seconds [https://troikatronix.com/files/isadora-manual.pdf p.150, https://troikatronix.com/files/isadora-manual.pdf p.84]; Envelope Generator rates are in seconds [https://troikatronix.com/files/isadora-manual.pdf p.92].",
+      "Movie Player play start, play length and position are percentages of the file's length [https://troikatronix.com/files/isadora-manual.pdf p.603].",
+      "Timecode is a data type: to a float input it becomes seconds, to an integer frames, to text HH:MM:SS:FF [scans/isadora/isadora_insights.md §5 Timecode, from https://troikatronix.com/files/isadora-manual.pdf p.299-300].",
+      "Time of Day fires by wall clock; MTC Movie Locker chases incoming MIDI timecode [scans/isadora/isadora_insights.md §4, §5, from https://troikatronix.com/files/isadora-manual.pdf p.784, https://troikatronix.com/files/isadora-manual.pdf p.607-609].",
+      "The Audio View has an audio buffer size, saved with the file since 4.5 [https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes].",
+      "The manual advises one frame rate for all videos, matching the Target Frame Rate [https://troikatronix.com/files/isadora-manual.pdf p.328]."
+    ],
+    "names": [
+      "Target Frame Rate",
+      "General Service Task",
+      "Movie Service Task",
+      "Render Speed",
+      "Timecode",
+      "Time of Day",
+      "MTC Movie Locker",
+      "Envelope Generator"
+    ],
+    "sources": [
+      "https://troikatronix.com/files/isadora-manual.pdf p.84, 92, 150, 199-200, 245, 328, 603",
+      "https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes",
+      "scans/isadora/isadora_insights.md"
+    ],
+    "what_a_max_user_would_notice": "There is no scheduler with millisecond events to reason about. Each envelope, timer or movie keeps its own time while its Scene runs, and the only global knob is how fast the whole engine's clock goes.",
+    "confidence": "medium",
+    "open_questions": "Running faster than real time is not mentioned. How audio-rate processing (4.5 audio type, VST) is clocked relative to the frame clock is not described in what was read."
+  },
+  {
+    "id": 4,
+    "dimension": "Data types",
+    "summary": "Every port has a declared type: integer, float, boolean, range, text, trigger, video, sound, blob, timecode, skeleton, and since 4.5 audio. Numeric types and triggers connect freely and are converted; video and sound connect only to their own kind. Mutable ports take the type of the first link. There is no list type, and media files are referred to by index numbers.",
+    "details": [
+      "Property types: Integer, Float, Boolean, Range, Text, Trigger, Video, Sound, Blob [https://troikatronix.com/files/isadora-manual.pdf p.156]; Timecode [https://troikatronix.com/files/isadora-manual.pdf p.115].",
+      "Float to integer truncates; integer 5 to a range gives 5-5; a trigger fires on any new value [https://troikatronix.com/files/isadora-manual.pdf p.115].",
+      "Mutable ports start as float and change to the first linked type; some actors mutate all related ports together, others each port separately [https://troikatronix.com/files/isadora-manual.pdf p.160, https://troikatronix.com/files/isadora-manual.pdf p.161].",
+      "Video has three kinds: vid-gpu (the default), vid-cpu (legacy) and vid-ci (Core Image, macOS), with converter actors the manual calls inherently inefficient [https://troikatronix.com/files/isadora-manual.pdf p.438, https://troikatronix.com/files/isadora-manual.pdf p.515].",
+      "4.5 added a cross-platform 'audio' type for VST3 and the new Audio actors; Core Audio ports became 'core-au' [https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes].",
+      "Skeleton is a data type output by OpenNI Tracker, Rokoko Studio Live Watcher and Skeleton From JSON [scans/isadora/isadora_insights.md §5 Tracking].",
+      "User Input types include Movie, Audio File, Picture File, MIDI File and 3D File: each passes an integer index into the Media View [https://troikatronix.com/files/isadora-manual.pdf p.175].",
+      "Text converts to a number only if it looks like one; otherwise an error code results [https://support.troikatronix.com/support/solutions/articles/13000014933-getting-started-with-javascript]. A Javascript input receiving video sees 0 [https://troikatronix.com/files/isadora-manual.pdf p.544].",
+      "The property type table has no list type [scans/isadora/isadora_insights.md §10, https://troikatronix.com/files/isadora-manual.pdf p.115]."
+    ],
+    "names": [
+      "Integer",
+      "Float",
+      "Boolean",
+      "Range",
+      "Text",
+      "Trigger",
+      "Video",
+      "Sound",
+      "Blob",
+      "Timecode",
+      "skeleton",
+      "audio",
+      "core-au",
+      "vid-gpu",
+      "vid-cpu",
+      "vid-ci"
+    ],
+    "sources": [
+      "https://troikatronix.com/files/isadora-manual.pdf p.115, 156, 160-161, 175, 438, 515, 544",
+      "https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes",
+      "https://support.troikatronix.com/support/solutions/articles/13000014933-getting-started-with-javascript",
+      "scans/isadora/isadora_insights.md"
+    ],
+    "what_a_max_user_would_notice": "Each link carries one value of one known type, and the type is checked when you draw the link. Several values travel as several links, not as one list.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 5,
+    "dimension": "Rates and channels",
+    "summary": "The patch does not split into control-rate and audio-rate cords. Rates are set globally: video at the frame rate, time-based actors at the service rate, movies at the movie service rate. Channels live inside an audio link, with routing strings and a channel editor deciding which channel goes where.",
+    "details": [
+      "General Service Task and Movie Service Task rates are global preferences [https://troikatronix.com/files/isadora-manual.pdf p.200].",
+      "Sound connects only to sound, video only to video [https://troikatronix.com/files/isadora-manual.pdf p.115].",
+      "4.5 audio actors have a Channel Configuration Editor for input and output busses; a VST connected to a source with more channels is limited automatically [https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes].",
+      "Sound Player routes file channels to device outputs with a text routing string [scans/isadora/isadora_insights.md §2, from https://troikatronix.com/files/isadora-manual.pdf p.742].",
+      "Matrix Router widgets show channel routing in four display sizes [https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes]."
+    ],
+    "names": [
+      "General Service Task",
+      "Movie Service Task",
+      "Channel Configuration Editor",
+      "routing",
+      "Matrix Router"
+    ],
+    "sources": [
+      "https://troikatronix.com/files/isadora-manual.pdf p.115, 200, 742",
+      "https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes",
+      "scans/isadora/isadora_insights.md"
+    ],
+    "what_a_max_user_would_notice": "There is no choice of rate per cord or per object; the engine owns the rates. A multichannel sound is one link, and its channels are routed by a setting on the actor.",
+    "confidence": "medium",
+    "open_questions": "How audio streams are processed between frames (block size, sample rate handling) is not described in the pages read."
+  },
+  {
+    "id": 6,
+    "dimension": "State and saving",
+    "summary": "Every input always holds a value, and that value is saved with the file. Leaving a Scene remembers all its values, so returning resumes where it left off, unless an input has an Init value, which is applied and executed on each entry. Snapshots store every input of every actor in a Scene. Media is referenced, not stored.",
+    "details": [
+      "When you leave a Scene every value is remembered, so it works exactly as before on return [https://troikatronix.com/files/isadora-manual.pdf p.118].",
+      "Init sets an input's value each time its Scene is activated [https://troikatronix.com/files/isadora-manual.pdf p.166, https://troikatronix.com/files/isadora-manual.pdf p.118]. Since v2.0 that value is passed in and executes the actor, so downstream changes [https://support.troikatronix.com/support/solutions/articles/13000026371-understanding-the-new-isadora-v2-0-actor-processing-mode].",
+      "Isadora preloads media by reading input values before a jump, so media inputs should use Init, not Enter Scene Value [https://support.troikatronix.com/support/solutions/articles/13000029774-use-the-initialize-feature-instead-of-enter-scene-value-to-initialize-media-inputs].",
+      "Snapshots memorize all inputs of all actors in a Scene; recall by click or actor; actors can be excluded from recall; snapshots turn red when actors were added later [https://troikatronix.com/files/isadora-manual.pdf p.181, https://troikatronix.com/files/isadora-manual.pdf p.182, https://troikatronix.com/files/isadora-manual.pdf p.183].",
+      "The document holds pointers to media files, not their data [https://troikatronix.com/files/isadora-manual.pdf p.135].",
+      "After Loading File: activate no Scene, the first Scene, or the Scene active when saved [https://troikatronix.com/files/isadora-manual.pdf p.200].",
+      "Control Panels and Cue Sheets travel with their Scenes when copied [https://troikatronix.com/files/isadora-manual.pdf p.185, https://troikatronix.com/files/isadora-manual.pdf p.219].",
+      "The Pythoner interpreter keeps its state until Isadora quits; it is not saved [https://troikatronix.com/files/isadora-manual.pdf p.659].",
+      "Auto-save is built in; since 4.5, opening a file offers a newer auto-saved version [https://troikatronix.com/files/isadora-manual.pdf p.210, https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes]."
+    ],
+    "names": [
+      "Init",
+      "Snapshots",
+      "Take Snapshot",
+      "Update Current Snapshot",
+      "Disable Actor Snapshot",
+      "Clear Invalid Snapshots",
+      "After Loading File",
+      "Enter Scene Value",
+      "Auto Save"
+    ],
+    "sources": [
+      "https://troikatronix.com/files/isadora-manual.pdf p.118, 135, 166, 181-183, 185, 200, 210, 219, 659",
+      "https://support.troikatronix.com/support/solutions/articles/13000026371-understanding-the-new-isadora-v2-0-actor-processing-mode",
+      "https://support.troikatronix.com/support/solutions/articles/13000029774-use-the-initialize-feature-instead-of-enter-scene-value-to-initialize-media-inputs",
+      "https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes"
+    ],
+    "what_a_max_user_would_notice": "Values persist by default: what you see on an actor is what reopens. Starting state is a checkbox on the input rather than a loadbang chain, and it runs through the patch when the Scene starts.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 7,
+    "dimension": "Parameters",
+    "summary": "Every actor setting is a typed input property with a minimum, a maximum and help text. Each input can be scaled, given an Init value, and tied to a panel control by number. Values arrive by link, by control, or by typing; there are no expressions or bindings on a parameter.",
+    "details": [
+      "Hovering shows a property's name, type, minimum and maximum [https://troikatronix.com/files/isadora-manual.pdf p.115, https://troikatronix.com/files/isadora-manual.pdf p.156].",
+      "Inputs have Scale Min and Scale Max, outputs Limit Min and Limit Max; both default to the property's absolute range [https://troikatronix.com/files/isadora-manual.pdf p.163, https://troikatronix.com/files/isadora-manual.pdf p.164, https://troikatronix.com/files/isadora-manual.pdf p.165].",
+      "The inspector on an input has Ctl Link, Init, Scale Min and Scale Max [https://troikatronix.com/files/isadora-manual.pdf p.117, https://troikatronix.com/files/isadora-manual.pdf p.165].",
+      "Less-used properties can be hidden with the eye icon, and the chosen layout saved as the actor's default [https://troikatronix.com/files/isadora-manual.pdf p.19].",
+      "Inputs drawn as triangles set the actor's port count and cannot be linked [https://troikatronix.com/files/isadora-manual.pdf p.162].",
+      "GLSL uniforms become inputs through an ISADORA_FLOAT_PARAM or ISADORA_INT_PARAM comment giving name, id, min, max, default and help text [https://support.troikatronix.com/support/solutions/articles/13000025645-glsl-shader-actor-tutorial].",
+      "Javascript ports are named with // iz_input and // iz_output comments [https://troikatronix.com/files/isadora-manual.pdf p.544, https://troikatronix.com/files/isadora-manual.pdf p.545].",
+      "VST3 actors hide their many inputs until a parameter is touched in the plugin's own window [https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes].",
+      "From outside, values come in through watcher actors; OSC addresses /isadora/1 to /isadora/100 map to OSC Listener channels [scans/isadora/isadora_insights.md §5 OSC, from https://troikatronix.com/files/isadora-manual.pdf p.301]."
+    ],
+    "names": [
+      "Scale Min",
+      "Scale Max",
+      "Limit Min",
+      "Limit Max",
+      "Init",
+      "Ctl Link",
+      "ISADORA_FLOAT_PARAM",
+      "ISADORA_INT_PARAM",
+      "iz_input",
+      "iz_output"
+    ],
+    "sources": [
+      "https://troikatronix.com/files/isadora-manual.pdf p.19, 115, 117, 156, 162-165, 301, 544-545",
+      "https://support.troikatronix.com/support/solutions/articles/13000025645-glsl-shader-actor-tutorial",
+      "https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes",
+      "scans/isadora/isadora_insights.md"
+    ],
+    "what_a_max_user_would_notice": "Every knob on an actor is already a visible, typed, range-limited input, so there is nothing like turning on a parameter. But a parameter cannot be driven by an expression; it needs a link.",
+    "confidence": "high",
+    "open_questions": "Whether actor properties can be addressed directly from OSC without a Listener actor was not found."
+  },
+  {
+    "id": 8,
+    "dimension": "Encapsulation and reuse",
+    "summary": "A User Actor wraps actors behind User Input and User Output ports and carries an identifier. Editing one offers Save & Update All, which rewrites every copy in every open document and toolbox while keeping links and hand-set values. A Macro is the same wrapper with no shared identity. User Actors live in a Global folder, or locally in the document.",
+    "details": [
+      "User Actors and Macros work the same except that a User Actor can update all its instances [https://troikatronix.com/files/isadora-manual.pdf p.171].",
+      "Each User Actor has a unique identifier; instances share it whether copied or dragged from the toolbox [https://troikatronix.com/files/isadora-manual.pdf p.172].",
+      "Save & Update All updates instances in all open documents and the Global or Local toolbox, keeps links where types still match, and tries to keep input values [https://troikatronix.com/files/isadora-manual.pdf p.177].",
+      "New Instance gives a variation its own identifier; Convert to Macro stops updating [https://troikatronix.com/files/isadora-manual.pdf p.173, https://troikatronix.com/files/isadora-manual.pdf p.177].",
+      "User Input and Output take the type, range and scaling of what they connect to, or a fixed data type; their order is set in an I/O dialog [https://troikatronix.com/files/isadora-manual.pdf p.175, https://troikatronix.com/files/isadora-manual.pdf p.176].",
+      "Global Toolbox actors live in a chosen folder; Local Toolbox actors are stored in the document [https://troikatronix.com/files/isadora-manual.pdf p.178].",
+      "Opening a file updates its User Actors to match the ones in the Global User Actor folder [https://support.troikatronix.com/support/solutions/articles/13000085286-keeping-global-user-actors-in-sync-when-collaborating].",
+      "User Actors save as .iua4 files [https://troikatronix.com/files/isadora-manual.pdf p.129, https://troikatronix.com/files/isadora-manual.pdf p.173]. A User Actor cannot contain itself [https://troikatronix.com/files/isadora-manual.pdf p.173].",
+      "User Actor On/Off switches all actors inside off [https://troikatronix.com/files/isadora-manual.pdf p.795]. Custom help text for User Actors and their ports came in Isadora 4 [https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes].",
+      "Instances differ only by their input values; no creation arguments are described [https://troikatronix.com/files/isadora-manual.pdf p.127]."
+    ],
+    "names": [
+      "User Actor",
+      "Macro",
+      "User Input",
+      "User Output",
+      "User Actor On/Off",
+      "Save & Update All",
+      "New Instance",
+      "Convert to Macro",
+      "Global Toolbox",
+      "Local Toolbox",
+      "Set Global User Actor Folder",
+      ".iua4"
+    ],
+    "sources": [
+      "https://troikatronix.com/files/isadora-manual.pdf p.127, 129, 171-178, 795",
+      "https://support.troikatronix.com/support/solutions/articles/13000085286-keeping-global-user-actors-in-sync-when-collaborating",
+      "https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes"
+    ],
+    "what_a_max_user_would_notice": "Reuse is by identity, not by file name. A copy pasted into a Scene stays linked to its siblings until you choose to update them, so an embedded copy and a shared one are the same thing.",
+    "confidence": "high",
+    "open_questions": "No way to make N copies automatically (as with voices) was found."
+  },
+  {
+    "id": 9,
+    "dimension": "Names and scope",
+    "summary": "Scenes cannot see each other's links. Data crosses only through Broadcaster and Listener on numbered channels, Set and Get Global Values under a text name, or OSC. Both reach only active Scenes. Most other things are addressed by number: Scenes by position or Cue Number, Stages, media, panel controls.",
+    "details": [
+      "Each Scene is completely independent; data passes only via Broadcaster/Listener, Set/Get Global Values and OSC [https://troikatronix.com/files/isadora-manual.pdf p.140].",
+      "Broadcaster sends any type, video included, to all active Listeners on its channel [https://troikatronix.com/files/isadora-manual.pdf p.415, https://troikatronix.com/files/isadora-manual.pdf p.566].",
+      "Global Values use a case-sensitive name, hold up to 64 values, carry text or numbers but not media, and output on Scene entry and whenever set [https://support.troikatronix.com/support/solutions/articles/13000014936-using-the-global-value-actors].",
+      "The KB advises prefixing global names with the User Actor's name, like a namespace, because numbered Broadcaster channels clash with the parent patch [https://support.troikatronix.com/support/solutions/articles/13000014936-using-the-global-value-actors].",
+      "Jump and Activate Scene target by relative or absolute position; Jump By Name by name prefix; Jump to Cue by Cue Number [https://troikatronix.com/files/isadora-manual.pdf p.84, https://troikatronix.com/files/isadora-manual.pdf p.88, https://troikatronix.com/files/isadora-manual.pdf p.94].",
+      "Projectors name a Stage by number [https://support.troikatronix.com/support/solutions/articles/13000016422-isadora-3-4-working-with-multiple-displays]; players name media by index [https://troikatronix.com/files/isadora-manual.pdf p.137]; controls link to inputs by Control ID [https://troikatronix.com/files/isadora-manual.pdf p.186].",
+      "Net Broadcaster reaches other machines by channel and Net ID [https://troikatronix.com/files/isadora-manual.pdf p.616]."
+    ],
+    "names": [
+      "Broadcaster",
+      "Listener",
+      "Set Global Values",
+      "Get Global Values",
+      "channel",
+      "Control ID",
+      "Cue Number",
+      "Jump By Name",
+      "Jump to Cue",
+      "Net ID"
+    ],
+    "sources": [
+      "https://troikatronix.com/files/isadora-manual.pdf p.84, 88, 94, 137, 140, 186, 415, 566, 616",
+      "https://support.troikatronix.com/support/solutions/articles/13000014936-using-the-global-value-actors",
+      "https://support.troikatronix.com/support/solutions/articles/13000016422-isadora-3-4-working-with-multiple-displays"
+    ],
+    "what_a_max_user_would_notice": "A wireless send only reaches parts of the show that are running. Most references are numbers, so reordering a list (Scenes, media, Stages) can change what a reference points at.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 10,
+    "dimension": "Show structure",
+    "summary": "A document is a row of Scenes, each a complete patch, in running order. Normally one Scene is active; moving along the row is moving through the show. Extra Scenes can be activated alongside and keep running across Scene changes. A Scene that is not active does nothing at all.",
+    "details": [
+      "Scenes are like scenes in a play, each with its own setup; jumping is near-instant [https://troikatronix.com/files/isadora-manual.pdf p.140].",
+      "Activating a Scene stops the previous one; with no fade, all its media output stops [https://troikatronix.com/files/isadora-manual.pdf p.140, https://troikatronix.com/files/isadora-manual.pdf p.141].",
+      "Activate Scene runs a secondary Scene beside the primary one until a Deactivate Scene or Activate Scene Amount stops it [https://troikatronix.com/files/isadora-manual.pdf p.386, https://troikatronix.com/files/isadora-manual.pdf p.89].",
+      "Go Triggers bind Next Scene, Previous Scene, Go Forward and Go Backward to keys, MIDI or HID [https://troikatronix.com/files/isadora-manual.pdf p.147, https://troikatronix.com/files/isadora-manual.pdf p.148].",
+      "MIDI Scene Control maps program change, controller or note numbers onto Scene positions [https://troikatronix.com/files/isadora-manual.pdf p.206, https://troikatronix.com/files/isadora-manual.pdf p.207].",
+      "Cue Numbers are separate from position, in Scene Index, Manual or Automatic mode [https://troikatronix.com/files/isadora-manual.pdf p.144, https://troikatronix.com/files/isadora-manual.pdf p.145, https://troikatronix.com/files/isadora-manual.pdf p.146, https://troikatronix.com/files/isadora-manual.pdf p.147].",
+      "Auto-follow and auto-continue cues are patched from Movie Player loop end, Jump to Cue and Activate Scene [https://troikatronix.com/files/isadora-manual.pdf p.98, https://troikatronix.com/files/isadora-manual.pdf p.99, https://troikatronix.com/files/isadora-manual.pdf p.100].",
+      "Each Scene has a Cue Sheet of operator prompts that send keys to Keyboard Watchers [https://troikatronix.com/files/isadora-manual.pdf p.219, https://troikatronix.com/files/isadora-manual.pdf p.221].",
+      "Open Isadora File opens another document from a patch [https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes]."
+    ],
+    "names": [
+      "Scene",
+      "Scene List",
+      "primary",
+      "secondary",
+      "Activate Scene",
+      "Deactivate Scene",
+      "Activate Scene Amount",
+      "Go Triggers",
+      "Jump",
+      "Jump to Cue",
+      "Cue Number",
+      "Cue Sheet",
+      "Open Isadora File"
+    ],
+    "sources": [
+      "https://troikatronix.com/files/isadora-manual.pdf p.89, 98-100, 140-141, 144-148, 206-207, 219-221, 386",
+      "https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes"
+    ],
+    "what_a_max_user_would_notice": "The unit of structure is the Scene, and the host switches them on and off. You do not build a state machine to change sections; you move along a list, and the old section's patch simply stops.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 11,
+    "dimension": "Interface",
+    "summary": "The operator works in a Control Panel, a separate view from the patch. One panel serves a run of adjacent Scenes and changes when the Scene changes. Controls connect to actor inputs and outputs by Control ID, not by links, and can show the current value of what they control.",
+    "details": [
+      "The Control Panel occupies the same area as the Scene Editor; Show Actor/Control Split shows both [https://troikatronix.com/files/isadora-manual.pdf p.184].",
+      "Panels are split and joined between Scenes; a bar under the Scene List shows which Scenes share one [https://troikatronix.com/files/isadora-manual.pdf p.185, https://troikatronix.com/files/isadora-manual.pdf p.186, https://troikatronix.com/files/isadora-manual.pdf p.187].",
+      "A control broadcasts its Control ID and value to the active Scene; linked inputs follow; a linked output drives the control as a readout [https://troikatronix.com/files/isadora-manual.pdf p.188, https://troikatronix.com/files/isadora-manual.pdf p.189].",
+      "'Show Value of Linked Properties' makes a control track its input when something else changes it [https://troikatronix.com/files/isadora-manual.pdf p.186, https://troikatronix.com/files/isadora-manual.pdf p.189].",
+      "Panels have Edit Mode and Use Mode [https://troikatronix.com/files/isadora-manual.pdf p.187].",
+      "Show-Hide Control matches control addresses with * and ? wildcards to build tabbed, app-like panels and to share one panel between non-adjacent Scenes; Set Control Focus moves keyboard focus [https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes].",
+      "Monitor and Stage Preview controls show video inside the panel [https://troikatronix.com/files/isadora-manual.pdf p.859].",
+      "Scene Select, Next Cue and Prev Cue controls make a cueing interface for a video operator [https://troikatronix.com/files/isadora-manual.pdf p.113]."
+    ],
+    "names": [
+      "Control Panel",
+      "Control ID",
+      "Ctl Link",
+      "Show Actor/Control Split",
+      "Split Control Panels",
+      "Join Control Panels",
+      "Show Value of Linked Properties",
+      "Edit Controls",
+      "Use Controls",
+      "Show-Hide Control",
+      "Set Control Focus",
+      "Control Address",
+      "Monitor",
+      "Stage Preview"
+    ],
+    "sources": [
+      "https://troikatronix.com/files/isadora-manual.pdf p.113, 184-189, 859",
+      "https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes"
+    ],
+    "what_a_max_user_would_notice": "The operator's view is not built from the patch's own boxes. It is a separate layout whose controls reach into the patch by number, and it follows the show from Scene to Scene.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 12,
+    "dimension": "Editing while running",
+    "summary": "The active Scene runs while you edit it. Blind Mode lets you edit a different Scene while the active one keeps running and keeps answering Go Triggers; the Scene being edited is paused. Pause Engine stops everything for rescuing a patch that jumps away as soon as it starts.",
+    "details": [
+      "Editing the active Scene during a show is possible; Blind Mode exists to edit without activating [https://troikatronix.com/files/isadora-manual.pdf p.223].",
+      "In Blind Mode the original Scene stays active, Scenes can be added, moved or deleted, Go Triggers and transitions work, and the blind Scene's timers, players and messaging are stopped [https://troikatronix.com/files/isadora-manual.pdf p.223, https://troikatronix.com/files/isadora-manual.pdf p.224].",
+      "Pause Engine disables all timers and messaging; a red border marks the window [https://troikatronix.com/files/isadora-manual.pdf p.222].",
+      "Dropping an actor onto a link inserts it, and deleting a video actor heals the link, so effects can be changed in rehearsal without breaking the video [https://troikatronix.com/files/isadora-manual.pdf p.158, https://troikatronix.com/files/isadora-manual.pdf p.159].",
+      "A User Actor can be edited without disturbing its Scene; Revert discards edits, Redo restores them [https://troikatronix.com/files/isadora-manual.pdf p.172, https://troikatronix.com/files/isadora-manual.pdf p.178].",
+      "A GLSL shader shows its result on the actor's output as soon as Compile is pressed [https://support.troikatronix.com/support/solutions/articles/13000025645-glsl-shader-actor-tutorial].",
+      "Undo is available (Edit > Undo) [https://troikatronix.com/files/isadora-manual.pdf p.120]."
+    ],
+    "names": [
+      "Blind Mode",
+      "Pause Engine",
+      "Resume Engine",
+      "Into Existing Links",
+      "Auto-Relinking",
+      "Revert",
+      "Compile"
+    ],
+    "sources": [
+      "https://troikatronix.com/files/isadora-manual.pdf p.120, 158-159, 172, 178, 222-224",
+      "https://support.troikatronix.com/support/solutions/articles/13000025645-glsl-shader-actor-tutorial"
+    ],
+    "what_a_max_user_would_notice": "There is a safe way to prepare the next section during a show: open it blind, and it stays frozen while the running one plays on.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 13,
+    "dimension": "Scripting",
+    "summary": "Three languages run inside actors: Javascript (V8, sandboxed), Python through the Pythoner actor (not sandboxed, one interpreter for the whole session), and GLSL fragment shaders. Each script sees only its own inputs and returns values to its outputs. No way for a script to build or change the patch was found.",
+    "details": [
+      "Javascript needs a main() function, called when an input changes; inputs arrive in arguments[]; returning an array fills the outputs [https://support.troikatronix.com/support/solutions/articles/13000014933-getting-started-with-javascript, https://troikatronix.com/files/isadora-manual.pdf p.544].",
+      "The patching environment knows nothing about the script's insides; ports are mutable [https://support.troikatronix.com/support/solutions/articles/13000014933-getting-started-with-javascript].",
+      "The Javascript actor is sandboxed; Python is not [https://troikatronix.com/files/isadora-manual.pdf p.658].",
+      "The Python interpreter starts with the first Pythoner actor and lives until Isadora quits; python_init runs on activation, python_main on input change, python_finalize before deactivation [https://troikatronix.com/files/isadora-manual.pdf p.659, https://troikatronix.com/files/isadora-manual.pdf p.661].",
+      "Pythoner asks permission before running code each session; a virtual_env folder beside the document is used automatically [https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes].",
+      "GLSL Shader compiles fragment shaders, is built to accept ShaderToy code, takes up to eight textures, and did not support ShaderToy multipass at the time of the article [https://support.troikatronix.com/support/solutions/articles/13000025645-glsl-shader-actor-tutorial, https://troikatronix.com/files/isadora-manual.pdf p.513]."
+    ],
+    "names": [
+      "Javascript",
+      "main()",
+      "arguments",
+      "Pythoner",
+      "python_main",
+      "python_init",
+      "python_finalize",
+      "virtual_env",
+      "python_modules",
+      "GLSL Shader"
+    ],
+    "sources": [
+      "https://troikatronix.com/files/isadora-manual.pdf p.513, 544, 658-661",
+      "https://support.troikatronix.com/support/solutions/articles/13000014933-getting-started-with-javascript",
+      "https://support.troikatronix.com/support/solutions/articles/13000025645-glsl-shader-actor-tutorial",
+      "https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes"
+    ],
+    "what_a_max_user_would_notice": "A script is a box with inputs and outputs, not a way to drive the patcher. Scripting the patch itself, as patcher scripting does, has no counterpart in what was read.",
+    "confidence": "medium",
+    "open_questions": "The full Pythoner entry (p.657-675) was read only to p.661. Whether any scripting API can create actors or links was not found."
+  },
+  {
+    "id": 14,
+    "dimension": "Errors and debugging",
+    "summary": "Feedback is mostly visual and on the patch: link colours show whether data flows, hovering a video or audio link previews it, and script errors mark the actor and print to a Monitor window. A Status window and status bar show load. There is no stepping or breakpoint tool in what was read.",
+    "details": [
+      "Links are red with no data, green with data [https://troikatronix.com/files/isadora-manual.pdf p.157].",
+      "Pointing at a video link shows the video moving through it [https://troikatronix.com/files/isadora-manual.pdf p.18]; hovering audio links shows feedback [https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes].",
+      "A red alert on a Javascript actor means a runtime error; messages go to the Monitor window [https://troikatronix.com/files/isadora-manual.pdf p.544]; print() writes there [https://support.troikatronix.com/support/solutions/articles/13000014933-getting-started-with-javascript].",
+      "Python output and runtime errors go to the Monitor; compile errors must be fixed before the editor closes [https://troikatronix.com/files/isadora-manual.pdf p.659, https://troikatronix.com/files/isadora-manual.pdf p.661].",
+      "Status window: Cycles, Video Processing Overhead, FPS, a MIDI input monitor [https://troikatronix.com/files/isadora-manual.pdf p.216, https://troikatronix.com/files/isadora-manual.pdf p.217].",
+      "Missing plugins raise a dialog on opening and, since 4.5, are marked in the Scene Editor [https://support.troikatronix.com/support/solutions/articles/13000068654-what-to-do-if-plugins-are-listed-as-missing, https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes].",
+      "Warnings can be turned off one by one in preferences [https://troikatronix.com/files/isadora-manual.pdf p.209].",
+      "Hover help is shown for every actor and property [https://troikatronix.com/files/isadora-manual.pdf p.15]."
+    ],
+    "names": [
+      "Monitor",
+      "Status Window",
+      "Cycles",
+      "VPO",
+      "FPS",
+      "Pause Engine",
+      "Warnings Preferences"
+    ],
+    "sources": [
+      "https://troikatronix.com/files/isadora-manual.pdf p.15, 18, 157, 209, 216-217, 544, 659, 661",
+      "https://support.troikatronix.com/support/solutions/articles/13000014933-getting-started-with-javascript",
+      "https://support.troikatronix.com/support/solutions/articles/13000068654-what-to-do-if-plugins-are-listed-as-missing",
+      "https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes"
+    ],
+    "what_a_max_user_would_notice": "You debug by looking at the patch itself: which links are green, what video is on a link. There is no general message log for ordinary actors.",
+    "confidence": "medium",
+    "open_questions": ""
+  },
+  {
+    "id": 15,
+    "dimension": "Rendering",
+    "summary": "Video goes to numbered Stages through Projector actors. On one Stage, Projectors stack by a layer number with one of three blend modes, so draw order is a number, not the graph. Processing is on the GPU by default. Whole Scenes are composited during a crossfade.",
+    "details": [
+      "Higher layer numbers are closer; blend is additive, transparent or opaque, and intensity means brightness or opacity accordingly [https://troikatronix.com/files/isadora-manual.pdf p.133, https://troikatronix.com/files/isadora-manual.pdf p.652].",
+      "Projector can render in 3D with depth test [https://troikatronix.com/files/isadora-manual.pdf p.653].",
+      "Isadora 3 uses the GPU as the main way to process video and does not support several graphics cards [https://troikatronix.com/files/isadora-manual.pdf p.325].",
+      "vid-gpu is the default video type; CPU and Core Image streams are legacy [https://troikatronix.com/files/isadora-manual.pdf p.515].",
+      "Shared GPU Resources lets GPU video be routed to any Stage [https://troikatronix.com/files/isadora-manual.pdf p.204].",
+      "A Default Resolution and a When Combining Video rule decide sizes when streams differ or inputs are empty [https://troikatronix.com/files/isadora-manual.pdf p.202, https://troikatronix.com/files/isadora-manual.pdf p.203, https://troikatronix.com/files/isadora-manual.pdf p.204].",
+      "Scene crossfades are additive, transparent above, or transparent below [https://troikatronix.com/files/isadora-manual.pdf p.150, https://troikatronix.com/files/isadora-manual.pdf p.151].",
+      "Aligned Stages of the same resolution share one OpenGL context; misaligned ones each wait for their own swap [https://support.troikatronix.com/support/solutions/articles/13000032804-arranging-multiple-stages-for-best-performance].",
+      "A Virtual Stage has no display and uses the default size [https://troikatronix.com/files/isadora-manual.pdf p.228, https://troikatronix.com/files/isadora-manual.pdf p.230]."
+    ],
+    "names": [
+      "Stage",
+      "Virtual Stage",
+      "Projector",
+      "layer",
+      "blend",
+      "intensity",
+      "3D enable",
+      "Depth test",
+      "vid-gpu",
+      "Shared GPU Resources",
+      "Default Resolution",
+      "When Combining Video"
+    ],
+    "sources": [
+      "https://troikatronix.com/files/isadora-manual.pdf p.133, 150-151, 202-204, 228, 230, 325, 515, 652-653",
+      "https://support.troikatronix.com/support/solutions/articles/13000032804-arranging-multiple-stages-for-best-performance"
+    ],
+    "what_a_max_user_would_notice": "Where an image ends up, and above what, is decided by numbers on the final actor, not by the order of a render chain.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 16,
+    "dimension": "Performance and concurrency",
+    "summary": "Performance is shown as whole-engine numbers: Cycles, FPS, frame rendering load and video processing overhead. The tools for saving work are switching parts off: Scenes, gated routing, User Actor On/Off, bypass. Media loading runs in the background, and the GPU does the video.",
+    "details": [
+      "Frame Rendering Load turns yellow, then red near 100% [https://troikatronix.com/files/isadora-manual.pdf p.22].",
+      "Cycles should stay above twice the frame rate [https://troikatronix.com/files/isadora-manual.pdf p.22].",
+      "VPO is the share of processor time used by video actors in the active Scene [https://troikatronix.com/files/isadora-manual.pdf p.217].",
+      "Before a jump, media for the next Scene preloads in the background while the current Scene plays [https://support.troikatronix.com/support/solutions/articles/13000014938-understanding-preloading-safely-using-the-preload-actors].",
+      "macOS runs four background movie players of each type for stability [https://troikatronix.com/files/isadora-manual.pdf p.204].",
+      "No eGPUs or multiple discrete GPUs [https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes].",
+      "Video resolution and codec are the main costs; keep resolutions equal [https://troikatronix.com/files/isadora-manual.pdf p.326, https://troikatronix.com/files/isadora-manual.pdf p.327]."
+    ],
+    "names": [
+      "Cycles",
+      "FPS",
+      "Frame Rendering Load",
+      "VPO",
+      "Loaded Media",
+      "Background Movie Players",
+      "exec src",
+      "User Actor On/Off"
+    ],
+    "sources": [
+      "https://troikatronix.com/files/isadora-manual.pdf p.22, 204, 217, 326-327",
+      "https://support.troikatronix.com/support/solutions/articles/13000014938-understanding-preloading-safely-using-the-preload-actors",
+      "https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes"
+    ],
+    "what_a_max_user_would_notice": "There is no per-object timing. You see one load figure for the whole show and reduce it by switching whole branches or Scenes off.",
+    "confidence": "medium",
+    "open_questions": "Threads are not described in what was read."
+  },
+  {
+    "id": 17,
+    "dimension": "Several machines",
+    "summary": "Isadora copies on a LAN share numbers by multicast with Net Broadcaster and Listener. Over the internet, IzzyCast carries video, audio and data between copies. Otherwise it talks to other systems through standard show protocols and per-Stage video sharing.",
+    "details": [
+      "Net Broadcaster sends numbers to machines by Net ID (0 means all) using multicast; only numbers [https://troikatronix.com/files/isadora-manual.pdf p.616, https://troikatronix.com/files/isadora-manual.pdf p.208].",
+      "IzzyCast joins copies anywhere by session ID, built on the Zoom Video SDK and paid by credits [scans/isadora/isadora_insights.md §8, from https://support.troikatronix.com/support/solutions/articles/13000097342-izzycast-faq].",
+      "Each Stage or display can be sent via Syphon/Spout or Blackmagic output [https://troikatronix.com/files/isadora-manual.pdf p.231].",
+      "MIDI Show Control, MTC chase, OSC, Art-Net and the Matrix Value system connect to other show equipment [scans/isadora/isadora_insights.md §5]."
+    ],
+    "names": [
+      "Net Broadcaster",
+      "Net ID",
+      "IzzyCast",
+      "Syphon",
+      "Spout",
+      "Blackmagic Output",
+      "MIDI Show Control",
+      "MTC"
+    ],
+    "sources": [
+      "https://troikatronix.com/files/isadora-manual.pdf p.208, 231, 616",
+      "scans/isadora/isadora_insights.md",
+      "https://support.troikatronix.com/support/solutions/articles/13000097342-izzycast-faq"
+    ],
+    "what_a_max_user_would_notice": "Machine-to-machine sends reuse the same Listener actor as Scene-to-Scene sends, so a value can come from another Scene or another computer without changing the receiving patch.",
+    "confidence": "medium",
+    "open_questions": "No shared clock or frame sync between machines beyond incoming timecode was found."
+  },
+  {
+    "id": 18,
+    "dimension": "Deployment",
+    "summary": "There is no build or export: a show is the document plus its media folder, opened in Isadora itself. A document can be locked as run-only with a password. Preferences decide what happens on launch and after a file loads.",
+    "details": [
+      "Run-only files take a password; the author chooses whether users may edit Control Panels, import media and save [https://troikatronix.com/files/isadora-manual.pdf p.214, https://troikatronix.com/files/isadora-manual.pdf p.215].",
+      "Startup Action and After Loading File set the launch behaviour; Automatically Show Stages opens outputs [https://troikatronix.com/files/isadora-manual.pdf p.200].",
+      "Unattended start on macOS uses Login Items plus an AppleScript to bring the Stage forward [https://support.troikatronix.com/support/solutions/articles/13000014940-making-the-stage-frontmost-when-using-login-items-on-macos].",
+      "Isadora 4 runs on macOS 10.14-15 and Windows 10-11; not Linux, tablets or eGPUs [https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes].",
+      "Demo mode runs and edits but cannot save [scans/isadora/isadora_insights.md §9].",
+      "A missing Stage display opens as a preview window, so a show file opens on a laptop [scans/isadora/isadora_insights.md §3]."
+    ],
+    "names": [
+      "Save As Read Only",
+      "Unlock Document",
+      "Lock Document",
+      "Startup Action",
+      "After Loading File",
+      "Automatically Show Stages"
+    ],
+    "sources": [
+      "https://troikatronix.com/files/isadora-manual.pdf p.200, 214-215",
+      "https://support.troikatronix.com/support/solutions/articles/13000014940-making-the-stage-frontmost-when-using-login-items-on-macos",
+      "https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes",
+      "scans/isadora/isadora_insights.md"
+    ],
+    "what_a_max_user_would_notice": "Shipping means handing over the file and folder, optionally locked. There is no separate player build in what was read.",
+    "confidence": "medium",
+    "open_questions": "No runtime-only player or plugin export was found; absence is from the pages read, not confirmed."
+  },
+  {
+    "id": 19,
+    "dimension": "Extending",
+    "summary": "New actors come from plugin files in an Isadora Plugins folder (and controls from an Isadora Controls folder), from host formats Isadora loads as actors (FreeFrame, Quartz Composer and Core Image on macOS, Audio Units, VST3), from GLSL text files, and from shared User Actors.",
+    "details": [
+      "Plugins go in 'Isadora Plugins', control plugins in 'Isadora Controls' [https://troikatronix.com/files/isadora-manual.pdf p.213].",
+      "FreeFrame and Quartz Composer folders are set in preferences [https://troikatronix.com/files/isadora-manual.pdf p.211, https://troikatronix.com/files/isadora-manual.pdf p.212].",
+      "VST3 plugins are validated in a VST Plugin Inspector and appear as actors [https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes].",
+      "A shader saved as .txt in the GLSL Plugins folder appears in the toolbox; ISADORA_PLUGIN_NAME and ISADORA_PLUGIN_DESC set its name and help [https://support.troikatronix.com/support/solutions/articles/13000025645-glsl-shader-actor-tutorial].",
+      "Plugins must be 64-bit and, on macOS, may be blocked unless signed [https://support.troikatronix.com/support/solutions/articles/13000068654-what-to-do-if-plugins-are-listed-as-missing].",
+      "User Actors are shared as files and on the Add-Ons page [https://troikatronix.com/files/isadora-manual.pdf p.24, https://troikatronix.com/files/isadora-manual.pdf p.129]."
+    ],
+    "names": [
+      "Isadora Plugins",
+      "Isadora Controls",
+      "FreeFrame",
+      "Quartz Composer",
+      "Core Image",
+      "VST3",
+      "GLSL Plugins",
+      "ISADORA_PLUGIN_NAME",
+      "ISADORA_PLUGIN_DESC"
+    ],
+    "sources": [
+      "https://troikatronix.com/files/isadora-manual.pdf p.24, 129, 211-213",
+      "https://support.troikatronix.com/support/solutions/articles/13000025645-glsl-shader-actor-tutorial",
+      "https://support.troikatronix.com/support/solutions/articles/13000068654-what-to-do-if-plugins-are-listed-as-missing",
+      "https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes"
+    ],
+    "what_a_max_user_would_notice": "A text file of shader code can become a toolbox actor with named, ranged inputs, with no wrapper patch.",
+    "confidence": "medium",
+    "open_questions": "A C/C++ SDK for writing actors was not covered in the pages read."
+  },
+  {
+    "id": 20,
+    "dimension": "Media and files",
+    "summary": "Media lives outside the document. The Media View holds references in typed bins, each with an index number that actors use. Before a jump, Isadora reads the next Scene's players and preloads their media. References can be replaced by hand.",
+    "details": [
+      "The document holds only pointers; moving or renaming a file breaks it; keep document and media in one folder [https://troikatronix.com/files/isadora-manual.pdf p.135].",
+      "Each reference has a number used by actors [https://troikatronix.com/files/isadora-manual.pdf p.137].",
+      "Auto Adjust Media keeps actors on the same files when references are moved or deleted [https://troikatronix.com/files/isadora-manual.pdf p.139].",
+      "Double-clicking a reference replaces its file; a cleared reference reads <Unassigned> and plays nothing [https://troikatronix.com/files/isadora-manual.pdf p.138, https://troikatronix.com/files/isadora-manual.pdf p.139].",
+      "On a jump Isadora scans the target Scene's players for media, speed and start point, preloads, then jumps; Preload Scene does this early [https://support.troikatronix.com/support/solutions/articles/13000014938-understanding-preloading-safely-using-the-preload-actors].",
+      "Preloading every next Scene by habit fills memory; watch Loaded Media [https://support.troikatronix.com/support/solutions/articles/13000014938-understanding-preloading-safely-using-the-preload-actors].",
+      "Pythoner reads a python_modules folder and a virtual_env folder beside the document [https://troikatronix.com/files/isadora-manual.pdf p.660, https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes].",
+      "Global User Actors are separate files that must travel with a show [https://support.troikatronix.com/support/solutions/articles/13000085286-keeping-global-user-actors-in-sync-when-collaborating]."
+    ],
+    "names": [
+      "Media View",
+      "bin",
+      "Auto Adjust Media",
+      "Replace Media",
+      "<Unassigned>",
+      "Preload Scene",
+      "Video Preload",
+      "Loaded Media",
+      "python_modules",
+      "virtual_env"
+    ],
+    "sources": [
+      "https://troikatronix.com/files/isadora-manual.pdf p.135, 137-139, 660",
+      "https://support.troikatronix.com/support/solutions/articles/13000014938-understanding-preloading-safely-using-the-preload-actors",
+      "https://support.troikatronix.com/support/solutions/articles/13000085286-keeping-global-user-actors-in-sync-when-collaborating",
+      "https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes"
+    ],
+    "what_a_max_user_would_notice": "Media is chosen by number from a project-wide list, so any number source can pick a clip. Loading is the host's job: it reads what the next Scene will play and loads it before the switch.",
+    "confidence": "high",
+    "open_questions": "No collect-media or automatic relink search was found in what was read."
+  },
+  {
+    "id": 21,
+    "dimension": "Link scaling and conversion",
+    "summary": "Every numeric link rescales its value: the output's Limit range is mapped onto the input's Scale range. Setting Scale Min above Scale Max inverts it. Types convert on the link too. This is system-level because it is a property of every connection, not of any actor.",
+    "details": [
+      "By default a link scales the output's range to the input's range [https://troikatronix.com/files/isadora-manual.pdf p.163, https://troikatronix.com/files/isadora-manual.pdf p.116].",
+      "A MIDI 0-127 output into a 0-100 input is scaled proportionally [https://troikatronix.com/files/isadora-manual.pdf p.116].",
+      "Scale Min greater than Scale Max inverts the mapping [https://troikatronix.com/files/isadora-manual.pdf p.117, https://troikatronix.com/files/isadora-manual.pdf p.166].",
+      "A round port has scaling on, a square port off [scans/isadora/isadora_insights.md §1, from https://support.troikatronix.com/support/solutions/articles/13000113815-understanding-and-using-port-shapes-and-fills].",
+      "Float to integer truncates; integer to range sets both ends [https://troikatronix.com/files/isadora-manual.pdf p.115]."
+    ],
+    "names": [
+      "Scale Min",
+      "Scale Max",
+      "Limit Min",
+      "Limit Max"
+    ],
+    "sources": [
+      "https://troikatronix.com/files/isadora-manual.pdf p.115-117, 163, 166",
+      "https://support.troikatronix.com/support/solutions/articles/13000113815-understanding-and-using-port-shapes-and-fills",
+      "scans/isadora/isadora_insights.md"
+    ],
+    "what_a_max_user_would_notice": "The range mapping a Max patch does with a separate scaling object is already on every cord. A raw number does not pass unchanged unless the ranges match.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 22,
+    "dimension": "Activation lifecycle",
+    "summary": "Actors run only while their Scene is active, and many have defined behaviour at the moment of entry and exit. Entry applies Init values, fires Enter Scene actors, outputs global values and starts players. Exit stops media. This is system-level because every actor shares the same start and stop moments, set by the host.",
+    "details": [
+      "Enter Scene Trigger and Enter Scene Value fire when their Scene is activated [https://troikatronix.com/files/isadora-manual.pdf p.483].",
+      "Init values are applied and executed on each activation [https://troikatronix.com/files/isadora-manual.pdf p.166, https://support.troikatronix.com/support/solutions/articles/13000026371-understanding-the-new-isadora-v2-0-actor-processing-mode].",
+      "Get Global Values outputs its current values on Scene entry [https://support.troikatronix.com/support/solutions/articles/13000014936-using-the-global-value-actors].",
+      "Pythoner's python_init runs on activation and python_finalize just before deactivation [https://troikatronix.com/files/isadora-manual.pdf p.661].",
+      "A Movie Player plays as soon as its Scene starts unless 'visible' is initialized off [https://troikatronix.com/files/isadora-manual.pdf p.99].",
+      "Leaving a Scene with no fade stops all its media output [https://troikatronix.com/files/isadora-manual.pdf p.140].",
+      "The first Pythoner activation after launch takes about half a second, so the manual suggests one in the first Scene [https://troikatronix.com/files/isadora-manual.pdf p.660, https://troikatronix.com/files/isadora-manual.pdf p.661]."
+    ],
+    "names": [
+      "Enter Scene Trigger",
+      "Enter Scene Value",
+      "Init",
+      "python_init",
+      "python_finalize",
+      "Get Global Values"
+    ],
+    "sources": [
+      "https://troikatronix.com/files/isadora-manual.pdf p.99, 140, 166, 483, 660-661",
+      "https://support.troikatronix.com/support/solutions/articles/13000026371-understanding-the-new-isadora-v2-0-actor-processing-mode",
+      "https://support.troikatronix.com/support/solutions/articles/13000014936-using-the-global-value-actors"
+    ],
+    "what_a_max_user_would_notice": "\"Load\" happens every time a section starts, not once per patch, and leaving a section is a clean stop the host performs.",
+    "confidence": "high",
+    "open_questions": ""
+  },
+  {
+    "id": 23,
+    "dimension": "Transitions between parts",
+    "summary": "Crossfading from one Scene to the next is a host service. Each Scene has fade-in and fade-out times and a crossfade mode, and the fade covers its video and sound together. Patches can read and set a Scene's level. This is system-level because the host, not the patch, mixes whole sections.",
+    "details": [
+      "Fade In, Fade Out and Crossfade Mode are Scene Settings; a progress bar shows the fade [https://troikatronix.com/files/isadora-manual.pdf p.150, https://troikatronix.com/files/isadora-manual.pdf p.151].",
+      "Jump fades video and audio between the Scenes [https://troikatronix.com/files/isadora-manual.pdf p.84]; Jump to Cue can override the Scene's fades [https://troikatronix.com/files/isadora-manual.pdf p.89].",
+      "Scene Intensity reports a Scene's level during a fade [https://troikatronix.com/files/isadora-manual.pdf p.694].",
+      "Activate Scene Amount sets a secondary Scene's visibility and volume continuously; zero deactivates it [https://troikatronix.com/files/isadora-manual.pdf p.96].",
+      "Matrix Value Receive mixes channel levels by Scene intensity during crossfades [scans/isadora/isadora_insights.md §5 DMX]."
+    ],
+    "names": [
+      "Fade In Time",
+      "Fade Out Time",
+      "Crossfade Mode",
+      "Additive Crossfade",
+      "Transparent Crossfade",
+      "Scene Intensity",
+      "Activate Scene Amount",
+      "fade ovrd"
+    ],
+    "sources": [
+      "https://troikatronix.com/files/isadora-manual.pdf p.84, 89, 96, 150-151, 694",
+      "scans/isadora/isadora_insights.md"
+    ],
+    "what_a_max_user_would_notice": "Changing sections smoothly needs no mixer patch: the old and new Scenes both run during the fade and the host blends their output.",
+    "confidence": "high",
+    "open_questions": ""
+  }
+]

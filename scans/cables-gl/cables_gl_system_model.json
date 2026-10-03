@@ -1,0 +1,753 @@
+[
+ {
+  "id": 1,
+  "dimension": "Evaluation",
+  "summary": "Two mechanisms drive work. Value ports push on change: when an output is set, connected inputs run their onChange, but only if the value really changed. Trigger ports are function calls with no data, and a visual patch hangs everything that draws off the MainLoop op, which fires its trigger once per rendered frame. A branch that no trigger reaches does not run.",
+  "details": [
+   "onChange runs when a connected op calls set(), when the user edits the value in the panel, or when a link is removed; it is skipped if the new value equals the old one [docs:5_writing_ops/dev_ops/dev_ops]",
+   "Triggering an output calls each connected op's onTriggered at once [docs:5_writing_ops/dev_callbacks/dev_callbacks]",
+   "MainLoop is 'the heart-piece of every WebGL-patch' and triggers the other ops according to the frame rate; the trigger-port page says it updates connected ports 60 times a second [op:Ops.Gl.MainLoop_v2, docs:5_writing_ops/dev_creating_ports/dev_ports_trigger/dev_ports_trigger]",
+   "An op that must update continuously should take a trigger input wired to MainLoop [docs:5_writing_ops/dev_callbacks/dev_callbacks]",
+   "Pressing d disables an op and its children, so a whole branch stops [docs:0_howtouse/ui_walkthrough/ui_walkthrough, docs:0_howtouse/keys/keys]",
+   "RouteTrigger, SwitchTrigger and TimedSequence send the frame trigger to one branch; the other branches do not run [op:Ops.Trigger.RouteTrigger_v2, op:Ops.Trigger.TimedSequence]",
+   "TriggerOnChangeNumber turns a value change into a trigger, bridging the two kinds of flow [op:Ops.Number.TriggerOnChangeNumber_v2]",
+   "Arrays and objects must be sent with setRef so a change registers even when the reference is the same [docs:5_writing_ops/dev_creating_ports/dev_ports_array/dev_ports_array]"
+  ],
+  "names": [
+   "MainLoop",
+   "onChange",
+   "onTriggered",
+   "Trigger",
+   "setRef",
+   "TriggerOnChangeNumber",
+   "RouteTrigger"
+  ],
+  "sources": [
+   "https://cables.gl/docs/5_writing_ops/dev_ops/dev_ops",
+   "https://cables.gl/docs/5_writing_ops/dev_callbacks/dev_callbacks",
+   "https://cables.gl/op/Ops.Gl.MainLoop_v2",
+   "https://cables.gl/docs/5_writing_ops/dev_creating_ports/dev_ports_trigger/dev_ports_trigger",
+   "https://cables.gl/docs/0_howtouse/keys/keys",
+   "https://cables.gl/op/Ops.Number.TriggerOnChangeNumber_v2"
+  ],
+  "what_a_max_user_would_notice": "Most visual work is not caused by a message arriving; it happens because the frame trigger walks through it every frame. Values sit on ports and are read when the frame passes, and a repeated identical value causes no work at all.",
+  "confidence": "high",
+  "open_questions": "Whether a value change propagates immediately through a whole chain of value ops, or only when next read, is described only at the op-code level (onChange fires on set)."
+ },
+ {
+  "id": 2,
+  "dimension": "Ordering",
+  "summary": "Order is set by the trigger graph. A trigger output calls its children at once, depth first, and ops like Sequence give numbered outputs that fire in order. The op guidelines ask every op with a trigger in to also pass a trigger out, so chains run in series without many Sequence ops. The docs read never tie order to screen position.",
+  "details": [
+   "Sequence has one exe input and numbered trigger outputs 0 to 15 [op:Ops.Trigger.Sequence]",
+   "Any op with a trigger in should have it as its first input and should also have a trigger out, 'to avoid having to use too many sequence ops' [docs:5_writing_ops/guidelines/guidelines]",
+   "A 'finished' trigger sits to the right of the trigger out [docs:5_writing_ops/guidelines/guidelines]",
+   "NumberSequence sets its outputs left to right, then fires a trigger [op:Ops.Number.NumberSequence]",
+   "Draw order is trigger order; LayerSequence is Sequence named for layers [op:Ops.Gl.LayerSequence]",
+   "Lights must come before the materials they light in the chain [docs:7_lighting/lights/lights]"
+  ],
+  "names": [
+   "Sequence",
+   "LayerSequence",
+   "NumberSequence",
+   "Trigger",
+   "Next",
+   "Execute"
+  ],
+  "sources": [
+   "https://cables.gl/op/Ops.Trigger.Sequence",
+   "https://cables.gl/docs/5_writing_ops/guidelines/guidelines",
+   "https://cables.gl/docs/7_lighting/lights/lights"
+  ],
+  "what_a_max_user_would_notice": "Order is not read off where boxes sit; it comes from which trigger output a chain hangs from and the Sequence outputs. The usual shape is a long vertical chain of trigger-in, trigger-out ops, closer to a call stack than to fanning out from one outlet.",
+  "confidence": "medium",
+  "open_questions": "Order among several cables leaving one trigger output is not stated on any page read."
+ },
+ {
+  "id": 3,
+  "dimension": "Time",
+  "summary": "There are several clocks. MainLoop gives the frame. The timeline is one keyframe time line for the whole patch, in seconds, with a set frame rate. Animation ops without the timeline take the frame trigger and compute their own progress, and Timer, TimeDelta and the browser's millisecond clock give elapsed and delta time. RenderAnim steps the patch at a fixed rate to render out of real time.",
+  "details": [
+   "TimeLineTime reports the current timeline time in seconds; TimeLineFrame reports the frame [op:Ops.TimeLine.TimeLineTime, op:Ops.TimeLine.TimeLineFrame_v2]",
+   "TimelineConfig sets FPS and 'Restrict to frames' and reports Duration Seconds [op:Ops.TimeLine.TimelineConfig]",
+   "Any number port can be keyframed from a menu beside it; keys have repeat modes (off, repeat, mirror, offset) and interpolation (linear, step, preset curves, bezier, clip) [docs:2_1_timeline/animation, blog.cables.gl/animations]",
+   "Timer has Speed, Play, Reset and 'Sync to timeline' [op:Ops.Anim.Timer_v2]",
+   "TimeDelta gives the time between incoming triggers, in seconds or ms [op:Ops.Anim.TimeDelta]",
+   "Milliseconds wraps the browser's performance.now() [op:Ops.Date.Milliseconds]",
+   "Interval triggers every x ms and its page warns not to use it in animations that will be recorded [op:Ops.Trigger.Interval]",
+   "RenderAnim renders at a given FPS for a duration in seconds or frames, to PNG or WebM [op:Ops.Gl.RenderAnim_v2]",
+   "TimeLineBPM draws a beat grid on the timeline; MidiClock and ClockSequencer give BPM-based triggers [op:Ops.TimeLine.Viz.TimeLineBPM, op:Ops.Devices.Midi.MidiClock, op:Ops.WebAudio.ClockSequencer]"
+  ],
+  "names": [
+   "MainLoop",
+   "Timeline",
+   "TimeLineTime",
+   "TimeLineFrame",
+   "TimelineConfig",
+   "Timer",
+   "TimeDelta",
+   "Milliseconds",
+   "Interval",
+   "RenderAnim",
+   "TimeLineBPM",
+   "Anim",
+   "TimelineValue"
+  ],
+  "sources": [
+   "https://cables.gl/docs/2_1_timeline/animation",
+   "https://blog.cables.gl/animations/",
+   "https://cables.gl/op/Ops.TimeLine.TimeLineTime",
+   "https://cables.gl/op/Ops.TimeLine.TimelineConfig",
+   "https://cables.gl/op/Ops.Anim.Timer_v2",
+   "https://cables.gl/op/Ops.Anim.TimeDelta",
+   "https://cables.gl/op/Ops.Trigger.Interval",
+   "https://cables.gl/op/Ops.Gl.RenderAnim_v2"
+  ],
+  "what_a_max_user_would_notice": "Time is mostly frames and a document-wide timeline in seconds, not a scheduler of timed messages. A keyframe curve lives on the port itself, so 'animate this setting' needs no extra objects.",
+  "confidence": "medium",
+  "open_questions": "How animation ops not synced to the timeline behave during RenderAnim (real time or stepped time) is not stated."
+ },
+ {
+  "id": 4,
+  "dimension": "Data types",
+  "summary": "Ports are typed, and each type has a colour: Trigger, Number, String, Boolean, Array and Object. Textures, geometry, shaders, audio nodes and HTML elements all travel on Object ports, so an Object port accepts anything unless the op checks the link itself. Conversion between types is done by named ops whose name carries both types.",
+  "details": [
+   "Port types: Trigger (yellow), Number/String/Boolean (green), Array (light purple), Object (dark purple) [docs:5_writing_ops/dev_creating_ports/dev_creating_ports]",
+   "JavaScript has one number type, so Number ports hold doubles; inInt and inFloat differ in the panel control [docs:5_writing_ops/dev_creating_ports/dev_ports_value/dev_ports_value, docs:5_writing_ops/dev_ops/dev_ops]",
+   "Object ports accept any object; ops must restrict links with shouldLink, or 'every object-port can connect to it, which will most likely lead to errors' [docs:5_writing_ops/object_ports/object_ports]",
+   "Conversion ops carry both type names, e.g. ArrayToString, NumberToBool [docs:5_writing_ops/guidelines/guidelines]",
+   "Array ops should copy, not alias, and output null when nothing is connected [docs:5_writing_ops/guidelines/guidelines]",
+   "Mesh ops output a geometry object; material ops output a shader [docs:5_writing_ops/guidelines/guidelines]",
+   "Point data is a flat array read in threes [cables_gl_insights.md section 7]"
+  ],
+  "names": [
+   "Trigger",
+   "Number",
+   "String",
+   "Boolean",
+   "Array",
+   "Object",
+   "shouldLink",
+   "Dynamic"
+  ],
+  "sources": [
+   "https://cables.gl/docs/5_writing_ops/dev_creating_ports/dev_creating_ports",
+   "https://cables.gl/docs/5_writing_ops/object_ports/object_ports",
+   "https://cables.gl/docs/5_writing_ops/guidelines/guidelines"
+  ],
+  "what_a_max_user_would_notice": "Cables refuse to connect where types do not match, and conversions are visible ops. There are no symbol-headed messages with a selector; a port holds one plain value or one JavaScript object.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 5,
+  "dimension": "Rates and channels",
+  "summary": "There is one control rate: the frame, set by MainLoop, plus whatever event triggers arrive. Audio is a graph of browser Web Audio nodes passed on Object ports; there is no per-sample patching. Many copies are made by trigger loops (Repeat) or by GPU instancing, not by multichannel cables.",
+  "details": [
+   "MainLoop has FPS Limit, Max Pixel Density and 'Reduce FPS unfocussed' [op:Ops.Gl.MainLoop_v2]",
+   "An audio cable is an Object port holding an audio node [docs:5_writing_ops/webaudio/webaudio]",
+   "No signal-rate layer; op authors are pointed to tone.js [docs:5_writing_ops/webaudio/webaudio]",
+   "The sound card gives 2 inputs and 2 outputs because of browser limits [docs:faq/technical/technical]",
+   "Repeat triggers everything under it N times; the performance page advises instancing for high counts [op:Ops.Trigger.Repeat_v2, docs:9_performance_optimization/02_usual_suspects/usual_suspects]",
+   "A MultiPort grows as cables are added [docs:5_writing_ops/dev_creating_ports/dev_multi_ports/dev_multi_ports]"
+  ],
+  "names": [
+   "MainLoop",
+   "FPS Limit",
+   "Repeat",
+   "MeshInstancer",
+   "MultiPort",
+   "Web Audio"
+  ],
+  "sources": [
+   "https://cables.gl/op/Ops.Gl.MainLoop_v2",
+   "https://cables.gl/docs/5_writing_ops/webaudio/webaudio",
+   "https://cables.gl/docs/faq/technical/technical",
+   "https://cables.gl/op/Ops.Trigger.Repeat_v2"
+  ],
+  "what_a_max_user_would_notice": "There is no separate signal world with its own cords. Audio nodes are wired as objects and the browser runs them; everything else runs at frame rate or on events.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 6,
+  "dimension": "State and saving",
+  "summary": "A patch is saved as JSON on the cables server, holding the ops, their links and every input port's typed value. Values that a cable feeds are not the stored ones; when the cable is removed the port returns to its typed value. Assets are uploaded into the patch, and patch-only ops are saved with it. Presets and frozen values are stored as hidden port values on their ops.",
+  "details": [
+   "Exports include the patch as a JSON file loaded by patchFile [docs:4_export_embed/embedding/embedding, docs:4_export_embed/dev_embed_webservers/dev_embed_webservers]",
+   "When a link to a number or string port is removed, the form value is set again; array and object ports go to null [docs:5_writing_ops/dev_ops/dev_ops]",
+   "Preset stores its data in ports marked 'Used internally by op' (data, sets, presetid), with none, xfade and a-b interpolation [op:Ops.Number.Preset]",
+   "Sidebar Presets_v2 keeps eight preset objects on its own ports [op:Ops.Sidebar.Presets_v2]",
+   "FreezeNumber captures a value on a button press and keeps it across reload [op:Ops.Number.FreezeNumber, cables_gl_insights.md section 17]",
+   "Backups hold patch, assets and custom ops; the newest 20 are kept and restored as a new patch [docs:4_export_embed/patch_backups/patch_backups]",
+   "op.onLoaded runs after the whole patch is loaded, linked and libraries are in; init runs twice on load [docs:5_writing_ops/dev_callbacks/dev_callbacks]",
+   "PatchInfo reports Last Saved and Last Exported [op:Ops.Cables.PatchInfo_v2]",
+   "A multiplayer pilot can revert the patch for everyone to the last saved state [docs:5_1_permissions/4_multiplayer/multiplayer]"
+  ],
+  "names": [
+   "patchFile",
+   "Preset",
+   "Presets",
+   "FreezeNumber",
+   "onLoaded",
+   "Backups",
+   "PatchInfo"
+  ],
+  "sources": [
+   "https://cables.gl/docs/5_writing_ops/dev_ops/dev_ops",
+   "https://cables.gl/docs/4_export_embed/embedding/embedding",
+   "https://cables.gl/op/Ops.Number.Preset",
+   "https://cables.gl/op/Ops.Number.FreezeNumber",
+   "https://cables.gl/docs/4_export_embed/patch_backups/patch_backups",
+   "https://cables.gl/docs/5_writing_ops/dev_callbacks/dev_callbacks"
+  ],
+  "what_a_max_user_would_notice": "Every typed setting is kept with the file without any extra storage object, because the setting lives on the port. Runtime values flowing on cables are not saved; only what is typed into ports.",
+  "confidence": "medium",
+  "open_questions": "Whether values computed at runtime (not typed) ever survive a save is not stated, beyond the freeze and preset ops."
+ },
+ {
+  "id": 7,
+  "dimension": "Parameters",
+  "summary": "Every input port is a parameter. Selecting an op shows all its inputs in a panel as sliders, checkboxes, menus and text fields, and the op's code decides which control is drawn. A typed value is kept; a cable overrides it. Any number port can be keyframed, and a port can be driven from outside through variables.",
+  "details": [
+   "Ports show as controls in the panel on the right when the op is selected [docs:0_howtouse/ui_walkthrough/ui_walkthrough]",
+   "The port call decides the control: inDropDown, inStringEditor, inTriggerButton; setPortGroup groups ports under headings; hidePort keeps the panel control but hides the port [docs:5_writing_ops/dev_gui_ui_attributes/dev_gui_ui_attributes]",
+   "A cable can be dragged straight onto a parameter name in another op's panel; clicking a connected parameter jumps to its source op [docs:0_howtouse/ui_walkthrough/ui_walkthrough]",
+   "Keyframing is turned on from the three-dot menu next to a port [docs:2_1_timeline/animation]",
+   "Preset binds parameters by dragging its Create Variable output onto them [op:Ops.Number.Preset]",
+   "Clicking an output field in the panel copies its value to the clipboard [docs:0_howtouse/ui_walkthrough/ui_walkthrough]"
+  ],
+  "names": [
+   "inFloat",
+   "inInt",
+   "inBool",
+   "inString",
+   "inDropDown",
+   "inStringEditor",
+   "inTriggerButton",
+   "setPortGroup",
+   "hidePort",
+   "Create Variable"
+  ],
+  "sources": [
+   "https://cables.gl/docs/0_howtouse/ui_walkthrough/ui_walkthrough",
+   "https://cables.gl/docs/5_writing_ops/dev_gui_ui_attributes/dev_gui_ui_attributes",
+   "https://cables.gl/docs/2_1_timeline/animation",
+   "https://cables.gl/op/Ops.Number.Preset"
+  ],
+  "what_a_max_user_would_notice": "An input is not just a hole a cord plugs into: it has a visible, stored value and a control in the panel. Settings are changed in the panel, not by typing arguments into a box.",
+  "confidence": "high",
+  "open_questions": "Ranges and units per port: the docs read show controls but do not describe min/max settings for the user."
+ },
+ {
+  "id": 8,
+  "dimension": "Encapsulation and reuse",
+  "summary": "A SubPatch groups ops in one box; its ports are made by dragging a cable to a 'create port' port, and PatchInput and PatchOutput are the inside ends. A SubPatchOp is a new named op built by patching, the counterpart of an abstraction, and it lives in a namespace like a coded op. Ops are versioned in their name (_v2), old versions stay loadable, and the editor offers an update.",
+  "details": [
+   "SubPatch: drag a cable to the dyn port to expose it; rename with t [op:Ops.Ui.SubPatch]",
+   "PatchInput must not be used outside a subpatch [op:Ops.Ui.PatchInput]",
+   "SubPatchOps have a border; made from a selection or 'Patch a new op' [docs:5_writing_ops/patchingops/subpatchops]",
+   "Namespaces nest by permission: Ops.Patch may contain User, Team, Extension and core ops; each level only those below it [docs:5_writing_ops/patchingops/subpatchops]",
+   "Op version is part of the name; old versions are hidden from the add dialog and get an update button [docs:5_writing_ops/dev_renaming/dev_renaming]",
+   "GetSubPatchName gives the name of the subpatch an op is in [op:Ops.Cables.GetSubPatchName]",
+   "Op code can depend on libraries, attachments and npm packages (npm in standalone) [docs:5_writing_ops/dev_libraries/dev_libraries]"
+  ],
+  "names": [
+   "SubPatch",
+   "SubPatchOp",
+   "PatchInput",
+   "PatchOutput",
+   "create port",
+   "Ops.Patch",
+   "Ops.User",
+   "Ops.Team",
+   "Ops.Extension",
+   "_v2"
+  ],
+  "sources": [
+   "https://cables.gl/op/Ops.Ui.SubPatch",
+   "https://cables.gl/op/Ops.Ui.PatchInput",
+   "https://cables.gl/docs/5_writing_ops/patchingops/subpatchops",
+   "https://cables.gl/docs/5_writing_ops/dev_renaming/dev_renaming",
+   "https://cables.gl/docs/5_1_permissions/3_ops/ops"
+  ],
+  "what_a_max_user_would_notice": "Reusable parts are ops with a full namespaced, versioned name and an owner, not files found on a search path. Ports come from dragging cables, so they arrive typed and named.",
+  "confidence": "medium",
+  "open_questions": "How a SubPatchOp takes arguments, and whether many instances update when it is edited, is not described. 'Blueprints' appear on no page read."
+ },
+ {
+  "id": 9,
+  "dimension": "Names and scope",
+  "summary": "Variables (VarSet/VarGet for numbers, strings, arrays, objects, textures) and named triggers (TriggerSend/TriggerReceive) link parts without cables. Names are case sensitive and reach across the patch and into subpatches. The same variables are the door to the page that embeds the patch.",
+  "details": [
+   "Variable names are case sensitive [docs:4_export_embed/dev_embed_vars/dev_embed_vars]",
+   "TriggerSend/TriggerReceive send triggers 'over large patches and into subpatches' [op:Ops.Trigger.TriggerSend]",
+   "The Ops.Vars namespace has Set, Get, Trigger-get and Trigger-set ops per type, plus VariablesAsObject and VariablesFromObject [ops:Ops.Vars]",
+   "Page JavaScript reads, sets and listens with CABLES.patch.getVar / setVariable; initial values can be given in the patch config [docs:4_export_embed/dev_embed_vars/dev_embed_vars]",
+   "TriggerReceiveFilter hears every named trigger starting with a prefix [op:Ops.Trigger.TriggerReceiveFilter]",
+   "Op names are full namespaced names such as Ops.Gl.MainLoop [docs:5_writing_ops/guidelines/guidelines]"
+  ],
+  "names": [
+   "VarSetNumber",
+   "VarGetNumber",
+   "TriggerVarGetNumber",
+   "VariablesAsObject",
+   "TriggerSend",
+   "TriggerReceive",
+   "TriggerReceiveFilter",
+   "getVar",
+   "setVariable"
+  ],
+  "sources": [
+   "https://cables.gl/op/Ops.Vars.VarSetNumber_v2",
+   "https://cables.gl/op/Ops.Vars.VarGetNumber_v2",
+   "https://cables.gl/ops/Ops.Vars",
+   "https://cables.gl/op/Ops.Trigger.TriggerSend",
+   "https://cables.gl/docs/4_export_embed/dev_embed_vars/dev_embed_vars"
+  ],
+  "what_a_max_user_would_notice": "Wireless names are typed, and a variable has one value you read anywhere rather than messages broadcast to receivers. No page offers a per-instance name scope.",
+  "confidence": "medium",
+  "open_questions": "No page says whether two instances of one SubPatchOp share variables, or whether any per-instance scope exists."
+ },
+ {
+  "id": 10,
+  "dimension": "Show structure",
+  "summary": "A work is one patch with one graph and one timeline. Parts are switched by routing the frame trigger to one branch, or by disabling ops. The docs describe no cue list or scene manager.",
+  "details": [
+   "RouteTrigger, SwitchTrigger and TimedSequence pick which branch the frame trigger reaches [op:Ops.Trigger.RouteTrigger_v2, op:Ops.Trigger.TimedSequence]",
+   "The timeline is one line of time for the whole patch, with loop areas and TimeLineLoop [blog.cables.gl/animations, op:Ops.TimeLine.TimeLineLoop]",
+   "Disable an op and its children with d [docs:0_howtouse/keys/keys]",
+   "Areas group ops visually and move them together [docs:0_howtouse/ui_walkthrough/ui_walkthrough]",
+   "No cue list, scene manager or show-control protocol appears [cables_gl_insights.md section 4]"
+  ],
+  "names": [
+   "RouteTrigger",
+   "SwitchTrigger",
+   "TimedSequence",
+   "TimeLineLoop",
+   "Area"
+  ],
+  "sources": [
+   "https://cables.gl/op/Ops.Trigger.RouteTrigger_v2",
+   "https://cables.gl/op/Ops.Trigger.TimedSequence",
+   "https://blog.cables.gl/animations/",
+   "https://cables.gl/docs/0_howtouse/keys/keys"
+  ],
+  "what_a_max_user_would_notice": "Turning a scene off means cutting off its trigger: an unreached branch costs nothing. A linear piece can be laid out on the timeline instead of sequenced with messages.",
+  "confidence": "medium",
+  "open_questions": ""
+ },
+ {
+  "id": 11,
+  "dimension": "Interface",
+  "summary": "Controls for the person using the patch are built with ops, not placed by hand. A Sidebar op starts a panel over the canvas and controls chain from it; HTML ops build page elements styled with CSS. The editor's parameter panel is the author's interface; Viz ops draw readouts on the patch itself.",
+  "details": [
+   "Sidebar controls (Slider, Toggle, Button, DropDown, ColorPicker, XYPad, Presets) chain from a Sidebar op and have no position ports [op:Ops.Sidebar.Sidebar, cables_gl_insights.md section 5]",
+   "Sidebar controls have an Input port, a Set Default trigger, Grey Out and Visible [op:Ops.Sidebar.Slider_v3]",
+   "Ctrl-click a sidebar element to find its op [docs:0_howtouse/ui_walkthrough/ui_walkthrough]",
+   "Ops.Html makes page elements from the patch [docs:faq/html_css/html_css_getting_started]",
+   "Viz ops (VizNumber, VizTexture, VizGraph) draw on the patch for the editor; any op can via renderVizLayer [docs:5_writing_ops/dev_vizops/dev_vizops]",
+   "UIMode reports whether the patch runs in the editor, a remote viewer, standalone, or embedded, so debug display can be hidden outside the editor [op:Ops.Cables.UIMode]",
+   "PlayerControlPanel is an HTML player UI for media or the timeline [op:Ops.Html.Utils.PlayerControlPanel_v2]"
+  ],
+  "names": [
+   "Sidebar",
+   "Slider",
+   "Toggle",
+   "DropDown",
+   "XYPad",
+   "Presets",
+   "Ops.Html",
+   "VizNumber",
+   "renderVizLayer",
+   "UIMode",
+   "PlayerControlPanel"
+  ],
+  "sources": [
+   "https://cables.gl/op/Ops.Sidebar.Sidebar",
+   "https://cables.gl/op/Ops.Sidebar.Slider_v3",
+   "https://cables.gl/docs/5_writing_ops/dev_vizops/dev_vizops",
+   "https://cables.gl/op/Ops.Cables.UIMode",
+   "https://cables.gl/op/Ops.Html.Utils.PlayerControlPanel_v2"
+  ],
+  "what_a_max_user_would_notice": "There is no second view of the same boxes for the performer. The performer's panel is generated by ops in the graph and laid out automatically, or built as a web page.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 12,
+  "dimension": "Editing while running",
+  "summary": "The patch keeps rendering in the browser while it is edited; changes to parameters, links and keyframes show at once. Undo exists. Editing an op's code in the web editor needs a save, and the tutorial reloads the patch; the standalone watches op files and reloads on save.",
+  "details": [
+   "The timeline lets you 'see every change happen in real time' [docs:2_1_timeline/animation]",
+   "Undo is cmd/ctrl+z in the patch and in the timeline [docs:0_howtouse/keys/keys]",
+   "Hello Op: click Save to execute the new code, then reload the patch with cmd+r [docs:5_writing_ops/dev_hello_op/dev_hello_op]",
+   "Standalone op files are watched, so editing in an external editor reflects immediately [docs:6_2_standalone/1_coding_ops/coding_ops]",
+   "Public patches can be opened in the editor by anyone and changed without saving [docs:5_1_permissions/1_patches/patches]"
+  ],
+  "names": [
+   "Undo",
+   "Save",
+   "Manage Op Directories"
+  ],
+  "sources": [
+   "https://cables.gl/docs/2_1_timeline/animation",
+   "https://cables.gl/docs/0_howtouse/keys/keys",
+   "https://cables.gl/docs/5_writing_ops/dev_hello_op/dev_hello_op",
+   "https://cables.gl/docs/6_2_standalone/1_coding_ops/coding_ops"
+  ],
+  "what_a_max_user_would_notice": "Same live feel as a running patcher, with the output preview in the same window. Code changes to an op are a save-and-reload step in the browser.",
+  "confidence": "medium",
+  "open_questions": "Whether a saved op-code change replaces running instances without a page reload in the web editor is not settled."
+ },
+ {
+  "id": 13,
+  "dimension": "Scripting",
+  "summary": "JavaScript is the language. Every op is one JavaScript file with ports declared in code and callbacks on them; users write their own ops in the browser editor and can read the source of every core op with the e key. Ops can include GLSL, Web Workers, WebAssembly and outside libraries. Pages read show no op that builds or rewires the graph from inside the patch.",
+  "details": [
+   "Ports are op.inFloat, op.inTrigger, op.outNumber and similar; code at the top runs when the op is added [docs:5_writing_ops/dev_ops/dev_ops]",
+   "Callbacks: onChange, onTriggered, onLinkChanged, init, onLoaded, onDelete [docs:5_writing_ops/dev_callbacks/dev_callbacks]",
+   "New ops are created as Ops.User.<name>.<Op> from the add dialog [docs:5_writing_ops/dev_hello_op/dev_hello_op]",
+   "Attachments hold shader source, data or worker code; inc_ attachments run first [docs:5_writing_ops/dev_attachments/dev_attachments]",
+   "CustomShader turns uniforms into ports [op:Ops.Gl.Shader.CustomShader_v2]",
+   "GetOpsByTag lists ops with a tag [ops:Ops.Cables]"
+  ],
+  "names": [
+   "op.inFloat",
+   "op.outNumber",
+   "onChange",
+   "onTriggered",
+   "onLinkChanged",
+   "onLoaded",
+   "onDelete",
+   "attachments",
+   "Ops.User"
+  ],
+  "sources": [
+   "https://cables.gl/docs/5_writing_ops/dev_ops/dev_ops",
+   "https://cables.gl/docs/5_writing_ops/dev_callbacks/dev_callbacks",
+   "https://cables.gl/docs/5_writing_ops/dev_hello_op/dev_hello_op",
+   "https://cables.gl/docs/5_writing_ops/dev_attachments/dev_attachments"
+  ],
+  "what_a_max_user_would_notice": "Scripting is not a script object inside the patch; a script becomes a first-class op with typed ports and panel controls, indistinguishable from a built-in one.",
+  "confidence": "medium",
+  "open_questions": "Whether an op can create, delete or connect other ops at runtime is not covered by any page read."
+ },
+ {
+  "id": 14,
+  "dimension": "Errors and debugging",
+  "summary": "Errors show on the op itself as a grey hint, orange warning or red error with a red dot. Many ops also report failure as an output port. Flow mode lights cables as data and triggers pass, Viz ops sit on cables as pass-through readouts, and logs go to the browser developer tools.",
+  "details": [
+   "op.setUiError(id, message, level) with 0 hint, 1 warning, 2 error [docs:5_writing_ops/dev_callbacks/dev_callbacks]",
+   "Ports such as Found, Has Error, Not a number, Expression Valid report failure as data [cables_gl_insights.md section 17]",
+   "Flow mode (f) shows how often and when things trigger [docs:9_performance_optimization/01_tools/tools]",
+   "op.log, not console.log, so messages carry the op reference and are silenced when embedded with silent [docs:5_writing_ops/dev_callbacks/dev_callbacks]",
+   "StepDebugTrigger/StepDebugNumber feed a step debugger [op:Ops.Debug.StepDebugger.StepDebugTrigger]",
+   "The embed option onError is called on a critical error such as no WebGL [docs:4_export_embed/embedding/embedding]"
+  ],
+  "names": [
+   "setUiError",
+   "op.log",
+   "Flow mode",
+   "VizNumber",
+   "VizTexture",
+   "StepDebugTrigger",
+   "onError"
+  ],
+  "sources": [
+   "https://cables.gl/docs/5_writing_ops/dev_callbacks/dev_callbacks",
+   "https://cables.gl/docs/9_performance_optimization/01_tools/tools",
+   "https://cables.gl/docs/4_export_embed/embedding/embedding"
+  ],
+  "what_a_max_user_would_notice": "Problems are marked where they happen, on the op, instead of in a separate console window. Failure is often a port value the patch can branch on.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 15,
+  "dimension": "Rendering",
+  "summary": "WebGL (WebGL2 where available) on the GPU, with WebGPU as an extension. The trigger tree is the scene: a state op (transform, blend, material, camera, light) applies its state, triggers its children, and the state holds only for what is under it. Draw order is trigger order. 2D effects run in a shared ImageCompose chain whose size is set once at the top.",
+  "details": [
+   "Transform ops in series make parent and child transforms [docs:1_beginner/beginner2_transformations/beginner2_transformations]",
+   "Lights go before the materials they light; ResetLights ends them for a branch [docs:7_lighting/lights/lights]",
+   "Every op that draws has a Render checkbox; mesh ops output geometry [docs:5_writing_ops/guidelines/guidelines]",
+   "Safari and iOS still use WebGL1 [docs:faq/webgl_differences/webgl_differences]",
+   "ImageCompose sets size, format, filter and wrap for its chain [op:Ops.Gl.ImageCompose.ImageCompose_v4]",
+   "RenderToTexture gives colour and depth textures [op:Ops.Gl.RenderToTexture_v3]"
+  ],
+  "names": [
+   "MainLoop",
+   "Transform",
+   "BlendMode",
+   "Camera",
+   "ResetLights",
+   "Sequence",
+   "ImageCompose",
+   "RenderToTexture",
+   "WebGpu"
+  ],
+  "sources": [
+   "https://cables.gl/docs/1_beginner/beginner2_transformations/beginner2_transformations",
+   "https://cables.gl/docs/7_lighting/lights/lights",
+   "https://cables.gl/docs/5_writing_ops/guidelines/guidelines",
+   "https://cables.gl/docs/faq/webgl_differences/webgl_differences"
+  ],
+  "what_a_max_user_would_notice": "Render state is inherited down the chain instead of set as attributes on each drawn object, so where a box sits in the trigger chain decides what it affects.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 16,
+  "dimension": "Performance and concurrency",
+  "summary": "The patch runs in the browser's main thread and on the GPU; heavy work can go to a Web Worker from an op attachment. Cost is shown by the Performance op (FPS, CPU and GPU ms per frame, draw and upload counts), the Profiler (CPU per op and subpatch), Flow mode, and timing ops that measure a branch.",
+  "details": [
+   "Performance should sit directly under MainLoop; it graphs frame time, MainLoop time, CPU and GPU time, and warns in orange [docs:9_performance_optimization/01_tools/tools, op:Ops.Gl.Performance]",
+   "Profiler under Tools > Profile reports CPU use by op and subpatch [docs:9_performance_optimization/01_tools/02_profiler/profiler_howto]",
+   "PerformanceMeasure and StopWatch time the ops under them [op:Ops.Gl.PerformanceMeasure, op:Ops.Debug.StopWatch]",
+   "Attachments can hold a Web Worker's code [docs:5_writing_ops/dev_attachments/dev_attachments]",
+   "MainLoop can reduce FPS when unfocused; embedded patches can pause() and resume() [op:Ops.Gl.MainLoop_v2, docs:4_export_embed/embedding/embedding]",
+   "Usual causes: high-count trigger loops and large blurs [docs:9_performance_optimization/02_usual_suspects/usual_suspects]"
+  ],
+  "names": [
+   "Performance",
+   "Profiler",
+   "Flow mode",
+   "PerformanceMeasure",
+   "StopWatch",
+   "TriggersPerSecond"
+  ],
+  "sources": [
+   "https://cables.gl/docs/9_performance_optimization/01_tools/tools",
+   "https://cables.gl/op/Ops.Gl.Performance",
+   "https://cables.gl/docs/9_performance_optimization/01_tools/02_profiler/profiler_howto"
+  ],
+  "what_a_max_user_would_notice": "Because work is one frame walk, cost is measured per frame and per branch, and a branch can be timed by putting a measuring op above it.",
+  "confidence": "medium",
+  "open_questions": "No page describes threading of the core beyond workers inside ops."
+ },
+ {
+  "id": 17,
+  "dimension": "Several machines",
+  "summary": "Sharing between machines is done with network ops, not a system-wide sync. SocketCluster connects patches through a server by channel and topic; WebSocket client ops are core; OSC needs a bridge in the browser and is native only in standalone. There is no texture sharing.",
+  "details": [
+   "SocketCluster sends objects and triggers between clients; the standalone can run the server [op:Ops.Extension.SocketCluster.SocketClusterClient_v2, op:Ops.Extension.Standalone.Net.SocketClusterServer]",
+   "UIMode reports a 'remote viewer' mode [op:Ops.Cables.UIMode]",
+   "No Syphon or Spout; screen-capture software is suggested [docs:faq/technical/technical]",
+   "OSC through osc2ws in the browser; Osc ops in standalone [docs:faq/midi_osc/midi_osc]",
+   "Multiplayer editing shares the editor session, not the running output [docs:5_1_permissions/4_multiplayer/multiplayer]"
+  ],
+  "names": [
+   "SocketCluster",
+   "WebSocket",
+   "Osc2Ws",
+   "Remote Viewer"
+  ],
+  "sources": [
+   "https://cables.gl/op/Ops.Extension.SocketCluster.SocketClusterClient_v2",
+   "https://cables.gl/docs/faq/technical/technical",
+   "https://cables.gl/docs/faq/midi_osc/midi_osc",
+   "https://cables.gl/op/Ops.Cables.UIMode"
+  ],
+  "what_a_max_user_would_notice": "Many copies of a piece usually means the same web page opened on many devices, linked by a socket server you patch yourself.",
+  "confidence": "medium",
+  "open_questions": "What the remote viewer is and how it connects is not described on any page read."
+ },
+ {
+  "id": 18,
+  "dimension": "Deployment",
+  "summary": "A patch exports as a web page: the core script, only the ops it uses, the patch JSON and an assets folder. Targets include a ZIP, GitHub Pages, Netlify, an iframe, an Electron executable built on the cables servers, a command-line export and a full patch file. Everything needed to run is MIT licensed; a page that loads assets must be served over HTTP.",
+  "details": [
+   "Export contents and the index.html sample [docs:4_export_embed/dev_embed_webservers/dev_embed_webservers]",
+   "Export targets [docs:4_export_embed/dev_embed/dev_embed]",
+   "CABLES.EMBED.addPatch or new CABLES.Patch; options glCanvasId, prefixAssetPath, onError, onFinishedLoading, silent [docs:4_export_embed/embedding/embedding]",
+   "Standalone launch flags for fullscreen, screen and GPU [docs:6_2_standalone/5_standalone_faq/standalone_faq]",
+   "Licence: MIT runtime, no licence to buy [docs:faq/licence_payment/licence/licence]",
+   "Exported pages must be served by a web server [docs:faq/embedding/running_locally/running_locally]"
+  ],
+  "names": [
+   "Export",
+   "CABLES.EMBED.addPatch",
+   "CABLES.Patch",
+   "prefixAssetPath",
+   "onFinishedLoading",
+   "standalone"
+  ],
+  "sources": [
+   "https://cables.gl/docs/4_export_embed/dev_embed/dev_embed",
+   "https://cables.gl/docs/4_export_embed/embedding/embedding",
+   "https://cables.gl/docs/4_export_embed/dev_embed_webservers/dev_embed_webservers",
+   "https://cables.gl/docs/faq/licence_payment/licence/licence"
+  ],
+  "what_a_max_user_would_notice": "The finished piece is a website, and the player is any browser. The page around it can drive the patch.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 19,
+  "dimension": "Extending",
+  "summary": "New parts are JavaScript ops, written in the browser editor or in any editor with the standalone. A user op looks and behaves exactly like a core op, with its own documentation page made automatically. Ops can pull in outside scripts, npm packages (standalone), WebAssembly and GLSL.",
+  "details": [
+   "Every op gets a documentation page when it is made [docs:5_writing_ops/dev_ops/dev_ops]",
+   "Libraries from uploads, URLs, other ops, core libs or npm [docs:5_writing_ops/dev_libraries/dev_libraries]",
+   "Standalone op directories form a hierarchy where the topmost same-named op wins, so core ops can be overridden [docs:6_2_standalone/1_coding_ops/coding_ops]",
+   "Ops can be shared as folders or npm-style packages [docs:6_2_standalone/2_sharing_ops/sharing_ops]",
+   "Viz ops draw custom editor readouts [docs:5_writing_ops/dev_vizops/dev_vizops]"
+  ],
+  "names": [
+   "Ops.User",
+   "Ops.Team",
+   "Ops.Extension",
+   "attachments",
+   "libraries",
+   "Manage Op Directories"
+  ],
+  "sources": [
+   "https://cables.gl/docs/5_writing_ops/dev_ops/dev_ops",
+   "https://cables.gl/docs/5_writing_ops/dev_libraries/dev_libraries",
+   "https://cables.gl/docs/6_2_standalone/1_coding_ops/coding_ops"
+  ],
+  "what_a_max_user_would_notice": "There is no compiled SDK step; extending the tool is writing a small script in the same window, and every built-in op is readable source to start from.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 20,
+  "dimension": "Media and files",
+  "summary": "Files are dragged into the editor and uploaded into the patch's assets on the server; some are converted on upload (FBX to GLB, CSV to JSON, MIDI to JSON). Ops refer to files by URL. Exports copy the assets folder, and the standalone keeps assets as local files. Loading is tracked as patch-wide state.",
+  "details": [
+   "Supported file types and conversions [docs:0_howtouse/files/files]",
+   "PatchFileList outputs the filenames uploaded to the patch; AssetPathURL gives the asset path [op:Ops.Cables.PatchFileList, ops:Ops.Cables]",
+   "LoadingStatus gives Loading, Progress, Jobs and a loading-finished trigger, and can start the timeline [op:Ops.Cables.LoadingStatus_v2]",
+   "prefixAssetPath tells an embedded patch where its assets folder is [docs:4_export_embed/embedding/embedding]",
+   "Standalone files are file: URLs [docs:6_2_standalone/5_standalone_faq/standalone_faq]",
+   "Assets are downloaded from the file browser [docs:faq/technical/technical]"
+  ],
+  "names": [
+   "assets",
+   "PatchFileList",
+   "AssetPathURL",
+   "LoadingStatus",
+   "LoadingJob",
+   "prefixAssetPath",
+   "UploadAsset"
+  ],
+  "sources": [
+   "https://cables.gl/docs/0_howtouse/files/files",
+   "https://cables.gl/op/Ops.Cables.PatchFileList",
+   "https://cables.gl/op/Ops.Cables.LoadingStatus_v2",
+   "https://cables.gl/docs/4_export_embed/embedding/embedding"
+  ],
+  "what_a_max_user_would_notice": "Media belongs to the patch and is stored with it online, not found on disk by name through a search path.",
+  "confidence": "medium",
+  "open_questions": ""
+ },
+ {
+  "id": 21,
+  "dimension": "Two kinds of cable: values and triggers",
+  "summary": "System-level because every port and every op design follows from it. Values (numbers, strings, arrays, objects) sit on ports and push on change; triggers carry no data and only say 'run now'. Taking a value at a moment needs a trigger form of an op, such as TriggerNumber or TriggerVarGetNumber.",
+  "details": [
+   "Trigger ports carry no data [docs:5_writing_ops/dev_creating_ports/dev_ports_trigger/dev_ports_trigger]",
+   "Ops.Vars has Var… (value) and TriggerVar… / VarTrigger… (sampled or set on trigger) forms per type [ops:Ops.Vars]",
+   "TriggerOnChangeNumber converts a change into a trigger [op:Ops.Number.TriggerOnChangeNumber_v2]",
+   "Ports named Execute take the main trigger and Trigger / Next pass it on [docs:5_writing_ops/dev_ops/dev_ops]"
+  ],
+  "names": [
+   "Trigger",
+   "Execute",
+   "Next",
+   "TriggerNumber",
+   "TriggerVarGetNumber",
+   "VarTriggerNumber"
+  ],
+  "sources": [
+   "https://cables.gl/docs/5_writing_ops/dev_creating_ports/dev_ports_trigger/dev_ports_trigger",
+   "https://cables.gl/ops/Ops.Vars",
+   "https://cables.gl/docs/5_writing_ops/dev_ops/dev_ops"
+  ],
+  "what_a_max_user_would_notice": "Data and 'when' are split onto different cables. There is no single cord that both carries a number and causes the next step; hot and cold inlets have no direct counterpart.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 22,
+  "dimension": "The browser as platform",
+  "summary": "System-level because it sets limits across every area. The patch is a web page: audio needs a user click to start, data from other servers needs CORS headers, video codecs are whatever the browser plays, sound I/O is two channels, and hardware access goes through web APIs (Web MIDI, WebXR, sensors). The standalone lifts some limits.",
+  "details": [
+   "PlayButton exists because audio needs a user interaction [docs:faq/audio_browsers/audio_browsers]",
+   "CORS and the CorsProxy op [docs:4_export_embed/cors/cors]",
+   "2 in, 2 out audio [docs:faq/technical/technical]",
+   "Standalone is for offline work, local files, npm and native features [docs:6_2_standalone/0_general/general]",
+   "UIMode tells editor, standalone and embedded apart [op:Ops.Cables.UIMode]"
+  ],
+  "names": [
+   "PlayButton",
+   "CorsProxy",
+   "standalone",
+   "UIMode"
+  ],
+  "sources": [
+   "https://cables.gl/docs/faq/audio_browsers/audio_browsers",
+   "https://cables.gl/docs/4_export_embed/cors/cors",
+   "https://cables.gl/docs/faq/technical/technical",
+   "https://cables.gl/docs/6_2_standalone/0_general/general"
+  ],
+  "what_a_max_user_would_notice": "The same patch runs on a phone with no install, but every part of the patch is bounded by what a browser tab is allowed to do.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 23,
+  "dimension": "Patches live online, with owners and permissions",
+  "summary": "System-level because it shapes saving, reuse and sharing. Patches are stored on the cables server and are private, unlisted or public; op namespaces carry ownership (patch, user, team, extension) and decide which ops may be published. Several people can join one patch, with one Pilot whose edits everyone sees.",
+  "details": [
+   "Patch visibility levels; public patches can be cloned [docs:5_1_permissions/1_patches/patches]",
+   "Namespace permissions and which ops a published patch may use [docs:5_1_permissions/3_ops/ops]",
+   "Multiplayer roles: non-participant, participant, pilot; pilot requests auto-accept after 20 s [docs:5_1_permissions/4_multiplayer/multiplayer]",
+   "An HTTP API lists patches and starts exports [docs:9_1_communication/api/api]",
+   "dev.cables.gl gets new work first [docs:faq/general/dev/dev]"
+  ],
+  "names": [
+   "Ops.Patch",
+   "Ops.User",
+   "Ops.Team",
+   "Ops.Extension",
+   "Pilot",
+   "Participant",
+   "Patchlists"
+  ],
+  "sources": [
+   "https://cables.gl/docs/5_1_permissions/1_patches/patches",
+   "https://cables.gl/docs/5_1_permissions/3_ops/ops",
+   "https://cables.gl/docs/5_1_permissions/4_multiplayer/multiplayer"
+  ],
+  "what_a_max_user_would_notice": "A patch is closer to a shared online document than to a file on your disk; reuse and permission go through accounts and namespaces.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 24,
+  "dimension": "Loading is an observable phase",
+  "summary": "System-level because start-up is something the patch can watch and wait on. A patch-wide LoadingStatus reports progress and jobs, ops can add their own LoadingJob, op code has an onLoaded callback, and the timeline can start only when loading is done. PreRender draws chosen times ahead to compile shaders and upload assets.",
+  "details": [
+   "LoadingStatus outputs Finished Initial Loading, Progress, Jobs and a finished trigger; Play Timeline input [op:Ops.Cables.LoadingStatus_v2]",
+   "op.onLoaded after the whole patch loads; init runs twice [docs:5_writing_ops/dev_callbacks/dev_callbacks]",
+   "onFinishedLoading embed callback [docs:4_export_embed/embedding/embedding]",
+   "PreRender and DemoPrerender [op:Ops.TimeLine.PreRender, op:Ops.TimeLine.DemoPrerender]"
+  ],
+  "names": [
+   "LoadingStatus",
+   "LoadingJob",
+   "onLoaded",
+   "onFinishedLoading",
+   "PreRender"
+  ],
+  "sources": [
+   "https://cables.gl/op/Ops.Cables.LoadingStatus_v2",
+   "https://cables.gl/docs/5_writing_ops/dev_callbacks/dev_callbacks",
+   "https://cables.gl/docs/4_export_embed/embedding/embedding"
+  ],
+  "what_a_max_user_would_notice": "Instead of one load moment that fires once, loading has progress and a finish event that the patch itself can use to gate playback.",
+  "confidence": "high",
+  "open_questions": ""
+ }
+]

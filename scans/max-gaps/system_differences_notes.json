@@ -1,0 +1,110 @@
+{
+  "overview": [
+    "What makes work happen. Max pushes: an event fires and the message runs down the cords. TouchDesigner pulls: a node computes only when an output asks for it and something it depends on changed. MadMapper, cables.gl and Gem run a frame loop. Isadora pulls from the end of each chain. So in the other tools unwatched work often costs nothing, while in Max it runs until something upstream stops it.",
+    "What decides order. In Max, several cords from one outlet fire right to left by where their destinations sit on screen. No other tool lets position decide that: Pd uses the order the cords were made, which the patch does not show; TouchDesigner orders by dependency, cables.gl by the trigger graph, MadMapper by its lists. Isadora uses position only where several links meet one input. Only Max and Pd need trigger as the everyday way to say what happens first.",
+    "Data and timing. In Max one message is both the data and the moment, and hot and cold inlets decide which inputs act. cables.gl puts data and 'run now' on two different kinds of cable. In TouchDesigner a wire carries no data at all; it only says where to fetch it.",
+    "What a file keeps. Max and Pd save the structure of a patch, not its current values, so every Max patch needs a storage choice. TouchDesigner, MadMapper, Isadora and cables.gl save every setting's value as part of the file, and a reopened project looks as it did.",
+    "Settings as parameters. In TouchDesigner, MadMapper, Isadora and cables.gl every setting is a named parameter with a range and a control. In Max that layer is opt-in: attributes everywhere, Parameter Mode on top for the objects that need it. Pd has none. Only TouchDesigner lets a setting be an expression, an export from a channel, or a two-way binding.",
+    "Names. Max and Pd names are global unless a prefix makes them local. TouchDesigner names are paths in a hierarchy, and every reference is drawn as a line. Isadora keeps each Scene sealed, with numbered channels between them. MadMapper's names form one tree that is also the OSC address of every parameter.",
+    "The shape of a show. Isadora and MadMapper build scenes, cues and transitions into the program. Max, TouchDesigner, cables.gl and Pd build them out of ordinary parts. A Max theatre or installation patch has to design its own scene layer.",
+    "Rendering. Jitter joins objects to a named context and orders them with depth testing or a layer number on each object. cables.gl and Gem treat the chain as a render tree: a transform or material applies to everything under it. TouchDesigner makes rendering an operator whose output is just another image. MadMapper and Isadora draw by list order or layer number.",
+    "Types on the cord. TouchDesigner wires join only one family and every change of kind is a visible converter node. Isadora links check types and rescale numbers on every link. cables.gl colours ports by type with a catch-all Object type. Max sends small values as atoms and big data by name, with converter objects between domains.",
+    "Errors. TouchDesigner, cables.gl and Isadora show errors on the node, and TouchDesigner repeats the mark on every component that contains it. Max and Pd print to a console that links back to the object. TouchDesigner and cables.gl also show each node's cost; Max shows only whole-patch meters.",
+    "Using more cores. Most of these tools do the main work on one thread. TouchDesigner (Engine COMP) and Pd ([pd~]) reach for a second process. Max has separate scheduler and audio threads and can spread audio across top-level patchers or poly~ voices.",
+    "Where the work ends up. plugdata runs the whole patch, editor included, as a plug-in in any DAW, and Heavy compiles patches to C++, plug-ins and Daisy. cables.gl exports a web page. TouchDesigner has a player-only runtime. Max builds standalones, Max for Live devices and RNBO exports. MadMapper and Isadora run only in their own app, with MadMapper's hardware players as the exception."
+  ],
+  "dimensions": {
+    "1": {
+      "difference": "Max pushes events and computes DSP every vector while audio is on. TouchDesigner pulls on demand and skips anything nobody watches. MadMapper, cables.gl and Gem draw once per frame, and cables.gl skips any branch the frame trigger does not reach. Isadora pulls from the end of each chain and can stop a whole upstream branch with a gated Gate. Pd works like Max.",
+      "advice": "In Max, unused work keeps running until something upstream stops it, so stop it at the top: turn off the metro or close a gate above the heavy part, and switch whole audio sections off with mute~ or pcontrol. Put the stop above the expensive object, not below it."
+    },
+    "2": {
+      "difference": "Max and Pd follow each path to its end before the next. Max orders several cords from one outlet by screen position, right to left. Pd orders them by the order the cords were made, which nobody can see. TouchDesigner orders by dependency, cables.gl by the trigger graph, MadMapper by list order, and Isadora by pull plus top-to-bottom position where several links meet one input.",
+      "advice": "Whenever one outlet feeds more than one place and the order matters, use trigger. A patch that leans on screen position breaks when someone tidies the layout, and the same patch copied into Pd runs in a different order."
+    },
+    "3": {
+      "difference": "Max has several clocks side by side: the millisecond scheduler, the sample clock, the render frame and the transport. TouchDesigner is frame-based with local timelines per component. MadMapper has an engine frame rate, a global BPM, timelines and a Master Speed. Isadora has a frame clock and no global timeline. cables.gl has the frame plus one timeline. Pd has one logical clock for messages and audio.",
+      "advice": "Choose the clock that matches what the result is for. Animation that ends up on screen should step with the render frame (jit.line, which loads as jit.mo.time, ramps in step with the render context) rather than the millisecond scheduler. Musical timing belongs on the transport."
+    },
+    "4": {
+      "difference": "Max sends atoms and lists, and passes big data (matrices, textures, dicts, buffers) by name. TouchDesigner has operator families that only join their own kind. Isadora types every port and converts numbers on links. cables.gl colours ports by type, with one Object type for textures, geometry and the rest. Pd has no int type: 1 and 1. are the same.",
+      "advice": "Because a Max cord often carries a name rather than the data, the cord does not show you the content. Look at it with a probe or a display object in the path. Keep each change of kind as a visible converter object, as TouchDesigner forces you to."
+    },
+    "5": {
+      "difference": "Max and Pd keep control, audio and frame rates apart. Pd sets block size, overlap and resampling per window with [block~]. TouchDesigner makes rate a property of each CHOP's data, with everything cooking on the frame. Isadora and cables.gl have one frame rate and handle audio separately. Many channels are one MC cord in Max, one cord in Pd, a channel bundle in TouchDesigner.",
+      "advice": "MC is Max's version of channels on one cord, and its wrapper messages give each channel its own value. For control data shared with visuals there is no message-rate equivalent (see 'Many channels from one generator' in the gap list)."
+    },
+    "6": {
+      "difference": "Max and Pd save structure, not values: a slider position is gone on reopen unless something stores it. Pd does this on purpose and has no preset system. TouchDesigner, MadMapper, Isadora and cables.gl save every setting's value in the file, and MadMapper and Isadora add scenes or snapshots as built-in presets.",
+      "advice": "Decide how a Max patch keeps its state before building it: Snapshots, pattrstorage with autopattr, or initial values in Parameter Mode. Without one, every control reopens at its default, and the operator sees a patch that has forgotten everything."
+    },
+    "7": {
+      "difference": "TouchDesigner, MadMapper, Isadora and cables.gl treat every setting as a named parameter with a range and a control. TouchDesigner adds four modes per parameter: constant, expression, export, bind. MadMapper gives every parameter an OSC address automatically. Max has attributes everywhere and an opt-in Parameter Mode layer that Snapshots, mapping, OSC and Live use. Pd has parameters only at the edges, through plugdata and Heavy.",
+      "advice": "Turn on Parameter Mode for the controls an operator or a host should reach, so they gain a range, an initial value, mapping and an OSC address in one step. Max has no expressions on attributes, so a computed setting is an explicit object feeding an attrui or a message, where it can be seen."
+    },
+    "8": {
+      "difference": "Max has three forms (p, abstractions, bpatchers) plus poly~ for copies. TouchDesigner makes the component the unit of everything, with clones that follow a master and a Replicator that makes one copy per table row. Isadora's User Actors update every copy on request. cables.gl versions ops in their names. Pd's [clone] replicates an abstraction like poly~. MadMapper has no subpatches at all.",
+      "advice": "Use abstractions, not copied p boxes, for anything used twice: every copy then follows the one file. Give each a small set of named settings through patcherargs, the way TouchDesigner components are driven by their custom parameters. For many copies, poly~ plays the role of TouchDesigner's Replicator and Pd's [clone]."
+    },
+    "9": {
+      "difference": "Max and Pd names are global unless made local by hand (#0, ---, $0, pv). TouchDesigner names are paths in a hierarchy and every reference is drawn as a dashed line. Isadora seals each Scene and passes data on numbered channels. cables.gl variables reach the whole patch. MadMapper's item tree doubles as the OSC address space.",
+      "advice": "A send/receive pair in Max is a link nobody can see, unlike a TouchDesigner reference. Keep such links few, name them clearly in capitals, use a cord when the two ends are close, and give every name inside a copied thing its per-copy prefix."
+    },
+    "10": {
+      "difference": "Isadora is built as a row of Scenes with transitions handled by the host. MadMapper has a grid of Scenes and Cues and a master timeline. Max, TouchDesigner, cables.gl and Pd have one graph, and scenes and cues are built from parts.",
+      "advice": "A Max piece with sections needs its scene layer designed early: what each section turns on and off, how state is stored per section (pattrstorage or Snapshots), how cues are listed (qlist or coll), and how sections fade. Isadora's rule that an inactive section does nothing is worth copying: switch whole sections off, not just their outputs."
+    },
+    "11": {
+      "difference": "Max places controls in the patch, where each one is part of the dataflow, and gives a second layout in presentation mode. TouchDesigner builds panels as a separate tree of components. Isadora links controls to inputs by number in a separate Control Panel. cables.gl builds its panel from ops. MadMapper's editor is the interface.",
+      "advice": "Max's strength is that a control sits in the path, so what it shows is what flows. Keep that, and use attrui where a control should be generated from an attribute instead of drawn by hand."
+    },
+    "12": {
+      "difference": "All six keep running while edited. Isadora adds Blind Mode, editing one Scene while another runs the show. TouchDesigner has wide undo and a Safe Mode for crashed files. In Max and Pd, retyping a box makes a new object and loses its state.",
+      "advice": "Max has no way to edit one section offline while another plays. Before changing a running show patch, store its state, since any retyped box comes back at its defaults."
+    },
+    "13": {
+      "difference": "Max has JavaScript in v8 and Node in node.script, both able to script the patcher. TouchDesigner uses Python everywhere, including in parameters. Pd's file is itself a list of messages that can edit a running patch. cables.gl ops are JavaScript files. Isadora runs JavaScript, Python and GLSL inside actors that cannot change the patch. MadMapper has no scripting.",
+      "advice": "Reach for v8 when logic branches a lot, as the preferred-objects table already says. Scripting the patcher itself is possible in Max, but a patch that rebuilds itself is hard to read; keep it for tools, not shows."
+    },
+    "14": {
+      "difference": "TouchDesigner, cables.gl and Isadora put errors on the node that raised them, and TouchDesigner repeats the mark on every containing component. Max and Pd print to a console that links back to the object. Max adds watchpoints, breakpoints and probes. MadMapper has no console, only monitors.",
+      "advice": "Since a Max error is only a console line, give script objects a status outlet and show it in the patch, the way many cables.gl ops have a 'has error' output. Missing objects and unknown attributes are mostly silent in Max, so check names before shipping."
+    },
+    "15": {
+      "difference": "Jitter joins objects to a named render context and orders them by depth testing, or by a layer number when depth testing is off on those objects. cables.gl and Gem treat the chain as a render tree where state applies to what is under it. TouchDesigner makes rendering an operator that outputs an image. MadMapper and Isadora order by list or layer number.",
+      "advice": "For 2D layering in Jitter, set @layer on each object and turn depth testing off on those same objects, or use jit.gl.layer, whose defaults are already depth off and blending on. Max's userguide says depth testing overrides the layer value otherwise. This corrects the repo's own forum notes, which put depth_enable on jit.world."
+    },
+    "16": {
+      "difference": "TouchDesigner and cables.gl show the cost of every node. Max, Pd, Isadora and MadMapper show whole-engine numbers. More cores come from extra processes in TouchDesigner (Engine COMP) and Pd ([pd~]); Max splits audio across threads by top-level patcher or poly~ voice.",
+      "advice": "Max has no per-object cost display, so find a slow part by switching sections off one at a time while watching the CPU and frame-rate meters."
+    },
+    "17": {
+      "difference": "TouchDesigner documents frame-locked sync across machines. MadMapper and Isadora connect through show protocols (OSC, NDI, Art-Net, Link, timecode). cables.gl uses network ops and a server. Pd speaks its own plain-text network format. Max networks through objects: OSC and OSCQuery, jit.net, Node for Max.",
+      "advice": "For several Max machines, drive them all from one source of time and control over OSC, and keep each patch deterministic from those inputs. Max has no frame lock across machines."
+    },
+    "18": {
+      "difference": "Max builds standalones, Max for Live devices and RNBO exports. plugdata runs the full patch as a plug-in in any DAW, and Heavy compiles patches to C++, plug-ins and Daisy. cables.gl exports a web page. TouchDesigner has a player-only runtime and licence tiers. MadMapper and Isadora run only in their own app.",
+      "advice": "When a patch must run inside a DAW other than Live, or on embedded hardware, RNBO is Max's route. Plan for its narrower object set from the start rather than porting a finished patch."
+    },
+    "19": {
+      "difference": "Every tool lets a new part look like a built-in one: Max externals and abstractions with refpages, TouchDesigner components and Custom Operators, cables.gl user ops with auto-made doc pages, Pd externals and pdlua classes. MadMapper extends only through shader and fixture files.",
+      "advice": "A Max abstraction or script object becomes a first-class box when it ships with a refpage and a help file, which is what lets tools check its ports and attributes. Butter_tools already works this way."
+    },
+    "20": {
+      "difference": "Max finds files by name along a search path, and Projects collect dependencies. MadMapper and TouchDesigner can collect or embed media in the project. Isadora preloads the next Scene's media before a jump. cables.gl uploads assets into the patch. Pd has search paths and no collect step.",
+      "advice": "For shows, keep media inside a Max Project so it travels and consolidates with the patch, and load clips before they are needed rather than at the moment of the cue."
+    }
+  },
+  "extras": {
+    "Max: Box text versus live state": "This is the reason a Max patch needs a storage choice (dimension 6) and loses state when a box is retyped (dimension 12).",
+    "TouchDesigner: What a connection is": "Max's wireless links (send/receive, value, named buffers) are invisible. Keep them few and named clearly.",
+    "TouchDesigner: The network as queryable data": "Max patches can be queried by scripting the patcher from v8, but nothing in the patch lists its own objects as data the way OP Find DAT does.",
+    "Isadora: Link scaling and conversion": "Max cords never rescale. Ranges are set on the source object where possible, or with scale or zmap, and scale does not clip.",
+    "Isadora: Activation lifecycle": "Max has one load moment, not per-section entry and exit. A section that must reset when it starts needs its own 'enter' message.",
+    "Isadora: Transitions between parts": "Crossfading whole sections is something a Max patch builds itself, for video and sound together.",
+    "cables.gl: Two kinds of cable: values and triggers": "Max's hot and cold inlets are its version of this split, inside one cord.",
+    "cables.gl: Loading is an observable phase": "Max's load runs in fixed phases, and the Max docs read describe no patch-wide progress report. Start a show only after the objects it depends on have finished loading.",
+    "Pd / plugdata: Behaviour versioning": "The Max docs read for this comparison describe no such switch. When a patch moves between Max versions, check the refpages of the objects it relies on.",
+    "MadMapper: Input space and output space": "In Jitter the same split is two steps: crop the source, then warp the result onto the output."
+  }
+}

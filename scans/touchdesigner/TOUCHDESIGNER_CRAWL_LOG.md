@@ -17,8 +17,10 @@ Companion files in this folder:
   (`pending` / `extracted` / `skipped`), `session`, `notes`.
 - `touchdesigner_insights.md` — how the tool works, by topic, for a reader who
   knows Max. Every entry names its source pages.
-- `touchdesigner_max_gap_candidates.json` — 66 candidate capabilities, each
-  with the Max-side check that was run.
+- `touchdesigner_max_gap_candidates.json` — 116 candidates, each with the
+  Max-side check that was run: 66 from session 1 (things Max may lack) and 50
+  from session 2 (things both tools have that TouchDesigner does differently;
+  these carry an `advice` field).
 
 Same pattern as `scans/userguide/` and `scans/cookbook/`.
 
@@ -36,7 +38,9 @@ Same pattern as `scans/userguide/` and `scans/cookbook/`.
   The wiki also has an `Experimental` namespace (docs for experimental
   builds), which was not enumerated.
 
-## Inventory (2026-10-02)
+## Inventory after session 1 (2026-10-02)
+
+The table after session 2 is in the Session 2 entry below.
 
 Groups are derived from each page's wiki categories and title; the rules are
 in `CATEGORY_GROUPS` in the enumerator.
@@ -149,6 +153,145 @@ catalogue of packages that are not installed, and Max for Live. A capability
 marked `absent` means "not found in Max or in the packages on this machine",
 not "no third-party package exists anywhere".
 
+### 2026-10-02 — Session 2 (shared concepts, different approaches)
+
+Session 1 looked for gaps. This pass looked at things both tools have (OSC,
+MIDI, presets, components, instancing, timing, ramps and smoothing, noise,
+tables and text, movies, image chains, feedback, compositing, shaders, the 3D
+scene, audio analysis, interface building, wireless links, start-up, errors,
+file handling, data conversion, scripting, networking) and asked where
+TouchDesigner's way is better, simpler or just different, and what a Max
+patcher should take from it.
+
+**Read 204 pages for the first time**, and re-read 39 that session 1 had
+already marked. All 247 pages requested came back; no fetch failed.
+
+- Of the 204: 117 were read in full and 87 partly. As in session 1, "in full"
+  for an operator page means its summary plus every parameter label and
+  one-line description, with wiki markup removed. Partly read pages were cut
+  at a fixed length, between 1,700 and 12,000 characters depending on the
+  batch; each state entry's `notes` gives the exact numbers.
+- 202 of the 204 were `pending`. The other two, `COMP Instance Page` and
+  `COMP Instance 2 Page`, had been `skipped` as fragments; they hold the
+  Geometry COMP's instancing parameters, which the `Geometry COMP` page only
+  transcludes, so they were read and are now `extracted`.
+- The 39 re-read pages keep their session-1 status and have
+  "Session 2 … re-read" added to their notes (for instance `Timer CHOP`, now
+  12,000 of 12,566 cleaned characters, `Movie File In TOP`, `Cook`,
+  `Custom Parameters`, `Transparency`, `Write a GLSL TOP`).
+- Four pages were fetched and not read, and are not marked by this session:
+  `Phong MAT` and `Introduction to Python Tutorial` (both still pending),
+  `Palette:particlesGpu` and `Render TOP` (both extracted in session 1).
+
+**What the cleaning step missed.** For some operator pages the parameter
+templates are written in a form the cleaning script does not parse, so the
+labels or the descriptions came out blank (for instance `Null CHOP`,
+`UDP In DAT`, `UDP Out DAT`, `Sort DAT`, `LFO CHOP`, `DAT to CHOP`, the
+menu items of `Movie File In TOP`'s Play Mode, and most `Level TOP` /
+`Composite TOP` parameters). Palette pages built from `Custom…` templates
+(`Palette/moviePlayer`, `Palette:movieBlender`) were read as raw parameter
+names and labels. Five pages have no summary text on the wiki at all:
+`Layer TOP`, `ParGroup Execute DAT`, `Palette:multiMix`, `Palette:search`,
+`Widget COMP`. `Smooth Operator` is a joke page. Claims in the insights file
+rest only on text that was actually shown.
+
+**The Max side.** Every comparison was checked against Max before it was
+written:
+
+- Refpages, read with a small script that prints digest, description,
+  attribute names and message names (and the full attribute or message
+  description where a claim depends on it): about 200 objects across
+  `max-ref`, `msp-ref`, `jit-ref` and the bundled Jitter Tools, jit.mo, Jitter
+  Geometry and VIDDLL packages.
+- `interfaces/obj-qlookup.json`, searched by name for each family (string.*,
+  array.*, zl.*, dict.*, pattr, MIDI, OSC, jit.gl.*, and words such as spring,
+  pickup, feedback, xml).
+- Max's userguide (`docs/userguide/content/`): OSC, Mapping, MIDI, Presets
+  and Interpolation, Snapshots, Connecting Parameters, Parameter Mode, Patcher
+  Lifecycle, Scheduler and Priority, Abstractions, bpatchers, Subpatchers,
+  Polyphony, Strings, Arrays, Conversion Cheat Sheet, Debugging and Probing,
+  Search Path, Projects, Transport, Prototypes, Non-real-time Processing, Time
+  Value Syntax, and the Jitter topics Video, Video Engine, Textures, Graphics
+  Processing, Render Passes, Depth Testing and Layering, JXS File Format and
+  Geometry. Each was read to a cut-off of 2,500 to 5,500 characters.
+- `packages/query_packages.py search` for easing, o.route, OSC-route, spring,
+  perlin, lag, envelope follower, onset, spectral centroid, pickup, soft
+  takeover, hysteresis, 14-bit and others.
+- `patching/MAX_PATCHING.md` and `scans/c74-forum/forum_insights.md`, by
+  `grep`, for known pitfalls on the same topics.
+
+Not checked: Max help patches, and nothing was run in Max. Two pieces of
+advice are assembled from documentation only and say so: the custom texture
+feedback loop, and driving several movies by frame number.
+
+**Found.** 50 new candidates were appended to
+`touchdesigner_max_gap_candidates.json` (116 in all). The first 66 are
+unchanged.
+
+| `max_status` | Count |
+|---|---|
+| `different-approach` | 36 |
+| `better-elsewhere` | 13 |
+| `unsure` | 1 |
+
+By category: timeline/cueing/show control 11, workflow/authoring 10,
+data/tables/scripting 8, control surface/UI building 5, video I/O & playback
+5, rendering/3D 4, GPU compute/shaders 4, networking/sync 2, audio 1.
+Confidence: 23 high, 27 medium.
+
+The new items add one field to the schema, `advice`: what a Max patcher should
+do or take from the comparison.
+
+`touchdesigner_insights.md` gained section 16, "Shared concepts, different
+approaches", ending in "Where Max is ahead" (MIDI learn, presets with
+interpolation, event timing, tempo-relative time, audio, stepping through a
+patch, recording a control, presentation mode, parameters over OSC, string and
+array objects).
+
+**Three things in the repo this pass ran into** (not changed; outside this
+folder):
+
+- `patching/MAX_PATCHING.md` recommends `line 0.` for Jitter / GL parameters.
+  The `jit.line` refpage describes it as the frame-synced replacement.
+- `scans/c74-forum/forum_insights.md` says `@depth_enable 1` on `jit.world`
+  for layering and `patching/MAX_PATCHING.md` says `@depth_enable 0`. Max's
+  userguide page on depth testing and layering says to turn depth testing off
+  to use `@layer`.
+- Max has no black-render checklist like TouchDesigner's
+  `Why is My Render Black`; one would fit in `patching/MAX_PATCHING.md`.
+
+**Inventory after session 2**
+
+| Group | Pages | Extracted | Skipped | Pending |
+|---|---|---|---|---|
+| TOP operators | 154 | 76 | 0 | 78 |
+| CHOP operators | 175 | 113 | 0 | 62 |
+| SOP operators | 115 | 4 | 0 | 111 |
+| POP operators | 108 | 12 | 0 | 96 |
+| DAT operators | 77 | 56 | 0 | 21 |
+| MAT operators | 15 | 6 | 1 | 8 |
+| COMP operators | 46 | 30 | 0 | 16 |
+| palette (ready-made components) | 172 | 32 | 0 | 140 |
+| concepts | 138 | 52 | 12 | 74 |
+| glossary | 165 | 85 | 3 | 77 |
+| operator topics | 14 | 13 | 0 | 1 |
+| interface | 6 | 1 | 0 | 5 |
+| uncategorized (many are concept pages) | 250 | 84 | 57 | 109 |
+| python reference | 774 | 0 | 0 | 774 |
+| release notes | 45 | 1 | 0 | 44 |
+| operator help fragments | 27 | 2 | 25 | 0 |
+| legacy tscript | 1 | 0 | 1 | 0 |
+| **Total** | **2,282** | **567** | **99** | **1,616** |
+
+**For a later pass on this theme:** the Python class pages behind the points
+above (`Par Class`, `Page Class`, `Run Class`, `oscinDAT Class`,
+`midioutCHOP Class`), `Bind CHOP` and `Geometry COMP`'s third instance page in
+full, `Render TOP` in full for draw order, `Palette:gestureCapture`,
+`Palette:chromaKey`, and the remaining CHOPs that shape control data
+(`Cycle CHOP`, `Extend CHOP`, `Resample CHOP` in full, `Sort CHOP`,
+`Reorder CHOP`). On the Max side, the custom feedback wiring and the
+frame-driven movie sync should be tried in Max before they are relied on.
+
 ## What the next session should read first
 
 1. **The rest of the operator families**, summary only, to finish the map:
@@ -180,3 +323,65 @@ not "no third-party package exists anywhere".
    projection attributes, `jit.movie` engine options, whether any Jitter
    object runs compute shaders, what `jit.geom.*` runs on, and whether
    uninstalled packages cover NDI, Art-Net, Kinect or TUIO.
+
+## Session 3 (system model) — 2026-10-02
+
+**Purpose.** Write TouchDesigner's column of the system-level comparison
+against the 20 dimensions in `scans/max-gaps/SYSTEM_DIMENSIONS.md`. Earlier
+sessions compared features; this one describes how the system as a whole
+handles evaluation, time, data, state, naming and structure.
+
+**Output.** `touchdesigner_system_model.json`: 23 items, one per dimension
+plus three added ones:
+
+- 21 *What a connection is*: a wire does not move data, it says where to
+  fetch it; references by path, expression or export are drawn as dashed
+  links.
+- 22 *Flags as a second state layer*: every node has on/off states outside
+  its parameters (Lock, Bypass, Cooking, Immune, Render …) that do not cook
+  and cannot be exported to.
+- 23 *The network as queryable data*: operators, parameters, errors and
+  timing come back as tables and channels (OP Find DAT, Parameter DAT,
+  Error DAT, Perform CHOP).
+
+**How the pages were read.** Wikitext fetched with
+`enumerate_touchdesigner.py --fetch` into the session scratchpad and read
+there. 74 titles requested, 73 came back; `COMP Common Page` does not exist
+under that name (the component common page is `COMP Other Common Page`).
+
+- 18 pages newly read and marked `extracted`: `Network Editor`, `Pane`,
+  `Node`, `Wire`, `Link`, `Display Flag`, `Render Flag`, `Selected Flag`,
+  `Write a CPlusPlus Plugin`, `Thread Manager`, `Performance Monitor Dialog`,
+  `Startup Errors Dialog`, `Licensing`, `Dialogs:Preferences Dialog`,
+  `MacOS Environment Variables`, `COMP Other Common Page`,
+  `CHOP Common Page`, `TDJSON` (the last two were `skipped` as help
+  fragments or not yet read).
+- 58 pages re-read for system-level detail (already `extracted`; their
+  notes now say so; `Window COMP`, `Pattern Matching`, `Custom Operators`
+  and `Panel` were only skimmed): among them `Cook`, `Dependency`, `Event`,
+  `Procedural`, `Time Slicing`, `Parameter`, `Parameter Mode`, `Export`,
+  `Binding`, `Network Path`, `Operator Shortcuts`, `Component`, `Clone`,
+  `Replicator COMP`, `Extensions`, `Component Time`, `Time COMP`, `Timeline`,
+  `Absolute Time`, `Perform Mode`, `Engine COMP`, `TouchEngine`, `Undo`,
+  `Flag`, `Storage`, `Virtual File System`, `Optimize`, `TouchPlayer`,
+  `Error DAT`, `Syncing Multiple Computers`, `Project Packager`, `Python`.
+- `MacOS Environment Variables` and `TDJSON` were fetched and skimmed but
+  contributed nothing to the model.
+
+**Things found worth recording**
+
+- The `Time Slicing` page gives the maximum time slice as 200 ms; the
+  `Dialogs:Preferences Dialog` page describes the same preference in frames
+  with a default of 6. The two pages disagree.
+- No page read documents a "Realtime" flag directly; it is mentioned in
+  passing on `Syncing Multiple Computers` (run with realtime off so no frame
+  is skipped) and on `Engine COMP` (an info channel for the realtime flag).
+- `COMP Other Common Page` is where external `.tox` loading, Load on Demand,
+  clone settings, shortcuts and relative-path behaviour are defined. It is
+  the most system-level page among the "help fragments" skipped in
+  session 1.
+
+**Not read, and worth reading for this theme:** `Dependency Class`,
+`Par Class`, `Project Class`, `Render TOP` in full (draw order),
+`Palette:synchroServer` / `Palette:synchroClient`, `Window COMP` in full,
+and the `Expose Flag` page.

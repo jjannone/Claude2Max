@@ -13,8 +13,9 @@ Companion files in this folder:
 - `cables_gl_crawl_state.json` — one entry per doc page, op namespace and
   op, with `status` (`pending` / `extracted` / `skipped`).
 - `cables_gl_insights.md` — how the tool works, by topic, for a Max reader.
-- `cables_gl_max_gap_candidates.json` — 42 candidate capabilities, each with
-  the Max-side check that was run.
+- `cables_gl_max_gap_candidates.json` — 87 candidates, each with the
+  Max-side check that was run: 42 gaps from session 1, and 45 shared
+  concepts done differently from session 2.
 
 Same pattern as `scans/userguide/` and `scans/cookbook/`.
 
@@ -116,6 +117,119 @@ candidate's `max_check` field. The sources were:
 1 better-elsewhere. The last one is compute shaders, which this machine has
 through the Compute package.
 
+### 2026-10-02 — Session 2 (Opus 5.5): shared concepts, different approaches
+
+**Purpose.** Session 1 looked for things Max lacks. This pass looked at
+things both tools have, to find where the cables way is better, simpler or
+just different in a way a Max patcher should know. The output is advice for
+someone working in Max.
+
+**Read on the cables side**:
+
+| What | Count | Status now |
+|---|---|---|
+| Op pages newly read | 380 | `extracted`, `session` 2026-10-02, with a note |
+| Op pages read again (already `extracted`) | 23 | unchanged |
+| Doc pages read again | 15 | unchanged (all were `extracted`) |
+| Op pages read in total | 495 of 1,370 | |
+| Op pages still not opened | 875 | `pending` |
+
+Newly read ops by top-level namespace: Gl 105, Array 29, Trigger 27,
+Math 25, Devices 23, String 18, Ui 17, Anim 14, Graphics 14, Json 14,
+Number 14, WebAudio 14, Sidebar 12, Boolean 8, Cables 7, Debug 7,
+TimeLine 7, Vars 7, Data 6, Html 4, Color 3, Audio 2, Date 1, Templates 1,
+Website 1.
+
+**207 of the 380 newly read op pages have no documentation text**, only a
+one-line summary and a port list. Each such entry says so in its `notes`.
+Port lists were still useful: most of this pass's findings come from which
+ports an op has (an easing dropdown, a mask input, a Finished trigger, a
+Found output).
+
+Doc pages read again for detail: `dev_callbacks`, `dev_ports_trigger`,
+`guidelines`, `image_composition`, `usual_suspects`, `dev_ops`,
+`dev_ports_array`, `dev_ports_value`, `lights`, `dev_gui_ui_attributes`,
+`subpatchops`, `arrays` (performance), `beginner2_transformations`,
+`shader` and `dev_creating_ports`.
+
+Same method as session 1: plain HTTP requests to `https://cables.gl/op/<name>`
+and `https://cables.gl/docs/<path>`, about one every 0.35 seconds. `/api/`
+was not used. Every request returned HTTP 200.
+
+**Read on the Max side.** A comparison is only as good as its Max half, so
+each item was checked before it was written:
+
+- Refpages (`.maxref.xml`) of about 180 Max objects: digest, description,
+  attribute names and message names for all of them, and the full text of
+  the attributes and outlets each candidate relies on. They include the
+  shared GL attribute page `jit.group-gl`, the Jitter Tools, Jitter Geometry
+  and jit.mo packages inside the Max install, and the `ease` package in
+  `~/Documents/Max 9/Packages`.
+- Userguide topics: `jitter/depth_layer_blend` (in full),
+  `jitter/render_passes` (first part), `jitter/jxs_file_format` (the param
+  and bind passages), `integers_vs_floats`, `mapping`, `conversion`
+  (headings), and keyword passages of `dictionaries`, `arrays`,
+  `jitter/textures` and `jitter/graphics_processing`.
+- The object registry, for names that do not exist: nothing contains "lfo",
+  "spring", "perlin", "valid", "default" or "fallback".
+- Repo docs, by keyword only: `patching/MAX_PATCHING.md`,
+  `patching/JITTER_JS_PATCHING.md`, `scans/c74-forum/forum_insights.md` and
+  `scans/packages/tutorials_insights.md`, for known Max pitfalls on the same
+  ground (draw order, texture cords, loading order, fast sources into v8).
+- `packages/query_packages.py search`: spring, easing, perlin, "low
+  frequency", smooth, threshold.
+
+Nothing was tested in a running Max. Where a claim about Max behaviour goes
+past what a refpage says, the candidate's `notes` say so.
+
+**Result**: 45 candidates appended to `cables_gl_max_gap_candidates.json`
+(now 87). The first 42 are byte-for-byte unchanged. By status:
+33 `different-approach`, 12 `better-elsewhere`, 0 `unsure`. By category:
+data/tables/scripting 11, rendering/3D 10, workflow/authoring 9,
+timeline/cueing/show control 5, control surface/UI building 4,
+GPU compute/shaders 3, video I/O & playback 2, audio 1. Each new item has an
+`advice` field: a pattern to copy in Max, a Max attribute to prefer, or an
+object worth building.
+
+`cables_gl_insights.md` gained section 17, "Shared concepts, different
+approaches", with a "Where Max is ahead" subsection and a "Not settled"
+subsection.
+
+**Strongest findings** (full text in the candidates file):
+
+1. Draw order. cables draws in trigger order; Max's userguide says objects
+   in the same layer draw in an indeterminate order.
+2. `jit.world @fps` has no effect while `@displaylink` is 1, the Mac default.
+3. Shader uniforms: a cables uniform is a port; a JXS uniform also needs a
+   `<param>` and a `<bind>` tag, and is set by message.
+4. Image effects in cables each carry blend mode, amount and mask; a Max
+   `jit.fx` object has none of the three.
+5. Easing is a dropdown on most cables ops; in Max it is the `ease` package.
+6. Max has no spring for a plain number and no object that tests whether a
+   texture is valid.
+7. Loading: cables has patch-wide loading status; Max has `loadbang` and
+   per-object done signals.
+8. Failure reporting: cables ops have Found, Valid and Has Error outputs;
+   Max reports to the console.
+9. `jit.gl.node` can overwrite attributes on its children, which is Max's
+   nearest match to a cables branch.
+10. `jit.mo.time` is Max's frame-locked LFO, ramp, noise and delta-time
+    source.
+
+**Weak spots in this session's output**:
+
+- No Max claim was tested in Max. The ones most worth a test: that
+  `enable 0` on a `jit.gl.node` stops its children; what `dict` sends for
+  `get` on a missing key; which message `jit.movie` sends when a read ends.
+- `jit.fx`: only `jit.fx.blur`'s attribute list was read. The claim that
+  `jit.fx` objects have no mix or mask rests on that one page plus the 83
+  object names.
+- cables variable scope, texture feedback and particles are not settled;
+  see "Not settled in this pass" in the insights file.
+- Third-party Max packages were searched for six terms only. An installed
+  package may already hold a spring, an analysis abstraction or a loading
+  gate.
+
 ## Fetch problems
 
 None. Every request returned HTTP 200. The enumerator ran three times and a
@@ -186,3 +300,71 @@ Run `python3 scans/cables-gl/enumerate_cables_gl.py` first. It keeps every
 `pending`, and flags entries that have left the site with
 `gone_from_site` without deleting them. `--status` prints coverage.
 `--dry-run` fetches and reports without writing.
+
+### After session 2
+
+Items 2, 3, 5, 6 and 7 above are partly done: `Ops.Gl.ShaderEffects` 4 more
+pages read (28 pending), `Ops.Gl.ImageCompose` 23 read (82 pending), `Ops.Devices` 23
+read, `Ops.Sidebar` 12 read, `Ops.Array` 29 read. Item 1 (timeline in depth)
+and item 4 (WebGPU) are untouched. Still worth doing:
+
+1. **Test the Max claims** listed under session 2's weak spots, in a running
+   Max.
+2. **Read the other 82 `jit.fx` refpages** for mix, mask and blend
+   attributes, to settle the image-effect comparison.
+3. **Texture feedback in cables**: find a written source or an example
+   patch, since no op page explains the Clear switch.
+4. **`Ops.Html`** (about 85 pages pending) and the rest of `Ops.Sidebar`,
+   for the UI-building comparison with presentation mode.
+5. **The rest of `Ops.Array`, `Ops.String` and `Ops.Json`** (about 250 pages
+   pending), against `zl`, `array.*`, `string.*` and `dict.*`. Low priority.
+
+## Session 3 (system model), 2026-10-02
+
+Goal: describe how cables works as a system, against the 20 dimensions in
+`scans/max-gaps/SYSTEM_DIMENSIONS.md`. Output: `cables_gl_system_model.json`,
+24 items (the 20 dimensions plus four added: 21 values vs triggers, 22 the
+browser as platform, 23 patches online with owners and permissions, 24
+loading as an observable phase).
+
+Method: the same curl fetch of server-rendered HTML as sessions 1 and 2. No
+`/api/` use. Claims come from pages read this session or recorded in
+`cables_gl_insights.md`.
+
+Read this session:
+
+- **Re-read docs** (already extracted): ui_walkthrough, keys, timeline
+  animation, dev_ops, dev_callbacks, dev_ports_value, dev_ports_trigger,
+  guidelines, subpatchops, object_ports, dev_gui_ui_attributes,
+  dev_hello_op, dev_embed_vars, dev_embed_functions, embedding, multiplayer,
+  files, standalone general and coding_ops, performance tools, profiler,
+  technical FAQ, the docs index.
+- **Re-read op and namespace pages**: MainLoop_v2, VarSetNumber_v2,
+  VarGetNumber_v2, SubPatch, PatchInput, UIMode, Timer_v2, TimeLineTime,
+  TimelineConfig, FreezeNumber, RenderAnim_v2, TimeDelta,
+  TriggerOnChangeNumber_v2, Interval, Presets_v2, PatchInfo_v2,
+  LoadingStatus_v2, Number.Preset, Trigger.Sequence, TriggerSend,
+  Gl.Performance, GetSubPatchName; namespaces Ops.Vars and Ops.Cables.
+- **Newly read** (were pending): TimeLine.AutoPlay, TimeLinePlay,
+  TimeLineFrame_v2, TimeLineSetTime, Ui.Subpatch2Template,
+  Ui.SubPatchInput, Html.Utils.PlayerControlPanel_v2, Date.Milliseconds,
+  Cables.PatchFileList; and the blog post `https://blog.cables.gl/animations/`
+  (linked from the timeline doc; added to the state file as
+  `blog:animations`). blog.cables.gl has no robots.txt (404).
+
+New facts this session, not in the insights file before:
+
+- The timeline has repeat modes (off, repeat, mirror, offset), interpolation
+  methods (linear, step, preset curves, bezier, clip), loop areas, and named
+  reusable animation clips that update everywhere they are used (blog post).
+- Editing an op's code in the web editor is a save, and the Hello Op
+  tutorial then reloads the patch; the standalone watches op files.
+- TriggerSend reaches into subpatches. Variable names are case sensitive.
+- Preset stores its data on ports marked "used internally by op", which
+  is how a preset survives a save: it is port state like any other.
+- UIMode can report a "remote viewer" mode; no page explains it.
+
+Still open (also in the JSON's `open_questions`): order among several
+cables on one trigger output; whether variables have any per-instance
+scope; SubPatchOp arguments and instance updating; whether an op can
+rewire the graph at runtime; what the remote viewer is.
