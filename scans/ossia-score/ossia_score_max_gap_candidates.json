@@ -1,0 +1,1206 @@
+[
+ {
+  "capability": "Interactive triggers that hold a timeline until an event",
+  "category": "timeline/cueing/show control",
+  "tool": "ossia score",
+  "tool_names": [
+   "Trigger",
+   "Auto-Trigger",
+   "Start on play"
+  ],
+  "what_it_does": "A point in the timeline can be made to wait: everything after it pauses until the trigger is fired by a click, a parameter value (MIDI button, OSC message) or an expression. The interval before it then has no fixed length.",
+  "source_urls": [
+   "https://ossia.io/score-docs/quick-start/breaking-the-timeline.html",
+   "https://ossia.io/score-docs/processes/scenario.html",
+   "https://ossia.io/score-docs/cues.html"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "qlist",
+   "transport",
+   "timepoint"
+  ],
+  "max_check": "Registry has no timeline object (search 'timeline' in obj-qlookup.json (Max registry, core plus bundled packages) returns nothing). qlist refpage: stores timed or untimed cues as messages. timepoint refpage: bangs when a transport reaches a time and only while the clock moves forward. Neither describes a timeline position that waits for an external condition before continuing. max_system_model.json dimension 10: Max has no built-in scene, cue or timeline layer.",
+  "advice": "",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Conditional branches at a synchronisation point",
+  "category": "timeline/cueing/show control",
+  "tool": "ossia score",
+  "tool_names": [
+   "Condition",
+   "Split condition",
+   "Sync"
+  ],
+  "what_it_does": "Several intervals can start from the same synchronisation point, and each start can carry a condition, so only the branches whose condition is true run when that point is reached. This lets a score choose its path at run time.",
+  "source_urls": [
+   "https://ossia.io/score-docs/common-practices/2-switches.html",
+   "https://ossia.io/score-docs/processes/scenario.html",
+   "https://ossia.io/score-docs/examples/basics/timemodel.html"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "gate",
+   "route",
+   "select"
+  ],
+  "max_check": "Searched obj-qlookup.json (Max registry, core plus bundled packages) for timeline/score objects: none. Branching in Max is done with gate/route in the dataflow, not on a timeline (max_system_model.json dimension 10). No object refpage read describes conditions attached to timeline points.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "The docs' Condition and Branch glossary entries are empty; behaviour summarised from the Switches and Scenario pages."
+ },
+ {
+  "capability": "Intervals with flexible duration (minimum, maximum, infinite)",
+  "category": "timeline/cueing/show control",
+  "tool": "ossia score",
+  "tool_names": [
+   "Interval",
+   "setIntervalMinDuration",
+   "setIntervalMaxInfinite"
+  ],
+  "what_it_does": "A block of time has a nominal length but also a minimum and a maximum, possibly infinite. Combined with a trigger at its end, it can be cut short after the minimum, or forced to end at the maximum if nothing happens.",
+  "source_urls": [
+   "https://ossia.io/score-docs/in-depth/scripting-api.html",
+   "https://ossia.io/score-docs/common-practices/1-looping.html",
+   "https://ossia.io/score-docs/common-practices/2-switches.html"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "transport",
+   "timepoint",
+   "delay"
+  ],
+  "max_check": "No Max object refpage read (transport, timepoint, qlist) models a time span with a min/max window. Closest is building timeouts by hand with delay or timepoint.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Loops and jumps inside a timeline (transitions)",
+  "category": "timeline/cueing/show control",
+  "tool": "ossia score",
+  "tool_names": [
+   "Transition",
+   "Sync",
+   "Scenario"
+  ],
+  "what_it_does": "Instantaneous connections can link a later point back to an earlier one, so a timeline loops forever or jumps between sections like a state machine, while each section keeps its timed contents.",
+  "source_urls": [
+   "https://ossia.io/score-docs/common-practices/1-looping.html",
+   "https://ossia.io/score-docs/quick-start/non-linear-timelines.html"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "qlist",
+   "transport"
+  ],
+  "max_check": "transport refpage lists position control but no loop graph; qlist steps through cues in order or by explicit messages. Neither describes a graph of timed sections with jumps.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Nested scenarios with independent speed per interval",
+  "category": "timeline/cueing/show control",
+  "tool": "ossia score",
+  "tool_names": [
+   "Scenario",
+   "Speed",
+   "IntervalSpeed"
+  ],
+  "what_it_does": "A scenario can contain intervals that contain further scenarios, to any depth. Each running interval has its own speed slider (and a speed message over the remote API), so one section can run slower, faster or paused while others keep going.",
+  "source_urls": [
+   "https://ossia.io/score-docs/processes/scenario.html",
+   "https://ossia.io/score-docs/in-depth/remote.html"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "transport"
+  ],
+  "max_check": "transport refpage: a named transport controls its own time context, with its own tempo attribute. That gives several independent clocks, but no nesting where a child inherits and multiplies its parent's speed.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Hierarchical tempo, time signature and quantisation (polytempo)",
+  "category": "timeline/cueing/show control",
+  "tool": "ossia score",
+  "tool_names": [
+   "Tempo",
+   "Musical metrics",
+   "Quantization",
+   "Parent",
+   "Free"
+  ],
+  "what_it_does": "Tempo, time signature and quantisation pass down the interval hierarchy: a child interval inherits its parent's, or sets its own with a Tempo process, so a 3/4 section can run inside a 4/4 root at another tempo. Triggers and intervals can be quantised to the next bar or beat of their own context.",
+  "source_urls": [
+   "https://ossia.io/score-docs/in-depth/musical.html",
+   "https://ossia.io/score-docs/processes/tempo.html",
+   "https://ossia.io/score-docs/examples/tempo/tempo-control.html"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "transport",
+   "metro",
+   "timepoint"
+  ],
+  "max_check": "transport refpage: named transports each have a tempo; metro @quantize refpage: output only on a time boundary of its transport. This gives several flat tempo contexts and quantised events, but no parent/child inheritance of tempo or metre.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Seek recomputes the state ('value compilation')",
+  "category": "timeline/cueing/show control",
+  "tool": "ossia score",
+  "tool_names": [
+   "Play from here",
+   "Value compilation",
+   "Transport value compilation"
+  ],
+  "what_it_does": "When playback jumps to a point, score works out which messages would have been sent by all earlier states and sends the latest value of each, so external devices end up where they would have been had the show run from the start.",
+  "source_urls": [
+   "https://ossia.io/score-docs/common-practices/9-seek-and-transport.html",
+   "https://ossia.io/score-docs/reference/preferences.html"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "transport",
+   "qlist",
+   "pattrstorage"
+  ],
+  "max_check": "transport refpage: setting position moves time but does not describe replaying earlier events. qlist and mtr refpages describe sequential playback, not catching up state on a jump. pattrstorage recalls a whole stored preset, which is a manual alternative.",
+  "advice": "",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Condition outcome chosen while seeking ('offset behaviour')",
+  "category": "timeline/cueing/show control",
+  "tool": "ossia score",
+  "tool_names": [
+   "Offset behaviour",
+   "Condition"
+  ],
+  "what_it_does": "When seeking past a condition, the author decides whether it counts as true, false, or is evaluated against the live value, so a rehearsal can jump past a point that depends on a performer's position.",
+  "source_urls": [
+   "https://ossia.io/score-docs/common-practices/9-seek-and-transport.html"
+  ],
+  "max_status": "absent",
+  "max_closest": [],
+  "max_check": "Depends on timeline conditions, which Max does not have (see the triggers and conditions entries). No Max refpage read covers it.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Floating parts of the score fired out of time",
+  "category": "timeline/cueing/show control",
+  "tool": "ossia score",
+  "tool_names": [
+   "Out-of-time triggering",
+   "Start on play",
+   "Re-triggering"
+  ],
+  "what_it_does": "A part of the score not connected to the start does not play by itself. Given a trigger with 'Start on play', it can be fired at any moment by an OSC message or click, and re-firing either restarts it or stops it.",
+  "source_urls": [
+   "https://ossia.io/score-docs/common-practices/3-out-of-time.html",
+   "https://ossia.io/score-docs/cues.html"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "qlist",
+   "pcontrol",
+   "transport"
+  ],
+  "max_check": "In Max, a section that runs on demand is a subpatcher or message chain fired by a receive; pcontrol refpage covers enabling/disabling subpatchers. There is no timeline for it to float on.",
+  "advice": "Build each on-demand section of a Max show as its own subpatcher with one entry message and a documented restart/stop policy, rather than wiring ad-hoc bangs into the middle of a chain.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Start, stop and reinitialise states",
+  "category": "timeline/cueing/show control",
+  "tool": "ossia score",
+  "tool_names": [
+   "Reinitialize",
+   "Global play",
+   "start state",
+   "end state"
+  ],
+  "what_it_does": "Messages placed on the first state of the score are sent on play and on Reinitialize; messages on the last state are sent on Stop. Reinitialize sends the start state without playing, which resets every device to a known state.",
+  "source_urls": [
+   "https://ossia.io/score-docs/common-practices/7-start-stop-cues.html",
+   "https://ossia.io/score-docs/processes/scenario.html"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "loadbang",
+   "closebang",
+   "pattrstorage"
+  ],
+  "max_check": "loadbang refpage: bangs when the file opens; closebang refpage: bangs when the window closes. They tie to file lifecycle, not to play/stop of a show. pattrstorage can recall a stored 'reset' preset on demand.",
+  "advice": "Give a Max show explicit 'reset', 'start' and 'stop' messages that send a stored state, separate from loadbang, so the room can be reset without reopening the patch.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Cues snapshotted from and refreshed against live devices",
+  "category": "timeline/cueing/show control",
+  "tool": "ossia score",
+  "tool_names": [
+   "Cue",
+   "State",
+   "Snapshot",
+   "Refresh"
+  ],
+  "what_it_does": "Dragging device-tree nodes onto the timeline stores their current values as a cue. Snapshot adds the selected parameters' live values; Refresh updates every stored value to what the devices report now.",
+  "source_urls": [
+   "https://ossia.io/score-docs/cues.html",
+   "https://ossia.io/score-docs/quick-start/saving-and-recalling-devices-state.html"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "pattrstorage",
+   "qlist"
+  ],
+  "max_check": "pattrstorage refpage: stores and recalls presets of pattr clients inside the patch; qlist stores messages. Both work on Max's own objects; neither reads the current values of external devices into a cue.",
+  "advice": "When a Max patch drives external gear, keep the gear's state as named parameters inside Max (pattr or parameter-enabled objects) so pattrstorage presets can stand in for cues and can be refreshed from current values.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Auto-sequence: automations generated between two states",
+  "category": "timeline/cueing/show control",
+  "tool": "ossia score",
+  "tool_names": [
+   "auto-sequence",
+   "Interpolate States"
+  ],
+  "what_it_does": "With auto-sequence on, storing a second state creates automation curves for every parameter that changed since the first, which can then be edited.",
+  "source_urls": [
+   "https://ossia.io/score-docs/quick-start/states-and-automations-in-practice.html",
+   "https://ossia.io/score-docs/in-depth/automations.html"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "pattrstorage",
+   "line"
+  ],
+  "max_check": "pattrstorage refpage: interp sets per-client interpolation; recall with a float recalls an interpolated preset between two. That fades between states but does not produce editable curves per parameter.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Tweened automation starts from the live value",
+  "category": "timeline/cueing/show control",
+  "tool": "ossia score",
+  "tool_names": [
+   "Tween mode",
+   "Tweening"
+  ],
+  "what_it_does": "An automation can ignore its drawn first value and instead ramp from whatever value the target parameter has when the automation starts, for a smooth handover from live control to scripted control.",
+  "source_urls": [
+   "https://ossia.io/score-docs/processes/automation_float.html",
+   "https://ossia.io/score-docs/in-depth/automations.html"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "line",
+   "line~"
+  ],
+  "max_check": "line refpage (list method): numbers are output from the currently stored value to the target value. So a Max ramp starts from the current value by default; score has to add a mode for it because its automations are drawn curves.",
+  "advice": "In Max, prefer a ramp object (line, line~) driven by 'target time' messages over a stored breakpoint list when control may be handed over from a live performer: it starts from wherever the value already is.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Recording incoming messages as automation curves",
+  "category": "timeline/cueing/show control",
+  "tool": "ossia score",
+  "tool_names": [
+   "Record automations from here",
+   "Recording"
+  ],
+  "what_it_does": "Selected device addresses can be recorded from a point in the timeline: incoming messages become automation curves that can be edited afterwards.",
+  "source_urls": [
+   "https://ossia.io/score-docs/in-depth/recording.html",
+   "https://ossia.io/score-docs/in-depth/automations.html"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "mtr",
+   "seq"
+  ],
+  "max_check": "mtr refpage: records messages on tracks and plays them back in sequence. It records events, not editable curves on a timeline.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "One browsable tree of every device's parameters",
+  "category": "networking/sync",
+  "tool": "ossia score",
+  "tool_names": [
+   "Device explorer",
+   "Device",
+   "namespace"
+  ],
+  "what_it_does": "All external devices (OSC, OSCQuery, MIDI, DMX, serial, audio card, windows...) appear in one tree of nodes and parameters with types, ranges and current values. Any parameter can be dragged onto a trigger, an automation or a port.",
+  "source_urls": [
+   "https://ossia.io/score-docs/quick-start/working-with-devices.html",
+   "https://ossia.io/score-docs/devices.html",
+   "https://ossia.io/score-docs/panels/explorer.html"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "udpreceive",
+   "midiin",
+   "serial",
+   "param.osc"
+  ],
+  "max_check": "Max userguide OSC.json: Max exposes its own parameters as OSC addresses and can serve OSCQuery. No Max object or userguide page read offers a unified browser of external devices' parameters; each protocol has its own object (udpreceive, midiin, serial).",
+  "advice": "",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "OSCQuery client that imports a remote namespace",
+  "category": "networking/sync",
+  "tool": "ossia score",
+  "tool_names": [
+   "OSCQuery device",
+   "Minuit"
+  ],
+  "what_it_does": "score lists OSCQuery servers found on the network, queries the chosen one and builds its full parameter tree, with types and ranges, ready to automate. Minuit, an older protocol, does the same.",
+  "source_urls": [
+   "https://ossia.io/score-docs/devices/oscquery-device.html",
+   "https://ossia.io/score-docs/devices/minuit-device.html"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "param.osc",
+   "udpsend"
+  ],
+  "max_check": "userguide OSC.json and preferences_and_settings.json: Max can enable an OSCQuery server (HTTP) for its own parameters. Neither describes Max acting as an OSCQuery client that reads another app's namespace.",
+  "advice": "",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "OSC and MIDI learn that builds the namespace",
+  "category": "networking/sync",
+  "tool": "ossia score",
+  "tool_names": [
+   "Learn",
+   "Create whole tree"
+  ],
+  "what_it_does": "In learn mode, every OSC address or MIDI message received is added to the device's tree, so a controller's vocabulary is captured by touching it. A MIDI device can also be created with its whole possible tree at once.",
+  "source_urls": [
+   "https://ossia.io/score-docs/devices/osc-device.html",
+   "https://ossia.io/score-docs/devices/midiin-device.html"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "udpreceive",
+   "midiin",
+   "osc.packet"
+  ],
+  "max_check": "Max: udpreceive and midiin output what arrives; nothing read describes accumulating a persistent address tree from incoming traffic. Max's own Mappings (MIDI/key mapping of parameters, per max_system_model.json dimension 7) map controls to Max parameters, the reverse direction.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Rich address patterns (ranges, alternatives, any depth)",
+  "category": "networking/sync",
+  "tool": "ossia score",
+  "tool_names": [
+   "Pattern matching",
+   "device:/foo.{5..23}",
+   "device://bar"
+  ],
+  "what_it_does": "Addresses accept wildcards, alternatives in braces, numeric ranges with steps, character classes, '//' for any depth and '!' for instances, so one automation can drive many parameters at once.",
+  "source_urls": [
+   "https://ossia.io/score-docs/in-depth/pattern-matching.html",
+   "https://ossia.io/score/features/addresses.html"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "regexp",
+   "route",
+   "osc.codebox"
+  ],
+  "max_check": "regexp refpage: PCRE matching on symbols and lists, which can match addresses but has no notion of an address tree. route matches exact first items. odot (installed third-party, query_packages) is the OSC-routing package; its pattern syntax was not checked.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Act on every address matching a pattern",
+  "category": "data/tables/scripting",
+  "tool": "ossia score",
+  "tool_names": [
+   "Pattern Applier",
+   "Pattern Combiner",
+   "Sweeper",
+   "CSV Recorder"
+  ],
+  "what_it_does": "Small processes take an address pattern: one spreads a list over the matching addresses, one combines their values (for example a mean), one sweeps a value across them in turn, and one records them all to CSV.",
+  "source_urls": [
+   "https://ossia.io/score-docs/processes/pattern-applier.html",
+   "https://ossia.io/score-docs/processes/pattern-combiner.html",
+   "https://ossia.io/score-docs/processes/sweeper.html",
+   "https://ossia.io/score-docs/processes/csv-recorder.html"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "array.mean",
+   "mtr"
+  ],
+  "max_check": "Max has no parameter tree to match against (see the device tree entry). array.mean exists in the registry for averaging a list; mtr records messages. Nothing addresses a set of parameters by pattern.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Automatic unit conversion between ports and parameters",
+  "category": "data/tables/scripting",
+  "tool": "ossia score",
+  "tool_names": [
+   "Unit system",
+   "dataspace",
+   "color.hsv",
+   "distance.mm",
+   "gain.db"
+  ],
+  "what_it_does": "Parameters and ports can carry units grouped in families (distance, colour, angle, orientation, gain, position). A value sent between two units of one family is converted automatically, for example metres to millimetres or a quaternion to Euler angles.",
+  "source_urls": [
+   "https://ossia.io/score-docs/in-depth/unit-system.html",
+   "https://ossia.io/ossia-docs/"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "dbtoa",
+   "atodb",
+   "poltocar",
+   "cartopol",
+   "jit.colorspace",
+   "mtof"
+  ],
+  "max_check": "Registry has separate converters: dbtoa/atodb, poltocar/cartopol, jit.colorspace (refpage: converts 4-plane char matrices between colourspaces). Each is an explicit object; nothing read attaches a unit to a parameter so conversion happens on the connection.",
+  "advice": "",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Write one component of a multi-value parameter, in any unit",
+  "category": "data/tables/scripting",
+  "tool": "ossia score",
+  "tool_names": [
+   "@[1]",
+   "@[color.rgb.r]",
+   "@[color.hsv.h]"
+  ],
+  "what_it_does": "An address can name one element of an array parameter, or one component in a unit, such as the hue of an RGB colour. score converts the current value, replaces that component and converts back, so two processes can write two components of one colour.",
+  "source_urls": [
+   "https://ossia.io/score-docs/in-depth/unit-system.html"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "zl",
+   "jit.colorspace"
+  ],
+  "max_check": "No refpage read describes addressing a sub-component of a parameter on the way in; in Max this needs reading the whole value, editing it (zl, unjoin/join) and writing it back.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Ranges map, units convert, never both",
+  "category": "data/tables/scripting",
+  "tool": "ossia score",
+  "tool_names": [
+   "Unit system",
+   "range",
+   "clip mode"
+  ],
+  "what_it_does": "When a value crosses a connection, score rescales it from the sender's range to the receiver's, unless both sides share a unit family, in which case it converts the unit and the range only clips. A value is never dropped because of a unit.",
+  "source_urls": [
+   "https://ossia.io/score-docs/in-depth/unit-system.html"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "scale",
+   "zmap",
+   "clip"
+  ],
+  "max_check": "scale refpage: maps an input range to an output range when you put the object there; zmap clips as well. Max never rescales implicitly on a cord.",
+  "advice": "Keep Max's explicit scaling, but write the rule down per patch: decide whether a value is a range to be mapped or a physical quantity to be converted, and use scale for the first and a named converter (dbtoa, mtof) for the second rather than mixing them.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Parameter metadata travels with the value",
+  "category": "networking/sync",
+  "tool": "ossia score",
+  "tool_names": [
+   "access",
+   "domain",
+   "bounding",
+   "repetition_filter",
+   "unit",
+   "critical",
+   "recall_safe"
+  ],
+  "what_it_does": "Every parameter can declare access mode, range or set of values, clip mode (free, clip, low, high, wrap, fold), repetition filter, unit, description, tags, priority, whether presets may recall it, and whether it is critical enough to need a reliable transport.",
+  "source_urls": [
+   "https://ossia.io/score-docs/devices/osc-device.html",
+   "https://ossia.io/score-docs/devices/serial-device.html",
+   "https://ossia.io/ossia-docs/"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "Parameter Mode (feature)",
+   "pattr",
+   "param.osc"
+  ],
+  "max_check": "max_system_model.json dimension 7: Max's Parameter Mode gives range, type, unit style, initial value and visibility to parameter-enabled objects. Fewer fields; nothing read mentions wrap/fold bounding, priority or a 'critical' flag.",
+  "advice": "Turn on Parameter Mode for every control a Max patch exposes, and set range, unit style and initial value there: it is the closest Max has to ossia's parameter metadata, and it is what OSC and OSCQuery export.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Bidirectional named aliases with transforms (Mapper device)",
+  "category": "networking/sync",
+  "tool": "ossia score",
+  "tool_names": [
+   "Mapper device",
+   "Ossia.Mapper",
+   "bind",
+   "read",
+   "write"
+  ],
+  "what_it_does": "A small script declares new parameters bound to existing ones, for example a readable name for a MIDI CC, with optional JS to rescale in each direction. The mapping runs permanently, even when the score is stopped.",
+  "source_urls": [
+   "https://ossia.io/score-docs/devices/mapper-device.html"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "pattr",
+   "node.script"
+  ],
+  "max_check": "pattr refpage: bindto makes a pattr maintain another object's data and get and set it automatically, which is a bidirectional alias inside Max. It has no per-direction transform and does not reach external devices.",
+  "advice": "Give external controls readable names inside Max with one alias layer (a pattr or a named send per control) rather than scattering raw CC numbers through the patch.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Scripted protocol adapters that feed the parameter tree",
+  "category": "networking/sync",
+  "tool": "ossia score",
+  "tool_names": [
+   "Serial device",
+   "WebSocket device",
+   "HTTP device",
+   "Ossia.Serial",
+   "onMessage",
+   "createTree"
+  ],
+  "what_it_does": "For serial, WebSocket and HTTP devices, a QML/JS script declares the tree of parameters and translates incoming bytes or JSON into address/value pairs, with framing options (delimiter, SLIP, size-prefix) for serial.",
+  "source_urls": [
+   "https://ossia.io/score-docs/devices/serial-device.html",
+   "https://ossia.io/score-docs/devices/ws-device.html",
+   "https://ossia.io/score-docs/devices/http-device.html"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "serial",
+   "node.script"
+  ],
+  "max_check": "serial refpage (digest: send and receive from a serial port) gives raw bytes; node.script refpage: runs a Node.js process controlled from Max. Parsing is written in the patch or the script, and the result is plain messages, not a parameter tree.",
+  "advice": "In Max, put each protocol's parsing in one place (a node.script or v8 file) whose only output is clean 'name value' messages, so the rest of the patch never sees bytes.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Art-Net, sACN and ENTTEC DMX with fixture library",
+  "category": "lighting/DMX/lasers",
+  "tool": "ossia score",
+  "tool_names": [
+   "Art-Net / DMX device",
+   "s/ACN",
+   "ENTTEC DMX USB Pro",
+   "Open Fixture Library"
+  ],
+  "what_it_does": "A lighting device speaks Art-Net, sACN or ENTTEC USB Pro (Mk2 can also receive). Fixtures from the Open Fixture Library format appear as named nodes; without fixtures, the 512 raw channels appear.",
+  "source_urls": [
+   "https://ossia.io/score-docs/devices/artnet-device.html",
+   "https://ossia.io/score-docs/reference/protocols-and-formats.html"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "serial",
+   "udpsend"
+  ],
+  "max_check": "Searched obj-qlookup.json (Max registry, core plus bundled packages) for dmx, artnet: none. query_packages 'dmx' finds only fxwdmxusbpro (Max for the Visual Arts, installed third-party): an abstraction sending to an ENTTEC USB Pro over serial. No Art-Net, sACN or fixture library.",
+  "advice": "",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "LED strips: textures and arrays to pixels",
+  "category": "lighting/DMX/lasers",
+  "tool": "ossia score",
+  "tool_names": [
+   "Lightness Computer",
+   "LED View",
+   "Array combiner",
+   "LED device"
+  ],
+  "what_it_does": "A shader's output texture can be converted into a pixel array (RGB or RGBW) for LED strips over Art-Net or NeoPixel SPI, with array tools to interleave channels and join strips, and a viewer to check the result.",
+  "source_urls": [
+   "https://ossia.io/score-docs/common-practices/13-led-design.html",
+   "https://ossia.io/score-docs/processes/pixel-utilities.html",
+   "https://ossia.io/score-docs/processes/array-utilities.html",
+   "https://ossia.io/score-docs/devices/led-device.html"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.spill",
+   "jit.matrix"
+  ],
+  "max_check": "jit.spill refpage: outputs matrix values as a Max list. That can turn a downsampled matrix into channel values, but Max has no LED output protocol (see the DMX entry).",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "IoT protocols: MQTT, CoAP, LSL",
+  "category": "networking/sync",
+  "tool": "ossia score",
+  "tool_names": [
+   "MQTT Device",
+   "CoAP Device",
+   "LSL"
+  ],
+  "what_it_does": "Built-in devices subscribe and publish to MQTT brokers (TCP or WebSocket, TLS), browse CoAP resources with discovery and observe, and expose Lab Streaming Layer streams.",
+  "source_urls": [
+   "https://ossia.io/score-docs/devices/mqtt-device.html",
+   "https://ossia.io/score-docs/devices/coap-device.html",
+   "https://ossia.io/score-docs/reference/protocols-and-formats.html"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "node.script"
+  ],
+  "max_check": "Searched obj-qlookup.json (Max registry, core plus bundled packages) for mqtt, coap: none; query_packages 'mqtt': no matches. node.script (refpage) runs Node.js, so npm libraries could provide these, but nothing is built in.",
+  "advice": "",
+  "confidence": "high",
+  "notes": "The LSL device page says only 'reference not yet available'."
+ },
+ {
+  "capability": "Embedded hardware I/O: GPIO, ADC, PWM, GPS, BLE",
+  "category": "sensors/tracking/ML",
+  "tool": "ossia score",
+  "tool_names": [
+   "Raw I/O device",
+   "GPS device",
+   "BLE device",
+   "Evdev device"
+  ],
+  "what_it_does": "On Linux boards like the Raspberry Pi, score reads and writes GPIO, ADC, DAC and PWM pins, reads gpsd GPS data, connects to Bluetooth LE GATT services or listens to advertisements, and reads any Linux input device.",
+  "source_urls": [
+   "https://ossia.io/score-docs/devices/rawio-device.html",
+   "https://ossia.io/score-docs/devices/gps-device.html",
+   "https://ossia.io/score-docs/devices/ble-device.html",
+   "https://ossia.io/score-docs/devices/evdev-device.html"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "hid",
+   "serial",
+   "max-ble"
+  ],
+  "max_check": "hid refpage: input from human interface devices, cross-platform. query_packages 'bluetooth' finds max-ble (Max Hardware Library, installed). Nothing for GPIO or gpsd; Max does not run on Linux boards (max_system_model.json dimension 18 lists macOS/Windows standalones and RNBO export to Raspberry Pi).",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "NDI video in and out, with PTZ camera control",
+  "category": "video I/O & playback",
+  "tool": "ossia score",
+  "tool_names": [
+   "NDI input device",
+   "NDI output device",
+   "PTZ"
+  ],
+  "what_it_does": "NDI 5/6 streams can be received or sent as video devices; a PTZ camera's zoom, pan, tilt, focus, white balance and presets appear as parameters.",
+  "source_urls": [
+   "https://ossia.io/score-docs/devices/ndi-device.html"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "jit.grab",
+   "jit.net.send"
+  ],
+  "max_check": "Searched obj-qlookup.json (Max registry, core plus bundled packages) for 'ndi': no NDI object (matches were bendin etc.). jit.net.send refpage: sends matrices to jit.net.recv over TCP, Max-to-Max only.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Remote control of transport, triggers and speed over WebSocket",
+  "category": "networking/sync",
+  "tool": "ossia score",
+  "tool_names": [
+   "WebSocket API",
+   "TriggerAdded",
+   "IntervalSpeed",
+   "Console"
+  ],
+  "what_it_does": "A JSON WebSocket API reports intervals and triggers as they start and end, sends a heartbeat with progress, and accepts play, pause, stop, seek, firing a trigger, per-interval speed and gain, parameter writes and JS code.",
+  "source_urls": [
+   "https://ossia.io/score-docs/in-depth/remote.html",
+   "https://ossia.io/score-docs/processes/controlsurface.html"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "node.script",
+   "param.osc"
+  ],
+  "max_check": "userguide OSC.json: Max exposes parameters over OSC and OSCQuery. node.script refpage allows building a WebSocket server by hand. Nothing built in reports show progress or accepts transport commands from a web remote.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "The running score as an OSCQuery device (extended tree)",
+  "category": "networking/sync",
+  "tool": "ossia score",
+  "tool_names": [
+   "Local device",
+   "extended tree",
+   "global_play",
+   "transport"
+  ],
+  "what_it_does": "score publishes its own transport (play, stop, reinit, transport in ms) over OSCQuery; with the extended tree on, every interval and process control becomes an addressable parameter.",
+  "source_urls": [
+   "https://ossia.io/score-docs/devices/local-device.html",
+   "https://ossia.io/score-docs/faq/controlling-score-with-oscquery.html"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "param.osc",
+   "transport"
+  ],
+  "max_check": "userguide OSC.json: all patchers with parameters exposed as OSC appear in Max's OSCQuery response; patchers can be excluded. That exposes parameter-enabled objects, not the transport of a show structure.",
+  "advice": "Expose a Max show's own transport (go, stop, reset, current cue) as parameter-enabled objects so it appears in Max's OSCQuery and can be driven like any other parameter.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Control surface generated from parameter metadata",
+  "category": "control surface/UI building",
+  "tool": "ossia score",
+  "tool_names": [
+   "Control surface"
+  ],
+  "what_it_does": "Dropping device addresses onto a Control Surface process creates widgets chosen from each parameter's type, unit and range, active only while that part of the score runs, and mirrored to remote clients.",
+  "source_urls": [
+   "https://ossia.io/score-docs/processes/controlsurface.html"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "attrui",
+   "param.osc"
+  ],
+  "max_check": "attrui refpage: inspects attribute values of the connected object(s) and builds a control for one attribute. It works on attributes of a cabled object, not on external parameters, and is always present rather than tied to a section of a show.",
+  "advice": "Where a Max section exposes several parameters, show them through attrui or parameter-enabled UI driven from the parameter's own range, so the control can never disagree with the value's real limits.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Replace the whole UI with a QML performer interface",
+  "category": "control surface/UI building",
+  "tool": "ossia score",
+  "tool_names": [
+   "Custom UI",
+   "Score.UI.PortSource",
+   "Score.UI.AddressSource",
+   "--ui"
+  ],
+  "what_it_does": "Launched with --ui and a QML file, score runs a custom performer interface whose widgets bind to process ports or device addresses by name, while the score plays underneath.",
+  "source_urls": [
+   "https://ossia.io/score-docs/custom-ui.html"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "Presentation Mode (feature)",
+   "v8ui",
+   "jsui"
+  ],
+  "max_check": "max_system_model.json dimension 11: Presentation Mode gives a second independent layout of chosen objects; custom UI via v8ui/jsui. The performer view lives inside the patcher rather than in a separate file bound by name.",
+  "advice": "Treat a Max presentation view as the performer interface and keep it limited to controls bound to named parameters, which is the same separation ossia makes with a separate UI file.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Headless player with autoplay and start delay",
+  "category": "deployment",
+  "tool": "ossia score",
+  "tool_names": [
+   "--no-gui",
+   "--autoplay",
+   "--wait",
+   "--no-restore"
+  ],
+  "what_it_does": "From the command line, score can open a file without its interface, start playing automatically after a delay (to let plug-ins load), and skip the crash-restore dialog: a ready-made start-up line for installations.",
+  "source_urls": [
+   "https://ossia.io/score-docs/reference/commandline.html",
+   "https://ossia.io/score-docs/faq/nogui.html"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "standalone (feature)",
+   "loadbang"
+  ],
+  "max_check": "max_system_model.json dimension 18: Max ships standalones and project Open Actions. Userguide grep for 'headless' and 'command line' found nothing. A standalone can start playing via loadbang, but no documented no-GUI mode was found.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Runs on Raspberry Pi and Linux ARM, full screen without a desktop",
+  "category": "deployment",
+  "tool": "ossia score",
+  "tool_names": [
+   "ossia-score-eglfs",
+   "Raspberry Pi",
+   "AArch64 AppImage"
+  ],
+  "what_it_does": "The same editor runs on Raspberry Pi 3/4 and other ARM Linux boards; an EGLFS launcher renders full screen with no window system, for embedded players.",
+  "source_urls": [
+   "https://ossia.io/score-docs/in-depth/embedded.html",
+   "https://ossia.io/score-docs/quick-start/installation.html"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "rnbo~"
+  ],
+  "max_check": "max_system_model.json dimension 18: RNBO (paid add-on) exports patches to Raspberry Pi; rnbo~ refpage: a special patcher for exportable code. Max itself and Jitter do not run on the Pi.",
+  "advice": "",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Scripting that builds the score, with one-step undo",
+  "category": "data/tables/scripting",
+  "tool": "ossia score",
+  "tool_names": [
+   "Score.createBox",
+   "Score.automate",
+   "Score.startMacro",
+   "Score.endMacro",
+   "Scripts menu"
+  ],
+  "what_it_does": "A JS console and script files can create intervals, processes, cables and automations, set curves and step values, and group all changes into one undo step. Script modules can add menu items with shortcuts.",
+  "source_urls": [
+   "https://ossia.io/score-docs/in-depth/scripting.html",
+   "https://ossia.io/score-docs/in-depth/scripting-api.html",
+   "https://ossia.io/score-docs/panels/console.html"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "thispatcher",
+   "v8"
+  ],
+  "max_check": "thispatcher refpage: modifies a patcher window with messages; max_system_model.json dimension 13: v8 can query and change the patcher. Nothing read mentions grouping scripted edits into a single undo step.",
+  "advice": "When a v8 script generates or rewires part of a Max patch, make it idempotent and keep it in one function, since Max has no documented way to undo a scripted batch in one step.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Hierarchical audio mixing with propagation",
+  "category": "audio",
+  "tool": "ossia score",
+  "tool_names": [
+   "Audio routing",
+   "Propagate",
+   "bus"
+  ],
+  "what_it_does": "Each process's audio is mixed into its parent interval, and up to the top of the score, which goes to the main output. Cabling an output elsewhere removes it from that mix unless Propagate is ticked; any interval can be made a bus with volume and pan.",
+  "source_urls": [
+   "https://ossia.io/score-docs/in-depth/audio-routing.html",
+   "https://ossia.io/score-docs/panels/mixer.html",
+   "https://ossia.io/score-docs/common-practices/4-audio.html"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "dac~",
+   "+~",
+   "send~",
+   "matrix~"
+  ],
+  "max_check": "max_system_model.json dimension 5: Max routes audio explicitly through cords and MC; send~/receive~ sum by name. There is no implicit parent mix.",
+  "advice": "In a large Max patch, give each section its own explicit sub-mix (a named send~ bus) before the master, which reproduces ossia's per-section mixing without hidden routing.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Channel-count polyphony with per-channel lists",
+  "category": "audio",
+  "tool": "ossia score",
+  "tool_names": [
+   "Polyphony",
+   "list"
+  ],
+  "what_it_does": "A mono Faust or Avendish effect fed N channels runs N copies; sending a list instead of a float to a control sets each channel's value separately.",
+  "source_urls": [
+   "https://ossia.io/score-docs/docs/advanced/polyphony.html",
+   "https://ossia.io/score-docs/common-practices/14-spatial-audio.html"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "mc.apply~"
+  ],
+  "max_check": "Registry has 241 mc.* objects; max_system_model.json dimension 5: MC wrapper objects hold one copy of an MSP object per channel. mc.apply~ refpage applies a function across channels. This is the same idea, already in Max.",
+  "advice": "When a Max effect has to run on many speakers or voices, reach for the MC version of the object and set per-channel values with one list, as ossia does, rather than duplicating the object by hand.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Distance- and grid-based panning to any speaker layout",
+  "category": "audio",
+  "tool": "ossia score",
+  "tool_names": [
+   "DBAP",
+   "GBAP",
+   "Matrix spatialization",
+   "Path Generator",
+   "Multi-Cursor Manager"
+  ],
+  "what_it_does": "Built-in processes compute speaker gains from a source position and a speaker layout (DBAP for irregular layouts, GBAP for grids, cascadable), apply them with a spatialisation matrix, and generate trajectories.",
+  "source_urls": [
+   "https://ossia.io/score-docs/common-practices/14-spatial-audio.html",
+   "https://ossia.io/score-docs/processes/gbap.html",
+   "https://ossia.io/score-docs/processes/dbap.html"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "matrix~",
+   "fl.spatial~"
+  ],
+  "max_check": "matrix~ refpage: routing and mixing matrix with gain per connection. Registry has no DBAP; query_packages 'dbap' finds FrameLib fl.spatial~ (installed third-party) computing DBAP speaker gains. abclib (installed) provides ambisonics.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Runs Pure Data patches and compiles Faust inside",
+  "category": "audio",
+  "tool": "ossia score",
+  "tool_names": [
+   "Pure Data support",
+   "libpd",
+   "Faust"
+  ],
+  "what_it_does": "A Pd patch dropped in becomes a process with audio, MIDI and value ports created from its adc~/dac~, MIDI and send/receive objects. Faust .dsp files are compiled on the spot, edited live and recompiled.",
+  "source_urls": [
+   "https://ossia.io/score-docs/processes/puredata.html",
+   "https://ossia.io/score-docs/processes/faust.html"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "gen~",
+   "vst~"
+  ],
+  "max_check": "Registry: no Pd host, no faust object; query_packages 'faust': no matches. gen~ is Max's own compiled DSP language (max_system_model.json dimension 21), not Faust.",
+  "advice": "",
+  "confidence": "high",
+  "notes": "abclib, installed here, is built from Faust code but ships compiled Max externals."
+ },
+ {
+  "capability": "Plug-in formats beyond VST/AU: CLAP, LV2, JSFX, AirWindows",
+  "category": "audio",
+  "tool": "ossia score",
+  "tool_names": [
+   "CLAP",
+   "LV2",
+   "JSFX",
+   "AirWindows"
+  ],
+  "what_it_does": "Besides VST 2/3, score hosts CLAP on all platforms, LV2 on Linux, Reaper's JSFX scripts and the built-in AirWindows effects.",
+  "source_urls": [
+   "https://ossia.io/score-docs/processes/audio-plugins.html",
+   "https://ossia.io/score-docs/reference/protocols-and-formats.html"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "vst~"
+  ],
+  "max_check": "vst~ refpage: hosts VST, VST3 and Audio Unit plug-ins. No mention of CLAP, LV2 or JSFX.",
+  "advice": "",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Shaders as files whose header creates the controls (ISF, VSA, CSF)",
+  "category": "GPU compute/shaders",
+  "tool": "ossia score",
+  "tool_names": [
+   "ISF Shaders",
+   "Vertex Shader Art",
+   "CSF Compute Shaders",
+   "Render Pipeline"
+  ],
+  "what_it_does": "Fragment shaders in the ISF format, vertex-shader-art point programs, compute shaders and raw raster pipelines each start with a JSON header listing inputs; dropping the file creates matching controls and ports, and code can be recompiled live.",
+  "source_urls": [
+   "https://ossia.io/score-docs/processes/shaders.html",
+   "https://ossia.io/score-docs/processes/vertex-shader-art.html",
+   "https://ossia.io/score-docs/processes/compute-shaders.html",
+   "https://ossia.io/score-docs/processes/render-pipeline.html"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.gl.slab",
+   "jit.gl.shader",
+   "jit.gpu.compute"
+  ],
+  "max_check": "jit.gl.slab refpage: processes textures with fragment shaders; jit.gl.shader: shaders described in a JXS file. jit.gpu.compute (Compute package, installed third-party) loads and runs GLSL compute shaders. query_packages lists jit.gl.isf (ISF package) but it was not found on disk.",
+  "advice": "Write Max shaders as .jxs files whose param declarations carry defaults and ranges, so jit.gl.slab exposes them as named, settable inputs the way ISF headers do.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "ONNX models, RapidLib learning and a local LLM as processes",
+  "category": "sensors/tracking/ML",
+  "tool": "ossia score",
+  "tool_names": [
+   "AI Recognition",
+   "BlazePose Detector",
+   "Classifier",
+   "Regressor",
+   "Qwen LLM"
+  ],
+  "what_it_does": "Pose-detection ONNX models run on camera or video input and output keypoints; RapidLib classifier and regressor learn mappings from recorded examples; a Qwen model generates text locally.",
+  "source_urls": [
+   "https://ossia.io/score-docs/processes/ai-recognition.html",
+   "https://ossia.io/score-docs/processes/classifier.html",
+   "https://ossia.io/score-docs/processes/regressor.html",
+   "https://ossia.io/score-docs/processes/qwen-llm.html"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "dk.regressor",
+   "fluid.knnregressor~"
+  ],
+  "max_check": "Registry: no onnx or ML objects. query_packages: Data Knot dk.regressor, FluidCorpusManipulation fluid.knnregressor~, ml.star (installed third-party) cover learned mappings; nothing for ONNX pose models or LLMs.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Polygon zones with interpolated attributes",
+  "category": "sensors/tracking/ML",
+  "tool": "ossia score",
+  "tool_names": [
+   "Geo Zones"
+  ],
+  "what_it_does": "Zones are polygons (for example in latitude/longitude) carrying numeric and enumerated attributes; a moving position gets distances to each zone and attribute values blended by proximity.",
+  "source_urls": [
+   "https://ossia.io/score-docs/processes/geo-zones.html"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "nodes"
+  ],
+  "max_check": "Registry has no polygon-zone object. nodes refpage: displays overlapping circular regions and outputs interpolated weights from the distance between a slider position and each node centre. Circles only, no polygons or attached attributes.",
+  "advice": "",
+  "confidence": "low",
+  "notes": ""
+ },
+ {
+  "capability": "Auto-calibrating and shaping input maps",
+  "category": "data/tables/scripting",
+  "tool": "ossia score",
+  "tool_names": [
+   "Calibrator",
+   "Mapping Tool",
+   "Smooth",
+   "OneEuro"
+  ],
+  "what_it_does": "Mapping processes learn a sensor's real min and max while it runs, add a deadzone, apply curve shapes and wrap/fold behaviour, and smooth noisy input with a 1-euro, low-pass, average or median filter.",
+  "source_urls": [
+   "https://ossia.io/score-docs/processes/calibrator.html",
+   "https://ossia.io/score-docs/processes/mapping-tool.html",
+   "https://ossia.io/score-docs/processes/smooth.html"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "scale",
+   "peak",
+   "trough",
+   "slide",
+   "dot.autoscale",
+   "pipo.1euro"
+  ],
+  "max_check": "scale refpage: fixed ranges; peak and trough refpages track running max and min; slide smooths logarithmically. query_packages: dot.autoscale (Digital Orchestra Toolbox) rescales by the min and max seen; pipo.1euro (MuBu) is a 1-euro filter. Built-in Max needs several objects for this.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Query structured data with jq syntax",
+  "category": "data/tables/scripting",
+  "tool": "ossia score",
+  "tool_names": [
+   "Object filter"
+  ],
+  "what_it_does": "A process applies a subset of jq to nested lists and maps, for example picking one keypoint from a pose model's output or slicing an array of objects.",
+  "source_urls": [
+   "https://ossia.io/score-docs/processes/object-filter.html",
+   "https://ossia.io/score-docs/processes/ai-recognition.html"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "dict",
+   "array.filter",
+   "dict.unpack"
+  ],
+  "max_check": "dict refpage: create and query dictionaries; registry has dict.* and array.* families (array.filter refpage: keep elements matching a condition). No jq-style path language was found.",
+  "advice": "When Max data gets deeply nested, keep it in a dict and extract fields at one point (dict.unpack or a v8 function) rather than chaining many list objects.",
+  "confidence": "low",
+  "notes": ""
+ },
+ {
+  "capability": "Tempo-aware media: ACID tags, time-stretch and video locked to tempo",
+  "category": "video I/O & playback",
+  "tool": "ossia score",
+  "tool_names": [
+   "Sound file process",
+   "Rubberband",
+   "Use tempo",
+   "Video"
+  ],
+  "what_it_does": "Sound files with tempo information (ACID tags or BPM in the name) are treated as loops and time-stretched or repitched to the score tempo; video can also be told its tempo and follows tempo changes.",
+  "source_urls": [
+   "https://ossia.io/score-docs/processes/soundfile.html",
+   "https://ossia.io/score-docs/processes/video.html"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "groove~",
+   "jit.movie"
+  ],
+  "max_check": "groove~ refpage: timestretch message enables time-stretching. Nothing read reads ACID tags or locks jit.movie playback to the transport tempo.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ }
+]

@@ -33,6 +33,7 @@ TOOLS = [  # (label, path)
     ("Isadora", SCANS / "isadora" / "isadora_system_model.json"),
     ("cables.gl", SCANS / "cables-gl" / "cables_gl_system_model.json"),
     ("Pd / plugdata", SCANS / "plugdata" / "plugdata_system_model.json"),
+    ("ossia score", SCANS / "ossia-score" / "ossia_score_system_model.json"),
 ]
 
 

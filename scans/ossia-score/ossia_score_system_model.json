@@ -1,0 +1,613 @@
+[
+ {
+  "id": 1,
+  "dimension": "Evaluation",
+  "summary": "Execution is driven by the score's time: while playing, each running interval ticks its processes, and a process only runs while its interval is active. A process outside the running path does nothing, and audio processes stop costing CPU once the playhead leaves their interval. Within a tick, processes form a dataflow graph whose cables carry audio, values, MIDI and textures.",
+  "details": [
+   "Processes attached to an interval run for its duration; processes on a state run once at that instant [processes.html]",
+   "JS processes get a tick(token, state) call on every tick plus start, stop, pause and resume callbacks [processes/javascript.html]",
+   "Audio past the end of an interval is bypassed entirely, saving CPU [quick-start/working-with-audio.html]",
+   "A mapping only runs while its box is connected to the start of the score and playing; a trigger at its end keeps it running [common-practices/12-data-processing.html]",
+   "A part not linked to the start does not run until triggered [common-practices/3-out-of-time.html]",
+   "The Mapper device is the exception: it runs permanently, even when the score is stopped [devices/mapper-device.html]"
+  ],
+  "names": [
+   "tick",
+   "Interval",
+   "State",
+   "Process"
+  ],
+  "sources": [
+   "https://ossia.io/score-docs/processes.html",
+   "https://ossia.io/score-docs/processes/javascript.html",
+   "https://ossia.io/score-docs/quick-start/working-with-audio.html",
+   "https://ossia.io/score-docs/common-practices/12-data-processing.html",
+   "https://ossia.io/score-docs/devices/mapper-device.html"
+  ],
+  "what_a_max_user_would_notice": "In Max an object computes whenever a message reaches its hot inlet, at any time (max_system_model.json dimension 1). In score nothing runs unless the playhead is inside its interval, so a 'patch that just runs' has to be placed in an interval held open by a trigger.",
+  "confidence": "medium",
+  "open_questions": "The in-depth 'Execution engine' page is an empty stub, so the tick scheduling is described only indirectly."
+ },
+ {
+  "id": 2,
+  "dimension": "Ordering",
+  "summary": "Within a tick, the order follows the dataflow graph of cables between processes, and the timeline decides which processes are active. The docs do not describe an explicit ordering tool like a trigger object; libossia parameters carry a priority attribute meant to say which nodes execute first.",
+  "details": [
+   "Processes are patched with cables in the nodal view; double-clicking inserts a process on a cable or before a port [in-depth/modular-workflow.html]",
+   "Unit rules hold when a process reads an address another process wrote earlier in the same tick [in-depth/unit-system.html]",
+   "libossia nodes have a priority attribute: nodes with the highest priority should execute first [ossia-docs]",
+   "Several transitions into one sync point: the smallest loop restarts first and cuts parallel intervals short [common-practices/1-looping.html]"
+  ],
+  "names": [
+   "cable",
+   "priority",
+   "Sync"
+  ],
+  "sources": [
+   "https://ossia.io/score-docs/in-depth/modular-workflow.html",
+   "https://ossia.io/score-docs/in-depth/unit-system.html",
+   "https://ossia.io/score-docs/common-practices/1-looping.html",
+   "https://ossia.io/ossia-docs/"
+  ],
+  "what_a_max_user_would_notice": "Max users manage right-to-left and depth-first order inside one event (max_system_model.json dimension 2). score's docs say little about message order within a tick; ordering is mostly a matter of time position and graph shape.",
+  "confidence": "low",
+  "open_questions": "How fan-out order is decided inside one tick is not documented in the pages read."
+ },
+ {
+  "id": 3,
+  "dimension": "Time",
+  "summary": "The timeline is the master clock. Model time is counted in flicks (705,600,000 per second) and is affected by speed controls; physical time is counted in audio samples. Each interval can run at its own speed, and tempo, time signature and quantisation pass down the hierarchy, so different sections can have different tempos. Transport can follow or drive JACK transport.",
+  "details": [
+   "Logical time in JS is token.date in flicks, divide by 705600000 for seconds; physical time is counted in samples [processes/javascript.html]",
+   "JS timing values stay accurate for about 147 days because of double precision; the C++ API reaches 414 years [processes/javascript.html]",
+   "Intervals can have min, max and infinite durations and a speed factor [in-depth/scripting-api.html]",
+   "Speed sliders appear on intervals while playing [processes/scenario.html]",
+   "Tempo, metre and quantisation propagate hierarchically; a child can be 3/4 inside a 4/4 root [in-depth/musical.html]",
+   "A Tempo process makes an interval's tempo absolute, not affected by the parent's speed [processes/tempo.html]",
+   "Only JACK transport is supported for external sync; SMPTE, MIDI clock and Link are planned [common-practices/9-seek-and-transport.html]",
+   "createBox accepts '00:01:15.345' strings or numbers in flicks [in-depth/scripting-api.html]"
+  ],
+  "names": [
+   "flick",
+   "model time",
+   "physical time",
+   "Tempo",
+   "Quantization",
+   "Speed",
+   "JACK transport"
+  ],
+  "sources": [
+   "https://ossia.io/score-docs/processes/javascript.html",
+   "https://ossia.io/score-docs/in-depth/musical.html",
+   "https://ossia.io/score-docs/processes/tempo.html",
+   "https://ossia.io/score-docs/common-practices/9-seek-and-transport.html",
+   "https://ossia.io/score-docs/in-depth/scripting-api.html"
+  ],
+  "what_a_max_user_would_notice": "Max has one scheduler, the sample clock and flat named transports at 480 PPQ (max_system_model.json dimension 3). score's time is a tree: a section can be slowed, paused or given its own tempo without touching the rest, and seeking replays state.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 4,
+  "dimension": "Data types",
+  "summary": "Ports carry audio (any number of channels), values, MIDI, textures and geometry. Values are typed: int, float, bool, char, string, vec2/vec3/vec4, list (tuple) and impulse. Values can also be nested lists and maps, which processes like Object filter query with jq syntax.",
+  "details": [
+   "Value types in the WebSocket API: Int, Float, Bool, Char, String, Vec2f, Vec3f, Vec4f, Tuple, Impulse [in-depth/remote.html]",
+   "Address types accept many aliases (pulse/bang/impulse, symbol/string, vec3f...) [score/features/addresses.html]",
+   "Audio ports carry arbitrary channel counts [common-practices/4-audio.html]",
+   "Video ports carry textures; GPU processes write to render targets [in-depth/video.html, quick-start/working-with-video.html]",
+   "Geometry flows from Object Loader or compute shaders to Model Display or Render Pipeline [processes/object-loader.html, processes/render-pipeline.html]",
+   "Object filter applies jq to nested lists and maps [processes/object-filter.html]"
+  ],
+  "names": [
+   "Impulse",
+   "Vec3f",
+   "Tuple",
+   "texture",
+   "geometry"
+  ],
+  "sources": [
+   "https://ossia.io/score-docs/in-depth/remote.html",
+   "https://ossia.io/score-docs/common-practices/4-audio.html",
+   "https://ossia.io/score-docs/in-depth/video.html",
+   "https://ossia.io/score-docs/processes/object-filter.html",
+   "https://ossia.io/score/features/addresses.html"
+  ],
+  "what_a_max_user_would_notice": "Max messages are atoms and lists, with big data passed by name (max_system_model.json dimension 4). score has typed vectors and an impulse type as first-class values, and a value can carry a unit.",
+  "confidence": "medium",
+  "open_questions": ""
+ },
+ {
+  "id": 5,
+  "dimension": "Rates and channels",
+  "summary": "Audio runs at the sound card rate with a buffer size; value and MIDI ports carry timestamped messages within each tick; video renders in a separate thread at the output's rate. Channels travel together in one audio port, and mono effects fed N channels run N times.",
+  "details": [
+   "JS ticks receive buffer_size and sample_rate, and value inlets list each message with its timestamp [processes/javascript.html]",
+   "Video processes form a render graph processed in a separate thread [in-depth/video.html]",
+   "Mono Faust and Avendish effects become polyphonic per channel; a list sets per-channel controls [docs/advanced/polyphony.html]",
+   "Window and NDI/Spout outputs choose a rendering rate [devices/spout-device.html, devices/ndi-device.html]",
+   "Spammer bypasses score's message send rate for devices that accept higher resolution [processes/spammer.html]"
+  ],
+  "names": [
+   "buffer_size",
+   "timestamp",
+   "render graph",
+   "Polyphony"
+  ],
+  "sources": [
+   "https://ossia.io/score-docs/processes/javascript.html",
+   "https://ossia.io/score-docs/in-depth/video.html",
+   "https://ossia.io/score-docs/docs/advanced/polyphony.html",
+   "https://ossia.io/score-docs/processes/spammer.html"
+  ],
+  "what_a_max_user_would_notice": "Max separates event, signal and frame domains with converter objects (max_system_model.json dimension 5). In score a value port inside an audio tick already carries sample-position timestamps, and the multichannel idea matches Max's MC.",
+  "confidence": "medium",
+  "open_questions": "The control-message send rate and how it is set are not documented beyond Spammer's note."
+ },
+ {
+  "id": 6,
+  "dimension": "State and saving",
+  "summary": "A .score file saves the whole timeline, processes, cables, device definitions and the values stored in states. Live parameter values belong to devices and are not saved unless stored in a cue. On a seek, 'value compilation' rebuilds device state from earlier states.",
+  "details": [
+   "Cues store messages in states; Snapshot and Refresh update them from live values [cues.html]",
+   "Value compilation sends the latest value from all earlier states when transporting [common-practices/9-seek-and-transport.html]",
+   "Parts of a score can be saved to the library as .scenario files and dropped back in; process presets are not available yet [presets.html]",
+   "A state dropped into the library becomes a .cues file [processes/scenario.html]",
+   "Device namespaces can be exported to disk [devices/osc-device.html]",
+   "Scripts can serialise the document to JSON and a device tree to JSON or OSCQuery JSON [in-depth/scripting-api.html]",
+   "JS process code with compile errors is not saved in the score [processes/javascript.html]"
+  ],
+  "names": [
+   "Cue",
+   "State",
+   ".scenario",
+   ".cues",
+   "Value compilation",
+   "Export device"
+  ],
+  "sources": [
+   "https://ossia.io/score-docs/cues.html",
+   "https://ossia.io/score-docs/common-practices/9-seek-and-transport.html",
+   "https://ossia.io/score-docs/presets.html",
+   "https://ossia.io/score-docs/devices/osc-device.html",
+   "https://ossia.io/score-docs/in-depth/scripting-api.html"
+  ],
+  "what_a_max_user_would_notice": "A Max patch saves structure and needs pattr, Snapshots or embed flags to keep values (max_system_model.json dimension 6). In score the stored values are the show itself: states on a timeline, and seeking reconstructs them.",
+  "confidence": "medium",
+  "open_questions": ""
+ },
+ {
+  "id": 7,
+  "dimension": "Parameters",
+  "summary": "Everything score controls is a parameter in a device tree, addressed as device:/path. Parameters carry a type, range or value set, clip mode, repetition filter, unit and more. Process controls are ports that can be given an address, automated, or cabled. There are no expressions on parameters; math lives in expression processes.",
+  "details": [
+   "Parameter attributes include domain, clip mode, repetition filter [devices/osc-device.html]",
+   "libossia attributes: access mode, domain, bounding (free, clip, low, high, wrap, fold), repetition filter, unit, extended type, description, tags, priority, recall_safe, refresh rate, step size, default value, critical, disabled, muted, hidden [ossia-docs]",
+   "Dragging a parameter onto a port sets its address and appends its unit [in-depth/unit-system.html]",
+   "Right-clicking a value port offers 'Create automation' [in-depth/automations.html]",
+   "Ports can be read and written by name or index from scripts, with min, max and enum values [in-depth/scripting-api.html]",
+   "The extended local tree exposes every interval and process control over OSCQuery [devices/local-device.html]"
+  ],
+  "names": [
+   "device:/path",
+   "domain",
+   "bounding",
+   "repetition_filter",
+   "unit",
+   "port",
+   "address"
+  ],
+  "sources": [
+   "https://ossia.io/score-docs/devices/osc-device.html",
+   "https://ossia.io/score-docs/in-depth/unit-system.html",
+   "https://ossia.io/score-docs/in-depth/automations.html",
+   "https://ossia.io/score-docs/devices/local-device.html",
+   "https://ossia.io/ossia-docs/"
+  ],
+  "what_a_max_user_would_notice": "In Max, settings are attributes and only parameter-enabled objects join the parameter system (max_system_model.json dimension 7). In score the parameter tree is the centre of the program: every external control is one, and the tree, not the patch, is what you browse.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 8,
+  "dimension": "Encapsulation and reuse",
+  "summary": "Reuse happens through nesting and the library. A Scenario process puts a whole score inside an interval, to any depth. Selections of the score can be saved to the library as .scenario files, states as .cues, and JS, Faust, shader and Pd files dropped in become processes. New processes come from plug-ins.",
+  "details": [
+   "Scenario nests a score inside another to arbitrary depth [processes/scenario.html]",
+   "Alt-drag a selection into the user library to save it as .scenario [presets.html]",
+   "Any .dsp file in the library appears under Faust in the process library [processes/faust.html]",
+   "A whole score can be saved as a preset and embedded recursively in itself [panels/library.html]",
+   "Faust libraries and score packages are installed through the package manager [processes/faust.html, in-depth/scripting-api.html]"
+  ],
+  "names": [
+   "Scenario",
+   ".scenario",
+   "User library",
+   "Package manager"
+  ],
+  "sources": [
+   "https://ossia.io/score-docs/processes/scenario.html",
+   "https://ossia.io/score-docs/presets.html",
+   "https://ossia.io/score-docs/panels/library.html",
+   "https://ossia.io/score-docs/processes/faust.html"
+  ],
+  "what_a_max_user_would_notice": "Max reuses through abstractions with arguments and #0 instance names, and poly~ for many copies (max_system_model.json dimension 8). The docs read describe no equivalent of arguments or replication for a saved .scenario; reuse is by copying a fragment back in.",
+  "confidence": "medium",
+  "open_questions": "Whether saved .scenario fragments stay linked to their file or are copied is not stated."
+ },
+ {
+  "id": 9,
+  "dimension": "Names and scope",
+  "summary": "Parameters are reached by path: device name, colon, slash path (OSCdevice:/track/1/volume), optionally followed by @[index] or @[unit]. Paths accept pattern matching. Score objects are found by name or label through the inspector or scripts. Device names are global to the document.",
+  "details": [
+   "Address form device:/foo/bar, with pattern matching on any level [in-depth/pattern-matching.html]",
+   "@[1] selects an array element; @[color.hsv.h] a unit component [in-depth/unit-system.html]",
+   "Score.find('Interval.foobar') and Score.findByLabel find objects by name or label [in-depth/scripting-api.html]",
+   "Media paths can start with <PROJECT>: or <LIBRARY>: [in-depth/media.html]",
+   "Mapper parameters bind to other devices' addresses by path [devices/mapper-device.html]"
+  ],
+  "names": [
+   "device:/path",
+   "@[ ]",
+   "Pattern matching",
+   "<PROJECT>:",
+   "<LIBRARY>:"
+  ],
+  "sources": [
+   "https://ossia.io/score-docs/in-depth/pattern-matching.html",
+   "https://ossia.io/score-docs/in-depth/unit-system.html",
+   "https://ossia.io/score-docs/in-depth/scripting-api.html",
+   "https://ossia.io/score-docs/in-depth/media.html"
+  ],
+  "what_a_max_user_would_notice": "Max names are mostly global send/receive names with scope tricks like #0 and --- (max_system_model.json dimension 9). In score a name is a full path in a tree, so related controls are grouped by their path and can be addressed together with one pattern.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 10,
+  "dimension": "Show structure",
+  "summary": "A show is one interactive score: intervals (blocks of time holding processes) between states (instants holding cues), joined at synchronisation points. Triggers hold the timeline until an event, conditions choose branches, transitions loop back, and sub-scenarios nest. Scenes are sequences of intervals each holding a sub-scenario.",
+  "details": [
+   "Triggers put the following part on hold until fired by mouse, parameter or expression [quick-start/breaking-the-timeline.html]",
+   "Conditions on split events select parallel branches [common-practices/2-switches.html]",
+   "Transitions are instantaneous intervals that connect any two states, letting the score loop [common-practices/1-looping.html]",
+   "Scenes: sequences of intervals each containing a sub-scenario, navigated with triggers or Play from here [common-practices/6-scenes.html]",
+   "Cues are messages inside states, played when the score reaches them or fired out of time [cues.html]",
+   "Intervals can be started, stopped and muted [processes/scenario.html]"
+  ],
+  "names": [
+   "Interval",
+   "State",
+   "Sync",
+   "Trigger",
+   "Condition",
+   "Transition",
+   "Scenario"
+  ],
+  "sources": [
+   "https://ossia.io/score-docs/quick-start/breaking-the-timeline.html",
+   "https://ossia.io/score-docs/common-practices/2-switches.html",
+   "https://ossia.io/score-docs/common-practices/1-looping.html",
+   "https://ossia.io/score-docs/common-practices/6-scenes.html",
+   "https://ossia.io/score-docs/cues.html"
+  ],
+  "what_a_max_user_would_notice": "Max has no built-in show layer; structure is built from qlist, pattrstorage and the transport (max_system_model.json dimension 10). score is the show layer: its whole interface is a timeline that can wait, branch and loop.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 11,
+  "dimension": "Interface",
+  "summary": "One window holds a device explorer and libraries on the left, the timeline (or nodal view) in the centre and an inspector on the right. Controls appear on process nodes and can be right-clicked for exact entry. A separate performer UI can be a QML file passed on the command line, and Control Surface processes generate widgets from parameter metadata.",
+  "details": [
+   "Explorer panel, scenario editor and object inspector [quick-start/interface-overview.html]",
+   "The temporal view and the modular (nodal) view switch at the bottom; cables can be hidden [in-depth/modular-workflow.html]",
+   "Custom QML UI with Score.UI.PortSource and AddressSource bindings, run with --ui [custom-ui.html]",
+   "Control surface widgets are chosen from the node's unit, type and range [processes/controlsurface.html]",
+   "The QML remote app uses the WebSocket API [in-depth/remote.html]"
+  ],
+  "names": [
+   "Device explorer",
+   "Inspector",
+   "nodal view",
+   "Custom UI",
+   "Control surface"
+  ],
+  "sources": [
+   "https://ossia.io/score-docs/quick-start/interface-overview.html",
+   "https://ossia.io/score-docs/in-depth/modular-workflow.html",
+   "https://ossia.io/score-docs/custom-ui.html",
+   "https://ossia.io/score-docs/processes/controlsurface.html"
+  ],
+  "what_a_max_user_would_notice": "In Max the controls are the dataflow and a presentation view is the performer view (max_system_model.json dimension 11). score's editor is a timeline, and a performer interface is a separate QML file that binds to ports and addresses by name.",
+  "confidence": "medium",
+  "open_questions": ""
+ },
+ {
+  "id": 12,
+  "dimension": "Editing while running",
+  "summary": "The score keeps playing while you edit: processes, sounds and shaders can be added, removed or changed during playback, and code processes recompile on Compile or Ctrl+Enter. Invalid code leaves the running version in place. Devices cannot be added during playback, and execution settings need a restart of playback.",
+  "details": [
+   "Every part of the score is meant to be editable during playback [common-practices/8-live-coding.html]",
+   "Adding a new device during playback is not possible [common-practices/8-live-coding.html]",
+   "Invalid code does not replace the current state, avoiding loud noises and flashes [common-practices/8-live-coding.html]",
+   "Execution settings changes require stopping and restarting playback [reference/preferences.html]",
+   "Scripted edits can be grouped into one undo step with startMacro/endMacro [in-depth/scripting-api.html]"
+  ],
+  "names": [
+   "Compile",
+   "Ctrl+Enter",
+   "Score.undo",
+   "startMacro"
+  ],
+  "sources": [
+   "https://ossia.io/score-docs/common-practices/8-live-coding.html",
+   "https://ossia.io/score-docs/reference/preferences.html",
+   "https://ossia.io/score-docs/in-depth/scripting-api.html"
+  ],
+  "what_a_max_user_would_notice": "Both run while edited. In Max, retyping an object resets it (max_system_model.json dimension 12); in score a code process keeps running its old version when new code fails to compile.",
+  "confidence": "medium",
+  "open_questions": ""
+ },
+ {
+  "id": 13,
+  "dimension": "Scripting",
+  "summary": "JavaScript (ES7, through QML) is built in at two levels: JS processes that run in the score with ports and a tick function, and a console/script API that edits the score itself, controls transport and devices, opens sockets and runs shell commands. Devices for serial, WebSocket, HTTP and mapping are written in QML. Math expressions (ExprTK), Faust, C++ JIT, bytebeat and Pd patches are other in-score languages.",
+  "details": [
+   "JS processes declare inlets, outlets and controls in QML and implement tick, start, stop [processes/javascript.html]",
+   "Global objects: Score, Util, Device, Protocols, System, Library [in-depth/scripting-api.html]",
+   "Protocols opens UDP, TCP, WebSocket, Unix sockets, HTTP and MIDI from scripts [in-depth/scripting-api.html]",
+   "Scripts in the library can register menu actions with shortcuts [in-depth/scripting.html]",
+   "ExprTK expressions for audio and value generators and filters [processes/exprtk.html]",
+   "C++ JIT compiles C++ into a process at run time; Texgen runs C++ in-process per frame [processes/cpp_jit.html, processes/texgen.html]",
+   "A JS process with a TextureOutlet renders a QtQuick item on the GPU [processes/javascript.html]"
+  ],
+  "names": [
+   "Script",
+   "tick",
+   "Score",
+   "Device",
+   "Protocols",
+   "ExprTK",
+   "C++ JIT",
+   "QML"
+  ],
+  "sources": [
+   "https://ossia.io/score-docs/processes/javascript.html",
+   "https://ossia.io/score-docs/in-depth/scripting-api.html",
+   "https://ossia.io/score-docs/in-depth/scripting.html",
+   "https://ossia.io/score-docs/processes/exprtk.html",
+   "https://ossia.io/score-docs/processes/cpp_jit.html"
+  ],
+  "what_a_max_user_would_notice": "Max has v8 objects and thispatcher for patch scripting, plus gen and node.script (max_system_model.json dimension 13). score's script API works on the timeline as a document: creating boxes at a time, automating an address, setting curve points.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 14,
+  "dimension": "Errors and debugging",
+  "summary": "Errors from code processes appear in the editor's log pane. Messages in and out of a selected process can be logged to a messages panel, and a benchmark mode shows each process's relative CPU cost. Monitoring processes (Value Display, Signal Display, LED View, Point2D View) and Teleplot let you watch values.",
+  "details": [
+   "The script editor's bottom pane displays the error log with line numbers [common-practices/8-live-coding.html]",
+   "Logging setting plus Messages panel (Ctrl+Shift+G) shows a process's messages [reference/preferences.html, faq/monitor-activity.html]",
+   "Benchmark setting computes relative computation time per process [reference/preferences.html]",
+   "Device explorer listening during execution can be turned off to save CPU [reference/preferences.html]",
+   "Monitoring processes: Value Display, Signal Display, LED View, Point2D View [processes/value-display.html]"
+  ],
+  "names": [
+   "Messages panel",
+   "Logging",
+   "Benchmark",
+   "Value Display",
+   "Signal Display",
+   "Teleplot"
+  ],
+  "sources": [
+   "https://ossia.io/score-docs/common-practices/8-live-coding.html",
+   "https://ossia.io/score-docs/reference/preferences.html",
+   "https://ossia.io/score-docs/faq/monitor-activity.html",
+   "https://ossia.io/score-docs/processes/value-display.html",
+   "https://ossia.io/score-docs/processes/teleplot.html"
+  ],
+  "what_a_max_user_would_notice": "Max has a console linked to objects, probes, watchpoints and Illustration Mode (max_system_model.json dimension 14). score's per-process CPU benchmark has no Max equivalent named in max_system_model.json, while Max's stepping debugger has none in score's docs.",
+  "confidence": "medium",
+  "open_questions": ""
+ },
+ {
+  "id": 15,
+  "dimension": "Rendering",
+  "summary": "Video uses Qt RHI over OpenGL, Vulkan, Metal or Direct3D. Video processes form a render graph in its own thread; each writes to a render target, and outputs are Window, Spout, Syphon, NDI or shared-memory devices. Shaders are ISF (fragment), VSA (vertex points), CSF (compute) or raw raster pipelines, all declared by a JSON header.",
+  "details": [
+   "Qt RHI with OpenGL ES 2.0, Vulkan, Metal, Direct3D 11/12 [in-depth/video.html, reference/protocols-and-formats.html]",
+   "Shaders must use ISF macros instead of gl_FragCoord to avoid Y-flips across backends [processes/shaders.html]",
+   "Render Pipeline renders arbitrary geometry with custom vertex and fragment shaders [processes/render-pipeline.html]",
+   "Video decoding stays on the GPU for YUV formats and HAP [processes/video.html, reference/protocols-and-formats.html]",
+   "A video output is chosen by selecting a Window device on the process's output port [quick-start/working-with-video.html]",
+   "Multiple image processes can output into one port [processes/image.html]"
+  ],
+  "names": [
+   "Qt RHI",
+   "render target",
+   "ISF",
+   "CSF",
+   "VSA",
+   "Render Pipeline",
+   "Window device"
+  ],
+  "sources": [
+   "https://ossia.io/score-docs/in-depth/video.html",
+   "https://ossia.io/score-docs/reference/protocols-and-formats.html",
+   "https://ossia.io/score-docs/processes/shaders.html",
+   "https://ossia.io/score-docs/processes/render-pipeline.html",
+   "https://ossia.io/score-docs/processes/video.html"
+  ],
+  "what_a_max_user_would_notice": "Jitter uses named contexts that objects join with @drawto, depth testing and @layer (max_system_model.json dimension 15). In score a video chain ends at an output device chosen on a port, and the docs do not describe a draw-order rule for overlapping images.",
+  "confidence": "medium",
+  "open_questions": "How score orders several images written to the same output is not documented in the pages read."
+ },
+ {
+  "id": 16,
+  "dimension": "Performance and concurrency",
+  "summary": "Audio runs in the audio thread; video renders in a separate thread; a Parallel setting spreads processes over CPU cores. Processes outside the active part of the score cost nothing. Benchmark mode shows each process's share of CPU. Pd patches must not run in Parallel mode.",
+  "details": [
+   "Parallel runs processes on separate CPU cores as far as possible [reference/preferences.html]",
+   "Video render graph in a separate thread [in-depth/video.html]",
+   "Do not use Parallel mode with Pd patches [processes/puredata.html]",
+   "Hardware video decoding through DXVA2/D3D11, VideoToolbox, V4L2-M2M [reference/protocols-and-formats.html]",
+   "Faust compiles for the current CPU's vector instructions [common-practices/14-spatial-audio.html]",
+   "Turning off explorer listening saves CPU with thousands of parameters [reference/preferences.html]"
+  ],
+  "names": [
+   "Parallel",
+   "Benchmark",
+   "hardware decoding"
+  ],
+  "sources": [
+   "https://ossia.io/score-docs/reference/preferences.html",
+   "https://ossia.io/score-docs/in-depth/video.html",
+   "https://ossia.io/score-docs/processes/puredata.html",
+   "https://ossia.io/score-docs/reference/protocols-and-formats.html"
+  ],
+  "what_a_max_user_would_notice": "Max splits work by thread priority, Overdrive and per-patcher audio threads (max_system_model.json dimension 16). In score the timeline itself limits cost: only what is playing runs.",
+  "confidence": "medium",
+  "open_questions": ""
+ },
+ {
+  "id": 17,
+  "dimension": "Several machines",
+  "summary": "Talking to other machines and programs is the core of score: every protocol is a device in the tree, OSCQuery and Minuit import remote namespaces, and the running score is itself an OSCQuery device. A WebSocket API gives remotes transport and trigger control. Transport sync is JACK only; video moves over NDI, Spout, Syphon or shared memory.",
+  "details": [
+   "Devices for OSC, OSCQuery, Minuit, HTTP, WebSocket, CoAP, MQTT, LSL, Art-Net, MIDI, serial and more [reference/protocols-and-formats.html]",
+   "OSCQuery device lists servers on the network and imports their namespace [devices/oscquery-device.html]",
+   "Local device exposes play, stop, reinit and transport over OSCQuery [devices/local-device.html]",
+   "WebSocket remote API [in-depth/remote.html]",
+   "JACK transport master or slave; others planned [common-practices/9-seek-and-transport.html]",
+   "RTP MIDI uses OS or third-party daemons [in-depth/midi.html]"
+  ],
+  "names": [
+   "Device",
+   "OSCQuery",
+   "Minuit",
+   "Local device",
+   "WebSocket API",
+   "JACK transport",
+   "NDI"
+  ],
+  "sources": [
+   "https://ossia.io/score-docs/reference/protocols-and-formats.html",
+   "https://ossia.io/score-docs/devices/oscquery-device.html",
+   "https://ossia.io/score-docs/devices/local-device.html",
+   "https://ossia.io/score-docs/in-depth/remote.html"
+  ],
+  "what_a_max_user_would_notice": "Max's networking is a set of objects and an OSCQuery server for its own parameters (max_system_model.json dimension 17). score reads other programs' parameter trees as if they were its own, which Max does not do.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 18,
+  "dimension": "Deployment",
+  "summary": "There is no separate player: the same open-source application runs scores, with command-line flags for no GUI, autoplay, a start delay and no restore dialog. It runs on Windows, macOS, Linux (including Raspberry Pi and other ARM boards, with an EGLFS full-screen mode), FreeBSD and partly the web.",
+  "details": [
+   "--no-gui, --autoplay, --wait, --no-restore, --no-opengl [reference/commandline.html]",
+   "Builds for Windows, macOS (Apple Silicon and Intel), Linux AppImage/Flatpak, AUR, Nix, FreeBSD ports [quick-start/installation.html]",
+   "Raspberry Pi 3/4 builds; ossia-score-eglfs runs full screen without X11 [in-depth/embedded.html]",
+   "Partial support for the web platform; SDL audio is used by the WebAssembly build [reference/protocols-and-formats.html]",
+   "Environment variables disable ALSA or plug-in scanning [reference/commandline.html]"
+  ],
+  "names": [
+   "--no-gui",
+   "--autoplay",
+   "ossia-score-eglfs",
+   "AppImage",
+   "WebAssembly"
+  ],
+  "sources": [
+   "https://ossia.io/score-docs/reference/commandline.html",
+   "https://ossia.io/score-docs/quick-start/installation.html",
+   "https://ossia.io/score-docs/in-depth/embedded.html",
+   "https://ossia.io/score-docs/reference/protocols-and-formats.html"
+  ],
+  "what_a_max_user_would_notice": "Max ships standalones and frozen devices on macOS and Windows, with RNBO for Raspberry Pi (max_system_model.json dimension 18). score deploys by installing the editor itself, free, on the target, including small Linux boards.",
+  "confidence": "high",
+  "open_questions": "Licensing is not stated on the pages read; the docs only say the project is open source on GitHub."
+ },
+ {
+  "id": 19,
+  "dimension": "Extending",
+  "summary": "Every process in score comes from a plug-in. New ones are written in C++ with Avendish (one reflected struct, also exportable to other plug-in formats) or with the full score API. Inside the app, new behaviour also comes from JS, ExprTK, Faust, C++ JIT, ISF/CSF shaders, Pd patches and QML device scripts. Packages are installed through a package manager.",
+  "details": [
+   "Avendish defines objects as C++ structs with reflected inputs and outputs; works for audio, message, CPU image and GPU plug-ins [development/plugins/plugins-with-avendish.html]",
+   "The score API customises almost every aspect; every process comes from plug-ins [development/plug-ins.html]",
+   "Faust packages can add libraries to the Faust path [processes/faust.html]",
+   "Library.installPackage installs packages from scripts [in-depth/scripting-api.html]"
+  ],
+  "names": [
+   "Avendish",
+   "score API",
+   "Package manager",
+   "C++ JIT"
+  ],
+  "sources": [
+   "https://ossia.io/score-docs/development/plug-ins.html",
+   "https://ossia.io/score-docs/development/plugins/plugins-with-avendish.html",
+   "https://ossia.io/score-docs/processes/faust.html",
+   "https://ossia.io/score-docs/in-depth/scripting-api.html"
+  ],
+  "what_a_max_user_would_notice": "Max extends through C/C++ externals, JS, gen and abstractions that all appear as boxes (max_system_model.json dimension 19). score's Avendish objects can also be built for other hosts, and a C++ process can be compiled inside the running app.",
+  "confidence": "medium",
+  "open_questions": ""
+ },
+ {
+  "id": 20,
+  "dimension": "Media and files",
+  "summary": "Media files are dropped onto the timeline. Relative paths are looked up in the project folder (the folder of the .score file) first; <PROJECT>: and <LIBRARY>: prefixes name the project or user library. A system library in Documents/ossia/score/packages holds shared presets, shaders, fixtures and scripts. Sound files stream from disk when they match the project rate, otherwise load to RAM.",
+  "details": [
+   "Relative media paths resolve in the project folder first; <PROJECT>: and <LIBRARY>: prefixes [in-depth/media.html]",
+   "System library at <Documents>/ossia/score/packages, downloaded from the user library on first launch [panels/library.html]",
+   "WAV/AIFF at the project rate stream from disk; others decode to RAM [processes/soundfile.html]",
+   "FFMPEG decodes audio and video; HAP decoded by score on the GPU [reference/protocols-and-formats.html]",
+   "MIDI file reader watches the file and reloads on change [processes/midi-file-reader.html]"
+  ],
+  "names": [
+   "<PROJECT>:",
+   "<LIBRARY>:",
+   "System library",
+   "Project library"
+  ],
+  "sources": [
+   "https://ossia.io/score-docs/in-depth/media.html",
+   "https://ossia.io/score-docs/panels/library.html",
+   "https://ossia.io/score-docs/processes/soundfile.html",
+   "https://ossia.io/score-docs/reference/protocols-and-formats.html"
+  ],
+  "what_a_max_user_would_notice": "Max finds files through a search path and projects (max_system_model.json dimension 20). score's lookup is simpler: project folder, then the library, with explicit prefixes.",
+  "confidence": "medium",
+  "open_questions": "No collect/consolidate feature for a score's media was found in the pages read."
+ },
+ {
+  "id": 21,
+  "dimension": "Units and dataspaces (system-level because the conversion rules apply to every connection)",
+  "summary": "Values can carry a unit from a family (distance, position, orientation, colour, angle, gain, time...). Whenever a value crosses any connection, whether a cable, a read from a device or a write to one, score converts between units of one family, otherwise maps ranges, and never drops a value because of a unit.",
+  "details": [
+   "Units come from the process's port declaration or from @[unit] on the address [in-depth/unit-system.html]",
+   "Same-family units convert and ranges only clip; otherwise ranges map [in-depth/unit-system.html]",
+   "The same rules apply on cables, device reads and device writes; the device's own clip mode applies on output [in-depth/unit-system.html]",
+   "Each family has a neutral unit through which conversions go [ossia-docs]"
+  ],
+  "names": [
+   "unit",
+   "dataspace",
+   "color.hsv",
+   "distance.m",
+   "gain.db",
+   "orientation.quaternion"
+  ],
+  "sources": [
+   "https://ossia.io/score-docs/in-depth/unit-system.html",
+   "https://ossia.io/ossia-docs/"
+  ],
+  "what_a_max_user_would_notice": "Max never converts or rescales on a cord; every conversion is an object you place (scale, dbtoa, jit.colorspace refpages). In score a cable between two differently ranged ports silently rescales, which surprises a Max user expecting the raw number.",
+  "confidence": "high",
+  "open_questions": ""
+ }
+]

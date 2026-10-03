@@ -11,11 +11,12 @@
     "Types on the cord. TouchDesigner wires join only one family and every change of kind is a visible converter node. Isadora links check types and rescale numbers on every link. cables.gl colours ports by type with a catch-all Object type. Max sends small values as atoms and big data by name, with converter objects between domains.",
     "Errors. TouchDesigner, cables.gl and Isadora show errors on the node, and TouchDesigner repeats the mark on every component that contains it. Max and Pd print to a console that links back to the object. TouchDesigner and cables.gl also show each node's cost; Max shows only whole-patch meters.",
     "Using more cores. Most of these tools do the main work on one thread. TouchDesigner (Engine COMP) and Pd ([pd~]) reach for a second process. Max has separate scheduler and audio threads and can spread audio across top-level patchers or poly~ voices.",
-    "Where the work ends up. plugdata runs the whole patch, editor included, as a plug-in in any DAW, and Heavy compiles patches to C++, plug-ins and Daisy. cables.gl exports a web page. TouchDesigner has a player-only runtime. Max builds standalones, Max for Live devices and RNBO exports. MadMapper and Isadora run only in their own app, with MadMapper's hardware players as the exception."
+    "Where the work ends up. plugdata runs the whole patch, editor included, as a plug-in in any DAW, and Heavy compiles patches to C++, plug-ins and Daisy. cables.gl exports a web page. TouchDesigner has a player-only runtime. Max builds standalones, Max for Live devices and RNBO exports. MadMapper and Isadora run only in their own app, with MadMapper's hardware players as the exception.",
+    "Time as the program. ossia score is the one tool where the timeline drives execution: a process runs only while its interval plays, triggers hold the timeline until an event, conditions choose which branch runs, and seeking replays the latest state. Max has a transport and timed objects, but no score structure that decides what runs."
   ],
   "dimensions": {
     "1": {
-      "difference": "Max pushes events and computes DSP every vector while audio is on. TouchDesigner pulls on demand and skips anything nobody watches. MadMapper, cables.gl and Gem draw once per frame, and cables.gl skips any branch the frame trigger does not reach. Isadora pulls from the end of each chain and can stop a whole upstream branch with a gated Gate. Pd works like Max.",
+      "difference": "Max pushes events and computes DSP every vector while audio is on. TouchDesigner pulls on demand and skips anything nobody watches. MadMapper, cables.gl and Gem draw once per frame, and cables.gl skips any branch the frame trigger does not reach. Isadora pulls from the end of each chain and can stop a whole upstream branch with a gated Gate. Pd works like Max. ossia score is driven by its timeline: a process runs only while its interval is playing.",
       "advice": "In Max, unused work keeps running until something upstream stops it, so stop it at the top: turn off the metro or close a gate above the heavy part, and switch whole audio sections off with mute~ or pcontrol. Put the stop above the expensive object, not below it."
     },
     "2": {
@@ -23,7 +24,7 @@
       "advice": "Whenever one outlet feeds more than one place and the order matters, use trigger. A patch that leans on screen position breaks when someone tidies the layout, and the same patch copied into Pd runs in a different order."
     },
     "3": {
-      "difference": "Max has several clocks side by side: the millisecond scheduler, the sample clock, the render frame and the transport. TouchDesigner is frame-based with local timelines per component. MadMapper has an engine frame rate, a global BPM, timelines and a Master Speed. Isadora has a frame clock and no global timeline. cables.gl has the frame plus one timeline. Pd has one logical clock for messages and audio.",
+      "difference": "Max has several clocks side by side: the millisecond scheduler, the sample clock, the render frame and the transport. TouchDesigner is frame-based with local timelines per component. MadMapper has an engine frame rate, a global BPM, timelines and a Master Speed. Isadora has a frame clock and no global timeline. cables.gl has the frame plus one timeline. Pd has one logical clock for messages and audio. ossia score makes the timeline the master clock, counted in flicks, with speed, tempo and quantisation passed down nested intervals.",
       "advice": "Choose the clock that matches what the result is for. Animation that ends up on screen should step with the render frame (jit.line, which loads as jit.mo.time, ramps in step with the render context) rather than the millisecond scheduler. Musical timing belongs on the transport."
     },
     "4": {
@@ -35,11 +36,11 @@
       "advice": "MC is Max's version of channels on one cord, and its wrapper messages give each channel its own value. For control data shared with visuals there is no message-rate equivalent (see 'Many channels from one generator' in the gap list)."
     },
     "6": {
-      "difference": "Max and Pd save structure, not values: a slider position is gone on reopen unless something stores it. Pd does this on purpose and has no preset system. TouchDesigner, MadMapper, Isadora and cables.gl save every setting's value in the file, and MadMapper and Isadora add scenes or snapshots as built-in presets.",
+      "difference": "Max and Pd save structure, not values: a slider position is gone on reopen unless something stores it. Pd does this on purpose and has no preset system. TouchDesigner, MadMapper, Isadora and cables.gl save every setting's value in the file, and MadMapper and Isadora add scenes or snapshots as built-in presets. ossia score saves the timeline and the values stored in its states, not live device values, and rebuilds state on a seek.",
       "advice": "Decide how a Max patch keeps its state before building it: Snapshots, pattrstorage with autopattr, or initial values in Parameter Mode. Without one, every control reopens at its default, and the operator sees a patch that has forgotten everything."
     },
     "7": {
-      "difference": "TouchDesigner, MadMapper, Isadora and cables.gl treat every setting as a named parameter with a range and a control. TouchDesigner adds four modes per parameter: constant, expression, export, bind. MadMapper gives every parameter an OSC address automatically. Max has attributes everywhere and an opt-in Parameter Mode layer that Snapshots, mapping, OSC and Live use. Pd has parameters only at the edges, through plugdata and Heavy.",
+      "difference": "TouchDesigner, MadMapper, Isadora and cables.gl treat every setting as a named parameter with a range and a control. TouchDesigner adds four modes per parameter: constant, expression, export, bind. MadMapper gives every parameter an OSC address automatically. Max has attributes everywhere and an opt-in Parameter Mode layer that Snapshots, mapping, OSC and Live use. Pd has parameters only at the edges, through plugdata and Heavy. ossia score puts every parameter it controls in one device tree with type, range, clip mode and unit.",
       "advice": "Turn on Parameter Mode for the controls an operator or a host should reach, so they gain a range, an initial value, mapping and an OSC address in one step. Max has no expressions on attributes, so a computed setting is an explicit object feeding an attrui or a message, where it can be seen."
     },
     "8": {
@@ -47,11 +48,11 @@
       "advice": "Use abstractions, not copied p boxes, for anything used twice: every copy then follows the one file. Give each a small set of named settings through patcherargs, the way TouchDesigner components are driven by their custom parameters. For many copies, poly~ plays the role of TouchDesigner's Replicator and Pd's [clone]."
     },
     "9": {
-      "difference": "Max and Pd names are global unless made local by hand (#0, ---, $0, pv). TouchDesigner names are paths in a hierarchy and every reference is drawn as a dashed line. Isadora seals each Scene and passes data on numbered channels. cables.gl variables reach the whole patch. MadMapper's item tree doubles as the OSC address space.",
+      "difference": "Max and Pd names are global unless made local by hand (#0, ---, $0, pv). TouchDesigner names are paths in a hierarchy and every reference is drawn as a dashed line. Isadora seals each Scene and passes data on numbered channels. cables.gl variables reach the whole patch. MadMapper's item tree doubles as the OSC address space. ossia score addresses parameters by device and path, with pattern matching over many addresses at once.",
       "advice": "A send/receive pair in Max is a link nobody can see, unlike a TouchDesigner reference. Keep such links few, name them clearly in capitals, use a cord when the two ends are close, and give every name inside a copied thing its per-copy prefix."
     },
     "10": {
-      "difference": "Isadora is built as a row of Scenes with transitions handled by the host. MadMapper has a grid of Scenes and Cues and a master timeline. Max, TouchDesigner, cables.gl and Pd have one graph, and scenes and cues are built from parts.",
+      "difference": "Isadora is built as a row of Scenes with transitions handled by the host. MadMapper has a grid of Scenes and Cues and a master timeline. Max, TouchDesigner, cables.gl and Pd have one graph, and scenes and cues are built from parts. ossia score makes the timeline itself interactive: triggers wait for an event, conditions choose a branch, transitions loop or jump.",
       "advice": "A Max piece with sections needs its scene layer designed early: what each section turns on and off, how state is stored per section (pattrstorage or Snapshots), how cues are listed (qlist or coll), and how sections fade. Isadora's rule that an inactive section does nothing is worth copying: switch whole sections off, not just their outputs."
     },
     "11": {
@@ -83,7 +84,7 @@
       "advice": "For several Max machines, drive them all from one source of time and control over OSC, and keep each patch deterministic from those inputs. Max has no frame lock across machines."
     },
     "18": {
-      "difference": "Max builds standalones, Max for Live devices and RNBO exports. plugdata runs the full patch as a plug-in in any DAW, and Heavy compiles patches to C++, plug-ins and Daisy. cables.gl exports a web page. TouchDesigner has a player-only runtime and licence tiers. MadMapper and Isadora run only in their own app.",
+      "difference": "Max builds standalones, Max for Live devices and RNBO exports. plugdata runs the full patch as a plug-in in any DAW, and Heavy compiles patches to C++, plug-ins and Daisy. cables.gl exports a web page. TouchDesigner has a player-only runtime and licence tiers. MadMapper and Isadora run only in their own app. ossia score has no separate player: the same open-source app runs headless or full screen on a Raspberry Pi.",
       "advice": "When a patch must run inside a DAW other than Live, or on embedded hardware, RNBO is Max's route. Plan for its narrower object set from the start rather than porting a finished patch."
     },
     "19": {
@@ -105,6 +106,7 @@
     "cables.gl: Two kinds of cable: values and triggers": "Max's hot and cold inlets are its version of this split, inside one cord.",
     "cables.gl: Loading is an observable phase": "Max's load runs in fixed phases, and the Max docs read describe no patch-wide progress report. Start a show only after the objects it depends on have finished loading.",
     "Pd / plugdata: Behaviour versioning": "The Max docs read for this comparison describe no such switch. When a patch moves between Max versions, check the refpages of the objects it relies on.",
-    "MadMapper: Input space and output space": "In Jitter the same split is two steps: crop the source, then warp the result onto the output."
+    "MadMapper: Input space and output space": "In Jitter the same split is two steps: crop the source, then warp the result onto the output.",
+    "ossia score: Units and dataspaces": "Max cords carry plain numbers with no unit. A Max patch that mixes units (degrees and radians, dB and gain, colour spaces) converts them with explicit objects, and the conversion is worth labelling."
   }
 }

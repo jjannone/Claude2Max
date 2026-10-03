@@ -20,6 +20,7 @@ userguide and refpages. The comparison and advice lines are written by hand in
 10. Errors. TouchDesigner, cables.gl and Isadora show errors on the node, and TouchDesigner repeats the mark on every component that contains it. Max and Pd print to a console that links back to the object. TouchDesigner and cables.gl also show each node's cost; Max shows only whole-patch meters.
 11. Using more cores. Most of these tools do the main work on one thread. TouchDesigner (Engine COMP) and Pd ([pd~]) reach for a second process. Max has separate scheduler and audio threads and can spread audio across top-level patchers or poly~ voices.
 12. Where the work ends up. plugdata runs the whole patch, editor included, as a plug-in in any DAW, and Heavy compiles patches to C++, plug-ins and Daisy. cables.gl exports a web page. TouchDesigner has a player-only runtime. Max builds standalones, Max for Live devices and RNBO exports. MadMapper and Isadora run only in their own app, with MadMapper's hardware players as the exception.
+13. Time as the program. ossia score is the one tool where the timeline drives execution: a process runs only while its interval plays, triggers hold the timeline until an event, conditions choose which branch runs, and seeking replays the latest state. Max has a transport and timed objects, but no score structure that decides what runs.
 
 ## Dimensions
 
@@ -46,7 +47,7 @@ userguide and refpages. The comparison and advice lines are written by hand in
 
 ## 1. Evaluation
 
-**The difference:** Max pushes events and computes DSP every vector while audio is on. TouchDesigner pulls on demand and skips anything nobody watches. MadMapper, cables.gl and Gem draw once per frame, and cables.gl skips any branch the frame trigger does not reach. Isadora pulls from the end of each chain and can stop a whole upstream branch with a gated Gate. Pd works like Max.
+**The difference:** Max pushes events and computes DSP every vector while audio is on. TouchDesigner pulls on demand and skips anything nobody watches. MadMapper, cables.gl and Gem draw once per frame, and cables.gl skips any branch the frame trigger does not reach. Isadora pulls from the end of each chain and can stop a whole upstream branch with a gated Gate. Pd works like Max. ossia score is driven by its timeline: a process runs only while its interval is playing.
 
 **Advice for Max:** In Max, unused work keeps running until something upstream stops it, so stop it at the top: turn off the metro or close a gate above the heavy part, and switch whole audio sections off with mute~ or pcontrol. Put the stop above the expensive object, not below it.
 
@@ -86,6 +87,12 @@ Two mechanisms drive work. Value ports push on change: when an output is set, co
 Two engines run side by side. Control work happens only when an event pushes a message down a cord, and each cascade runs to the end, depth first. Audio is not demand-driven: while DSP is on, every tilde object in every open patch (shown or not) is computed every block, and the only way to stop unused audio work is a [switch~] in that window. Gem frames are pushed the same way, as a message sent down from each [gemhead] once per frame.
 - *Coming from Max:* The same push model as Max for messages. The difference is that audio work in a patch is never skipped on its own; Max's mute~ (refpage: disable signal processing in a subpatch) has its Pd counterpart in [switch~], which also changes block size.
 - *Confidence:* high
+
+### ossia score
+
+Execution is driven by the score's time: while playing, each running interval ticks its processes, and a process only runs while its interval is active. A process outside the running path does nothing, and audio processes stop costing CPU once the playhead leaves their interval. Within a tick, processes form a dataflow graph whose cables carry audio, values, MIDI and textures.
+- *Coming from Max:* In Max an object computes whenever a message reaches its hot inlet, at any time (max_system_model.json dimension 1). In score nothing runs unless the playhead is inside its interval, so a 'patch that just runs' has to be placed in an interval held open by a trigger.
+- *Confidence:* medium
 
 ## 2. Ordering
 
@@ -130,9 +137,15 @@ Outlets fire right to left and cascades run depth first, as in Max. When one out
 - *Coming from Max:* A fan-out that is safe in Max because of box positions can run in any order in Pd, and moving boxes changes nothing. Pd patches therefore use [t] far more often.
 - *Confidence:* high
 
+### ossia score
+
+Within a tick, the order follows the dataflow graph of cables between processes, and the timeline decides which processes are active. The docs do not describe an explicit ordering tool like a trigger object; libossia parameters carry a priority attribute meant to say which nodes execute first.
+- *Coming from Max:* Max users manage right-to-left and depth-first order inside one event (max_system_model.json dimension 2). score's docs say little about message order within a tick; ordering is mostly a matter of time position and graph shape.
+- *Confidence:* low
+
 ## 3. Time
 
-**The difference:** Max has several clocks side by side: the millisecond scheduler, the sample clock, the render frame and the transport. TouchDesigner is frame-based with local timelines per component. MadMapper has an engine frame rate, a global BPM, timelines and a Master Speed. Isadora has a frame clock and no global timeline. cables.gl has the frame plus one timeline. Pd has one logical clock for messages and audio.
+**The difference:** Max has several clocks side by side: the millisecond scheduler, the sample clock, the render frame and the transport. TouchDesigner is frame-based with local timelines per component. MadMapper has an engine frame rate, a global BPM, timelines and a Master Speed. Isadora has a frame clock and no global timeline. cables.gl has the frame plus one timeline. Pd has one logical clock for messages and audio. ossia score makes the timeline the master clock, counted in flicks, with speed, tempo and quantisation passed down nested intervals.
 
 **Advice for Max:** Choose the clock that matches what the result is for. Animation that ends up on screen should step with the render frame (jit.line, which loads as jit.mo.time, ramps in step with the render context) rather than the millisecond scheduler. Musical timing belongs on the transport.
 
@@ -171,6 +184,12 @@ There are several clocks. MainLoop gives the frame. The timeline is one keyframe
 
 One logical clock, kept as a 64-bit float in milliseconds, drives both messages and audio. Audio runs in blocks of 64 samples, and messages run only between blocks, so a cascade's changes all land on the same block. Scheduled events always run in order even when Pd falls behind real time, and the patch can render faster than real time with fast-forward or batch mode.
 - *Coming from Max:* There is one scheduler, not a high-priority scheduler plus a low-priority queue as in Max's scheduler topic, so there is no overdrive setting to think about. Offline rendering is a message from inside the patch rather than a choice of audio driver.
+- *Confidence:* high
+
+### ossia score
+
+The timeline is the master clock. Model time is counted in flicks (705,600,000 per second) and is affected by speed controls; physical time is counted in audio samples. Each interval can run at its own speed, and tempo, time signature and quantisation pass down the hierarchy, so different sections can have different tempos. Transport can follow or drive JACK transport.
+- *Coming from Max:* Max has one scheduler, the sample clock and flat named transports at 480 PPQ (max_system_model.json dimension 3). score's time is a tree: a section can be slowed, paused or given its own tempo without touching the rest, and seeking replays state.
 - *Confidence:* high
 
 ## 4. Data types
@@ -216,6 +235,12 @@ Messages carry floats, symbols and pointers; there is no int, so 1 and 1. are th
 - *Coming from Max:* Max's messages topic lists int as its own atom type; Pd has none, so integer division and int/float typing never come up. There is no dict; nested data is done with data structures, which Max has no equivalent for.
 - *Confidence:* high
 
+### ossia score
+
+Ports carry audio (any number of channels), values, MIDI, textures and geometry. Values are typed: int, float, bool, char, string, vec2/vec3/vec4, list (tuple) and impulse. Values can also be nested lists and maps, which processes like Object filter query with jq syntax.
+- *Coming from Max:* Max messages are atoms and lists, with big data passed by name (max_system_model.json dimension 4). score has typed vectors and an impulse type as first-class values, and a value can carry a unit.
+- *Confidence:* medium
+
 ## 5. Rates and channels
 
 **The difference:** Max and Pd keep control, audio and frame rates apart. Pd sets block size, overlap and resampling per window with [block~]. TouchDesigner makes rate a property of each CHOP's data, with everything cooking on the frame. Isadora and cables.gl have one frame rate and handle audio separately. Many channels are one MC cord in Max, one cord in Pd, a channel bundle in TouchDesigner.
@@ -259,9 +284,15 @@ Control and audio are split as in Max, with control running between audio blocks
 - *Coming from Max:* Max uses separate mc. objects (mc.pack~ refpage) and a pfft~ manager (refpage: spectral processing manager for patchers); Pd has neither and does both by settings on the cord and the window.
 - *Confidence:* high
 
+### ossia score
+
+Audio runs at the sound card rate with a buffer size; value and MIDI ports carry timestamped messages within each tick; video renders in a separate thread at the output's rate. Channels travel together in one audio port, and mono effects fed N channels run N times.
+- *Coming from Max:* Max separates event, signal and frame domains with converter objects (max_system_model.json dimension 5). In score a value port inside an audio tick already carries sample-position timestamps, and the multichannel idea matches Max's MC.
+- *Confidence:* medium
+
 ## 6. State and saving
 
-**The difference:** Max and Pd save structure, not values: a slider position is gone on reopen unless something stores it. Pd does this on purpose and has no preset system. TouchDesigner, MadMapper, Isadora and cables.gl save every setting's value in the file, and MadMapper and Isadora add scenes or snapshots as built-in presets.
+**The difference:** Max and Pd save structure, not values: a slider position is gone on reopen unless something stores it. Pd does this on purpose and has no preset system. TouchDesigner, MadMapper, Isadora and cables.gl save every setting's value in the file, and MadMapper and Isadora add scenes or snapshots as built-in presets. ossia score saves the timeline and the values stored in its states, not live device values, and rebuilds state on a seek.
 
 **Advice for Max:** Decide how a Max patch keeps its state before building it: Snapshots, pattrstorage with autopattr, or initial values in Parameter Mode. Without one, every control reopens at its default, and the operator sees a patch that has forgotten everything.
 
@@ -302,9 +333,15 @@ A patch saves only what you see: boxes, their creation text and the cords. Value
 - *Coming from Max:* Max saves object state and offers pattrstorage (refpage: save and recall pattr presets) and Snapshots; a Pd patch reopens with every number box at zero unless the patch itself re-sends values.
 - *Confidence:* high
 
+### ossia score
+
+A .score file saves the whole timeline, processes, cables, device definitions and the values stored in states. Live parameter values belong to devices and are not saved unless stored in a cue. On a seek, 'value compilation' rebuilds device state from earlier states.
+- *Coming from Max:* A Max patch saves structure and needs pattr, Snapshots or embed flags to keep values (max_system_model.json dimension 6). In score the stored values are the show itself: states on a timeline, and seeking reconstructs them.
+- *Confidence:* medium
+
 ## 7. Parameters
 
-**The difference:** TouchDesigner, MadMapper, Isadora and cables.gl treat every setting as a named parameter with a range and a control. TouchDesigner adds four modes per parameter: constant, expression, export, bind. MadMapper gives every parameter an OSC address automatically. Max has attributes everywhere and an opt-in Parameter Mode layer that Snapshots, mapping, OSC and Live use. Pd has parameters only at the edges, through plugdata and Heavy.
+**The difference:** TouchDesigner, MadMapper, Isadora and cables.gl treat every setting as a named parameter with a range and a control. TouchDesigner adds four modes per parameter: constant, expression, export, bind. MadMapper gives every parameter an OSC address automatically. Max has attributes everywhere and an opt-in Parameter Mode layer that Snapshots, mapping, OSC and Live use. Pd has parameters only at the edges, through plugdata and Heavy. ossia score puts every parameter it controls in one device tree with type, range, clip mode and unit.
 
 **Advice for Max:** Turn on Parameter Mode for the controls an operator or a host should reach, so they gain a range, an initial value, mapping and an OSC address in one step. Max has no expressions on attributes, so a computed setting is an explicit object feeding an attrui or a message, where it can be seen.
 
@@ -344,6 +381,12 @@ Every input port is a parameter. Selecting an op shows all its inputs in a panel
 Vanilla Pd has no parameter system. Settings are creation arguments, inlets and messages; IEM GUIs expose every property as a message and can take $1 or $0. Parameters appear only at the edges: plugdata's [param] maps a value to DAW automation, and Heavy turns annotated receives such as [r gain @hv_param 0 1 0.5] into plugin parameters on export.
 - *Coming from Max:* Max's parameter mode topic describes parameters with initial values, names, units and modulation shared by presets, Live and MIDI mapping. Pd has nothing in the core, so a 'parameter' is just a named receive.
 - *Confidence:* medium
+
+### ossia score
+
+Everything score controls is a parameter in a device tree, addressed as device:/path. Parameters carry a type, range or value set, clip mode, repetition filter, unit and more. Process controls are ports that can be given an address, automated, or cabled. There are no expressions on parameters; math lives in expression processes.
+- *Coming from Max:* In Max, settings are attributes and only parameter-enabled objects join the parameter system (max_system_model.json dimension 7). In score the parameter tree is the centre of the program: every external control is one, and the tree, not the patch, is what you browse.
+- *Confidence:* high
 
 ## 8. Encapsulation and reuse
 
@@ -388,9 +431,15 @@ A SubPatch groups ops in one box; its ports are made by dragging a cable to a 'c
 - *Coming from Max:* One mechanism ($) where Max uses # for arguments and abstractions open read-only, per Pd's own manual. Graph-on-parent replaces the bpatcher (refpage: embed a subpatch with a visible UI), but the face is decided inside the abstraction, not by the box that loads it.
 - *Confidence:* high
 
+### ossia score
+
+Reuse happens through nesting and the library. A Scenario process puts a whole score inside an interval, to any depth. Selections of the score can be saved to the library as .scenario files, states as .cues, and JS, Faust, shader and Pd files dropped in become processes. New processes come from plug-ins.
+- *Coming from Max:* Max reuses through abstractions with arguments and #0 instance names, and poly~ for many copies (max_system_model.json dimension 8). The docs read describe no equivalent of arguments or replication for a saved .scenario; reuse is by copying a fragment back in.
+- *Confidence:* medium
+
 ## 9. Names and scope
 
-**The difference:** Max and Pd names are global unless made local by hand (#0, ---, $0, pv). TouchDesigner names are paths in a hierarchy and every reference is drawn as a dashed line. Isadora seals each Scene and passes data on numbered channels. cables.gl variables reach the whole patch. MadMapper's item tree doubles as the OSC address space.
+**The difference:** Max and Pd names are global unless made local by hand (#0, ---, $0, pv). TouchDesigner names are paths in a hierarchy and every reference is drawn as a dashed line. Isadora seals each Scene and passes data on numbered channels. cables.gl variables reach the whole patch. MadMapper's item tree doubles as the OSC address space. ossia score addresses parameters by device and path, with pattern matching over many addresses at once.
 
 **Advice for Max:** A send/receive pair in Max is a link nobody can see, unlike a TouchDesigner reference. Keep such links few, name them clearly in capitals, use a cord when the two ends are close, and give every name inside a copied thing its per-copy prefix.
 
@@ -431,9 +480,15 @@ Names are global by default: [send]/[receive], arrays, [value], [text], [send~],
 - *Coming from Max:* Max has pv (refpage: share data within a patch hierarchy) for scoped values; Pd has no scoped name, only $0 prefixes. Sending to a window by name replaces thispatcher (refpage: send messages to a patcher).
 - *Confidence:* high
 
+### ossia score
+
+Parameters are reached by path: device name, colon, slash path (OSCdevice:/track/1/volume), optionally followed by @[index] or @[unit]. Paths accept pattern matching. Score objects are found by name or label through the inspector or scripts. Device names are global to the document.
+- *Coming from Max:* Max names are mostly global send/receive names with scope tricks like #0 and --- (max_system_model.json dimension 9). In score a name is a full path in a tree, so related controls are grouped by their path and can be addressed together with one pattern.
+- *Confidence:* high
+
 ## 10. Show structure
 
-**The difference:** Isadora is built as a row of Scenes with transitions handled by the host. MadMapper has a grid of Scenes and Cues and a master timeline. Max, TouchDesigner, cables.gl and Pd have one graph, and scenes and cues are built from parts.
+**The difference:** Isadora is built as a row of Scenes with transitions handled by the host. MadMapper has a grid of Scenes and Cues and a master timeline. Max, TouchDesigner, cables.gl and Pd have one graph, and scenes and cues are built from parts. ossia score makes the timeline itself interactive: triggers wait for an event, conditions choose a branch, transitions loop or jump.
 
 **Advice for Max:** A Max piece with sections needs its scene layer designed early: what each section turns on and off, how state is stored per section (pattrstorage or Snapshots), how cues are listed (qlist or coll), and how sections fade. Isadora's rule that an inactive section does nothing is worth copying: switch whole sections off, not just their outputs.
 
@@ -473,6 +528,12 @@ A work is one patch with one graph and one timeline. Parts are switched by routi
 A work is one patch graph, with subpatches. There are no scenes, cues or timelines in the core. Sections are turned on and off with [switch~] for audio and [spigot] for messages, and sequences are played from [text sequence] or [qlist], which send timed messages to named receivers.
 - *Coming from Max:* Close to Max: both leave show structure to the patch. Pd has fewer helpers for it.
 - *Confidence:* medium
+
+### ossia score
+
+A show is one interactive score: intervals (blocks of time holding processes) between states (instants holding cues), joined at synchronisation points. Triggers hold the timeline until an event, conditions choose branches, transitions loop back, and sub-scenarios nest. Scenes are sequences of intervals each holding a sub-scenario.
+- *Coming from Max:* Max has no built-in show layer; structure is built from qlist, pattrstorage and the transport (max_system_model.json dimension 10). score is the show layer: its whole interface is a timeline that can wait, branch and loop.
+- *Confidence:* high
 
 ## 11. Interface
 
@@ -515,6 +576,12 @@ Controls for the person using the patch are built with ops, not placed by hand. 
 
 Vanilla Pd's controls live in the patch itself: atom boxes and the IEM set ([bng], [tgl], [nbx], sliders, radios, [vu], [cnv]). A control binds to a value by cord or by its built-in send/receive names. An abstraction's face is its graph-on-parent area. plugdata adds a presentation mode, a plugin mode that shows the patch with none of plugdata's own UI, an Inspector sidebar for properties, and pdlua objects that paint their own GUIs.
 - *Coming from Max:* Vanilla Pd has a small GUI set and no presentation view; plugdata's presentation and plugin modes fill that gap but are not part of the .pd format's documented semantics.
+- *Confidence:* medium
+
+### ossia score
+
+One window holds a device explorer and libraries on the left, the timeline (or nodal view) in the centre and an inspector on the right. Controls appear on process nodes and can be right-clicked for exact entry. A separate performer UI can be a QML file passed on the command line, and Control Surface processes generate widgets from parameter metadata.
+- *Coming from Max:* In Max the controls are the dataflow and a presentation view is the performer view (max_system_model.json dimension 11). score's editor is a timeline, and a performer interface is a separate QML file that binds to ports and addresses by name.
 - *Confidence:* medium
 
 ## 12. Editing while running
@@ -560,6 +627,12 @@ Edit mode and run mode differ only in what a click does; the patch keeps running
 - *Coming from Max:* Same live-editing feel as Max. Retyping a box loses its state in both; Pd says so as a design rule.
 - *Confidence:* high
 
+### ossia score
+
+The score keeps playing while you edit: processes, sounds and shaders can be added, removed or changed during playback, and code processes recompile on Compile or Ctrl+Enter. Invalid code leaves the running version in place. Devices cannot be added during playback, and execution settings need a restart of playback.
+- *Coming from Max:* Both run while edited. In Max, retyping an object resets it (max_system_model.json dimension 12); in score a code process keeps running its old version when new code fails to compile.
+- *Confidence:* medium
+
 ## 13. Scripting
 
 **The difference:** Max has JavaScript in v8 and Node in node.script, both able to script the patcher. TouchDesigner uses Python everywhere, including in parameters. Pd's file is itself a list of messages that can edit a running patch. cables.gl ops are JavaScript files. Isadora runs JavaScript, Python and GLSL inside actors that cannot change the patch. MadMapper has no scripting.
@@ -601,6 +674,12 @@ JavaScript is the language. Every op is one JavaScript file with ports declared 
 
 The patch file is itself a list of messages to canvases, and the same messages (obj, msg, connect, disconnect, clear, vis, menusave) can be sent to any window at run time, so patches build and edit patches. Inside objects, [expr], [expr~] and [fexpr~] give C-like expressions, and pdlua (shipped with plugdata) lets a .pd_lua file define a new object class with control, signal and graphics methods. There is no JavaScript.
 - *Coming from Max:* Dynamic patching uses the same text as the file format, not a separate scripting API, and objects are addressed by creation index rather than by scripting name. Lua takes the place of Max's js and v8 (Max's js refpage now calls js the legacy engine).
+- *Confidence:* high
+
+### ossia score
+
+JavaScript (ES7, through QML) is built in at two levels: JS processes that run in the score with ports and a tick function, and a console/script API that edits the score itself, controls transport and devices, opens sockets and runs shell commands. Devices for serial, WebSocket, HTTP and mapping are written in QML. Math expressions (ExprTK), Faust, C++ JIT, bytebeat and Pd patches are other in-score languages.
+- *Coming from Max:* Max has v8 objects and thispatcher for patch scripting, plus gen and node.script (max_system_model.json dimension 13). score's script API works on the timeline as a document: creating boxes at a time, automating an address, setting curve points.
 - *Confidence:* high
 
 ## 14. Errors and debugging
@@ -646,6 +725,12 @@ Errors print in red to the console of the main Pd window, with log levels. Ctrl+
 - *Coming from Max:* Vanilla Pd has no watchpoints, stepping or cord probes like Max's debugging topic describes; [trace] is the nearest tool. plugdata's hover scope covers part of what Max's signal probe does.
 - *Confidence:* high
 
+### ossia score
+
+Errors from code processes appear in the editor's log pane. Messages in and out of a selected process can be logged to a messages panel, and a benchmark mode shows each process's relative CPU cost. Monitoring processes (Value Display, Signal Display, LED View, Point2D View) and Teleplot let you watch values.
+- *Coming from Max:* Max has a console linked to objects, probes, watchpoints and Illustration Mode (max_system_model.json dimension 14). score's per-process CPU benchmark has no Max equivalent named in max_system_model.json, while Max's stepping debugger has none in score's docs.
+- *Confidence:* medium
+
 ## 15. Rendering
 
 **The difference:** Jitter joins objects to a named render context and orders them by depth testing, or by a layer number when depth testing is off on those objects. cables.gl and Gem treat the chain as a render tree where state applies to what is under it. TouchDesigner makes rendering an operator that outputs an image. MadMapper and Isadora order by list or layer number.
@@ -687,6 +772,12 @@ WebGL (WebGL2 where available) on the GPU, with WebGPU as an extension. The trig
 
 Gem draws by passing a frame message down chains that start at [gemhead]. Objects on the chain change OpenGL state (transform, colour, texture, shader) for everything below them, and a geo at the bottom draws with whatever has built up, so order on the cord is order of application. Draw order between chains is the number on each [gemhead]. Images are processed on the CPU by pix objects and handed to the GPU by an explicit [pix_texture].
 - *Coming from Max:* In Jitter a shape object owns its own transform and colour; in Gem those are boxes above it on the cord, and draw order is a number rather than a layer plus depth test.
+- *Confidence:* medium
+
+### ossia score
+
+Video uses Qt RHI over OpenGL, Vulkan, Metal or Direct3D. Video processes form a render graph in its own thread; each writes to a render target, and outputs are Window, Spout, Syphon, NDI or shared-memory devices. Shaders are ISF (fragment), VSA (vertex points), CSF (compute) or raw raster pipelines, all declared by a JSON header.
+- *Coming from Max:* Jitter uses named contexts that objects join with @drawto, depth testing and @layer (max_system_model.json dimension 15). In score a video chain ends at an output device chosen on a port, and the docs do not describe a draw-order rule for overlapping images.
 - *Confidence:* medium
 
 ## 16. Performance and concurrency
@@ -732,6 +823,12 @@ Pd computes messages and audio in one thread. The GUI is a separate process, and
 - *Coming from Max:* No parallel voices, no separate high-priority thread, and graphics share the audio thread unless split into another process.
 - *Confidence:* medium
 
+### ossia score
+
+Audio runs in the audio thread; video renders in a separate thread; a Parallel setting spreads processes over CPU cores. Processes outside the active part of the score cost nothing. Benchmark mode shows each process's share of CPU. Pd patches must not run in Parallel mode.
+- *Coming from Max:* Max splits work by thread priority, Overdrive and per-patcher audio threads (max_system_model.json dimension 16). In score the timeline itself limits cost: only what is playing runs.
+- *Confidence:* medium
+
 ## 17. Several machines
 
 **The difference:** TouchDesigner documents frame-locked sync across machines. MadMapper and Isadora connect through show protocols (OSC, NDI, Art-Net, Link, timecode). cables.gl uses network ops and a server. Pd speaks its own plain-text network format. Max networks through objects: OSC and OSCQuery, jit.net, Node for Max.
@@ -775,9 +872,15 @@ Pd's own network format, FUDI, is plain-text Pd messages ending in a semicolon, 
 - *Coming from Max:* Because files and network share one text format, any program that can write 'freq 440;' to a socket can drive a patch. There is no built-in clock sync between machines.
 - *Confidence:* medium
 
+### ossia score
+
+Talking to other machines and programs is the core of score: every protocol is a device in the tree, OSCQuery and Minuit import remote namespaces, and the running score is itself an OSCQuery device. A WebSocket API gives remotes transport and trigger control. Transport sync is JACK only; video moves over NDI, Spout, Syphon or shared memory.
+- *Coming from Max:* Max's networking is a set of objects and an OSCQuery server for its own parameters (max_system_model.json dimension 17). score reads other programs' parameter trees as if they were its own, which Max does not do.
+- *Confidence:* high
+
 ## 18. Deployment
 
-**The difference:** Max builds standalones, Max for Live devices and RNBO exports. plugdata runs the full patch as a plug-in in any DAW, and Heavy compiles patches to C++, plug-ins and Daisy. cables.gl exports a web page. TouchDesigner has a player-only runtime and licence tiers. MadMapper and Isadora run only in their own app.
+**The difference:** Max builds standalones, Max for Live devices and RNBO exports. plugdata runs the full patch as a plug-in in any DAW, and Heavy compiles patches to C++, plug-ins and Daisy. cables.gl exports a web page. TouchDesigner has a player-only runtime and licence tiers. MadMapper and Isadora run only in their own app. ossia score has no separate player: the same open-source app runs headless or full screen on a Raspberry Pi.
 
 **Advice for Max:** When a patch must run inside a DAW other than Live, or on embedded hardware, RNBO is Max's route. Plan for its narrower object set from the start rather than porting a finished patch.
 
@@ -816,6 +919,12 @@ A patch exports as a web page: the core script, only the ops it uses, the patch 
 
 Pd runs as an app, headless from the command line (-nogui, -batch, -send), or embedded through libpd. plugdata runs the same .pd files as a standalone, as VST3/AU/CLAP/LV2 plugins in three flavours, and on iOS. The Heavy compiler, built into plugdata, turns a patch made of supported objects into C/C++, DPF plugins, Daisy firmware, a Pd external, WASM and more, with no Pd runtime.
 - *Coming from Max:* The whole editor runs inside the DAW plugin, and a patch can leave Pd entirely as generated code; the catch is that only a subset of objects compiles.
+- *Confidence:* high
+
+### ossia score
+
+There is no separate player: the same open-source application runs scores, with command-line flags for no GUI, autoplay, a start delay and no restore dialog. It runs on Windows, macOS, Linux (including Raspberry Pi and other ARM boards, with an EGLFS full-screen mode), FreeBSD and partly the web.
+- *Coming from Max:* Max ships standalones and frozen devices on macOS and Windows, with RNBO for Raspberry Pi (max_system_model.json dimension 18). score deploys by installing the editor itself, free, on the target, including small Linux boards.
 - *Confidence:* high
 
 ## 19. Extending
@@ -861,6 +970,12 @@ New objects are compiled C externals, abstractions, or (in plugdata) pdlua class
 - *Coming from Max:* Lua is the in-app language rather than JavaScript, and an object can be written in Lua with signals and graphics without a wrapper box.
 - *Confidence:* high
 
+### ossia score
+
+Every process in score comes from a plug-in. New ones are written in C++ with Avendish (one reflected struct, also exportable to other plug-in formats) or with the full score API. Inside the app, new behaviour also comes from JS, ExprTK, Faust, C++ JIT, ISF/CSF shaders, Pd patches and QML device scripts. Packages are installed through a package manager.
+- *Coming from Max:* Max extends through C/C++ externals, JS, gen and abstractions that all appear as boxes (max_system_model.json dimension 19). score's Avendish objects can also be built for other hosts, and a C++ process can be compiled inside the running app.
+- *Confidence:* medium
+
 ## 20. Media and files
 
 **The difference:** Max finds files by name along a search path, and Projects collect dependencies. MadMapper and TouchDesigner can collect or embed media in the project. Isadora preloads the next Scene's media before a jump. cables.gl uploads assets into the patch. Pd has search paths and no collect step.
@@ -903,6 +1018,12 @@ Files are dragged into the editor and uploaded into the patch's assets on the se
 Files are found along search paths: [declare] paths for this patch, the patch's own folder, the user's paths, then Pd's extra folder. Files are written next to the patch by default, paths use forward slashes everywhere, and ~ expands. Small data can live inside the .pd file (array contents, [text define -k]); there is no collect or project step. plugdata finds patches by their place in its Patches folder when a DAW project moves to another machine.
 - *Coming from Max:* The patch says what it needs with [declare]; there is no project window or collective that gathers media.
 - *Confidence:* high
+
+### ossia score
+
+Media files are dropped onto the timeline. Relative paths are looked up in the project folder (the folder of the .score file) first; <PROJECT>: and <LIBRARY>: prefixes name the project or user library. A system library in Documents/ossia/score/packages holds shared presets, shaders, fixtures and scripts. Sound files stream from disk when they match the project rate, otherwise load to RAM.
+- *Coming from Max:* Max finds files through a search path and projects (max_system_model.json dimension 20). score's lookup is simpler: project folder, then the library, with explicit prefixes.
+- *Confidence:* medium
 
 ## Dimensions only one tool named
 
@@ -954,6 +1075,10 @@ per tool: the same number means different things in different files.
 - **Behaviour versioning.** Why system-level: it governs how every object's behaviour is kept stable across releases. When a Pd release fixes an object's behaviour, the old behaviour stays selectable with a compatibility version, sent as '; pd compatibility 0.52' or given as -compatibility at startup. Help files document which objects changed.
   - *For Max:* The Max docs read for this comparison describe no such switch. When a patch moves between Max versions, check the refpages of the objects it relies on.
 - **Engine and GUI split.** Why system-level: it shapes performance, remote use and how plugdata exists at all. Vanilla Pd's engine and its Tcl GUI are separate processes that talk over a socket, so Pd can run with no GUI, with a GUI on another machine, or with a different GUI. plugdata is exactly that: Pd's engine with minimal changes and a new JUCE interface, which is what lets it run inside a plugin.
+
+### ossia score
+
+- **Units and dataspaces (system-level because the conversion rules apply to every connection).** Values can carry a unit from a family (distance, position, orientation, colour, angle, gain, time...). Whenever a value crosses any connection, whether a cable, a read from a device or a write to one, score converts between units of one family, otherwise maps ranges, and never drops a value because of a unit.
 
 ## Sources
 

@@ -1,0 +1,2270 @@
+{
+  "https://ossia.io/ossia-docs/": {
+    "title": "libossia API reference (all bindings, incl. Max)",
+    "url": "https://ossia.io/ossia-docs/",
+    "group": "ossia.io",
+    "source_path": "",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read the prose sections on the device/node/parameter model, attributes, units and the Max-binding notes (ossia-max); code samples for other bindings skimmed."
+  },
+  "https://ossia.io/score-docs/": {
+    "title": "Home",
+    "url": "https://ossia.io/score-docs/",
+    "group": "home",
+    "source_path": "index.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/common-practices": {
+    "title": "Common practices",
+    "url": "https://ossia.io/score-docs/common-practices",
+    "group": "common practices",
+    "source_path": "docs/common-practices/common-practices.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/common-practices/1-looping.html": {
+    "title": "Looping",
+    "url": "https://ossia.io/score-docs/common-practices/1-looping.html",
+    "group": "common practices",
+    "source_path": "docs/common-practices/1-looping.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/common-practices/10-livestreaming.html": {
+    "title": "Livestreaming",
+    "url": "https://ossia.io/score-docs/common-practices/10-livestreaming.html",
+    "group": "common practices",
+    "source_path": "docs/common-practices/10-livestreaming.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/common-practices/11-video-mixing-and-mapping.html": {
+    "title": "Video mixing and mapping",
+    "url": "https://ossia.io/score-docs/common-practices/11-video-mixing-and-mapping.html",
+    "group": "common practices",
+    "source_path": "docs/common-practices/11-video-mixing.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/common-practices/12-data-processing.html": {
+    "title": "Data processing and filtering",
+    "url": "https://ossia.io/score-docs/common-practices/12-data-processing.html",
+    "group": "common practices",
+    "source_path": "docs/common-practices/12-data-processing.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/common-practices/13-led-design.html": {
+    "title": "LED design",
+    "url": "https://ossia.io/score-docs/common-practices/13-led-design.html",
+    "group": "common practices",
+    "source_path": "docs/common-practices/13-led-design.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/common-practices/14-spatial-audio.html": {
+    "title": "Spatial audio techniques",
+    "url": "https://ossia.io/score-docs/common-practices/14-spatial-audio.html",
+    "group": "common practices",
+    "source_path": "docs/common-practices/14-spatial-audio.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/common-practices/2-switches.html": {
+    "title": "Switches",
+    "url": "https://ossia.io/score-docs/common-practices/2-switches.html",
+    "group": "common practices",
+    "source_path": "docs/common-practices/2-switches.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/common-practices/3-out-of-time.html": {
+    "title": "Out-of-time triggering",
+    "url": "https://ossia.io/score-docs/common-practices/3-out-of-time.html",
+    "group": "common practices",
+    "source_path": "docs/common-practices/3-out-of-time.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/common-practices/4-audio.html": {
+    "title": "Audio techniques",
+    "url": "https://ossia.io/score-docs/common-practices/4-audio.html",
+    "group": "common practices",
+    "source_path": "docs/common-practices/4-audio.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/common-practices/5-video.html": {
+    "title": "Video techniques",
+    "url": "https://ossia.io/score-docs/common-practices/5-video.html",
+    "group": "common practices",
+    "source_path": "docs/common-practices/5-video.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/common-practices/6-scenes.html": {
+    "title": "Scenes",
+    "url": "https://ossia.io/score-docs/common-practices/6-scenes.html",
+    "group": "common practices",
+    "source_path": "docs/common-practices/6-scenes.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/common-practices/7-start-stop-cues.html": {
+    "title": "Start/stop cues",
+    "url": "https://ossia.io/score-docs/common-practices/7-start-stop-cues.html",
+    "group": "common practices",
+    "source_path": "docs/common-practices/7-start-stop-cues.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/common-practices/8-live-coding.html": {
+    "title": "Live coding",
+    "url": "https://ossia.io/score-docs/common-practices/8-live-coding.html",
+    "group": "common practices",
+    "source_path": "docs/common-practices/8-live-coding.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/common-practices/9-seek-and-transport.html": {
+    "title": "Seek and transport",
+    "url": "https://ossia.io/score-docs/common-practices/9-seek-and-transport.html",
+    "group": "common practices",
+    "source_path": "docs/common-practices/9-seek-and-transport.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/cues.html": {
+    "title": "Cues",
+    "url": "https://ossia.io/score-docs/cues.html",
+    "group": "in depth",
+    "source_path": "docs/in-depth/cues.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/custom-ui.html": {
+    "title": "Custom UI",
+    "url": "https://ossia.io/score-docs/custom-ui.html",
+    "group": "in depth",
+    "source_path": "docs/in-depth/custom-ui.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/development": {
+    "title": "Development",
+    "url": "https://ossia.io/score-docs/development",
+    "group": "development",
+    "source_path": "docs/development/development.md",
+    "status": "skipped",
+    "session": "2026-10-03",
+    "notes": "Skipped: build-from-source / packaging instructions for developers, not about how score works."
+  },
+  "https://ossia.io/score-docs/development/architecture.html": {
+    "title": "Architecture",
+    "url": "https://ossia.io/score-docs/development/architecture.html",
+    "group": "development",
+    "source_path": "docs/development/architecture.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source); changelog is only a list of release links; Avendish page read to the first examples."
+  },
+  "https://ossia.io/score-docs/development/build-from-source.html": {
+    "title": "Building from source",
+    "url": "https://ossia.io/score-docs/development/build-from-source.html",
+    "group": "development",
+    "source_path": "docs/development/build-from-source.md",
+    "status": "skipped",
+    "session": "2026-10-03",
+    "notes": "Skipped: build-from-source / packaging instructions for developers, not about how score works."
+  },
+  "https://ossia.io/score-docs/development/build/hacking.html": {
+    "title": "Hacking",
+    "url": "https://ossia.io/score-docs/development/build/hacking.html",
+    "group": "development",
+    "source_path": "docs/development/build/Hacking-on-score.md",
+    "status": "skipped",
+    "session": "2026-10-03",
+    "notes": "Skipped: build-from-source / packaging instructions for developers, not about how score works."
+  },
+  "https://ossia.io/score-docs/development/build/packaging.html": {
+    "title": "Packaging",
+    "url": "https://ossia.io/score-docs/development/build/packaging.html",
+    "group": "development",
+    "source_path": "docs/development/build/Packaging-score-for-Linux.md",
+    "status": "skipped",
+    "session": "2026-10-03",
+    "notes": "Skipped: build-from-source / packaging instructions for developers, not about how score works."
+  },
+  "https://ossia.io/score-docs/development/build/release.html": {
+    "title": "Release build",
+    "url": "https://ossia.io/score-docs/development/build/release.html",
+    "group": "development",
+    "source_path": "docs/development/build/Creating-a-release-build.md",
+    "status": "skipped",
+    "session": "2026-10-03",
+    "notes": "Skipped: build-from-source / packaging instructions for developers, not about how score works."
+  },
+  "https://ossia.io/score-docs/development/plug-ins.html": {
+    "title": "Plug-ins",
+    "url": "https://ossia.io/score-docs/development/plug-ins.html",
+    "group": "development",
+    "source_path": "docs/development/plug-ins.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source); changelog is only a list of release links; Avendish page read to the first examples."
+  },
+  "https://ossia.io/score-docs/development/plugins/plugins-with-avendish.html": {
+    "title": "Plug-ins with Avendish",
+    "url": "https://ossia.io/score-docs/development/plugins/plugins-with-avendish.html",
+    "group": "development",
+    "source_path": "docs/development/plugins/Plugins-with-avendish.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source); changelog is only a list of release links; Avendish page read to the first examples."
+  },
+  "https://ossia.io/score-docs/devices.html": {
+    "title": "Devices",
+    "url": "https://ossia.io/score-docs/devices.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/devices.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/artnet-device.html": {
+    "title": "Art-Net device",
+    "url": "https://ossia.io/score-docs/devices/artnet-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/artnet-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/audio-device.html": {
+    "title": "Audio device",
+    "url": "https://ossia.io/score-docs/devices/audio-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/audio-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/ble-device.html": {
+    "title": "BLE device",
+    "url": "https://ossia.io/score-docs/devices/ble-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/ble-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/camera-device.html": {
+    "title": "Camera device",
+    "url": "https://ossia.io/score-docs/devices/camera-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/camera-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/coap-device.html": {
+    "title": "CoAP Device",
+    "url": "https://ossia.io/score-docs/devices/coap-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/coap-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/companion-device.html": {
+    "title": "Bitfocus Companion Device",
+    "url": "https://ossia.io/score-docs/devices/companion-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/companion-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/evdev-device.html": {
+    "title": "Evdev device",
+    "url": "https://ossia.io/score-docs/devices/evdev-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/evdev-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/gps-device.html": {
+    "title": "GPS device",
+    "url": "https://ossia.io/score-docs/devices/gps-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/gps-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/http-device.html": {
+    "title": "HTTP device",
+    "url": "https://ossia.io/score-docs/devices/http-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/http-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/joystick-device.html": {
+    "title": "Joystick device",
+    "url": "https://ossia.io/score-docs/devices/joystick-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/joystick-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/kinect-device.html": {
+    "title": "Kinect device",
+    "url": "https://ossia.io/score-docs/devices/kinect-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/kinect-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/leapmotion-device.html": {
+    "title": "Leapmotion device",
+    "url": "https://ossia.io/score-docs/devices/leapmotion-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/leapmotion-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/led-device.html": {
+    "title": "LED device",
+    "url": "https://ossia.io/score-docs/devices/led-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/led-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/libav-device.html": {
+    "title": "Libav device",
+    "url": "https://ossia.io/score-docs/devices/libav-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/libav-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/local-device.html": {
+    "title": "Local device",
+    "url": "https://ossia.io/score-docs/devices/local-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/local-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/lsl-device.html": {
+    "title": "LSL device",
+    "url": "https://ossia.io/score-docs/devices/lsl-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/lsl-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/mapper-device.html": {
+    "title": "Mapper device",
+    "url": "https://ossia.io/score-docs/devices/mapper-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/mapper-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Partly read: first ~90 lines; later code examples not read."
+  },
+  "https://ossia.io/score-docs/devices/midiin-device.html": {
+    "title": "MIDI input device",
+    "url": "https://ossia.io/score-docs/devices/midiin-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/midiin-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/midiout-device.html": {
+    "title": "MIDI output device",
+    "url": "https://ossia.io/score-docs/devices/midiout-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/midiout-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/minuit-device.html": {
+    "title": "Minuit device",
+    "url": "https://ossia.io/score-docs/devices/minuit-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/minuit-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/mqtt-device.html": {
+    "title": "MQTT Device",
+    "url": "https://ossia.io/score-docs/devices/mqtt-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/mqtt-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/ndi-device.html": {
+    "title": "NDI devices",
+    "url": "https://ossia.io/score-docs/devices/ndi-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/ndi-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/osc-device.html": {
+    "title": "OSC device",
+    "url": "https://ossia.io/score-docs/devices/osc-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/osc-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/oscquery-device.html": {
+    "title": "OSCQuery device",
+    "url": "https://ossia.io/score-docs/devices/oscquery-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/oscquery-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/rawio-device.html": {
+    "title": "Raw I/O device",
+    "url": "https://ossia.io/score-docs/devices/rawio-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/rawio-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/serial-device.html": {
+    "title": "Serial device",
+    "url": "https://ossia.io/score-docs/devices/serial-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/serial-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Partly read: first ~90 lines; later code examples not read."
+  },
+  "https://ossia.io/score-docs/devices/sh4lt-device.html": {
+    "title": "Sh4lt devices",
+    "url": "https://ossia.io/score-docs/devices/sh4lt-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/sh4lt-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/shmdata-device.html": {
+    "title": "Shmdata devices",
+    "url": "https://ossia.io/score-docs/devices/shmdata-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/shmdata-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/spatgris-device.html": {
+    "title": "SpatGris device",
+    "url": "https://ossia.io/score-docs/devices/spatgris-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/spatgris-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/spout-device.html": {
+    "title": "Spout devices",
+    "url": "https://ossia.io/score-docs/devices/spout-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/spout-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/syphon-device.html": {
+    "title": "Syphon devices",
+    "url": "https://ossia.io/score-docs/devices/syphon-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/syphon-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/wiimote-device.html": {
+    "title": "Wiimote device",
+    "url": "https://ossia.io/score-docs/devices/wiimote-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/wiimote-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/window-device.html": {
+    "title": "Window device",
+    "url": "https://ossia.io/score-docs/devices/window-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/window-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/devices/ws-device.html": {
+    "title": "WebSocket device",
+    "url": "https://ossia.io/score-docs/devices/ws-device.html",
+    "group": "devices",
+    "source_path": "docs/reference-manual/devices/library/ws-device.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Partly read: first ~90 lines; later code examples not read."
+  },
+  "https://ossia.io/score-docs/docs/advanced/polyphony.html": {
+    "title": "Polyphonic behaviours",
+    "url": "https://ossia.io/score-docs/docs/advanced/polyphony.html",
+    "group": "in depth",
+    "source_path": "docs/in-depth/polyphony.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/docs/advanced/puredata.html": {
+    "title": "Pure Data (redirect)",
+    "url": "https://ossia.io/score-docs/docs/advanced/puredata.html",
+    "group": "in depth",
+    "source_path": "docs/in-depth/puredata.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/examples": {
+    "title": "Examples",
+    "url": "https://ossia.io/score-docs/examples",
+    "group": "examples",
+    "source_path": "docs/examples/examples.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/examples/3d": {
+    "title": "3D Graphics",
+    "url": "https://ossia.io/score-docs/examples/3d",
+    "group": "examples",
+    "source_path": "docs/examples/3d/3d.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/examples/3d/curl-noise.html": {
+    "title": "Curl Noise Geometry Filter",
+    "url": "https://ossia.io/score-docs/examples/3d/curl-noise.html",
+    "group": "examples",
+    "source_path": "docs/examples/3d/curl-noise.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/examples/3d/extract-attribute.html": {
+    "title": "Extract Attribute",
+    "url": "https://ossia.io/score-docs/examples/3d/extract-attribute.html",
+    "group": "examples",
+    "source_path": "docs/examples/3d/extract-attribute.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/examples/3d/generate-array.html": {
+    "title": "Generate Array",
+    "url": "https://ossia.io/score-docs/examples/3d/generate-array.html",
+    "group": "examples",
+    "source_path": "docs/examples/3d/generate-array.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/examples/3d/gltf-checkers.html": {
+    "title": "glTF Scene with Effects",
+    "url": "https://ossia.io/score-docs/examples/3d/gltf-checkers.html",
+    "group": "examples",
+    "source_path": "docs/examples/3d/gltf-checkers.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/examples/3d/js-texture-inlet.html": {
+    "title": "Texture Inlet in Qt Quick 3D",
+    "url": "https://ossia.io/score-docs/examples/3d/js-texture-inlet.html",
+    "group": "examples",
+    "source_path": "docs/examples/3d/js-texture-inlet.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/examples/3d/maxicube.html": {
+    "title": "Massive Particle System",
+    "url": "https://ossia.io/score-docs/examples/3d/maxicube.html",
+    "group": "examples",
+    "source_path": "docs/examples/3d/maxicube.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/examples/3d/sponza.html": {
+    "title": "Sponza Palace",
+    "url": "https://ossia.io/score-docs/examples/3d/sponza.html",
+    "group": "examples",
+    "source_path": "docs/examples/3d/sponza.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/examples/3d/ssynth.html": {
+    "title": "Structure Synth Example",
+    "url": "https://ossia.io/score-docs/examples/3d/ssynth.html",
+    "group": "examples",
+    "source_path": "docs/examples/3d/ssynth.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/examples/3d/threedim.html": {
+    "title": "3D meshes",
+    "url": "https://ossia.io/score-docs/examples/3d/threedim.html",
+    "group": "examples",
+    "source_path": "docs/examples/3d/threedim.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/examples/advanced": {
+    "title": "Advanced",
+    "url": "https://ossia.io/score-docs/examples/advanced",
+    "group": "examples",
+    "source_path": "docs/examples/advanced/advanced.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/examples/audio": {
+    "title": "Audio",
+    "url": "https://ossia.io/score-docs/examples/audio",
+    "group": "examples",
+    "source_path": "docs/examples/audio/audio.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/examples/audio/audiofx.html": {
+    "title": "Audio Effects Example",
+    "url": "https://ossia.io/score-docs/examples/audio/audiofx.html",
+    "group": "examples",
+    "source_path": "docs/examples/audio/audiofx.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/examples/audio/faust-synthesis.html": {
+    "title": "Faust Synthesis example",
+    "url": "https://ossia.io/score-docs/examples/audio/faust-synthesis.html",
+    "group": "examples",
+    "source_path": "docs/examples/audio/faust-synthesis.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/examples/audio/pd-integration.html": {
+    "title": "PureData Example",
+    "url": "https://ossia.io/score-docs/examples/audio/pd-integration.html",
+    "group": "examples",
+    "source_path": "docs/examples/audio/pd-integration.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/examples/automation": {
+    "title": "Automation",
+    "url": "https://ossia.io/score-docs/examples/automation",
+    "group": "examples",
+    "source_path": "docs/examples/automation/automation.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/examples/automation/modulation.html": {
+    "title": "Device modulation",
+    "url": "https://ossia.io/score-docs/examples/automation/modulation.html",
+    "group": "examples",
+    "source_path": "docs/examples/automation/modulation.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/examples/automation/smoothing.html": {
+    "title": "Smoothing and filtering",
+    "url": "https://ossia.io/score-docs/examples/automation/smoothing.html",
+    "group": "examples",
+    "source_path": "docs/examples/automation/smoothing.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/examples/basics": {
+    "title": "Basics",
+    "url": "https://ossia.io/score-docs/examples/basics",
+    "group": "examples",
+    "source_path": "docs/examples/basics/basics.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/examples/basics/all-media.html": {
+    "title": "Multi-media patching",
+    "url": "https://ossia.io/score-docs/examples/basics/all-media.html",
+    "group": "examples",
+    "source_path": "docs/examples/advanced/all-media.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/examples/basics/delayed.html": {
+    "title": "Temporal patching (delayed)",
+    "url": "https://ossia.io/score-docs/examples/basics/delayed.html",
+    "group": "examples",
+    "source_path": "docs/examples/basics/delayed.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/examples/basics/glutton.html": {
+    "title": "Temporal patching (glutton)",
+    "url": "https://ossia.io/score-docs/examples/basics/glutton.html",
+    "group": "examples",
+    "source_path": "docs/examples/basics/glutton.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/examples/basics/osc.html": {
+    "title": "Basic OSC example",
+    "url": "https://ossia.io/score-docs/examples/basics/osc.html",
+    "group": "examples",
+    "source_path": "docs/examples/basics/osc.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/examples/basics/timeflo.html": {
+    "title": "Basic timeline",
+    "url": "https://ossia.io/score-docs/examples/basics/timeflo.html",
+    "group": "examples",
+    "source_path": "docs/examples/basics/timeflo.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/examples/basics/timeline-and-patches.html": {
+    "title": "Timeline and patches",
+    "url": "https://ossia.io/score-docs/examples/basics/timeline-and-patches.html",
+    "group": "examples",
+    "source_path": "docs/examples/basics/timeline-and-patches.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/examples/basics/timemodel.html": {
+    "title": "Time model",
+    "url": "https://ossia.io/score-docs/examples/basics/timemodel.html",
+    "group": "examples",
+    "source_path": "docs/examples/basics/timemodel.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/examples/devices": {
+    "title": "Device Examples",
+    "url": "https://ossia.io/score-docs/examples/devices",
+    "group": "examples",
+    "source_path": "docs/examples/devices/device-examples.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/examples/devices/gamepad.html": {
+    "title": "Gamepad control",
+    "url": "https://ossia.io/score-docs/examples/devices/gamepad.html",
+    "group": "examples",
+    "source_path": "docs/examples/devices/gamepad.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/examples/tempo": {
+    "title": "Tempo Examples",
+    "url": "https://ossia.io/score-docs/examples/tempo",
+    "group": "examples",
+    "source_path": "docs/examples/tempo/tempo.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/examples/tempo/tempo-control.html": {
+    "title": "Tempo manipulation",
+    "url": "https://ossia.io/score-docs/examples/tempo/tempo-control.html",
+    "group": "examples",
+    "source_path": "docs/examples/tempo/tempo-control.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/examples/video": {
+    "title": "Video Examples",
+    "url": "https://ossia.io/score-docs/examples/video",
+    "group": "examples",
+    "source_path": "docs/examples/video/video-examples.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/examples/video/audioreactive.html": {
+    "title": "Audio-reactive visuals",
+    "url": "https://ossia.io/score-docs/examples/video/audioreactive.html",
+    "group": "examples",
+    "source_path": "docs/examples/video/audioreactive.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/examples/video/camera.html": {
+    "title": "Camera input",
+    "url": "https://ossia.io/score-docs/examples/video/camera.html",
+    "group": "examples",
+    "source_path": "docs/examples/video/camera.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/examples/video/video-basics.html": {
+    "title": "Video manipulation",
+    "url": "https://ossia.io/score-docs/examples/video/video-basics.html",
+    "group": "examples",
+    "source_path": "docs/examples/video/video-basics.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/faq.html": {
+    "title": "FAQ",
+    "url": "https://ossia.io/score-docs/faq.html",
+    "group": "faq",
+    "source_path": "docs/faq/faq.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/faq/controlling-score-with-oscquery.html": {
+    "title": "Controlling score with OSCQuery",
+    "url": "https://ossia.io/score-docs/faq/controlling-score-with-oscquery.html",
+    "group": "faq",
+    "source_path": "docs/faq/controlling-score-with-oscquery.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/faq/linux.html": {
+    "title": "Running on Linux",
+    "url": "https://ossia.io/score-docs/faq/linux.html",
+    "group": "faq",
+    "source_path": "docs/faq/linux.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/faq/monitor-activity.html": {
+    "title": "How to monitor activity ?",
+    "url": "https://ossia.io/score-docs/faq/monitor-activity.html",
+    "group": "faq",
+    "source_path": "docs/faq/monitor-activity.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/faq/nogui.html": {
+    "title": "How to run score without GUI ?",
+    "url": "https://ossia.io/score-docs/faq/nogui.html",
+    "group": "faq",
+    "source_path": "docs/faq/nogui.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/in-depth": {
+    "title": "In depth",
+    "url": "https://ossia.io/score-docs/in-depth",
+    "group": "in depth",
+    "source_path": "docs/in-depth/in-depth.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/in-depth/audio-routing.html": {
+    "title": "Audio routing",
+    "url": "https://ossia.io/score-docs/in-depth/audio-routing.html",
+    "group": "in depth",
+    "source_path": "docs/in-depth/audio-routing.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/in-depth/automations.html": {
+    "title": "Automations",
+    "url": "https://ossia.io/score-docs/in-depth/automations.html",
+    "group": "in depth",
+    "source_path": "docs/in-depth/automations.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/in-depth/embedded.html": {
+    "title": "Embedded devices",
+    "url": "https://ossia.io/score-docs/in-depth/embedded.html",
+    "group": "in depth",
+    "source_path": "docs/in-depth/embedded.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/in-depth/execution.html": {
+    "title": "Execution engine",
+    "url": "https://ossia.io/score-docs/in-depth/execution.html",
+    "group": "in depth",
+    "source_path": "docs/in-depth/execution.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/in-depth/media.html": {
+    "title": "Media management",
+    "url": "https://ossia.io/score-docs/in-depth/media.html",
+    "group": "in depth",
+    "source_path": "docs/in-depth/media.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/in-depth/midi.html": {
+    "title": "MIDI support",
+    "url": "https://ossia.io/score-docs/in-depth/midi.html",
+    "group": "in depth",
+    "source_path": "docs/in-depth/midi.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/in-depth/modular-workflow.html": {
+    "title": "Modular workflow",
+    "url": "https://ossia.io/score-docs/in-depth/modular-workflow.html",
+    "group": "in depth",
+    "source_path": "docs/in-depth/modular.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/in-depth/musical.html": {
+    "title": "Musical metrics",
+    "url": "https://ossia.io/score-docs/in-depth/musical.html",
+    "group": "in depth",
+    "source_path": "docs/in-depth/musical.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/in-depth/pattern-matching.html": {
+    "title": "Pattern matching",
+    "url": "https://ossia.io/score-docs/in-depth/pattern-matching.html",
+    "group": "in depth",
+    "source_path": "docs/in-depth/pattern-matching.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/in-depth/recording.html": {
+    "title": "Recording",
+    "url": "https://ossia.io/score-docs/in-depth/recording.html",
+    "group": "in depth",
+    "source_path": "docs/in-depth/recording.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/in-depth/remote.html": {
+    "title": "Remote Control",
+    "url": "https://ossia.io/score-docs/in-depth/remote.html",
+    "group": "in depth",
+    "source_path": "docs/in-depth/remote.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/in-depth/scripting-api.html": {
+    "title": "Scripting API",
+    "url": "https://ossia.io/score-docs/in-depth/scripting-api.html",
+    "group": "in depth",
+    "source_path": "docs/in-depth/scripting-api.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/in-depth/scripting.html": {
+    "title": "Scripting",
+    "url": "https://ossia.io/score-docs/in-depth/scripting.html",
+    "group": "in depth",
+    "source_path": "docs/in-depth/scripting.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/in-depth/unit-system.html": {
+    "title": "Address system",
+    "url": "https://ossia.io/score-docs/in-depth/unit-system.html",
+    "group": "in depth",
+    "source_path": "docs/in-depth/unit-system.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/in-depth/video.html": {
+    "title": "Graphics pipeline",
+    "url": "https://ossia.io/score-docs/in-depth/video.html",
+    "group": "in depth",
+    "source_path": "docs/in-depth/graphics-pipeline.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/integrations": {
+    "title": "Integrations",
+    "url": "https://ossia.io/score-docs/integrations",
+    "group": "integrations",
+    "source_path": "docs/integrations/integrations.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/integrations/blender.html": {
+    "title": "Integrating with Blender",
+    "url": "https://ossia.io/score-docs/integrations/blender.html",
+    "group": "integrations",
+    "source_path": "docs/integrations/blender.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source); changelog is only a list of release links; Avendish page read to the first examples."
+  },
+  "https://ossia.io/score-docs/package-manager.html": {
+    "title": "Package manager",
+    "url": "https://ossia.io/score-docs/package-manager.html",
+    "group": "in depth",
+    "source_path": "docs/in-depth/package-manager.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/panels.html": {
+    "title": "Panels",
+    "url": "https://ossia.io/score-docs/panels.html",
+    "group": "panels",
+    "source_path": "docs/reference-manual/panels/panels.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/panels/console.html": {
+    "title": "Console",
+    "url": "https://ossia.io/score-docs/panels/console.html",
+    "group": "panels",
+    "source_path": "docs/reference-manual/panels/console.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/panels/explorer.html": {
+    "title": "Device explorer",
+    "url": "https://ossia.io/score-docs/panels/explorer.html",
+    "group": "panels",
+    "source_path": "docs/reference-manual/panels/explorer.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/panels/inspector.html": {
+    "title": "Inspector",
+    "url": "https://ossia.io/score-docs/panels/inspector.html",
+    "group": "panels",
+    "source_path": "docs/reference-manual/panels/inspector.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/panels/library.html": {
+    "title": "Library",
+    "url": "https://ossia.io/score-docs/panels/library.html",
+    "group": "panels",
+    "source_path": "docs/reference-manual/panels/library.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/panels/mixer.html": {
+    "title": "Mixer",
+    "url": "https://ossia.io/score-docs/panels/mixer.html",
+    "group": "panels",
+    "source_path": "docs/reference-manual/panels/mixer.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/presets.html": {
+    "title": "Presets",
+    "url": "https://ossia.io/score-docs/presets.html",
+    "group": "in depth",
+    "source_path": "docs/in-depth/presets.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/processes.html": {
+    "title": "Processes",
+    "url": "https://ossia.io/score-docs/processes.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/processes.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/processes/2Dspline.html": {
+    "title": "2D Spline",
+    "url": "https://ossia.io/score-docs/processes/2Dspline.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/2Dspline.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/adsr.html": {
+    "title": "ADSR",
+    "url": "https://ossia.io/score-docs/processes/adsr.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/adsr.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/ai-prompt-composer.html": {
+    "title": "AI Prompt Composer",
+    "url": "https://ossia.io/score-docs/processes/ai-prompt-composer.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/ai-prompt-composer.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/ai-prompt-interpolator.html": {
+    "title": "AI Prompt Interpolator",
+    "url": "https://ossia.io/score-docs/processes/ai-prompt-interpolator.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/ai-prompt-interpolator.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/ai-recognition.html": {
+    "title": "AI Recognition",
+    "url": "https://ossia.io/score-docs/processes/ai-recognition.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/ai-recognition.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/analysis.html": {
+    "title": "Analysis",
+    "url": "https://ossia.io/score-docs/processes/analysis.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/analysis.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/array-utilities.html": {
+    "title": "Array utilities",
+    "url": "https://ossia.io/score-docs/processes/array-utilities.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/array-utilities.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/audio-effects.html": {
+    "title": "Audio Effects",
+    "url": "https://ossia.io/score-docs/processes/audio-effects.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/audio-effects.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Partly read: first part of a long page (about 45-110 lines); later sections not read."
+  },
+  "https://ossia.io/score-docs/processes/audio-looper.html": {
+    "title": "Audio looper",
+    "url": "https://ossia.io/score-docs/processes/audio-looper.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/audio_looper.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/audio-particles.html": {
+    "title": "Audio Particles",
+    "url": "https://ossia.io/score-docs/processes/audio-particles.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/audio-particles.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/audio-plugins.html": {
+    "title": "Audio plugins",
+    "url": "https://ossia.io/score-docs/processes/audio-plugins.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/audio-plugins.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/audio-utilities.html": {
+    "title": "Audio utilities",
+    "url": "https://ossia.io/score-docs/processes/audio-utilities.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/audio-utilities.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/automation_float.html": {
+    "title": "Automation (float)",
+    "url": "https://ossia.io/score-docs/processes/automation_float.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/automation_float.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/barrverb.html": {
+    "title": "BarrVerb",
+    "url": "https://ossia.io/score-docs/processes/barrverb.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/barrverb.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/bytebeat.html": {
+    "title": "Bytebeat",
+    "url": "https://ossia.io/score-docs/processes/bytebeat.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/bytebeat.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Partly read: first part of a long page (about 45-110 lines); later sections not read."
+  },
+  "https://ossia.io/score-docs/processes/calibrator.html": {
+    "title": "Calibrator",
+    "url": "https://ossia.io/score-docs/processes/calibrator.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/calibrator.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/classifier.html": {
+    "title": "Classifier",
+    "url": "https://ossia.io/score-docs/processes/classifier.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/classifier.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Partly read: first part of a long page (about 45-110 lines); later sections not read."
+  },
+  "https://ossia.io/score-docs/processes/compute-shaders.html": {
+    "title": "Compute Shaders",
+    "url": "https://ossia.io/score-docs/processes/compute-shaders.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/compute-shader.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Partly read: first part of a long page (about 45-110 lines); later sections not read."
+  },
+  "https://ossia.io/score-docs/processes/computer-vision-utilities.html": {
+    "title": "Computer Vision utilities",
+    "url": "https://ossia.io/score-docs/processes/computer-vision-utilities.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/computer-vision-utilities.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/context-free-art.html": {
+    "title": "Context-Free Art",
+    "url": "https://ossia.io/score-docs/processes/context-free-art.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/context-free-art.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/control-utilities.html": {
+    "title": "Control utilities",
+    "url": "https://ossia.io/score-docs/processes/control-utilities.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/control-utilities.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/controlsurface.html": {
+    "title": "Control surface",
+    "url": "https://ossia.io/score-docs/processes/controlsurface.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/controlsurface.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Partly read: first part of a long page (about 45-110 lines); later sections not read."
+  },
+  "https://ossia.io/score-docs/processes/cpp_jit.html": {
+    "title": "C++ JIT",
+    "url": "https://ossia.io/score-docs/processes/cpp_jit.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/cpp_jit.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/csv-recorder.html": {
+    "title": "CSV recorder",
+    "url": "https://ossia.io/score-docs/processes/csv-recorder.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/csv-recorder.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/dbap.html": {
+    "title": "DBAP",
+    "url": "https://ossia.io/score-docs/processes/dbap.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/dbap.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/display-utilities.html": {
+    "title": "Display Utilities",
+    "url": "https://ossia.io/score-docs/processes/display-utilities.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/display-utilities.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/easetanbul.html": {
+    "title": "Easetanbul",
+    "url": "https://ossia.io/score-docs/processes/easetanbul.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/easetanbul.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/envelope-follower.html": {
+    "title": "Envelope Follower",
+    "url": "https://ossia.io/score-docs/processes/envelope-follower.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/envelope-follower.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/exprtk.html": {
+    "title": "Math expressions",
+    "url": "https://ossia.io/score-docs/processes/exprtk.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/exprtk.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Partly read: first part of a long page (about 45-110 lines); later sections not read."
+  },
+  "https://ossia.io/score-docs/processes/faust.html": {
+    "title": "Faust",
+    "url": "https://ossia.io/score-docs/processes/faust.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/faust.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/gbap.html": {
+    "title": "GBAP",
+    "url": "https://ossia.io/score-docs/processes/gbap.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/gbap.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Partly read: first part of a long page (about 45-110 lines); later sections not read."
+  },
+  "https://ossia.io/score-docs/processes/geo-zones.html": {
+    "title": "Geo Zones",
+    "url": "https://ossia.io/score-docs/processes/geo-zones.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/geo-zones.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Partly read: first part of a long page (about 45-110 lines); later sections not read."
+  },
+  "https://ossia.io/score-docs/processes/gestures.html": {
+    "title": "Gestures",
+    "url": "https://ossia.io/score-docs/processes/gestures.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/gestures.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/gradient-scrubber.html": {
+    "title": "Gradient Scrubber",
+    "url": "https://ossia.io/score-docs/processes/gradient-scrubber.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/gradient-scrubber.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/gradient.html": {
+    "title": "Gradient",
+    "url": "https://ossia.io/score-docs/processes/gradient.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/gradient.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/graphics-utilities.html": {
+    "title": "Graphics Utilities",
+    "url": "https://ossia.io/score-docs/processes/graphics-utilities.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/graphics-utilities.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/hdf5.html": {
+    "title": "HDF5 Support",
+    "url": "https://ossia.io/score-docs/processes/hdf5.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/hdf5.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Partly read: first part of a long page (about 45-110 lines); later sections not read."
+  },
+  "https://ossia.io/score-docs/processes/image.html": {
+    "title": "Image process",
+    "url": "https://ossia.io/score-docs/processes/image.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/image.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/interpolator.html": {
+    "title": "Interpolator",
+    "url": "https://ossia.io/score-docs/processes/interpolator.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/interpolator.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/javascript.html": {
+    "title": "Javascript",
+    "url": "https://ossia.io/score-docs/processes/javascript.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/javascript.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Partly read: first part of a long page (about 45-110 lines); later sections not read."
+  },
+  "https://ossia.io/score-docs/processes/led-view.html": {
+    "title": "LED View",
+    "url": "https://ossia.io/score-docs/processes/led-view.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/led-view.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/lfo.html": {
+    "title": "LFO",
+    "url": "https://ossia.io/score-docs/processes/lfo.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/lfo.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/mapping-curve.html": {
+    "title": "Mapping Curve",
+    "url": "https://ossia.io/score-docs/processes/mapping-curve.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/mapping-curve.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Partly read: first part of a long page (about 45-110 lines); later sections not read."
+  },
+  "https://ossia.io/score-docs/processes/mapping-tool.html": {
+    "title": "Mapping tool",
+    "url": "https://ossia.io/score-docs/processes/mapping-tool.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/mapping-tool.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/mapping-utilities.html": {
+    "title": "Mapping utilities",
+    "url": "https://ossia.io/score-docs/processes/mapping-utilities.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/mapping-utilities.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/mapping.html": {
+    "title": "Mapping (float)",
+    "url": "https://ossia.io/score-docs/processes/mapping.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/mapping.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/matrix-spatialization.html": {
+    "title": "Matrix Spatialization",
+    "url": "https://ossia.io/score-docs/processes/matrix-spatialization.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/spatialization-matrix.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/matrix.html": {
+    "title": "Matrix",
+    "url": "https://ossia.io/score-docs/processes/matrix.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/matrix.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Partly read: first part of a long page (about 45-110 lines); later sections not read."
+  },
+  "https://ossia.io/score-docs/processes/melodial.html": {
+    "title": "Melodial",
+    "url": "https://ossia.io/score-docs/processes/melodial.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/melodial.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/midi-file-reader.html": {
+    "title": "MIDI File Reader",
+    "url": "https://ossia.io/score-docs/processes/midi-file-reader.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/midi-file-reader.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/midi-file-scaler.html": {
+    "title": "MIDI File Scaler",
+    "url": "https://ossia.io/score-docs/processes/midi-file-scaler.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/midi-file-scaler.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Partly read: first part of a long page (about 45-110 lines); later sections not read."
+  },
+  "https://ossia.io/score-docs/processes/midi-file-scroller.html": {
+    "title": "MIDI File Scroller",
+    "url": "https://ossia.io/score-docs/processes/midi-file-scroller.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/midi-file-scroller.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/midi-filter.html": {
+    "title": "MIDI Filter",
+    "url": "https://ossia.io/score-docs/processes/midi-filter.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/midi-filter.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/midi-utilities.html": {
+    "title": "MIDI utilities",
+    "url": "https://ossia.io/score-docs/processes/midi-utilities.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/midi-utilities.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/model-display.html": {
+    "title": "Model display",
+    "url": "https://ossia.io/score-docs/processes/model-display.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/model-display.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/multicursor.html": {
+    "title": "Multi-Cursor Manager",
+    "url": "https://ossia.io/score-docs/processes/multicursor.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/multi-cursor.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/nodes.html": {
+    "title": "Nodes",
+    "url": "https://ossia.io/score-docs/processes/nodes.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/nodes.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/object-filter.html": {
+    "title": "Object filter",
+    "url": "https://ossia.io/score-docs/processes/object-filter.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/object-filter.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Partly read: first part of a long page (about 45-110 lines); later sections not read."
+  },
+  "https://ossia.io/score-docs/processes/object-loader.html": {
+    "title": "Object loader",
+    "url": "https://ossia.io/score-docs/processes/object-loader.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/object-loader.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/pathgenerator.html": {
+    "title": "Path Generator",
+    "url": "https://ossia.io/score-docs/processes/pathgenerator.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/path-generator.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/pattern-applier.html": {
+    "title": "Pattern Applier",
+    "url": "https://ossia.io/score-docs/processes/pattern-applier.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/pattern-applier.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/pattern-combiner.html": {
+    "title": "Pattern Combiner",
+    "url": "https://ossia.io/score-docs/processes/pattern-combiner.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/pattern-combiner.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/patternal.html": {
+    "title": "Patternal",
+    "url": "https://ossia.io/score-docs/processes/patternal.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/patternal.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/patternist.html": {
+    "title": "Patternist",
+    "url": "https://ossia.io/score-docs/processes/patternist.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/patternist.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/piano-roll.html": {
+    "title": "Piano roll",
+    "url": "https://ossia.io/score-docs/processes/piano-roll.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/piano-roll.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/pixel-utilities.html": {
+    "title": "Pixel Utilities",
+    "url": "https://ossia.io/score-docs/processes/pixel-utilities.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/pixel-utilities.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/point2d-view.html": {
+    "title": "Point2D View",
+    "url": "https://ossia.io/score-docs/processes/point2d-view.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/point2D-view.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/poles.html": {
+    "title": "Poles",
+    "url": "https://ossia.io/score-docs/processes/poles.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/poles.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Partly read: first part of a long page (about 45-110 lines); later sections not read."
+  },
+  "https://ossia.io/score-docs/processes/process-launcher.html": {
+    "title": "Process Launcher",
+    "url": "https://ossia.io/score-docs/processes/process-launcher.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/process-launcher.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/puredata.html": {
+    "title": "Pure Data integration",
+    "url": "https://ossia.io/score-docs/processes/puredata.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/puredata.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/qwen-llm.html": {
+    "title": "Qwen LLM",
+    "url": "https://ossia.io/score-docs/processes/qwen-llm.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/qwen-llm.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Partly read: first part of a long page (about 45-110 lines); later sections not read."
+  },
+  "https://ossia.io/score-docs/processes/range-filter.html": {
+    "title": "Range filter",
+    "url": "https://ossia.io/score-docs/processes/range-filter.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/range-filter.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/rate-limiter.html": {
+    "title": "Rate Limiter",
+    "url": "https://ossia.io/score-docs/processes/rate-limiter.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/rate-limiter.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/regressor.html": {
+    "title": "Regressor",
+    "url": "https://ossia.io/score-docs/processes/regressor.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/regressor.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Partly read: first part of a long page (about 45-110 lines); later sections not read."
+  },
+  "https://ossia.io/score-docs/processes/render-pipeline.html": {
+    "title": "Render Pipeline",
+    "url": "https://ossia.io/score-docs/processes/render-pipeline.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/render-pipeline.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Partly read: first part of a long page (about 45-110 lines); later sections not read."
+  },
+  "https://ossia.io/score-docs/processes/scenario.html": {
+    "title": "Scenario",
+    "url": "https://ossia.io/score-docs/processes/scenario.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/scenario.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/shaders.html": {
+    "title": "ISF Shaders",
+    "url": "https://ossia.io/score-docs/processes/shaders.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/shader.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Partly read: first part of a long page (about 45-110 lines); later sections not read."
+  },
+  "https://ossia.io/score-docs/processes/shell-command.html": {
+    "title": "Shell command",
+    "url": "https://ossia.io/score-docs/processes/shell-command.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/shell.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/signal-display.html": {
+    "title": "Signal Display",
+    "url": "https://ossia.io/score-docs/processes/signal-display.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/signal-display.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/smooth.html": {
+    "title": "Smooth",
+    "url": "https://ossia.io/score-docs/processes/smooth.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/smooth.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/soundfile.html": {
+    "title": "Soundfiles",
+    "url": "https://ossia.io/score-docs/processes/soundfile.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/soundfile.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/spammer.html": {
+    "title": "Spammer",
+    "url": "https://ossia.io/score-docs/processes/spammer.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/spammer.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/sprite-reader.html": {
+    "title": "Sprite Reader",
+    "url": "https://ossia.io/score-docs/processes/sprite-reader.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/sprite-reader.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Partly read: first part of a long page (about 45-110 lines); later sections not read."
+  },
+  "https://ossia.io/score-docs/processes/step.html": {
+    "title": "Step sequencer",
+    "url": "https://ossia.io/score-docs/processes/step.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/step.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/structure-synth.html": {
+    "title": "Structure Synth",
+    "url": "https://ossia.io/score-docs/processes/structure-synth.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/structure-synth.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/sweeper.html": {
+    "title": "Sweeper",
+    "url": "https://ossia.io/score-docs/processes/sweeper.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/sweeper.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/teleplot.html": {
+    "title": "Teleplot",
+    "url": "https://ossia.io/score-docs/processes/teleplot.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/teleplot.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/tempo.html": {
+    "title": "Tempo",
+    "url": "https://ossia.io/score-docs/processes/tempo.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/tempo.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/texgen.html": {
+    "title": "Texture generator",
+    "url": "https://ossia.io/score-docs/processes/texgen.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/texgen.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/text.html": {
+    "title": "Text process",
+    "url": "https://ossia.io/score-docs/processes/text.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/text.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/trigger.html": {
+    "title": "Trigger",
+    "url": "https://ossia.io/score-docs/processes/trigger.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/trigger.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/tweener.html": {
+    "title": "Tweener",
+    "url": "https://ossia.io/score-docs/processes/tweener.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/tweener.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/value-display.html": {
+    "title": "Value Display",
+    "url": "https://ossia.io/score-docs/processes/value-display.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/value-display.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/value-filter.html": {
+    "title": "Value Filter",
+    "url": "https://ossia.io/score-docs/processes/value-filter.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/value-filter.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/vertex-shader-art.html": {
+    "title": "Vertex Shader Art",
+    "url": "https://ossia.io/score-docs/processes/vertex-shader-art.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/vsa-shader.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Partly read: first part of a long page (about 45-110 lines); later sections not read."
+  },
+  "https://ossia.io/score-docs/processes/video.html": {
+    "title": "Video",
+    "url": "https://ossia.io/score-docs/processes/video.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/video.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/processes/wavecycle.html": {
+    "title": "Wavecycle",
+    "url": "https://ossia.io/score-docs/processes/wavecycle.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/wavecycle.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read: prose of the page (code blocks and bold bullet lists filtered out, first ~45 lines)."
+  },
+  "https://ossia.io/score-docs/quick-start": {
+    "title": "Quick start",
+    "url": "https://ossia.io/score-docs/quick-start",
+    "group": "quick start",
+    "source_path": "docs/quick-start/quick-start.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/quick-start/breaking-the-timeline.html": {
+    "title": "Breaking the timeline",
+    "url": "https://ossia.io/score-docs/quick-start/breaking-the-timeline.html",
+    "group": "quick start",
+    "source_path": "docs/quick-start/breaking-the-timeline.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/quick-start/installation.html": {
+    "title": "Installation",
+    "url": "https://ossia.io/score-docs/quick-start/installation.html",
+    "group": "quick start",
+    "source_path": "docs/quick-start/installation.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/quick-start/interface-overview.html": {
+    "title": "Interface overview",
+    "url": "https://ossia.io/score-docs/quick-start/interface-overview.html",
+    "group": "quick start",
+    "source_path": "docs/quick-start/interface-overview.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/quick-start/non-linear-timelines.html": {
+    "title": "Non-linear timeline",
+    "url": "https://ossia.io/score-docs/quick-start/non-linear-timelines.html",
+    "group": "quick start",
+    "source_path": "docs/quick-start/non-linear-timelines.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/quick-start/saving-and-recalling-devices-state.html": {
+    "title": "Saving & recalling devices' state",
+    "url": "https://ossia.io/score-docs/quick-start/saving-and-recalling-devices-state.html",
+    "group": "quick start",
+    "source_path": "docs/quick-start/saving-recalling-devices-state.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/quick-start/states-and-automations-in-practice.html": {
+    "title": "States & automations in practice",
+    "url": "https://ossia.io/score-docs/quick-start/states-and-automations-in-practice.html",
+    "group": "quick start",
+    "source_path": "docs/quick-start/states-and-automations-in-practice.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/quick-start/what-is-score.html": {
+    "title": "What is score ?",
+    "url": "https://ossia.io/score-docs/quick-start/what-is-score.html",
+    "group": "quick start",
+    "source_path": "docs/quick-start/what-is-score.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/quick-start/working-with-audio.html": {
+    "title": "Working with audio",
+    "url": "https://ossia.io/score-docs/quick-start/working-with-audio.html",
+    "group": "quick start",
+    "source_path": "docs/quick-start/working-with-audio.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/quick-start/working-with-devices.html": {
+    "title": "Working with devices",
+    "url": "https://ossia.io/score-docs/quick-start/working-with-devices.html",
+    "group": "quick start",
+    "source_path": "docs/quick-start/working-with-devices.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/quick-start/working-with-video.html": {
+    "title": "Working with video",
+    "url": "https://ossia.io/score-docs/quick-start/working-with-video.html",
+    "group": "quick start",
+    "source_path": "docs/quick-start/working-with-video.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/quick-start/writing-automations.html": {
+    "title": "Writing automations",
+    "url": "https://ossia.io/score-docs/quick-start/writing-automations.html",
+    "group": "quick start",
+    "source_path": "docs/quick-start/writing-automations.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/reference": {
+    "title": "Reference",
+    "url": "https://ossia.io/score-docs/reference",
+    "group": "reference",
+    "source_path": "docs/reference-manual/reference-manual.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/reference-manual/processes/library/automation.html": {
+    "title": "automation",
+    "url": "https://ossia.io/score-docs/reference-manual/processes/library/automation.html",
+    "group": "processes",
+    "source_path": "docs/reference-manual/processes/library/automation.md",
+    "status": "skipped",
+    "session": "2026-10-03",
+    "notes": "Empty source file (0 bytes); the automation reference is automation_float."
+  },
+  "https://ossia.io/score-docs/reference/changelog.html": {
+    "title": "Changelog",
+    "url": "https://ossia.io/score-docs/reference/changelog.html",
+    "group": "reference",
+    "source_path": "docs/reference-manual/references/changelog.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source); changelog is only a list of release links; Avendish page read to the first examples."
+  },
+  "https://ossia.io/score-docs/reference/commandline.html": {
+    "title": "Command line API",
+    "url": "https://ossia.io/score-docs/reference/commandline.html",
+    "group": "reference",
+    "source_path": "docs/reference-manual/references/command-line.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/reference/glossary.html": {
+    "title": "Glossary",
+    "url": "https://ossia.io/score-docs/reference/glossary.html",
+    "group": "reference",
+    "source_path": "docs/reference-manual/references/glossary.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/reference/preferences.html": {
+    "title": "Score preferences",
+    "url": "https://ossia.io/score-docs/reference/preferences.html",
+    "group": "reference",
+    "source_path": "docs/reference-manual/references/preferences.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/reference/protocols-and-formats.html": {
+    "title": "Supported protocols and formats",
+    "url": "https://ossia.io/score-docs/reference/protocols-and-formats.html",
+    "group": "reference",
+    "source_path": "docs/reference-manual/references/protocols.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score-docs/reference/shortcuts.html": {
+    "title": "Shortcuts",
+    "url": "https://ossia.io/score-docs/reference/shortcuts.html",
+    "group": "reference",
+    "source_path": "docs/reference-manual/references/shortcuts.md",
+    "status": "pending",
+    "session": null,
+    "notes": ""
+  },
+  "https://ossia.io/score-docs/troubleshooting.html": {
+    "title": "Troubleshooting",
+    "url": "https://ossia.io/score-docs/troubleshooting.html",
+    "group": "faq",
+    "source_path": "docs/troubleshooting.md",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/score/features/addresses.html": {
+    "title": "score feature: addresses",
+    "url": "https://ossia.io/score/features/addresses.html",
+    "group": "ossia.io",
+    "source_path": "",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/site-libossia/features/max.html": {
+    "title": "libossia: Max (ossia-max)",
+    "url": "https://ossia.io/site-libossia/features/max.html",
+    "group": "ossia.io",
+    "source_path": "",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  },
+  "https://ossia.io/site-libossia/features/oscquery.html": {
+    "title": "libossia: OSCQuery",
+    "url": "https://ossia.io/site-libossia/features/oscquery.html",
+    "group": "ossia.io",
+    "source_path": "",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (Markdown source)."
+  }
+}
