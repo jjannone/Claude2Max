@@ -49,9 +49,17 @@ def test_text_bearing_classes_keep_the_text_estimate():
         assert ws[0] < ws[1], f"{maxclass} width does not follow its text"
 
 
-def test_ui_sizes_still_overrides_the_help_file():
-    assert s.resolve_box_size("toggle", "") == tuple(s.UI_SIZES["toggle"])
-    assert s.resolve_box_size("chooser", "", [10, 11]) == (10, 11)   # spec wins over both
+def test_registry_size_wins_over_the_help_file():
+    """Max's defaults registry gives a new box's size; help files hold resized
+    demo boxes. Values read from transform-defaults.json, 2026-10-04."""
+    if s.REGISTRY_SIZE_CACHE.lookup("toggle") is None:
+        return   # no Max install
+    assert s.resolve_box_size("toggle", "") == (24, 24)          # toggle.maxhelp: 136 x 136
+    assert s.resolve_box_size("dial", "") == (40, 40)
+    assert s.resolve_box_size("meter~", "") == (80, 13)
+    assert s.resolve_box_size("multislider", "") == (20, 140)
+    assert s.resolve_box_size("comment", "abc") == (s.estimate_text_width("abc"), 22)  # text-sized, never the registry
+    assert s.resolve_box_size("chooser", "", [10, 11]) == (10, 11)   # spec wins over all
 
 
 def test_resized_box_survives_sync_then_convert():
@@ -79,7 +87,7 @@ def test_sync_drops_only_a_size_convert_reproduces():
 def test_every_caller_agrees_with_build_box():
     """_size_is_default, build_box and presentation_layout must never
     disagree, for any class the converter can be handed."""
-    classes = sorted(set(s.UI_SIZES) | set(s.MAXCLASS_DEFAULTS) | set(s.TEXT_SIZED_CLASSES)
+    classes = sorted(set(s.UI_SIZES) | {"toggle", "dial", "meter~", "multislider", "number"} | set(s.MAXCLASS_DEFAULTS) | set(s.TEXT_SIZED_CLASSES)
                      | {"chooser", "attrui", "playlist~", "filtergraph~", "jit.cellblock", "v8ui"})
     for mc in classes:
         text = "some text" if mc in s.TEXT_SIZED_CLASSES else ""

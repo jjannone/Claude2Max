@@ -68,26 +68,6 @@ _JBOX_FALLBACK_ATTRS = {
     "textcolor", "textjustification", "valuepopup", "valuepopuplabel", "varname",
 }
 
-# Max object abbreviations that have no refpage under their own name AND that
-# nothing mechanical can discover — unlike operators (`/`, `&`, `>>`), which ARE
-# discoverable because their refpage declares the real name in the XML root's
-# `name` attribute and so are harvested by RefpageCache.name_aliases().
-# These shorthands appear in no `name` attribute anywhere, so they must be
-# listed. Each target was verified to resolve to a real maxref.xml.
-_VERIFIED_WORD_ALIASES = {
-    "t": "trigger",
-    "sel": "select",
-    "s": "send",
-    "r": "receive",
-    "b": "bangbang",
-    "del": "delay",
-    "j": "join",
-    "i": "int",      # int.maxref.xml — name="int"; `i` is Max shorthand
-    "f": "float",    # float.maxref.xml — name="float"; `f` is Max shorthand
-    "v": "value",    # value.maxref.xml; `v` is Max shorthand
-}
-
-
 _OBSERVED_WARNED = False   # the missing-map warning prints once per process
 
 
@@ -179,15 +159,15 @@ class _GateResolver:
         the whole `mc.*` operator family, which made the convert gate BLOCK
         patches using division. Harvesting yields 56 with no collisions.
 
-        The word aliases below still need the hand-maintained table: `i`/`f`/`t`
-        and friends are Max shorthand with no refpage of their own AND no
-        `name` attribute pointing at them, so nothing mechanical can find them.
-        They come second so a harvested (authoritative) entry always wins.
+        Word shorthands (`t`, `i`, `sel`, `b`, …) come from Max's own registry,
+        obj-qlookup.json's `alias` field. A hand table used to list them and
+        won over the registry; it also invented `j` for `join`, which Max does
+        not have, so the gate accepted a box that loads as a red box. Removed
+        2026-10-04: every one of its other nine names is in the registry.
         """
         _db_names, db_aliases = self._rp.object_db()
         aliases = dict(self._rp.name_aliases())
         aliases.update(db_aliases)            # Max's own registry outranks globbing
-        aliases.update(_VERIFIED_WORD_ALIASES)
         return aliases
 
     def resolve_object(self, name):
@@ -2357,20 +2337,44 @@ class PackageObjectsCache:
 
 PACKAGE_OBJECTS_CACHE = PackageObjectsCache()
 
-# Fixed sizes for UI objects
+class RegistrySizeCache:
+    """The patching size a new box of a UI class is created at, from Max's own
+    defaults registry, `interfaces/transform-defaults/transform-defaults.json`
+    (each class's `patching_rect`). 107 classes have one in Max 9.2. This is
+    the source of truth for a default size: the help files hold boxes someone
+    resized (toggle.maxhelp's toggles are 136 x 136). Found 2026-10-04; the
+    2026-09-15 search for a fresh-instance size missed this file."""
+
+    _REL = Path("interfaces/transform-defaults/transform-defaults.json")
+
+    def __init__(self, c74):
+        self._sizes = None
+        self._c74 = c74
+        self.error = None
+
+    def lookup(self, maxclass):
+        if self._sizes is None:
+            self._sizes = {}
+            try:
+                data = json.loads((Path(self._c74) / self._REL).read_text())
+                for cls, attrs in data.items():
+                    r = (attrs or {}).get("patching_rect") if isinstance(attrs, dict) else None
+                    if isinstance(r, list) and len(r) >= 4 and r[2] and r[3]:
+                        self._sizes[cls] = (int(round(r[2])), int(round(r[3])))
+            except (OSError, TypeError, ValueError) as exc:
+                self.error = f"{type(exc).__name__} reading {self._REL}"
+        return self._sizes.get(maxclass)
+
+
+# Sizes for the UI classes Max's defaults registry has no `patching_rect` for.
+# No source: these date from the first commit (2026-03-28). Until each is read
+# from a fresh box saved in Max (patches/max-behavior-tests, tab 6), they are
+# the converter's guess, used only because the help-file fallback is worse
+# (live.toggle.maxhelp's boxes are 72 x 72). The 18 other classes this table
+# used to hold now come from the registry, which disagreed with it on 10.
 UI_SIZES = {
     "inlet":    (30, 30),
     "outlet":   (30, 30),
-    "toggle":   (24, 24),
-    "button":   (24, 24),
-    "slider":   (20, 140),
-    "dial":     (40, 48),
-    "number":   (50, 22),
-    "flonum":   (50, 22),
-    "multislider": (120, 80),
-    "function": (200, 100),
-    "scope~":   (130, 130),
-    "jit.pwindow": (160, 120),
     "preset":   (100, 40),
     "live.dial": (44, 47),
     "live.slider": (48, 100),
@@ -2379,14 +2383,6 @@ UI_SIZES = {
     "live.menu": (100, 20),
     "live.text": (44, 20),
     "live.tab":  (100, 20),
-    "gain~":    (22, 140),
-    "ezdac~":   (45, 45),
-    "ezadc~":   (45, 45),
-    "meter~":   (12, 100),
-    "umenu":    (100, 22),
-    "radiogroup": (18, 90),
-    "matrixctrl": (100, 100),
-    "textedit": (200, 80),
 }
 
 
@@ -2454,6 +2450,7 @@ class HelpSizeCache:
 
 
 HELP_SIZE_CACHE = HelpSizeCache(REFPAGE_CACHE._c74)
+REGISTRY_SIZE_CACHE = RegistrySizeCache(REFPAGE_CACHE._c74)
 
 # Classes whose box width follows the text they display, so a fixed size read
 # from a help file is the wrong answer for them however well it was measured.
@@ -2479,8 +2476,9 @@ def min_object_box_width(numinlets, numoutlets):
 def resolve_box_size(maxclass, text, spec_size=None, ports=None):
     """The (w, h) convert writes for a box, as one function.
 
-    Order: the spec's own `size`, the UI_SIZES override, the class's own help
-    file, then the text-width estimate at one line high. Then, for an object
+    Order: the spec's own `size`, Max's defaults registry, the UI_SIZES table
+    for classes the registry lacks, the class's own help file, then the
+    text-width estimate at one line high. Then, for an object
     box whose `ports` (numinlets, numoutlets) are given, the width is raised to
     min_object_box_width, even over a spec `size`.
 
@@ -2499,6 +2497,10 @@ def resolve_box_size(maxclass, text, spec_size=None, ports=None):
 def _unclamped_box_size(maxclass, text, spec_size):
     if spec_size:
         return int(spec_size[0]), int(spec_size[1])
+    if maxclass not in TEXT_SIZED_CLASSES:
+        reg = REGISTRY_SIZE_CACHE.lookup(maxclass)
+        if reg is not None:
+            return reg
     if maxclass in UI_SIZES:
         w, h = UI_SIZES[maxclass]
         return int(w), int(h)
@@ -2842,10 +2844,13 @@ _BOX_TEXT_PAD = 8      # left + right text margin inside a box
 
 
 def wrapped_lines(text, width, fontsize=None):
-    """How many lines Max wraps `text` onto in a box `width` px wide."""
+    """How many lines Max wraps `text` onto in a box `width` px wide, planned
+    for a monospace font like every width (TEXT_PX_PER_CHAR). It used 7 px per
+    character, an Arial figure, after widths moved to 10 in 2026-09; a wrapped
+    box then came out too short on a monospace screen (fixed 2026-10-04)."""
     if not text:
         return 1
-    per_char = 7.0 * (float(fontsize or DEFAULT_FONT_SIZE) / DEFAULT_FONT_SIZE)
+    per_char = TEXT_PX_PER_CHAR * (float(fontsize or DEFAULT_FONT_SIZE) / DEFAULT_FONT_SIZE)
     usable = max(float(width) - _BOX_TEXT_PAD, per_char)
     return sum(max(1, math.ceil(len(seg) * per_char / usable)) for seg in text.split("\n"))
 
@@ -4016,11 +4021,43 @@ def _build_connections(lines, bid_to_spec):
 # parent's `showrootpatcherontab` decides whether the parent itself gets a tab
 # (`thispatcher setactivetab <name>` switches). Authored in a spec's
 # `patcher_extras` (root or sub-spec) and mirrored back by sync. 2026-09-12.
-_PATCHER_PASSTHROUGH = ("snapshot", "parameters", "showontab", "showrootpatcherontab")
+#
+# Every other patcher key Max saved travels the same way, the patcher-level twin
+# of `box_extras`: `description`, `tags`, `gridsize`, `default_fontsize` /
+# `default_fontname`, `devicewidth` on a Live device, `subpatcher_template`,
+# the window position. A round trip of 1,200 C74 patches lost all of these
+# while only the four keys above were kept (2026-10-04). Skipped: the keys the
+# converter builds from the spec itself, and values equal to what the converter
+# writes on its own, so a patch the converter made carries no extras.
+_PATCHER_DERIVED_KEYS = frozenset({
+    "fileversion", "appversion", "classnamespace", "boxes", "lines", "bglocked",
+})
+
+
+def _converter_patcher_defaults():
+    return {"gridsize": [15.0, 15.0], "default_fontsize": DEFAULT_FONT_SIZE,
+            "default_fontname": DEFAULT_FONT_NAME}
 
 
 def _patcher_extras(patcher):
-    return {k: patcher[k] for k in _PATCHER_PASSTHROUGH if k in patcher}
+    defaults = _converter_patcher_defaults()
+    extras = {}
+    for k, v in patcher.items():
+        if k in _PATCHER_DERIVED_KEYS:
+            continue
+        if k in defaults and v == defaults[k]:
+            continue
+        if k == "rect":
+            # The size is the spec's width / height; only a window position
+            # other than the converter's own 100, 100 is extra.
+            if not isinstance(v, list) or len(v) < 2 or [float(v[0]), float(v[1])] == [100.0, 100.0]:
+                continue
+        if k == "openinpresentation" and v:
+            # convert writes 1 whenever an object is in presentation; only a
+            # saved 0 (the operator turned it off) has to be carried.
+            continue
+        extras[k] = v
+    return extras
 
 
 # Box keys the converter derives from the spec itself, so sync never copies
@@ -4524,8 +4561,13 @@ def convert_patcher(spec, script_dirs=None):
     if spec.get("bglocked"):
         patcher["bglocked"] = 1
     for k, v in (spec.get("patcher_extras") or {}).items():
-        if k in _PATCHER_PASSTHROUGH:
-            patcher[k] = copy.deepcopy(v)
+        if k in _PATCHER_DERIVED_KEYS:
+            continue
+        if k == "rect":
+            if isinstance(v, list) and len(v) >= 2:
+                patcher["rect"] = [float(v[0]), float(v[1]), float(width), float(height)]
+            continue
+        patcher[k] = copy.deepcopy(v)
 
     # Add name as title comment
     name = spec.get("name")

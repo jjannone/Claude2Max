@@ -1867,8 +1867,17 @@ def _pitfall_chunks() -> list:
 
 
 def _query_tokens(query: str) -> list:
-    """Lowercase, split, drop 1-char tokens — the shared tokeniser for both searches."""
-    return [t for t in query.lower().split() if len(t) > 1]
+    """Lowercase and split — the shared tokeniser for both searches. One-
+    character tokens are kept: in Max they are names (`t`, `b`, `+`, `*`), and
+    dropping them lost the key term of "+ operator" (2026-10-04). _token_in
+    matches them only as a standalone word, so `t` does not hit every "t"."""
+    return [t for t in query.lower().split() if t]
+
+
+def _token_in(token: str, text: str) -> bool:
+    if len(token) > 1:
+        return token in text
+    return re.search(r"(?<![\w])" + re.escape(token) + r"(?![\w])", text) is not None
 
 
 def _truncate(text: str, cap: int) -> str:
@@ -1922,7 +1931,7 @@ def search_pitfalls(term: str, limit: int = 8) -> dict:
         if term_l and term_l in text_l:           # whole-phrase match dominates
             score += 50
         for t in tokens:
-            if t in text_l:
+            if _token_in(t, text_l):
                 score += 5
         if score:
             scored.append((score, entry))
@@ -1997,7 +2006,7 @@ def lookup_rule(name_fragment: str, limit: int = 5) -> dict:
             score += 100
             matched_in = "header"
         else:
-            hdr_hits = sum(1 for t in tokens if t in name_l)
+            hdr_hits = sum(1 for t in tokens if _token_in(t, name_l))
             if hdr_hits:
                 score += 20 * hdr_hits
                 matched_in = "header"
@@ -2005,7 +2014,7 @@ def lookup_rule(name_fragment: str, limit: int = 5) -> dict:
                 score += 8
                 matched_in = "body"
             else:
-                body_hits = sum(1 for t in tokens if t in body_l)
+                body_hits = sum(1 for t in tokens if _token_in(t, body_l))
                 if body_hits:
                     score += body_hits
                     matched_in = "body"

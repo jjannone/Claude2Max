@@ -28,7 +28,7 @@ into a patch **inside Max** with `patchgen.js`, so:
 | `width` | no | 800 | Patcher window width in pixels |
 | `height` | no | 600 | Patcher window height in pixels |
 | `bglocked` | no | unset | `1` locks the background layer (Max's *View > Lock Background*): background objects — presentation panels — can't be selected while editing. Written to the patcher only when set; `sync` mirrors the patcher's value back. Required whenever the patch has presentation panels — see `patching/MAX_PATCHING.md` > *Presentation panels live in the background layer*. |
-| `patcher_extras` | no | unset | Patcher-level state Max writes that is not a box, carried verbatim: `snapshot` (the Snapshots panel's stored snapshots, values keyed by parameter long name) and `parameters` (Max's box-id → parameter-name registry, which Max rebuilds on save). `sync` fills it from the file and removes it when the operator deletes the snapshots in Max; `convert` writes it back. Do not author those two — they exist so a snapshot stored in Max survives the next convert (delay-shootout, 2026-09-09). Two keys *are* authored here: `showontab` and `showrootpatcherontab`, Max's patcher-window tabs. Put `"patcher_extras": {"showontab": 1}` in a `p` box's `patcher` sub-spec and Max shows that subpatcher as a tab of the parent window, titled with the box's name (`p "1 Key sends"`, quotes for spaces); `showrootpatcherontab` on the root decides whether the parent itself gets a tab. This is how every C74 help file is built, and `thispatcher setactivetab <name>` switches tabs. `sync` mirrors both on the root and, since 2026-09-13, inside nested `patcher` sub-specs. |
+| `patcher_extras` | no | unset | Every patcher-level key Max saved that the converter does not build itself, carried verbatim, the patcher twin of `box_extras`: `description`, `tags`, `gridsize`, `default_fontsize` / `default_fontname`, a Live device's `devicewidth`, `subpatcher_template`, the window position (`rect`; its size stays the spec's `width` / `height`), and any key Max adds later. Values equal to what the converter writes on its own are left out, so a converted patch has none (2026-10-04; before then only the four keys below were kept, and a round trip of C74 patches lost the rest). Among them: `snapshot` (the Snapshots panel's stored snapshots, values keyed by parameter long name) and `parameters` (Max's box-id → parameter-name registry, which Max rebuilds on save). `sync` fills it from the file and removes it when the operator deletes the snapshots in Max; `convert` writes it back. Do not author those two — they exist so a snapshot stored in Max survives the next convert (delay-shootout, 2026-09-09). Two keys *are* authored here: `showontab` and `showrootpatcherontab`, Max's patcher-window tabs. Put `"patcher_extras": {"showontab": 1}` in a `p` box's `patcher` sub-spec and Max shows that subpatcher as a tab of the parent window, titled with the box's name (`p "1 Key sends"`, quotes for spaces); `showrootpatcherontab` on the root decides whether the parent itself gets a tab. This is how every C74 help file is built, and `thispatcher setactivetab <name>` switches tabs. `sync` mirrors both on the root and, since 2026-09-13, inside nested `patcher` sub-specs. |
 | `objects` | yes | — | Dict of named objects (see below) |
 | `connections` | yes | — | Array of connections between objects |
 
@@ -507,16 +507,16 @@ Lay out the main signal chain vertically, top to bottom. Place the primary input
 
 ### Spacing
 
-- Use ~35px vertical spacing between objects in a chain (enough room for a cable).
-- Where a comment label will appear between two objects, leave ~55px vertical gap to fit the label plus cable clearance.
-- Use ~90px horizontal spacing between parallel columns or side-by-side controls.
+- Put rows of a chain 55 px apart, the converter's own `Y_SPACING`: a one-line box is 22 px tall, and the rest is room for the cord.
+- Put parallel columns far enough apart that the widest box in a column, planned for a monospace font, clears the next column with its label. The converter's default is 170 px (`X_SPACING`). See `patching/MAX_PATCHING.md` > *Plan every width for a monospace font*.
 
 ### Comment placement
 
-- Place comment labels **above** the object they describe.
-- **Right-shift** the comment ~15px from the object's x position so it does not sit on top of a vertical patch cable entering the object's inlet.
-- When inserting a comment between two connected objects, add enough vertical space so the comment does not overlap the cable or either object. A comment is ~14px tall; budget at least 20px above and below it.
+- Put a comment that labels a box to the box's **right**, on the same row, never above or below it, where cords run. Rule: `patching/MAX_PATCHING.md` > *In the patching view, a label goes to the right of its box* (John, 2026-09-27).
+- A one-line comment is 22 px tall, as the converter draws it.
 - Keep comments short. Use them to label controls (e.g. "tempo (ms)"), not to narrate the patch.
+
+(This section used to say labels go above their objects, with ~35 px row spacing and a 14 px comment. None of that had a source, and it disagreed with the rules and the converter; replaced 2026-10-04.)
 
 ### Side-by-side inputs
 
@@ -526,7 +526,7 @@ Example: if `num_value` feeds inlet 0 and `num_factor` feeds inlet 1 of `p scale
 
 ### Side controls
 
-When a secondary control (velocity, duration, etc.) feeds into a later inlet of an object in the main chain, place it above and to the right of that object so the cable drops down naturally into the correct inlet. Label it with a comment using the same right-shift rule.
+When a secondary control (velocity, duration, etc.) feeds into a later inlet of an object in the main chain, place it above and to the right of that object so the cable drops down naturally into the correct inlet. Put its label to its right.
 
 ## Presentation View
 Use the `presentation` field on objects to create a clean, user-facing layout separate from the patching view. Presentation mode hides all wiring and non-presented objects, showing only the controls the user needs.
@@ -551,7 +551,7 @@ For instance: a Max patch with a START button, a status text comment, a number b
 ### When to use presentation
 
 - Every control in the presentation should have a comment label. If a control is worth showing to the user, it is worth labelling.
-- Place comment labels **above** the control they describe, with ~18px vertical gap so the label text clears the control cleanly. Comments render slightly taller in presentation than in patching view.
+- Put each label to the **right** of its control, centred on it. Rule: `patching/MAX_PATCHING.md` > *Label placement*.
 - Group related controls together (e.g. all transport controls in one row, all note parameters in another).
 - Keep the layout compact — presentation is meant to be a minimal panel, not a spread-out canvas.
 - Presentation positions are independent of patching positions, so optimize each view for its own purpose.

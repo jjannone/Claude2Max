@@ -1,5 +1,6 @@
 """Patcher-level `snapshot` / `parameters` survive sync → convert (see
-`_PATCHER_PASSTHROUGH` in spec2maxpat.py)."""
+`_patcher_extras` in spec2maxpat.py), and so does every other patcher key Max
+saved: `test_every_saved_patcher_key_survives`."""
 import copy, json, os, sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import spec2maxpat as s2m
@@ -62,3 +63,30 @@ def test_tab_keys_pass_through_on_root_and_subpatcher():
     synced = s2m.extract_spec(s2m.sync_spec(mp)[1])
     assert synced["patcher_extras"]["showrootpatcherontab"] == 0
     assert s2m.convert_spec(synced)["patcher"]["showrootpatcherontab"] == 0
+
+
+def test_every_saved_patcher_key_survives():
+    """Keys a 1,200-patch round trip lost before 2026-10-04, each named here by
+    hand. The window position survives; its size stays the spec's."""
+    saved = {"description": "a patch", "tags": "demo", "gridsize": [8.0, 8.0],
+             "default_fontsize": 13.0, "default_fontname": "Arial Bold",
+             "devicewidth": 800.0, "subpatcher_template": "MyTemplate",
+             "openinpresentation": 0}
+    mp = _built()
+    for k, v in saved.items():
+        assert k not in mp["patcher"] or mp["patcher"][k] != v, k
+        mp["patcher"][k] = copy.deepcopy(v)
+    mp["patcher"]["rect"] = [340.0, 87.0, 900.0, 500.0]
+    spec = s2m.extract_spec(s2m.sync_spec(mp)[1])
+    rebuilt = s2m.convert_spec(spec)["patcher"]
+    for k, v in saved.items():
+        assert rebuilt.get(k) == v, (k, rebuilt.get(k))
+    assert rebuilt["rect"] == [340.0, 87.0, 900.0, 500.0]
+
+
+def test_converter_defaults_are_not_extras():
+    """A patch the converter made carries none of its own defaults as extras."""
+    mp = _built()
+    for k in ("gridsize", "default_fontsize", "default_fontname", "rect", "openinpresentation"):
+        assert k in mp["patcher"], k
+    assert s2m._patcher_extras(mp["patcher"]) == {}

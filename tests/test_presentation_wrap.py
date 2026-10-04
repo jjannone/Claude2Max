@@ -12,7 +12,11 @@ def _box(spec, cls):
 
 
 def test_lines_and_heights_match_corpus():
-    assert s.wrapped_lines("abl.dsp.darkhall~ @mix 1. @size 0.5", 160) == 2
+    # Max saved this box as 2 lines on 2026-09-09, drawing Arial. Line counts
+    # are planned for a monospace font, as widths are (MAX_PATCHING.md > Plan
+    # every width for a monospace font), where it takes 3; a box planned for
+    # 3 is a little tall in Arial and never too short in monospace.
+    assert s.wrapped_lines("abl.dsp.darkhall~ @mix 1. @size 0.5", 160) == 3
     assert s.wrapped_lines("vst~", 160) == 1
     assert [s.wrapped_height(n) for n in (1, 2, 3, 4, 5, 6)] == [22.0, 37.0, 52.0, 66.0, 81.0, 95.0]
     assert [s.wrapped_height(n, "newobj") for n in (2, 3)] == [35.0, 50.0]
@@ -22,7 +26,7 @@ def test_lines_and_heights_match_corpus():
 def test_wrapped_newobj_gets_linecount_and_height():
     b = _box({"objects": {"o": {"type": "newobj", "text": "abl.dsp.darkhall~ @mix 1. @size 0.5",
                                 "pos": [10, 10], "presentation": [10, 10, 160, 22]}}, "connections": []}, "newobj")
-    assert b["presentation_linecount"] == 2 and b["presentation_rect"][3] == 35.0
+    assert b["presentation_linecount"] == 3 and b["presentation_rect"][3] == 50.0
 
 
 def test_one_line_comment_gets_max_minimum_height():
@@ -41,7 +45,7 @@ def test_one_line_message_keeps_authored_height():
 def test_generous_height_is_not_shrunk():
     b = _box({"objects": {"o": {"type": "message", "text": "x" * 60, "pos": [10, 10],
                                 "presentation": [10, 10, 100, 120]}}, "connections": []}, "message")
-    assert b["presentation_linecount"] == 5 and b["presentation_rect"][3] == 120.0
+    assert b["presentation_linecount"] == 7 and b["presentation_rect"][3] == 120.0
 
 
 if __name__ == "__main__":

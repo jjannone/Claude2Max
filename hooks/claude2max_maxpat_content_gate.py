@@ -48,10 +48,14 @@ def _report(result: dict, name: str) -> str:
                     else "attribute" if rule == "attribute-invalid"
                     else "maxclass" if rule == "maxclass-unresolved" else rule)
             lines.append(f"  • {what} '{tok}'" + (f"  (×{n})" if n > 1 else ""))
+        if len(errs) > _MAX_LINES:
+            lines.append(f"  … and {len(errs) - _MAX_LINES} more not shown")
     if warns:
         lines.append("WARNINGS (verify — may be invented OR real-but-undocumented):")
         for (rule, tok), n in warns.most_common(_MAX_LINES):
             lines.append(f"  • message '{tok}'" + (f"  (×{n})" if n > 1 else ""))
+        if len(warns) > _MAX_LINES:
+            lines.append(f"  … and {len(warns) - _MAX_LINES} more not shown")
     lines.append("Resolve each with lookup_object / list_attributes (the real "
                  "name), or set \"unverified\": true on an abstraction you have "
                  "confirmed exists. Then re-edit the file.")

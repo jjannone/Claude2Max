@@ -116,3 +116,12 @@ if __name__ == "__main__":
     for name, fn in list(globals().items()):
         if name.startswith("test_"):
             fn(); print("ok", name)
+
+
+def test_wrapping_uses_the_same_width_per_character():
+    """A box exactly as wide as its text at 10 px/char holds it on one line;
+    one character narrower wraps. Wrapping once assumed 7 px/char."""
+    text = "x" * 30
+    w = 30 * s.TEXT_PX_PER_CHAR + s._BOX_TEXT_PAD
+    assert s.wrapped_lines(text, w) == 1
+    assert s.wrapped_lines(text, w - s.TEXT_PX_PER_CHAR) == 2

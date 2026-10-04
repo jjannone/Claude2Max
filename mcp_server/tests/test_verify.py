@@ -559,8 +559,12 @@ def _pres(t, rect, **kw):
 
 def test_nominal_ui_sizes_mirror_converter():
     import spec2maxpat
-    from claude2max_verify.rules import _NOMINAL_UI_SIZES
-    assert _NOMINAL_UI_SIZES == spec2maxpat.UI_SIZES, "rules._NOMINAL_UI_SIZES drifted from spec2maxpat.UI_SIZES"
+    from claude2max_verify.rules import _NOMINAL_UI_SIZES, _UNREGISTERED_UI_SIZES
+    assert _UNREGISTERED_UI_SIZES == spec2maxpat.UI_SIZES, "rules table drifted from spec2maxpat.UI_SIZES"
+    for mc in ("toggle", "dial", "meter~", "multislider", "number", "live.dial", "inlet"):
+        if mc in _NOMINAL_UI_SIZES:
+            assert _NOMINAL_UI_SIZES[mc] == spec2maxpat.resolve_box_size(mc, ""), mc
+    assert "comment" not in _NOMINAL_UI_SIZES and "message" not in _NOMINAL_UI_SIZES
 
 
 # (a) presentation-overlap ---------------------------------------------------

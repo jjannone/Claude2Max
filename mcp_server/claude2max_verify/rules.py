@@ -62,26 +62,22 @@ _INTERACTIVE = {
     "multislider", "textedit", "umenu", "attrui", "kslider", "tab",
     "matrixctrl", "pictslider", "function", "filtergraph~", "itable",
     "nslider", "led", "gswitch", "preset", "jit.cellblock", "jit.pwindow",
-    "ezdac~", "ezadc~", "gain~", "playlist~", "incdec", "spectroscope~",
-    "scope~", "meter~",
+    "ezdac~", "ezadc~", "gain~", "playlist~", "incdec",
 }
+# Display-only objects are not controls: an operator reads them and does not
+# operate them. `meter~`, `scope~` and `spectroscope~` were listed here, and
+# the `live.` prefix below took in `live.meter~`, so a patch that only shows a
+# level was told it needed a presentation view for controls (2026-10-04).
+_DISPLAY_ONLY = {"meter~", "scope~", "spectroscope~", "live.meter~"}   # names checked in obj-qlookup.json
 
-# Nominal patching-view box sizes for UI classes — a MIRROR of
-# spec2maxpat.UI_SIZES (this module must not import the converter). A test in
-# tests/test_verify.py asserts the two tables agree, so drift is caught.
-_NOMINAL_UI_SIZES = {
+# Nominal patching-view box sizes for UI classes: Max's defaults registry
+# (transform-defaults.json `patching_rect`, read directly — this module must
+# not import the converter), then a MIRROR of spec2maxpat.UI_SIZES for the
+# classes the registry lacks. tests/test_verify.py asserts both agree with the
+# converter, so drift is caught.
+_UNREGISTERED_UI_SIZES = {
     "inlet":    (30, 30),
     "outlet":   (30, 30),
-    "toggle":   (24, 24),
-    "button":   (24, 24),
-    "slider":   (20, 140),
-    "dial":     (40, 48),
-    "number":   (50, 22),
-    "flonum":   (50, 22),
-    "multislider": (120, 80),
-    "function": (200, 100),
-    "scope~":   (130, 130),
-    "jit.pwindow": (160, 120),
     "preset":   (100, 40),
     "live.dial": (44, 47),
     "live.slider": (48, 100),
@@ -90,15 +86,31 @@ _NOMINAL_UI_SIZES = {
     "live.menu": (100, 20),
     "live.text": (44, 20),
     "live.tab":  (100, 20),
-    "gain~":    (22, 140),
-    "ezdac~":   (45, 45),
-    "ezadc~":   (45, 45),
-    "meter~":   (12, 100),
-    "umenu":    (100, 22),
-    "radiogroup": (18, 90),
-    "matrixctrl": (100, 100),
-    "textedit": (200, 80),
 }
+
+
+def _load_registry_sizes():
+    import json as _json
+    from pathlib import Path as _Path
+    for app in ("/Applications/Max.app", "/Applications/Max 9.app", "/Applications/Max 8.app"):
+        f = _Path(app) / "Contents/Resources/C74/interfaces/transform-defaults/transform-defaults.json"
+        if f.exists():
+            try:
+                data = _json.loads(f.read_text())
+            except (OSError, ValueError):
+                return {}
+            out = {}
+            for cls, attrs in data.items():
+                r = attrs.get("patching_rect") if isinstance(attrs, dict) else None
+                if isinstance(r, list) and len(r) >= 4 and r[2] and r[3]:
+                    out[cls] = (int(round(r[2])), int(round(r[3])))
+            return out
+    return {}
+
+
+_NOMINAL_UI_SIZES = {**_load_registry_sizes(), **{k: v for k, v in _UNREGISTERED_UI_SIZES.items()}}
+for _skip in ("newobj", "message", "comment"):
+    _NOMINAL_UI_SIZES.pop(_skip, None)
 
 # Text-box width per character and per box — a MIRROR of
 # spec2maxpat.TEXT_PX_PER_CHAR / TEXT_PX_PAD, planned for a monospace font
@@ -138,7 +150,7 @@ _STRUCTURAL_NEWOBJ = {"p", "patcher"}
 _CUSTOM_ATTR_OBJECTS = {
     "jsui", "v8ui", "js", "v8", "jspainter",
     "mxj", "mxj~",
-    "gen~", "gen", "jit.gen", "jit.expr", "jit.gl.pix", "jit.gl.slab",
+    "gen~", "gen", "jit.gen", "jit.gl.pix", "jit.gl.slab",
     "rnbo~",
     # codebox-family content holders: their free-form `code` content attribute is
     # real but not enumerated in the refpage attributelist (the converter's own
@@ -252,6 +264,8 @@ def is_interactive(maxclass: str) -> bool:
     """True if an operator manipulates this object class at runtime."""
     if maxclass in _INTERACTIVE:
         return True
+    if maxclass in _DISPLAY_ONLY:
+        return False
     if maxclass.startswith("live."):
         # live.comment / live.line are decoration, not controls.
         return maxclass not in ("live.comment", "live.line")
