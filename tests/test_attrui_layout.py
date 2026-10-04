@@ -91,3 +91,40 @@ def test_a_right_justified_label_left_of_a_row_moves_with_it():
     assert out["m3"][1] != 80, "the column was not restacked"
     assert out["l3"][1] == out["m3"][1], (out["l3"], out["m3"])
     assert out["p"][1] == 120, out["p"]
+
+
+def _lay_out(P):
+    with tempfile.NamedTemporaryFile("w", suffix=".maxpat", delete=False) as f:
+        json.dump(P, f)
+    subprocess.run([sys.executable, str(TOOL), "--messages", f.name], check=True, capture_output=True)
+    return json.load(open(f.name))
+
+
+def test_a_rerun_restacks_a_column_whose_heading_it_set_in():
+    # The first run sets the heading in by HEAD_INDENT. A box at the top then
+    # shrinks (a message widened to fewer lines). The second run must still
+    # count the indented heading as the column's and restack, not refuse.
+    boxes = [box("m0", "message", 20, 20, 60, 37, "a"), box("m1", "message", 20, 70, text="b"),
+             box("h", "comment", 20, 100, 200, 20, "heading"),
+             box("m2", "message", 20, 126, text="c"), box("dest", "newobj", 20, 300, 200, 22, "print")]
+    P = _lay_out({"patcher": {"boxes": boxes, "lines": [line(s, "dest") for s in ("m0", "m1", "m2")]}})
+    out = {b["box"]["id"]: b["box"]["patching_rect"] for b in P["patcher"]["boxes"]}
+    assert out["h"][0] > 20, out["h"]                      # set in by the first run
+    before = {k: out[k][1] for k in ("m1", "h", "m2")}
+    out["m0"][3] = 22                                       # m0 is now one line
+    P = _lay_out(P)
+    out = {b["box"]["id"]: b["box"]["patching_rect"] for b in P["patcher"]["boxes"]}
+    for k in ("m1", "h", "m2"):
+        assert out[k][1] < before[k], (k, out[k], before[k])
+
+
+def test_a_long_one_line_message_gets_the_text_gap():
+    # A sentence-long message is its own item to read, like a multi-line one.
+    boxes = [box("m1", "message", 20, 20, 400, 22, "set a long sentence"),
+             box("m2", "message", 20, 43, 400, 22, "set another long sentence"),
+             box("s1", "message", 20, 100, 40, 22, "a"), box("s2", "message", 20, 123, 40, 22, "b"),
+             box("dest", "newobj", 20, 300, 200, 22, "print")]
+    P = _lay_out({"patcher": {"boxes": boxes, "lines": [line(s, "dest") for s in ("m1", "m2", "s1", "s2")]}})
+    out = {b["box"]["id"]: b["box"]["patching_rect"] for b in P["patcher"]["boxes"]}
+    assert out["m2"][1] - (out["m1"][1] + 22) == 8, (out["m1"], out["m2"])
+    assert out["s2"][1] - (out["s1"][1] + 22) == 1, (out["s1"], out["s2"])

@@ -41,6 +41,7 @@ ROW_GAP = 1          # between stacked rows — a hairline, not a separator
 TEXT_GAP = 8         # beside a message box of more than one line: each is its own item to read
                      # (John, 2026-10-04, on the butter_comment help file)
 ONE_LINE = 24        # a box taller than this holds more than one line
+LONG_LINE = 300      # a message box wider than this holds a sentence, not a word: it gets TEXT_GAP too
 HEAD_GAP = 6         # between a group's comment and its first row
 BLOCK_GAP = 14       # between one group and the next
 PORT_INSET = 9.5     # a box's first port's centre, from its left edge (Max 9's saved cords; rules._PORT_INSET_PX)
@@ -153,8 +154,10 @@ def lay_out(P, name, report):
         # them — those are the group headers.
         lo = min(b['patching_rect'][1] for b in items)
         hi = max(b['patching_rect'][1] for b in items)
+        # A heading this pass set in by HEAD_INDENT on an earlier run is still
+        # the column's: without it, a second run stacks rows onto it.
         column = items + [b for b in boxes.values()
-                          if round(b['patching_rect'][0]) == cx and b.get('maxclass') == 'comment'
+                          if round(b['patching_rect'][0]) in (cx, cx + HEAD_INDENT) and b.get('maxclass') == 'comment'
                           and lo - 40 <= b['patching_rect'][1] <= hi]
         column.sort(key=lambda b: b['patching_rect'][1])
 
@@ -185,7 +188,8 @@ def lay_out(P, name, report):
 
         y = column[0]['patching_rect'][1]
         first = True
-        tall = lambda m: m is not None and m.get('maxclass') == 'message' and m['patching_rect'][3] > ONE_LINE
+        tall = lambda m: (m is not None and m.get('maxclass') == 'message'
+                          and (m['patching_rect'][3] > ONE_LINE or m['patching_rect'][2] > LONG_LINE))
         for k, b in enumerate(column):
             nxt = column[k + 1] if k + 1 < len(column) else None
             r = b['patching_rect']
