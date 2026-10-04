@@ -1,0 +1,290 @@
+// =============================================================================
+// CLOTH SIMULATION - MASS-SPRING SYSTEM, WITH COLLISIONS
+// =============================================================================
+// A copy of clothsim.comp from Cycling '74's Compute package, with three
+// additions: the cloth is pushed out of a sphere, kept above a floor, and it
+// is pinned at its four corners until the pins are released. Search for "ADDED" to find each change.
+// =============================================================================
+// Real-time cloth simulation using a mass-spring model with Verlet integration.
+// Each pixel in the position image represents a cloth particle connected to its
+// neighbors by springs.
+//
+// Spring configuration (8-connected grid):
+//   - Structural springs: horizontal and vertical neighbors (4 springs)
+//   - Shear springs: diagonal neighbors (4 springs)
+//
+// The simulation uses shared memory tiling with a 1-pixel halo to efficiently
+// access neighbor positions without repeated global memory reads.
+//
+// Double-buffering: Position image is split horizontally into two halves.
+// The 'eo' (even/odd) parameter controls which half is read vs written,
+// allowing ping-pong updates without race conditions.
+//
+// Fixed points: one pin at each of the four corners holds the cloth in place
+// while the rest simulates freely.
+// =============================================================================
+
+#version 460
+
+// =============================================================================
+// IMAGE BINDINGS
+// =============================================================================
+
+// Position image: stores XYZ position of each cloth particle
+// Layout: [read half | write half] based on 'eo' parameter
+layout(set = 0, binding = 0, rgba32f) uniform image2D posImg;
+
+// Velocity image: stores XYZ velocity of each cloth particle
+layout(set = 0, binding = 1, rgba32f) uniform image2D velImg;
+
+// Wind force image: external force field applied to cloth
+layout(set = 0, binding = 2, rgba32f) uniform image2D windImg;
+
+// =============================================================================
+// SIMULATION PARAMETERS
+// =============================================================================
+
+layout(set = 0, binding = 3) uniform Config
+{
+    float gravity;         // Gravitational acceleration (typically negative Y)
+    float mass;            // Mass of each particle
+    float springK;         // Spring stiffness constant (Hooke's law)
+    float deltaT;          // Time step for integration
+    float damping;         // Velocity damping coefficient (air resistance)
+    float restLengthHoriz; // Rest length of horizontal springs
+    float restLengthVert;  // Rest length of vertical springs
+    float restLengthDiag;  // Rest length of diagonal springs (typically sqrt(2) * horiz)
+    int eo;                // Even/odd frame toggle for double-buffering (0 or 1)
+    // ADDED: collision settings
+    vec4 sphere;           // Sphere collider: xyz = center, w = radius (0 = no sphere)
+    float floorY;          // Height of the floor
+    float friction;        // Share of speed lost per step while touching (0 to 1)
+    int release;           // 0 = top row is pinned, 1 = pins let go
+};
+
+// ADDED: how far off a surface the cloth is held, so it never pokes through
+const float GAP = 0.015;
+
+// 16x16 work group for 2D cloth grid processing
+layout(local_size_x = 16, local_size_y = 16) in;
+
+// =============================================================================
+// SHARED MEMORY TILE
+// =============================================================================
+// Each work group loads a tile of positions plus a 1-pixel halo border.
+// This allows each thread to access all 8 neighbors without additional
+// global memory reads, significantly improving performance.
+
+const int TILE_X = int(gl_WorkGroupSize.x);  // 16
+const int TILE_Y = int(gl_WorkGroupSize.y);  // 16
+
+// Shared tile: (16+2) x (16+2) = 18x18 positions including halo
+shared vec3 p[(TILE_X + 2) * (TILE_Y + 2)];
+
+// Convert 2D local coordinates to 1D shared array index
+int id2Index(ivec2 lid) {
+    return lid.x + lid.y * (TILE_X + 2);
+}
+
+// Read from shared array with automatic +1 halo offset
+// Input lid is in [0, TILE_SIZE) range, output includes halo adjustment
+vec3 readShared(ivec2 lid) {
+    ivec2 sh = lid + ivec2(1);  // Offset into interior of shared tile
+    return p[id2Index(sh)];
+}
+
+// =============================================================================
+// COOPERATIVE TILE LOADING
+// =============================================================================
+// All threads in the work group cooperatively load the tile plus halo.
+// Each thread may load multiple texels to cover the (TILE+2)x(TILE+2) region.
+
+void loadTileWithHalo(ivec2 groupOrigin, ivec2 size, ivec2 readBase)
+{
+    ivec2 lid = ivec2(gl_LocalInvocationID.xy);
+
+    // Loop to cover all positions in the extended tile
+    // Threads stride by TILE_X/TILE_Y to cover the full (TILE+2)x(TILE+2) region
+    for (int y = lid.y; y < TILE_Y + 2; y += TILE_Y) {
+        for (int x = lid.x; x < TILE_X + 2; x += TILE_X) {
+            ivec2 local = ivec2(x, y);
+
+            // Map local tile coordinate to global image coordinate
+            // Subtract 1 to account for halo (local 0 maps to global -1)
+            ivec2 global = groupOrigin + local - ivec2(1);
+
+            // Clamp to valid image bounds (handles edge particles)
+            global = clamp(global, ivec2(0), size - ivec2(1));
+
+            // Load position from the read buffer (offset by readBase)
+            p[id2Index(local)] = imageLoad(posImg, global + readBase).xyz;
+        }
+    }
+
+    // Synchronize to ensure all positions are loaded before simulation
+    barrier();
+}
+
+// =============================================================================
+// SPRING FORCE CALCULATION
+// =============================================================================
+// Calculates the force exerted by a spring connecting the current particle
+// to a neighbor at the given offset.
+//
+// Uses Hooke's Law: F = -k * (|x| - rest_length) * normalize(x)
+// where x is the vector from current particle to neighbor.
+
+vec3 calcSpringForce(ivec2 offset, float restLength, float k)
+{
+    ivec2 lid = ivec2(gl_LocalInvocationID.xy);
+
+    // Vector from current particle to neighbor (from shared memory)
+    vec3 v = readShared(lid + offset) - readShared(lid);
+
+    // Squared length for early-out check
+    float l2 = dot(v, v);
+    if (l2 < 1e-6) return vec3(0.0);  // Particles coincident, no force
+
+    // Calculate spring force using Hooke's law
+    // F = k * (currentLength - restLength) * direction
+    float invL = inversesqrt(l2);        // 1 / currentLength
+    float currentLength = 1.0 / invL;
+    float displacement = currentLength - restLength;
+
+    // Force points toward neighbor if stretched, away if compressed
+    return v * k * displacement * invL;
+}
+
+// =============================================================================
+// MAIN SIMULATION STEP
+// =============================================================================
+
+void main()
+{
+    ivec2 gid = ivec2(gl_GlobalInvocationID.xy);
+    ivec2 lid = ivec2(gl_LocalInvocationID.xy);
+
+    // Calculate effective cloth dimensions (half of position image width)
+    ivec2 size = imageSize(posImg) / ivec2(2, 1);
+
+    // Bounds check
+    if (gid.x >= size.x || gid.y >= size.y) return;
+
+    // Work group origin in global coordinates
+    ivec2 groupOrigin = ivec2(gl_WorkGroupID.xy) * ivec2(TILE_X, TILE_Y);
+
+    // Double-buffer offset: read from one half, write to other
+    // eo=0: read from left half (0), write to right half (size.x)
+    // eo=1: read from right half (size.x), write to left half (0)
+    ivec2 readBase = ivec2(eo * size.x, 0);
+
+    // Cooperatively load position tile with halo into shared memory
+    loadTileWithHalo(groupOrigin, size, readBase);
+
+    // Calculate write position (opposite buffer from read)
+    ivec2 writeUV = gid + ivec2((1 - eo) * size.x, 0);
+
+    // =========================================================================
+    // FIXED ANCHOR POINTS
+    // =========================================================================
+    // ADDED: one pin at each of the four corners, so the cloth hangs like a
+    // hammock. release == 1 lets every pin go. (The original pinned three
+    // points along the top row.)
+
+    bool isCorner = (gid.x == 0 || gid.x == size.x - 1) &&
+                    (gid.y == 0 || gid.y == size.y - 1);
+    bool isFixed = release == 0 && isCorner;
+
+    if (isFixed) {
+        // Fixed points maintain their position
+        imageStore(posImg, writeUV, vec4(readShared(lid), 1.0));
+    }
+    else {
+        // =====================================================================
+        // DYNAMIC PARTICLE SIMULATION
+        // =====================================================================
+
+        // Sample wind force at this particle
+        vec3 wind = imageLoad(windImg, gid).xyz;
+
+        // Cache uniform values locally for efficiency
+        float m = mass, k = springK, dt = deltaT, damp = damping;
+
+        // ---------------------------------------------------------------------
+        // ACCUMULATE FORCES
+        // ---------------------------------------------------------------------
+
+        // Gravity: F = m * g (downward in Y)
+        vec3 force = m * vec3(0.0, gravity, 0.0);
+
+        // Wind: external force field (scaled down)
+        force += wind * 0.1;
+
+        // Spring forces from 8 neighbors (structural + shear springs)
+        // Vertical springs (up/down)
+        force += calcSpringForce(ivec2(+0, -1), restLengthVert, k);
+        force += calcSpringForce(ivec2(+0, +1), restLengthVert, k);
+
+        // Horizontal springs (left/right)
+        force += calcSpringForce(ivec2(-1, +0), restLengthHoriz, k);
+        force += calcSpringForce(ivec2(+1, +0), restLengthHoriz, k);
+
+        // Diagonal/shear springs
+        force += calcSpringForce(ivec2(-1, -1), restLengthDiag, k);
+        force += calcSpringForce(ivec2(+1, -1), restLengthDiag, k);
+        force += calcSpringForce(ivec2(-1, +1), restLengthDiag, k);
+        force += calcSpringForce(ivec2(+1, +1), restLengthDiag, k);
+
+        // ---------------------------------------------------------------------
+        // VELOCITY DAMPING
+        // ---------------------------------------------------------------------
+        // Simulates air resistance: F_damp = -damping * velocity
+        vec3 vel = imageLoad(velImg, gid).xyz;
+        force += -vel * damp;
+
+        // ---------------------------------------------------------------------
+        // VERLET INTEGRATION
+        // ---------------------------------------------------------------------
+        // Semi-implicit Euler / Velocity Verlet for stable integration
+        // a = F / m
+        // v_new = v + a * dt
+        // p_new = p + v_new * dt + 0.5 * a * dt^2
+
+        vec3 a = force / m;
+        vec3 newVel = vel + a * dt;
+        vec3 newPos = readShared(lid) + newVel * dt + 0.5 * a * dt * dt;
+
+        // ---------------------------------------------------------------------
+        // ADDED: COLLISIONS
+        // ---------------------------------------------------------------------
+        // A point that has ended up inside a shape is moved back to the
+        // surface. The part of its velocity that heads into the surface is
+        // removed, and friction slows what is left, so the cloth settles.
+        float keep = 1.0 - clamp(friction, 0.0, 1.0);
+
+        // Sphere
+        if (sphere.w > 0.0) {
+            vec3 d = newPos - sphere.xyz;
+            float r = sphere.w + GAP;
+            float d2 = dot(d, d);
+            if (d2 < r * r) {
+                vec3 n = d2 > 1e-8 ? d * inversesqrt(d2) : vec3(0.0, 1.0, 0.0);
+                newPos = sphere.xyz + n * r;
+                float vn = dot(newVel, n);
+                if (vn < 0.0) newVel -= vn * n;
+                newVel *= keep;
+            }
+        }
+
+        // Floor
+        if (newPos.y < floorY + GAP) {
+            newPos.y = floorY + GAP;
+            if (newVel.y < 0.0) newVel.y = 0.0;
+            newVel *= keep;
+        }
+
+        // Write updated position and velocity
+        imageStore(posImg, writeUV, vec4(newPos, 1.0));
+        imageStore(velImg, gid, vec4(newVel, 1.0));
+    }
+}
