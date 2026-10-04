@@ -1016,7 +1016,22 @@ def _luminance(rgba) -> float:
     return 0.2126 * r + 0.7152 * g + 0.0722 * b
 
 
-_CONTRAST_MIN = 3.0   # WCAG large-text minimum; calibrate before raising
+# WCAG contrast minimums: 4.5:1 for ordinary text, 3:1 for large text, which
+# WCAG defines as 18 pt and up, or 14 pt and up in bold. Max's `fontsize` is
+# in points (jbox refpage), and `fontface` 1 and 3 are bold and bold italic.
+# Raised from a flat 3:1 on 2026-10-04 after a calibration that found no
+# comment in patches/, Butter_tools or the C74 help files between the two.
+_CONTRAST_MIN = 4.5
+_CONTRAST_MIN_LARGE = 3.0
+
+
+def _is_large_text(attrs) -> bool:
+    try:
+        size = float(attrs.get("fontsize", 12))
+        face = int(attrs.get("fontface", 0))
+    except (TypeError, ValueError):
+        return False
+    return size >= 18 or (size >= 14 and face in (1, 3))
 
 
 def rule_comment_contrast(ctx: SpecContext) -> list:
@@ -1025,9 +1040,10 @@ def rule_comment_contrast(ctx: SpecContext) -> list:
     Only comments that set BOTH `bgcolor` and `textcolor` are judged (one alone
     pairs with Max's default, which is calibrated for the canvas). Background
     alpha below 0.1 is effectively transparent and skipped. Ratio below
-    _CONTRAST_MIN fires. `bubble_bgcolor` is deliberately not considered.
+    _CONTRAST_MIN (4.5:1) fires, or below _CONTRAST_MIN_LARGE (3:1) for
+    large text. `bubble_bgcolor` is deliberately not considered.
     Source: MAX_PATCHING.md > A comment's text must contrast with its own
-    background ("a one-line luminance diff over the spec is enough").
+    background (the WCAG figures).
     """
     out = []
     for oid, obj in ctx.objects.items():
@@ -1046,11 +1062,12 @@ def rule_comment_contrast(ctx: SpecContext) -> list:
             continue
         hi, lo = max(lb, lf), min(lb, lf)
         ratio = (hi + 0.05) / (lo + 0.05)
-        if ratio < _CONTRAST_MIN:
+        need = _CONTRAST_MIN_LARGE if _is_large_text(attrs) else _CONTRAST_MIN
+        if ratio < need:
             out.append(Violation(
                 "comment-contrast", WARNING, oid,
                 f"Comment '{oid}' has text/background contrast {ratio:.2f}:1 "
-                f"(below {_CONTRAST_MIN:.0f}:1) — textcolor {list(fg[:3])} on bgcolor "
+                f"(below {need:g}:1) — textcolor {list(fg[:3])} on bgcolor "
                 f"{list(bg[:3])} is unreadable. Lighten the text or darken the panel.",
                 "MAX_PATCHING.md > A comment's text must contrast with its own background",
             ))

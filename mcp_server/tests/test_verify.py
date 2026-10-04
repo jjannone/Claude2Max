@@ -725,6 +725,22 @@ def test_comment_contrast_clean_and_single_attr_skipped():
     assert "comment-contrast" not in _rules(verify_spec(one))
 
 
+def test_comment_contrast_large_text_gets_the_lower_minimum():
+    # Grey 0.4 on black is about 3.7:1: under 4.5 for ordinary text, over 3
+    # for large text (18 pt and up, or 14 pt and up in bold).
+    def spec(**font):
+        return {"objects": {"c": {"type": "comment", "text": "note",
+                                  "attrs": {"bgcolor": [0.0, 0.0, 0.0, 1.0],
+                                            "textcolor": [0.4, 0.4, 0.4, 1.0],
+                                            **font}}},
+                "connections": []}
+    assert "comment-contrast" in _rules(verify_spec(spec()))
+    assert "comment-contrast" in _rules(verify_spec(spec(fontsize=14)))
+    assert "comment-contrast" not in _rules(verify_spec(spec(fontsize=18)))
+    assert "comment-contrast" not in _rules(verify_spec(spec(fontsize=14, fontface=1)))
+    assert "comment-contrast" not in _rules(verify_spec(spec(fontsize=14, fontface=3)))
+
+
 # (s) control-unlabelled ------------------------------------------------------
 def test_control_unlabelled_per_control():
     spec = {"objects": {

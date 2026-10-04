@@ -266,6 +266,8 @@ These came from a review of the eleven Butter_tools help files against Max's 973
 
 20. **Cords are white at 20% opacity, set once for each patcher.** Every patcher in a help file, the root and each tab and subpatcher, carries `patchlinecolor 1. 1. 1. 0.2` (the patcher refpage: "Sets the default color for patch cords"), so every cord, including one added later by hand, takes it, and no cord carries a colour of its own. Max's own templates (`templates/*.maxpat`) save it on the patcher the same way. Whether MSP and Jitter cords follow it has not been checked in Max. `help_form.color_control_cords` sets it after every build and removes any per-cord colour. (John, 2026-10-04: first white at 80% opacity on each cord, then 20% opacity as one patcher setting.)
 
+21. **Labels on a jagged stack go to its left, right-justified.** A stack is a column of boxes on one left edge that feed one inlet. It is jagged when its boxes differ in width. Labels on the right of a jagged stack start at a different x on every row and read as a ragged list. On the left, with `textjustification 2`, all as wide as the widest and ending 8 px before the column, they line up on one edge, beside the box each one names. A stack whose boxes share one width (a column of `attrui`) keeps its labels on the right. Width is measured in the font the comment is drawn in, not estimated. For instance, butter_table's `cellblock` tab: `selmode`, `select 0 3`, `1 5`, `dump`, `clear 2 1` and `set 2 1 5 out of 19-tET` with their labels on the left. For Butter_tools, `tools/jagged_labels.py` moves them, and `tools/attrui_layout.py` keeps a left label with its row when it restacks a column. (John, 2026-10-04, with two screenshots of that tab.)
+
 The other rules that bind a help file, collected for reference: the window opens at the root's size (*Patcher Tabs — Several Patches in One Window*, above); demos must address what is drawn; controls are grouped under headers; an attribute that is mentioned is shown; text contrasts with its canvas (*An object that draws its own text takes its colour from the patch, not from a constant*, under *Presentation View Design Principles*); a `preset` binds by message after load (`CLAUDE.md` > *Link Objects by Name After the Patch Has Loaded*).
 
 ### An Object's Top-Level Mode Is on Every Tab — Binding Rule {!core}
@@ -775,8 +777,16 @@ For an operator-facing action the user clicks (save, load, clear, reset, recall,
 
 If the downstream consumer needs a bare `bang` rather than the message's symbol, route the message through a **`button`** — not `[t b]`. Both convert anything to a bang, but the `button` blinks when it fires (so the patching view shows you the action actually happened) and can be clicked directly to fire the chain while testing. `[t b]` gives you the same bang with neither. The operator still sees and clicks the labelled message; the button sits below it in the patching view as a visible confirmation light. (Derived from the Zendrum bank UI: `save`/`load` message boxes replaced button+comment pairs.)
 
+### Group by spacing first, and add a panel only when spacing is not enough
+
+Space alone tells the reader what belongs together: things close to each other read as one group. So the gap inside a group is always clearly smaller than the gap between groups, for instance 5–10 px between a control and its neighbours, 30 px between groups. Lay the groups out that way first. Then add a panel only where spacing does not separate them, for instance where a dense presentation packs groups close together. Help files rarely need more than spacing and section headers. Use one grouping device per area: spacing, or a panel, or a line, not all three. (John, 2026-10-04, from a design-principles review.)
+
+### Use a fixed spacing scale, and line things up on shared edges
+
+Pick a few gap sizes and use only those, for instance 5, 10, 15 and 30 px: 5 between a control and its label, 10 between rows inside a group, 15 for panel padding, 30 between groups. Gaps chosen one by one ("this looks about right") come out as 7, 12, 18 and 22 px, and the layout looks unsettled without the reader knowing why. Line controls up as well. Controls in a column share a left edge, and controls in a row share a top edge or a centre line. The same kind of control sits in the same place in every group, so the eye finds it without searching. This is the presentation view's version of *Keep boxes on the grid the patch already uses*. (John, 2026-10-04.)
+
 ### Panel-based grouping
-Use dark rounded panels (`panel` objects with rounded corners and a dark fill) to cluster related controls. The panel boundary is the group label — controls inside share a purpose. Do not mix unrelated controls inside one panel. Leave consistent padding (≈15 px) between panel edge and contents.
+When spacing is not enough (see above), use dark rounded panels (`panel` objects with rounded corners and a dark fill) to cluster related controls. The panel boundary is the group label — controls inside share a purpose. Do not mix unrelated controls inside one panel. Leave consistent padding (≈15 px) between panel edge and contents.
 
 ### Presentation panels live in the background layer — Binding Rule {!core}
 
@@ -844,8 +854,16 @@ Follow this palette consistently:
 - **Green button** — read/recall action (safe)
 - **White/light** — standard labels and controls
 
+**Use the strong colours sparingly.** An accent only stands out against things that are not accented. If red and amber appear on every label, nothing stands out and the reader cannot find what matters. Keep the strongest colour for one or two things per view: the live state, the one action that cannot be undone.
+
+**Never let colour carry meaning alone.** About one man in twelve cannot tell red from green, so to them a red store button and a green recall button look the same. Every coloured control also says what it does in words: a message box reading `store` or `recall`, or a label beside it. The colour then repeats the meaning; it is never the only place the meaning lives. (John, 2026-10-04.)
+
 ### Monospace font throughout
 Use a monospace font (e.g. `Courier` or `Monaco`) consistently across all comment labels and UI text in presentation view. It gives a technical-but-legible character and makes the layout feel intentional.
+
+### Use three or four text sizes, each with one job
+
+Give every piece of text a role, and give each role one size: for instance title, section header, label and note. Pick the sizes once per patch, for instance 18 for the title, 13 for section headers, 12 for labels (Max's default), 11 for notes, and use no others. A size picked box by box drifts, and six slightly different sizes read as a mistake rather than as an order of importance. Tell levels apart by size and weight first, colour second. Do not shrink text below 11 for looks: small text that adds atmosphere but cannot be read is a common fault of themed interfaces, the lcars and nostromo themes included. (John, 2026-10-04.)
 
 ### Label placement
 Labels go to the **right** of their control — never above, never below (unless vertical stacking is forced by space). Align label baselines with the control's vertical center.
@@ -853,6 +871,8 @@ Labels go to the **right** of their control — never above, never below (unless
 ### A comment's text must contrast with its own background — check every comment, in every view it appears in
 
 A comment is readable only if its `textcolor` reads against whatever is directly behind the text. When a comment carries its own `bgcolor`, that background is what's behind the text, in both views — the patcher canvas and any presentation panel are irrelevant. So the pair `bgcolor` / `textcolor` has to contrast on its own, per comment. The trap is a shared label helper that stamps one background onto every label and then lets a caller change only the text color: the caller reasons about the panel or the canvas, forgets the stamped background, and produces dark-on-dark or light-on-light text that reads as a blank box. For instance: a patching-view note was given dark ink so it would show on Max's light canvas, but the helper had already given it the dark panel background, and the note was unreadable. A comment that lives only in the patching view usually wants no `bgcolor` at all — the default comment is what the canvas is calibrated for. Before handing over any patch, scan every comment that sets both attributes and confirm their luminances differ; a one-line luminance diff over the spec is enough (see the check the kslider-restrike session ran).
+
+"Differ" has a number: the contrast ratio between text and background is at least **4.5 : 1** for ordinary text and **3 : 1** for large text (18 pt and up, or 14 pt bold). These are the WCAG accessibility figures, the web's standard for readable text. The ratio is `(L1 + 0.05) / (L2 + 0.05)`, where L1 is the lighter colour's relative luminance and L2 the darker one's. A pair that only "looks different" on one screen can fail on a projector or for a reader with weaker eyesight; the number holds everywhere. The verifier's `comment-contrast` check applies both figures to every comment that sets both colours, reading `fontsize` (in points) and `fontface` (1 and 3 are bold) to tell large text from ordinary. (John, 2026-10-04.)
 
 ### An object that draws its own text takes its colour from the patch, not from a constant — Binding Rule {!core}
 

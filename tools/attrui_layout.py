@@ -49,6 +49,7 @@ ROW_REACH = 12       # the widest space between two boxes of one row
 COLUMN_BREAK = 60    # a bigger vertical space than this ends a column
 UNDER_ROW = 12       # the space under a row of several boxes, where its cords run to the column
                      # (John, 2026-10-04: a little more space between rows of messages)
+LEFT_LABEL_GAP = 12  # a right-justified comment ending this close left of a row is its label
 LABEL_REACH = 100    # a comment this close to the right of a row, on its line, is its label
 HEAD_INDENT = 22     # a heading between rows is set in this far: about 12 px clear of the
                      # column's line, which runs at the ports' centre, PORT_INSET in
@@ -171,9 +172,13 @@ def lay_out(P, name, report):
                 continue
             row = [b] + rows.get(b['id'], [])
             right = max(m['patching_rect'][0] + m['patching_rect'][2] for m in row)
+            left = b['patching_rect'][0]
             labels[b['id']] = [c for c in boxes.values() if c.get('maxclass') == 'comment'
                                and abs(c['patching_rect'][1] - b['patching_rect'][1]) < 4
-                               and right - 2 <= c['patching_rect'][0] <= right + LABEL_REACH]
+                               and (right - 2 <= c['patching_rect'][0] <= right + LABEL_REACH
+                                    # or a right-justified label on its left (help-file rule 21)
+                                    or (c.get('textjustification') == 2
+                                        and 0 <= left - (c['patching_rect'][0] + c['patching_rect'][2]) <= LEFT_LABEL_GAP))]
         riders += [c for cs in labels.values() for c in cs]
         snapshot = {id(b): list(b['patching_rect']) for b in column + riders}
         before = _overlaps(P)
