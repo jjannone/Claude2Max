@@ -74,3 +74,20 @@ def test_a_label_beside_a_row_moves_with_it():
     assert out["m3"][1] != 80, "the column was not restacked"
     assert out["l3"][1] == out["m3"][1], (out["l3"], out["m3"])
     assert out["l"][1] == out["m1"][1], (out["l"], out["m1"])
+
+
+def test_a_right_justified_label_left_of_a_row_moves_with_it():
+    # help-file rule 21: labels on a jagged stack sit on its left, right-justified
+    left = box("l3", "comment", 20, 80, 100, 20, "label 3"); left["box"]["textjustification"] = 2
+    plain = box("p", "comment", 20, 120, 100, 20, "not a label")   # left-justified: stays
+    boxes = [box("m1", "message", 128, 20, text="a"), box("m3", "message", 128, 80, text="c"), left,
+             box("m4", "message", 128, 120, text="d"), plain,
+             box("dest", "newobj", 20, 300, 200, 22, "print")]
+    P = {"patcher": {"boxes": boxes, "lines": [line(s, "dest") for s in ("m1", "m3", "m4")]}}
+    with tempfile.NamedTemporaryFile("w", suffix=".maxpat", delete=False) as f:
+        json.dump(P, f)
+    subprocess.run([sys.executable, str(TOOL), "--messages", f.name], check=True, capture_output=True)
+    out = {b["box"]["id"]: b["box"]["patching_rect"] for b in json.load(open(f.name))["patcher"]["boxes"]}
+    assert out["m3"][1] != 80, "the column was not restacked"
+    assert out["l3"][1] == out["m3"][1], (out["l3"], out["m3"])
+    assert out["p"][1] == 120, out["p"]
