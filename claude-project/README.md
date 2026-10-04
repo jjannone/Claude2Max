@@ -2,6 +2,8 @@
 
 Everything a Claude.ai Project (or one chat) needs to write Max/MSP patches as JSON specs that build themselves inside Max. No server, no terminal.
 
+**This is for learning and small patches only. Any deeper work in Max needs Claude Code**, which comes with a paid Claude plan. Without it, Claude writes object and attribute names from memory with nothing to check them, and a wrong name fails silently in Max. It also cannot see or edit your saved patches, and it works from a condensed rulebook. To switch, clone `https://github.com/jjannone/Claude2Max`, open the folder in Claude Code, and say hello.
+
 | file | what it is | where it goes |
 |---|---|---|
 | `CLAUDE_INSTRUCTIONS.md` | the Project's custom instructions | paste into the Project's **Instructions** field |

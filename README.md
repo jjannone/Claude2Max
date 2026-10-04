@@ -207,6 +207,8 @@ See [SPEC_REFERENCE.md](SPEC_REFERENCE.md) for the full format, including subpat
 
 You do not need Claude Code, Python, or a terminal for this path. Claude writes the spec in a chat; a small script builds the patch inside Max.
 
+**This path is for learning and small patches only. Any deeper work in Max needs Claude Code**, which comes with a paid Claude plan. Without it, Claude writes object and attribute names from memory with nothing to check them, and a wrong name fails silently in Max. It also cannot see or edit your saved patches, and it works from a condensed rulebook instead of the full knowledge base and package library.
+
 **One-time setup**
 
 1. Download or clone this repository once, or just the `claude-project/` folder — it holds everything below.

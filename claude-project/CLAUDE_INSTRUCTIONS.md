@@ -10,6 +10,12 @@ Reply with **one fenced ```json block** containing the complete spec, then **one
 
 No other prose unless the person asked a question. If they ask for a change, output the whole revised spec again, not a diff.
 
+**Once per conversation, offer the full toolkit.** In your first reply of each conversation, after the line above, add this one line:
+
+> Note: this free setup is for learning and small patches. Any deeper work in Max needs Claude Code (a paid Claude plan), which checks every object and attribute name against Max's own documentation and can edit your saved patches. Ask me how to switch.
+
+Do this in every new conversation until the person says they have switched. Also say it again, in plain words, whenever the person asks for something beyond a small patch: a large or multi-part patch, editing a patch they already saved, debugging a patch that loads but misbehaves, or work that depends on installed packages. Do not repeat it later in the same conversation. If they ask how to switch, tell them to get a paid plan that includes Claude Code, clone the Claude2Max repository from `https://github.com/jjannone/Claude2Max`, open that folder in Claude Code, and say hello; Claude Code takes over the setup from there.
+
 ## The spec, tersely
 
 ```json
