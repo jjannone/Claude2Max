@@ -7,24 +7,24 @@ TouchDesigner, Isadora, cables.gl, plugdata, ossia score, QLab, Vezér or Resolu
 check against Max's object list, refpages and the installed packages, by an
 agent that does not know Max well. Treat them as leads, not findings.
 
-738 entries, 0 confirmed, 0 rejected.
+738 entries, 112 confirmed, 0 rejected.
 
 | Category | Not in Max | Partly in Max | In Max, better elsewhere | In both, done differently | Unsure |
 |---|---|---|---|---|---|
 | GPU compute/shaders | 0 | 8 | 7 | 10 | 2 |
-| audio | 9 | 38 | 5 | 49 | 1 |
+| audio | 2 | 45 | 5 | 49 | 1 |
 | control surface/UI building | 0 | 20 | 6 | 27 | 2 |
-| data/tables/scripting | 5 | 18 | 8 | 42 | 2 |
-| deployment | 1 | 11 | 1 | 7 | 4 |
-| lighting/DMX/lasers | 19 | 4 | 0 | 1 | 0 |
-| networking/sync | 16 | 16 | 2 | 14 | 1 |
-| projection mapping | 9 | 17 | 2 | 4 | 2 |
-| rendering/3D | 4 | 17 | 3 | 32 | 5 |
-| sensors/tracking/ML | 10 | 12 | 2 | 4 | 2 |
+| data/tables/scripting | 2 | 21 | 8 | 42 | 2 |
+| deployment | 0 | 12 | 1 | 7 | 4 |
+| lighting/DMX/lasers | 7 | 15 | 0 | 2 | 0 |
+| networking/sync | 5 | 27 | 2 | 14 | 1 |
+| projection mapping | 3 | 22 | 2 | 5 | 2 |
+| rendering/3D | 3 | 18 | 3 | 32 | 5 |
+| sensors/tracking/ML | 2 | 20 | 2 | 4 | 2 |
 | system model | 0 | 0 | 0 | 16 | 0 |
-| timeline/cueing/show control | 18 | 28 | 13 | 27 | 0 |
-| video I/O & playback | 11 | 29 | 4 | 27 | 2 |
-| workflow/authoring | 10 | 19 | 8 | 43 | 2 |
+| timeline/cueing/show control | 1 | 45 | 13 | 27 | 0 |
+| video I/O & playback | 2 | 38 | 4 | 27 | 2 |
+| workflow/authoring | 6 | 22 | 8 | 44 | 2 |
 
 ## Themes
 
@@ -33,69 +33,81 @@ more than one tool documents is a stronger lead than a single entry.
 
 | Theme | Tools | Entries | Not in Max | Partly in Max | In Max, better elsewhere | In both, done differently | Unsure |
 |---|---|---|---|---|---|---|---|
-| Every parameter addressable: OSC, learn, binding, expressions | Isadora, MadMapper, QLab, Resolume, TouchDesigner, Vezér, cables.gl, ossia score | 28 | 3 | 11 | 2 | 12 | 0 |
-| Easing, smoothing and ramps | Isadora, MadMapper, QLab, Resolume, TouchDesigner, cables.gl, plugdata (ELSE), plugdata (Pd vanilla) | 23 | 3 | 3 | 8 | 9 | 0 |
+| Every parameter addressable: OSC, learn, binding, expressions | Isadora, MadMapper, QLab, Resolume, TouchDesigner, Vezér, cables.gl, ossia score | 29 | 1 | 14 | 2 | 12 | 0 |
+| Easing, smoothing and ramps | Isadora, MadMapper, QLab, Resolume, TouchDesigner, cables.gl, plugdata (ELSE), plugdata (Pd vanilla) | 22 | 0 | 5 | 8 | 9 | 0 |
 | Files, projects and media management | Isadora, MadMapper, QLab, TouchDesigner, cables.gl, plugdata (ELSE), plugdata (Gem), plugdata (Pd vanilla) | 20 | 0 | 10 | 0 | 9 | 1 |
 | Scaling, clipping and ranges | Isadora, MadMapper, TouchDesigner, cables.gl, plugdata (ELSE), plugdata (Gem), plugdata (Pd vanilla), plugdata (cyclone) | 18 | 0 | 2 | 4 | 12 | 0 |
-| Effect chains: blend, amount and mask on each stage | Isadora, MadMapper, QLab, Resolume, cables.gl, plugdata (ELSE), plugdata (Gem) | 20 | 1 | 5 | 1 | 13 | 0 |
-| Scenes and cues as the structure of a show | Isadora, MadMapper, QLab, Resolume, TouchDesigner, Vezér | 34 | 9 | 17 | 0 | 8 | 0 |
-| Mapping editor: slices, masks and warps on the output | Isadora, MadMapper, QLab, Resolume, TouchDesigner, Vezér | 25 | 6 | 17 | 0 | 2 | 0 |
-| Keyframe timeline over any parameter | MadMapper, QLab, Resolume, TouchDesigner, Vezér, cables.gl | 23 | 3 | 11 | 1 | 8 | 0 |
-| Filters and DSP conventions | Isadora, TouchDesigner, cables.gl, plugdata (ELSE), plugdata (Gem), plugdata (Pd vanilla) | 22 | 1 | 5 | 0 | 16 | 0 |
+| Effect chains: blend, amount and mask on each stage | Isadora, MadMapper, QLab, Resolume, cables.gl, plugdata (ELSE), plugdata (Gem) | 19 | 0 | 5 | 1 | 13 | 0 |
+| Scenes and cues as the structure of a show | Isadora, MadMapper, QLab, Resolume, TouchDesigner, Vezér | 34 | 0 | 26 | 0 | 8 | 0 |
+| Keyframe timeline over any parameter | MadMapper, QLab, Resolume, TouchDesigner, Vezér, cables.gl | 23 | 2 | 12 | 1 | 8 | 0 |
+| Mapping editor: slices, masks and warps on the output | Isadora, MadMapper, QLab, Resolume, TouchDesigner, Vezér | 23 | 0 | 20 | 0 | 3 | 0 |
+| Filters and DSP conventions | Isadora, TouchDesigner, cables.gl, plugdata (ELSE), plugdata (Gem), plugdata (Pd vanilla) | 22 | 0 | 6 | 0 | 16 | 0 |
 | Names and scope: send, receive, variables | Isadora, TouchDesigner, cables.gl, plugdata (ELSE), plugdata (Gem), plugdata (Pd vanilla) | 17 | 1 | 3 | 3 | 10 | 0 |
 | Tables, lists and data | Isadora, TouchDesigner, cables.gl, plugdata (ELSE), plugdata (Gem), plugdata (Pd vanilla) | 16 | 1 | 3 | 1 | 9 | 2 |
-| Tempo and clocks | Isadora, MadMapper, QLab, Resolume, Vezér, plugdata (ELSE) | 15 | 1 | 6 | 2 | 6 | 0 |
+| Tempo and clocks | Isadora, MadMapper, QLab, Resolume, Vezér, plugdata (ELSE) | 15 | 0 | 7 | 2 | 6 | 0 |
 | Text and strings | Isadora, TouchDesigner, cables.gl, plugdata (ELSE), plugdata (Pd vanilla), plugdata (cyclone) | 14 | 0 | 5 | 2 | 7 | 0 |
 | Controls and panels | Isadora, MadMapper, TouchDesigner, cables.gl, plugdata (ELSE), plugdata (Gem) | 13 | 0 | 3 | 2 | 8 | 0 |
 | Draw order and layering stated outright | Isadora, MadMapper, TouchDesigner, cables.gl, plugdata (Gem), plugdata (Pd vanilla) | 13 | 0 | 0 | 2 | 11 | 0 |
 | Movie playback | Isadora, MadMapper, Resolume, TouchDesigner, cables.gl, plugdata (Gem) | 9 | 0 | 3 | 1 | 4 | 1 |
-| Encapsulation: ports, arguments, on and off | Isadora, TouchDesigner, cables.gl, plugdata (ELSE), plugdata (Pd vanilla) | 27 | 2 | 5 | 4 | 15 | 1 |
+| Encapsulation: ports, arguments, on and off | Isadora, TouchDesigner, cables.gl, plugdata (ELSE), plugdata (Pd vanilla) | 27 | 1 | 6 | 4 | 15 | 1 |
 | Logic, gates and comparisons | Isadora, MadMapper, cables.gl, plugdata (ELSE), plugdata (Pd vanilla) | 12 | 0 | 1 | 2 | 9 | 0 |
 | OSC and MIDI handling | Isadora, TouchDesigner, cables.gl, plugdata (ELSE), plugdata (Pd vanilla) | 9 | 0 | 1 | 0 | 8 | 0 |
-| Timecode as a type, and chasing it | Isadora, MadMapper, Resolume, TouchDesigner, Vezér | 7 | 6 | 0 | 0 | 0 | 1 |
+| Timecode as a type, and chasing it | Isadora, MadMapper, Resolume, TouchDesigner, Vezér | 7 | 0 | 6 | 0 | 0 | 1 |
 | Bypass and stopping unused work | Isadora, MadMapper, cables.gl, plugdata (Gem), plugdata (Pd vanilla) | 6 | 1 | 0 | 1 | 3 | 1 |
+| DMX, Art-Net and sACN in and out | Isadora, MadMapper, TouchDesigner, Vezér, ossia score | 6 | 0 | 6 | 0 | 0 | 0 |
 | Shader authoring conveniences | Isadora, MadMapper, cables.gl, ossia score | 10 | 1 | 5 | 1 | 1 | 2 |
 | Shader uniforms become controls | MadMapper, TouchDesigner, cables.gl, plugdata (Gem) | 8 | 0 | 0 | 2 | 5 | 1 |
 | Start-up, loading and initial values | Isadora, TouchDesigner, cables.gl, plugdata (Gem) | 7 | 1 | 0 | 2 | 4 | 0 |
-| Body, face and hand tracking | Isadora, MadMapper, TouchDesigner, cables.gl | 6 | 4 | 2 | 0 | 0 | 0 |
+| Body, face and hand tracking | Isadora, MadMapper, TouchDesigner, cables.gl | 6 | 0 | 6 | 0 | 0 | 0 |
 | Errors and status as data | Isadora, MadMapper, TouchDesigner, cables.gl | 6 | 0 | 0 | 2 | 4 | 0 |
 | Random and probability | Isadora, TouchDesigner, plugdata (ELSE), plugdata (Gem) | 6 | 0 | 3 | 0 | 3 | 0 |
-| Cameras, lights and materials | Isadora, TouchDesigner, cables.gl, plugdata (Gem) | 5 | 2 | 2 | 0 | 1 | 0 |
-| DMX, Art-Net and sACN in and out | Isadora, MadMapper, TouchDesigner, ossia score | 5 | 4 | 1 | 0 | 0 | 0 |
+| Cameras, lights and materials | Isadora, TouchDesigner, cables.gl, plugdata (Gem) | 5 | 1 | 3 | 0 | 1 | 0 |
 | Feedback and trails | TouchDesigner, plugdata (ELSE), plugdata (Gem), plugdata (Pd vanilla) | 5 | 0 | 1 | 2 | 2 | 0 |
+| Keeping several machines in step | Isadora, MadMapper, TouchDesigner, cables.gl | 5 | 2 | 3 | 0 | 0 | 0 |
 | Presets and saved state | MadMapper, cables.gl, plugdata (ELSE), plugdata (Pd vanilla) | 5 | 0 | 0 | 1 | 4 | 0 |
-| Keeping several machines in step | Isadora, MadMapper, TouchDesigner, cables.gl | 4 | 2 | 2 | 0 | 0 | 0 |
+| Sharing video with other apps and machines: NDI, Syphon, Spout | Isadora, MadMapper, TouchDesigner, ossia score | 5 | 0 | 5 | 0 | 0 | 0 |
 | Textures and image formats | TouchDesigner, cables.gl, plugdata (Gem) | 11 | 0 | 2 | 0 | 7 | 2 |
 | Geometry, meshes and instancing | TouchDesigner, cables.gl, plugdata (Pd vanilla) | 10 | 0 | 6 | 1 | 2 | 1 |
-| Lighting fixtures driven from the picture or from geometry | Isadora, MadMapper, TouchDesigner | 7 | 7 | 0 | 0 | 0 | 0 |
+| Lighting fixtures driven from the picture or from geometry | Isadora, MadMapper, TouchDesigner | 7 | 2 | 4 | 0 | 1 | 0 |
 | Many channels from one generator | TouchDesigner, plugdata (ELSE), plugdata (Pd vanilla) | 5 | 0 | 1 | 0 | 4 | 0 |
 | Polyphony and voices | Isadora, plugdata (ELSE), plugdata (cyclone) | 5 | 0 | 0 | 0 | 5 | 0 |
-| Sharing video with other apps and machines: NDI, Syphon, Spout | Isadora, MadMapper, TouchDesigner | 4 | 1 | 3 | 0 | 0 | 0 |
 | Tuning and pitch | Isadora, plugdata (ELSE), plugdata (Pd vanilla) | 4 | 0 | 1 | 0 | 3 | 0 |
-| Automatic edge blending between projectors | Isadora, MadMapper, TouchDesigner | 3 | 3 | 0 | 0 | 0 | 0 |
+| Automatic edge blending between projectors | Isadora, MadMapper, TouchDesigner | 3 | 0 | 3 | 0 | 0 | 0 |
 | Offline rendering of a whole show | Isadora, MadMapper, cables.gl | 3 | 0 | 3 | 0 | 0 | 0 |
-| Laser output | MadMapper, TouchDesigner | 10 | 7 | 3 | 0 | 0 | 0 |
+| Laser output | MadMapper, TouchDesigner | 10 | 6 | 4 | 0 | 0 | 0 |
 | Profiling and live views of the running graph | TouchDesigner, cables.gl | 5 | 0 | 4 | 0 | 0 | 1 |
 | Calibrating a projector to a real object | MadMapper, TouchDesigner | 4 | 3 | 1 | 0 | 0 | 0 |
-| Controlling projectors, cameras and show gear | Isadora, MadMapper | 4 | 4 | 0 | 0 | 0 | 0 |
-| Internet streaming and remote sessions | Isadora, TouchDesigner | 4 | 4 | 0 | 0 | 0 | 0 |
+| Controlling projectors, cameras and show gear | Isadora, MadMapper | 4 | 0 | 4 | 0 | 0 | 0 |
+| Internet streaming and remote sessions | Isadora, TouchDesigner | 4 | 1 | 3 | 0 | 0 | 0 |
 | Particles | TouchDesigner, plugdata (Gem) | 3 | 0 | 1 | 0 | 2 | 0 |
-| Speech in and out | Isadora, cables.gl | 3 | 1 | 2 | 0 | 0 | 0 |
-| Stage tracking, motion capture and LIDAR | Isadora, TouchDesigner | 3 | 3 | 0 | 0 | 0 | 0 |
-| Vector media: Lottie, SVG, font outlines | MadMapper, cables.gl | 3 | 1 | 1 | 0 | 0 | 1 |
+| Speech in and out | Isadora, cables.gl | 3 | 0 | 3 | 0 | 0 | 0 |
+| Stage tracking, motion capture and LIDAR | Isadora, TouchDesigner | 3 | 2 | 1 | 0 | 0 | 0 |
+| Vector media: Lottie, SVG, font outlines | MadMapper, cables.gl | 3 | 0 | 2 | 0 | 0 | 1 |
 | Audio levels and routing | QLab, Resolume | 2 | 0 | 1 | 1 | 0 | 0 |
 | Compute shaders | TouchDesigner, cables.gl | 2 | 0 | 0 | 1 | 0 | 1 |
 | Control panels that build themselves or run remotely | TouchDesigner, cables.gl | 2 | 0 | 2 | 0 | 0 | 0 |
 | Dome output | Isadora, TouchDesigner | 2 | 0 | 1 | 0 | 0 | 1 |
 | Frame rate and frame-locked timing | MadMapper, cables.gl | 2 | 0 | 0 | 0 | 2 | 0 |
-| Python inside the patch | Isadora, TouchDesigner | 2 | 1 | 1 | 0 | 0 | 0 |
-| Subtitle files | Isadora, cables.gl | 2 | 2 | 0 | 0 | 0 | 0 |
+| Hosting other vendors' engines | TouchDesigner, ossia score | 2 | 1 | 1 | 0 | 0 | 0 |
+| Python inside the patch | Isadora, TouchDesigner | 2 | 0 | 2 | 0 | 0 | 0 |
+| Subtitle files | Isadora, cables.gl | 2 | 0 | 2 | 0 | 0 | 0 |
 | Triggers from the clock or a calendar | Isadora, MadMapper | 2 | 0 | 2 | 0 | 0 | 0 |
-| VR and AR | TouchDesigner, cables.gl | 2 | 2 | 0 | 0 | 0 | 0 |
+| VR and AR | TouchDesigner, cables.gl | 2 | 0 | 2 | 0 | 0 | 0 |
 | Web page as a texture | TouchDesigner, cables.gl | 2 | 0 | 1 | 0 | 0 | 1 |
 | System model | several | 13 | 0 | 0 | 0 | 13 | 0 |
-| Timeline structure: waits, branches, loops | ossia score | 11 | 6 | 4 | 0 | 1 | 0 |
+| Timeline structure: waits, branches, loops | ossia score | 11 | 1 | 9 | 0 | 1 | 0 |
 | Deployment | ossia score | 3 | 0 | 3 | 0 | 0 | 0 |
+| Authoring platform and collaboration | cables.gl | 2 | 2 | 0 | 0 | 0 | 0 |
+| Synthesis methods as single objects | plugdata (ELSE) | 2 | 1 | 1 | 0 | 0 | 0 |
+| AI and scripting access to the patch | Resolume | 1 | 0 | 1 | 0 | 0 | 0 |
+| Collaborative editing across machines | QLab | 1 | 1 | 0 | 0 | 0 | 0 |
+| IoT and sensor-network protocols | ossia score | 1 | 0 | 1 | 0 | 0 | 0 |
+| Machine learning on video | TouchDesigner | 1 | 0 | 1 | 0 | 0 | 0 |
+| Number entry conveniences | Resolume | 1 | 1 | 0 | 0 | 0 | 0 |
+| Patch dependencies and search paths | plugdata (Pd vanilla) | 1 | 0 | 0 | 0 | 1 | 0 |
+| Rehearsal and audition routing | QLab | 1 | 0 | 1 | 0 | 0 | 0 |
+| Retrigger and hold behaviour | QLab | 1 | 0 | 1 | 0 | 0 | 0 |
+| Spatial zones and interpolation | ossia score | 1 | 0 | 1 | 0 | 0 | 0 |
 | Units and conversion | ossia score | 1 | 0 | 0 | 0 | 1 | 0 |
 
 ## GPU compute/shaders
@@ -430,102 +442,28 @@ more than one tool documents is a stronger lead than a single entry.
 
 ## audio
 
-### 2D path fades with merge, smoothing, looping and a circle tool (QLab)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Easing, smoothing and ramps
-- **There:** `2D Path`, `Merge`, `Smooth path`, `Loop`, `circle tool`
-- **What it does:** One fade moves two parameters along a drawn path (object position, video translation/rotation/scale, or two OSC values). If the target is not at the start, merge eases it onto the path over a chosen percentage of the fade; paths can be smoothed and looped (5.6).
-- **Closest in Max:** `nodes`, `function`
-- **Checked:** function refpage: a 1D breakpoint editor. nodes refpage: weights from a slider position, not a path over time. No refpage read draws or plays a 2D path.
-- **Source:** <https://qlab.app/docs/v5/audio/fading-audio/> · <https://qlab.app/docs/v5/video/fading-video/> · <https://qlab.app/docs/v5/networking/network-cues/> · <https://qlab.app/docs/v5/general/change-log/>
-- id: `qlab--2d-path-fades-with-merge-smoothing-looping-and-a-circle-tool`
-
-### Fade and stop others, and duck others while a cue runs (QLab)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Scenes and cues as the structure of a show
-- **There:** `Fade & Stop Others Over Time`, `Duck/Boost Audio of Other Cues In This List While Running`
-- **What it does:** Starting a cue can fade and stop its peers, its whole list, or every cue, over a set time; or duck (or boost) the audio of the other cues in its list by a level for as long as it runs.
-- **Closest in Max:** `live.gain~`, `line~`
-- **Checked:** No Max object knows which other players are 'peers'. Ducking is built with live.gain~ or line~ per player plus s/r. No refpage read offers a scope-based fade-and-stop.
-- **Source:** <https://qlab.app/docs/v5/fundamentals/inspector/>
-- id: `qlab--fade-and-stop-others-and-duck-others-while-a-cue-runs`
-
-### Relative fades, absolute-supersedes-relative, and Revert Fade Action (QLab)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Easing, smoothing and ramps
-- **There:** `Absolute Fade`, `relative fade`, `Revert Fade Action`
-- **What it does:** A fade can set end values or add/multiply (levels and translation add, scale and opacity multiply). An absolute fade clears earlier relative changes. Revert Fade Action undoes only the changes one fade made, keeping anything changed since.
-- **Closest in Max:** `line`, `line~`, `pattrstorage`
-- **Checked:** line and line~ ramp to absolute targets. pattrstorage refpage: recall and recallmulti interpolate between stored presets; no relative recall or per-fade undo is described.
-- **Source:** <https://qlab.app/docs/v5/audio/fading-audio/> · <https://qlab.app/docs/v5/video/fading-video/>
-- id: `qlab--relative-fades-absolute-supersedes-relative-and-revert-fade-action`
-
-### Runs Pure Data patches and compiles Faust inside (ossia score)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **There:** `Pure Data support`, `libpd`, `Faust`
-- **What it does:** A Pd patch dropped in becomes a process with audio, MIDI and value ports created from its adc~/dac~, MIDI and send/receive objects. Faust .dsp files are compiled on the spot, edited live and recompiled.
-- **Closest in Max:** `gen~`, `vst~`
-- **Checked:** Registry: no Pd host, no faust object; query_packages 'faust': no matches. gen~ is Max's own compiled DSP language (max_system_model.json dimension 21), not Faust.
-- **Notes:** abclib, installed here, is built from Faust code but ships compiled Max externals.
-- **Source:** <https://ossia.io/score-docs/processes/puredata.html> · <https://ossia.io/score-docs/processes/faust.html>
-- id: `ossia-score--runs-pure-data-patches-and-compiles-faust-inside`
-
 ### Analog circuit simulation from a netlist typed in the box (plugdata (ELSE))
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Not in Max · confidence high · confirmed
+- **Theme:** Synthesis methods as single objects
 - **There:** `circuit~`
 - **What it does:** The box text is a list of components (resistor, capacitor, diode, transistor, op-amp, tube, potentiometer, voltage source, probe), each with numbered nodes. Signal inlets can drive any value, each probe becomes an outlet, and named part models (for instance 12AX7 or 2N3904) can be chosen.
 - **Closest in Max:** `gen~`, `abl.device.autofilter~`
 - **Checked:** No circuit simulator in obj-qlookup.json. query_packages.py 'circuit' returned only objects whose descriptions mention circuits (for instance Abl.AutoFilter~), none that takes a netlist.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No circuit simulator in obj-qlookup.json, refpages or installed packages; Abl.AutoFilter~ has fixed circuit models but no netlist. Web searches found no Max external that takes a netlist; ELSE is Pd-only.
 - **Source:** <Documentation/9.else/circuit~-help.pd>
 - id: `plugdata-else--analog-circuit-simulation-from-a-netlist-typed-in-the-box`
 
-### Discrete-summation (DSF) band-limited oscillator (plugdata (ELSE))
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Filters and DSP conventions
-- **There:** `blip~`
-- **What it does:** Generates a sum of cosine partials in closed form: fundamental, number of partials, lowest harmonic and a multiplier that scales each next partial. Cost does not grow with the partial count. Based on Csound's gbuzz.
-- **Closest in Max:** `oscbank~`, `ioscbank~`, `gen~`
-- **Checked:** Registry and package search. No object named for buzz or DSF in obj-qlookup.json. query_packages.py 'band-limited' returned CNMAT sinusoids~ and unrelated objects. oscbank~ and ioscbank~ are additive banks whose cost grows with the number of oscillators.
-- **Notes:** Could be written in gen~ from the formula. The tutorial's comments call the object gbuzz~ while the box is blip~.
-- **Source:** <Documentation/9.else/blip~-help.pd> · <Documentation/12.live-electronics-tutorial/Part.03-Sound.Generators/12-Oscillators/3.Band.Limited(Anti-Aliased)/2.[blip~].DSF.pd>
-- id: `plugdata-else--discrete-summation-dsf-band-limited-oscillator`
-
-### Port of the Mutable Instruments Plaits macro-oscillator (plugdata (ELSE))
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Encapsulation: ports, arguments, on and off
-- **There:** `plaits~`, `plaits.m~`
-- **What it does:** Twenty-four synthesis engines behind one object, with timbre, harmonics and morph inputs, a trigger and a level input, and pitch in Hz, MIDI or a -1 to 1 control voltage.
-- **Closest in Max:** `abl.dsp.meldosc~`, `vst~`
-- **Checked:** No plaits object in the registry; query_packages.py 'plaits' returned nothing. The bundled abl.dsp.meldosc~ ('Meta-oscillator') is a different multi-engine oscillator.
-- **Source:** <Documentation/9.else/plaits~-help.pd> · <Documentation/12.live-electronics-tutorial/Part.04-Control/18-MIDI-CV-OSC-Net/2.CV/5.[plaits~].pd>
-- id: `plugdata-else--port-of-the-mutable-instruments-plaits-macro-oscillator`
-
-### Xenakis-style dynamic stochastic synthesis (plugdata (ELSE))
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **There:** `gendyn~`, `gendyn.m~`
-- **What it does:** A waveform made of a few breakpoints whose positions and amplitudes each move by random walk on every cycle, with a choice of distributions, step sizes, a frequency range or centre frequency with bandwidth, and interpolation.
-- **Closest in Max:** `gen~`
-- **Checked:** No object of that kind in obj-qlookup.json. query_packages.py 'gendy' returned nothing.
-- **Source:** <Documentation/9.else/gendyn~-help.pd> · <Documentation/12.live-electronics-tutorial/Part.11-Synthesis(Advanced)/38-Stochastic/1.gendyn~.pd>
-- id: `plugdata-else--xenakis-style-dynamic-stochastic-synthesis`
-
 ### Compute exactly one DSP block on demand (bang to [switch~]) (plugdata (Pd vanilla))
 
-- **Max:** Not in Max · confidence medium · unreviewed
+- **Max:** Not in Max · confidence medium · confirmed
 - **Theme:** Bypass and stopping unused work
 - **There:** `switch~`, `bang`
 - **What it does:** A bang to a switched-off [switch~] runs one block of that subpatch's audio and stops. The help uses it to fill a table with a window function or noise without leaving that audio running.
-- **Closest in Max:** `buffer~`, `peek~`, `uzi`
+- **Closest in Max:** `buffer~`, `peek~`, `uzi`, `mute~`, `poly~`
 - **Checked:** Registry has no switch~ or block~. Read poly~, mute~ and pcontrol message lists: none steps DSP by one vector. buffer~ has a fill message for functions; peek~ writes samples from messages.
 - **Notes:** Tables in Max are filled from the message side (buffer~ fill, uzi into peek~) or in a v8 script.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Max's registry has no switch~ or block~, and the mute~ and poly~ refpages offer no way to run one vector and stop. The use case in Pd's help, filling a table, is met in Max another way: buffer~'s fill message takes a constant or function, or uzi into peek~.
 - **Source:** <Documentation/5.reference/block~-help.pd>
 - id: `plugdata--compute-exactly-one-dsp-block-on-demand-bang-to-switch`
 
@@ -539,6 +477,18 @@ more than one tool documents is a stronger lead than a single entry.
 - **Checked:** Core registry grep 'speech', 'speak', 'tts': none. Package library: upshot_texttospeech ('text to speech engine'; library entry read, patch not opened).
 - **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=746>
 - id: `isadora--text-to-speech-as-one-object`
+
+### 2D path fades with merge, smoothing, looping and a circle tool (QLab)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Easing, smoothing and ramps
+- **There:** `2D Path`, `Merge`, `Smooth path`, `Loop`, `circle tool`
+- **What it does:** One fade moves two parameters along a drawn path (object position, video translation/rotation/scale, or two OSC values). If the target is not at the start, merge eases it onto the path over a chosen percentage of the fade; paths can be smoothed and looped (5.6).
+- **Closest in Max:** `jit.path`, `jit.path.ui`, `jit.anim.path`, `function`
+- **Checked:** function refpage: a 1D breakpoint editor. nodes refpage: weights from a slider position, not a path over time. No refpage read draws or plays a 2D path.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). jit.path (jit-ref) plays an N-dimensional point path over a duration, with interpolation modes, loop and closed attributes. jit.path.ui (bundled Jitter Tools) lets you edit such a path in the render window. There is no merge-onto-path option and no circle tool, and it is a Jitter tool, not a fade on any parameter.
+- **Source:** <https://qlab.app/docs/v5/audio/fading-audio/> · <https://qlab.app/docs/v5/video/fading-video/> · <https://qlab.app/docs/v5/networking/network-cues/> · <https://qlab.app/docs/v5/general/change-log/>
+- id: `qlab--2d-path-fades-with-merge-smoothing-looping-and-a-circle-tool`
 
 ### Audio matrix in two stages: per-cue matrix into a per-patch matrix, with main, input, output and crosspoint levels in dB (QLab)
 
@@ -562,6 +512,18 @@ more than one tool documents is a stronger lead than a single entry.
 - **Source:** <https://qlab.app/docs/v5/other-cues/devamp-cues/> · <https://qlab.app/docs/v5/tutorials/intro-to-devamp-cues/>
 - id: `qlab--devamp-leave-a-loop-at-the-end-of-the-current-slice-and-fire-the-next-cue-on-that-exact-moment`
 
+### Fade and stop others, and duck others while a cue runs (QLab)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Scenes and cues as the structure of a show
+- **There:** `Fade & Stop Others Over Time`, `Duck/Boost Audio of Other Cues In This List While Running`
+- **What it does:** Starting a cue can fade and stop its peers, its whole list, or every cue, over a set time; or duck (or boost) the audio of the other cues in its list by a level for as long as it runs.
+- **Closest in Max:** `live.gain~`, `line~`, `send`, `receive`, `omx.comp~`
+- **Checked:** No Max object knows which other players are 'peers'. Ducking is built with live.gain~ or line~ per player plus s/r. No refpage read offers a scope-based fade-and-stop.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Max has no cue list, so no object knows a cue's 'peers'. The behaviour can be built from existing objects: s/r to every player, line~ or live.gain~ per player, or omx.comp~'s sidechain for signal ducking. The scope options QLab offers in one checkbox have to be wired by hand.
+- **Source:** <https://qlab.app/docs/v5/fundamentals/inspector/>
+- id: `qlab--fade-and-stop-others-and-duck-others-while-a-cue-runs`
+
 ### Object audio: marks that store output levels, with gravity, shadow, filters and object spread (QLab)
 
 - **Max:** Partly in Max · confidence medium · unreviewed
@@ -572,6 +534,18 @@ more than one tool documents is a stronger lead than a single entry.
 - **Checked:** nodes refpage: overlapping circular regions give weights by distance from a slider. Package library: abclib abc.vbap~ (VBAP), Panning Tools pan~. None stores arbitrary level sets at points with gravity, shadow or blocking lines, and none draws a heatmap.
 - **Source:** <https://qlab.app/docs/v5/audio/object-audio/> · <https://qlab.app/docs/v5/audio/audio-map-editor/>
 - id: `qlab--object-audio-marks-that-store-output-levels-with-gravity-shadow-filters-and-object-spread`
+
+### Relative fades, absolute-supersedes-relative, and Revert Fade Action (QLab)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Easing, smoothing and ramps
+- **There:** `Absolute Fade`, `relative fade`, `Revert Fade Action`
+- **What it does:** A fade can set end values or add/multiply (levels and translation add, scale and opacity multiply). An absolute fade clears earlier relative changes. Revert Fade Action undoes only the changes one fade made, keeping anything changed since.
+- **Closest in Max:** `line`, `line~`, `pattrstorage`
+- **Checked:** line and line~ ramp to absolute targets. pattrstorage refpage: recall and recallmulti interpolate between stored presets; no relative recall or per-fade undo is described.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). line and line~ ramp to absolute targets; a relative fade can be built by adding a ramped offset. pattrstorage interpolates between stored presets but its refpage describes no relative recall. Nothing undoes only one fade's changes, which is the real gap.
+- **Source:** <https://qlab.app/docs/v5/audio/fading-audio/> · <https://qlab.app/docs/v5/video/fading-video/>
+- id: `qlab--relative-fades-absolute-supersedes-relative-and-revert-fade-action`
 
 ### Several audio devices at once, one per output patch, plus separate input devices (QLab)
 
@@ -637,6 +611,20 @@ more than one tool documents is a stronger lead than a single entry.
 - **Source:** <https://ossia.io/score-docs/processes/audio-plugins.html> · <https://ossia.io/score-docs/reference/protocols-and-formats.html>
 - id: `ossia-score--plug-in-formats-beyond-vst-au-clap-lv2-jsfx-airwindows`
 
+### Runs Pure Data patches and compiles Faust inside (ossia score)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Hosting other vendors' engines
+- **There:** `Pure Data support`, `libpd`, `Faust`
+- **What it does:** A Pd patch dropped in becomes a process with audio, MIDI and value ports created from its adc~/dac~, MIDI and send/receive objects. Faust .dsp files are compiled on the spot, edited live and recompiled.
+- **Closest in Max:** `gen~`, `vst~`
+- **Third-party:** Faust (GRAME) `faustgen~, mc.faustgen~` <https://github.com/grame-cncm/faust/tree/master-dev/embedded/faustgen>
+- **Checked:** Registry: no Pd host, no faust object; query_packages 'faust': no matches. gen~ is Max's own compiled DSP language (max_system_model.json dimension 21), not Faust.
+- **Notes:** abclib, installed here, is built from Faust code but ships compiled Max externals.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Max has no Faust or Pd host built in. GRAME's faustgen~ compiles and live-edits Faust inside Max, covering half the entry. No way to host a Pd patch inside Max was found.
+- **Source:** <https://ossia.io/score-docs/processes/puredata.html> · <https://ossia.io/score-docs/processes/faust.html>
+- id: `ossia-score--runs-pure-data-patches-and-compiles-faust-inside`
+
 ### A full noise palette with seeds (plugdata (ELSE))
 
 - **Max:** Partly in Max · confidence medium · unreviewed
@@ -658,6 +646,19 @@ more than one tool documents is a stronger lead than a single entry.
 - **Checked:** Registry: no lorenz~, henon~ or similar. Bundled: abl.dsp.crackle~ ('Crackle sound generator'). query_packages.py 'lorenz' found xy.attractors~ in an installed third-party package. Any of the maps is a few lines of gen~ codebox.
 - **Source:** <Documentation/9.else/lorenz~-help.pd> · <Documentation/9.else/henon~-help.pd> · <Documentation/9.else/logistic~-help.pd> · <Documentation/9.else/gbman~-help.pd> · <Documentation/9.else/cusp~-help.pd> · <Documentation/9.else/crackle~-help.pd> · <Documentation/12.live-electronics-tutorial/Part.03-Sound.Generators/13-Noise-Chaos/9.Chaotic.pd>
 - id: `plugdata-else--chaotic-map-generators-with-a-rate-in-hertz`
+
+### Discrete-summation (DSF) band-limited oscillator (plugdata (ELSE))
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Filters and DSP conventions
+- **There:** `blip~`
+- **What it does:** Generates a sum of cosine partials in closed form: fundamental, number of partials, lowest harmonic and a multiplier that scales each next partial. Cost does not grow with the partial count. Based on Csound's gbuzz.
+- **Closest in Max:** `gen~`, `oscbank~`, `ioscbank~`
+- **Checked:** Registry and package search. No object named for buzz or DSF in obj-qlookup.json. query_packages.py 'band-limited' returned CNMAT sinusoids~ and unrelated objects. oscbank~ and ioscbank~ are additive banks whose cost grows with the number of oscillators.
+- **Notes:** Could be written in gen~ from the formula. The tutorial's comments call the object gbuzz~ while the box is blip~.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No DSF or buzz object in obj-qlookup.json or the package library. Max ships a gen~ example, Examples/gen/gen~.band_limited_saw.maxpat, whose code has a 'DSF section' computing a DSF BLIT with number of partials and rolloff. So the method is in Max as an example patch, not a ready object with ELSE's controls.
+- **Source:** <Documentation/9.else/blip~-help.pd> · <Documentation/12.live-electronics-tutorial/Part.03-Sound.Generators/12-Oscillators/3.Band.Limited(Anti-Aliased)/2.[blip~].DSF.pd>
+- id: `plugdata-else--discrete-summation-dsf-band-limited-oscillator`
 
 ### Event detectors that answer with impulses, not bangs (plugdata (ELSE))
 
@@ -775,6 +776,19 @@ more than one tool documents is a stronger lead than a single entry.
 - **Source:** <Documentation/9.else/conv~-help.pd> · <Documentation/10.cyclone/buffir~-help.pd> · <Documentation/12.live-electronics-tutorial/Part.09-Spectral.Processing/35-Advanced/2.Convolution/3.Partitioned.pd>
 - id: `plugdata-else--partitioned-convolution-with-a-table-as-the-impulse-response`
 
+### Port of the Mutable Instruments Plaits macro-oscillator (plugdata (ELSE))
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Encapsulation: ports, arguments, on and off
+- **There:** `plaits~`, `plaits.m~`
+- **What it does:** Twenty-four synthesis engines behind one object, with timbre, harmonics and morph inputs, a trigger and a level input, and pitch in Hz, MIDI or a -1 to 1 control voltage.
+- **Closest in Max:** `abl.dsp.meldosc~`, `vst~`
+- **Third-party:** vb-objects / Mutable Instruments Max port (Volker Böhm) `vb.mi.plts~` <https://vboehm.net/2020/02/mutable-instruments-max-port/>
+- **Checked:** No plaits object in the registry; query_packages.py 'plaits' returned nothing. The bundled abl.dsp.meldosc~ ('Meta-oscillator') is a different multi-engine oscillator.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No plaits object in Max or the installed packages. Volker Böhm's free vb.mi.plts~ ports Plaits to Max, so the gap closes with an install.
+- **Source:** <Documentation/9.else/plaits~-help.pd> · <Documentation/12.live-electronics-tutorial/Part.04-Control/18-MIDI-CV-OSC-Net/2.CV/5.[plaits~].pd>
+- id: `plugdata-else--port-of-the-mutable-instruments-plaits-macro-oscillator`
+
 ### Randomness triggered by impulses, with weights (plugdata (ELSE))
 
 - **Max:** Partly in Max · confidence medium · unreviewed
@@ -873,6 +887,19 @@ more than one tool documents is a stronger lead than a single entry.
 - **Checked:** Refpages. lookup~: 'Transfer function lookup table' reading a buffer~. pong~: folding, wrapping and clipping with a mode attribute. No object generates Chebyshev transfer functions in the registry; PeRColate's gen17 (installed) fills a table with one.
 - **Source:** <Documentation/9.else/shaper~-help.pd> · <Documentation/9.else/power~-help.pd> · <Documentation/9.else/fold~-help.pd> · <Documentation/12.live-electronics-tutorial/Part.05-Synthesis(Basic)/25-Waveshaping/7.Chebyshev.polinomials/2.[shaper~].pd>
 - id: `plugdata-else--waveshaper-that-builds-a-chebyshev-function-from-harmonic-weights`
+
+### Xenakis-style dynamic stochastic synthesis (plugdata (ELSE))
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Synthesis methods as single objects
+- **There:** `gendyn~`, `gendyn.m~`
+- **What it does:** A waveform made of a few breakpoints whose positions and amplitudes each move by random walk on every cycle, with a choice of distributions, step sizes, a frequency range or centre frequency with bandwidth, and interpolation.
+- **Closest in Max:** `gen~`
+- **Third-party:** gendynix~ (Rodolphe Bourotte) `gendynix~` <https://cycling74.com/tools/gendynix> · gendyflext (Spencer Russell) `gendy~` <https://github.com/ssfrr/gendyflext>
+- **Checked:** No object of that kind in obj-qlookup.json. query_packages.py 'gendy' returned nothing.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Nothing built in or installed ('gendy' finds nothing). Two old third-party externals exist, gendynix~ and gendy~ from gendyflext; both may not run on current Max.
+- **Source:** <Documentation/9.else/gendyn~-help.pd> · <Documentation/12.live-electronics-tutorial/Part.11-Synthesis(Advanced)/38-Stochastic/1.gendyn~.pd>
+- id: `plugdata-else--xenakis-style-dynamic-stochastic-synthesis`
 
 ### A bang for every DSP block ([bang~]) (plugdata (Pd vanilla))
 
@@ -2265,62 +2292,29 @@ more than one tool documents is a stronger lead than a single entry.
 
 ## data/tables/scripting
 
-### Embedded Python with virtual environments and pip packages (Isadora)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Python inside the patch
-- **There:** `Pythoner`
-- **What it does:** Runs Python scripts inside the patch in one long-lived interpreter, with inputs and outputs as script values, virtual environments, pip packages, and a per-show environment folder that travels with the file. Not sandboxed.
-- **Closest in Max:** `v8`, `node.script`, `mxj`
-- **Checked:** Registry grep 'python' and 'py': no Python object. Package library search 'python': none installed. Max's scripting hosts are JavaScript (v8, js), Node (node.script) and Java (mxj).
-- **Notes:** Only the first tenth of the 38,000-character manual entry was read. Third-party Python externals for Max exist but are not installed here.
-- **Review:** 2026-10-02 (Claude): no object whose name contains 'python' in Max 9's obj-qlookup.json. Third-party packages that are not installed on this machine were not checked.
-- **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=657> · <https://troikatronix.com/files/isadora-manual.pdf#page=658> · <https://support.troikatronix.com/support/solutions/articles/13000118388-pythoner-updating-notes> · <https://troikatronix.com/isadora/>
-- id: `isadora--embedded-python-with-virtual-environments-and-pip-packages`
-
-### Act on every address matching a pattern (ossia score)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Every parameter addressable: OSC, learn, binding, expressions
-- **There:** `Pattern Applier`, `Pattern Combiner`, `Sweeper`, `CSV Recorder`
-- **What it does:** Small processes take an address pattern: one spreads a list over the matching addresses, one combines their values (for example a mean), one sweeps a value across them in turn, and one records them all to CSV.
-- **Closest in Max:** `array.mean`, `mtr`
-- **Checked:** Max has no parameter tree to match against (see the device tree entry). array.mean exists in the registry for averaging a list; mtr records messages. Nothing addresses a set of parameters by pattern.
-- **Source:** <https://ossia.io/score-docs/processes/pattern-applier.html> · <https://ossia.io/score-docs/processes/pattern-combiner.html> · <https://ossia.io/score-docs/processes/sweeper.html> · <https://ossia.io/score-docs/processes/csv-recorder.html>
-- id: `ossia-score--act-on-every-address-matching-a-pattern`
-
-### Write one component of a multi-value parameter, in any unit (ossia score)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Every parameter addressable: OSC, learn, binding, expressions
-- **There:** `@[1]`, `@[color.rgb.r]`, `@[color.hsv.h]`
-- **What it does:** An address can name one element of an array parameter, or one component in a unit, such as the hue of an RGB colour. score converts the current value, replaces that component and converts back, so two processes can write two components of one colour.
-- **Closest in Max:** `zl`, `jit.colorspace`
-- **Checked:** No refpage read describes addressing a sub-component of a parameter on the way in; in Max this needs reading the whole value, editing it (zl, unjoin/join) and writing it back.
-- **Source:** <https://ossia.io/score-docs/in-depth/unit-system.html>
-- id: `ossia-score--write-one-component-of-a-multi-value-parameter-in-any-unit`
-
 ### A receive with a priority, giving ordered delivery (plugdata (Gem))
 
-- **Max:** Not in Max · confidence medium · unreviewed
+- **Max:** Not in Max · confidence medium · confirmed
 - **Theme:** Names and scope: send, receive, variables
 - **There:** `gemreceive`
 - **What it does:** gemreceive is a named receive with a number: among receivers of the same name, lower numbers get the message first. Gem's whole render order is built on it (gemhead is an abstraction around 'gemreceive __gem_render 50'), and it can be used for any ordered broadcast.
-- **Closest in Max:** `receive`, `trigger`
+- **Closest in Max:** `receive`, `trigger`, `pattrstorage`
 - **Checked:** Read receive.maxref.xml: no arguments or attributes beyond the name, one message (set). Nothing gives an order among receivers of one name. In Max, order is stated with trigger and cords.
 - **Notes:** Not a graphics feature, but it is what makes Gem's render order a plain number.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). receive.maxref.xml has no priority argument; Max states order with trigger and cords. pattrstorage has a priority message, but it only orders preset recall among pattr clients, not message delivery to receivers.
 - **Source:** <Documentation/14.gem/gemreceive-help.pd> · <Abstractions/Gem/gemhead.pd>
 - id: `plugdata-gem--a-receive-with-a-priority-giving-ordered-delivery`
 
 ### User-defined graphical data structures (plugdata (Pd vanilla))
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Not in Max · confidence high · confirmed
 - **Theme:** Tables, lists and data
 - **There:** `struct`, `scalar`, `pointer`, `get`, `set`, `append`, `element`, `getsize`, `setsize`, `drawpolygon`, `filledpolygon`, `drawcurve`, `plot`, `drawnumber`, `drawsymbol`, `drawtext`
 - **What it does:** A template declares named fields (float, symbol, text, nested arrays) and drawing instructions that use the fields as coordinates and colours. Each datum is drawn on a canvas, and dragging a drawn point edits the field behind it. Patches walk the data with pointers.
-- **Closest in Max:** `dict`, `jit.cellblock`, `v8ui`, `jsui`, `function`, `nodes`
+- **Closest in Max:** `dict`, `v8ui`, `jsui`, `jit.cellblock`, `nodes`
 - **Checked:** Registry searched for 'struct', 'draw': none (lcd exists and its digest says deprecated). dict holds nested data with no drawing. v8ui/jsui refpages: a script draws and handles the mouse, so the pairing of data and picture has to be written by hand each time.
 - **Notes:** The closest Max route is a v8ui script over a dict.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No struct-like object in Max's registry. dict holds nested data but draws nothing; v8ui and jsui can draw data and take mouse edits, but the link between fields and drawing is written by hand in a script each time.
 - **Source:** <Documentation/1.manual/resources/chapter2.htm> · <Documentation/4.data.structures/01.scalars.pd> · <Documentation/4.data.structures/06.array.pd> · <Documentation/5.reference/struct-help.pd> · <Documentation/5.reference/pointer-help.pd> · <Documentation/5.reference/draw-shapes-help.pd> · <Documentation/5.reference/plot-help.pd>
 - id: `plugdata--user-defined-graphical-data-structures`
 
@@ -2334,6 +2328,20 @@ more than one tool documents is a stronger lead than a single entry.
 - **Notes:** Read in full. Would port well as a v8 object.
 - **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=311> · <https://troikatronix.com/files/isadora-manual.pdf#page=312> · <https://troikatronix.com/files/isadora-manual.pdf#page=313> · <https://troikatronix.com/files/isadora-manual.pdf#page=314> · <https://troikatronix.com/files/isadora-manual.pdf#page=317> · <https://troikatronix.com/files/isadora-manual.pdf#page=318> · <https://troikatronix.com/files/isadora-manual.pdf#page=319> · <https://troikatronix.com/files/isadora-manual.pdf#page=320> · <https://troikatronix.com/files/isadora-manual.pdf#page=321> · <https://troikatronix.com/files/isadora-manual.pdf#page=716> · <https://troikatronix.com/files/isadora-manual.pdf#page=717> · <https://troikatronix.com/files/isadora-manual.pdf#page=764> · <https://troikatronix.com/files/isadora-manual.pdf#page=765>
 - id: `isadora--declarative-parser-for-serial-and-tcp-streams-that-creates-named-outputs`
+
+### Embedded Python with virtual environments and pip packages (Isadora)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Python inside the patch
+- **There:** `Pythoner`
+- **What it does:** Runs Python scripts inside the patch in one long-lived interpreter, with inputs and outputs as script values, virtual environments, pip packages, and a per-show environment folder that travels with the file. Not sandboxed.
+- **Closest in Max:** `v8`, `node.script`, `mxj`
+- **Third-party:** py-js (shakfu) `py, pyjs` <https://github.com/shakfu/py-js>
+- **Checked:** Registry grep 'python' and 'py': no Python object. Package library search 'python': none installed. Max's scripting hosts are JavaScript (v8, js), Node (node.script) and Java (mxj).
+- **Notes:** Only the first tenth of the 38,000-character manual entry was read. Third-party Python externals for Max exist but are not installed here.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No Python object in Max's registry; its built-in scripting is JavaScript (v8, node.script) and Java (mxj). The third-party py-js project embeds Python 3 in Max. Whether it handles virtual environments and pip per show like Isadora's Pythoner was not checked.
+- **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=657> · <https://troikatronix.com/files/isadora-manual.pdf#page=658> · <https://support.troikatronix.com/support/solutions/articles/13000118388-pythoner-updating-notes> · <https://troikatronix.com/isadora/>
+- id: `isadora--embedded-python-with-virtual-environments-and-pip-packages`
 
 ### Operations limited to channels picked by a name pattern (TouchDesigner)
 
@@ -2437,6 +2445,19 @@ more than one tool documents is a stronger lead than a single entry.
 - **Source:** <https://cables.gl/op/Ops.Data.SpreadSheetArray> · <https://cables.gl/ops/Ops.Json>
 - id: `cables-gl--editable-spreadsheet-op-that-outputs-rows-as-objects`
 
+### Act on every address matching a pattern (ossia score)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Every parameter addressable: OSC, learn, binding, expressions
+- **There:** `Pattern Applier`, `Pattern Combiner`, `Sweeper`, `CSV Recorder`
+- **What it does:** Small processes take an address pattern: one spreads a list over the matching addresses, one combines their values (for example a mean), one sweeps a value across them in turn, and one records them all to CSV.
+- **Closest in Max:** `array.mean`, `mtr`
+- **Third-party:** ossia-max (ossia) `ossia.remote, ossia.parameter` <https://ossia.io/ossia-docs/>
+- **Checked:** Max has no parameter tree to match against (see the device tree entry). array.mean exists in the registry for averaging a list; mtr records messages. Nothing addresses a set of parameters by pattern.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Max itself has no parameter tree to pattern-match. The third-party ossia-max package does: ossia.remote can bind to many parameters by wildcard. Pattern Combiner, Sweeper and CSV Recorder as ready processes were not found.
+- **Source:** <https://ossia.io/score-docs/processes/pattern-applier.html> · <https://ossia.io/score-docs/processes/pattern-combiner.html> · <https://ossia.io/score-docs/processes/sweeper.html> · <https://ossia.io/score-docs/processes/csv-recorder.html>
+- id: `ossia-score--act-on-every-address-matching-a-pattern`
+
 ### Auto-calibrating and shaping input maps (ossia score)
 
 - **Max:** Partly in Max · confidence medium · unreviewed
@@ -2457,6 +2478,19 @@ more than one tool documents is a stronger lead than a single entry.
 - **Checked:** Registry has separate converters: dbtoa/atodb, poltocar/cartopol, jit.colorspace (refpage: converts 4-plane char matrices between colourspaces). Each is an explicit object; nothing read attaches a unit to a parameter so conversion happens on the connection.
 - **Source:** <https://ossia.io/score-docs/in-depth/unit-system.html> · <https://ossia.io/ossia-docs/>
 - id: `ossia-score--automatic-unit-conversion-between-ports-and-parameters`
+
+### Write one component of a multi-value parameter, in any unit (ossia score)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Every parameter addressable: OSC, learn, binding, expressions
+- **There:** `@[1]`, `@[color.rgb.r]`, `@[color.hsv.h]`
+- **What it does:** An address can name one element of an array parameter, or one component in a unit, such as the hue of an RGB colour. score converts the current value, replaces that component and converts back, so two processes can write two components of one colour.
+- **Closest in Max:** `zl`, `jit.colorspace`, `jit.rgb2hsl`, `jit.hsl2rgb`
+- **Third-party:** ossia-max (ossia) `ossia.remote, ossia.parameter` <https://ossia.io/ossia-docs/>
+- **Checked:** No refpage read describes addressing a sub-component of a parameter on the way in; in Max this needs reading the whole value, editing it (zl, unjoin/join) and writing it back.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). In plain Max you read the whole value, edit it with zl or join/unjoin, convert colour spaces with jit.colorspace, and write it back. ossia-max adds unit conversion on remotes; whether it supports addressing one component like @[color.hsv.h] was not confirmed.
+- **Source:** <https://ossia.io/score-docs/in-depth/unit-system.html>
+- id: `ossia-score--write-one-component-of-a-multi-value-parameter-in-any-unit`
 
 ### Euclidean rhythm from a step number (plugdata (ELSE))
 
@@ -3159,17 +3193,6 @@ more than one tool documents is a stronger lead than a single entry.
 
 ## deployment
 
-### Export a mapping to a small standalone player that syncs with others (MadMapper)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Keeping several machines in step
-- **There:** `MiniMad`, `miniMAD`, `Export Video Mapping to MiniMad`, `MiniMad Video`, `MiniMad Light`, `MiniMad Controller`, `Sync Group`
-- **What it does:** A project's surfaces and media, or its recorded light sequences, are exported to a Raspberry Pi based box that plays them with no computer. Several boxes on one network cable keep their playback together with no configuration, and can be controlled from MadMapper or by OSC.
-- **Closest in Max:** `RNBO`, `standalone`
-- **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'raspberry': the userguide 'rnbo' topic says RNBO patchers export to hardware targets like Raspberry Pi; that is audio code, not video mapping or DMX playback. The registry has a 'standalone' object and the userguide a 'standalones_and_collectives' topic, for desktop applications.
-- **Source:** <https://docs.madmapper.com/madmapper/6/6.-outputs/minimad> · <https://docs.madmapper.com/madmapper/6/1.-introduction/extensions-and-companions> · <https://download.madmapper.com/minimad/MiniMad_3_User_Guide.pdf> · <https://madmapper.com/files/02-MiniMad%20Controller.pdf>
-- id: `madmapper--export-a-mapping-to-a-small-standalone-player-that-syncs-with-others`
-
 ### Run-only, password-locked show files with graded permissions (Isadora)
 
 - **Max:** Partly in Max · confidence medium · unreviewed
@@ -3180,6 +3203,18 @@ more than one tool documents is a stronger lead than a single entry.
 - **Checked:** Read userguide standalones_and_collectives.json headings: Max builds standalone applications and collectives. A standalone hides the patch but is a build, not a lock on an editable file with selectable permissions.
 - **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=214> · <https://troikatronix.com/files/isadora-manual.pdf#page=215>
 - id: `isadora--run-only-password-locked-show-files-with-graded-permissions`
+
+### Export a mapping to a small standalone player that syncs with others (MadMapper)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Keeping several machines in step
+- **There:** `MiniMad`, `miniMAD`, `Export Video Mapping to MiniMad`, `MiniMad Video`, `MiniMad Light`, `MiniMad Controller`, `Sync Group`
+- **What it does:** A project's surfaces and media, or its recorded light sequences, are exported to a Raspberry Pi based box that plays them with no computer. Several boxes on one network cable keep their playback together with no configuration, and can be controlled from MadMapper or by OSC.
+- **Closest in Max:** `standalone`, `rnbo~`
+- **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'raspberry': the userguide 'rnbo' topic says RNBO patchers export to hardware targets like Raspberry Pi; that is audio code, not video mapping or DMX playback. The registry has a 'standalone' object and the userguide a 'standalones_and_collectives' topic, for desktop applications.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Max builds standalone applications (userguide standalones_and_collectives) but they need a full computer. The userguide rnbo topic says RNBO patchers export to Raspberry Pi, but that is audio code, not video mapping playback, and no auto-sync between boxes is described.
+- **Source:** <https://docs.madmapper.com/madmapper/6/6.-outputs/minimad> · <https://docs.madmapper.com/madmapper/6/1.-introduction/extensions-and-companions> · <https://download.madmapper.com/minimad/MiniMad_3_User_Guide.pdf> · <https://madmapper.com/files/02-MiniMad%20Controller.pdf>
+- id: `madmapper--export-a-mapping-to-a-small-standalone-player-that-syncs-with-others`
 
 ### Render the whole show to files: video per output, laser, DMX and audio (MadMapper)
 
@@ -3427,215 +3462,182 @@ more than one tool documents is a stronger lead than a single entry.
 
 ## lighting/DMX/lasers
 
-### Art-Net DMX send and receive (Isadora)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** DMX, Art-Net and sACN in and out
-- **There:** `ArtNet Send`, `ArtNet Receive`, `LanBox Channels`
-- **What it does:** Sends a DMX frame to an Art-Net node or broadcasts it, at a limited rate, and receives DMX so a lighting desk can drive the patch. Nodes on the network are listed in a menu.
-- **Closest in Max:** `fxwdmxusbpro (Max for the Visual Arts)`, `udpsend`, `serial`
-- **Checked:** Registry grep 'dmx', 'artnet', 'sacn': none. Refpage grep 'dmx': only a mention in serial. Package library: fxwdmxusbpro only (library entry read: sends DMX to an Enttec DMX USB Pro over serial). No Art-Net or sACN object is installed. udpsend refpage read: it has a rawbytes message, so Art-Net packets could be built by hand.
-- **Notes:** Well-known third-party Art-Net externals exist for Max but none is installed, so none was verified.
-- **Review:** 2026-10-02 (Claude): no object whose name contains 'artnet' in Max 9's obj-qlookup.json. Third-party packages that are not installed on this machine were not checked.
-- **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=403> · <https://troikatronix.com/files/isadora-manual.pdf#page=404> · <https://troikatronix.com/files/isadora-manual.pdf#page=405> · <https://troikatronix.com/files/isadora-manual.pdf#page=554> · <https://troikatronix.com/isadora/lighting-control/> · <https://support.troikatronix.com/support/solutions/articles/13000042899-controlling-led-strips-via-artnet>
-- id: `isadora--art-net-dmx-send-and-receive`
-
-### Lighting-style soft patch that crossfades with the Scenes (Isadora)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Lighting fixtures driven from the picture or from geometry
-- **There:** `Matrix Value Send`, `Matrix Value Receive`, `Matrix Color Send`, `Channel Map`, `Master`
-- **What it does:** Cues send levels to logical channels. One receiver maps each logical channel to any set of output channels through an editable table, applies a grand master, and blends levels from two Scenes according to their fade progress, so a Scene crossfade is also a lighting crossfade. Output is formatted text for Art-Net, serial DMX or MIDI.
-- **Closest in Max:** `router`, `matrixctrl`, `pattrstorage`, `coll`
-- **Checked:** Registry has router and matrixctrl (names seen; refpages not read this session). pattrstorage refpage read: interpolates between stored presets, which is the nearest thing to a level crossfade. No object combines a patch table, a master and cue-driven mixing.
-- **Notes:** Matrix Value Receive was read in full. Matrix Color Send, which samples pixel rows or columns of a video into the same channels for LED strips, was read in part; that sampling step alone is not a gap, since jit.spill ('Unroll a matrix into a list') and jit.iter exist in the registry. The soft patch with cue-driven mixing is the idea worth porting.
-- **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=580> · <https://troikatronix.com/files/isadora-manual.pdf#page=581> · <https://troikatronix.com/files/isadora-manual.pdf#page=582> · <https://troikatronix.com/files/isadora-manual.pdf#page=583> · <https://troikatronix.com/files/isadora-manual.pdf#page=584> · <https://support.troikatronix.com/support/solutions/articles/13000085235-routing-values-using-the-matrix-value-send-and-receive-actors>
-- id: `isadora--lighting-style-soft-patch-that-crossfades-with-the-scenes`
-
-### PJLink projector control (Isadora)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Controlling projectors, cameras and show gear
-- **There:** `Send PJLink`
-- **What it does:** Sends PJLink commands to a networked projector, with optional password, and outputs the projector's reply. Used to close the shutter between cues instead of projecting black.
-- **Closest in Max:** `sadam.tcpClient (Sadam Library)`, `mxj net.tcp.send`, `node.script`
-- **Checked:** Registry and package search 'pjlink': none. PJLink is a text protocol over TCP port 4352 (per the manual). Max's core registry has no TCP client: grep 'tcp' matched nothing, and 'net.' matched only jit.net.send and jit.net.recv, which carry matrices. sadam.tcpClient is installed (library entry read: 'Bidirectional TCP client'). max-mxj ships net.tcp.send and net.tcp.recv help files (seen by name, not read).
-- **Notes:** Category is the nearest fit: projector hardware control.
-- **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=707> · <https://troikatronix.com/files/isadora-manual.pdf#page=708> · <https://support.troikatronix.com/support/solutions/articles/13000067857-using-the-send-pjlink-actor>
-- id: `isadora--pjlink-projector-control`
-
-### Art-Net and sACN in and out, with node discovery and many universes (MadMapper)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** DMX, Art-Net and sACN in and out
-- **There:** `Art-Net`, `sACN`, `ArtNet In`, `Unicast`, `Universe Synchronization`, `DMX Monitor`, `DMX Router`, `DMX to OSC`, `DMX Input`
-- **What it does:** MadMapper sends and receives DMX over Ethernet as Art-Net or sACN, in broadcast or unicast, finds Art-Net nodes by polling, and handles thousands of universes. Incoming DMX can control any parameter. Small modules route universes to USB interfaces, forward a universe as OSC, and show live channel values.
-- **Closest in Max:** `udpsend`, `udpreceive`, `fxwdmxusbpro (Max for the Visual Arts)`
-- **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'art-net', 'artnet', 'sacn', 'e131': no hits in Max or in the package library. udpsend and udpreceive (refpages: send and receive messages over UDP) are the only transport; the packet format would have to be built by hand.
-- **Notes:** Third-party Art-Net externals for Max may exist outside this machine; none is in the repo's package library.
-- **Review:** 2026-10-02 (Claude): no object whose name contains 'artnet' in Max 9's obj-qlookup.json. Third-party packages that are not installed on this machine were not checked.
-- **Source:** <https://docs.madmapper.com/madmapper/6/5.-dmx-and-led-mapping/dmx-fundamentals> · <https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences> · <https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control> · <https://docs.madmapper.com/madmapper/6/8.-modules> · <https://docs.madmapper.com/madmapper/6/15.-troubleshooting> · <https://madmapper.com/madmapper/features>
-- id: `madmapper--art-net-and-sacn-in-and-out-with-node-discovery-and-many-universes`
-
 ### Camera scan that calibrates a laser to the scene (MadMapper)
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Not in Max · confidence high · confirmed
 - **Theme:** Laser output
 - **There:** `Laser Scanner`, `MAD Laser Scanner`
 - **What it does:** The laser draws a moving 16 x 16 grid of dots while a camera records them. The result is a background image for the laser output showing the scene from the laser's position, for aligning paths to real objects.
 - **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'laser', 'ilda', 'galvo': no hits in Max; one package hit, Vsynth's vector_3ch_out (see the laser output candidate).
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Max has no laser output of its own, so nothing calibrates one. Grepped refpages, bundled docs and the package library for laser and ILDA: only Vsynth's vector audio output turned up.
 - **Source:** <https://docs.madmapper.com/madmapper/6/7.-laser-madlaser/tools-laser-scanner> · <https://docs.madmapper.com/madmapper/6/12.-advanced/special-tools-and-auto-calibration>
 - id: `madmapper--camera-scan-that-calibrates-a-laser-to-the-scene`
 
-### Camera scan that finds where every LED pixel is (MadMapper)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Lighting fixtures driven from the picture or from geometry
-- **There:** `LED Scanner`, `Start Scan`, `DMX Range`, `Map LEDs at 0,0 if not detected`
-- **What it does:** MadMapper flashes each LED in a DMX range one at a time while a camera watches, then places the fixtures in the workspace where the camera saw them. An irregular LED installation is mapped without measuring.
-- **Closest in Max:** `jit.grab`
-- **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). No DMX output objects in Max to begin with (see the DMX candidates). 'pixel map' and 'fixture': no relevant hits.
-- **Source:** <https://docs.madmapper.com/madmapper/6/5.-dmx-and-led-mapping/tools-led-scanner> · <https://docs.madmapper.com/madmapper/6/12.-advanced/special-tools-and-auto-calibration>
-- id: `madmapper--camera-scan-that-finds-where-every-led-pixel-is`
-
-### DMX fixtures as surfaces that sample the picture under them (MadMapper)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Lighting fixtures driven from the picture or from geometry
-- **There:** `MadLight`, `DMX Fixture`, `DMX Line`, `DMX Circle`, `DMX Bézier`, `DMX samplers`, `DMX Filtering`, `Response Curve`
-- **What it does:** A light fixture is placed on the output like a video surface and takes its colour from the pixels beneath it, so any video composition drives LEDs and lights directly. Sampling can be one pixel, a box average, or a stretched average for strips, and each fixture has a response curve.
-- **Closest in Max:** `fxwdmxusbpro (Max for the Visual Arts)`, `jit.matrix`, `serial`
-- **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'dmx': no Max object; the word appears once, in the serial refpage. One package hit: fxwdmxusbpro (an abstraction that sends a list of channel values to an Enttec DMX USB Pro over serial). 'fixture', 'pixel map': nothing. A Max user would read pixels from a jit.matrix and build the channel list by hand.
-- **Source:** <https://docs.madmapper.com/madmapper/6/5.-dmx-and-led-mapping/dmx-fundamentals> · <https://docs.madmapper.com/madmapper/6/5.-dmx-and-led-mapping/dmx-fixtures> · <https://docs.madmapper.com/madmapper/6/1.-introduction/what's-new/madmapper-v6>
-- id: `madmapper--dmx-fixtures-as-surfaces-that-sample-the-picture-under-them`
-
 ### Fixture definitions: channel types, 16-bit pairs, computed channels, wiring order (MadMapper)
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Not in Max · confidence high · confirmed
 - **Theme:** Lighting fixtures driven from the picture or from geometry
 - **There:** `Fixture Editor`, `DMX Fixture Definitions`, `Pixel Type`, `Pixel Size`, `Assignation`, `Slider`, `Expression`, `16 Bits`, `LED Strip Mode`, `Matrix Mode`, `Skip channels 511–512`
 - **What it does:** A fixture type is described once: its pixel grid, the meaning of each channel (colour components, generic sliders, or a value computed by a GLSL expression from colour, position, time and other sliders), 8 or 16 bits, and which of 16 wiring orders its pixels follow. Definitions are files that can be shared. Moving heads use colour channels fed by video and slider channels for pan, tilt and gobo.
+- **Closest in Max:** `dict`
+- **Third-party:** LXMax (unreleased) `lx.dmx.write / lx.fixture (planned)` <https://github.com/pixsper/lxmax>
 - **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'fixture': no hits anywhere.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No fixture-definition system in Max or the installed packages. imp.dmx only offers 8/16-bit converters. LXMax lists fixture objects on its roadmap but has no release.
 - **Source:** <https://docs.madmapper.com/madmapper/6/14.-technical-notes/dmx-fixture-definitions> · <https://docs.madmapper.com/madmapper/6/5.-dmx-and-led-mapping/dmx-fixtures> · <https://docs.madmapper.com/madmapper/6/5.-dmx-and-led-mapping/controlling-moving-lights>
 - id: `madmapper--fixture-definitions-channel-types-16-bit-pairs-computed-channels-wiring-order`
 
 ### Fixture layouts imported from and exported to SVG or CSV, patch included (MadMapper)
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Not in Max · confidence high · confirmed
 - **Theme:** Lighting fixtures driven from the picture or from geometry
 - **There:** `Import Fixtures`, `Export Fixtures`, `Import DMX Fixtures from CSV`, `__UN__`, `__CH__`, `__FT__`, `__FD__`, `__SL__`
 - **What it does:** A lighting layout drawn in a vector program becomes patched fixtures on import: universe, channel, fixture type and strip length are read from each shape's id or attributes, and layer groups become fixture groups. Exporting gives an SVG that rebuilds the same setup or serves as a guide for making video.
 - **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). No fixture concept in Max, so nothing to import into.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No Max object or package turns an SVG or CSV into patched fixtures; Max has no fixture concept to import into. Checked the package library for fixture and DMX terms.
 - **Source:** <https://docs.madmapper.com/madmapper/6/14.-technical-notes/dmx:-import-export-from-svg> · <https://docs.madmapper.com/madmapper/6/14.-technical-notes/dmx-fixture-definitions>
 - id: `madmapper--fixture-layouts-imported-from-and-exported-to-svg-or-csv-patch-included`
 
 ### ILDA files: import, export and recording (MadMapper)
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Not in Max · confidence high · confirmed
 - **Theme:** Laser output
 - **There:** `ILDA Files`, `Store Ilda Frame`, `Record Ilda Movie`, `Record at fixed frame rate`, `Record as ILDA stream`, `ILDA Export`
 - **What it does:** Standard .ild laser files play as media on laser surfaces. Any laser output can save its current frame or record a movie of its points, either at a fixed frame rate or as a raw point stream for playing from a laser's own SD card. Timelines export to ILDA slower than real time.
+- **Third-party:** Maxwell (standalone app built in Max, not a package) `custom laser-DAC external inside the app` <https://cycling74.com/articles/pew-pew---maxwell-meets-lasers>
 - **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'ilda': no hits anywhere.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No Max object or installed package reads or writes .ild files; grepped docs and the package library for ILDA. The Maxwell app (built in Max) records ILDA files, but it is a standalone app, not something a patch can use.
 - **Source:** <https://docs.madmapper.com/madmapper/6/7.-laser-madlaser/ilda-files> · <https://docs.madmapper.com/madmapper/6/6.-outputs> · <https://madmapper.com/files/MadLaser%20Guide.pdf> · <https://docs.madmapper.com/madmapper/6/6.-outputs/timeline-export>
 - id: `madmapper--ilda-files-import-export-and-recording`
 
-### Laser output to ILDA DACs, including over audio channels (MadMapper)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Laser output
-- **There:** `MadLaser`, `Laser Output`, `Etherdream`, `ShowNET`, `Helios USB`, `LaserCube`, `IDN`, `FB4`, `Moncha`, `Enable Audio Laser (AVB / Dante)`, `PPS`, `Desired FPS`
-- **What it does:** Drives laser projectors directly: coloured paths are turned into frames of points and sent to network or USB DACs, or as five audio channels (X, Y, R, G, B) to an AVB or Dante audio interface. Any number of lasers can be used.
-- **Closest in Max:** `vector_3ch_out (Vsynth)`
-- **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'ilda', 'etherdream', 'galvo': no hits anywhere. 'laser': one package hit, Vsynth's vector_3ch_out (package entry: sends vector X, Y and brightness signals to audio outputs). That is the same idea as MadMapper's audio laser output, without colour channels or any DAC protocol.
-- **Notes:** The audio route is the one a Max patch could plausibly follow, since X/Y/R/G/B as signals is ordinary MSP. Whether vector_3ch_out is meant for lasers or for oscilloscopes was not checked.
-- **Source:** <https://docs.madmapper.com/madmapper/6/7.-laser-madlaser> · <https://docs.madmapper.com/madmapper/6/6.-outputs> · <https://docs.madmapper.com/madmapper/6/13.-setup-and-installation/additional-hardware> · <https://madmapper.com/files/MadLaser%20AVB%20Support-1.pdf> · <https://madmapper.com/extensions/madlaser>
-- id: `madmapper--laser-output-to-ilda-dacs-including-over-audio-channels`
-
 ### Laser path planning: blanking, corner dwell, speed, draw order, frame rate (MadMapper)
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Not in Max · confidence high · confirmed
 - **Theme:** Laser output
 - **There:** `Laser Render`, `Max Speed`, `Optimize Angles`, `Angle Min`, `Angle Delay`, `End Repeat`, `In Fade`, `Out Fade`, `Point Intensity`, `Min Points`, `Blank Delay`, `Color Delay`, `Min Voltage`, `Scan Area`, `ILDA Mode`, `Preserve FPS`, `Preserve Image Quality`
 - **What it does:** Before points go to the laser, MadMapper orders the paths to shorten beam travel, shares scan time between paths by length, adds points at corners so they stay sharp, blanks the beam between paths, shifts colours in time to match the mirrors, and either holds the frame rate or holds the detail when there is too much to draw.
 - **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). No laser objects in Max or the package library, so none of this exists.
 - **Notes:** This is the part that would be hardest to rebuild; it encodes what real scanners can physically do.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Nothing in Max, the bundled packages or the package library does laser path optimisation, blanking or corner dwell. Searched for laser and ILDA in docs and packages.
 - **Source:** <https://madmapper.com/files/MadLaser%20Guide.pdf> · <https://docs.madmapper.com/madmapper/6/6.-outputs> · <https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences/madlaser-preferences> · <https://raw.githubusercontent.com/madmappersoftware/MadMapper-Materials/HEAD/LaserMaterialsDoc.md>
 - id: `madmapper--laser-path-planning-blanking-corner-dwell-speed-draw-order-frame-rate`
 
 ### Laser safety limits built into the output (MadMapper)
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Not in Max · confidence high · confirmed
 - **Theme:** Laser output
 - **There:** `Laser Safety Zones & Masks`, `Masks`, `Invert Mask`, `Mask Beams Only`, `Max non-moving Beam Intensity`, `Unlock Security Features`, `Arm Lasers`
 - **What it does:** Each laser output has masks the beam cannot enter, or enters only at reduced power, and a limit on the power of a beam that is not moving. Lasers emit nothing until armed and are un-armed when the computer wakes from sleep.
 - **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). No laser objects in Max or the package library.
 - **Notes:** The manual itself says software masks must not be the only protection.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No laser output and so no laser safety masks or arming in Max or any package found. Same searches as the other laser entries.
 - **Source:** <https://docs.madmapper.com/madmapper/6/7.-laser-madlaser/laser-visualization-and-safety> · <https://docs.madmapper.com/madmapper/6/7.-laser-madlaser/getting-started-with-madlaser> · <https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences/madlaser-preferences> · <https://docs.madmapper.com/madmapper/6/1.-introduction/what's-new/release-notes-v6>
 - id: `madmapper--laser-safety-limits-built-into-the-output`
 
-### Record DMX streams with synced audio and play them back (MadMapper)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** DMX, Art-Net and sACN in and out
-- **There:** `MadLight Recorder`, `MadLight Sequence`, `MadLight Player`, `Export to MiniMad`, `Sync`
-- **What it does:** Records every DMX frame MadMapper sends, or that arrives from another desk, into a compact sequence file with an optional audio track kept in sync. Sequences are replayed by a player module, placed in timelines, or exported to a standalone player.
-- **Closest in Max:** `mtr`
-- **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). mtr's refpage: records messages and plays them back in sequence, with read and write. It could record channel lists as messages, but there is no DMX-specific recorder and no stored-changes-only file format.
-- **Source:** <https://docs.madmapper.com/madmapper/6/5.-dmx-and-led-mapping/madlight-recorder> · <https://docs.madmapper.com/madmapper/6/6.-outputs/timeline-export> · <https://docs.madmapper.com/madmapper/6/15.-troubleshooting/madmapper-release-notes-history>
-- id: `madmapper--record-dmx-streams-with-synced-audio-and-play-them-back`
-
 ### Split one laser composition across several lasers (MadMapper)
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Not in Max · confidence high · confirmed
 - **Theme:** Laser output
 - **There:** `Laser Dispatch`, `Dispatch Count`, `Publish Internal Loopback`, `Laser Buffer`
 - **What it does:** A laser composition built on an output with no hardware is looped back as media and shared out between several real lasers, so a picture too complex for one scanner stays bright and steady. Shapes are tracked from frame to frame so each stays on the same laser. The looped composition can also be mesh warped as a whole.
 - **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). No laser objects in Max or the package library.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Max has no laser output, so nothing splits a composition between lasers. Same searches as the other laser entries.
 - **Source:** <https://madmapper.com/files/MadLaser%20Guide.pdf> · <https://docs.madmapper.com/madmapper/6/6.-outputs> · <https://docs.madmapper.com/madmapper/6/7.-laser-madlaser> · <https://docs.madmapper.com/madmapper/6/15.-troubleshooting/madmapper-release-notes-history>
 - id: `madmapper--split-one-laser-composition-across-several-lasers`
 
-### Fixture-level lighting from geometry attributes (TouchDesigner)
+### Art-Net DMX send and receive (Isadora)
 
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Lighting fixtures driven from the picture or from geometry
-- **There:** `DMX Fixture POP`, `DMX Out POP`, `DMX Map DAT`, `TDGdtf`
-- **What it does:** Each primitive of a geometry stands for one fixture. Point attributes such as colour and position are packed into the fixture's channel layout, including 16-bit channels, and addresses are laid out automatically. GDTF and MVR files describe the fixtures and the rig.
-- **Checked:** Same searches as the DMX entry. Nothing in the registry, refpages or installed packages maps structured data onto fixture profiles or reads GDTF or MVR.
-- **Source:** <https://docs.derivative.ca/DMX_Fixture_POP> · <https://docs.derivative.ca/DMX_Out_POP> · <https://docs.derivative.ca/DMX_Map_DAT> · <https://docs.derivative.ca/GDTF_and_MVR_in_TouchDesigner>
-- id: `touchdesigner--fixture-level-lighting-from-geometry-attributes`
-
-### Pan and tilt solving for moving heads (TouchDesigner)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Lighting fixtures driven from the picture or from geometry
-- **There:** `Pan Tilt CHOP`
-- **What it does:** Works out the pan and tilt angles that aim each moving-head fixture at a 3D target, choosing angles that avoid flips, with range limits.
-- **Checked:** Searched the registry and refpage text for pan-tilt and 'moving head': no match. The trigonometry could be written in expr or JavaScript.
-- **Source:** <https://docs.derivative.ca/Pan_Tilt_CHOP>
-- id: `touchdesigner--pan-and-tilt-solving-for-moving-heads`
-
-### Art-Net output as virtual named nodes, with discovery, soft patch, channel lists, output monitor, colour master and blackout on mute (Vezér)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Mapping editor: slices, masks and warps on the output
-- **There:** `Art-Net Outputs`, `virtual output nodes`, `DMX Soft Patching`, `DMX Output Monitor`, `Art-Net Color Master Fader`, `DMX Blackout on Mute`, `1x10, 12, 24`
-- **What it does:** Tracks send to named virtual nodes (up to 256: 16 subnets of 16 universes), which can be auto-created from discovered Art-Net devices. A soft patch reroutes source universe and channel to destination without touching tracks. One track can feed a channel list such as '1x10, 12, 24'; 16-bit values span two channels. A monitor shows a universe's output, a master fader scales all colour tracks, and muting a track or soloing another composition can send zero.
-- **Closest in Max:** `udpsend`, `serial`
-- **Checked:** No artnet or dmx object in obj-qlookup.json (Max registry, core plus bundled packages). query_packages: only fxwdmxusbpro (Max for the Visual Arts), an abstraction sending DMX to an Enttec USB Pro over serial; nothing for Art-Net.
-- **Notes:** Art-Net is already listed absent from MadMapper, Isadora and ossia; this entry is about Vezér's output-side tools (virtual nodes, channel lists, blackout on mute).
-- **Source:** <https://imimot.com/help/vezer/general/preferences-art-net> · <https://imimot.com/help/vezer/general/outputs-of-vezer> · <https://imimot.com/help/vezer/tools/dmx-soft-patching> · <https://imimot.com/help/vezer/tools/dmx-output-monitor> · <https://imimot.com/help/vezer/tools/art-net-color-master-fader> · <https://imimot.com/help/vezer/tracks/art-net-value-track> · <https://imimot.com/help/vezer/tracks/16-bit-art-net-support> · <https://imimot.com/help/vezer/general/preferences-global-behaviours>
-- id: `vezer--art-net-output-as-virtual-named-nodes-with-discovery-soft-patch-channel-lists-output-monitor-colour-master-and-blackout-on-mute`
-
-### Art-Net, sACN and ENTTEC DMX with fixture library (ossia score)
-
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Partly in Max · confidence high · confirmed
 - **Theme:** DMX, Art-Net and sACN in and out
-- **There:** `Art-Net / DMX device`, `s/ACN`, `ENTTEC DMX USB Pro`, `Open Fixture Library`
-- **What it does:** A lighting device speaks Art-Net, sACN or ENTTEC USB Pro (Mk2 can also receive). Fixtures from the Open Fixture Library format appear as named nodes; without fixtures, the 512 raw channels appear.
-- **Closest in Max:** `serial`, `udpsend`
-- **Checked:** Searched obj-qlookup.json (Max registry, core plus bundled packages) for dmx, artnet: none. query_packages 'dmx' finds only fxwdmxusbpro (Max for the Visual Arts, installed third-party): an abstraction sending to an ENTTEC USB Pro over serial. No Art-Net, sACN or fixture library.
-- **Source:** <https://ossia.io/score-docs/devices/artnet-device.html> · <https://ossia.io/score-docs/reference/protocols-and-formats.html>
-- id: `ossia-score--art-net-sacn-and-enttec-dmx-with-fixture-library`
+- **There:** `ArtNet Send`, `ArtNet Receive`, `LanBox Channels`
+- **What it does:** Sends a DMX frame to an Art-Net node or broadcasts it, at a limited rate, and receives DMX so a lighting desk can drive the patch. Nodes on the network are listed in a menu.
+- **Closest in Max:** `udpsend`, `udpreceive`, `serial`
+- **Third-party:** imp.dmx (not installed) `imp.dmx.artnetin / imp.dmx.artnetout` <https://cycling74.com/tools/imp-dmx-dmx-for-max> · Max for the Visual Arts (installed) `fxwdmxusbpro` <~/Documents/Max 9/Packages/Max for the Visual Arts>
+- **Checked:** Registry grep 'dmx', 'artnet', 'sacn': none. Refpage grep 'dmx': only a mention in serial. Package library: fxwdmxusbpro only (library entry read: sends DMX to an Enttec DMX USB Pro over serial). No Art-Net or sACN object is installed. udpsend refpage read: it has a rawbytes message, so Art-Net packets could be built by hand.
+- **Notes:** Well-known third-party Art-Net externals exist for Max but none is installed, so none was verified.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Nothing built in speaks Art-Net. imp.dmx (not installed) sends and receives Art-Net; it has no node menu.
+- **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=403> · <https://troikatronix.com/files/isadora-manual.pdf#page=404> · <https://troikatronix.com/files/isadora-manual.pdf#page=405> · <https://troikatronix.com/files/isadora-manual.pdf#page=554> · <https://troikatronix.com/isadora/lighting-control/> · <https://support.troikatronix.com/support/solutions/articles/13000042899-controlling-led-strips-via-artnet>
+- id: `isadora--art-net-dmx-send-and-receive`
+
+### PJLink projector control (Isadora)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Controlling projectors, cameras and show gear
+- **There:** `Send PJLink`
+- **What it does:** Sends PJLink commands to a networked projector, with optional password, and outputs the projector's reply. Used to close the shutter between cues instead of projecting black.
+- **Closest in Max:** `mxj`
+- **Third-party:** Sadam Library (installed) `sadam.tcpClient` <~/Documents/Max 9/Packages/Sadam Library> · osc-pjlink (community patch) `Max 6 patch` <https://github.com/PixelStereo/osc-pjlink>
+- **Checked:** Registry and package search 'pjlink': none. PJLink is a text protocol over TCP port 4352 (per the manual). Max's core registry has no TCP client: grep 'tcp' matched nothing, and 'net.' matched only jit.net.send and jit.net.recv, which carry matrices. sadam.tcpClient is installed (library entry read: 'Bidirectional TCP client'). max-mxj ships net.tcp.send and net.tcp.recv help files (seen by name, not read).
+- **Notes:** Category is the nearest fit: projector hardware control.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No PJLink object. PJLink is plain text over TCP port 4352, which Max can send with mxj net.tcp.send (max-mxj package, bundled; help file found) or node.script (Node for Max, bundled), or sadam.tcpClient. Community PJLink patches exist on the Max forum and GitHub.
+- **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=707> · <https://troikatronix.com/files/isadora-manual.pdf#page=708> · <https://support.troikatronix.com/support/solutions/articles/13000067857-using-the-send-pjlink-actor>
+- id: `isadora--pjlink-projector-control`
+
+### Art-Net and sACN in and out, with node discovery and many universes (MadMapper)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** DMX, Art-Net and sACN in and out
+- **There:** `Art-Net`, `sACN`, `ArtNet In`, `Unicast`, `Universe Synchronization`, `DMX Monitor`, `DMX Router`, `DMX to OSC`, `DMX Input`
+- **What it does:** MadMapper sends and receives DMX over Ethernet as Art-Net or sACN, in broadcast or unicast, finds Art-Net nodes by polling, and handles thousands of universes. Incoming DMX can control any parameter. Small modules route universes to USB interfaces, forward a universe as OSC, and show live channel values.
+- **Closest in Max:** `udpsend`, `udpreceive`, `serial`
+- **Third-party:** imp.dmx (not installed) `imp.dmx.artnetin / imp.dmx.artnetout` <https://cycling74.com/tools/imp-dmx-dmx-for-max> · LXMax (unreleased) `lx.dmx.write / lx.fixture (planned)` <https://github.com/pixsper/lxmax> · Max for the Visual Arts (installed) `fxwdmxusbpro` <~/Documents/Max 9/Packages/Max for the Visual Arts>
+- **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'art-net', 'artnet', 'sacn', 'e131': no hits in Max or in the package library. udpsend and udpreceive (refpages: send and receive messages over UDP) are the only transport; the packet format would have to be built by hand.
+- **Notes:** Third-party Art-Net externals for Max may exist outside this machine; none is in the repo's package library.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Nothing built in speaks Art-Net or sACN. The imp.dmx package (not installed) sends and receives Art-Net but has no sACN and no node discovery; LXMax plans both but is unreleased.
+- **Source:** <https://docs.madmapper.com/madmapper/6/5.-dmx-and-led-mapping/dmx-fundamentals> · <https://docs.madmapper.com/madmapper/6/2.-the-interface/madmapper-preferences> · <https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control> · <https://docs.madmapper.com/madmapper/6/8.-modules> · <https://docs.madmapper.com/madmapper/6/15.-troubleshooting> · <https://madmapper.com/madmapper/features>
+- id: `madmapper--art-net-and-sacn-in-and-out-with-node-discovery-and-many-universes`
+
+### Camera scan that finds where every LED pixel is (MadMapper)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Lighting fixtures driven from the picture or from geometry
+- **There:** `LED Scanner`, `Start Scan`, `DMX Range`, `Map LEDs at 0,0 if not detected`
+- **What it does:** MadMapper flashes each LED in a DMX range one at a time while a camera watches, then places the fixtures in the workspace where the camera saw them. An irregular LED installation is mapped without measuring.
+- **Closest in Max:** `jit.grab`, `metro`, `jit.findbounds`
+- **Third-party:** cv.jit (installed) `cv.jit.blobs.centroids` <~/Documents/Max 9/Packages/cv.jit> · imp.dmx (not installed) `imp.dmx.artnetin / imp.dmx.artnetout` <https://cycling74.com/tools/imp-dmx-dmx-for-max>
+- **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). No DMX output objects in Max to begin with (see the DMX candidates). 'pixel map' and 'fixture': no relevant hits.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No ready tool. It can be built: step through LEDs with metro, send DMX out, and find the bright spot with jit.findbounds or cv.jit.blobs.centroids. Web search found only standalone mappers (Lightwork, cymapper), not Max ones.
+- **Source:** <https://docs.madmapper.com/madmapper/6/5.-dmx-and-led-mapping/tools-led-scanner> · <https://docs.madmapper.com/madmapper/6/12.-advanced/special-tools-and-auto-calibration>
+- id: `madmapper--camera-scan-that-finds-where-every-led-pixel-is`
+
+### DMX fixtures as surfaces that sample the picture under them (MadMapper)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Lighting fixtures driven from the picture or from geometry
+- **There:** `MadLight`, `DMX Fixture`, `DMX Line`, `DMX Circle`, `DMX Bézier`, `DMX samplers`, `DMX Filtering`, `Response Curve`
+- **What it does:** A light fixture is placed on the output like a video surface and takes its colour from the pixels beneath it, so any video composition drives LEDs and lights directly. Sampling can be one pixel, a box average, or a stretched average for strips, and each fixture has a response curve.
+- **Closest in Max:** `jit.matrix`, `jit.spill`, `jit.gl.asyncread`, `serial`
+- **Third-party:** Max for the Visual Arts (installed) `fxwdmxusbpro` <~/Documents/Max 9/Packages/Max for the Visual Arts> · imp.dmx (not installed) `imp.dmx.artnetin / imp.dmx.artnetout` <https://cycling74.com/tools/imp-dmx-dmx-for-max>
+- **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'dmx': no Max object; the word appears once, in the serial refpage. One package hit: fxwdmxusbpro (an abstraction that sends a list of channel values to an Enttec DMX USB Pro over serial). 'fixture', 'pixel map': nothing. A Max user would read pixels from a jit.matrix and build the channel list by hand.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Sampling pixels into channel values works with jit.matrix and jit.spill, and serial's refpage documents break and mark-after-break settings for DMX. But fixtures as placeable surfaces with sampling modes and response curves do not exist; DMX out needs a third-party abstraction.
+- **Source:** <https://docs.madmapper.com/madmapper/6/5.-dmx-and-led-mapping/dmx-fundamentals> · <https://docs.madmapper.com/madmapper/6/5.-dmx-and-led-mapping/dmx-fixtures> · <https://docs.madmapper.com/madmapper/6/1.-introduction/what's-new/madmapper-v6>
+- id: `madmapper--dmx-fixtures-as-surfaces-that-sample-the-picture-under-them`
+
+### Laser output to ILDA DACs, including over audio channels (MadMapper)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Laser output
+- **There:** `MadLaser`, `Laser Output`, `Etherdream`, `ShowNET`, `Helios USB`, `LaserCube`, `IDN`, `FB4`, `Moncha`, `Enable Audio Laser (AVB / Dante)`, `PPS`, `Desired FPS`
+- **What it does:** Drives laser projectors directly: coloured paths are turned into frames of points and sent to network or USB DACs, or as five audio channels (X, Y, R, G, B) to an AVB or Dante audio interface. Any number of lasers can be used.
+- **Closest in Max:** `ezdac~`, `cycle~`
+- **Third-party:** Vsynth (installed) `vector_3ch_out` <~/Documents/Max 9/Packages/Vsynth> · Maxwell (standalone app built in Max, not a package) `custom laser-DAC external inside the app` <https://cycling74.com/articles/pew-pew---maxwell-meets-lasers>
+- **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'ilda', 'etherdream', 'galvo': no hits anywhere. 'laser': one package hit, Vsynth's vector_3ch_out (package entry: sends vector X, Y and brightness signals to audio outputs). That is the same idea as MadMapper's audio laser output, without colour channels or any DAC protocol.
+- **Notes:** The audio route is the one a Max patch could plausibly follow, since X/Y/R/G/B as signals is ordinary MSP. Whether vector_3ch_out is meant for lasers or for oscilloscopes was not checked.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Max has no ILDA DAC support. The audio route works in principle: X, Y and colour are ordinary MSP signals, and Vsynth's vector_3ch_out sends XY and brightness to audio outs. Maxwell, an app built in Max, drives Ether Dream and Helios through its own external, but that external is not a package.
+- **Source:** <https://docs.madmapper.com/madmapper/6/7.-laser-madlaser> · <https://docs.madmapper.com/madmapper/6/6.-outputs> · <https://docs.madmapper.com/madmapper/6/13.-setup-and-installation/additional-hardware> · <https://madmapper.com/files/MadLaser%20AVB%20Support-1.pdf> · <https://madmapper.com/extensions/madlaser>
+- id: `madmapper--laser-output-to-ilda-dacs-including-over-audio-channels`
+
+### Record DMX streams with synced audio and play them back (MadMapper)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** DMX, Art-Net and sACN in and out
+- **There:** `MadLight Recorder`, `MadLight Sequence`, `MadLight Player`, `Export to MiniMad`, `Sync`
+- **What it does:** Records every DMX frame MadMapper sends, or that arrives from another desk, into a compact sequence file with an optional audio track kept in sync. Sequences are replayed by a player module, placed in timelines, or exported to a standalone player.
+- **Closest in Max:** `mtr`, `sfrecord~`, `sfplay~`
+- **Third-party:** imp.dmx (not installed) `imp.dmx.artnetin / imp.dmx.artnetout` <https://cycling74.com/tools/imp-dmx-dmx-for-max>
+- **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). mtr's refpage: records messages and plays them back in sequence, with read and write. It could record channel lists as messages, but there is no DMX-specific recorder and no stored-changes-only file format.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). mtr ('Record and sequence messages') can record channel lists and sfrecord~ records audio, but keeping them in sync and exporting a player is left to the patcher. Receiving DMX at all needs a third-party package.
+- **Source:** <https://docs.madmapper.com/madmapper/6/5.-dmx-and-led-mapping/madlight-recorder> · <https://docs.madmapper.com/madmapper/6/6.-outputs/timeline-export> · <https://docs.madmapper.com/madmapper/6/15.-troubleshooting/madmapper-release-notes-history>
+- id: `madmapper--record-dmx-streams-with-synced-audio-and-play-them-back`
 
 ### Trace video into laser paths in real time (MadMapper)
 
@@ -3661,6 +3663,19 @@ more than one tool documents is a stronger lead than a single entry.
 - **Source:** <https://docs.derivative.ca/DMX> · <https://docs.derivative.ca/DMX_Out_CHOP> · <https://docs.derivative.ca/Art-Net> · <https://docs.derivative.ca/SACN> · <https://docs.derivative.ca/Art-Net_DAT>
 - id: `touchdesigner--dmx-art-net-sacn-and-kinet-input-and-output`
 
+### Fixture-level lighting from geometry attributes (TouchDesigner)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Lighting fixtures driven from the picture or from geometry
+- **There:** `DMX Fixture POP`, `DMX Out POP`, `DMX Map DAT`, `TDGdtf`
+- **What it does:** Each primitive of a geometry stands for one fixture. Point attributes such as colour and position are packed into the fixture's channel layout, including 16-bit channels, and addresses are laid out automatically. GDTF and MVR files describe the fixtures and the rig.
+- **Closest in Max:** `jit.spill`, `jit.matrix`, `vexpr`
+- **Third-party:** imp.dmx (not installed) `imp.dmx.artnetin / imp.dmx.artnetout` <https://cycling74.com/tools/imp-dmx-dmx-for-max> · LXMax (unreleased) `lx.dmx.write / lx.fixture (planned)` <https://github.com/pixsper/lxmax>
+- **Checked:** Same searches as the DMX entry. Nothing in the registry, refpages or installed packages maps structured data onto fixture profiles or reads GDTF or MVR.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Packing per-point colour into channel lists can be built from jit.spill ('Unroll a matrix into a list') and math; imp.dmx adds 16-bit splitting. Nothing in Max or any package reads GDTF or MVR, and no web result showed one for Max.
+- **Source:** <https://docs.derivative.ca/DMX_Fixture_POP> · <https://docs.derivative.ca/DMX_Out_POP> · <https://docs.derivative.ca/DMX_Map_DAT> · <https://docs.derivative.ca/GDTF_and_MVR_in_TouchDesigner>
+- id: `touchdesigner--fixture-level-lighting-from-geometry-attributes`
+
 ### Laser projector output (TouchDesigner)
 
 - **Max:** Partly in Max · confidence high · unreviewed
@@ -3672,6 +3687,45 @@ more than one tool documents is a stronger lead than a single entry.
 - **Source:** <https://docs.derivative.ca/Lasers> · <https://docs.derivative.ca/Laser_CHOP> · <https://docs.derivative.ca/Laser_Device_CHOP>
 - id: `touchdesigner--laser-projector-output`
 
+### Pan and tilt solving for moving heads (TouchDesigner)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Lighting fixtures driven from the picture or from geometry
+- **There:** `Pan Tilt CHOP`
+- **What it does:** Works out the pan and tilt angles that aim each moving-head fixture at a 3D target, choosing angles that avoid flips, with range limits.
+- **Closest in Max:** `jit.anim.node`, `jit.quat2euler`, `cartopol`
+- **Checked:** Searched the registry and refpage text for pan-tilt and 'moving head': no match. The trigonometry could be written in expr or JavaScript.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). jit.anim.node's lookat attribute orients a node toward a 3D point, and jit.quat2euler turns the result into angles, so basic aiming is a few objects. Flip avoidance, range limits and conversion to a fixture's DMX range are not provided; a Max forum thread shows people building it by hand.
+- **Source:** <https://docs.derivative.ca/Pan_Tilt_CHOP>
+- id: `touchdesigner--pan-and-tilt-solving-for-moving-heads`
+
+### Art-Net output as virtual named nodes, with discovery, soft patch, channel lists, output monitor, colour master and blackout on mute (Vezér)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** DMX, Art-Net and sACN in and out
+- **There:** `Art-Net Outputs`, `virtual output nodes`, `DMX Soft Patching`, `DMX Output Monitor`, `Art-Net Color Master Fader`, `DMX Blackout on Mute`, `1x10, 12, 24`
+- **What it does:** Tracks send to named virtual nodes (up to 256: 16 subnets of 16 universes), which can be auto-created from discovered Art-Net devices. A soft patch reroutes source universe and channel to destination without touching tracks. One track can feed a channel list such as '1x10, 12, 24'; 16-bit values span two channels. A monitor shows a universe's output, a master fader scales all colour tracks, and muting a track or soloing another composition can send zero.
+- **Closest in Max:** `coll`, `udpsend`
+- **Third-party:** imp.dmx (not installed) `imp.dmx.artnetin / imp.dmx.artnetout` <https://cycling74.com/tools/imp-dmx-dmx-for-max>
+- **Checked:** No artnet or dmx object in obj-qlookup.json (Max registry, core plus bundled packages). query_packages: only fxwdmxusbpro (Max for the Visual Arts), an abstraction sending DMX to an Enttec USB Pro over serial; nothing for Art-Net.
+- **Notes:** Art-Net is already listed absent from MadMapper, Isadora and ossia; this entry is about Vezér's output-side tools (virtual nodes, channel lists, blackout on mute).
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Art-Net output only through imp.dmx (not installed), with no discovery or virtual nodes. Soft patch and channel lists could be built with coll, but no Max tool provides them. Theme changed: this is about DMX output, not the mapping editor.
+- **Source:** <https://imimot.com/help/vezer/general/preferences-art-net> · <https://imimot.com/help/vezer/general/outputs-of-vezer> · <https://imimot.com/help/vezer/tools/dmx-soft-patching> · <https://imimot.com/help/vezer/tools/dmx-output-monitor> · <https://imimot.com/help/vezer/tools/art-net-color-master-fader> · <https://imimot.com/help/vezer/tracks/art-net-value-track> · <https://imimot.com/help/vezer/tracks/16-bit-art-net-support> · <https://imimot.com/help/vezer/general/preferences-global-behaviours>
+- id: `vezer--art-net-output-as-virtual-named-nodes-with-discovery-soft-patch-channel-lists-output-monitor-colour-master-and-blackout-on-mute`
+
+### Art-Net, sACN and ENTTEC DMX with fixture library (ossia score)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** DMX, Art-Net and sACN in and out
+- **There:** `Art-Net / DMX device`, `s/ACN`, `ENTTEC DMX USB Pro`, `Open Fixture Library`
+- **What it does:** A lighting device speaks Art-Net, sACN or ENTTEC USB Pro (Mk2 can also receive). Fixtures from the Open Fixture Library format appear as named nodes; without fixtures, the 512 raw channels appear.
+- **Closest in Max:** `serial`, `udpsend`
+- **Third-party:** imp.dmx (not installed) `imp.dmx.artnetin / imp.dmx.artnetout` <https://cycling74.com/tools/imp-dmx-dmx-for-max> · Max for the Visual Arts (installed) `fxwdmxusbpro` <~/Documents/Max 9/Packages/Max for the Visual Arts> · LXMax (unreleased) `lx.dmx.write / lx.fixture (planned)` <https://github.com/pixsper/lxmax>
+- **Checked:** Searched obj-qlookup.json (Max registry, core plus bundled packages) for dmx, artnet: none. query_packages 'dmx' finds only fxwdmxusbpro (Max for the Visual Arts, installed third-party): an abstraction sending to an ENTTEC USB Pro over serial. No Art-Net, sACN or fixture library.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Enttec USB Pro output exists via fxwdmxusbpro (installed) over serial, and Art-Net via imp.dmx (not installed). No sACN and no Open Fixture Library support found for Max.
+- **Source:** <https://ossia.io/score-docs/devices/artnet-device.html> · <https://ossia.io/score-docs/reference/protocols-and-formats.html>
+- id: `ossia-score--art-net-sacn-and-enttec-dmx-with-fixture-library`
+
 ### LED strips: textures and arrays to pixels (ossia score)
 
 - **Max:** Partly in Max · confidence medium · unreviewed
@@ -3681,6 +3735,19 @@ more than one tool documents is a stronger lead than a single entry.
 - **Checked:** jit.spill refpage: outputs matrix values as a Max list. That can turn a downsampled matrix into channel values, but Max has no LED output protocol (see the DMX entry).
 - **Source:** <https://ossia.io/score-docs/common-practices/13-led-design.html> · <https://ossia.io/score-docs/processes/pixel-utilities.html> · <https://ossia.io/score-docs/processes/array-utilities.html> · <https://ossia.io/score-docs/devices/led-device.html>
 - id: `ossia-score--led-strips-textures-and-arrays-to-pixels`
+
+### Lighting-style soft patch that crossfades with the Scenes (Isadora)
+
+- **Max:** In both, done differently · confidence high · confirmed
+- **Theme:** Lighting fixtures driven from the picture or from geometry
+- **There:** `Matrix Value Send`, `Matrix Value Receive`, `Matrix Color Send`, `Channel Map`, `Master`
+- **What it does:** Cues send levels to logical channels. One receiver maps each logical channel to any set of output channels through an editable table, applies a grand master, and blends levels from two Scenes according to their fade progress, so a Scene crossfade is also a lighting crossfade. Output is formatted text for Art-Net, serial DMX or MIDI.
+- **Closest in Max:** `pattrstorage`, `coll`, `matrixctrl`, `router`
+- **Checked:** Registry has router and matrixctrl (names seen; refpages not read this session). pattrstorage refpage read: interpolates between stored presets, which is the nearest thing to a level crossfade. No object combines a patch table, a master and cue-driven mixing.
+- **Notes:** Matrix Value Receive was read in full. Matrix Color Send, which samples pixel rows or columns of a video into the same channels for LED strips, was read in part; that sampling step alone is not a gap, since jit.spill ('Unroll a matrix into a list') and jit.iter exist in the registry. The soft patch with cue-driven mixing is the idea worth porting.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). pattrstorage interpolates between presets, so a scene crossfade of channel levels is native; coll or matrixctrl can hold the logical-to-output channel map. There is no single receiver that bundles soft patch, grand master and scene-linked blending, so it is assembled from these objects.
+- **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=580> · <https://troikatronix.com/files/isadora-manual.pdf#page=581> · <https://troikatronix.com/files/isadora-manual.pdf#page=582> · <https://troikatronix.com/files/isadora-manual.pdf#page=583> · <https://troikatronix.com/files/isadora-manual.pdf#page=584> · <https://support.troikatronix.com/support/solutions/articles/13000085235-routing-values-using-the-matrix-value-send-and-receive-actors>
+- id: `isadora--lighting-style-soft-patch-that-crossfades-with-the-scenes`
 
 ### Lighting cues that track, with pulls from other cues and parking (QLab)
 
@@ -3697,181 +3764,77 @@ more than one tool documents is a stronger lead than a single entry.
 
 ## networking/sync
 
-### IzzyCast: internet video, audio and data sessions between patches (Isadora)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Internet streaming and remote sessions
-- **There:** `IzzyCast Create Session`, `IzzyCast Join Session`, `IzzyCast Broadcaster`, `IzzyCast Receiver`, `IzzyCast Devices`
-- **What it does:** A host creates a session and others join by a session number. Each participant can send video, audio and control data to the others, and each incoming stream arrives as an ordinary video stream in the patch. Built on the Zoom Video SDK, so it needs no network set-up; paid by prepaid participant-minutes.
-- **Closest in Max:** `jit.net.send`, `jit.net.recv`, `node.script (Node for Max package)`, `AOO for Max (package, audio)`
-- **Checked:** jit.net.send refpage read: matrices to a jit.net.recv at a known host and port, no relay or NAT traversal. Installed 'AOO for Max' package is audio over network (seen in the package list; its objects were not read). Nothing found carries video between remote patches through a hosted service.
-- **Notes:** A paid hosted service, not a pure software feature. The IzzyCast feature pages were fetched and not read.
-- **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=524> · <https://troikatronix.com/files/isadora-manual.pdf#page=526> · <https://troikatronix.com/files/isadora-manual.pdf#page=533> · <https://troikatronix.com/files/isadora-manual.pdf#page=535> · <https://troikatronix.com/files/isadora-manual.pdf#page=540> · <https://support.troikatronix.com/support/solutions/articles/13000097342-izzycast-faq> · <https://troikatronix.com/izzycast/>
-- id: `isadora--izzycast-internet-video-audio-and-data-sessions-between-patches`
-
 ### Send laser paths to previsualisation programs and other apps (MadMapper)
 
-- **Max:** Not in Max · confidence medium · unreviewed
+- **Max:** Not in Max · confidence medium · confirmed
 - **Theme:** Laser output
 - **There:** `External Visualisation`, `Capture`, `Depence`, `WYSIWYG`, `LA.preview`, `Publish to PONK`, `PONK`, `Beam Preview`, `Enable Fog`
 - **What it does:** Laser output can be sent to 3D previsualisation software to program a show before the venue, and shared with other programs as paths over the network using the open PONK protocol. A beam preview with simulated fog can itself be shown on video outputs.
 - **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'ponk': no hits anywhere. No laser objects of any kind were found.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No laser or PONK object in Max or the package library. PONK has TouchDesigner and openFrameworks versions (github.com/madmappersoftware/Ponk, ofxPonk) but none for Max was found. Laser output from Max exists only through third-party tools (the Maxwell app; an ILDA/Ether Dream external described in the C74 article 'Pew Pew - Max/well Meets Lasers'), not previz or PONK.
 - **Source:** <https://docs.madmapper.com/madmapper/6/7.-laser-madlaser/laser-visualization-and-safety> · <https://docs.madmapper.com/madmapper/6/6.-outputs> · <https://docs.madmapper.com/madmapper/6/15.-troubleshooting/madmapper-release-notes-history> · <https://madmapper.com/extensions/madlaser>
 - id: `madmapper--send-laser-paths-to-previsualisation-programs-and-other-apps`
 
-### Switch projectors on and off and close their shutters over the network (MadMapper)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Controlling projectors, cameras and show gear
-- **There:** `MadProjectorControl`, `PJLink`, `Power`, `Mute`
-- **What it does:** A module per projector speaks PJLink: power and shutter buttons that follow the projector's real state, plus model and lamp information. Because the buttons are ordinary parameters, cues and schedulers can run a venue's projectors unattended.
-- **Closest in Max:** `sadam.tcpClient (Sadam Library)`
-- **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'pjlink': no hits anywhere. 'tcp': Max's own hits are jit.net.send and jit.net.recv, which are for matrices; the package library has sadam.tcpClient, sadam.tcpSender, sadam.tcpReceiver and sadam.tcpServer (Sadam Library, installed). So a TCP connection is available from a package and the PJLink commands would be written by hand.
-- **Notes:** The manual describes PJLink only as a network protocol; that it runs over TCP is not stated there, so sadam.tcpClient as the carrier is an assumption to confirm.
-- **Source:** <https://docs.madmapper.com/madmapper/6/12.-advanced/madprojectorcontrol> · <https://madmapper.com/files/MadMapper%20-%20MadProjectorControl%20Guide.pdf> · <https://madmapper.com/extensions/madprojectorcontrol>
-- id: `madmapper--switch-projectors-on-and-off-and-close-their-shutters-over-the-network`
-
-### Incoming timecode with lookback rules, freewheel and mid-cue starts (QLab)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Scenes and cues as the structure of a show
-- **There:** `Sync cues in this list to incoming timecode`, `On Start`, `lookback time`, `On Stop`, `Freewheel time`
-- **What it does:** A list listens to LTC or MTC. When timecode starts, it can also start cues whose triggers fall in the last minute, hour, X seconds, or ever; cues start partway in and follow jumps; on stop they pause, stop or run on, ignoring dropouts up to a 0-2 s freewheel.
-- **Closest in Max:** `rtin`, `sync~`, `transport`
-- **Checked:** Searched obj-qlookup.json (Max registry, core plus bundled packages) and the package library for timecode, LTC, SMPTE: nothing. rtin refpage receives MIDI real-time messages only. sync~ refpage: tempo sync from beat clock or click, not timecode.
-- **Notes:** Isadora, TouchDesigner and MadMapper entries cover timecode; QLab's difference is the lookback policy for cues before the first frame.
-- **Source:** <https://qlab.app/docs/v5/fundamentals/cue-lists/> · <https://qlab.app/docs/v5/networking/using-timecode/> · <https://qlab.app/docs/v5/tools/timecode-status-window/>
-- id: `qlab--incoming-timecode-with-lookback-rules-freewheel-and-mid-cue-starts`
-
 ### Multi-computer collaborative editing with permissions (QLab)
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Not in Max · confidence high · confirmed
+- **Theme:** Collaborative editing across machines
 - **There:** `Collaboration`, `primary`, `remote`, `view / edit / control access`
 - **What it does:** Several Macs open one workspace over a LAN; each collaborator has view, edit or control permission, sees others' selections, keeps their own undo history; cues always run on the primary.
 - **Checked:** max_system_model.json dimension 17: Max has no built-in multi-machine session. No object or userguide page read offers shared editing of one patch.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No object or userguide page offers several machines editing one patch. Collab-Hub (installed) shares data between patches, not editing.
 - **Source:** <https://qlab.app/docs/v5/networking/collaboration/>
 - id: `qlab--multi-computer-collaborative-editing-with-permissions`
 
-### Override controls: suspend each protocol's input or output globally (QLab)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Mapping editor: slices, masks and warps on the output
-- **There:** `Override Controls`, `/overrides/*`
-- **What it does:** Global switches cut MIDI voice, MSC, SysEx, external network, local network, timecode and DMX traffic separately in each direction; affected cues show a red symbol and the footer warns.
-- **Closest in Max:** `gate`, `midiin`, `udpreceive`
-- **Checked:** Max preferences and the userguide pages read have no global per-protocol mute; each input object (midiin, udpreceive) is gated by hand.
-- **Source:** <https://qlab.app/docs/v5/tools/override-controls/> · <https://qlab.app/docs/v5/scripting/osc-dictionary-v5/>
-- id: `qlab--override-controls-suspend-each-protocol-s-input-or-output-globally`
-
 ### Show control broadcast with subscriptions and a templated outgoing format (QLab)
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Not in Max · confidence high · confirmed
+- **Theme:** Every parameter addressable: OSC, learn, binding, expressions
 - **There:** `/listen`, `/ignore`, `/eventFormat`, `/qlab/event/workspace/go`
 - **What it does:** A client sends /listen (or a scoped form such as /listen/go/number) and QLab reports GO, start, stop, playhead and the all-cue actions. /eventFormat rewrites what is sent using tokens, so QLab can fire another system's cues in its own syntax.
-- **Closest in Max:** `udpsend`, `param.osc`
+- **Closest in Max:** `udpsend`, `param.osc`, `sprintf`
 - **Checked:** param.osc refpage: reports parameter changes over OSC (with an info message listing every parameter). It reports parameter values, not show events, and has no per-client subscription or format template.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). param.osc reports parameter values over OSC, with no show events, per-client subscriptions or output templates. Such a protocol could be patched with udpsend and sprintf, but Max has no cue engine to report on.
 - **Source:** <https://qlab.app/docs/v5/networking/show-control-broadcast/>
 - id: `qlab--show-control-broadcast-with-subscriptions-and-a-templated-outgoing-format`
 
 ### DJ-player sync: the DJ's loaded track triggers and drives its video (Resolume)
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Not in Max · confidence high · confirmed
 - **Theme:** Keyframe timeline over any parameter
 - **There:** `Denon StageLinQ`, `Pioneer Pro DJ Link`, `Player Layer Target`, `Fader`
 - **What it does:** Arena watches Denon or Pioneer players on the network. A clip linked to a track is triggered when the track is loaded and its playhead follows the track through scratching and looping; the layer is locked until the song ends. The mixer's channel fader can drive the layer's opacity, and each player can send its videos to a chosen layer. Clips are matched by track title.
 - **Checked:** Registry and installed packages (query_packages.py: no StageLinQ, Pro DJ Link or TCNet objects). Max can receive MIDI clock or Link tempo (Link package: link.beat, link.session), which gives tempo, not the track's playhead.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No Pro DJ Link, StageLinQ or TCNet object in Max or the package library, and none found on the web. A separate bridge app such as pro-dj-link-monitor (github.com/PROcrush/pro-dj-link-monitor) can turn player data into OSC or LTC that Max could receive.
 - **Source:** <https://resolume.com/support/en/sync-to-denon-players> · <https://resolume.com/support/en/sync-to-pioneer-dj-players> · <https://resolume.com/support/en/sync-with-dj>
 - id: `resolume--dj-player-sync-the-dj-s-loaded-track-triggers-and-drives-its-video`
 
-### Timecode chase per clip with an offset and a delay (Resolume)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Timecode as a type, and chasing it
-- **There:** `SMPTE`, `Offset`, `Delay`
-- **What it does:** Arena reads LTC timecode from an audio input (two inputs at once, one per deck of a DJ mix). Any clip set to SMPTE 1 or 2 follows it; each clip has an offset (the docs' convention is one hour per show) and a delay in frames to compensate for the signal chain.
-- **Closest in Max:** `jit.movie`
-- **Checked:** Registry: no smpte, ltc or mtc objects; query_packages.py search 'timecode' and 'smpte': no matches. Already a theme from MadMapper, Isadora and TouchDesigner; Resolume's difference is that the offset and delay live on each clip.
-- **Source:** <https://resolume.com/support/en/smpte> · <https://resolume.com/support/en/video> · <https://resolume.com/support/en/preferences>
-- id: `resolume--timecode-chase-per-clip-with-an-offset-and-a-delay`
-
 ### Frame-locked sync across machines (TouchDesigner)
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Not in Max · confidence high · confirmed
 - **Theme:** Keeping several machines in step
 - **There:** `Sync In CHOP`, `Sync Out CHOP`, `Touch In/Out Synced Ports`, `TDSynchro`
 - **What it does:** A server and its clients wait for each other every frame so all machines render the same frame, with timeouts and banning of slow clients. A toolkit splits a large canvas across machines and keeps the pieces frame-matched.
-- **Closest in Max:** `jit.net.send`, `udpsend`
+- **Closest in Max:** `jit.net.send`, `udpsend`, `udpreceive`
 - **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for sync: sync~, mc.sync~, plugsync~ (audio tempo sync) and jit.gl.asyncread. jit.net.send (refpage read) sends matrices over TCP. Nothing makes several Max instances step frames together.
 - **Notes:** Sync In and Out need a Pro licence, per the docs.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No frame-barrier or render-sync object in the registry, refpages or userguide. A handshake could be patched with udpsend/udpreceive, but there is no built-in frame lock or canvas-splitting toolkit.
 - **Source:** <https://docs.derivative.ca/Sync_CHOPs_Common> · <https://docs.derivative.ca/Syncing_Multiple_Computers> · <https://docs.derivative.ca/Sync> · <https://docs.derivative.ca/Touch_In/Out_Synced_Ports> · <https://docs.derivative.ca/TDSynchro>
 - id: `touchdesigner--frame-locked-sync-across-machines`
 
-### WebRTC peer connections (TouchDesigner)
+### IzzyCast: internet video, audio and data sessions between patches (Isadora)
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Partly in Max · confidence high · confirmed
 - **Theme:** Internet streaming and remote sessions
-- **There:** `WebRTC DAT`, `Palette:signalingServer`, `Palette:signalingClient`, `Palette:webRTC`
-- **What it does:** Low-latency video, audio and data between the program and browsers or other peers, with sample signalling components.
-- **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for webrtc: no match. Not in the installed packages.
-- **Review:** 2026-10-02 (Claude): no object whose name contains 'webrtc' in Max 9's obj-qlookup.json. Third-party packages that are not installed on this machine were not checked.
-- **Source:** <https://docs.derivative.ca/WebRTC> · <https://docs.derivative.ca/WebRTC_DAT>
-- id: `touchdesigner--webrtc-peer-connections`
-
-### Each timeline chases its own sync source: internal, MIDI clock (SPP) or MTC, with a SMPTE offset (Vezér)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Timecode as a type, and chasing it
-- **There:** `Composition`, `Tempo/Sync menu`, `SPP`, `MTC`, `Edit SMPTE Offset...`
-- **What it does:** Every composition picks its own clock: normal speed, a BPM (manual, or measured from a MIDI clock), SPP (follow MIDI clock start, stop and song position) or MTC (follow timecode). An SMPTE offset sets where in the incoming timecode the composition starts, and the display counts down to it.
-- **Closest in Max:** `transport`, `rtin`, `sync~`
-- **Checked:** No object named mtc, smpte, ltc or timecode in obj-qlookup.json (Max registry, core plus bundled packages); refpage text search for timecode/MTC finds only dsp/adstatus audio-driver settings. rtin refpage: receives MIDI real-time messages (clock, start, stop), so MIDI clock can be read by hand. transport refpage: a clocksource attribute ('other timing sources may also be used') and getclocksources, no MTC mentioned. sync~ refpage: follows tap, MIDI beat clock or a click track. query_packages: no timecode/MTC/SMPTE objects in installed packages.
-- **Notes:** Overlaps the MadMapper 'chase external timecode' entry (unsure there). Vezér's angle is that each composition has its own sync choice and offset.
-- **Source:** <https://imimot.com/help/vezer/compositions/tempo-and-synchronisation>
-- id: `vezer--each-timeline-chases-its-own-sync-source-internal-midi-clock-spp-or-mtc-with-a-smpte-offset`
-
-### Incoming MMC routed by device ID: 0 the master transport, 127 the current timeline, 1-126 a timeline by index (Vezér)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Timecode as a type, and chasing it
-- **There:** `MMC Transport`, `DeviceID`
-- **What it does:** Vezér listens to MMC Play, Stop, Rewind, Record and Locate. The device ID picks the target: 0 is the master transport, 127 the selected composition, and 1 to 126 the composition with that index. The docs warn that Locate needs the composition's frame rate to match the sender, since MMC carries none.
-- **Closest in Max:** `midiin`, `sxformat`
-- **Checked:** No MMC parser in obj-qlookup.json (Max registry, core plus bundled packages); midiin gives raw bytes, so the sysex would be parsed in a patch or a v8. Max has no timeline to address by index.
-- **Source:** <https://imimot.com/help/vezer/controlling-vezer/mmc-transport>
-- id: `vezer--incoming-mmc-routed-by-device-id-0-the-master-transport-127-the-current-timeline-1-126-a-timeline-by-index`
-
-### MTC and MMC sent per timeline, with the timeline's index as the MMC device ID (Vezér)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Timecode as a type, and chasing it
-- **There:** `Transmit MTC`, `Transmit MMC`, `DeviceID`, `SYNC button`
-- **What it does:** A composition can send MIDI timecode while it plays, with a full-frame message whenever the playhead jumps, plus a start-time offset. It can also send MMC Play, Stop, Rewind and Locate. MMC normally goes to device ID 127 (all), but an option sends the composition's index as the device ID, so one Vezér composition drives the matching composition in another machine.
-- **Closest in Max:** `sxformat`, `midiout`, `sync~`
-- **Checked:** No MTC or MMC object in obj-qlookup.json (Max registry, core plus bundled packages). sxformat refpage: 'Prepare MIDI system exclusive messages', so MMC (a sysex message) can be built by hand and sent with midiout; quarter-frame MTC would also be hand-built. sync~ refpage generates MIDI beat clock, not timecode.
-- **Source:** <https://imimot.com/help/vezer/compositions/transmit-midi-timecode-mtc> · <https://imimot.com/help/vezer/compositions/transmit-midi-machine-control-mmc> · <https://imimot.com/help/vezer/tools/mtc-generator>
-- id: `vezer--mtc-and-mmc-sent-per-timeline-with-the-timeline-s-index-as-the-mmc-device-id`
-
-### IoT protocols: MQTT, CoAP, LSL (ossia score)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **There:** `MQTT Device`, `CoAP Device`, `LSL`
-- **What it does:** Built-in devices subscribe and publish to MQTT brokers (TCP or WebSocket, TLS), browse CoAP resources with discovery and observe, and expose Lab Streaming Layer streams.
-- **Closest in Max:** `node.script`
-- **Checked:** Searched obj-qlookup.json (Max registry, core plus bundled packages) for mqtt, coap: none; query_packages 'mqtt': no matches. node.script (refpage) runs Node.js, so npm libraries could provide these, but nothing is built in.
-- **Notes:** The LSL device page says only 'reference not yet available'.
-- **Source:** <https://ossia.io/score-docs/devices/mqtt-device.html> · <https://ossia.io/score-docs/devices/coap-device.html> · <https://ossia.io/score-docs/reference/protocols-and-formats.html>
-- id: `ossia-score--iot-protocols-mqtt-coap-lsl`
-
-### One browsable tree of every device's parameters (ossia score)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Every parameter addressable: OSC, learn, binding, expressions
-- **There:** `Device explorer`, `Device`, `namespace`
-- **What it does:** All external devices (OSC, OSCQuery, MIDI, DMX, serial, audio card, windows...) appear in one tree of nodes and parameters with types, ranges and current values. Any parameter can be dragged onto a trigger, an automation or a port.
-- **Closest in Max:** `udpreceive`, `midiin`, `serial`, `param.osc`
-- **Checked:** Max userguide OSC.json: Max exposes its own parameters as OSC addresses and can serve OSCQuery. No Max object or userguide page read offers a unified browser of external devices' parameters; each protocol has its own object (udpreceive, midiin, serial).
-- **Source:** <https://ossia.io/score-docs/quick-start/working-with-devices.html> · <https://ossia.io/score-docs/devices.html> · <https://ossia.io/score-docs/panels/explorer.html>
-- id: `ossia-score--one-browsable-tree-of-every-device-s-parameters`
+- **There:** `IzzyCast Create Session`, `IzzyCast Join Session`, `IzzyCast Broadcaster`, `IzzyCast Receiver`, `IzzyCast Devices`
+- **What it does:** A host creates a session and others join by a session number. Each participant can send video, audio and control data to the others, and each incoming stream arrives as an ordinary video stream in the patch. Built on the Zoom Video SDK, so it needs no network set-up; paid by prepaid participant-minutes.
+- **Closest in Max:** `jit.net.send`, `jit.net.recv`, `node.script`
+- **Third-party:** AOO for Max (installed) `aoo.client` · Collab-Hub (installed) `CH-Client`
+- **Checked:** jit.net.send refpage read: matrices to a jit.net.recv at a known host and port, no relay or NAT traversal. Installed 'AOO for Max' package is audio over network (seen in the package list; its objects were not read). Nothing found carries video between remote patches through a hosted service.
+- **Notes:** A paid hosted service, not a pure software feature. The IzzyCast feature pages were fetched and not read.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Audio and data between remote patches exist through installed third-party packages (AOO, Collab-Hub). Nothing carries video between patches over the internet; jit.net.send is direct TCP to a known host.
+- **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=524> · <https://troikatronix.com/files/isadora-manual.pdf#page=526> · <https://troikatronix.com/files/isadora-manual.pdf#page=533> · <https://troikatronix.com/files/isadora-manual.pdf#page=535> · <https://troikatronix.com/files/isadora-manual.pdf#page=540> · <https://support.troikatronix.com/support/solutions/articles/13000097342-izzycast-faq> · <https://troikatronix.com/izzycast/>
+- id: `isadora--izzycast-internet-video-audio-and-data-sessions-between-patches`
 
 ### Raw TCP client in the core toolset (Isadora)
 
@@ -3908,6 +3871,46 @@ more than one tool documents is a stronger lead than a single entry.
 - **Source:** <https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control> · <https://docs.madmapper.com/madmapper/6/11.-live-performance-and-control/osc-commands-and-channels-list>
 - id: `madmapper--every-parameter-reachable-by-osc-without-setup-and-discoverable`
 
+### Switch projectors on and off and close their shutters over the network (MadMapper)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Controlling projectors, cameras and show gear
+- **There:** `MadProjectorControl`, `PJLink`, `Power`, `Mute`
+- **What it does:** A module per projector speaks PJLink: power and shutter buttons that follow the projector's real state, plus model and lamp information. Because the buttons are ordinary parameters, cues and schedulers can run a venue's projectors unattended.
+- **Closest in Max:** `mxj net.tcp.send`
+- **Third-party:** Max for the Visual Arts (installed) `panasonic_PJLink.maxpat` <~/Documents/Max 9/Packages/Max for the Visual Arts/patchers/Toolbox/communication/panasonic_PJLink.maxpat> · Sadam Library (installed) `sadam.tcpClient`
+- **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'pjlink': no hits anywhere. 'tcp': Max's own hits are jit.net.send and jit.net.recv, which are for matrices; the package library has sadam.tcpClient, sadam.tcpSender, sadam.tcpReceiver and sadam.tcpServer (Sadam Library, installed). So a TCP connection is available from a package and the PJLink commands would be written by hand.
+- **Notes:** The manual describes PJLink only as a network protocol; that it runs over TCP is not stated there, so sadam.tcpClient as the carrier is an assumption to confirm.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Max has no PJLink module. But an installed package has a working PJLink example patch that sends shutter commands over TCP with mxj net.tcp.send (bundled max-mxj package, help file present). It does not read back the projector's real state or lamp info.
+- **Source:** <https://docs.madmapper.com/madmapper/6/12.-advanced/madprojectorcontrol> · <https://madmapper.com/files/MadMapper%20-%20MadProjectorControl%20Guide.pdf> · <https://madmapper.com/extensions/madprojectorcontrol>
+- id: `madmapper--switch-projectors-on-and-off-and-close-their-shutters-over-the-network`
+
+### Incoming timecode with lookback rules, freewheel and mid-cue starts (QLab)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Scenes and cues as the structure of a show
+- **There:** `Sync cues in this list to incoming timecode`, `On Start`, `lookback time`, `On Stop`, `Freewheel time`
+- **What it does:** A list listens to LTC or MTC. When timecode starts, it can also start cues whose triggers fall in the last minute, hour, X seconds, or ever; cues start partway in and follow jumps; on stop they pause, stop or run on, ignoring dropouts up to a 0-2 s freewheel.
+- **Closest in Max:** `adstatus`, `rtin`, `midiin`, `transport`
+- **Third-party:** smpte~ (kronihias, flext) `smpte~` <https://github.com/kronihias/smpte-> · sft.ltc~ (sillyfrytools, paid) `sft.ltc~` <https://sillyfrytools.gumroad.com/l/whrzc>
+- **Checked:** Searched obj-qlookup.json (Max registry, core plus bundled packages) and the package library for timecode, LTC, SMPTE: nothing. rtin refpage receives MIDI real-time messages only. sync~ refpage: tempo sync from beat clock or click, not timecode.
+- **Notes:** Isadora, TouchDesigner and MadMapper entries cover timecode; QLab's difference is the lookback policy for cues before the first frame.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No timecode object in Max. adstatus can report timecode from audio drivers that support it (ASIO 2), and third-party externals decode LTC. Nothing gives QLab's lookback, freewheel or mid-cue start rules; those would be built by hand.
+- **Source:** <https://qlab.app/docs/v5/fundamentals/cue-lists/> · <https://qlab.app/docs/v5/networking/using-timecode/> · <https://qlab.app/docs/v5/tools/timecode-status-window/>
+- id: `qlab--incoming-timecode-with-lookback-rules-freewheel-and-mid-cue-starts`
+
+### Override controls: suspend each protocol's input or output globally (QLab)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Mapping editor: slices, masks and warps on the output
+- **There:** `Override Controls`, `/overrides/*`
+- **What it does:** Global switches cut MIDI voice, MSC, SysEx, external network, local network, timecode and DMX traffic separately in each direction; affected cues show a red symbol and the footer warns.
+- **Closest in Max:** `gate`, `midiin`, `udpreceive`
+- **Checked:** Max preferences and the userguide pages read have no global per-protocol mute; each input object (midiin, udpreceive) is gated by hand.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). The Max userguide (midi.json) says the MIDI Setup window has an 'On' checkbox per port to enable or disable it. That is a global MIDI switch per port, but nothing similar exists for network, timecode or DMX, and nothing warns which parts of a patch are affected.
+- **Source:** <https://qlab.app/docs/v5/tools/override-controls/> · <https://qlab.app/docs/v5/scripting/osc-dictionary-v5/>
+- id: `qlab--override-controls-suspend-each-protocol-s-input-or-output-globally`
+
 ### REST and WebSocket API with stable ids and subscriptions (Resolume)
 
 - **Max:** Partly in Max · confidence medium · unreviewed
@@ -3917,6 +3920,19 @@ more than one tool documents is a stronger lead than a single entry.
 - **Checked:** maxurl refpage: an HTTP client (get, post, put, delete), not a server. Userguide OSC.json: Max can serve OSCQuery over HTTP, which describes parameters. A full read-write server with subscriptions is built in Node for Max (node.script), by hand.
 - **Source:** <https://resolume.com/support/en/restapi> · <https://resolume.com/support/en/websocket-api> · <https://resolume.com/docs/restapi/>
 - id: `resolume--rest-and-websocket-api-with-stable-ids-and-subscriptions`
+
+### Timecode chase per clip with an offset and a delay (Resolume)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Timecode as a type, and chasing it
+- **There:** `SMPTE`, `Offset`, `Delay`
+- **What it does:** Arena reads LTC timecode from an audio input (two inputs at once, one per deck of a DJ mix). Any clip set to SMPTE 1 or 2 follows it; each clip has an offset (the docs' convention is one hour per show) and a delay in frames to compensate for the signal chain.
+- **Closest in Max:** `jit.movie`, `adstatus`, `translate`
+- **Third-party:** smpte~ (kronihias, flext) `smpte~` <https://github.com/kronihias/smpte-> · sft.ltc~ (sillyfrytools, paid) `sft.ltc~` <https://sillyfrytools.gumroad.com/l/whrzc>
+- **Checked:** Registry: no smpte, ltc or mtc objects; query_packages.py search 'timecode' and 'smpte': no matches. Already a theme from MadMapper, Isadora and TouchDesigner; Resolume's difference is that the offset and delay live on each clip.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No LTC reader in Max; adstatus reports driver timecode only on ASIO 2 drivers. Third-party externals decode LTC, and jit.movie can then be positioned with a per-clip offset by hand.
+- **Source:** <https://resolume.com/support/en/smpte> · <https://resolume.com/support/en/video> · <https://resolume.com/support/en/preferences>
+- id: `resolume--timecode-chase-per-clip-with-an-offset-and-a-delay`
 
 ### Running part of a project in a separate process (TouchDesigner)
 
@@ -3951,6 +3967,57 @@ more than one tool documents is a stronger lead than a single entry.
 - **Source:** <https://docs.derivative.ca/Shared_Memory> · <https://docs.derivative.ca/Syphon_Spout_In_TOP>
 - id: `touchdesigner--shared-memory-for-images-and-channels`
 
+### WebRTC peer connections (TouchDesigner)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Internet streaming and remote sessions
+- **There:** `WebRTC DAT`, `Palette:signalingServer`, `Palette:signalingClient`, `Palette:webRTC`
+- **What it does:** Low-latency video, audio and data between the program and browsers or other peers, with sample signalling components.
+- **Closest in Max:** `jit.web`, `jweb`, `node.script`
+- **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for webrtc: no match. Not in the installed packages.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No WebRTC object anywhere. jit.web (bundled, 'Render a web browser to a GL texture or matrix') and jit.web~ could host a WebRTC page and bring its video and audio into Jitter, and node.script could do signalling; this is untested and needs your own web code. A C74 forum thread reports trouble getting WebRTC rooms working in jweb.
+- **Source:** <https://docs.derivative.ca/WebRTC> · <https://docs.derivative.ca/WebRTC_DAT>
+- id: `touchdesigner--webrtc-peer-connections`
+
+### Each timeline chases its own sync source: internal, MIDI clock (SPP) or MTC, with a SMPTE offset (Vezér)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Timecode as a type, and chasing it
+- **There:** `Composition`, `Tempo/Sync menu`, `SPP`, `MTC`, `Edit SMPTE Offset...`
+- **What it does:** Every composition picks its own clock: normal speed, a BPM (manual, or measured from a MIDI clock), SPP (follow MIDI clock start, stop and song position) or MTC (follow timecode). An SMPTE offset sets where in the incoming timecode the composition starts, and the display counts down to it.
+- **Closest in Max:** `transport`, `rtin`, `sync~`, `translate`
+- **Third-party:** smpte~ (kronihias, flext) `smpte~` <https://github.com/kronihias/smpte-> · sft.ltc~ (sillyfrytools, paid) `sft.ltc~` <https://sillyfrytools.gumroad.com/l/whrzc>
+- **Checked:** No object named mtc, smpte, ltc or timecode in obj-qlookup.json (Max registry, core plus bundled packages); refpage text search for timecode/MTC finds only dsp/adstatus audio-driver settings. rtin refpage: receives MIDI real-time messages (clock, start, stop), so MIDI clock can be read by hand. transport refpage: a clocksource attribute ('other timing sources may also be used') and getclocksources, no MTC mentioned. sync~ refpage: follows tap, MIDI beat clock or a click track. query_packages: no timecode/MTC/SMPTE objects in installed packages.
+- **Notes:** Overlaps the MadMapper 'chase external timecode' entry (unsure there). Vezér's angle is that each composition has its own sync choice and offset.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). The transport refpage supports several named transports with a 'clocksource' attribute, and rtin and sync~ read MIDI clock. No MTC/SMPTE reader or SMPTE offset is built in; LTC needs a third-party external.
+- **Source:** <https://imimot.com/help/vezer/compositions/tempo-and-synchronisation>
+- id: `vezer--each-timeline-chases-its-own-sync-source-internal-midi-clock-spp-or-mtc-with-a-smpte-offset`
+
+### Incoming MMC routed by device ID: 0 the master transport, 127 the current timeline, 1-126 a timeline by index (Vezér)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Timecode as a type, and chasing it
+- **There:** `MMC Transport`, `DeviceID`
+- **What it does:** Vezér listens to MMC Play, Stop, Rewind, Record and Locate. The device ID picks the target: 0 is the master transport, 127 the selected composition, and 1 to 126 the composition with that index. The docs warn that Locate needs the composition's frame rate to match the sender, since MMC carries none.
+- **Closest in Max:** `sysexin`, `midiin`, `route`
+- **Checked:** No MMC parser in obj-qlookup.json (Max registry, core plus bundled packages); midiin gives raw bytes, so the sysex would be parsed in a patch or a v8. Max has no timeline to address by index.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No MMC parser. sysexin ('Receive MIDI system exclusive messages') plus route or a v8 script can decode MMC and pick a target by device ID. Max has no timelines to address by index.
+- **Source:** <https://imimot.com/help/vezer/controlling-vezer/mmc-transport>
+- id: `vezer--incoming-mmc-routed-by-device-id-0-the-master-transport-127-the-current-timeline-1-126-a-timeline-by-index`
+
+### MTC and MMC sent per timeline, with the timeline's index as the MMC device ID (Vezér)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Timecode as a type, and chasing it
+- **There:** `Transmit MTC`, `Transmit MMC`, `DeviceID`, `SYNC button`
+- **What it does:** A composition can send MIDI timecode while it plays, with a full-frame message whenever the playhead jumps, plus a start-time offset. It can also send MMC Play, Stop, Rewind and Locate. MMC normally goes to device ID 127 (all), but an option sends the composition's index as the device ID, so one Vezér composition drives the matching composition in another machine.
+- **Closest in Max:** `sxformat`, `midiout`, `sync~`
+- **Third-party:** smpte~ (Mattijs, Cycling '74 tools) `smpte~` <https://cycling74.com/tools/smpte>
+- **Checked:** No MTC or MMC object in obj-qlookup.json (Max registry, core plus bundled packages). sxformat refpage: 'Prepare MIDI system exclusive messages', so MMC (a sysex message) can be built by hand and sent with midiout; quarter-frame MTC would also be hand-built. sync~ refpage generates MIDI beat clock, not timecode.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No MTC or MMC object. sxformat ('Prepare MIDI system exclusive messages') with midiout can build MMC and full-frame MTC messages, and quarter-frames by hand. sync~ sends beat clock only. smpte~ (third-party) sends LTC audio, not MTC.
+- **Source:** <https://imimot.com/help/vezer/compositions/transmit-midi-timecode-mtc> · <https://imimot.com/help/vezer/compositions/transmit-midi-machine-control-mmc> · <https://imimot.com/help/vezer/tools/mtc-generator>
+- id: `vezer--mtc-and-mmc-sent-per-timeline-with-the-timeline-s-index-as-the-mmc-device-id`
+
 ### OSCQuery browser that creates a lane with the remote parameter's range and type (Vezér)
 
 - **Max:** Partly in Max · confidence high · unreviewed
@@ -3975,6 +4042,20 @@ more than one tool documents is a stronger lead than a single entry.
 - **Source:** <https://cables.gl/op/Ops.Net.WebSocket.WebSocket_v2> · <https://cables.gl/op/Ops.Extension.SocketCluster.SocketClusterClient_v2> · <https://cables.gl/op/Ops.Extension.Standalone.Net.SocketClusterServer> · <https://cables.gl/op/Ops.Extension.Standalone.Net.HttpServer>
 - id: `cables-gl--websocket-client-ops-and-shared-state-across-clients`
 
+### IoT protocols: MQTT, CoAP, LSL (ossia score)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** IoT and sensor-network protocols
+- **There:** `MQTT Device`, `CoAP Device`, `LSL`
+- **What it does:** Built-in devices subscribe and publish to MQTT brokers (TCP or WebSocket, TLS), browse CoAP resources with discovery and observe, and expose Lab Streaming Layer streams.
+- **Closest in Max:** `node.script`
+- **Third-party:** max-mqtt (256dpi) `mqtt` <https://github.com/256dpi/max-mqtt> · MQTT client for Max (Artificiel) `mqtt` <https://gitlab.artificiel.org/max/mqtt>
+- **Checked:** Searched obj-qlookup.json (Max registry, core plus bundled packages) for mqtt, coap: none; query_packages 'mqtt': no matches. node.script (refpage) runs Node.js, so npm libraries could provide these, but nothing is built in.
+- **Notes:** The LSL device page says only 'reference not yet available'.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). MQTT exists as third-party externals (max-mqtt and others). No CoAP or LSL external was found; a C74 forum thread on LSL suggests building it by hand. node.script (bundled Node for Max) could load npm libraries for any of them.
+- **Source:** <https://ossia.io/score-docs/devices/mqtt-device.html> · <https://ossia.io/score-docs/devices/coap-device.html> · <https://ossia.io/score-docs/reference/protocols-and-formats.html>
+- id: `ossia-score--iot-protocols-mqtt-coap-lsl`
+
 ### OSC and MIDI learn that builds the namespace (ossia score)
 
 - **Max:** Partly in Max · confidence medium · unreviewed
@@ -3997,6 +4078,19 @@ more than one tool documents is a stronger lead than a single entry.
 - **Review:** 2026-10-03 (Claude): Max's OSC userguide topic describes Max answering OSCQuery requests once enabled in preferences; nothing read there or in the refpages describes importing another app's namespace.
 - **Source:** <https://ossia.io/score-docs/devices/oscquery-device.html> · <https://ossia.io/score-docs/devices/minuit-device.html>
 - id: `ossia-score--oscquery-client-that-imports-a-remote-namespace`
+
+### One browsable tree of every device's parameters (ossia score)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Every parameter addressable: OSC, learn, binding, expressions
+- **There:** `Device explorer`, `Device`, `namespace`
+- **What it does:** All external devices (OSC, OSCQuery, MIDI, DMX, serial, audio card, windows...) appear in one tree of nodes and parameters with types, ranges and current values. Any parameter can be dragged onto a trigger, an automation or a port.
+- **Closest in Max:** `param.osc`, `udpreceive`, `midiin`, `serial`
+- **Third-party:** ossia-max (libossia) `ossia.client` <https://ossia.io/ossia-docs/>
+- **Checked:** Max userguide OSC.json: Max exposes its own parameters as OSC addresses and can serve OSCQuery. No Max object or userguide page read offers a unified browser of external devices' parameters; each protocol has its own object (udpreceive, midiin, serial).
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Max itself has one object per protocol and no device browser. The third-party ossia-max package gives a browsable tree of remote OSC/OSCQuery/MIDI devices, but not DMX, serial or audio cards, and no drag-to-bind across a whole show.
+- **Source:** <https://ossia.io/score-docs/quick-start/working-with-devices.html> · <https://ossia.io/score-docs/devices.html> · <https://ossia.io/score-docs/panels/explorer.html>
+- id: `ossia-score--one-browsable-tree-of-every-device-s-parameters`
 
 ### Remote control of transport, triggers and speed over WebSocket (ossia score)
 
@@ -4260,106 +4354,57 @@ more than one tool documents is a stronger lead than a single entry.
 
 ## projection mapping
 
-### Automatic edge blending from overlapping displays, with a wizard (Isadora)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Automatic edge blending between projectors
-- **There:** `Blend Maker`, `Blend Adjustment`, `Edge Blend Mask`, `Global Edge Blend Mask`, `Gamma Curve`
-- **What it does:** Drag two displays of one Stage so they overlap and the overlap becomes a soft blend. Curve, gamma and knee are adjusted per edge. A wizard builds grids from 1x1 to 8x1 projectors from a resolution and an overlap. Mask actors do the same from inside a patch.
-- **Closest in Max:** `jit.gl.cornerpin`, `jit.gl.meshwarp`, `jit.gl.slab`
-- **Checked:** Grepped all refpages and bundled package docs for 'edgeblend' and 'keystone': no files. Userguide grep 'edge blend': none. Package library search 'blend' and 'edge': audio and geometry hits only. jit.gl.meshwarp (refpage read) has apply_mask and mask_mode attributes but no blend-between-projectors function.
-- **Notes:** A shader in jit.gl.slab could do it; nothing shipped or installed does.
-- **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=235> · <https://troikatronix.com/files/isadora-manual.pdf#page=236> · <https://troikatronix.com/files/isadora-manual.pdf#page=237> · <https://troikatronix.com/files/isadora-manual.pdf#page=238> · <https://troikatronix.com/files/isadora-manual.pdf#page=477> · <https://troikatronix.com/files/isadora-manual.pdf#page=509>
-- id: `isadora--automatic-edge-blending-from-overlapping-displays-with-a-wizard`
-
 ### 3D calibration: line up a 3D model with a real object from matched points (MadMapper)
 
-- **Max:** Not in Max · confidence medium · unreviewed
+- **Max:** Not in Max · confidence medium · confirmed
 - **Theme:** Calibrating a projector to a real object
 - **There:** `3D Calibration`, `3D Surface`, `Calibrate`, `Fix Position`, `Reset Calibration`
 - **What it does:** Import an OBJ of the real object, pick known points on the model, and place each on the matching point of the object as the projector sees it. MadMapper solves the projector's view, shows the RMS error as points are added, and locks the result.
-- **Closest in Max:** `jit.gl.model`, `jit.gl.camera`, `cv.jit.calibration`, `cv.jit.unproject`
+- **Closest in Max:** `jit.gl.model`, `jit.gl.camera`
+- **Third-party:** cv.jit (installed) `cv.jit.calibration / cv.jit.unproject` <~/Documents/Max 9/Packages/cv.jit>
 - **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'calibrat': nothing in Max itself. Package hits: cv.jit.calibration (camera intrinsics and lens distortion from chessboard views), cv.jit.findchessboardcorners, cv.jit.unproject (2D image points to 3D camera coordinates). jit.gl.model's refpage: reads and draws OBJ and other formats. None solves a projector pose from point pairs on a model.
 - **Notes:** The cv.jit objects calibrate a camera, not a projector. Whether they could be combined to do this was not tested.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No Max object solves a projector's view from matched 3D and 2D points. cv.jit.calibration only does camera intrinsics from a chessboard. Grepped refpages and bundled docs for calibration and projector terms: nothing relevant.
 - **Source:** <https://docs.madmapper.com/madmapper/6/4.-surfaces/advanced-3d-and-scanning> · <https://docs.madmapper.com/madmapper/6/15.-troubleshooting>
 - id: `madmapper--3d-calibration-line-up-a-3d-model-with-a-real-object-from-matched-points`
 
-### Automatic soft-edge blend between overlapping projectors (MadMapper)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Automatic edge blending between projectors
-- **There:** `Soft-Edge Blending`, `Soft Edge`, `Auto Setup`, `Width`, `Power`
-- **What it does:** Select two or more overlapping quads and press one button; MadMapper works out the shared area and fades each projector's edge so the seam disappears. Width and a gamma value are then tuned per edge. Angled overlaps are handled with a feathered mask inside each surface.
-- **Closest in Max:** `jit.gl.cornerpin`, `jit.gl.slab`, `jit.gl.pix`
-- **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'soft edge', 'edge blend' and 'feather': no hits anywhere. 'keystone': no hits. jit.gl.cornerpin's refpage describes repositioning four image corners only. A blend ramp could be written by hand as a shader in jit.gl.slab or jit.gl.pix, but nothing computes the overlap.
-- **Notes:** The automatic overlap calculation is the part with no Max equivalent; the ramp itself is a simple shader.
-- **Source:** <https://docs.madmapper.com/madmapper/6/6.-outputs/soft-edge-blending> · <https://docs.madmapper.com/madmapper/6/4.-surfaces/surface-inspector>
-- id: `madmapper--automatic-soft-edge-blend-between-overlapping-projectors`
-
 ### Structured-light scan that gives the projector's own view of the scene (MadMapper)
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Not in Max · confidence high · confirmed
 - **Theme:** Calibrating a projector to a real object
 - **There:** `Space Scanner`, `Spatial Scanner`, `Capture`, `Capture Timing`
 - **What it does:** The projector shows a series of stripe patterns while a camera photographs them. The result is an image of the scene as seen from the projector, pixel for pixel, set as the output's background so surfaces can be drawn on it away from the site.
-- **Closest in Max:** `jit.grab`, `cv.jit.calibration`
+- **Closest in Max:** `jit.grab`, `jit.gl.slab`
 - **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'structured light': no hits anywhere. jit.grab's refpage: digitizes video from any digitizer. Capture exists; the pattern projection and decoding do not.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Grepped Max docs and the package library for structured light and Gray code: nothing. Web search found only standalone OpenCV projects, no Max tool. jit.grab captures the frames, but decoding the patterns would need new code.
 - **Source:** <https://docs.madmapper.com/madmapper/6/12.-advanced/special-tools-and-auto-calibration> · <https://docs.madmapper.com/madmapper/6/4.-surfaces/tools-space-scanner> · <https://madmapper.com/files/13-Space%20Scanner%20Guide-1.pdf>
 - id: `madmapper--structured-light-scan-that-gives-the-projector-s-own-view-of-the-scene`
 
-### Video wall layout built from panel count, resolution and bezel size (MadMapper)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Mapping editor: slices, masks and warps on the output
-- **There:** `Video Wall Template`, `Video Wall Setup`, `Setup bezel`, `Number of screens`, `Destination`
-- **What it does:** A template asks how many screens across and down, their resolution, the bezel width and their rotation, and creates the grid of surfaces with the bezel gaps allowed for. An output's destination can also split one canvas across several displays.
-- **Closest in Max:** `jit.window`, `jit.world`, `jit.displays`
-- **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). jit.displays's refpage: enumerates and sets monitor attributes. jit.window: draws to a window, with 'rect', 'pos', 'fullscreen'. No bezel or video-wall helper found.
-- **Notes:** Simple arithmetic to build by hand; listed because it is a one-step setup in MadMapper.
-- **Source:** <https://docs.madmapper.com/madmapper/6/4.-surfaces/video-wall-setup> · <https://docs.madmapper.com/madmapper/6/6.-outputs>
-- id: `madmapper--video-wall-layout-built-from-panel-count-resolution-and-bezel-size`
-
-### Slice Transform: place content into each slice of the stage map in one drag (Resolume)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Mapping editor: slices, masks and warps on the output
-- **There:** `Slice Transform`, `Slices panel`, `Fill`, `Fit`, `Stretch`, `Mask`
-- **What it does:** Dragging a screen, or a selection of slices, from the Slices panel onto a clip, layer, group or the composition makes a Slice Transform effect that puts a copy of the content into every slice, scaled to Fill, Fit or Stretch, or used as a mask. Each slice can be bypassed, soloed or mirrored. Changing the slice in the output map updates the content. A slice that no longer exists is shown in red while the rest keep working.
-- **Closest in Max:** `jit.gl.meshwarp`, `jit.gl.layer`, `jit.fx.subtexture`
-- **Checked:** Registry: no object reads a shared stage map and places content per region. jit.gl.meshwarp refpage: warps one texture on one mesh. Placing a clip into N regions means N layers with hand-set position and scale.
-- **Source:** <https://resolume.com/support/en/transform> · <https://resolume.com/support/en/input-maps>
-- id: `resolume--slice-transform-place-content-into-each-slice-of-the-stage-map-in-one-drag`
-
-### Wire patches receive the host's projection slices as shapes (Resolume)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Mapping editor: slices, masks and warps on the output
-- **There:** `Slice In`, `Slices tab`
-- **What it does:** A Wire source or effect with a Slice In node gets the slices from Arena's Advanced Output, chosen by dragging them onto the effect's Slices tab, and can draw outlines, chasers or fill shapes that line up with the stage. In Wire itself, dummy slice sets stand in.
-- **Closest in Max:** `jit.gl.meshwarp`, `jit.gl.sketch`
-- **Checked:** Registry: no object shares a mapping layout as data with other objects. jit.gl.meshwarp refpage can output its mesh matrix (output_mesh_matrix), which is the nearest thing: one warp's geometry, not a stage of named slices.
-- **Source:** <https://resolume.com/support/en/wire-slices>
-- id: `resolume--wire-patches-receive-the-host-s-projection-slices-as-shapes`
-
 ### Import of projector calibration files (TouchDesigner)
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Not in Max · confidence high · confirmed
 - **Theme:** Calibrating a projector to a real object
 - **There:** `MPCDI TOP`, `MPCDI DAT`, `Vioso TOP`, `Scalable Display TOP`
 - **What it does:** Loads the warp and blend data written by camera-based auto-calibration systems (the MPCDI standard, VIOSO, Scalable Displays) and applies it to the output.
+- **Closest in Max:** `jit.gl.meshwarp`
 - **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for mpcdi, vioso, scalable: no match. Not in the installed-package library either.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Grepped all Max refpages, bundled package docs and the userguide for MPCDI, VIOSO and warp-file terms: nothing. A web search found VIOSO plugins for Unity and Unreal, none for Max. jit.gl.meshwarp (Jitter Tools) can hold a warp but cannot read these files.
 - **Source:** <https://docs.derivative.ca/MPCDI> · <https://docs.derivative.ca/MPCDI_TOP> · <https://docs.derivative.ca/Vioso> · <https://docs.derivative.ca/Scalable_Display_TOP> · <https://docs.derivative.ca/How-to_calibrate_your_projector_with_Scalable_Displays>
 - id: `touchdesigner--import-of-projector-calibration-files`
 
-### Multi-projector edge blending (TouchDesigner)
+### Automatic edge blending from overlapping displays, with a wizard (Isadora)
 
-- **Max:** Not in Max · confidence medium · unreviewed
+- **Max:** Partly in Max · confidence high · confirmed
 - **Theme:** Automatic edge blending between projectors
-- **There:** `Palette:projectorBlend`
-- **What it does:** Takes one image, stretches it over a grid of overlapping projectors and produces the blended edges, with per-projector overlap, gamma, luminance and blank-out controls.
-- **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for 'edge blend' and 'soft edge': no match. packages/query_packages.py search (installed third-party packages) 'edge blend': no match. It could be built from a shader in jit.gl.slab or jit.gl.pix, but nothing ready-made was found.
-- **Source:** <https://docs.derivative.ca/Palette:projectorBlend> · <https://docs.derivative.ca/Projection_Mapping>
-- id: `touchdesigner--multi-projector-edge-blending`
+- **There:** `Blend Maker`, `Blend Adjustment`, `Edge Blend Mask`, `Global Edge Blend Mask`, `Gamma Curve`
+- **What it does:** Drag two displays of one Stage so they overlap and the overlap becomes a soft blend. Curve, gamma and knee are adjusted per edge. A wizard builds grids from 1x1 to 8x1 projectors from a resolution and an overlap. Mask actors do the same from inside a patch.
+- **Closest in Max:** `jit.gl.slab`, `jit.gl.cornerpin`, `jit.gl.meshwarp`
+- **Third-party:** Max for the Visual Arts (installed) `GLCorner_edgeblend.maxpat (example patch)` <~/Documents/Max 9/Packages/Max for the Visual Arts/patchers/Projection/GLCorner_edgeblend.maxpat> · jasch objects (installed) `jasch.tr.edgeblend.jxs (shader)` <~/Documents/Max 9/Packages/jasch objects/abstractions/shaders/jasch.tr.edgeblend.jxs>
+- **Checked:** Grepped all refpages and bundled package docs for 'edgeblend' and 'keystone': no files. Userguide grep 'edge blend': none. Package library search 'blend' and 'edge': audio and geometry hits only. jit.gl.meshwarp (refpage read) has apply_mask and mask_mode attributes but no blend-between-projectors function.
+- **Notes:** A shader in jit.gl.slab could do it; nothing shipped or installed does.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Edge blending ships as a shader: Jitter Tools (bundled) has code/jxs/image-fx/transition/tr.edgeblend.jxs, 'generates gradient alpha for edge-blending', with a per-side fade vec4, used through jit.gl.slab. The installed Max for the Visual Arts package has patchers/Projection/GLCorner_edgeblend.maxpat. What Max lacks is the automatic part: no object works out the overlap, and the shader has no gamma or knee control. The entry's note that 'nothing shipped does' is wrong: the shader ships with Max.
+- **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=235> · <https://troikatronix.com/files/isadora-manual.pdf#page=236> · <https://troikatronix.com/files/isadora-manual.pdf#page=237> · <https://troikatronix.com/files/isadora-manual.pdf#page=238> · <https://troikatronix.com/files/isadora-manual.pdf#page=477> · <https://troikatronix.com/files/isadora-manual.pdf#page=509>
+- id: `isadora--automatic-edge-blending-from-overlapping-displays-with-a-wizard`
 
 ### IzzyMap: slice mapping inside every output, with every point drivable live (Isadora)
 
@@ -4383,6 +4428,20 @@ more than one tool documents is a stronger lead than a single entry.
 - **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). jit.gl.cornerpin's refpage has 'drawcorners', 'corner_color', 'hover' attributes, so its handles are visible in the output window. No ready test pattern or output cursor was found; both can be drawn with jit.gl.sketch or jit.gl.text.
 - **Source:** <https://docs.madmapper.com/madmapper/6/6.-outputs> · <https://docs.madmapper.com/madmapper/6/2.-the-interface/keyboard-shortcuts> · <https://docs.madmapper.com/madmapper/6/9.-master-settings> · <https://docs.madmapper.com/madmapper/6/4.-surfaces/warping-and-geometry>
 - id: `madmapper--alignment-aids-drawn-on-the-real-output`
+
+### Automatic soft-edge blend between overlapping projectors (MadMapper)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Automatic edge blending between projectors
+- **There:** `Soft-Edge Blending`, `Soft Edge`, `Auto Setup`, `Width`, `Power`
+- **What it does:** Select two or more overlapping quads and press one button; MadMapper works out the shared area and fades each projector's edge so the seam disappears. Width and a gamma value are then tuned per edge. Angled overlaps are handled with a feathered mask inside each surface.
+- **Closest in Max:** `jit.gl.slab`, `jit.gl.cornerpin`, `jit.gl.pix`
+- **Third-party:** Max for the Visual Arts (installed) `GLCorner_edgeblend.maxpat (example patch)` <~/Documents/Max 9/Packages/Max for the Visual Arts/patchers/Projection/GLCorner_edgeblend.maxpat> · jasch objects (installed) `jasch.tr.edgeblend.jxs (shader)` <~/Documents/Max 9/Packages/jasch objects/abstractions/shaders/jasch.tr.edgeblend.jxs>
+- **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). 'soft edge', 'edge blend' and 'feather': no hits anywhere. 'keystone': no hits. jit.gl.cornerpin's refpage describes repositioning four image corners only. A blend ramp could be written by hand as a shader in jit.gl.slab or jit.gl.pix, but nothing computes the overlap.
+- **Notes:** The automatic overlap calculation is the part with no Max equivalent; the ramp itself is a simple shader.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Edge blending ships as a shader: Jitter Tools (bundled) has code/jxs/image-fx/transition/tr.edgeblend.jxs, 'generates gradient alpha for edge-blending', with a per-side fade vec4, used through jit.gl.slab. The installed Max for the Visual Arts package has patchers/Projection/GLCorner_edgeblend.maxpat. What Max lacks is the automatic part: no object works out the overlap, and the shader has no gamma or knee control.
+- **Source:** <https://docs.madmapper.com/madmapper/6/6.-outputs/soft-edge-blending> · <https://docs.madmapper.com/madmapper/6/4.-surfaces/surface-inspector>
+- id: `madmapper--automatic-soft-edge-blend-between-overlapping-projectors`
 
 ### Bézier masks with feathering that follow the surface or the source (MadMapper)
 
@@ -4443,6 +4502,19 @@ more than one tool documents is a stronger lead than a single entry.
 - **Source:** <https://docs.madmapper.com/madmapper/6/4.-surfaces/svg-import-and-animation> · <https://docs.madmapper.com/madmapper/6/3.-media/media-formats-and-video-codecs> · <https://docs.madmapper.com/madmapper/6/15.-troubleshooting/madmapper-release-notes-history> · <https://docs.madmapper.com/madmapper/6/1.-introduction/what's-new/release-notes-v6>
 - id: `madmapper--svg-files-become-editable-line-surfaces-laser-paths-or-fixtures`
 
+### Video wall layout built from panel count, resolution and bezel size (MadMapper)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Mapping editor: slices, masks and warps on the output
+- **There:** `Video Wall Template`, `Video Wall Setup`, `Setup bezel`, `Number of screens`, `Destination`
+- **What it does:** A template asks how many screens across and down, their resolution, the bezel width and their rotation, and creates the grid of surfaces with the bezel gaps allowed for. An output's destination can also split one canvas across several displays.
+- **Closest in Max:** `jit.fx.subtexture`, `jit.gl.cornerpin`, `jit.displays`, `jit.world`
+- **Checked:** Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). jit.displays's refpage: enumerates and sets monitor attributes. jit.window: draws to a window, with 'rect', 'pos', 'fullscreen'. No bezel or video-wall helper found.
+- **Notes:** Simple arithmetic to build by hand; listed because it is a one-step setup in MadMapper.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Max has the parts: jit.fx.subtexture (Jitter Tools, 'Reference a sub-region of a texture') cuts one canvas into panels and jit.displays reports monitors. There is no one-step template that does the bezel arithmetic.
+- **Source:** <https://docs.madmapper.com/madmapper/6/4.-surfaces/video-wall-setup> · <https://docs.madmapper.com/madmapper/6/6.-outputs>
+- id: `madmapper--video-wall-layout-built-from-panel-count-resolution-and-bezel-size`
+
 ### Automatic edge blend from overlapping regions of one stage (QLab)
 
 - **Max:** Partly in Max · confidence high · unreviewed
@@ -4488,6 +4560,18 @@ more than one tool documents is a stronger lead than a single entry.
 - **Source:** <https://qlab.app/docs/v5/video/video-output/>
 - id: `qlab--warping-per-region-with-perspective-linear-or-bezier-meshes-and-linked-points-across-regions`
 
+### Slice Transform: place content into each slice of the stage map in one drag (Resolume)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Mapping editor: slices, masks and warps on the output
+- **There:** `Slice Transform`, `Slices panel`, `Fill`, `Fit`, `Stretch`, `Mask`
+- **What it does:** Dragging a screen, or a selection of slices, from the Slices panel onto a clip, layer, group or the composition makes a Slice Transform effect that puts a copy of the content into every slice, scaled to Fill, Fit or Stretch, or used as a mask. Each slice can be bypassed, soloed or mirrored. Changing the slice in the output map updates the content. A slice that no longer exists is shown in red while the rest keep working.
+- **Closest in Max:** `jit.fx.subtexture`, `jit.gl.layer`, `jit.gl.cornerpin`, `jit.gl.meshwarp`
+- **Checked:** Registry: no object reads a shared stage map and places content per region. jit.gl.meshwarp refpage: warps one texture on one mesh. Placing a clip into N regions means N layers with hand-set position and scale.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Max can put content into many output regions with jit.gl.layer or jit.gl.cornerpin per region and jit.fx.subtexture for cropping, but there is no stage map of slices to fill in one step, and no fill/fit/stretch per slice.
+- **Source:** <https://resolume.com/support/en/transform> · <https://resolume.com/support/en/input-maps>
+- id: `resolume--slice-transform-place-content-into-each-slice-of-the-stage-map-in-one-drag`
+
 ### Virtual output screens and screen-to-slice routing for multi-stage warping (Resolume)
 
 - **Max:** Partly in Max · confidence low · unreviewed
@@ -4509,6 +4593,19 @@ more than one tool documents is a stronger lead than a single entry.
 - **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for dome, fisheye, equirect: jit.gl.cubemap (refpage methods include equirect_matrix and panorama_matrix, which load such images into a cube map) and jit.gl.environment. No object was found that goes the other way, from a cube map to a fisheye image.
 - **Source:** <https://docs.derivative.ca/Projection_TOP> · <https://docs.derivative.ca/Palette:domeViewer>
 - id: `touchdesigner--dome-formats-cube-map-to-fisheye-or-equirectangular`
+
+### Multi-projector edge blending (TouchDesigner)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Automatic edge blending between projectors
+- **There:** `Palette:projectorBlend`
+- **What it does:** Takes one image, stretches it over a grid of overlapping projectors and produces the blended edges, with per-projector overlap, gamma, luminance and blank-out controls.
+- **Closest in Max:** `jit.gl.slab`, `jit.gl.cornerpin`, `jit.gl.meshwarp`
+- **Third-party:** Max for the Visual Arts (installed) `GLCorner_edgeblend.maxpat (example patch)` <~/Documents/Max 9/Packages/Max for the Visual Arts/patchers/Projection/GLCorner_edgeblend.maxpat> · jasch objects (installed) `jasch.tr.edgeblend.jxs (shader)` <~/Documents/Max 9/Packages/jasch objects/abstractions/shaders/jasch.tr.edgeblend.jxs>
+- **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for 'edge blend' and 'soft edge': no match. packages/query_packages.py search (installed third-party packages) 'edge blend': no match. It could be built from a shader in jit.gl.slab or jit.gl.pix, but nothing ready-made was found.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Edge blending ships as a shader: Jitter Tools (bundled) has code/jxs/image-fx/transition/tr.edgeblend.jxs, 'generates gradient alpha for edge-blending', with a per-side fade vec4, used through jit.gl.slab. The installed Max for the Visual Arts package has patchers/Projection/GLCorner_edgeblend.maxpat. What Max lacks is the automatic part: no object works out the overlap, and the shader has no gamma or knee control. TouchDesigner's grid setup with per-projector gamma and blank-out has no Max equivalent.
+- **Source:** <https://docs.derivative.ca/Palette:projectorBlend> · <https://docs.derivative.ca/Projection_Mapping>
+- id: `touchdesigner--multi-projector-edge-blending`
 
 ### Perspective-correct rendering for a viewing position (TouchDesigner)
 
@@ -4628,6 +4725,18 @@ more than one tool documents is a stronger lead than a single entry.
 - **Source:** <https://docs.madmapper.com/madmapper/6/6.-outputs/loopback-and-advanced-output-techniques> · <https://docs.madmapper.com/madmapper/6/6.-outputs> · <https://docs.madmapper.com/madmapper/6/4.-surfaces> · <https://docs.madmapper.com/madmapper/6/2.-the-interface/interface-overview>
 - id: `madmapper--the-mapping-stage-is-kept-apart-from-the-content-and-locked-for-the-show`
 
+### Wire patches receive the host's projection slices as shapes (Resolume)
+
+- **Max:** In both, done differently · confidence medium · confirmed
+- **Theme:** Mapping editor: slices, masks and warps on the output
+- **There:** `Slice In`, `Slices tab`
+- **What it does:** A Wire source or effect with a Slice In node gets the slices from Arena's Advanced Output, chosen by dragging them onto the effect's Slices tab, and can draw outlines, chasers or fill shapes that line up with the stage. In Wire itself, dummy slice sets stand in.
+- **Closest in Max:** `jit.gl.sketch`, `jit.gl.meshwarp`
+- **Checked:** Registry: no object shares a mapping layout as data with other objects. jit.gl.meshwarp refpage can output its mesh matrix (output_mesh_matrix), which is the nearest thing: one warp's geometry, not a stage of named slices.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Max has no host slice map to receive. In Max the patch owns its own output geometry, so outlines that line up with it are drawn from the same coordinates with jit.gl.sketch. The real gap is the missing slice editor, covered by other entries.
+- **Source:** <https://resolume.com/support/en/wire-slices>
+- id: `resolume--wire-patches-receive-the-host-s-projection-slices-as-shapes`
+
 ### Dome and mirror warping from externally calibrated mesh files (Isadora)
 
 - **Max:** Unsure · confidence low · unreviewed
@@ -4655,47 +4764,38 @@ more than one tool documents is a stronger lead than a single entry.
 
 ### Gaussian splat loading and rendering (TouchDesigner)
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Not in Max · confidence high · confirmed
 - **Theme:** Start-up, loading and initial values
 - **There:** `Point File In POP`, `Palette:gsGeo`, `Palette:gsScene`
 - **What it does:** Reads Gaussian splat files and renders them with a supplied shader component.
 - **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for gaussian, splat: only blur effects matched.
-- **Review:** 2026-10-02 (Claude): no object whose name contains 'splat' in Max 9's obj-qlookup.json. Third-party packages that are not installed on this machine were not checked.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No 'splat' or 'gaussian' object in obj-qlookup.json (the only 'splat' refpage is the gen splat operator, which writes into a buffer). A web search found no Max or Jitter Gaussian-splat package.
 - **Source:** <https://docs.derivative.ca/Gaussian_Splats> · <https://docs.derivative.ca/Point_File_In_POP>
 - id: `touchdesigner--gaussian-splat-loading-and-rendering`
 
 ### Hosting Notch blocks and serving disguise RenderStream (TouchDesigner)
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Not in Max · confidence high · confirmed
+- **Theme:** Hosting other vendors' engines
 - **There:** `Notch TOP`, `RenderStream In TOP`, `RenderStream Out TOP`, `RenderStream In CHOP`
 - **What it does:** Runs compiled Notch real-time effects inside the graph with their exposed properties as parameters, and lets a disguise media server drive a project as a render node.
 - **Checked:** Searched the registry and refpage text for notch and renderstream: the only hits were filter objects whose text uses 'notch' in the audio sense. Not in the installed packages.
 - **Notes:** Both need licences from the other vendor.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No 'notch' or 'renderstream' match beyond audio notch filters. disguise's RenderStream docs (help.disguise.one/workflows/renderstream/renderstream-overview) list Unreal, Unity, TouchDesigner and Notch as supported engines, not Max; a web search found no Max integration.
 - **Source:** <https://docs.derivative.ca/Notch> · <https://docs.derivative.ca/Notch_TOP> · <https://docs.derivative.ca/RenderStream>
 - id: `touchdesigner--hosting-notch-blocks-and-serving-disguise-renderstream`
 
 ### Substance materials (TouchDesigner)
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Not in Max · confidence high · confirmed
 - **Theme:** Cameras, lights and materials
 - **There:** `Substance TOP`, `Substance Select TOP`, `PBR MAT`
 - **What it does:** Loads Adobe Substance .sbsar materials, exposes their settings as parameters, and feeds every texture layer to the PBR material.
-- **Closest in Max:** `jit.gl.pbr`
+- **Closest in Max:** `jit.gl.pbr`, `jit.gl.material`, `jit.gl.textureset`
 - **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for substance, sbsar: no match. jit.gl.pbr (refpage read) takes separate albedo, normal, roughness and metallic textures, so baked texture sets work; procedural .sbsar files do not.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No 'substance' or 'sbsar' in obj-qlookup.json, any refpage or the installed package library. jit.gl.pbr (Jitter Tools docs) takes separate albedo, roughness, metallic, normals and heightmap textures, so baked Substance maps can be fed by hand, but nothing loads an .sbsar or exposes its settings.
 - **Source:** <https://docs.derivative.ca/Substance_TOP> · <https://docs.derivative.ca/PBR_MAT>
 - id: `touchdesigner--substance-materials`
-
-### VR and AR sessions with controllers and hand tracking (cables.gl)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** VR and AR
-- **There:** `Ops.Devices.WebXr.Vr.Vr`, `Ops.Devices.WebXr.Vr.VrController`, `Ops.Devices.WebXr.Vr.VrHand`
-- **What it does:** The Vr op starts a WebXR session in VR or AR mode and renders the patch for each eye, giving the viewer's pose. Two more ops give controller tracking and tracked hands with bones and pointing rays.
-- **Checked:** Max object registry (interfaces/obj-qlookup.json, 1,323 names): 'vr' matches no object. refpage names and digests (1,940 .maxref.xml files under C74): 'vr' and 'oculus' match nothing. userguide (C74/docs/userguide/content): 'WebXR\|OpenXR\|VR ' in 0 files. packages/query_packages.py search 'vr' and 'oculus': no relevant matches.
-- **Notes:** Absent from core Max and the installed packages. Third-party VR packages that are not installed were not searched. The cables op pages have no written documentation.
-- **Review:** 2026-10-02 (Claude): no object whose name contains 'vr' in Max 9's obj-qlookup.json. Third-party packages that are not installed on this machine were not checked.
-- **Source:** <https://cables.gl/op/Ops.Devices.WebXr.Vr.Vr> · <https://cables.gl/op/Ops.Devices.WebXr.Vr.VrHand> · <https://cables.gl/ops/Ops.Devices.WebXr.Vr>
-- id: `cables-gl--vr-and-ar-sessions-with-controllers-and-hand-tracking`
 
 ### Fluid, smoke and soft-body simulation (TouchDesigner)
 
@@ -4819,6 +4919,19 @@ more than one tool documents is a stronger lead than a single entry.
 - **Notes:** Max has shadows. What cables adds is a named choice of algorithm and the option to turn casting on and off per branch of the scene. The documentation of artifacts is also better than anything found in the Max userguide ('shadow' appears in 2 userguide files, neither about tuning).
 - **Source:** <https://cables.gl/docs/7_lighting/shadows/shadows> · <https://cables.gl/op/Ops.Gl.ShaderEffects.Shadow_v3>
 - id: `cables-gl--shadow-filtering-choices-and-per-branch-cast-receive`
+
+### VR and AR sessions with controllers and hand tracking (cables.gl)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** VR and AR
+- **There:** `Ops.Devices.WebXr.Vr.Vr`, `Ops.Devices.WebXr.Vr.VrController`, `Ops.Devices.WebXr.Vr.VrHand`
+- **What it does:** The Vr op starts a WebXR session in VR or AR mode and renders the patch for each eye, giving the viewer's pose. Two more ops give controller tracking and tracked hands with bones and pointing rays.
+- **Third-party:** VR (Graham Wakefield) `vr` <https://cycling74.com/packages/vr>
+- **Checked:** Max object registry (interfaces/obj-qlookup.json, 1,323 names): 'vr' matches no object. refpage names and digests (1,940 .maxref.xml files under C74): 'vr' and 'oculus' match nothing. userguide (C74/docs/userguide/content): 'WebXR\|OpenXR\|VR ' in 0 files. packages/query_packages.py search 'vr' and 'oculus': no relevant matches.
+- **Notes:** Absent from core Max and the installed packages. Third-party VR packages that are not installed were not searched. The cables op pages have no written documentation.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No VR or WebXR object in Max. The third-party VR package renders to Rift and Vive with controller data. Nothing found for AR sessions or tracked hands with bones.
+- **Source:** <https://cables.gl/op/Ops.Devices.WebXr.Vr.Vr> · <https://cables.gl/op/Ops.Devices.WebXr.Vr.VrHand> · <https://cables.gl/ops/Ops.Devices.WebXr.Vr>
+- id: `cables-gl--vr-and-ar-sessions-with-controllers-and-hand-tracking`
 
 ### Deforming grid shapes with built-in physics (plugdata (Gem))
 
@@ -5378,120 +5491,69 @@ more than one tool documents is a stronger lead than a single entry.
 
 ### BlackTrax (RTTrP) tracking input (Isadora)
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Not in Max · confidence high · confirmed
 - **Theme:** Stage tracking, motion capture and LIDAR
 - **There:** `Blacktrax Watcher`
 - **What it does:** Receives RTTrP packets from a BlackTrax performer-tracking system, by unicast or multicast, and outputs position, rotation, velocity and acceleration for a named trackable.
 - **Closest in Max:** `udpreceive`
 - **Checked:** Registry and package search 'blacktrax', 'mocap': none. Would need a binary packet parser.
 - **Notes:** Niche; relevant to large venues.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No 'blacktrax' or 'rttrp' object in Max's registry, refpages or installed packages, and a web search found no Max external. A separate bridge app, RTTrPMtoOSC (github.com/bastidererste/RTTrPMtoOSC), converts RTTrP to OSC, which udpreceive can then take.
 - **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=409> · <https://troikatronix.com/files/isadora-manual.pdf#page=410>
 - id: `isadora--blacktrax-rttrp-tracking-input`
 
+### LIDAR scanners and scan-based blob tracking (TouchDesigner)
+
+- **Max:** Not in Max · confidence high · confirmed
+- **Theme:** Stage tracking, motion capture and LIDAR
+- **There:** `Hokuyo CHOP`, `Ouster TOP`, `SICK TOP`, `Leuze ROD4 CHOP`, `Blob Track CHOP`
+- **What it does:** Reads 2D and 3D laser scanners directly, and tracks groups of scan points as blobs with ids, velocity and occlusion handling.
+- **Closest in Max:** `serial`, `udpreceive`, `node.script`
+- **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for lidar: no match. packages/query_packages.py search (installed third-party packages) 'lidar': no match. cv.jit's blob objects work on images, not on scan point lists.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No 'lidar', 'hokuyo' or laser-scanner object in obj-qlookup.json, refpages or installed packages. Web searches found no Max external for Hokuyo, Ouster or SICK; a forum thread (cycling74.com/forums/anyone-used-a-lidar-in-max-recommendations) points to a Node library for RPLidar, which needs code in node.script.
+- **Source:** <https://docs.derivative.ca/LIDAR> · <https://docs.derivative.ca/Hokuyo_CHOP> · <https://docs.derivative.ca/Blob_Track_CHOP>
+- id: `touchdesigner--lidar-scanners-and-scan-based-blob-tracking`
+
 ### Depth-camera skeleton tracking and a shared skeleton data type (Isadora)
 
-- **Max:** Not in Max · confidence medium · unreviewed
+- **Max:** Partly in Max · confidence medium · confirmed
 - **Theme:** Body, face and hand tracking
 - **There:** `OpenNI Tracker`, `Skeleton Decoder`, `Skeleton Visualizer`, `Skeleton From JSON`, `Rokoko Studio Live Watcher`
 - **What it does:** One actor reads Kinect, Orbbec and RealSense depth cameras and outputs depth, colour, body masks and skeletons, and can record and replay depth streams. Skeletons travel as one value type that a decoder splits into named joints, a visualizer draws, a motion-capture suit also produces, and a JSON converter can feed from any other source.
-- **Closest in Max:** `cv.jit (package)`, `jit.grab`, `dict`
+- **Closest in Max:** `jit.grab`, `dict`
+- **Third-party:** dp.kinect3 (Dale Phurrough, commercial) `dp.kinect3` <https://github.com/diablodale/dp.kinect3> · jit.realsense `jit.realsense` <https://github.com/blueyeti/jit.realsense>
 - **Checked:** Registry and package search 'kinect', 'openni', 'skeleton', 'pose', 'mediapipe', 'leap': nothing installed. cv.jit is installed and covers 2D image analysis, not depth skeletons. Only the opening of the OpenNI Tracker entry was read; the KB article URL is from the index and was not read.
 - **Notes:** Third-party Kinect externals for Max exist but are not installed here. OpenNI Tracker is marked public beta with a long-run crash note.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No depth-camera or skeleton object in Max itself. Third-party externals give depth and skeletons for single camera families, but Max has no shared skeleton value type; a dict could carry joints, by convention only.
 - **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=622> · <https://troikatronix.com/files/isadora-manual.pdf#page=623> · <https://troikatronix.com/files/isadora-manual.pdf#page=683> · <https://troikatronix.com/files/isadora-manual.pdf#page=728> · <https://troikatronix.com/files/isadora-manual.pdf#page=730> · <https://troikatronix.com/files/isadora-manual.pdf#page=732> · <https://support.troikatronix.com/support/solutions/articles/13000069937-skeleton-tracking-in-isadora-3-with-openni-tracker>
 - id: `isadora--depth-camera-skeleton-tracking-and-a-shared-skeleton-data-type`
 
 ### Leap Motion hand tracking (Isadora)
 
-- **Max:** Not in Max · confidence medium · unreviewed
+- **Max:** Partly in Max · confidence medium · confirmed
 - **Theme:** Body, face and hand tracking
 - **There:** `Leap Motion Watcher`
 - **What it does:** Reports the position and rotation of hands over a Leap Motion controller, and the angle and distance between two hands.
+- **Third-party:** Ultraleap `ultraleap` <https://github.com/celtera/ultraleap> · aka.leapmotion `aka.leapmotion` <https://github.com/akamatsu/aka.leapmotion>
 - **Checked:** Registry and package search 'leap': none installed.
 - **Notes:** Third-party externals may exist; not verified.
-- **Review:** 2026-10-02 (Claude): no object whose name contains 'leap' in Max 9's obj-qlookup.json. Third-party packages that are not installed on this machine were not checked.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Nothing named 'leap' in Max's registry. The Ultraleap package (Package Manager, source at github.com/celtera/ultraleap) gives hand and finger tracking, so only the two-hand angle and distance outputs would need building.
 - **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=559>
 - id: `isadora--leap-motion-hand-tracking`
 
 ### Speech to text as one object (Isadora)
 
-- **Max:** Not in Max · confidence low · unreviewed
+- **Max:** Partly in Max · confidence low · confirmed
 - **Theme:** Speech in and out
 - **There:** `Audio to Text`
 - **What it does:** Converts spoken audio into text inside the patch, for voice-controlled pieces. Added in an Isadora 4 point release.
+- **Closest in Max:** `jweb`, `node.script`
+- **Third-party:** kaldi-msp `(Kaldi speech recognition external)` <https://github.com/ilzxc/kaldi-msp>
 - **Checked:** Registry and package search 'speech to text', 'stt', 'whisper': none.
 - **Notes:** Seen only as a heading and one sentence in the release notes; it is not in the v4.0 manual. How it works was not read.
-- **Review:** 2026-10-02 (Claude): no object whose name contains 'speech' in Max 9's obj-qlookup.json. Third-party packages that are not installed on this machine were not checked.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No speech-recognition object in obj-qlookup.json or refpages; Upshot's upshot_texttospeech is speech out, not in. A Kaldi-based external exists on GitHub, and the forum suggests cloud APIs through node.script, which means writing code. No one-object Whisper external was found.
 - **Source:** <https://support.troikatronix.com/support/solutions/articles/13000106556-isadora-4-release-notes>
 - id: `isadora--speech-to-text-as-one-object`
-
-### Depth cameras and skeleton tracking (TouchDesigner)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Body, face and hand tracking
-- **There:** `Kinect Azure TOP`, `Kinect Azure CHOP`, `Orbbec TOP`, `RealSense TOP`, `ZED TOP`, `OAK Device CHOP`, `Nuitrack TOP`, `Nuitrack CHOP`, `Leap Motion CHOP`
-- **What it does:** Operators for each depth camera family give colour, depth, point cloud and body skeleton data; Leap Motion gives hands.
-- **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for kinect, leap, realsense, skeleton, 'depth cam': no match. packages/query_packages.py search (installed third-party packages) kinect, leap, realsense, skeleton: no match.
-- **Notes:** Several of these are Windows-only in TouchDesigner too.
-- **Review:** 2026-10-02 (Claude): no object whose name contains 'kinect' in Max 9's obj-qlookup.json. Third-party packages that are not installed on this machine were not checked.
-- **Source:** <https://docs.derivative.ca/Kinect> · <https://docs.derivative.ca/Kinect_Azure_TOP> · <https://docs.derivative.ca/Orbbec> · <https://docs.derivative.ca/RealSense> · <https://docs.derivative.ca/ZED> · <https://docs.derivative.ca/OAK-D> · <https://docs.derivative.ca/Nuitrack_TOP> · <https://docs.derivative.ca/Leap_Motion>
-- id: `touchdesigner--depth-cameras-and-skeleton-tracking`
-
-### LIDAR scanners and scan-based blob tracking (TouchDesigner)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Stage tracking, motion capture and LIDAR
-- **There:** `Hokuyo CHOP`, `Ouster TOP`, `SICK TOP`, `Leuze ROD4 CHOP`, `Blob Track CHOP`
-- **What it does:** Reads 2D and 3D laser scanners directly, and tracks groups of scan points as blobs with ids, velocity and occlusion handling.
-- **Closest in Max:** `cv.jit.blobs.centroids`, `serial`
-- **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for lidar: no match. packages/query_packages.py search (installed third-party packages) 'lidar': no match. cv.jit's blob objects work on images, not on scan point lists.
-- **Review:** 2026-10-02 (Claude): no object whose name contains 'lidar' in Max 9's obj-qlookup.json. Third-party packages that are not installed on this machine were not checked.
-- **Source:** <https://docs.derivative.ca/LIDAR> · <https://docs.derivative.ca/Hokuyo_CHOP> · <https://docs.derivative.ca/Blob_Track_CHOP>
-- id: `touchdesigner--lidar-scanners-and-scan-based-blob-tracking`
-
-### Stage and motion-capture tracking protocols (TouchDesigner)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Stage tracking, motion capture and LIDAR
-- **There:** `BlackTrax CHOP`, `PosiStageNet CHOP`, `OptiTrack In CHOP`
-- **What it does:** Receives performer and object positions from BlackTrax, PosiStageNet and OptiTrack systems as channels.
-- **Closest in Max:** `udpreceive`
-- **Checked:** Searched the registry and refpage text for blacktrax, posistage, optitrack, natnet: no match. Not in the installed packages. The protocols run over UDP, so a hand-written parser on udpreceive is possible.
-- **Source:** <https://docs.derivative.ca/BlackTrax> · <https://docs.derivative.ca/PosiStageNet_CHOP> · <https://docs.derivative.ca/OptiTrack_In_CHOP> · <https://docs.derivative.ca/Interoperability>
-- id: `touchdesigner--stage-and-motion-capture-tracking-protocols`
-
-### VR headsets (TouchDesigner)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** VR and AR
-- **There:** `OpenVR TOP`, `OpenVR CHOP`, `Oculus Rift TOP`, `Palette:TDVR`
-- **What it does:** Renders to OpenVR and Oculus headsets and reads headset and controller tracking.
-- **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for vr, headset, hmd: no match. packages/query_packages.py search (installed third-party packages) 'oculus': no match.
-- **Notes:** Not supported on macOS in TouchDesigner either, per its MacOS page.
-- **Review:** 2026-10-02 (Claude): no object whose name contains 'vr' in Max 9's obj-qlookup.json. Third-party packages that are not installed on this machine were not checked.
-- **Source:** <https://docs.derivative.ca/Palette:TDVR> · <https://docs.derivative.ca/Interoperability>
-- id: `touchdesigner--vr-headsets`
-
-### Face, hand and body tracking from a camera (cables.gl)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Body, face and hand tracking
-- **There:** `Ops.Extension.Mediapipe.MpFaceTracking`, `Ops.Extension.Mediapipe.FaceMesh`, `Ops.Extension.Mediapipe.MpHandTracking`, `Ops.Extension.Mediapipe.MpHand`, `Ops.Extension.Mediapipe.MpPoseTracking_v2`, `Ops.Extension.Mediapipe.MpPoseGetCoordinate`
-- **What it does:** Google's Mediapipe models run in the patch on a webcam or video element and output a face mesh as points and as geometry, hand landmarks for each hand, and body pose landmarks and lines. Pose tracking can also output a mask texture of the person.
-- **Closest in Max:** `cv.jit (package)`, `jweb`
-- **Checked:** Max object registry (interfaces/obj-qlookup.json, 1,323 names): 'mediapipe' and 'face' match nothing; 'pose' and 'hand' match only unrelated names. userguide (C74/docs/userguide/content): 'mediapipe' in 0 files. packages/query_packages.py search 'mediapipe' and 'hand tracking': no matches; 'pose' and 'face' return unrelated objects in the first results. This repo's CLAUDE.md names cv.jit.faces as an installed object; its help file was not read here.
-- **Notes:** Absent from core Max and from the packages installed on this machine. Packages that are not installed were not searched. A jweb page running Mediapipe is the likely Max route.
-- **Source:** <https://cables.gl/ops/Ops.Extension.Mediapipe> · <https://cables.gl/op/Ops.Extension.Mediapipe.MpPoseTracking_v2> · <https://cables.gl/op/Ops.Extension.Mediapipe.MpHandTracking> · <https://cables.gl/op/Ops.Extension.Mediapipe.MpFaceTracking>
-- id: `cables-gl--face-hand-and-body-tracking-from-a-camera`
-
-### Polygon zones with interpolated attributes (ossia score)
-
-- **Max:** Not in Max · confidence low · unreviewed
-- **There:** `Geo Zones`
-- **What it does:** Zones are polygons (for example in latitude/longitude) carrying numeric and enumerated attributes; a moving position gets distances to each zone and attribute values blended by proximity.
-- **Closest in Max:** `nodes`
-- **Checked:** Registry has no polygon-zone object. nodes refpage: displays overlapping circular regions and outputs interpolated weights from the distance between a slider position and each node centre. Circles only, no polygons or attached attributes.
-- **Source:** <https://ossia.io/score-docs/processes/geo-zones.html>
-- id: `ossia-score--polygon-zones-with-interpolated-attributes`
 
 ### Depth cameras and tethered still cameras as live inputs (MadMapper)
 
@@ -5516,6 +5578,20 @@ more than one tool documents is a stronger lead than a single entry.
 - **Source:** <https://docs.derivative.ca/Body_Track_CHOP> · <https://docs.derivative.ca/Face_Track_CHOP>
 - id: `touchdesigner--body-and-face-tracking-from-a-plain-camera`
 
+### Depth cameras and skeleton tracking (TouchDesigner)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Body, face and hand tracking
+- **There:** `Kinect Azure TOP`, `Kinect Azure CHOP`, `Orbbec TOP`, `RealSense TOP`, `ZED TOP`, `OAK Device CHOP`, `Nuitrack TOP`, `Nuitrack CHOP`, `Leap Motion CHOP`
+- **What it does:** Operators for each depth camera family give colour, depth, point cloud and body skeleton data; Leap Motion gives hands.
+- **Closest in Max:** `jit.grab`
+- **Third-party:** dp.kinect3 (Dale Phurrough, commercial) `dp.kinect3` <https://github.com/diablodale/dp.kinect3> · jit.realsense `jit.realsense` <https://github.com/blueyeti/jit.realsense> · Ultraleap `ultraleap` <https://github.com/celtera/ultraleap>
+- **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for kinect, leap, realsense, skeleton, 'depth cam': no match. packages/query_packages.py search (installed third-party packages) kinect, leap, realsense, skeleton: no match.
+- **Notes:** Several of these are Windows-only in TouchDesigner too.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Nothing for depth cameras in Max's own registry or refpages. Third-party externals cover Kinect (dp.kinect3, Windows only), RealSense (jit.realsense) and Leap (ultraleap), but there is no single family covering Orbbec, ZED, OAK and Nuitrack as TouchDesigner does.
+- **Source:** <https://docs.derivative.ca/Kinect> · <https://docs.derivative.ca/Kinect_Azure_TOP> · <https://docs.derivative.ca/Orbbec> · <https://docs.derivative.ca/RealSense> · <https://docs.derivative.ca/ZED> · <https://docs.derivative.ca/OAK-D> · <https://docs.derivative.ca/Nuitrack_TOP> · <https://docs.derivative.ca/Leap_Motion>
+- id: `touchdesigner--depth-cameras-and-skeleton-tracking`
+
 ### GPU optical flow (TouchDesigner)
 
 - **Max:** Partly in Max · confidence high · unreviewed
@@ -5525,6 +5601,32 @@ more than one tool documents is a stronger lead than a single entry.
 - **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for 'optical flow': no match. packages/query_packages.py search (installed third-party packages) found cv.jit.HSflow and cv.jit.LKflow, which work on greyscale matrices on the CPU.
 - **Source:** <https://docs.derivative.ca/Optical_Flow_TOP>
 - id: `touchdesigner--gpu-optical-flow`
+
+### Stage and motion-capture tracking protocols (TouchDesigner)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Stage tracking, motion capture and LIDAR
+- **There:** `BlackTrax CHOP`, `PosiStageNet CHOP`, `OptiTrack In CHOP`
+- **What it does:** Receives performer and object positions from BlackTrax, PosiStageNet and OptiTrack systems as channels.
+- **Closest in Max:** `udpreceive`
+- **Third-party:** pxspr.psn (Pixsper) `pxspr.psn` <https://github.com/pixsper/pxspr.psn>
+- **Checked:** Searched the registry and refpage text for blacktrax, posistage, optitrack, natnet: no match. Not in the installed packages. The protocols run over UDP, so a hand-written parser on udpreceive is possible.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Nothing built in. PosiStageNet is covered by the third-party pxspr.psn package. No Max external was found for BlackTrax RTTrP or OptiTrack NatNet; those need a bridge app or a hand-written UDP parser.
+- **Source:** <https://docs.derivative.ca/BlackTrax> · <https://docs.derivative.ca/PosiStageNet_CHOP> · <https://docs.derivative.ca/OptiTrack_In_CHOP> · <https://docs.derivative.ca/Interoperability>
+- id: `touchdesigner--stage-and-motion-capture-tracking-protocols`
+
+### VR headsets (TouchDesigner)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** VR and AR
+- **There:** `OpenVR TOP`, `OpenVR CHOP`, `Oculus Rift TOP`, `Palette:TDVR`
+- **What it does:** Renders to OpenVR and Oculus headsets and reads headset and controller tracking.
+- **Third-party:** VR (Graham Wakefield) `vr` <https://cycling74.com/packages/vr>
+- **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for vr, headset, hmd: no match. packages/query_packages.py search (installed third-party packages) 'oculus': no match.
+- **Notes:** Not supported on macOS in TouchDesigner either, per its MacOS page.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No 'vr' or headset object in obj-qlookup.json or refpages. Graham Wakefield's VR package in the Package Manager renders to Rift and Vive and reads headset and controller pose, but it targets older headsets and OpenXR devices were not checked.
+- **Source:** <https://docs.derivative.ca/Palette:TDVR> · <https://docs.derivative.ca/Interoperability>
+- id: `touchdesigner--vr-headsets`
 
 ### Classifiers trained in Teachable Machine (cables.gl)
 
@@ -5536,6 +5638,20 @@ more than one tool documents is a stronger lead than a single entry.
 - **Notes:** Max has trainable classifiers for audio and for numeric data. The gap is image and pose classification, and loading a model trained elsewhere with no code.
 - **Source:** <https://cables.gl/op/Ops.Extension.TeachableMachines.ImageClassifier_v2> · <https://cables.gl/op/Ops.Extension.TeachableMachines.AudioClassifier> · <https://cables.gl/ops/Ops.Extension.TeachableMachines>
 - id: `cables-gl--classifiers-trained-in-teachable-machine`
+
+### Face, hand and body tracking from a camera (cables.gl)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Body, face and hand tracking
+- **There:** `Ops.Extension.Mediapipe.MpFaceTracking`, `Ops.Extension.Mediapipe.FaceMesh`, `Ops.Extension.Mediapipe.MpHandTracking`, `Ops.Extension.Mediapipe.MpHand`, `Ops.Extension.Mediapipe.MpPoseTracking_v2`, `Ops.Extension.Mediapipe.MpPoseGetCoordinate`
+- **What it does:** Google's Mediapipe models run in the patch on a webcam or video element and output a face mesh as points and as geometry, hand landmarks for each hand, and body pose landmarks and lines. Pose tracking can also output a mask texture of the person.
+- **Closest in Max:** `jweb`, `jit.grab`
+- **Third-party:** lysdexic-audio jweb examples `jweb-pose-landmarker, jweb-hands-landmarker, jweb-face-landmarker` <https://github.com/lysdexic-audio> · robtherich/jweb-mediapipe `jweb-mediapipe` <https://github.com/robtherich/jweb-mediapipe>
+- **Checked:** Max object registry (interfaces/obj-qlookup.json, 1,323 names): 'mediapipe' and 'face' match nothing; 'pose' and 'hand' match only unrelated names. userguide (C74/docs/userguide/content): 'mediapipe' in 0 files. packages/query_packages.py search 'mediapipe' and 'hand tracking': no matches; 'pose' and 'face' return unrelated objects in the first results. This repo's CLAUDE.md names cv.jit.faces as an installed object; its help file was not read here.
+- **Notes:** Absent from core Max and from the packages installed on this machine. Packages that are not installed were not searched. A jweb page running Mediapipe is the likely Max route.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No MediaPipe object in Max. Community example patches run MediaPipe face, hand and pose models inside Max's built-in jweb browser object, and send landmarks back to the patch. These are example patches, not packaged objects, and they do not output geometry or GL textures directly.
+- **Source:** <https://cables.gl/ops/Ops.Extension.Mediapipe> · <https://cables.gl/op/Ops.Extension.Mediapipe.MpPoseTracking_v2> · <https://cables.gl/op/Ops.Extension.Mediapipe.MpHandTracking> · <https://cables.gl/op/Ops.Extension.Mediapipe.MpFaceTracking>
+- id: `cables-gl--face-hand-and-body-tracking-from-a-camera`
 
 ### Phone sensors read by ops in a patch that runs on the phone (cables.gl)
 
@@ -5580,6 +5696,18 @@ more than one tool documents is a stronger lead than a single entry.
 - **Checked:** Registry: no onnx or ML objects. query_packages: Data Knot dk.regressor, FluidCorpusManipulation fluid.knnregressor~, ml.star (installed third-party) cover learned mappings; nothing for ONNX pose models or LLMs.
 - **Source:** <https://ossia.io/score-docs/processes/ai-recognition.html> · <https://ossia.io/score-docs/processes/classifier.html> · <https://ossia.io/score-docs/processes/regressor.html> · <https://ossia.io/score-docs/processes/qwen-llm.html>
 - id: `ossia-score--onnx-models-rapidlib-learning-and-a-local-llm-as-processes`
+
+### Polygon zones with interpolated attributes (ossia score)
+
+- **Max:** Partly in Max · confidence low · confirmed
+- **Theme:** Spatial zones and interpolation
+- **There:** `Geo Zones`
+- **What it does:** Zones are polygons (for example in latitude/longitude) carrying numeric and enumerated attributes; a moving position gets distances to each zone and attribute values blended by proximity.
+- **Closest in Max:** `nodes`
+- **Checked:** Registry has no polygon-zone object. nodes refpage: displays overlapping circular regions and outputs interpolated weights from the distance between a slider position and each node centre. Circles only, no polygons or attached attributes.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). nodes.maxref.xml: circular regions that output weights by distance from a cursor. That covers proximity blending, but not polygons, geographic coordinates or attributes attached to zones.
+- **Source:** <https://ossia.io/score-docs/processes/geo-zones.html>
+- id: `ossia-score--polygon-zones-with-interpolated-attributes`
 
 ### Multiple blobs with size, bounding box and orientation, and stable IDs (plugdata (Gem))
 
@@ -5901,211 +6029,43 @@ more than one tool documents is a stronger lead than a single entry.
 
 ## timeline/cueing/show control
 
+### Condition outcome chosen while seeking ('offset behaviour') (ossia score)
+
+- **Max:** Not in Max · confidence medium · confirmed
+- **Theme:** Timeline structure: waits, branches, loops
+- **There:** `Offset behaviour`, `Condition`
+- **What it does:** When seeking past a condition, the author decides whether it counts as true, false, or is evaluated against the live value, so a rehearsal can jump past a point that depends on a performer's position.
+- **Checked:** Depends on timeline conditions, which Max does not have (see the triggers and conditions entries). No Max refpage read covers it.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Nothing in Max covers it. Antescofo's startfromlabel and scrubtolabel decide whether messages are sent while seeking, but nothing found lets the author pick a condition's outcome when seeking past it.
+- **Source:** <https://ossia.io/score-docs/common-practices/9-seek-and-transport.html>
+- id: `ossia-score--condition-outcome-chosen-while-seeking-offset-behaviour`
+
 ### Cue Sheet: operator prompts that fire keys (Isadora)
 
-- **Max:** Not in Max · confidence medium · unreviewed
+- **Max:** Partly in Max · confidence medium · confirmed
 - **Theme:** Scenes and cues as the structure of a show
 - **There:** `Cue Sheet`, `Cue Sheet Editor`, `Keyboard Watcher`
 - **What it does:** Each Scene holds a list of cues with a line of text telling the operator what to wait for. Taking a cue shows the next prompt and sends that cue's key to the patch as if typed.
-- **Closest in Max:** `qlist`, `coll`, `umenu`, `comment`
+- **Closest in Max:** `coll`, `umenu`, `comment`, `qlist`
 - **Checked:** Registry and package grep for 'cue' as above; nothing presents a prompt list to an operator. Would be built from coll or qlist plus a display.
 - **Notes:** Small feature; listed because it is a ready-made operator surface.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No operator prompt list in the registry or the packages searched. It can be built from coll or qlist plus a comment display and a key object, with no new code.
 - **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=219> · <https://troikatronix.com/files/isadora-manual.pdf#page=220> · <https://troikatronix.com/files/isadora-manual.pdf#page=221>
 - id: `isadora--cue-sheet-operator-prompts-that-fire-keys`
 
 ### Cue numbering with point cues and renumbering (Isadora)
 
-- **Max:** Not in Max · confidence medium · unreviewed
+- **Max:** Partly in Max · confidence medium · confirmed
 - **Theme:** Scenes and cues as the structure of a show
 - **There:** `Cue Numbering`, `Scene Index`, `Manual`, `Automatic`, `Renumber Cues`, `Jump to Cue`, `Next Cue`, `Prev Cue`
 - **What it does:** Each Scene carries a cue number separate from its position. Cues can be numbered by hand with decimals, or kept in order automatically with inserted cues getting point numbers such as 8.5. A patch or an operator button can go to a cue by number.
-- **Closest in Max:** `mo.cue (modulo package)`, `upshot_cues (Upshot package)`, `qlist`, `umenu`
+- **Closest in Max:** `qlist`, `umenu`, `pattrstorage`
+- **Third-party:** modulo `mo.cue` <~/Documents/Max 9/Packages/modulo/help/utility/mo.cue.maxhelp>
 - **Checked:** Registry grep 'cue': none. Package search 'cue': mo.cue ('set numbered cues and trigger events') and upshot_cues ('program cues'); only their library entries were read, not their patches. qlist refpage read: sequential message list, no numbering scheme.
 - **Notes:** mo.cue may cover go-to-by-number; nothing found does insert-between numbering.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No cue numbering in the registry. Installed modulo package's mo.cue goes to a cue by number (goto, inc, dec), and upshot_cues fires up to 100 cues by bar/beat. Nothing does decimal point cues or renumbering.
 - **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=144> · <https://troikatronix.com/files/isadora-manual.pdf#page=145> · <https://troikatronix.com/files/isadora-manual.pdf#page=146> · <https://troikatronix.com/files/isadora-manual.pdf#page=147> · <https://troikatronix.com/files/isadora-manual.pdf#page=549> · <https://troikatronix.com/files/isadora-manual.pdf#page=861> · <https://troikatronix.com/files/isadora-manual.pdf#page=868>
 - id: `isadora--cue-numbering-with-point-cues-and-renumbering`
-
-### MIDI Show Control send and receive by named fields (Isadora)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Controlling projectors, cameras and show gear
-- **There:** `Send MIDI Show Control`, `MIDI Show Control Watcher`
-- **What it does:** Builds and decodes MIDI Show Control messages from named fields: device ID, command format, command, cue number, cue list, cue path, and timecode for timed commands. The sender's inputs change to match the command chosen.
-- **Closest in Max:** `sxformat`, `sysexin`, `midiout`
-- **Checked:** Registry grep 'msc', 'showcontrol': none. Package search 'show control': none. sxformat refpage read: formats system exclusive bytes from arguments. MSC is sysex, so it can be assembled by hand; no object knows the protocol.
-- **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=596> · <https://troikatronix.com/files/isadora-manual.pdf#page=701> · <https://troikatronix.com/files/isadora-manual.pdf#page=702>
-- id: `isadora--midi-show-control-send-and-receive-by-named-fields`
-
-### Scene list: a document as a row of independent patches, one active at a time (Isadora)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Scenes and cues as the structure of a show
-- **There:** `Scene`, `Scene List`, `Scene Editor`, `Enter Scene Trigger`, `Enter Scene Value`, `Current Scene Number`, `Get Scene Name`
-- **What it does:** A show file is a row of self-contained patches called Scenes. Activating one starts all its actors and media; leaving it stops them. The row is the running order of the show.
-- **Closest in Max:** `pcontrol`, `thispatcher`, `pattrstorage`, `qlist`, `mo.cue (modulo package)`
-- **Checked:** Grepped obj-qlookup.json (core registry, 1,323 names) for 'scene' and 'cue': no names. Grepped the userguide for 'scene': only GL-scene and Live-API uses. Package library search 'scene' and 'cue': mo.cue (numbered cue trigger) and upshot_cues ('program cues'), neither a container of patches. Read refpages: pcontrol opens, closes and loads patcher windows; thispatcher setactivetab switches tabs; qlist stores timed messages. None starts and stops a whole patch with its media as a unit.
-- **Notes:** The single largest gap. Everything a Max user builds by hand around poly~, pcontrol, mute and loadbang is the host's job here.
-- **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=140> · <https://troikatronix.com/files/isadora-manual.pdf#page=141> · <https://troikatronix.com/files/isadora-manual.pdf#page=142> · <https://troikatronix.com/files/isadora-manual.pdf#page=483> · <https://troikatronix.com/isadora/cueing-show-control/>
-- id: `isadora--scene-list-a-document-as-a-row-of-independent-patches-one-active-at-a-time`
-
-### Scene transitions with per-scene fade in, fade out and layering mode (Isadora)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Scenes and cues as the structure of a show
-- **There:** `Jump`, `Jump++`, `Jump By Name`, `Jump to Cue`, `Fade In Time`, `Fade Out Time`, `Crossfade Mode`, `Scene Intensity`
-- **What it does:** Changing Scene crossfades the whole outgoing and incoming patch, video and sound together, over times stored on each Scene or given to the Jump actor. The new Scene can be added, drawn above or drawn below the old one.
-- **Closest in Max:** `jit.xfade`, `pattrstorage`, `line`
-- **Checked:** Read refpages: jit.xfade crossfades two matrices; pattrstorage has 'fade' and 'recall' messages that interpolate stored parameter values. Neither fades two running patches against each other. No registry name contains 'fade' beyond these (jit.xfade found by grep 'xfade').
-- **Notes:** Depends on the Scene model above; listed separately because the fade is the part operators use every cue.
-- **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=150> · <https://troikatronix.com/files/isadora-manual.pdf#page=151> · <https://troikatronix.com/files/isadora-manual.pdf#page=547> · <https://troikatronix.com/files/isadora-manual.pdf#page=549> · <https://troikatronix.com/files/isadora-manual.pdf#page=551> · <https://troikatronix.com/files/isadora-manual.pdf#page=694>
-- id: `isadora--scene-transitions-with-per-scene-fade-in-fade-out-and-layering-mode`
-
-### Timecode as a data type, with MTC chase for movies (Isadora)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Timecode as a type, and chasing it
-- **There:** `MTC Reader`, `MTC Compare`, `MTC Movie Locker`, `Timecode Comparator`, `Timecode Calculator`, `Timecode Converter`, `Use Timecode`
-- **What it does:** Timecode is a value type that converts itself to seconds, frames or text depending on what it is linked to, and compares correctly across frame rates. Actors read incoming MIDI Timecode, fire at a given time, and lock a movie to it by trimming speed and jumping when drift is too large.
-- **Closest in Max:** `rtin`, `midiin`, `sysexin`, `transport`, `timepoint`, `jit.movie`
-- **Checked:** Registry grep 'timecode', 'mtc', 'smpte', 'ltc': no names. Refpage grep 'time code' / 'MTC': only adstatus. Package library search 'timecode', 'mtc', 'ltc': nothing relevant. rtin refpage read: MIDI real-time messages (clock, start, stop), not quarter-frame timecode. transport and timepoint work in Max's own musical time.
-- **Notes:** MTC quarter-frame messages could be decoded from midiin by hand. Only MTC input is documented for Isadora; no LTC.
-- **Review:** 2026-10-02 (Claude): no object whose name contains 'timecode / mtc' in Max 9's obj-qlookup.json. Third-party packages that are not installed on this machine were not checked.
-- **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=292> · <https://troikatronix.com/files/isadora-manual.pdf#page=293> · <https://troikatronix.com/files/isadora-manual.pdf#page=299> · <https://troikatronix.com/files/isadora-manual.pdf#page=300> · <https://troikatronix.com/files/isadora-manual.pdf#page=607> · <https://troikatronix.com/files/isadora-manual.pdf#page=608> · <https://troikatronix.com/files/isadora-manual.pdf#page=609> · <https://troikatronix.com/files/isadora-manual.pdf#page=785> · <https://troikatronix.com/files/isadora-manual.pdf#page=786> · <https://troikatronix.com/files/isadora-manual.pdf#page=787>
-- id: `isadora--timecode-as-a-data-type-with-mtc-chase-for-movies`
-
-### Second-trigger policy and hold-to-play on release (QLab)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Easing, smoothing and ramps
-- **There:** `Second Triggers`, `Second trigger on release`
-- **What it does:** What a running cue does when told to start again is a per-cue setting: nothing, panic, stop, hard stop, hard stop and restart, or devamp. 'On release' treats the key or MIDI note release as the second trigger, giving sampler-style hold-to-play.
-- **Closest in Max:** `sfplay~`, `onebang`, `gate`
-- **Checked:** No refpage read describes a per-object retrigger policy. sfplay~ and playlist~ simply restart or follow the message sent. Hold-to-play is built by hand from key/keyup or notein velocity 0.
-- **Source:** <https://qlab.app/docs/v5/fundamentals/inspector/>
-- id: `qlab--second-trigger-policy-and-hold-to-play-on-release`
-
-### Autopilot: automatic advance through clips and columns (Resolume)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Scenes and cues as the structure of a show
-- **There:** `Autopilot`, `Bag`, `Master Layer`, `Clip Actions`, `Column Actions`
-- **What it does:** An autopilot on the composition, a group, a layer or a clip advances forward, backward or randomly (Any, Other, or Bag, which plays everything once before reshuffling). It advances after a time in seconds or beats, at the end of the clip, or at the end of the longest, shortest, top or bottom clip in the column. Each clip or column can override the action (go to first, last, a specific one, or do nothing), a Master Layer can drive the whole show, and the clip's choice overrides the layer's, which overrides the group's, which overrides the composition's.
-- **Closest in Max:** `qlist`, `jit.playlist`, `random`, `urn`
-- **Checked:** jit.playlist refpage: 'next' plays the next clip but there is no end-of-clip auto-advance policy or random-without-repeat choice. qlist refpage: a timed cue list, not a clip sequencer. Max has urn for drawing without repeats (registry), so 'Bag' is buildable, but no object combines duration rules, per-item actions and a priority order.
-- **Source:** <https://resolume.com/support/en/autopilot> · <https://resolume.com/support/en/clips> · <https://resolume.com/support/en/layers>
-- id: `resolume--autopilot-automatic-advance-through-clips-and-columns`
-
-### Parameter animations that restart on a clip trigger or column trigger (Resolume)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Scenes and cues as the structure of a show
-- **There:** `Start Settings`, `BPM Phase Lock`
-- **What it does:** An animated parameter can be set to start running on composition load, on any clip trigger in its layer, on a column trigger, or only by hand. A BPM-synced animation can drop its phase lock so it starts its cycle when the clip starts instead of staying aligned with the master bar.
-- **Closest in Max:** `line`, `phasor~`, `transport`
-- **Checked:** Max has no built-in parameter animation, so no restart policy exists. In a patch the restart is a message from the trigger into whatever ramp object (line, a phasor or a transport-linked metro) drives the value.
-- **Source:** <https://resolume.com/support/en/parameter-animation>
-- id: `resolume--parameter-animations-that-restart-on-a-clip-trigger-or-column-trigger`
-
-### Timecode as a built-in type, with LTC in and out (TouchDesigner)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Timecode as a type, and chasing it
-- **There:** `Timecode CHOP`, `LTC In CHOP`, `LTC Out CHOP`, `tdu.Timecode`
-- **What it does:** SMPTE timecode is read from and written to an audio channel, generated, converted and compared. Movie players, the timer and video inputs all report and accept timecode.
-- **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for timecode, ltc, smpte, mtc: no match. packages/query_packages.py search (installed third-party packages) 'timecode': no match; 'ltc' matched only an unrelated compander.
-- **Notes:** MIDI timecode could be parsed by hand from raw MIDI; that was not counted as support.
-- **Review:** 2026-10-02 (Claude): no object whose name contains 'timecode / ltc / smpte' in Max 9's obj-qlookup.json. Third-party packages that are not installed on this machine were not checked.
-- **Source:** <https://docs.derivative.ca/Timecode> · <https://docs.derivative.ca/Timecode_CHOP> · <https://docs.derivative.ca/LTC_In_CHOP>
-- id: `touchdesigner--timecode-as-a-built-in-type-with-ltc-in-and-out`
-
-### Queue mode: play timelines one after another, looping the queue (Vezér)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Keyframe timeline over any parameter
-- **There:** `Composition Queue mode`, `Queue toggle`, `Start Queue from the current Composition`
-- **What it does:** With Queue on, the master Play button starts the first composition, and each composition starts the next when it reaches its end. The queue can loop back to the first, and can start from the selected composition.
-- **Closest in Max:** `transport`, `timepoint`, `counter`
-- **Checked:** No playlist-of-timelines object in obj-qlookup.json (Max registry, core plus bundled packages). It would be built by hand from end-of-section bangs (timepoint at each section's length) into the next section's transport.
-- **Source:** <https://imimot.com/help/vezer/general/composition-queue-mode> · <https://imimot.com/help/vezer/general/preferences-global-behaviours>
-- id: `vezer--queue-mode-play-timelines-one-after-another-looping-the-queue`
-
-### Subtitle files as timed data (cables.gl)
-
-- **Max:** Not in Max · confidence low · unreviewed
-- **Theme:** Subtitle files
-- **There:** `Ops.Extension.Subtitles.ParseSubtitles`, `Ops.Extension.Subtitles.SubtitleAnim`
-- **What it does:** Parses .srt and .vtt subtitle files and turns the cues into keys of an animation object, so text follows the timeline or a video's time.
-- **Closest in Max:** `coll`, `text`, `jit.textfile`
-- **Checked:** Max object registry (interfaces/obj-qlookup.json, 1,323 names) and refpage names and digests (1,940 .maxref.xml files under C74): 'subtit' matches nothing. packages/query_packages.py search 'subtitle': no matches.
-- **Notes:** Small. A few lines of v8 would parse the format in Max.
-- **Source:** <https://cables.gl/op/Ops.Extension.Subtitles.SubtitleAnim> · <https://cables.gl/ops/Ops.Extension.Subtitles>
-- id: `cables-gl--subtitle-files-as-timed-data`
-
-### Condition outcome chosen while seeking ('offset behaviour') (ossia score)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Timeline structure: waits, branches, loops
-- **There:** `Offset behaviour`, `Condition`
-- **What it does:** When seeking past a condition, the author decides whether it counts as true, false, or is evaluated against the live value, so a rehearsal can jump past a point that depends on a performer's position.
-- **Checked:** Depends on timeline conditions, which Max does not have (see the triggers and conditions entries). No Max refpage read covers it.
-- **Source:** <https://ossia.io/score-docs/common-practices/9-seek-and-transport.html>
-- id: `ossia-score--condition-outcome-chosen-while-seeking-offset-behaviour`
-
-### Conditional branches at a synchronisation point (ossia score)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Timeline structure: waits, branches, loops
-- **There:** `Condition`, `Split condition`, `Sync`
-- **What it does:** Several intervals can start from the same synchronisation point, and each start can carry a condition, so only the branches whose condition is true run when that point is reached. This lets a score choose its path at run time.
-- **Closest in Max:** `gate`, `route`, `select`
-- **Checked:** Searched obj-qlookup.json (Max registry, core plus bundled packages) for timeline/score objects: none. Branching in Max is done with gate/route in the dataflow, not on a timeline (max_system_model.json dimension 10). No object refpage read describes conditions attached to timeline points.
-- **Notes:** The docs' Condition and Branch glossary entries are empty; behaviour summarised from the Switches and Scenario pages.
-- **Source:** <https://ossia.io/score-docs/common-practices/2-switches.html> · <https://ossia.io/score-docs/processes/scenario.html> · <https://ossia.io/score-docs/examples/basics/timemodel.html>
-- id: `ossia-score--conditional-branches-at-a-synchronisation-point`
-
-### Interactive triggers that hold a timeline until an event (ossia score)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Timeline structure: waits, branches, loops
-- **There:** `Trigger`, `Auto-Trigger`, `Start on play`
-- **What it does:** A point in the timeline can be made to wait: everything after it pauses until the trigger is fired by a click, a parameter value (MIDI button, OSC message) or an expression. The interval before it then has no fixed length.
-- **Closest in Max:** `qlist`, `transport`, `timepoint`
-- **Checked:** Registry has no timeline object (search 'timeline' in obj-qlookup.json (Max registry, core plus bundled packages) returns nothing). qlist refpage: stores timed or untimed cues as messages. timepoint refpage: bangs when a transport reaches a time and only while the clock moves forward. Neither describes a timeline position that waits for an external condition before continuing. max_system_model.json dimension 10: Max has no built-in scene, cue or timeline layer.
-- **Source:** <https://ossia.io/score-docs/quick-start/breaking-the-timeline.html> · <https://ossia.io/score-docs/processes/scenario.html> · <https://ossia.io/score-docs/cues.html>
-- id: `ossia-score--interactive-triggers-that-hold-a-timeline-until-an-event`
-
-### Intervals with flexible duration (minimum, maximum, infinite) (ossia score)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Timeline structure: waits, branches, loops
-- **There:** `Interval`, `setIntervalMinDuration`, `setIntervalMaxInfinite`
-- **What it does:** A block of time has a nominal length but also a minimum and a maximum, possibly infinite. Combined with a trigger at its end, it can be cut short after the minimum, or forced to end at the maximum if nothing happens.
-- **Closest in Max:** `transport`, `timepoint`, `delay`
-- **Checked:** No Max object refpage read (transport, timepoint, qlist) models a time span with a min/max window. Closest is building timeouts by hand with delay or timepoint.
-- **Source:** <https://ossia.io/score-docs/in-depth/scripting-api.html> · <https://ossia.io/score-docs/common-practices/1-looping.html> · <https://ossia.io/score-docs/common-practices/2-switches.html>
-- id: `ossia-score--intervals-with-flexible-duration-minimum-maximum-infinite`
-
-### Loops and jumps inside a timeline (transitions) (ossia score)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Timeline structure: waits, branches, loops
-- **There:** `Transition`, `Sync`, `Scenario`
-- **What it does:** Instantaneous connections can link a later point back to an earlier one, so a timeline loops forever or jumps between sections like a state machine, while each section keeps its timed contents.
-- **Closest in Max:** `qlist`, `transport`
-- **Checked:** transport refpage lists position control but no loop graph; qlist steps through cues in order or by explicit messages. Neither describes a graph of timed sections with jumps.
-- **Source:** <https://ossia.io/score-docs/common-practices/1-looping.html> · <https://ossia.io/score-docs/quick-start/non-linear-timelines.html>
-- id: `ossia-score--loops-and-jumps-inside-a-timeline-transitions`
-
-### Seek recomputes the state ('value compilation') (ossia score)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Timeline structure: waits, branches, loops
-- **There:** `Play from here`, `Value compilation`, `Transport value compilation`
-- **What it does:** When playback jumps to a point, score works out which messages would have been sent by all earlier states and sends the latest value of each, so external devices end up where they would have been had the show run from the start.
-- **Closest in Max:** `transport`, `qlist`, `pattrstorage`
-- **Checked:** transport refpage: setting position moves time but does not describe replaying earlier events. qlist and mtr refpages describe sequential playback, not catching up state on a jump. pattrstorage recalls a whole stored preset, which is a manual alternative.
-- **Source:** <https://ossia.io/score-docs/common-practices/9-seek-and-transport.html> · <https://ossia.io/score-docs/reference/preferences.html>
-- id: `ossia-score--seek-recomputes-the-state-value-compilation`
 
 ### Go Triggers: one document-wide GO / BACK binding for keyboard, MIDI and HID (Isadora)
 
@@ -6118,6 +6078,45 @@ more than one tool documents is a stronger lead than a single entry.
 - **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=147> · <https://troikatronix.com/files/isadora-manual.pdf#page=148> · <https://troikatronix.com/files/isadora-manual.pdf#page=149> · <https://troikatronix.com/files/isadora-manual.pdf#page=150> · <https://troikatronix.com/files/isadora-manual.pdf#page=514> · <https://troikatronix.com/files/isadora-manual.pdf#page=206>
 - id: `isadora--go-triggers-one-document-wide-go-back-binding-for-keyboard-midi-and-hid`
 
+### MIDI Show Control send and receive by named fields (Isadora)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Controlling projectors, cameras and show gear
+- **There:** `Send MIDI Show Control`, `MIDI Show Control Watcher`
+- **What it does:** Builds and decodes MIDI Show Control messages from named fields: device ID, command format, command, cue number, cue list, cue path, and timecode for timed commands. The sender's inputs change to match the command chosen.
+- **Closest in Max:** `sxformat`, `sysexin`, `midiout`
+- **Third-party:** none (forum abstraction) `MSC decoder abstraction` <https://cycling74.com/forums/midi-show-control-2>
+- **Checked:** Registry grep 'msc', 'showcontrol': none. Package search 'show control': none. sxformat refpage read: formats system exclusive bytes from arguments. MSC is sysex, so it can be assembled by hand; no object knows the protocol.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). MSC is sysex, so sxformat and midiout can build it and sysexin can receive it (refpages read). No object knows MSC fields by name, built-in or in installed packages.
+- **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=596> · <https://troikatronix.com/files/isadora-manual.pdf#page=701> · <https://troikatronix.com/files/isadora-manual.pdf#page=702>
+- id: `isadora--midi-show-control-send-and-receive-by-named-fields`
+
+### Scene list: a document as a row of independent patches, one active at a time (Isadora)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Scenes and cues as the structure of a show
+- **There:** `Scene`, `Scene List`, `Scene Editor`, `Enter Scene Trigger`, `Enter Scene Value`, `Current Scene Number`, `Get Scene Name`
+- **What it does:** A show file is a row of self-contained patches called Scenes. Activating one starts all its actors and media; leaving it stops them. The row is the running order of the show.
+- **Closest in Max:** `pcontrol`, `thispatcher`, `pattrstorage`, `qlist`
+- **Checked:** Grepped obj-qlookup.json (core registry, 1,323 names) for 'scene' and 'cue': no names. Grepped the userguide for 'scene': only GL-scene and Live-API uses. Package library search 'scene' and 'cue': mo.cue (numbered cue trigger) and upshot_cues ('program cues'), neither a container of patches. Read refpages: pcontrol opens, closes and loads patcher windows; thispatcher setactivetab switches tabs; qlist stores timed messages. None starts and stops a whole patch with its media as a unit.
+- **Notes:** The single largest gap. Everything a Max user builds by hand around poly~, pcontrol, mute and loadbang is the host's job here.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Registry and userguide have no scene container. pcontrol (enable/disable, open/close patchers) and thispatcher can switch whole subpatchers by hand, so a scene list is buildable, but Max has no host-level running order. modulo's mo.cue only triggers numbered cues.
+- **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=140> · <https://troikatronix.com/files/isadora-manual.pdf#page=141> · <https://troikatronix.com/files/isadora-manual.pdf#page=142> · <https://troikatronix.com/files/isadora-manual.pdf#page=483> · <https://troikatronix.com/isadora/cueing-show-control/>
+- id: `isadora--scene-list-a-document-as-a-row-of-independent-patches-one-active-at-a-time`
+
+### Scene transitions with per-scene fade in, fade out and layering mode (Isadora)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Scenes and cues as the structure of a show
+- **There:** `Jump`, `Jump++`, `Jump By Name`, `Jump to Cue`, `Fade In Time`, `Fade Out Time`, `Crossfade Mode`, `Scene Intensity`
+- **What it does:** Changing Scene crossfades the whole outgoing and incoming patch, video and sound together, over times stored on each Scene or given to the Jump actor. The new Scene can be added, drawn above or drawn below the old one.
+- **Closest in Max:** `jit.xfade`, `pattrstorage`, `line`
+- **Checked:** Read refpages: jit.xfade crossfades two matrices; pattrstorage has 'fade' and 'recall' messages that interpolate stored parameter values. Neither fades two running patches against each other. No registry name contains 'fade' beyond these (jit.xfade found by grep 'xfade').
+- **Notes:** Depends on the Scene model above; listed separately because the fade is the part operators use every cue.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). jit.xfade crossfades two matrices and pattrstorage interpolates stored presets (presets_and_interpolation userguide page). Nothing crossfades two whole running patches with audio and video together; it must be wired by hand.
+- **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=150> · <https://troikatronix.com/files/isadora-manual.pdf#page=151> · <https://troikatronix.com/files/isadora-manual.pdf#page=547> · <https://troikatronix.com/files/isadora-manual.pdf#page=549> · <https://troikatronix.com/files/isadora-manual.pdf#page=551> · <https://troikatronix.com/files/isadora-manual.pdf#page=694>
+- id: `isadora--scene-transitions-with-per-scene-fade-in-fade-out-and-layering-mode`
+
 ### Secondary (background) Scenes with their own intensity (Isadora)
 
 - **Max:** Partly in Max · confidence medium · unreviewed
@@ -6129,6 +6128,20 @@ more than one tool documents is a stronger lead than a single entry.
 - **Notes:** Max's everything-runs model covers the 'always on' case for free; what is missing is the managed on/off with a level.
 - **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=386> · <https://troikatronix.com/files/isadora-manual.pdf#page=388> · <https://troikatronix.com/files/isadora-manual.pdf#page=464> · <https://troikatronix.com/files/isadora-manual.pdf#page=415> · <https://troikatronix.com/files/isadora-manual.pdf#page=566> · <https://support.troikatronix.com/support/solutions/articles/13000046020-isadora-3-how-to-run-multiple-scenes-simultaneously-using-the-activate-scene-actor>
 - id: `isadora--secondary-background-scenes-with-their-own-intensity`
+
+### Timecode as a data type, with MTC chase for movies (Isadora)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Timecode as a type, and chasing it
+- **There:** `MTC Reader`, `MTC Compare`, `MTC Movie Locker`, `Timecode Comparator`, `Timecode Calculator`, `Timecode Converter`, `Use Timecode`
+- **What it does:** Timecode is a value type that converts itself to seconds, frames or text depending on what it is linked to, and compares correctly across frame rates. Actors read incoming MIDI Timecode, fire at a given time, and lock a movie to it by trimming speed and jumping when drift is too large.
+- **Closest in Max:** `midiin`, `rtin`, `jit.movie`, `transport`
+- **Third-party:** Peter Elsea tutorial (abstraction, not a package) `Max & MTC patches` <http://peterelsea.com/Maxtuts_advanced/Max&MTC.pdf>
+- **Checked:** Registry grep 'timecode', 'mtc', 'smpte', 'ltc': no names. Refpage grep 'time code' / 'MTC': only adstatus. Package library search 'timecode', 'mtc', 'ltc': nothing relevant. rtin refpage read: MIDI real-time messages (clock, start, stop), not quarter-frame timecode. transport and timepoint work in Max's own musical time.
+- **Notes:** MTC quarter-frame messages could be decoded from midiin by hand. Only MTC input is documented for Isadora; no LTC.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No MTC, timecode or chase object in the registry or refpages; rtin covers clock/start/stop only. MTC quarter frames can be decoded from midiin (Elsea tutorial), but there is no timecode type and no movie-chasing logic.
+- **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=292> · <https://troikatronix.com/files/isadora-manual.pdf#page=293> · <https://troikatronix.com/files/isadora-manual.pdf#page=299> · <https://troikatronix.com/files/isadora-manual.pdf#page=300> · <https://troikatronix.com/files/isadora-manual.pdf#page=607> · <https://troikatronix.com/files/isadora-manual.pdf#page=608> · <https://troikatronix.com/files/isadora-manual.pdf#page=609> · <https://troikatronix.com/files/isadora-manual.pdf#page=785> · <https://troikatronix.com/files/isadora-manual.pdf#page=786> · <https://troikatronix.com/files/isadora-manual.pdf#page=787>
+- id: `isadora--timecode-as-a-data-type-with-mtc-chase-for-movies`
 
 ### Triggers by wall-clock time and date (Isadora)
 
@@ -6241,6 +6254,18 @@ more than one tool documents is a stronger lead than a single entry.
 - **Source:** <https://qlab.app/docs/v5/fundamentals/cue-sequences/> · <https://qlab.app/docs/v5/fundamentals/inspector/>
 - id: `qlab--pre-wait-post-wait-and-two-continue-modes-auto-continue-vs-auto-follow`
 
+### Second-trigger policy and hold-to-play on release (QLab)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Retrigger and hold behaviour
+- **There:** `Second Triggers`, `Second trigger on release`
+- **What it does:** What a running cue does when told to start again is a per-cue setting: nothing, panic, stop, hard stop, hard stop and restart, or devamp. 'On release' treats the key or MIDI note release as the second trigger, giving sampler-style hold-to-play.
+- **Closest in Max:** `onebang`, `gate`, `key`, `keyup`, `sfplay~`
+- **Checked:** No refpage read describes a per-object retrigger policy. sfplay~ and playlist~ simply restart or follow the message sent. Hold-to-play is built by hand from key/keyup or notein velocity 0.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No per-object retrigger policy in any refpage read. Hold-to-play and restart rules are a few objects (key/keyup, onebang, gate) wired by hand.
+- **Source:** <https://qlab.app/docs/v5/fundamentals/inspector/>
+- id: `qlab--second-trigger-policy-and-hold-to-play-on-release`
+
 ### A parameter driven by the clip's own playhead (Resolume)
 
 - **Max:** Partly in Max · confidence medium · unreviewed
@@ -6252,6 +6277,18 @@ more than one tool documents is a stronger lead than a single entry.
 - **Source:** <https://resolume.com/support/en/parameter-animation> · <https://resolume.com/support/en/stills>
 - id: `resolume--a-parameter-driven-by-the-clip-s-own-playhead`
 
+### Autopilot: automatic advance through clips and columns (Resolume)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Scenes and cues as the structure of a show
+- **There:** `Autopilot`, `Bag`, `Master Layer`, `Clip Actions`, `Column Actions`
+- **What it does:** An autopilot on the composition, a group, a layer or a clip advances forward, backward or randomly (Any, Other, or Bag, which plays everything once before reshuffling). It advances after a time in seconds or beats, at the end of the clip, or at the end of the longest, shortest, top or bottom clip in the column. Each clip or column can override the action (go to first, last, a specific one, or do nothing), a Master Layer can drive the whole show, and the clip's choice overrides the layer's, which overrides the group's, which overrides the composition's.
+- **Closest in Max:** `jit.playlist`, `urn`, `random`, `qlist`
+- **Checked:** jit.playlist refpage: 'next' plays the next clip but there is no end-of-clip auto-advance policy or random-without-repeat choice. qlist refpage: a timed cue list, not a clip sequencer. Max has urn for drawing without repeats (registry), so 'Bag' is buildable, but no object combines duration rules, per-item actions and a priority order.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). jit.playlist has next and loopreport (refpage), and urn draws without repeats, so end-of-clip advance and 'Bag' order can be wired with a few objects. No object combines advance rules, per-clip actions and column logic.
+- **Source:** <https://resolume.com/support/en/autopilot> · <https://resolume.com/support/en/clips> · <https://resolume.com/support/en/layers>
+- id: `resolume--autopilot-automatic-advance-through-clips-and-columns`
+
 ### Clip trigger rules: Normal / Toggle / Piano, clip target, fader start, ignore column (Resolume)
 
 - **Max:** Partly in Max · confidence medium · unreviewed
@@ -6262,6 +6299,18 @@ more than one tool documents is a stronger lead than a single entry.
 - **Checked:** Userguide mapping.json: Max's MIDI and key mappings have a Trigger Mode (Toggle, Momentary, Cycle, Bang) for a mapped control, which covers the press/hold part for one UI object. Nothing in Max routes a clip to 'whichever player is free' or ties a restart to a fader rising; jit.polymovie's autorestart (refpage) only chooses restart versus resume when an instance is toggled.
 - **Source:** <https://resolume.com/support/en/clips> · <https://resolume.com/support/en/layers> · <https://resolume.com/support/en/composition>
 - id: `resolume--clip-trigger-rules-normal-toggle-piano-clip-target-fader-start-ignore-column`
+
+### Parameter animations that restart on a clip trigger or column trigger (Resolume)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Scenes and cues as the structure of a show
+- **There:** `Start Settings`, `BPM Phase Lock`
+- **What it does:** An animated parameter can be set to start running on composition load, on any clip trigger in its layer, on a column trigger, or only by hand. A BPM-synced animation can drop its phase lock so it starts its cycle when the clip starts instead of staying aligned with the master bar.
+- **Closest in Max:** `line`, `phasor~`, `transport`
+- **Checked:** Max has no built-in parameter animation, so no restart policy exists. In a patch the restart is a message from the trigger into whatever ramp object (line, a phasor or a transport-linked metro) drives the value.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Max has no built-in parameter animation, so no restart policy. Restarting a ramp on a trigger is one message into line or phasor~, which is easy but manual.
+- **Source:** <https://resolume.com/support/en/parameter-animation>
+- id: `resolume--parameter-animations-that-restart-on-a-clip-trigger-or-column-trigger`
 
 ### Event lifetimes as data for instancing (TouchDesigner)
 
@@ -6296,6 +6345,20 @@ more than one tool documents is a stronger lead than a single entry.
 - **Source:** <https://docs.derivative.ca/Palette:sceneChanger>
 - id: `touchdesigner--scene-based-show-framework`
 
+### Timecode as a built-in type, with LTC in and out (TouchDesigner)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Timecode as a type, and chasing it
+- **There:** `Timecode CHOP`, `LTC In CHOP`, `LTC Out CHOP`, `tdu.Timecode`
+- **What it does:** SMPTE timecode is read from and written to an audio channel, generated, converted and compared. Movie players, the timer and video inputs all report and accept timecode.
+- **Closest in Max:** `adstatus`, `midiin`, `seq`
+- **Third-party:** smpte~ (Mattijs Kneppers, cycling74.com/tools) `smpte~` <https://cycling74.com/tools/smpte> · Peter Elsea tutorial (abstraction, not a package) `Max & MTC patches` <http://peterelsea.com/Maxtuts_advanced/Max&MTC.pdf>
+- **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for timecode, ltc, smpte, mtc: no match. packages/query_packages.py search (installed third-party packages) 'timecode': no match; 'ltc' matched only an unrelated compander.
+- **Notes:** MIDI timecode could be parsed by hand from raw MIDI; that was not counted as support.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No timecode object in obj-qlookup.json. The dsp message 'timecode' (dsp.maxref.xml, adstatus refpage) only starts timecode reading in ASIO 2 drivers, and seq only reads a MIDI-file smpteoffset. smpte~ (cycling74.com/tools/smpte) writes LTC but cannot read it, and MTC must be decoded by hand from midiin.
+- **Source:** <https://docs.derivative.ca/Timecode> · <https://docs.derivative.ca/Timecode_CHOP> · <https://docs.derivative.ca/LTC_In_CHOP>
+- id: `touchdesigner--timecode-as-a-built-in-type-with-ltc-in-and-out`
+
 ### Timing engine with segments, states and callbacks (TouchDesigner)
 
 - **Max:** Partly in Max · confidence medium · unreviewed
@@ -6318,6 +6381,18 @@ more than one tool documents is a stronger lead than a single entry.
 - **Notes:** MadMapper's marker entry covers pause/loop/jump; Vezér adds the per-cue loop count and an explicit reset of cue state.
 - **Source:** <https://imimot.com/help/vezer/cues> · <https://imimot.com/help/vezer/cues/types> · <https://imimot.com/help/vezer/cues/repeats> · <https://imimot.com/help/vezer/cues/controls> · <https://imimot.com/help/vezer/cues/jumping-to-a-specific-cue>
 - id: `vezer--cue-points-that-stop-loop-n-times-or-loop-forever-with-a-reset-of-all-loop-counts`
+
+### Queue mode: play timelines one after another, looping the queue (Vezér)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Keyframe timeline over any parameter
+- **There:** `Composition Queue mode`, `Queue toggle`, `Start Queue from the current Composition`
+- **What it does:** With Queue on, the master Play button starts the first composition, and each composition starts the next when it reaches its end. The queue can loop back to the first, and can start from the selected composition.
+- **Closest in Max:** `transport`, `timepoint`, `counter`, `jit.playlist`
+- **Checked:** No playlist-of-timelines object in obj-qlookup.json (Max registry, core plus bundled packages). It would be built by hand from end-of-section bangs (timepoint at each section's length) into the next section's transport.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No playlist of timelines in the registry. End-of-section bangs (timepoint, or loopreport on jit.playlist) into a counter chain the sections by hand.
+- **Source:** <https://imimot.com/help/vezer/general/composition-queue-mode> · <https://imimot.com/help/vezer/general/preferences-global-behaviours>
+- id: `vezer--queue-mode-play-timelines-one-after-another-looping-the-queue`
 
 ### Recording creates one lane per incoming address, and can keep only the turning points (Vezér)
 
@@ -6355,6 +6430,20 @@ more than one tool documents is a stronger lead than a single entry.
 - **Source:** <https://cables.gl/docs/2_1_timeline/animation> · <https://cables.gl/docs/0_howtouse/keys/keys> · <https://cables.gl/op/Ops.TimeLine.Anim> · <https://cables.gl/op/Ops.TimeLine.TimelineValue> · <https://cables.gl/ops/Ops.TimeLine>
 - id: `cables-gl--keyframe-timeline-on-any-number-port`
 
+### Subtitle files as timed data (cables.gl)
+
+- **Max:** Partly in Max · confidence low · confirmed
+- **Theme:** Subtitle files
+- **There:** `Ops.Extension.Subtitles.ParseSubtitles`, `Ops.Extension.Subtitles.SubtitleAnim`
+- **What it does:** Parses .srt and .vtt subtitle files and turns the cues into keys of an animation object, so text follows the timeline or a video's time.
+- **Closest in Max:** `text`, `coll`, `v8`, `jit.gl.text`
+- **Third-party:** max-msp-srt-json (GitHub, mageeagle) `SRT loader scripts` <https://github.com/mageeagle/max-msp-srt-json>
+- **Checked:** Max object registry (interfaces/obj-qlookup.json, 1,323 names) and refpage names and digests (1,940 .maxref.xml files under C74): 'subtit' matches nothing. packages/query_packages.py search 'subtitle': no matches.
+- **Notes:** Small. A few lines of v8 would parse the format in Max.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No subtitle object in the registry, refpages or package library. Forum threads and a GitHub project load .srt into coll and follow movie time, so it is buildable but not built in.
+- **Source:** <https://cables.gl/op/Ops.Extension.Subtitles.SubtitleAnim> · <https://cables.gl/ops/Ops.Extension.Subtitles>
+- id: `cables-gl--subtitle-files-as-timed-data`
+
 ### Auto-sequence: automations generated between two states (ossia score)
 
 - **Max:** Partly in Max · confidence medium · unreviewed
@@ -6364,6 +6453,20 @@ more than one tool documents is a stronger lead than a single entry.
 - **Checked:** pattrstorage refpage: interp sets per-client interpolation; recall with a float recalls an interpolated preset between two. That fades between states but does not produce editable curves per parameter.
 - **Source:** <https://ossia.io/score-docs/quick-start/states-and-automations-in-practice.html> · <https://ossia.io/score-docs/in-depth/automations.html>
 - id: `ossia-score--auto-sequence-automations-generated-between-two-states`
+
+### Conditional branches at a synchronisation point (ossia score)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Timeline structure: waits, branches, loops
+- **There:** `Condition`, `Split condition`, `Sync`
+- **What it does:** Several intervals can start from the same synchronisation point, and each start can carry a condition, so only the branches whose condition is true run when that point is reached. This lets a score choose its path at run time.
+- **Closest in Max:** `gate`, `route`, `select`
+- **Third-party:** Antescofo (IRCAM) `antescofo~` <https://antescofo-doc.ircam.fr/Reference/compound_whenever/>
+- **Checked:** Searched obj-qlookup.json (Max registry, core plus bundled packages) for timeline/score objects: none. Branching in Max is done with gate/route in the dataflow, not on a timeline (max_system_model.json dimension 10). No object refpage read describes conditions attached to timeline points.
+- **Notes:** The docs' Condition and Branch glossary entries are empty; behaviour summarised from the Switches and Scenario pages.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Max branches in dataflow only (gate, route). Antescofo scores have if/switch and whenever actions, so conditional paths exist in a third-party score language, not a graphic timeline.
+- **Source:** <https://ossia.io/score-docs/common-practices/2-switches.html> · <https://ossia.io/score-docs/processes/scenario.html> · <https://ossia.io/score-docs/examples/basics/timemodel.html>
+- id: `ossia-score--conditional-branches-at-a-synchronisation-point`
 
 ### Hierarchical tempo, time signature and quantisation (polytempo) (ossia score)
 
@@ -6375,6 +6478,45 @@ more than one tool documents is a stronger lead than a single entry.
 - **Checked:** transport refpage: named transports each have a tempo; metro @quantize refpage: output only on a time boundary of its transport. This gives several flat tempo contexts and quantised events, but no parent/child inheritance of tempo or metre.
 - **Source:** <https://ossia.io/score-docs/in-depth/musical.html> · <https://ossia.io/score-docs/processes/tempo.html> · <https://ossia.io/score-docs/examples/tempo/tempo-control.html>
 - id: `ossia-score--hierarchical-tempo-time-signature-and-quantisation-polytempo`
+
+### Interactive triggers that hold a timeline until an event (ossia score)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Timeline structure: waits, branches, loops
+- **There:** `Trigger`, `Auto-Trigger`, `Start on play`
+- **What it does:** A point in the timeline can be made to wait: everything after it pauses until the trigger is fired by a click, a parameter value (MIDI button, OSC message) or an expression. The interval before it then has no fixed length.
+- **Closest in Max:** `qlist`, `transport`, `timepoint`
+- **Third-party:** Antescofo (IRCAM) `antescofo~` <https://antescofo-doc.ircam.fr/Reference/compound_whenever/>
+- **Checked:** Registry has no timeline object (search 'timeline' in obj-qlookup.json (Max registry, core plus bundled packages) returns nothing). qlist refpage: stores timed or untimed cues as messages. timepoint refpage: bangs when a transport reaches a time and only while the clock moves forward. Neither describes a timeline position that waits for an external condition before continuing. max_system_model.json dimension 10: Max has no built-in scene, cue or timeline layer.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No timeline object in the registry. Antescofo, a free IRCAM external for Max, runs scores whose events wait for a performer, and its whenever action fires on a condition. That covers the waiting idea in text form, not a graphic timeline.
+- **Source:** <https://ossia.io/score-docs/quick-start/breaking-the-timeline.html> · <https://ossia.io/score-docs/processes/scenario.html> · <https://ossia.io/score-docs/cues.html>
+- id: `ossia-score--interactive-triggers-that-hold-a-timeline-until-an-event`
+
+### Intervals with flexible duration (minimum, maximum, infinite) (ossia score)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Timeline structure: waits, branches, loops
+- **There:** `Interval`, `setIntervalMinDuration`, `setIntervalMaxInfinite`
+- **What it does:** A block of time has a nominal length but also a minimum and a maximum, possibly infinite. Combined with a trigger at its end, it can be cut short after the minimum, or forced to end at the maximum if nothing happens.
+- **Closest in Max:** `transport`, `timepoint`, `delay`
+- **Third-party:** Antescofo (IRCAM) `antescofo~` <https://antescofo-doc.ircam.fr/Reference/compound_whenever/>
+- **Checked:** No Max object refpage read (transport, timepoint, qlist) models a time span with a min/max window. Closest is building timeouts by hand with delay or timepoint.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No Max object models a span with min/max length; delay or timepoint timeouts are built by hand. Antescofo actions take during/while clauses and wait on events, which is close but not the same model.
+- **Source:** <https://ossia.io/score-docs/in-depth/scripting-api.html> · <https://ossia.io/score-docs/common-practices/1-looping.html> · <https://ossia.io/score-docs/common-practices/2-switches.html>
+- id: `ossia-score--intervals-with-flexible-duration-minimum-maximum-infinite`
+
+### Loops and jumps inside a timeline (transitions) (ossia score)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Timeline structure: waits, branches, loops
+- **There:** `Transition`, `Sync`, `Scenario`
+- **What it does:** Instantaneous connections can link a later point back to an earlier one, so a timeline loops forever or jumps between sections like a state machine, while each section keeps its timed contents.
+- **Closest in Max:** `qlist`, `transport`
+- **Third-party:** Antescofo (IRCAM) `antescofo~` <https://antescofo-doc.ircam.fr/Reference/compound_whenever/>
+- **Checked:** transport refpage lists position control but no loop graph; qlist steps through cues in order or by explicit messages. Neither describes a graph of timed sections with jumps.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). transport and qlist have no graph of sections. Antescofo has loop actions and a jump attribute on events listing possible continuations of the score.
+- **Source:** <https://ossia.io/score-docs/common-practices/1-looping.html> · <https://ossia.io/score-docs/quick-start/non-linear-timelines.html>
+- id: `ossia-score--loops-and-jumps-inside-a-timeline-transitions`
 
 ### Nested scenarios with independent speed per interval (ossia score)
 
@@ -6396,6 +6538,19 @@ more than one tool documents is a stronger lead than a single entry.
 - **Checked:** mtr refpage: records messages on tracks and plays them back in sequence. It records events, not editable curves on a timeline.
 - **Source:** <https://ossia.io/score-docs/in-depth/recording.html> · <https://ossia.io/score-docs/in-depth/automations.html>
 - id: `ossia-score--recording-incoming-messages-as-automation-curves`
+
+### Seek recomputes the state ('value compilation') (ossia score)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Timeline structure: waits, branches, loops
+- **There:** `Play from here`, `Value compilation`, `Transport value compilation`
+- **What it does:** When playback jumps to a point, score works out which messages would have been sent by all earlier states and sends the latest value of each, so external devices end up where they would have been had the show run from the start.
+- **Closest in Max:** `transport`, `qlist`, `pattrstorage`
+- **Third-party:** Antescofo (IRCAM) `antescofo~` <https://antescofo-doc.ircam.fr/Reference/transport/>
+- **Checked:** transport refpage: setting position moves time but does not describe replaying earlier events. qlist and mtr refpages describe sequential playback, not catching up state on a jump. pattrstorage recalls a whole stored preset, which is a manual alternative.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). transport and qlist do not replay state on a jump. Antescofo's scrubtolabel runs the score fast to a label and sends the messages on the way, which is close to value compilation; pattrstorage recall is the manual alternative.
+- **Source:** <https://ossia.io/score-docs/common-practices/9-seek-and-transport.html> · <https://ossia.io/score-docs/reference/preferences.html>
+- id: `ossia-score--seek-recomputes-the-state-value-compilation`
 
 ### Named main and synced clocks, and a metronome that understands compound and additive time signatures (plugdata (ELSE))
 
@@ -6905,127 +7060,28 @@ more than one tool documents is a stronger lead than a single entry.
 
 ### RTMP streaming straight from a patch (Isadora)
 
-- **Max:** Not in Max · confidence medium · unreviewed
+- **Max:** Not in Max · confidence medium · confirmed
 - **Theme:** Internet streaming and remote sessions
 - **There:** `RTMP Streamer`
 - **What it does:** Streams a video and audio feed to YouTube, Twitch, Facebook Live and similar services from an actor, given a stream URL and key.
-- **Closest in Max:** `jit.gl.syphonserver (to OBS)`
+- **Closest in Max:** `jit.movie`
 - **Checked:** Registry and package search 'rtmp', 'stream': no streaming objects. The usual Max route is Syphon or NDI into separate streaming software. KB article URL is from the index; fetched, not read.
-- **Review:** 2026-10-02 (Claude): no object whose name contains 'rtmp' in Max 9's obj-qlookup.json. Third-party packages that are not installed on this machine were not checked.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No RTMP object in Max, bundled packages or the package library. The Max userguide (jitter/video.json) and the C74 tutorial 'Tips for Streaming Your Max Patch' send video to OBS via Syphon or Spout, which then streams.
 - **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=686> · <https://troikatronix.com/files/isadora-manual.pdf#page=687> · <https://support.troikatronix.com/support/solutions/articles/13000089992-using-the-rtmp-streamer-actor>
 - id: `isadora--rtmp-streaming-straight-from-a-patch`
 
-### Subtitle playback from SRT files (Isadora)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Subtitle files
-- **There:** `SRT Subtitle Player`, `Text Draw`
-- **What it does:** Given a timecode position, normally a movie's, outputs the caption text from an SRT file for that moment, ready to draw over the video.
-- **Closest in Max:** `jit.gl.text`, `text`, `coll`, `v8`
-- **Checked:** Registry and package search 'subtitle', 'srt': none. Would be a short script plus jit.gl.text.
-- **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=751>
-- id: `isadora--subtitle-playback-from-srt-files`
-
-### VISCA-over-IP camera control (Isadora)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Controlling projectors, cameras and show gear
-- **There:** `VISCA PTZ Controller`
-- **What it does:** Controls pan, tilt, zoom and focus of PTZ cameras that speak VISCA over IP or Datavideo DVIP, with range presets per camera model. Public beta, tested by the vendor on two models.
-- **Closest in Max:** `udpsend`, `sadam.tcpClient (Sadam Library)`, `serial`
-- **Checked:** Registry and package search 'visca', 'ptz': none. Would be raw bytes over UDP or TCP. Only the first 2,300 of 21,700 characters of the actor entry were read.
-- **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=813>
-- id: `isadora--visca-over-ip-camera-control`
-
-### Beat Looper with Catch Up (Resolume)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Tempo and clocks
-- **There:** `Beat Looper`, `Catch Up`
-- **What it does:** On a BPM-synced clip, one click loops the last N beats (a stutter or climax effect). Turning it off either continues from where the playhead is or, with Catch Up, jumps to where the clip would have been had the loop never happened.
-- **Closest in Max:** `jit.movie`
-- **Checked:** jit.movie refpage: looppoints / looppoints_ms set a loop region and position can be set, so a loop can be built; nothing tracks a 'virtual' playhead to catch up to when the loop ends.
-- **Source:** <https://resolume.com/support/en/video>
-- id: `resolume--beat-looper-with-catch-up`
-
-### AI video operators on NVIDIA cards (TouchDesigner)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **There:** `NVIDIA Background TOP`, `NVIDIA Upscaler TOP`
-- **What it does:** Person segmentation without a green screen, and AI upscaling of video, run from NVIDIA's SDKs.
-- **Checked:** Searched the registry and refpage text for segment, upscal, super-res: only audio and matrix-grid objects matched. No person segmentation or AI upscaling object was found in Max or in the installed packages.
-- **Notes:** Windows and NVIDIA only; models are a separate download.
-- **Source:** <https://docs.derivative.ca/NVIDIA_Background_TOP> · <https://docs.derivative.ca/NVIDIA_Upscaler_TOP>
-- id: `touchdesigner--ai-video-operators-on-nvidia-cards`
-
 ### Driving displays without the desktop, with hardware frame lock (TouchDesigner)
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Not in Max · confidence high · confirmed
+- **Theme:** Keeping several machines in step
 - **There:** `Direct Display Out TOP`, `Hardware Frame-Lock`, `Window COMP`
 - **What it does:** Outputs straight to GPU display ports, bypassing the Windows desktop compositor, and locks buffer swaps across GPUs and machines with NVIDIA Quadro Sync.
 - **Closest in Max:** `jit.window`, `jit.world`, `jit.displays`
 - **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) and the Max userguide for genlock, frame lock, vsync: no match in the userguide. jit.window and jit.world (refpages read) have sync and fullscreen attributes; jit.displays reports and sets monitor modes. Nothing addresses desktop-free output or swap groups.
 - **Notes:** Windows and workstation NVIDIA cards only.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Registry, refpages and userguide have no genlock, swap-lock or direct display output. jit.displays only sets and queries monitor attributes.
 - **Source:** <https://docs.derivative.ca/Direct_Display_Out_TOP> · <https://docs.derivative.ca/Hardware_Frame_Lock> · <https://docs.derivative.ca/Perfect_Playback>
 - id: `touchdesigner--driving-displays-without-the-desktop-with-hardware-frame-lock`
-
-### Internet streaming out and in: RTMP, SRT, RTSP (TouchDesigner)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Internet streaming and remote sessions
-- **There:** `Video Stream Out TOP`, `Video Stream In TOP`
-- **What it does:** Encodes video with the GPU (H.264, H.265, AV1) and streams it to services such as Twitch and YouTube, or between sites with SRT, including per-frame metadata. The matching input operator receives streams.
-- **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for rtmp, rtsp, srt, stream: no video streaming object. jit.net.send sends matrices to another Max only.
-- **Notes:** The output operator needs an NVIDIA card, per its page.
-- **Review:** 2026-10-02 (Claude): no object whose name contains 'rtmp / stream' in Max 9's obj-qlookup.json. Third-party packages that are not installed on this machine were not checked.
-- **Source:** <https://docs.derivative.ca/Video_Stream_Out_TOP> · <https://docs.derivative.ca/Video_Streaming_User_Guide> · <https://docs.derivative.ca/RTMP> · <https://docs.derivative.ca/SRT> · <https://docs.derivative.ca/RTSP>
-- id: `touchdesigner--internet-streaming-out-and-in-rtmp-srt-rtsp`
-
-### Lens distortion matching and camera tracking input (TouchDesigner)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Cameras, lights and materials
-- **There:** `Lens Distort TOP`, `FreeD In CHOP`, `Stype TOP`, `Stype In CHOP`, `MoSys TOP`, `MoSys CHOP`
-- **What it does:** Applies or removes Brown-Conrady lens distortion so renders match a real camera, and reads camera position and lens data from broadcast tracking systems.
-- **Closest in Max:** `cv.jit.calibration`
-- **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for lens, undistort, distortion: only audio distortion and jit.fx.vhs matched. cv.jit.calibration exists in the package library (not read in detail). No FreeD, Stype or MoSys receiver found.
-- **Source:** <https://docs.derivative.ca/Lens_Distort_TOP> · <https://docs.derivative.ca/FreeD_In_CHOP> · <https://docs.derivative.ca/Stype> · <https://docs.derivative.ca/MoSys>
-- id: `touchdesigner--lens-distortion-matching-and-camera-tracking-input`
-
-### NDI video over the network (TouchDesigner)
-
-- **Max:** Not in Max · confidence high · unreviewed
-- **Theme:** Sharing video with other apps and machines: NDI, Syphon, Spout
-- **There:** `NDI In TOP`, `NDI Out TOP`, `NDI DAT`
-- **What it does:** Sends and receives NDI video and audio, lists sources on the network, and carries metadata tables with frames.
-- **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for the word ndi: no match. packages/query_packages.py search (installed third-party packages) 'ndi' matched only words containing those letters.
-- **Notes:** Absent from Max and from the packages installed on this machine. A third-party package may exist; none was checked.
-- **Review:** 2026-10-02 (Claude): no object whose name contains 'ndi' in Max 9's obj-qlookup.json. Third-party packages that are not installed on this machine were not checked.
-- **Source:** <https://docs.derivative.ca/NDI> · <https://docs.derivative.ca/Interoperability>
-- id: `touchdesigner--ndi-video-over-the-network`
-
-### Lottie animation playback (cables.gl)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Vector media: Lottie, SVG, font outlines
-- **There:** `Ops.Extension.Lottie.LottieTexturePlayer_v2`, `Ops.Extension.Lottie.LottieSVGPlayer_v2`
-- **What it does:** Plays a Lottie (Bodymovin) vector animation file into a texture or an HTML element, with frame, speed and play-mode control.
-- **Closest in Max:** `jweb`
-- **Checked:** Max object registry (interfaces/obj-qlookup.json, 1,323 names), refpage names and digests (1,940 .maxref.xml files under C74), userguide (C74/docs/userguide/content) and packages/query_packages.py search: 'lottie' matches nothing anywhere. jweb (a Chromium page in a UI box) could host the JavaScript player, but nothing found gets a jweb page into a texture.
-- **Notes:** Lottie is a common hand-off format from motion designers.
-- **Review:** 2026-10-02 (Claude): no object whose name contains 'lottie' in Max 9's obj-qlookup.json. Third-party packages that are not installed on this machine were not checked.
-- **Source:** <https://cables.gl/op/Ops.Extension.Lottie.LottieTexturePlayer_v2> · <https://cables.gl/ops/Ops.Extension.Lottie>
-- id: `cables-gl--lottie-animation-playback`
-
-### NDI video in and out, with PTZ camera control (ossia score)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **There:** `NDI input device`, `NDI output device`, `PTZ`
-- **What it does:** NDI 5/6 streams can be received or sent as video devices; a PTZ camera's zoom, pan, tilt, focus, white balance and presets appear as parameters.
-- **Closest in Max:** `jit.grab`, `jit.net.send`
-- **Checked:** Searched obj-qlookup.json (Max registry, core plus bundled packages) for 'ndi': no NDI object (matches were bendin etc.). jit.net.send refpage: sends matrices to jit.net.recv over TCP, Max-to-Max only.
-- **Source:** <https://ossia.io/score-docs/devices/ndi-device.html>
-- id: `ossia-score--ndi-video-in-and-out-with-ptz-camera-control`
 
 ### Media preloading handled by the host at every Scene change (Isadora)
 
@@ -7081,6 +7137,31 @@ more than one tool documents is a stronger lead than a single entry.
 - **Checked:** Read refpages: jit.world wraps a window, renderer and corner pin; its attribute list has fullscreen, rect, size, windowposition, enable_cornerpin, output_texture and no display-assignment table. jit.gl.node captures a sub-scene to a texture, the nearest thing to a Virtual Stage. Display assignment in Max is a window rectangle set per patch.
 - **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=225> · <https://troikatronix.com/files/isadora-manual.pdf#page=226> · <https://troikatronix.com/files/isadora-manual.pdf#page=227> · <https://troikatronix.com/files/isadora-manual.pdf#page=228> · <https://troikatronix.com/files/isadora-manual.pdf#page=230> · <https://troikatronix.com/files/isadora-manual.pdf#page=231> · <https://troikatronix.com/files/isadora-manual.pdf#page=726> · <https://troikatronix.com/isadora/multi-projector-setups-blending-and-routing/>
 - id: `isadora--stages-numbered-outputs-decoupled-from-physical-displays-saved-per-document`
+
+### Subtitle playback from SRT files (Isadora)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Subtitle files
+- **There:** `SRT Subtitle Player`, `Text Draw`
+- **What it does:** Given a timecode position, normally a movie's, outputs the caption text from an SRT file for that moment, ready to draw over the video.
+- **Closest in Max:** `text`, `v8`, `jit.gl.text`, `timer`
+- **Checked:** Registry and package search 'subtitle', 'srt': none. Would be a short script plus jit.gl.text.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No SRT reader in Max or any package. A short v8 script can parse the file and send the right line to jit.gl.text. The Jitter Recipes 'SubTitle' patch (Max for the Visual Arts package) only draws typed text, it does not read SRT.
+- **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=751>
+- id: `isadora--subtitle-playback-from-srt-files`
+
+### VISCA-over-IP camera control (Isadora)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Controlling projectors, cameras and show gear
+- **There:** `VISCA PTZ Controller`
+- **What it does:** Controls pan, tilt, zoom and focus of PTZ cameras that speak VISCA over IP or Datavideo DVIP, with range presets per camera model. Public beta, tested by the vendor on two models.
+- **Closest in Max:** `mxj net.udp.send`, `serial`
+- **Third-party:** Sadam Library (installed) `sadam.udpClient` · jit.ndi (pixsper) `jit.ndi.receive~` <https://github.com/pixsper/jit.ndi>
+- **Checked:** Registry and package search 'visca', 'ptz': none. Would be raw bytes over UDP or TCP. Only the first 2,300 of 21,700 characters of the actor entry were read.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No VISCA or PTZ object in Max. VISCA is raw bytes over UDP, which mxj net.udp.send (bundled max-mxj, help present) or sadam.udpClient can send, so it can be built with per-model byte tables. jit.ndi offers PTZ for NDI cameras.
+- **Source:** <https://troikatronix.com/files/isadora-manual.pdf#page=813>
+- id: `isadora--visca-over-ip-camera-control`
 
 ### Share any output with other apps: Syphon, Spout, NDI, internal loopback (MadMapper)
 
@@ -7160,6 +7241,18 @@ more than one tool documents is a stronger lead than a single entry.
 - **Source:** <https://resolume.com/support/en/video> · <https://resolume.com/support/en/bpm> · <https://resolume.com/support/en/stills> · <https://resolume.com/support/en/sources>
 - id: `resolume--bpm-sync-playback-a-clip-s-length-is-a-number-of-beats-and-follows-the-tempo`
 
+### Beat Looper with Catch Up (Resolume)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Tempo and clocks
+- **There:** `Beat Looper`, `Catch Up`
+- **What it does:** On a BPM-synced clip, one click loops the last N beats (a stutter or climax effect). Turning it off either continues from where the playhead is or, with Catch Up, jumps to where the clip would have been had the loop never happened.
+- **Closest in Max:** `jit.movie`, `transport`
+- **Checked:** jit.movie refpage: looppoints / looppoints_ms set a loop region and position can be set, so a loop can be built; nothing tracks a 'virtual' playhead to catch up to when the loop ends.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). jit.movie has looppoints, looppoints_ms, position and rate attributes (refpage), and transport gives the beat. A beat loop with catch-up can be patched by remembering the elapsed time; there is no one-click version.
+- **Source:** <https://resolume.com/support/en/video>
+- id: `resolume--beat-looper-with-catch-up`
+
 ### Beat Snap: a triggered clip waits for the next beat, bar or N bars (Resolume)
 
 - **Max:** Partly in Max · confidence high · unreviewed
@@ -7215,6 +7308,19 @@ more than one tool documents is a stronger lead than a single entry.
 - **Source:** <https://resolume.com/support/en/video> · <https://resolume.com/support/en/smpte>
 - id: `resolume--play-modes-for-returning-to-a-clip-and-for-random-jumping`
 
+### AI video operators on NVIDIA cards (TouchDesigner)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Machine learning on video
+- **There:** `NVIDIA Background TOP`, `NVIDIA Upscaler TOP`
+- **What it does:** Person segmentation without a green screen, and AI upscaling of video, run from NVIDIA's SDKs.
+- **Third-party:** jitter-mediapipe (little-scale) `jit.pose` <https://github.com/little-scale/jitter-mediapipe>
+- **Checked:** Searched the registry and refpage text for segment, upscal, super-res: only audio and matrix-grid objects matched. No person segmentation or AI upscaling object was found in Max or in the installed packages.
+- **Notes:** Windows and NVIDIA only; models are a separate download.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No segmentation or AI upscaling object in Max, bundled packages, or the installed package library. The third-party jitter-mediapipe package does pose, hands and face landmarks, which is near but not segmentation.
+- **Source:** <https://docs.derivative.ca/NVIDIA_Background_TOP> · <https://docs.derivative.ca/NVIDIA_Upscaler_TOP>
+- id: `touchdesigner--ai-video-operators-on-nvidia-cards`
+
 ### Colour management with OpenColorIO, and HDR (TouchDesigner)
 
 - **Max:** Partly in Max · confidence medium · unreviewed
@@ -7224,6 +7330,46 @@ more than one tool documents is a stronger lead than a single entry.
 - **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for ocio, opencolorio, aces, lut, tone map, hdr, color space: jit.colorspace, jit.fx.lin2srgb, jit.fx.srgb2lin. A tonemap.jxp pass file ships for jit.gl.pass. No OCIO support and nothing about HDR display output was found.
 - **Source:** <https://docs.derivative.ca/Color_Space> · <https://docs.derivative.ca/OpenColorIO_TOP>
 - id: `touchdesigner--colour-management-with-opencolorio-and-hdr`
+
+### Internet streaming out and in: RTMP, SRT, RTSP (TouchDesigner)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Internet streaming and remote sessions
+- **There:** `Video Stream Out TOP`, `Video Stream In TOP`
+- **What it does:** Encodes video with the GPU (H.264, H.265, AV1) and streams it to services such as Twitch and YouTube, or between sites with SRT, including per-frame metadata. The matching input operator receives streams.
+- **Closest in Max:** `jit.movie`
+- **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for rtmp, rtsp, srt, stream: no video streaming object. jit.net.send sends matrices to another Max only.
+- **Notes:** The output operator needs an NVIDIA card, per its page.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No RTMP or SRT output and no GPU encoder in Max. The bundled VIDDLL package README lists 'rtsp streaming support' for jit.movie, so RTSP input exists (forum threads say it is unreliable). The Max userguide (jitter/video.json) sends video to OBS through Syphon or Spout for streaming.
+- **Source:** <https://docs.derivative.ca/Video_Stream_Out_TOP> · <https://docs.derivative.ca/Video_Streaming_User_Guide> · <https://docs.derivative.ca/RTMP> · <https://docs.derivative.ca/SRT> · <https://docs.derivative.ca/RTSP>
+- id: `touchdesigner--internet-streaming-out-and-in-rtmp-srt-rtsp`
+
+### Lens distortion matching and camera tracking input (TouchDesigner)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Cameras, lights and materials
+- **There:** `Lens Distort TOP`, `FreeD In CHOP`, `Stype TOP`, `Stype In CHOP`, `MoSys TOP`, `MoSys CHOP`
+- **What it does:** Applies or removes Brown-Conrady lens distortion so renders match a real camera, and reads camera position and lens data from broadcast tracking systems.
+- **Closest in Max:** `jit.gl.slab`, `jit.gl.pix`, `jit.gl.camera`
+- **Third-party:** cv.jit (installed) `cv.jit.calibration` <https://github.com/Cycling74/cv.jit>
+- **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for lens, undistort, distortion: only audio distortion and jit.fx.vhs matched. cv.jit.calibration exists in the package library (not read in detail). No FreeD, Stype or MoSys receiver found.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Jitter Tools ships td.lens.jxs (a 'simple lens filter' shader) and jit.fx.crt has a barrel distortion parameter, but neither is Brown-Conrady matching. cv.jit.calibration finds a real camera's distortion coefficients. No object reads broadcast camera-tracking data (e.g. FreeD).
+- **Source:** <https://docs.derivative.ca/Lens_Distort_TOP> · <https://docs.derivative.ca/FreeD_In_CHOP> · <https://docs.derivative.ca/Stype> · <https://docs.derivative.ca/MoSys>
+- id: `touchdesigner--lens-distortion-matching-and-camera-tracking-input`
+
+### NDI video over the network (TouchDesigner)
+
+- **Max:** Partly in Max · confidence high · confirmed
+- **Theme:** Sharing video with other apps and machines: NDI, Syphon, Spout
+- **There:** `NDI In TOP`, `NDI Out TOP`, `NDI DAT`
+- **What it does:** Sends and receives NDI video and audio, lists sources on the network, and carries metadata tables with frames.
+- **Closest in Max:** `jit.net.send`, `jit.net.recv`
+- **Third-party:** jit.ndi (pixsper) `jit.ndi.receive~ (sender name not confirmed)` <https://github.com/pixsper/jit.ndi> · Syphon / Spout `jit.gl.syphonserver` <c74max://packagemanager/syphon>
+- **Checked:** Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for the word ndi: no match. packages/query_packages.py search (installed third-party packages) 'ndi' matched only words containing those letters.
+- **Notes:** Absent from Max and from the packages installed on this machine. A third-party package may exist; none was checked.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Nothing in Max or its bundled packages speaks NDI. The third-party jit.ndi package (github.com/pixsper/jit.ndi) sends and receives NDI video and audio. Syphon and Spout packages share video between apps on one machine.
+- **Source:** <https://docs.derivative.ca/NDI> · <https://docs.derivative.ca/Interoperability>
+- id: `touchdesigner--ndi-video-over-the-network`
 
 ### Point cloud files and operations (TouchDesigner)
 
@@ -7258,6 +7404,19 @@ more than one tool documents is a stronger lead than a single entry.
 - **Source:** <https://docs.derivative.ca/Web_Render_TOP> · <https://docs.derivative.ca/Audio_Web_Render_CHOP> · <https://docs.derivative.ca/Palette:webBrowser>
 - id: `touchdesigner--web-page-rendered-to-a-texture`
 
+### Lottie animation playback (cables.gl)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Vector media: Lottie, SVG, font outlines
+- **There:** `Ops.Extension.Lottie.LottieTexturePlayer_v2`, `Ops.Extension.Lottie.LottieSVGPlayer_v2`
+- **What it does:** Plays a Lottie (Bodymovin) vector animation file into a texture or an HTML element, with frame, speed and play-mode control.
+- **Closest in Max:** `jit.web`, `jweb`
+- **Checked:** Max object registry (interfaces/obj-qlookup.json, 1,323 names), refpage names and digests (1,940 .maxref.xml files under C74), userguide (C74/docs/userguide/content) and packages/query_packages.py search: 'lottie' matches nothing anywhere. jweb (a Chromium page in a UI box) could host the JavaScript player, but nothing found gets a jweb page into a texture.
+- **Notes:** Lottie is a common hand-off format from motion designers.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No Lottie object anywhere. Bundled jit.web renders a web page to a GL texture, so a small HTML page using the lottie-web library could play a Lottie file into Jitter; untested, and frame control would go through the page.
+- **Source:** <https://cables.gl/op/Ops.Extension.Lottie.LottieTexturePlayer_v2> · <https://cables.gl/ops/Ops.Extension.Lottie>
+- id: `cables-gl--lottie-animation-playback`
+
 ### Offline render of a patch to an image sequence at a fixed frame rate (cables.gl)
 
 - **Max:** Partly in Max · confidence low · unreviewed
@@ -7269,6 +7428,19 @@ more than one tool documents is a stronger lead than a single entry.
 - **Notes:** Max looks able to do this by combining a fixed time step with non-realtime recording, but the recipe was not found written down and was not tested. May not be a gap at all.
 - **Source:** <https://cables.gl/op/Ops.Gl.RenderAnim_v2> · <https://cables.gl/op/Ops.Gl.MediaRecorder_v2> · <https://cables.gl/docs/faq/features/recording/recording>
 - id: `cables-gl--offline-render-of-a-patch-to-an-image-sequence-at-a-fixed-frame-rate`
+
+### NDI video in and out, with PTZ camera control (ossia score)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Sharing video with other apps and machines: NDI, Syphon, Spout
+- **There:** `NDI input device`, `NDI output device`, `PTZ`
+- **What it does:** NDI 5/6 streams can be received or sent as video devices; a PTZ camera's zoom, pan, tilt, focus, white balance and presets appear as parameters.
+- **Closest in Max:** `jit.grab`, `jit.net.send`
+- **Third-party:** jit.ndi (pixsper) `jit.ndi.receive~ (sender name not confirmed)` <https://github.com/pixsper/jit.ndi>
+- **Checked:** Searched obj-qlookup.json (Max registry, core plus bundled packages) for 'ndi': no NDI object (matches were bendin etc.). jit.net.send refpage: sends matrices to jit.net.recv over TCP, Max-to-Max only.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Not in Max or bundled packages. The third-party jit.ndi package sends and receives NDI video and audio and, per its C74 forum thread, has PTZ attributes such as ptz_pantilt_speed.
+- **Source:** <https://ossia.io/score-docs/devices/ndi-device.html>
+- id: `ossia-score--ndi-video-in-and-out-with-ptz-camera-control`
 
 ### Tempo-aware media: ACID tags, time-stretch and video locked to tempo (ossia score)
 
@@ -7750,112 +7922,76 @@ more than one tool documents is a stronger lead than a single entry.
 
 ### Text prompt to a working shader with controls (MadMapper)
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Not in Max · confidence high · confirmed
 - **Theme:** Shader authoring conveniences
 - **There:** `MadAI`, `Mad AI`, `Using MadAI`, `MadAI Credits`
 - **What it does:** Typing a description produces a material, laser material or 2D effect, complete with sliders for the parameters asked for; further prompts refine it, and the code stays editable. It runs on the maker's servers, one credit per prompt.
 - **Checked:** Not searched in Max: this is a paid online service, not a program feature that could be looked up as an object.
 - **Notes:** Listed for completeness. The FAQ page cited was read only in its MadAI and MadLaser general sections.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Searched the userguide and refpages: Max has no text-to-shader or AI generator. Community MCP servers for Max (see the Resolume MCP entry) edit patches, not shaders with controls.
 - **Source:** <https://docs.madmapper.com/madmapper/6/12.-advanced/mad-ai-extension> · <https://docs.madmapper.com/madmapper/6/3.-media/online-material-library> · <https://madmapper.com/extensions/FAQ>
 - id: `madmapper--text-prompt-to-a-working-shader-with-controls`
 
-### Audition: every output class rerouted for rehearsal, by one switch (QLab)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Mapping editor: slices, masks and warps on the output
-- **There:** `Audition`, `Audition GO`, `Audition Preview`, `Always audition`, `Audition window`
-- **What it does:** Per output class (audio, video, MIDI, MTC, LTC, network, light) the workspace defines what an audition does: no change, silence, an alternate patch, or for video a monitor window. Audition GO plays a sequence through those; Always audition makes GO do so for a whole session.
-- **Closest in Max:** `gate`, `selector~`, `send`
-- **Checked:** No Max object or userguide page read describes a patch-wide rehearsal routing. It is built by hand with gates or send names per output.
-- **Source:** <https://qlab.app/docs/v5/tools/auditioning-cues/> · <https://qlab.app/docs/v5/fundamentals/workspace-settings/>
-- id: `qlab--audition-every-output-class-rerouted-for-rehearsal-by-one-switch`
-
 ### Timeline editor for a group, with snapping, nudge, trim and slip (QLab)
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Not in Max · confidence high · confirmed
 - **Theme:** Keyframe timeline over any parameter
 - **There:** `Timeline tab`, `Pin`, `Slip`, `Trim`, `Nudge`
 - **What it does:** Children of a Timeline Group are drawn as lanes; dragging changes their pre-wait and snaps to the start and end of other cues, their slices and the current playback line; keys nudge by 0.1 or 0.01 s; edges trim; option-drag slips media without moving it.
 - **Closest in Max:** `mtr`, `transport`
 - **Checked:** Searched obj-qlookup.json (Max registry, core plus bundled packages) for timeline: none. mtr refpage records and plays message tracks but draws no lanes. max_system_model.json dimension 10: no built-in timeline layer.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No timeline or lane editor in the registry or userguide; mtr records message tracks but draws nothing. No installed package offers a cue timeline with snapping and slip.
 - **Source:** <https://qlab.app/docs/v5/fundamentals/group-cues/>
 - id: `qlab--timeline-editor-for-a-group-with-snapping-nudge-trim-and-slip`
 
-### An MCP server for AI apps to build and edit the composition (Resolume)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Effect chains: blend, amount and mask on each stage
-- **There:** `Arena MCP Server`, `Wire MCP Server`
-- **What it does:** Since 7.26 Resolume ships MCP servers. An AI desktop app can summarise a composition, load files, add or remove layers, columns, groups and effects, and (for Wire) build a patch, wire it, set values and write ISF shaders. It is limited to what the REST API does: no output mapping, shortcuts, cue points, presets, envelopes or dashboard.
-- **Closest in Max:** `node.script`
-- **Checked:** Registry and userguide: nothing in Max exposes a patch to an AI app as tools. (This repo's own claude2max MCP server looks up Max documentation; it does not edit a running patch.)
-- **Notes:** Docs page is dated 7.26.0; recent feature.
-- **Source:** <https://resolume.com/support/en/mcp-servers>
-- id: `resolume--an-mcp-server-for-ai-apps-to-build-and-edit-the-composition`
-
-### Decks: banks of clips that switch without stopping playback, with persistent clips (Resolume)
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **Theme:** Scenes and cues as the structure of a show
-- **There:** `Deck`, `Persistent Clips`, `Composition browser`
-- **What it does:** The clips of one composition are split into decks. Switching decks changes which clips are shown in the grid but does not interrupt what is playing. A clip marked persistent appears in the same slot in every deck (a logo, a live camera). A deck from another composition can be added during a show by double-clicking it.
-- **Closest in Max:** `jit.playlist`, `pattrstorage`
-- **Checked:** Registry and userguide: nothing groups media into switchable banks. A Max patch would swap a jit.playlist's contents with clear/append (refpage), which stops nothing only if the playing clip lives elsewhere; there is no 'persistent slot' idea.
-- **Source:** <https://resolume.com/support/en/decks> · <https://resolume.com/support/en/clips> · <https://resolume.com/support/en/vocabulary>
-- id: `resolume--decks-banks-of-clips-that-switch-without-stopping-playback-with-persistent-clips`
-
 ### Math typed into any number field (Resolume)
 
-- **Max:** Not in Max · confidence medium · unreviewed
+- **Max:** Not in Max · confidence medium · confirmed
+- **Theme:** Number entry conveniences
 - **There:** `Expressions`, `Input Box Math`
 - **What it does:** Any value box in Arena, Avenue and Wire accepts arithmetic and a few functions and constants (min, max, sin, cos, tan, abs, radians, sqrt, pi, tau, phi): '-1920/4' for a position, '/3' after a width to divide it.
 - **Closest in Max:** `flonum`, `expr`
 - **Checked:** flonum refpage: displays and outputs numbers; nothing says typed expressions are evaluated. Max's arithmetic lives in objects (expr).
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). flonum refpage says nothing about evaluating typed math, and the 'expression' grep over refpages hits only expr-type objects. Arithmetic in Max lives in objects such as expr.
 - **Source:** <https://resolume.com/support/en/expressions> · <https://resolume.com/support/en/parameters> · <https://resolume.com/support/en/input-selection>
 - id: `resolume--math-typed-into-any-number-field`
 
 ### Authoring in a browser tab with nothing to install (cables.gl)
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Not in Max · confidence high · confirmed
+- **Theme:** Authoring platform and collaboration
 - **There:** `cables.gl editor`, `MIT License`
 - **What it does:** The editor runs in a web browser. The docs say no licence is bought, the runtime is MIT licensed and the main features stay free; storage, upload size and exports per day have limits tied to supporter levels.
 - **Checked:** Max is a desktop application at /Applications/Max.app. No browser-hosted Max editor appears in the userguide file list. Max's licence terms were not looked up.
 - **Notes:** A property of the platform, not a feature to copy. It matters when choosing a tool for a class where students cannot install software.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Max is a desktop app. Miraweb (installed) and mira let a browser or tablet control a running patch, but nothing lets you author a patch in a browser tab.
 - **Source:** <https://cables.gl/docs/faq/general/general> · <https://cables.gl/docs/faq/licence_payment/licence/licence> · <https://cables.gl/docs/faq/licence_payment/payment/payment> · <https://cables.gl/docs/faq/teaching/teaching>
 - id: `cables-gl--authoring-in-a-browser-tab-with-nothing-to-install`
 
 ### Several people editing one patch at once (cables.gl)
 
-- **Max:** Not in Max · confidence high · unreviewed
+- **Max:** Not in Max · confidence high · confirmed
+- **Theme:** Authoring platform and collaboration
 - **There:** `Multiplayer`, `Pilot`, `Participant`
 - **What it does:** Several users open the same patch. One is the Pilot and makes the changes; the others see cursors, selections and the Pilot's view, follow parameter changes and the rendered output live, can ask for the pilot seat, and can chat.
-- **Closest in Max:** `Projects (Max feature)`
+- **Third-party:** Collab-Hub `Collab-Hub client` <~/Documents/Max 9/Packages/Collab-Hub>
 - **Checked:** userguide (C74/docs/userguide/content): 'multiplayer' in 0 files; 'collaborat' in 1 file (standalones_and_collectives.json), which says a Project is the document to use with a version control tool such as Git. refpage names and digests (1,940 .maxref.xml files under C74): 'collab' matches nothing. packages/query_packages.py search 'collab': the Collab-Hub package, which shares data between performers' patches, not the editing of one patch.
 - **Notes:** One editor at a time, so closer to screen sharing with hand-over than to simultaneous editing. Useful for teaching.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Userguide has no shared or simultaneous patch editing; Projects only suggest using Git. Collab-Hub (installed) shares data, not editing.
 - **Source:** <https://cables.gl/docs/5_1_permissions/4_multiplayer/multiplayer> · <https://cables.gl/docs/5_1_permissions/0_users/users>
 - id: `cables-gl--several-people-editing-one-patch-at-once`
 
 ### A box abstraction that reacts to being clicked (plugdata (ELSE))
 
-- **Max:** Not in Max · confidence medium · unreviewed
+- **Max:** Not in Max · confidence medium · confirmed
 - **Theme:** Encapsulation: ports, arguments, on and off
 - **There:** `click`, `properties`
 - **What it does:** Placed inside an abstraction, click sends a bang when the abstraction's box is clicked in the parent patch, and properties does the same when its Properties menu item is chosen. ELSE uses this so that clicking player~ opens a file dialog and clicking a table object opens its data.
-- **Closest in Max:** `bpatcher`, `ubutton`, `hover`, `mousestate`
+- **Closest in Max:** `bpatcher`, `patcherargs`, `hover`
 - **Checked:** No object in obj-qlookup.json reports clicks on the box of the abstraction that contains it. In Max, double-clicking an abstraction's box opens its patcher. A bpatcher can hold a ubutton, but that is a UI, which the repo's rules say an abstraction should not have.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No object reports a click on the box of its own abstraction. Double-clicking patcherargs only outputs the arguments (refpage); v8ui/jsui have ondblclick (custom_ui_objects userguide) but those are UI boxes, and bpatcher clicks go to its contents.
 - **Source:** <Documentation/9.else/click-help.pd> · <Documentation/9.else/properties-help.pd>
 - id: `plugdata-else--a-box-abstraction-that-reacts-to-being-clicked`
-
-### Per-patch declaration of what the patch needs ([declare]) (plugdata (Pd vanilla))
-
-- **Max:** Not in Max · confidence medium · unreviewed
-- **There:** `declare -path`, `declare -lib`, `declare -stdpath`, `else/knob`
-- **What it does:** [declare -path folder -lib name] in a patch adds search folders and loads libraries for that patch alone, so the patch states its own dependencies. A 'library/object' prefix picks which library an object comes from.
-- **Closest in Max:** `filepath`, `Projects`, `Package Manager`
-- **Checked:** Userguide search_path, package_manager and externals pages: paths are global (File Preferences, Packages folder) or per Project. filepath refpage: manages the search path, 'or manage paths specific to a single patch'. No in-patch dependency declaration or name prefix found.
-- **Notes:** filepath's per-patch mode was read only as one sentence.
-- **Source:** <Documentation/5.reference/declare-help.pd> · <Documentation/1.manual/resources/chapter4.htm>
-- id: `plugdata--per-patch-declaration-of-what-the-patch-needs-declare`
 
 ### Blind Mode: edit one Scene while another runs the show (Isadora)
 
@@ -7902,6 +8038,18 @@ more than one tool documents is a stronger lead than a single entry.
 - **Source:** <https://docs.madmapper.com/madmapper/6/3.-media/online-material-library> · <https://docs.madmapper.com/madmapper/6/2.-the-interface/toolbar-and-workspace> · <https://docs.madmapper.com/madmapper/6/1.-introduction/what's-new/madmapper-v6>
 - id: `madmapper--in-app-shader-library-install-publish-and-remix-community-shaders`
 
+### Audition: every output class rerouted for rehearsal, by one switch (QLab)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Rehearsal and audition routing
+- **There:** `Audition`, `Audition GO`, `Audition Preview`, `Always audition`, `Audition window`
+- **What it does:** Per output class (audio, video, MIDI, MTC, LTC, network, light) the workspace defines what an audition does: no change, silence, an alternate patch, or for video a monitor window. Audition GO plays a sequence through those; Always audition makes GO do so for a whole session.
+- **Closest in Max:** `gate`, `selector~`, `send`
+- **Checked:** No Max object or userguide page read describes a patch-wide rehearsal routing. It is built by hand with gates or send names per output.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). No patch-wide rehearsal routing in Max or its userguide. It can be wired by hand with gates or swapped send names per output, but nothing covers every output kind with one switch.
+- **Source:** <https://qlab.app/docs/v5/tools/auditioning-cues/> · <https://qlab.app/docs/v5/fundamentals/workspace-settings/>
+- id: `qlab--audition-every-output-class-rerouted-for-rehearsal-by-one-switch`
+
 ### Record a cue sequence by playing it live (QLab)
 
 - **Max:** Partly in Max · confidence medium · unreviewed
@@ -7923,6 +8071,32 @@ more than one tool documents is a stronger lead than a single entry.
 - **Checked:** max_system_model.json dimension 6: a .maxpat saves structure, not state. pattrstorage refpage: presets can be recalled to restore a start state, but there is no built-in split between saved and live values per parameter.
 - **Source:** <https://qlab.app/docs/v5/fundamentals/workspace/> · <https://qlab.app/docs/v5/other-cues/transport-cues/> · <https://qlab.app/docs/v5/other-cues/target-cues/> · <https://qlab.app/docs/v5/scripting/osc-dictionary-v5/>
 - id: `qlab--temporary-properties-that-revert-on-reset-separate-from-saved-values`
+
+### An MCP server for AI apps to build and edit the composition (Resolume)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** AI and scripting access to the patch
+- **There:** `Arena MCP Server`, `Wire MCP Server`
+- **What it does:** Since 7.26 Resolume ships MCP servers. An AI desktop app can summarise a composition, load files, add or remove layers, columns, groups and effects, and (for Wire) build a patch, wire it, set values and write ISF shaders. It is limited to what the REST API does: no output mapping, shortcuts, cue points, presets, envelopes or dashboard.
+- **Closest in Max:** `node.script`
+- **Third-party:** MaxMSP-MCP-Server (tiianhk, GitHub) `MCP server + Max host patch` <https://github.com/tiianhk/MaxMSP-MCP-Server> · MaxMCP (signalcompose, GitHub) `native C++ MCP external` <https://github.com/signalcompose/maxmcp> · maxmsp-mcp (DCsLostBoy, GitHub) `MCP server + mcp_host.maxpat` <https://github.com/DCsLostBoy/maxmsp-mcp>
+- **Checked:** Registry and userguide: nothing in Max exposes a patch to an AI app as tools. (This repo's own claude2max MCP server looks up Max documentation; it does not edit a running patch.)
+- **Notes:** Docs page is dated 7.26.0; recent feature.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Nothing built in, but several community MCP servers on GitHub let an AI app build and edit a running Max patch. They are third-party, not shipped by Cycling '74.
+- **Source:** <https://resolume.com/support/en/mcp-servers>
+- id: `resolume--an-mcp-server-for-ai-apps-to-build-and-edit-the-composition`
+
+### Decks: banks of clips that switch without stopping playback, with persistent clips (Resolume)
+
+- **Max:** Partly in Max · confidence medium · confirmed
+- **Theme:** Scenes and cues as the structure of a show
+- **There:** `Deck`, `Persistent Clips`, `Composition browser`
+- **What it does:** The clips of one composition are split into decks. Switching decks changes which clips are shown in the grid but does not interrupt what is playing. A clip marked persistent appears in the same slot in every deck (a logo, a live camera). A deck from another composition can be added during a show by double-clicking it.
+- **Closest in Max:** `jit.playlist`, `pattrstorage`
+- **Checked:** Registry and userguide: nothing groups media into switchable banks. A Max patch would swap a jit.playlist's contents with clear/append (refpage), which stops nothing only if the playing clip lives elsewhere; there is no 'persistent slot' idea.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Nothing groups clips into switchable banks. jit.playlist can be refilled with clear/append (refpage), and several playlists can be shown or hidden by hand, but there is no persistent-slot idea.
+- **Source:** <https://resolume.com/support/en/decks> · <https://resolume.com/support/en/clips> · <https://resolume.com/support/en/vocabulary>
+- id: `resolume--decks-banks-of-clips-that-switch-without-stopping-playback-with-persistent-clips`
 
 ### A live viewer in every node (TouchDesigner)
 
@@ -8624,6 +8798,19 @@ more than one tool documents is a stronger lead than a single entry.
 - **Advice for Max:** Max is ahead here; keep using pattrstorage and snapshots. The Pd habit that transfers is making startup state visible in the patch (loadmess with the values in view).
 - **Source:** <Documentation/1.manual/resources/chapter2.htm> · <Documentation/7.stuff/synth/preset.pd>
 - id: `plugdata--no-preset-system-by-design`
+
+### Per-patch declaration of what the patch needs ([declare]) (plugdata (Pd vanilla))
+
+- **Max:** In both, done differently · confidence medium · confirmed
+- **Theme:** Patch dependencies and search paths
+- **There:** `declare -path`, `declare -lib`, `declare -stdpath`, `else/knob`
+- **What it does:** [declare -path folder -lib name] in a patch adds search folders and loads libraries for that patch alone, so the patch states its own dependencies. A 'library/object' prefix picks which library an object comes from.
+- **Closest in Max:** `filepath`
+- **Checked:** Userguide search_path, package_manager and externals pages: paths are global (File Preferences, Packages folder) or per Project. filepath refpage: manages the search path, 'or manage paths specific to a single patch'. No in-patch dependency declaration or name prefix found.
+- **Notes:** filepath's per-patch mode was read only as one sentence.
+- **Review:** Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). filepath refpage can manage paths for a single patch, and the Projects userguide page collects a patch's dependencies (patches, media, externals). Max does this per project or with filepath, not with a declaration box inside the patch, and has no 'library/object' prefix.
+- **Source:** <Documentation/5.reference/declare-help.pd> · <Documentation/1.manual/resources/chapter4.htm>
+- id: `plugdata--per-patch-declaration-of-what-the-patch-needs-declare`
 
 ### Per-patch unique names that work at the top level ($0) (plugdata (Pd vanilla))
 

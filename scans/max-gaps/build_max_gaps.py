@@ -11,8 +11,10 @@ that are not in the list yet and never overwrites an entry that is already
 there, so review notes and corrected statuses survive a re-run. It then
 renders `max_gaps.md` from the list.
 
-Fields a reviewer changes: `max_status`, `max_closest`, `theme`, `review`
-and `review_notes`. `theme` groups entries from different tools that describe
+Fields a reviewer changes: `max_status`, `max_closest`, `installable`,
+`theme`, `review` and `review_notes`. `installable` lists third-party Max
+packages, not bundled with Max, that cover the entry: each item is
+{package, object, url, how_checked}. `theme` groups entries from different tools that describe
 the same capability; give two entries the same theme text to group them.
 `review` is one of:
 
@@ -188,6 +190,10 @@ def render(entries):
                 out.append(f"- **What it does:** {cell(e['what_it_does'])}")
             if e["max_closest"]:
                 out.append("- **Closest in Max:** " + ", ".join(f"`{n}`" for n in e["max_closest"]))
+            if e.get("installable"):
+                out.append("- **Third-party:** " + " · ".join(
+                    f"{i['package']} `{i['object']}` <{i['url']}>" if i.get("url")
+                    else f"{i['package']} `{i['object']}`" for i in e["installable"]))
             if e["max_check"]:
                 out.append(f"- **Checked:** {cell(e['max_check'])}")
             if e.get("advice"):
@@ -217,6 +223,7 @@ def main():
     for e in entries:
         for field in ("advice", "notes", "theme", "review_notes"):
             e.setdefault(field, "")
+        e.setdefault("installable", [])
     known = {e["id"] for e in entries}
 
     found, problems = load_candidates()

@@ -24,3 +24,5 @@ scans/maxhelp/maxhelp_port_counts_local.json
 
 # Lock files Excel and Word leave beside an open document.
 ~$*
+
+handoffs/
