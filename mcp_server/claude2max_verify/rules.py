@@ -277,6 +277,8 @@ class SpecContext:
         conns = self.spec.get("connections", [])
         self.connections: list = conns if isinstance(conns, list) else []
         self.debug_ids = set(self.spec.get("debug_additions", []) or [])
+        # True for a tab of a help file (set by run_all; see _help_tabs).
+        self.help_tab = False
 
         # incoming / outgoing maps keyed by object id.  Each entry is the raw
         # connection plus its index, so rules can report a precise location.
@@ -485,6 +487,8 @@ def rule_presentation_required(ctx: SpecContext) -> list:
     converter won't set openinpresentation and the operator is stuck in the
     edit graph.
     """
+    if ctx.help_tab:
+        return []   # a help file's tabs are read in the patching view, as Max's own are
     interactive = [
         oid for oid, obj in ctx.objects.items()
         if isinstance(obj, dict) and is_interactive(ctx.maxclass(obj))
@@ -700,7 +704,11 @@ def rule_subpatcher_labels(ctx: SpecContext) -> list:
         is_encaps = has_sub or mc in ("poly~", "bpatcher")
         if not is_encaps:
             continue
-        if not (ctx.attrs(obj).get("comment") or "").strip():
+        sub = obj.get("patcher")
+        no_ports = (has_sub and isinstance(sub.get("objects"), dict)
+                    and not any(isinstance(o, dict) and o.get("type") in ("inlet", "outlet")
+                                for o in sub["objects"].values()))
+        if not no_ports and not (ctx.attrs(obj).get("comment") or "").strip():
             out.append(Violation(
                 "subpatcher-label-missing", WARNING, oid,
                 f"Encapsulation '{oid}' ({mc}) has no outside comment attr "
@@ -1855,6 +1863,83 @@ def rule_tab_window_too_small(ctx: SpecContext) -> list:
     )]
 
 
+HELP_TAB_MAX = (1000, 800)   # past this a tab does not fit a laptop screen
+
+
+def _tab_name(obj: dict) -> str:
+    words = (obj.get("text") or "").split(" ", 1)
+    return words[1].strip().strip('"') if len(words) == 2 and words[0] in ("p", "patcher") else ""
+
+
+def _help_tabs(spec: dict):
+    """[(id, name, sub-spec)] of a help file's tabs in box order, or None when
+    the spec is not a help file. The mark of one is a tab named `basic`, the
+    first tab of every help file Max ships and of every one made from its
+    template."""
+    objs = spec.get("objects") if isinstance(spec, dict) else None
+    if not isinstance(objs, dict):
+        return None
+    tabs = [(oid, _tab_name(o), o["patcher"]) for oid, o in objs.items()
+            if isinstance(o, dict) and isinstance(o.get("patcher"), dict)
+            and (o["patcher"].get("patcher_extras") or {}).get("showontab")]
+    if not any(name == "basic" for _, name, _ in tabs):
+        return None
+    return tabs
+
+
+def _has_header(sub: dict) -> bool:
+    """A header at the tab's top left: Max's helpname.js / helpdetails.js, or a butter_comment."""
+    for o in (sub.get("objects") or {}).values():
+        if not isinstance(o, dict):
+            continue
+        pos = o.get("pos") or [999, 999]
+        if pos[0] > 40 or pos[1] > 40:
+            continue
+        a = o.get("attrs") or {}
+        name = str(a.get("filename") or "")
+        if o.get("type") in ("jsui", "v8ui") and name.split(".")[0] in ("helpname", "helpdetails", "butter_comment"):
+            return True
+    return False
+
+
+def rule_help_file_form(ctx: SpecContext) -> list:
+    """The form of a help file: `basic` first and `?` last, tab names lowercase
+    and unnumbered, a header at the top of every tab, and no tab larger than a
+    laptop screen.
+    Source: MAX_PATCHING.md > Help Files — How a Help File Teaches > The Form of a Help File.
+    """
+    tabs = _help_tabs(ctx.spec)
+    if not tabs:
+        return []
+    src = "MAX_PATCHING.md > The Form of a Help File"
+    out = []
+    names = [n for _, n, _ in tabs]
+    if names[0] != "basic":
+        out.append(Violation("help-tab-order", WARNING, "patcher",
+                             f"A help file's first tab is `basic`; this one starts with `{names[0]}`.", src))
+    if names[-1] != "?":
+        out.append(Violation("help-tab-order", WARNING, "patcher",
+                             f"A help file's last tab is `?`, as in Max's own; this one ends with `{names[-1]}`.", src))
+    for oid, name, sub in tabs:
+        if name == "?":
+            continue
+        if name != name.lower() or name[:1].isdigit():
+            out.append(Violation("help-tab-name", STYLE, oid,
+                                 f"Tab `{name}`: help-file tabs are lowercase and unnumbered, as Max's are.", src))
+        if not _has_header(sub):
+            out.append(Violation("help-tab-header", WARNING, oid,
+                                 f"Tab `{name}` has no header at its top left (a butter_comment, or Max's helpname.js / helpdetails.js).", src))
+        try:
+            w, h = float(sub.get("width", 0)), float(sub.get("height", 0))
+        except (TypeError, ValueError):
+            continue
+        if w > HELP_TAB_MAX[0] or h > HELP_TAB_MAX[1]:
+            out.append(Violation("help-tab-too-large", WARNING, oid,
+                                 f"Tab `{name}` is {int(w)} × {int(h)}, past {HELP_TAB_MAX[0]} × {HELP_TAB_MAX[1]}. "
+                                 f"Aim for about 700 × 500 and split the tab.", src))
+    return out
+
+
 def rule_box_off_canvas(ctx: SpecContext) -> list:
     """Every box of the view the patch opens in fits its window.
 
@@ -1928,6 +2013,17 @@ def rule_off_grid(ctx: SpecContext) -> list:
         r = ctx.box_rect(obj)
         if r is not None:
             pts.append((oid, r[0], r[1]))
+    # A row of a stacked column (attrui or message boxes 1 px apart) is placed
+    # against the row above it, not the grid, so it is left out: only the
+    # column's first row is held to the grid, and the stacked rows do not
+    # count against the grid either (MAX_PATCHING.md > A Stack of Bound
+    # Controls Is One Block).
+    rects = {oid: ctx.box_rect(ctx.objects[oid]) for oid, _x, _y in pts}
+    def stacked(oid):
+        r = rects[oid]
+        return any(o != oid and q is not None and abs(q[0] - r[0]) < 1
+                   and 0 <= r[1] - (q[1] + q[3]) <= 2 for o, q in rects.items())
+    pts = [p for p in pts if not stacked(p[0])]
     if len(pts) < _GRID_MIN_BOXES:
         return []
 
@@ -2504,6 +2600,7 @@ REGISTRY = [
     rule_long_cord,
     rule_box_off_canvas,
     rule_tab_window_too_small,
+    rule_help_file_form,
     rule_off_grid,
 ]
 
@@ -2599,8 +2696,10 @@ def run_all(spec: dict, resolver=None, base_dir=None, native=False) -> list:
     subpatcher has its location prefixed with the box-id path (`tab_2/m5`).
     """
     violations: list = []
+    help_prefixes = {f"{oid}/" for oid, _n, _s in (_help_tabs(spec) or [])}
     for prefix, scope in iter_spec_scopes(spec):
         ctx = SpecContext(scope, base_dir=base_dir, native=native)
+        ctx.help_tab = prefix in help_prefixes
         violations.extend(_run_rules(REGISTRY, ctx, prefix))
         if resolver is not None:
             violations.extend(_run_rules(RESOLVER_REGISTRY, ctx, prefix, resolver))

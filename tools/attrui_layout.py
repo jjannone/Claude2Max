@@ -45,6 +45,8 @@ CLEARANCE = 12       # how far above the destination the horizontal run sits
 ROW_REACH = 12       # the widest space between two boxes of one row
 COLUMN_BREAK = 60    # a bigger vertical space than this ends a column
 UNDER_ROW = 7        # the space under a row, where its cords run to the column
+HEAD_INDENT = 12     # a heading between rows is set in this far, clear of the column's line
+ALIGNED = 1          # a line this close to the inlet's x is over it: no bend at the bottom
 
 
 def _feeds(P, bid):
@@ -167,6 +169,11 @@ def lay_out(P, name, report):
                     y += BLOCK_GAP
                 if r[1] != y:
                     r[1] = y; moved += 1
+                # A heading inside the column is crossed by the column's own
+                # line, which runs down the left edge at its outlets; set it in
+                # so the line passes beside the words, not through them.
+                if not first and r[0] < cx + HEAD_INDENT:
+                    r[0] = cx + HEAD_INDENT; moved += 1
                 y += r[3] + HEAD_GAP
             else:
                 if r[1] != y:
@@ -221,7 +228,14 @@ def _route(P, boxes, ids, joins=None):
             outX = boxes[sid]['patching_rect'][0] + PORT_INSET
             if sid in joins:
                 gy, gx = joins[sid]
-                pl['midpoints'] = [outX, gy, gx, gy, gx, runY, inX, runY]
+                if abs(gx - inX) <= ALIGNED:
+                    # the column's line is over the inlet: join it and go
+                    # straight down, with no bend at the bottom (John, 2026-10-03)
+                    pl['midpoints'] = [outX, gy, inX, gy]
+                else:
+                    pl['midpoints'] = [outX, gy, gx, gy, gx, runY, inX, runY]
+            elif abs(outX - inX) <= ALIGNED:
+                pl['midpoints'] = []            # directly above the inlet: a straight cord
             else:
                 pl['midpoints'] = [outX, runY, inX, runY]
             routed += 1

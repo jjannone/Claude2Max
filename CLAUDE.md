@@ -153,6 +153,12 @@ For instance: writing `[oscparse]` between `[udpreceive]` and `[route /user]` be
 
 This is one extra lookup per never-used object name — cheap insurance against the silent-failure mode the rest of this rule describes.
 
+## A Script Cannot Answer a Message Its Host Object Already Handles — Binding Rule {!core}
+
+A `v8`, `v8ui`, `js` or `jsui` script runs inside a host object, and the host gets every message first. When the host has its own message of that name, the host handles it and the script's function of the same name never runs. Nothing reports the clash: the script's function exists, a test outside Max calls it directly and passes, and in Max the message does the host's thing instead. So before giving a script a message handler, look the name up in the host object's own refpage (`v8ui.maxref.xml`, and `jbox.maxref.xml` for what every box shares). If the host has it, the script needs another name.
+
+For instance: `butter_keys` copied kslider's legacy `size 0|1` (large or small keyboard) as a script function. `v8ui`'s refpage lists its own `size <width> <height>`, so Max resized the box and the script's `size` never ran, while the node test that called it directly passed. (John, 2026-10-03.) The recognition signal: writing a function in a UI script whose name is a common box word (for instance `size`, which `v8ui` owns), or copying a message from the object the script imitates without checking the host.
+
 ## Prefer the Tool's Own Registry Over Reconstructing One
 
 When you need to know whether a name exists in an external system, look first for a **machine-readable registry that the system ships and consults itself** — before globbing its documentation, scraping its help files, or inferring from a corpus of its output. Documentation coverage is always incomplete, and inference blurs distinctions the registry already draws precisely. A derived list is a model of the truth; the registry *is* the truth, and it stays correct when the tool updates.
@@ -542,6 +548,10 @@ The recognition signal: defending a message box on the grounds that it is clicka
 
 Message boxes keep every job where there is no state to show: a one-shot `read`, a `bang`-like trigger, a formatter fed from upstream, and setting a real attribute where `attrui` cannot reach (see *Drive a Real Attribute With `attrui`, Not a `$` Message Box*).
 
+## A Message Box Needs No Button to Fire It — Binding Rule {!core}
+
+A message box is itself clickable in a locked patch: one click sends its message. So do not put a `button` in front of a message box only so the reader has something to click. The `button` adds a box and a cord and does nothing the message box does not already do. A `button` belongs in front of a message box only when something else must also trigger it, for instance a `loadbang` whose firing should be visible. (John, 2026-10-03, after the help-file utilities corner was built as a `button` into `; max clearmaxwindow`.) The recognition signal: a `button` whose only cord goes to a message box, with nothing feeding the `button`.
+
 ## A Message That an Object Already Sends Comes From That Object, Not a Message Box — Binding Rule {!core}
 
 When the message a patch needs is exactly what a UI object sends, use that object instead of a message box that spells the message out. A `bang` comes from a `button`, not a `[bang(` box. The object does the same job in the same one click, and it also shows that it fired: a `button` flashes, and it can sit in the path of an automatic trigger, so a `loadbang` into a `button` shows the load happening. A message box that only repeats a value an object already produces is a second, silent way to do the same thing. (John, 2026-09-26.)
@@ -567,6 +577,8 @@ For instance, both from `jit.butter.alphamask.maxhelp` (John, 2026-09-21): `join
 That registry also settles what an alias actually is. `jit.gl.layer` maps to the `jit.gl.videoplane` binary in `init/jitter-objectmappings.txt`, but it is not the same object: the registry gives it `blend_enable` 1, `depth_enable` 0, `preserve_aspect` 1 and `transform_reset` 5, against videoplane's 0, 1, 0 and 0. So the two names are two sets of defaults over one implementation, and which name you write is itself a decision. C74's own `pass.gamma.correction.maxpat` writes `jit.gl.layer @blend_enable 0` — turning it *off* — which is the tell.
 
 The recognition signal: typing a number or an attribute because it makes the box "say what it does." The box already says what it does; a default written out says what it does *not* do.
+
+**The same goes for sending a default at load.** A `loadbang` or `loadmess` that sends an object a value it already has is a box and a cord that change nothing, and it tells the reader something was set when nothing was. In a help file or demo, use the object's defaults wherever the demo works with them, so the reader sees the object as it comes. Where a demo needs another starting value, for instance a keyboard range a real MIDI keyboard can reach, save it on the box as an attribute and show it with an `attrui`, rather than sending it at load. (John, 2026-10-03, about a `loadbang` → `lohikey 36 84` in the `butter_keys` help file.)
 
 ## One `loadmess` Carries a Group of Related Settings — Binding Rule {!core}
 
@@ -862,7 +874,9 @@ Concretely, when building or reviewing any such patch:
 - **Make outputs visible** (number boxes, comments, `print`, or a `prepend set` → message box that captures lists/symbols) so the user sees what the object emits, not just what it receives.
 - **Label and lay out the demos clearly** — section headers, feeders above / outputs below, no overlapping controls — so the functionality reads at a glance.
 
-The acceptance test is behavioral, not structural: open the patch, click every demo and flip every attrui, and confirm each produces a **visible change**. A click that changes nothing on screen is a broken demo even if the message it sends is "correct."
+The acceptance test is behavioral, not structural: open the patch, click every demo and flip every attrui, and confirm each produces a **visible change** wherever the setting has one to give. A click that should change something on screen and does not is a broken demo, even if the message it sends is "correct."
+
+**Not every setting has a visible effect, and that is no reason to leave it out.** Some important settings change nothing on screen: how a value is stored, whether the object saves its data, what happens on the next click, whether an outlet filters repeats. Show them anyway, and say in the label what they change and when it will show. Do not invent a visible side effect for a setting that has none, and do not drop it from the help file because clicking it looks like nothing happened. (John, 2026-10-03.)
 
 For instance: the `butter_keys` comparison bench placed `kslider` and `butter_keys` showing MIDI 48–60, but several demos targeted notes outside that range (`chord 60 …`, `set 62`, `setval 62 …`) and the slider-face messages set values against an integer 0–127 range — so the keys lit nothing visible and the slider bars barely moved. The fix: every demo note pulled into 48–60, every arg-taking message given representative args, and slider-face values cast as `0.–1.` floats (with a `setminmax -1. 1.` bipolar example). Earlier the same failure hit `butter_keys.maxhelp` (displayed 36–48 while demos targeted 60–67). This rule is symmetric with **Never Render an Empty Container** and the presentation aesthetic rules: visible-but-wrong is recoverable; silent-and-blank trains the user to distrust the object.
 

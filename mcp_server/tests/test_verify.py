@@ -1215,6 +1215,63 @@ def test_tab_window_too_small():
     assert not _hits(verify_spec({"width": 300, "height": 200, "objects": {}, "connections": []}), "tab-window-too-small")
 
 
+def test_off_grid_leaves_stacked_rows_alone():
+    # Six boxes on a 10 px grid, then a column of three attrui stacked 1 px
+    # apart under the first: the 2nd and 3rd rows are off the grid by design.
+    objs = {f"m{i}": {"type": "newobj", "text": "print", "pos": [20 + 60 * i, 20], "size": [50, 22]} for i in range(6)}
+    objs["a1"] = {"type": "attrui", "pos": [20, 100], "size": [200, 22]}
+    objs["a2"] = {"type": "attrui", "pos": [20, 123], "size": [200, 22]}
+    objs["a3"] = {"type": "attrui", "pos": [20, 146], "size": [200, 22]}
+    hits = {h["location"] for h in _hits(verify_spec({"objects": objs, "connections": []}), "off-grid")}
+    assert not hits & {"a1", "a2", "a3"}, hits
+    # a lone box off the grid is still reported
+    objs["stray"] = {"type": "newobj", "text": "print", "pos": [403, 300], "size": [50, 22]}
+    hits = {h["location"] for h in _hits(verify_spec({"objects": objs, "connections": []}), "off-grid")}
+    assert "stray" in hits, hits
+
+
+def _help_spec(names, header=True, size=(700, 500), control=True):
+    """A help file whose tabs are `names`, in order."""
+    objs = {}
+    for k, n in enumerate(names):
+        inner = {}
+        if header and n != "?":
+            inner["h"] = {"type": "v8ui", "pos": [10, 10], "size": [600, 60],
+                          "attrs": {"filename": "butter_comment.js"}}
+        if control and n != "?":
+            inner["t"] = {"type": "toggle", "pos": [20, 100]}
+        text = 'p "%s"' % n if " " in n else "p %s" % n
+        objs["tab%d" % k] = {"type": "newobj", "text": text, "inlets": 0, "outlets": 0, "outlettype": [],
+                             "pos": [20, 20 + 30 * k],
+                             "patcher": {"width": size[0], "height": size[1], "objects": inner,
+                                         "connections": [], "patcher_extras": {"showontab": 1}}}
+    return {"width": size[0], "height": size[1] + 26, "objects": objs, "connections": [],
+            "patcher_extras": {"showontab": 0, "showrootpatcherontab": 0}}
+
+
+def test_help_file_form():
+    # the template's form passes, and its tabs need no presentation view
+    good = verify_spec(_help_spec(["basic", "per node", "?"]))
+    assert not [r for r in _rules(good) if r.startswith("help-")], _rules(good)
+    assert "presentation-required" not in _rules(good)
+    assert "subpatcher-label-missing" not in _rules(good)
+    # basic first, ? last
+    assert _hits(verify_spec(_help_spec(["dots", "basic", "?"])), "help-tab-order")
+    assert _hits(verify_spec(_help_spec(["basic", "dots"])), "help-tab-order")
+    # lowercase, unnumbered names
+    assert _hits(verify_spec(_help_spec(["basic", "1 overview", "?"])), "help-tab-name")
+    assert _hits(verify_spec(_help_spec(["basic", "Dots", "?"])), "help-tab-name")
+    # a header on every tab but ?
+    assert len(_hits(verify_spec(_help_spec(["basic", "dots", "?"], header=False)), "help-tab-header")) == 2
+    # larger than a laptop screen
+    assert _hits(verify_spec(_help_spec(["basic", "?"], size=(1530, 830))), "help-tab-too-large")
+    # tabs with no `basic` are not a help file: none of this applies, and the
+    # presentation rule still does
+    other = verify_spec(_help_spec(["1 Key sends", "2 Notes"], header=False))
+    assert not [r for r in _rules(other) if r.startswith("help-")]
+    assert "presentation-required" in _rules(other)
+
+
 def test_box_off_canvas():
     # presented box past the window: one WARNING for the patch, naming the size needed
     pres = {"width": 400, "height": 300,
