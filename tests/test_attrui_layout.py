@@ -59,3 +59,18 @@ def test_a_heading_between_rows_is_set_in_clear_of_the_line():
     subprocess.run([sys.executable, str(TOOL), "--messages", f.name], check=True, capture_output=True)
     out = {b["box"]["id"]: b["box"]["patching_rect"] for b in json.load(open(f.name))["patcher"]["boxes"]}
     assert out["h"][0] >= 20 + 12, out["h"]
+
+
+def test_a_label_beside_a_row_moves_with_it():
+    boxes = [box("m1", "message", 20, 20, text="a"), box("m2", "message", 90, 20, text="b"),
+             box("l", "comment", 160, 20, 100, 20, "label"),
+             box("m3", "message", 20, 80, text="c"), box("l3", "comment", 90, 80, 100, 20, "label 3"),
+             box("dest", "newobj", 20, 300, 200, 22, "print")]
+    P = {"patcher": {"boxes": boxes, "lines": [line(s, "dest") for s in ("m1", "m2", "m3")]}}
+    with tempfile.NamedTemporaryFile("w", suffix=".maxpat", delete=False) as f:
+        json.dump(P, f)
+    subprocess.run([sys.executable, str(TOOL), "--messages", f.name], check=True, capture_output=True)
+    out = {b["box"]["id"]: b["box"]["patching_rect"] for b in json.load(open(f.name))["patcher"]["boxes"]}
+    assert out["m3"][1] != 80, "the column was not restacked"
+    assert out["l3"][1] == out["m3"][1], (out["l3"], out["m3"])
+    assert out["l"][1] == out["m1"][1], (out["l"], out["m1"])

@@ -44,8 +44,11 @@ PORT_INSET = 9.5     # a box's first port's centre, from its left edge (Max 9's 
 CLEARANCE = 12       # how far above the destination the horizontal run sits
 ROW_REACH = 12       # the widest space between two boxes of one row
 COLUMN_BREAK = 60    # a bigger vertical space than this ends a column
-UNDER_ROW = 7        # the space under a row, where its cords run to the column
-HEAD_INDENT = 12     # a heading between rows is set in this far, clear of the column's line
+UNDER_ROW = 12       # the space under a row of several boxes, where its cords run to the column
+                     # (John, 2026-10-04: a little more space between rows of messages)
+LABEL_REACH = 100    # a comment this close to the right of a row, on its line, is its label
+HEAD_INDENT = 22     # a heading between rows is set in this far: about 12 px clear of the
+                     # column's line, which runs at the ports' centre, PORT_INSET in
 ALIGNED = 1          # a line this close to the inlet's x is over it: no bend at the bottom
 
 
@@ -157,6 +160,18 @@ def lay_out(P, name, report):
         # stacked column — a cascade, an arrangement beside examples — fails
         # that check and is left alone without needing to be recognised first.
         riders = [m for b in column for m in rows.get(b['id'], [])]
+        # A label to the right of a box or row is part of it: it moves with it.
+        # (Without this, spacing the rows out left every label behind.)
+        labels = {}
+        for b in column:
+            if b.get('maxclass') == 'comment':
+                continue
+            row = [b] + rows.get(b['id'], [])
+            right = max(m['patching_rect'][0] + m['patching_rect'][2] for m in row)
+            labels[b['id']] = [c for c in boxes.values() if c.get('maxclass') == 'comment'
+                               and abs(c['patching_rect'][1] - b['patching_rect'][1]) < 4
+                               and right - 2 <= c['patching_rect'][0] <= right + LABEL_REACH]
+        riders += [c for cs in labels.values() for c in cs]
         snapshot = {id(b): list(b['patching_rect']) for b in column + riders}
         before = _overlaps(P)
 
@@ -177,7 +192,7 @@ def lay_out(P, name, report):
                 y += r[3] + HEAD_GAP
             else:
                 if r[1] != y:
-                    for m in rows.get(b['id'], []):     # the row rides along
+                    for m in rows.get(b['id'], []) + labels.get(b['id'], []):   # the row and its label ride along
                         m['patching_rect'][1] = y
                     r[1] = y; moved += 1
                 y += r[3] + (UNDER_ROW if rows.get(b['id']) else ROW_GAP)
