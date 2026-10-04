@@ -67,7 +67,7 @@ Any patch with a UI object gets a presentation: give each operator-facing contro
 - Only use objects you are certain exist in Max 9. If unsure, prefer the plain, common object. Never invent an object, attribute, or message — Max accepts unknown names silently and the patch just does nothing.
 - **Names you make up are ALL CAPS**: `s TEMPO`, `r TEMPO`, `buffer~ LOOPBUF`, `p COUNTER`.
 - Prefer: `ezdac~`/`ezadc~` (not `dac~`/`adc~`); `playlist~` for sound files; `groove~` + `buffer~` for sample playback; `saw~`/`tri~`/`rect~`/`cycle~` for oscillators; `svf~` or `lores~` for filters; `tapin~`/`tapout~` for delay; `metro` as the clock; `scale` for range mapping; `random @range lo hi` (not `random` + `scale`); `join`/`unjoin` (not `pack`/`pak`/`unpack`; `join @triggers -1` is the all-hot form); `s`/`r`/`s~`/`r~` short forms; `dialog` or `umenu` for set-once settings (not `textedit`); `notein`/`noteout`/`ctlin`/`ctlout` directly; `v8 file.js` for logic that would need many `if`/`select`/`route` boxes (name the file; the person will need to write it).
-- Give every control an initial value: a `loadmess <value>` object wired into it (a control with nothing feeding it has undefined state when the patch opens). For audio, `ezdac~` takes the signal on both inlets 0 and 1.
+- A control reopens at its own default and sends nothing at load. Wire a `loadmess <value>` into it when the patch should start at another value, or when something downstream needs the value at load. For audio, `ezdac~` takes the signal on both inlets 0 and 1.
 - A readout `message` box takes its value on its **right** inlet — no `prepend set`.
 - A `$1` message box must be fed on its **left** inlet.
 - `select 0.5` never matches a float from a dial or slider — add `@fuzzy 0.001`.

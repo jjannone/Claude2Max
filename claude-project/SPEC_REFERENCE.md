@@ -346,11 +346,11 @@ Some objects must be used in pairs or have strong conventional partners.
 
 ### Z-order in .maxpat files
 
-In Max, the order of objects in the `boxes` array determines their visual stacking: **later items draw on top** (in front), earlier items sit behind (corrected 2026-09-09 — this section used to say the opposite; see `patching/MAX_PATCHING.md` > *Max .maxpat Internals*). This matters for:
+In Max, the order of objects in the `boxes` array determines their visual stacking: **earlier items draw in front** and take the click; later items sit behind. Max saves a newly made box at the start of the list, which is in front. Tested in Max by John, 2026-10-04 (`patches/max-behavior-tests/`, tab 1); this section said the opposite from 2026-09-09 until then (see `patching/MAX_PATCHING.md` > *Max .maxpat Internals*). This matters for:
 
-- **Annotation comments and click targets** — declare them after the objects they must cover (a transparent button over a title comment goes after the comment)
+- **Annotation comments and click targets** — declare them before the objects they must cover. A transparent button over a comment is the exception: a comment in a locked patch lets clicks through, so the button gets the click in either order
 - **Background panels** — render behind everything. The converter places every `panel` box after every non-panel box on its own; the spec author's part is `background: 1` on each presentation panel and `bglocked: 1` at the spec root (see `patching/MAX_PATCHING.md` > *Presentation panels live in the background layer*).
-- The same convention as most drawing APIs: paint order, last on top
+- The opposite of most drawing APIs, where the last thing painted is on top
 
 ### Bubble comments (@bubbleside)
 
@@ -676,10 +676,10 @@ class the converter knows.
 
 ### Inlet and Outlet Object Sizes
 
-automatically — do not specify a `size` for them in the spec. Note that Max 9's
-own shipped patches are split between 30 × 30 and 25 × 25 (25 × 25 is the more
-common of the two, 58 % of `inlet` boxes), so treat 30 × 30 as this repo's
-convention rather than as a verified fresh-instance default.
+automatically — do not specify a `size` for them in the spec. 30 × 30 is what
+Max 9.2 gives a new `inlet` or `outlet` box (John, in Max, 2026-10-04,
+`patches/max-behavior-tests/`, tab 6). Max's own shipped patches also contain
+25 × 25 boxes (58 % of `inlet` boxes); why has not been checked.
 
 ### Arithmetic: Float Output Requires a Float Argument
 

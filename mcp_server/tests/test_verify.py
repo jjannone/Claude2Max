@@ -772,14 +772,20 @@ def test_textedit_into_template():
     assert "textedit-into-template" not in _rules(verify_spec(routed))
 
 
-# (m) select-float-needs-fuzzy -------------------------------------------------
-def test_select_float_needs_fuzzy():
+# (m) select-float-from-ui ------------------------------------------------------
+def test_select_float_from_ui():
     objs = {"d": {"type": "dial"}, "sel": {"type": "newobj", "text": "select 0.5"},
-            "fz": {"type": "newobj", "text": "select 0.5 @fuzzy 0.001"},
+            "fz": {"type": "newobj", "text": "select 0.5 @matchfloat 1 @fuzzy 0.001"},
+            "it": {"type": "newobj", "text": "select 5 @fuzzy 0.001"},
             "msg": {"type": "message", "text": "0.5"}}
-    assert "select-float-needs-fuzzy" in _rules(verify_spec({"objects": objs, "connections": [["d", 0, "sel", 0]]}))
-    assert "select-float-needs-fuzzy" not in _rules(verify_spec({"objects": objs, "connections": [["d", 0, "fz", 0]]}))
-    assert "select-float-needs-fuzzy" not in _rules(verify_spec({"objects": objs, "connections": [["msg", 0, "sel", 0]]}))
+    def rules(conns):
+        return _rules(verify_spec({"objects": objs, "connections": conns}))
+    assert "select-float-from-ui" in rules([["d", 0, "sel", 0]])
+    # @fuzzy did not widen the match in Max 9.2, so it no longer silences the warning
+    assert "select-float-from-ui" in rules([["d", 0, "fz", 0]])
+    # an attribute's float value is not a float argument
+    assert "select-float-from-ui" not in rules([["d", 0, "it", 0]])
+    assert "select-float-from-ui" not in rules([["msg", 0, "sel", 0]])
 
 
 # (k) script-object-declarations ----------------------------------------------
@@ -849,25 +855,14 @@ def test_kslider_demo_range():
     assert hits == ["bad"]
 
 
-# (n) jit-matrix-fan-in (resolver-gated) --------------------------------------
-class _MatrixResolver(FakeResolver):
-    def resolve_object(self, name):
-        if name == "jit.noise":
-            return {"source": "fake", "outlettype": ["jit_matrix", ""]}
-        return super().resolve_object(name)
-
-
-def test_jit_matrix_fan_in():
+# (n) jit-matrix-fan-in was removed 2026-10-04: two matrices into one inlet
+# work in Max (John, max-behavior-tests tab 4). Guard against it returning.
+def test_jit_matrix_fan_in_is_not_flagged():
     objs = {"a": {"type": "newobj", "text": "jit.noise"}, "b": {"type": "newobj", "text": "jit.noise"},
-            "v": {"type": "newobj", "text": "v8 x.js", "inlets": 2, "outlets": 1, "outlettype": [""]}}
-    res = _MatrixResolver(["jit.noise", "v8"])
-    fires = verify_spec({"objects": objs, "connections": [["a", 0, "v", 0], ["b", 0, "v", 0]]}, resolver=res)
-    assert "jit-matrix-fan-in" in _rules(fires)
-    ok = verify_spec({"objects": objs, "connections": [["a", 0, "v", 0], ["b", 0, "v", 1]]}, resolver=res)
-    assert "jit-matrix-fan-in" not in _rules(ok)
-    notypes = verify_spec({"objects": objs, "connections": [["a", 0, "v", 0], ["b", 0, "v", 0]]},
-                          resolver=FakeResolver(["jit.noise", "v8"]))
-    assert "jit-matrix-fan-in" not in _rules(notypes)
+            "w": {"type": "jit.pwindow"}}
+    out = verify_spec({"objects": objs, "connections": [["a", 0, "w", 0], ["b", 0, "w", 0]]},
+                      resolver=FakeResolver(["jit.noise"]))
+    assert "jit-matrix-fan-in" not in _rules(out)
 
 
 # (r) io-comment-box-missing --------------------------------------------------

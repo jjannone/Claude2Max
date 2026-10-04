@@ -2366,22 +2366,21 @@ class RegistrySizeCache:
         return self._sizes.get(maxclass)
 
 
-# Sizes for the UI classes Max's defaults registry has no `patching_rect` for.
-# No source: these date from the first commit (2026-03-28). Until each is read
-# from a fresh box saved in Max (patches/max-behavior-tests, tab 6), they are
-# the converter's guess, used only because the help-file fallback is worse
-# (live.toggle.maxhelp's boxes are 72 x 72). The 18 other classes this table
-# used to hold now come from the registry, which disagreed with it on 10.
+# Sizes for the UI classes Max's defaults registry has no `patching_rect` for,
+# read from fresh boxes John made in Max 9.2 and saved (2026-10-04,
+# patches/max-behavior-tests, tab 6). Six of the ten first-commit guesses were
+# wrong (live.toggle was 44 x 20, not 15 x 15). The 18 other classes this table
+# used to hold come from the registry, which disagreed with it on 10.
 UI_SIZES = {
     "inlet":    (30, 30),
     "outlet":   (30, 30),
     "preset":   (100, 40),
-    "live.dial": (44, 47),
-    "live.slider": (48, 100),
-    "live.toggle": (44, 20),
-    "live.numbox": (44, 20),
-    "live.menu": (100, 20),
-    "live.text": (44, 20),
+    "live.dial": (41, 48),
+    "live.slider": (39, 95),
+    "live.toggle": (15, 15),
+    "live.numbox": (44, 15),
+    "live.menu": (100, 15),
+    "live.text": (44, 15),
     "live.tab":  (100, 20),
 }
 

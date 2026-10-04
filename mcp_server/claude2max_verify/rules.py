@@ -79,12 +79,12 @@ _UNREGISTERED_UI_SIZES = {
     "inlet":    (30, 30),
     "outlet":   (30, 30),
     "preset":   (100, 40),
-    "live.dial": (44, 47),
-    "live.slider": (48, 100),
-    "live.toggle": (44, 20),
-    "live.numbox": (44, 20),
-    "live.menu": (100, 20),
-    "live.text": (44, 20),
+    "live.dial": (41, 48),
+    "live.slider": (39, 95),
+    "live.toggle": (15, 15),
+    "live.numbox": (44, 15),
+    "live.menu": (100, 15),
+    "live.text": (44, 15),
     "live.tab":  (100, 20),
 }
 
@@ -669,7 +669,7 @@ def rule_no_hidden_elements(ctx: SpecContext) -> list:
     return out
 
 
-_IO_COMMENT_REACH_PX = 60.0
+_IO_COMMENT_REACH_PX = 60.0       # John's preference, confirmed 2026-10-04
 
 
 def _check_io_labels(objects: dict, path: str, out: list) -> None:
@@ -810,13 +810,12 @@ def rule_debug_marking(ctx: SpecContext) -> list:
 #   io-comment-box-missing             0          0
 #   template-on-right-inlet            0          0
 #   textedit-into-template             0          0
-#   select-float-needs-fuzzy           0          1
+#   select-float-from-ui               0          1
 #   script-filename-missing            0      3,332*    *native mode; now no-ops there (ctx.native)
 #   script-io-undeclared               4        968*    *same — derived specs never declare I/O
 #   attribute-group-incomplete         0          4
 #   attribute-required                 0         42     jit.world without @enable 1, as the doc warns
 #   kslider-demo-range                 0          0
-#   jit-matrix-fan-in                  —          —     resolver-gated; corpus run was --no-resolver
 #   cord-crosses-unrelated-box        95          0     panels excluded; attrui columns dominate
 #                                                       (2026-09-16: ports moved toward the box edges as Max
 #                                                       draws them; 228 fewer hits over 25 patches with a
@@ -1145,13 +1144,16 @@ def rule_textedit_into_template(ctx: SpecContext) -> list:
 _FLOAT_UI_SOURCES = {"dial", "slider", "rslider", "flonum", "multislider"}
 
 
-def rule_select_float_needs_fuzzy(ctx: SpecContext) -> list:
-    """(m) `select` against a float from a UI source needs `@fuzzy`.
+def rule_select_float_from_ui(ctx: SpecContext) -> list:
+    """(m) `select` against a float literal, fed by a UI control.
 
-    UI floats arrive as 0.14999999…; `select 0.15` misses them silently.
-    Fires when a `select`/`sel` has a float literal arg, no `@fuzzy`, and any
-    incoming cord from a dial/slider/rslider/flonum/multislider/live.* control.
-    Source: MAX_PATCHING.md > select with float values from UI requires @fuzzy.
+    `select` matches a float only when it is exactly equal; in Max 9.2
+    `@matchfloat 1 @fuzzy 0.001` still missed 0.4995 against 0.5 (John,
+    2026-10-04, patches/max-behavior-tests tab 3). So a UI value near the
+    target never matches. Fires when a `select`/`sel` has a float literal arg
+    and any incoming cord from a dial/slider/rslider/flonum/multislider/live.*
+    control, whatever its attributes.
+    Source: MAX_PATCHING.md > select matches a float only when it is exactly equal.
     """
     out = []
     for oid, obj in ctx.objects.items():
@@ -1160,9 +1162,12 @@ def rule_select_float_needs_fuzzy(ctx: SpecContext) -> list:
         toks = ctx.text(obj).split()
         if not toks or toks[0] not in ("select", "sel"):
             continue
-        if "@fuzzy" in toks:
-            continue
-        has_float = any("." in a and _is_numeric_literal(a) for a in toks[1:] if not a.startswith("@"))
+        args = []
+        for a in toks[1:]:
+            if a.startswith("@"):
+                break
+            args.append(a)
+        has_float = any("." in a and _is_numeric_literal(a) for a in args)
         if not has_float:
             continue
         for i, conn in ctx.incoming.get(oid, []):
@@ -1172,11 +1177,12 @@ def rule_select_float_needs_fuzzy(ctx: SpecContext) -> list:
             smc = ctx.maxclass(src)
             if smc in _FLOAT_UI_SOURCES or (smc.startswith("live.") and is_interactive(smc)):
                 out.append(Violation(
-                    "select-float-needs-fuzzy", WARNING, oid,
+                    "select-float-from-ui", WARNING, oid,
                     f"'{ctx.text(obj)}' compares floats but is fed by '{conn[0]}' "
-                    f"({smc}), whose values arrive as 0.1499999… and never match "
-                    f"exactly. Add `@fuzzy 0.001` (or compare on ints).",
-                    "MAX_PATCHING.md > select with float values from UI requires @fuzzy",
+                    f"({smc}). select matches only an exactly equal float, and "
+                    f"@fuzzy did not widen that in Max 9.2. Scale or round to an "
+                    f"int before the select.",
+                    "MAX_PATCHING.md > select matches a float only when it is exactly equal",
                 ))
                 break
     return out
@@ -1385,51 +1391,6 @@ def rule_kslider_demo_range(ctx: SpecContext) -> list:
     return out
 
 
-def rule_jit_matrix_fan_in(ctx: SpecContext, resolver) -> list:
-    """(n) Two jit_matrix sources fanned into one inlet is a structural conflict.
-
-    Resolver-gated: an outlet's type comes from the spec's own `outlettype`
-    override, else `resolver.resolve_object(name)["outlettype"]`. Groups
-    connections by (destination, inlet) and flags any group with two or more
-    distinct matrix sources. A resolver that returns no outlet types → no-op.
-    Source: MAX_PATCHING.md > Two jit_matrix sources fanned into one inlet is
-    a structural conflict.
-    """
-    if resolver is None:
-        return []
-    groups: dict = {}
-    for i, conn in enumerate(ctx.connections):
-        if not isinstance(conn, (list, tuple)) or len(conn) < 4:
-            continue
-        src = ctx.objects.get(conn[0])
-        if not isinstance(src, dict):
-            continue
-        types = src.get("outlettype")
-        if not isinstance(types, list):
-            info = resolver.resolve_object(_classname(ctx, src))
-            types = info.get("outlettype") if isinstance(info, dict) else None
-        if not isinstance(types, list):
-            continue
-        so = conn[1]
-        if not (isinstance(so, int) and 0 <= so < len(types)):
-            continue
-        if types[so] != "jit_matrix":
-            continue
-        groups.setdefault((conn[2], conn[3]), []).append((i, conn[0]))
-    out = []
-    for (dst, inlet), members in groups.items():
-        srcs = sorted({s for _i, s in members})
-        if len(srcs) >= 2:
-            out.append(Violation(
-                "jit-matrix-fan-in", WARNING, f"{dst}[{inlet}]",
-                f"{len(srcs)} jit_matrix sources ({', '.join(srcs)}) fan into inlet "
-                f"{inlet} of '{dst}'. Give each matrix source its own inlet and "
-                f"dispatch on `inlet` in JS.",
-                "MAX_PATCHING.md > Two jit_matrix sources fanned into one inlet is a structural conflict",
-            ))
-    return out
-
-
 # ───────────────────────────────────────────────────────────────────────────
 # STYLE rules, second family — patching-view geometry (TASK_QUEUE item 13
 # (c)–(g)). All read pos/size via SpecContext.box_rect and skip any object
@@ -1439,7 +1400,7 @@ def rule_jit_matrix_fan_in(ctx: SpecContext, resolver) -> list:
 _ROW_PX = 55.0            # one layout row (spec2maxpat Y_SPACING); cords shorter than this are "local"
 _CORD_WIDEN_PX = 3.0
 _CORD_MIN_OVERLAP_AREA = 20.0
-_CORD_TOO_SHORT_PX = 15.0
+_CORD_TOO_SHORT_PX = 15.0         # John's preference, confirmed 2026-10-04
 
 
 # Port centre to box edge, both sides. Max's saved cords say 9.5: in files Max 9
@@ -1731,7 +1692,7 @@ def rule_button_side_tap(ctx: SpecContext) -> list:
 
 _SPEC_EMBED_ID = "obj-spec-embed"   # storage in the shape of a box — never laid out
 _RECEIVE_CLASSES = frozenset({"r", "receive", "r~", "receive~"})
-_LONG_CORD_PX = 600.0               # centre to centre; c2m_layout's threshold
+_LONG_CORD_PX = 600.0               # centre to centre; c2m_layout's threshold; John's preference, confirmed 2026-10-04
 _GRID_CANDIDATES = (15, 10, 5)      # coarsest first; Max's own default grid is 15
 _GRID_FIT_RATIO = 0.8               # share of boxes that must sit on a grid for it to count
 _GRID_MIN_BOXES = 5                 # fewer boxes than this cannot establish a grid
@@ -2371,7 +2332,11 @@ def _destinations_hold_the_value(ctx: SpecContext, oid: str) -> bool:
 
 
 def rule_control_init_on_load(ctx: SpecContext) -> list:
-    """(t) A control with nothing feeding it has undefined state on load.
+    """(t) A control with nothing feeding it sends nothing at load.
+
+    It reopens at its own default, not at its saved value (John, in Max,
+    2026-10-04, max-behavior-tests tab 5), so the objects it feeds may hold
+    something other than what it shows.
 
     Two cases are not reported, because the patch already has the default
     (CLAUDE.md > Don't Add an Object That Duplicates What an Object Already in
@@ -2380,8 +2345,8 @@ def rule_control_init_on_load(ctx: SpecContext) -> list:
 
     Weakest defensible form: any incoming cord (loadmess, loadbang → message,
     a live data source) is assumed to initialize the control. Suppressed for
-    the whole scope when an `autopattr` is present (@autorestore); `live.*`
-    objects save their own value and are exempt.
+    the whole scope when an `autopattr` is present (@autorestore). `live.*`
+    objects are not in _INIT_CONTROLS.
     Source: MAX_PATCHING.md > Every control must initialize to a known state
     on patch load.
     """
@@ -2400,10 +2365,10 @@ def rule_control_init_on_load(ctx: SpecContext) -> list:
             continue
         out.append(Violation(
             "control-init-on-load", STYLE, oid,
-            f"'{oid}' ({ctx.maxclass(obj)}) has nothing feeding it, so its state on "
-            f"load is whatever the file saved — undefined for the operator. Feed it "
-            f"a [loadmess <default>] or a loadbang'd message, or put the scope under "
-            f"an [autopattr].",
+            f"'{oid}' ({ctx.maxclass(obj)}) has nothing feeding it. It reopens at its "
+            f"default and sends nothing at load, so what it feeds may not match "
+            f"what it shows. If the patch should start elsewhere, or downstream "
+            f"needs the value at load, feed it a [loadmess <value>].",
             "MAX_PATCHING.md > Every control must initialize to a known state on patch load",
         ))
     return out
@@ -2723,7 +2688,7 @@ REGISTRY = [
     rule_comment_contrast,
     rule_template_on_right_inlet,
     rule_textedit_into_template,
-    rule_select_float_needs_fuzzy,
+    rule_select_float_from_ui,
     rule_script_object_declarations,
     rule_attribute_group_incomplete,
     rule_kslider_demo_range,
@@ -2761,7 +2726,6 @@ RESOLVER_REGISTRY = [
     rule_attribute_resolves,
     rule_message_resolves,
     rule_maxclass_resolves,
-    rule_jit_matrix_fan_in,
 ]
 
 

@@ -16,9 +16,9 @@
 //   coll          — async: trigger `write <file>`, read+parse the file
 //   table         — async: trigger `write <file>`, read+parse the file
 //
-// coll/table have NO v8 wrapper class, and `messnamed` only delivers to
-// [receive] objects — never to a bare `coll NAME` / `table NAME`. So the
-// dumper reaches them by one of two documented-correct paths, tried in
+// coll/table have NO v8 wrapper class, and whether `messnamed` reaches a
+// bare `coll NAME` / `table NAME` is untested (it does reach `buffer~ NAME`,
+// John 2026-10-04). So the dumper reaches them by one of two tested paths, tried in
 // order (see reachNamedWrite):
 //   (a) getnamed — this.patcher.getnamed(NAME).message("write", file).
 //       Zero wiring, but the object must have its Scripting Name (@varname)

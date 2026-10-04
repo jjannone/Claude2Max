@@ -173,14 +173,15 @@ class Slot:
     def title(self, S, px, py, pw, bx=None, by=None):
         """The pane title, with a transparent button over it so clicking the
         title selects the effect: button → [tab index] → s TABSEL → live.tab.
-        The button is declared after the comment so it draws on top."""
+        A locked comment lets clicks through, so the order does not matter."""
         p = self.pid
         rect = [px + 8, py + 6, pw - 16, LABEL_H]
         S.label(f"{p}_ptitle", f"{self.n} · {self.short}", rect,
                 AMBER, bold=True, varname=f"TITLE_{self.n:02d}")
         if bx is not None:
-            # declared AFTER the comment: later boxes draw on top, so the button
-            # gets the click (MAX_PATCHING.md > Max .maxpat Internals, z-order)
+            # declared after the comment, so it sits behind it (earlier boxes
+            # draw in front), but a comment in a locked patch lets clicks
+            # through, so the button still gets them (John, 2026-10-04).
             S.add(f"{p}_tbtn", {"type": "button", "pos": [bx, by], "presentation": list(rect),
                                 "attrs": {"bgcolor": [0.0, 0.0, 0.0, 0.0], "outlinecolor": [0.0, 0.0, 0.0, 0.0],
                                           "blinkcolor": [1.0, 0.55, 0.0, 0.35]}})
