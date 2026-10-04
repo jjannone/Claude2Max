@@ -461,10 +461,11 @@ This reverses two earlier binding rules — *Always Hide Plumbing Patchcords* an
 - Keep plumbing (`prepend`, `sprintf`, formatter message boxes, `route`, `select`) off the operator's screen by **not giving it `presentation: 1`**. That is the entire mechanism, and it needs no second half.
 - If a region of the patching view looks like a mess once its cords are visible, **the layout is the problem** — space the objects out, stagger the fan-outs, and honor the right-to-left ordering rule in `patching/MAX_PATCHING.md`. Do not reach for `hidden` to tidy up a tangle.
 
-**Two things stay exempt**, and they share a property: neither is an authoring choice about tidiness, which is the only thing the rule forbids.
+**Three things stay exempt.** The first two share a property: neither is an authoring choice about tidiness, which is the only thing the rule forbids.
 
 1. **The embedded spec codebox** (`id: "obj-spec-embed"`) keeps `"hidden": 1`. It is not part of the patch's graph at all — storage in the shape of a box, with no inlets, no outlets, and nothing to read.
 2. **Boxes whose visibility is runtime state owned by code.** The tutorial system's highlight panels and bubble annotations start hidden and are unhidden one step at a time by the generated v8 controller through `patcher.getnamed()` (contract: a `tut-panel-N` / `tut-ann-N` varname, see `TUTORIAL_GUIDELINES.md`). There `hidden` is a state machine's initial value, not a decision about what a reader gets to see.
+3. **The cord from a colour chip to the `prepend` beside it, in a help file.** The chip and its `prepend` sit side by side as one control, and the chip's outlet is at its bottom left, so the cord could only loop back up into the inlet next to it. Hiding it is the one tidiness exception, and it is John's (2026-10-04): every other cord in a help file stays visible. Layout in `patching/MAX_PATCHING.md` > *Help Files*, rule 17.
 
 The test that separates them from a violation: **who changes it?** If the answer is "nobody, it was authored that way to keep the view tidy," it is a violation. If the answer is "code, while the patch runs," it is state.
 
@@ -710,6 +711,14 @@ When writing a `v8`/`js`/`jsui` object — or any new object that is **not** hig
    **The setter is named `set_` plus the attribute's own name**, as in `set_dotsize`. Check it does not match a setter or message the base object already has.
 
 This pairs with **Never Regress Functionality When Changing Modality** (a reimplementation arrives at least as capable) and **Never Write API Names From Memory** (verify the inherited object's real messages/attributes against its refpage before mirroring them). Note for verification: a custom object has no C74 refpage, so the `verify_spec` gate can't check its attributes — shipping a `<name>.maxref.xml` (and a `<name>.maxhelp`) for any reusable object you create lets the gate and other tooling validate it like a built-in.
+
+## A Script UI That Stands In for an Object Box Looks Like One — Binding Rule {!core}
+
+When a `v8ui` or `jsui` stands in for a Max object that lives in an object box, draw it as an object box, the way Max 9 draws one: a dark box with a grey strip along its whole top edge and its whole bottom edge, and its name in the theme's object-name colour (`this.patcher.syntax_objectcolor`). Mark each port on its strip where Max's cords meet it: 9.5 px in from the left edge, 9.5 px in from the right edge for the last port, and evenly between, so port i of n sits at 9.5 + i × (width − 19) / (n − 1). That was measured from the bends of segmented cords in Max's own help files, where 1,608 of 1,612 outlet cords, 1,894 of 1,900 inlet cords and 2,271 of 2,274 single-outlet cords meet the box exactly there (2026-10-04). Any control on the face sits over the port it acts on: for instance, split a row into equal cells, one per port, and cell k always holds port k.
+
+The reason: a script UI shows nothing of its ports in a locked patch. Without the bars the reader cannot tell how many outlets there are or which one a cord leaves from, and the box reads as a control instead of an object that passes messages on.
+
+This covers stand-ins for object-box objects such as `gate`, `metro` or `scale`. A stand-in for a UI object, such as `toggle` or `colorpicker`, looks like that UI object instead. For instance: `btr.gate` draws Max's two strips with two inlet marks and one mark per outlet, its name and its outlet count in a number box, and a button over each outlet. (John, 2026-10-04, from a screenshot of `btr.gate` beside real object boxes. The port positions are measured; the strips' thickness and grey are matched by eye.) The recognition signal: writing `paint()` for a script whose job is to pass the patch's messages on.
 
 ## Embed the Script in Every v8 Box — Binding Rule {!core}
 
@@ -1541,6 +1550,12 @@ The difference matters to the reader. An abstraction can be opened to see its in
 **Several pictures on one cord follow Butter mc.jit** (`Butter_tools/docs/BUTTER_MC_JIT.md`): a dedicated mc inlet or outlet sends, for each batch, `mc_batch <frames> <columns> <rows> <shape> [<gl x> <gl y> <pixel x> <pixel y>]`, then each frame as `<n> jit_gl_texture <name>` (or `jit_matrix`), n counting from 1. `shape` is `square`, `rect` or `irregular`; the four numbers follow only the first two. `route mc_batch 1 2 3 …` takes a batch apart. Read that file before giving an object an mc port, and add the object to its table. (John, 2026-10-02.)
 
 **The package's text format is Butter Markdown** (`Butter_tools/docs/BUTTER_MARKDOWN.md`): ordinary Markdown plus one extension, `[text]{attrs}`, for font, size and colour, and em-dash-fenced tables. `butter_comment` reads it, and any later Butter_tools object that draws words reads the same format, so text written for one moves to another unchanged — read that file before writing text for one of them, or before adding an object that draws text. Two things about it that bite from a patch, both because Max parses a message box before the text ever reaches the object: a **message box eats the backslash in `\n`**, so a line break written from a patch is `<br>`; and a comma or semicolon must be escaped `\,` / `\;`, which is why the format also takes **`≤` (option-comma) for the comma** in a colour, so the common case needs no escaping.
+
+### Every Butter Object Takes Ranges Where It Takes Item Numbers — Binding Rule
+
+Wherever a Butter or `btr` object takes several numbers that name items (outlets, channels, keys, steps, nodes, cells), it also takes patterns: `1-3` means `1 2 3` and `5-3` counts down; `1-9:2` steps; `3-` runs to the last item; `*` is every item; `^4` leaves items out, and alone means everything but those. Where an object takes names, `chan[1-3]` and `chan 1-3` both make `chan1 chan2 chan3`, and `t[xyz]` makes `tx ty tz`. These come from TouchDesigner's pattern matching, and steps from Houdini. Typing a run out in full is slow and easy to get wrong, and one convention across the package means a reader learns it once.
+
+The parser lives in one place, `Butter_tools/javascript/butter_range.js`, and every object requires it rather than writing its own (*A Reusable Object Has One Home on the Search Path*). Items that do not start at 1, such as a keyboard's MIDI notes, pass their first and last item so that `*` and `60-` mean the drawn keys. Max reads these patterns in a message box as symbols, since they are not numbers, so they reach the script as strings; a negative number such as `-1` stays a number and never means "from the end". Every object that takes patterns has a `ranges` tab in its help file, and every ranges tab opens with the same full overview of the patterns, including those this object does not use, before its own demos (`help_form.ranges_overview`). For instance: `btr.gate`'s `on * ^2` and `butter_keys`'s `setkeys 1 37-`. (John, 2026-10-04. The other objects move onto it as they need it.) The recognition signal: writing a handler whose arguments are item numbers or names.
 
 ## Consult Installed Packages Before Long Native Chains {!core}
 
