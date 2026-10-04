@@ -20048,5 +20048,3259 @@
     "theme": "System model",
     "review": "unreviewed",
     "review_notes": ""
+  },
+  {
+    "id": "qlab--a-cue-list-with-a-playhead-a-go-button-and-a-standby-display",
+    "capability": "A cue list with a playhead, a GO button and a standby display",
+    "category": "timeline/cueing/show control",
+    "tool": "QLab",
+    "tool_names": [
+      "GO",
+      "playhead",
+      "standby display",
+      "Notes field"
+    ],
+    "what_it_does": "An ordered list of whole actions (play a file, fade, send OSC). GO starts the cue standing by and moves the playhead to the next cue or sequence; the standby display and an operator note for that cue sit beside the GO button. Each list has its own playhead.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/fundamentals/workspace/",
+      "https://qlab.app/docs/v5/fundamentals/cue-lists/",
+      "https://qlab.app/docs/v5/fundamentals/cues/"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "qlist",
+      "coll"
+    ],
+    "max_check": "qlist refpage: stores timed or untimed cues as messages; next outputs lines up to the next numeric line. It holds messages, not media actions, and has no standby display, notes or playhead UI. obj-qlookup.json (Max registry, core plus bundled packages) has no cue-list object.",
+    "confidence": "high",
+    "advice": "",
+    "notes": "Isadora's scene list and cue sheet entries cover neighbouring ground; QLab's difference is the per-cue property model and the playhead/GO convention.",
+    "theme": "Scenes and cues as the structure of a show",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--pre-wait-post-wait-and-two-continue-modes-auto-continue-vs-auto-follow",
+    "capability": "Pre-wait, post-wait and two continue modes (auto-continue vs auto-follow)",
+    "category": "timeline/cueing/show control",
+    "tool": "QLab",
+    "tool_names": [
+      "Pre Wait",
+      "Post Wait",
+      "Auto-continue",
+      "Auto-follow",
+      "cue sequence"
+    ],
+    "what_it_does": "Every cue has a pre-wait, a duration and a post-wait. Auto-continue starts the next cue when this one starts (after the post-wait); auto-follow starts it when this one ends, whatever its length. Chained cues form one sequence started by one GO.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/fundamentals/cue-sequences/",
+      "https://qlab.app/docs/v5/fundamentals/inspector/"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "delay",
+      "pipe",
+      "qlist"
+    ],
+    "max_check": "delay and pipe refpages: delay a bang or a message by a time. qlist refpage: lines that start with a number wait that many ms before the next. None distinguishes 'start next when I start' from 'start next when I finish', and none knows a media file's duration.",
+    "confidence": "high",
+    "advice": "",
+    "notes": "",
+    "theme": "",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--group-cue-modes-timeline-playlist-start-first-start-first-and-enter-start-random",
+    "capability": "Group cue modes: Timeline, Playlist, Start First, Start First And Enter, Start Random",
+    "category": "timeline/cueing/show control",
+    "tool": "QLab",
+    "tool_names": [
+      "Group cue",
+      "Timeline",
+      "Playlist",
+      "Start First",
+      "Start First And Enter",
+      "Start Random"
+    ],
+    "what_it_does": "One container type with five behaviours: start all children at once (placed by pre-wait), play children one after another with optional crossfade, shuffle and loop, start the first child and run the rest as a background sequence, act as a folder, or start a random armed and idle child, each once before any repeats.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/fundamentals/group-cues/"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "urn",
+      "playlist~",
+      "jit.playlist",
+      "trigger"
+    ],
+    "max_check": "urn refpage: random numbers without duplicates until all are used, which matches Start Random's round robin for numbers only. playlist~ and jit.playlist refpages: next, loop, int to play a clip; no crossfade attribute is listed in either refpage. No Max object groups arbitrary actions with a selectable start policy.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Scenes and cues as the structure of a show",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--timeline-editor-for-a-group-with-snapping-nudge-trim-and-slip",
+    "capability": "Timeline editor for a group, with snapping, nudge, trim and slip",
+    "category": "workflow/authoring",
+    "tool": "QLab",
+    "tool_names": [
+      "Timeline tab",
+      "Pin",
+      "Slip",
+      "Trim",
+      "Nudge"
+    ],
+    "what_it_does": "Children of a Timeline Group are drawn as lanes; dragging changes their pre-wait and snaps to the start and end of other cues, their slices and the current playback line; keys nudge by 0.1 or 0.01 s; edges trim; option-drag slips media without moving it.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/fundamentals/group-cues/"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "mtr",
+      "transport"
+    ],
+    "max_check": "Searched obj-qlookup.json (Max registry, core plus bundled packages) for timeline: none. mtr refpage records and plays message tracks but draws no lanes. max_system_model.json dimension 10: no built-in timeline layer.",
+    "confidence": "high",
+    "advice": "",
+    "notes": "",
+    "theme": "Keyframe timeline over any parameter",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--second-trigger-policy-and-hold-to-play-on-release",
+    "capability": "Second-trigger policy and hold-to-play on release",
+    "category": "timeline/cueing/show control",
+    "tool": "QLab",
+    "tool_names": [
+      "Second Triggers",
+      "Second trigger on release"
+    ],
+    "what_it_does": "What a running cue does when told to start again is a per-cue setting: nothing, panic, stop, hard stop, hard stop and restart, or devamp. 'On release' treats the key or MIDI note release as the second trigger, giving sampler-style hold-to-play.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/fundamentals/inspector/"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "sfplay~",
+      "onebang",
+      "gate"
+    ],
+    "max_check": "No refpage read describes a per-object retrigger policy. sfplay~ and playlist~ simply restart or follow the message sent. Hold-to-play is built by hand from key/keyup or notein velocity 0.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Easing, smoothing and ramps",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--fade-and-stop-others-and-duck-others-while-a-cue-runs",
+    "capability": "Fade and stop others, and duck others while a cue runs",
+    "category": "audio",
+    "tool": "QLab",
+    "tool_names": [
+      "Fade & Stop Others Over Time",
+      "Duck/Boost Audio of Other Cues In This List While Running"
+    ],
+    "what_it_does": "Starting a cue can fade and stop its peers, its whole list, or every cue, over a set time; or duck (or boost) the audio of the other cues in its list by a level for as long as it runs.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/fundamentals/inspector/"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "live.gain~",
+      "line~"
+    ],
+    "max_check": "No Max object knows which other players are 'peers'. Ducking is built with live.gain~ or line~ per player plus s/r. No refpage read offers a scope-based fade-and-stop.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Scenes and cues as the structure of a show",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--slices-with-per-slice-play-counts-zero-count-skip-and-infinite-loops",
+    "capability": "Slices with per-slice play counts, zero-count skip and infinite loops",
+    "category": "audio",
+    "tool": "QLab",
+    "tool_names": [
+      "Slices",
+      "slice marker",
+      "play count"
+    ],
+    "what_it_does": "Markers split an Audio or Video cue into slices; each slice plays its own number of times, 0 skips it seamlessly, a letter loops it forever. Markers in AIFF/WAV files are imported; markers must be at least 0.05 s apart.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/audio/audio-cues/",
+      "https://qlab.app/docs/v5/general/new-in-qlab-5/"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "groove~",
+      "sfplay~",
+      "jit.movie"
+    ],
+    "max_check": "groove~ refpage: setloop sets one pair of loop points; startloop. sfplay~ refpage: preload defines numbered cue regions and loopone loops one. jit.movie refpage: looppoints, loopreport. None holds a list of regions with play counts that advances by itself.",
+    "confidence": "high",
+    "advice": "",
+    "notes": "",
+    "theme": "Mapping editor: slices, masks and warps on the output",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--devamp-leave-a-loop-at-the-end-of-the-current-slice-and-fire-the-next-cue-on-that-exact-moment",
+    "capability": "Devamp: leave a loop at the end of the current slice, and fire the next cue on that exact moment",
+    "category": "audio",
+    "tool": "QLab",
+    "tool_names": [
+      "Devamp cue",
+      "Start next cue when target reaches the end of the current slice",
+      "Stop target"
+    ],
+    "what_it_does": "A Devamp cue waits until its looping target reaches the end of the current slice, then lets it play on, or also starts the next cue at that instant (post-wait computed from the playback position), or stops it and starts the next: a timed musical hand-off.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/other-cues/devamp-cues/",
+      "https://qlab.app/docs/v5/tutorials/intro-to-devamp-cues/"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "groove~",
+      "jit.movie",
+      "edge~"
+    ],
+    "max_check": "jit.movie refpage: loopreport sends loopnotify at the loop point, a hook for a hand-off at frame rate. groove~ has no loop-end notification in its refpage; edge~ (refpage: detects logical signal transitions) on groove~'s sync output would be the hand-built route. Nothing does the 'exit after this pass' policy.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Scenes and cues as the structure of a show",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--audio-matrix-in-two-stages-per-cue-matrix-into-a-per-patch-matrix-with-main-input-output-and-crosspoint-levels-in-db",
+    "capability": "Audio matrix in two stages: per-cue matrix into a per-patch matrix, with main, input, output and crosspoint levels in dB",
+    "category": "audio",
+    "tool": "QLab",
+    "tool_names": [
+      "cue matrix mixer",
+      "patch matrix mixer",
+      "audio output patch",
+      "cue outputs",
+      "main level"
+    ],
+    "what_it_does": "Each cue has its own matrix (file channels x cue outputs) with input, output, crosspoint and main levels; cue outputs feed an output patch whose own matrix routes up to 128 cue outputs to device outputs. Levels are typed in dB; a level without a sign is read as negative.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/audio/introduction-to-audio/",
+      "https://qlab.app/docs/v5/audio/audio-cues/",
+      "https://qlab.app/docs/v5/audio/audio-output-patch-editor/"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "matrix~",
+      "mc.matrix~",
+      "crosspatch",
+      "live.gain~"
+    ],
+    "max_check": "matrix~ refpage: three-number lists set a gain per inlet/outlet pair, with a ramp time; no row/column master levels. crosspatch refpage: a patching UI for matrix~ connections. Gains are linear; dB needs dbtoa. Building QLab's layout is plain patching but laborious.",
+    "confidence": "high",
+    "advice": "",
+    "notes": "",
+    "theme": "Scenes and cues as the structure of a show",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--several-audio-devices-at-once-one-per-output-patch-plus-separate-input-devices",
+    "capability": "Several audio devices at once, one per output patch, plus separate input devices",
+    "category": "audio",
+    "tool": "QLab",
+    "tool_names": [
+      "audio output patch",
+      "audio input patch",
+      "Using different devices for input and output"
+    ],
+    "what_it_does": "Any number of output patches, each on its own audio device (or the same one), are live together; Mic cues may take input from a different device than they output to, with drift kept under the two buffer sizes plus a small margin.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/audio/mic-cues/",
+      "https://qlab.app/docs/v5/fundamentals/workspace-settings/",
+      "https://qlab.app/docs/v5/general/new-in-qlab-5/"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "dac~",
+      "adc~"
+    ],
+    "max_check": "Max userguide, Preferences > Audio: one Input Device and one Output Device are chosen for the selected driver, for the whole application. Several physical devices at once need a macOS aggregate device. The userguide pages read do not describe drift compensation between different input and output devices.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Mapping editor: slices, masks and warps on the output",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--object-audio-marks-that-store-output-levels-with-gravity-shadow-filters-and-object-spread",
+    "capability": "Object audio: marks that store output levels, with gravity, shadow, filters and object spread",
+    "category": "audio",
+    "tool": "QLab",
+    "tool_names": [
+      "audio map",
+      "mark",
+      "gravity",
+      "shadow",
+      "filter",
+      "spread",
+      "map object",
+      "heatmap"
+    ],
+    "what_it_does": "Sound sources are objects moved on a 2D map. Marks are points that store a full set of output levels; an object's levels come from its distance to the marks, shaped by each mark's gravity (0.1-5) and shadow (0-90 degrees), cut by filter lines, and widened by spread. A heatmap shows one output's level everywhere.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/audio/object-audio/",
+      "https://qlab.app/docs/v5/audio/audio-map-editor/"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "nodes",
+      "abc.vbap~",
+      "pan~"
+    ],
+    "max_check": "nodes refpage: overlapping circular regions give weights by distance from a slider. Package library: abclib abc.vbap~ (VBAP), Panning Tools pan~. None stores arbitrary level sets at points with gravity, shadow or blocking lines, and none draws a heatmap.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Mapping editor: slices, masks and warps on the output",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--relative-fades-absolute-supersedes-relative-and-revert-fade-action",
+    "capability": "Relative fades, absolute-supersedes-relative, and Revert Fade Action",
+    "category": "audio",
+    "tool": "QLab",
+    "tool_names": [
+      "Absolute Fade",
+      "relative fade",
+      "Revert Fade Action"
+    ],
+    "what_it_does": "A fade can set end values or add/multiply (levels and translation add, scale and opacity multiply). An absolute fade clears earlier relative changes. Revert Fade Action undoes only the changes one fade made, keeping anything changed since.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/audio/fading-audio/",
+      "https://qlab.app/docs/v5/video/fading-video/"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "line",
+      "line~",
+      "pattrstorage"
+    ],
+    "max_check": "line and line~ ramp to absolute targets. pattrstorage refpage: recall and recallmulti interpolate between stored presets; no relative recall or per-fade undo is described.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Easing, smoothing and ramps",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--2d-path-fades-with-merge-smoothing-looping-and-a-circle-tool",
+    "capability": "2D path fades with merge, smoothing, looping and a circle tool",
+    "category": "audio",
+    "tool": "QLab",
+    "tool_names": [
+      "2D Path",
+      "Merge",
+      "Smooth path",
+      "Loop",
+      "circle tool"
+    ],
+    "what_it_does": "One fade moves two parameters along a drawn path (object position, video translation/rotation/scale, or two OSC values). If the target is not at the start, merge eases it onto the path over a chosen percentage of the fade; paths can be smoothed and looped (5.6).",
+    "source_urls": [
+      "https://qlab.app/docs/v5/audio/fading-audio/",
+      "https://qlab.app/docs/v5/video/fading-video/",
+      "https://qlab.app/docs/v5/networking/network-cues/",
+      "https://qlab.app/docs/v5/general/change-log/"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "nodes",
+      "function"
+    ],
+    "max_check": "function refpage: a 1D breakpoint editor. nodes refpage: weights from a slider position, not a path over time. No refpage read draws or plays a 2D path.",
+    "confidence": "high",
+    "advice": "",
+    "notes": "",
+    "theme": "Easing, smoothing and ramps",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--audition-every-output-class-rerouted-for-rehearsal-by-one-switch",
+    "capability": "Audition: every output class rerouted for rehearsal, by one switch",
+    "category": "workflow/authoring",
+    "tool": "QLab",
+    "tool_names": [
+      "Audition",
+      "Audition GO",
+      "Audition Preview",
+      "Always audition",
+      "Audition window"
+    ],
+    "what_it_does": "Per output class (audio, video, MIDI, MTC, LTC, network, light) the workspace defines what an audition does: no change, silence, an alternate patch, or for video a monitor window. Audition GO plays a sequence through those; Always audition makes GO do so for a whole session.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/tools/auditioning-cues/",
+      "https://qlab.app/docs/v5/fundamentals/workspace-settings/"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "gate",
+      "selector~",
+      "send"
+    ],
+    "max_check": "No Max object or userguide page read describes a patch-wide rehearsal routing. It is built by hand with gates or send names per output.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Mapping editor: slices, masks and warps on the output",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--override-controls-suspend-each-protocol-s-input-or-output-globally",
+    "capability": "Override controls: suspend each protocol's input or output globally",
+    "category": "networking/sync",
+    "tool": "QLab",
+    "tool_names": [
+      "Override Controls",
+      "/overrides/*"
+    ],
+    "what_it_does": "Global switches cut MIDI voice, MSC, SysEx, external network, local network, timecode and DMX traffic separately in each direction; affected cues show a red symbol and the footer warns.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/tools/override-controls/",
+      "https://qlab.app/docs/v5/scripting/osc-dictionary-v5/"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "gate",
+      "midiin",
+      "udpreceive"
+    ],
+    "max_check": "Max preferences and the userguide pages read have no global per-protocol mute; each input object (midiin, udpreceive) is gated by hand.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Mapping editor: slices, masks and warps on the output",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--automatic-edge-blend-from-overlapping-regions-of-one-stage",
+    "capability": "Automatic edge blend from overlapping regions of one stage",
+    "category": "projection mapping",
+    "tool": "QLab",
+    "tool_names": [
+      "region",
+      "Edge blend",
+      "Auto edge blends",
+      "Blend gamma"
+    ],
+    "what_it_does": "Overlap two regions of a stage and QLab blends the overlap automatically, sending the shared pixels to both projectors with complementary ramps; widths can be set by hand and one gamma applies per stage.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/video/video-output/"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.gl.slab",
+      "jit.gl.meshwarp",
+      "jit.gl.cornerpin"
+    ],
+    "max_check": "Searched obj-qlookup.json (Max registry, core plus bundled packages) for blend/edge: only jit.alphablend and edge detectors, no edge-blend object. Jitter Tools ships the shader tr.edgeblend.jxs ('generates gradient alpha for edge-blending', a vec4 fade parameter) for jit.gl.slab, so the ramp exists; the widths must be set by hand per output. jit.gl.meshwarp and jit.gl.cornerpin refpages: geometry only.",
+    "confidence": "high",
+    "advice": "",
+    "notes": "MadMapper, Isadora and TouchDesigner entries already cover edge blending; QLab's difference is that the blend width comes from the region overlap on the stage itself.",
+    "theme": "Mapping editor: slices, masks and warps on the output",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--stage-masks-as-image-files-that-reload-when-edited",
+    "capability": "Stage masks as image files that reload when edited",
+    "category": "projection mapping",
+    "tool": "QLab",
+    "tool_names": [
+      "Load mask...",
+      "stage mask"
+    ],
+    "what_it_does": "A greyscale image (black hides, white shows) masks a whole stage. QLab has no mask editor; it watches the file and reloads it on change, so any paint program edits the mask live.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/video/video-output/"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.alphablend",
+      "filewatch",
+      "jit.gl.meshwarp"
+    ],
+    "max_check": "jit.alphablend refpage: blends two images by an alpha image. filewatch refpage: bangs whenever a watched file is altered, so reload-on-edit is plain patching. jit.gl.meshwarp refpage: mask_mode and apply_mask, masks drawn as polygons in the object. What Max lacks is a mask stage built into its output path.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Mapping editor: slices, masks and warps on the output",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--stage-region-route-and-device-as-separate-layers-of-video-output",
+    "capability": "Stage, region, route and device as separate layers of video output",
+    "category": "projection mapping",
+    "tool": "QLab",
+    "tool_names": [
+      "stage",
+      "region",
+      "output route",
+      "device",
+      "Scaling mode",
+      "Rear projection"
+    ],
+    "what_it_does": "Cues draw on a stage; regions of the stage go to routes; routes go to devices. Swapping a projector means picking a new device on the route and a scaling mode (center, fit, stretch, fill), with 90-degree rotation and rear-projection mirroring, without touching cues.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/video/video-output/",
+      "https://qlab.app/docs/v5/video/introduction-to-video/"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.world",
+      "jit.gl.node",
+      "jit.gl.videoplane",
+      "jit.gl.cornerpin"
+    ],
+    "max_check": "jit.gl.node refpage: render a group of objects to a sub-context and capture it, which can play the stage. jit.gl.videoplane refpage: preserve_aspect. No object models routes independent of devices; it is plain patching with named textures.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Mapping editor: slices, masks and warps on the output",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--warping-per-region-with-perspective-linear-or-bezier-meshes-and-linked-points-across-regions",
+    "capability": "Warping per region with perspective, linear or Bezier meshes and linked points across regions",
+    "category": "projection mapping",
+    "tool": "QLab",
+    "tool_names": [
+      "Warping tab",
+      "Perspective",
+      "Linear",
+      "Bezier",
+      "Mesh splits",
+      "linked control points"
+    ],
+    "what_it_does": "Each region is warped onto its route with a mesh of 1 to 32 splits per axis; coincident control points of several regions can be linked so, for example, three regions on three faces of a cube move as one object.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/video/video-output/"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.gl.meshwarp",
+      "jit.gl.cornerpin"
+    ],
+    "max_check": "jit.gl.meshwarp refpage (Jitter Tools package): meshdim, nurbs_order/curvature, read/save JSON. jit.gl.cornerpin: four corners. Linking points across separate meshwarps is not described.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Tempo and clocks",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--load-and-load-to-time-a-whole-sequence-with-negative-times-from-the-end",
+    "capability": "Load and load-to-time a whole sequence, with negative times from the end",
+    "category": "timeline/cueing/show control",
+    "tool": "QLab",
+    "tool_names": [
+      "Load cue",
+      "Load to Time",
+      "Auto-load",
+      "loadActionAt"
+    ],
+    "what_it_does": "A cue or a whole sequence can be prepared to start instantly, or to start partway through for rehearsal; negative times count back from the end. QLab waits until every cue in a sequence is ready before starting it.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/other-cues/transport-cues/",
+      "https://qlab.app/docs/v5/tools/tools-menu/",
+      "https://qlab.app/docs/v5/scripting/osc-dictionary-v5/"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "sfplay~",
+      "jit.movie",
+      "buffer~"
+    ],
+    "max_check": "sfplay~ refpage: preload defines cue regions ahead of playback; seek is always deferred to low priority. jit.movie refpage: asyncread. No object loads a group of players to a common time.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--temporary-properties-that-revert-on-reset-separate-from-saved-values",
+    "capability": "Temporary properties that revert on reset, separate from saved values",
+    "category": "workflow/authoring",
+    "tool": "QLab",
+    "tool_names": [
+      "temporary properties",
+      "Reset cue",
+      "/live",
+      "Target cue"
+    ],
+    "what_it_does": "Changes made by Fade cues, Target cues and live OSC messages are temporary: they never mark the file as edited and vanish when a cue or the workspace is reset, which makes the workspace behave 'as though it was just opened'.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/fundamentals/workspace/",
+      "https://qlab.app/docs/v5/other-cues/transport-cues/",
+      "https://qlab.app/docs/v5/other-cues/target-cues/",
+      "https://qlab.app/docs/v5/scripting/osc-dictionary-v5/"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "pattrstorage",
+      "pattr"
+    ],
+    "max_check": "max_system_model.json dimension 6: a .maxpat saves structure, not state. pattrstorage refpage: presets can be recalled to restore a start state, but there is no built-in split between saved and live values per parameter.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Tempo and clocks",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--incoming-timecode-with-lookback-rules-freewheel-and-mid-cue-starts",
+    "capability": "Incoming timecode with lookback rules, freewheel and mid-cue starts",
+    "category": "networking/sync",
+    "tool": "QLab",
+    "tool_names": [
+      "Sync cues in this list to incoming timecode",
+      "On Start",
+      "lookback time",
+      "On Stop",
+      "Freewheel time"
+    ],
+    "what_it_does": "A list listens to LTC or MTC. When timecode starts, it can also start cues whose triggers fall in the last minute, hour, X seconds, or ever; cues start partway in and follow jumps; on stop they pause, stop or run on, ignoring dropouts up to a 0-2 s freewheel.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/fundamentals/cue-lists/",
+      "https://qlab.app/docs/v5/networking/using-timecode/",
+      "https://qlab.app/docs/v5/tools/timecode-status-window/"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "rtin",
+      "sync~",
+      "transport"
+    ],
+    "max_check": "Searched obj-qlookup.json (Max registry, core plus bundled packages) and the package library for timecode, LTC, SMPTE: nothing. rtin refpage receives MIDI real-time messages only. sync~ refpage: tempo sync from beat clock or click, not timecode.",
+    "confidence": "high",
+    "advice": "",
+    "notes": "Isadora, TouchDesigner and MadMapper entries cover timecode; QLab's difference is the lookback policy for cues before the first frame.",
+    "theme": "Scenes and cues as the structure of a show",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--show-control-broadcast-with-subscriptions-and-a-templated-outgoing-format",
+    "capability": "Show control broadcast with subscriptions and a templated outgoing format",
+    "category": "networking/sync",
+    "tool": "QLab",
+    "tool_names": [
+      "/listen",
+      "/ignore",
+      "/eventFormat",
+      "/qlab/event/workspace/go"
+    ],
+    "what_it_does": "A client sends /listen (or a scoped form such as /listen/go/number) and QLab reports GO, start, stop, playhead and the all-cue actions. /eventFormat rewrites what is sent using tokens, so QLab can fire another system's cues in its own syntax.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/networking/show-control-broadcast/"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "udpsend",
+      "param.osc"
+    ],
+    "max_check": "param.osc refpage: reports parameter changes over OSC (with an info message listing every parameter). It reports parameter values, not show events, and has no per-client subscription or format template.",
+    "confidence": "high",
+    "advice": "",
+    "notes": "",
+    "theme": "",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--multi-computer-collaborative-editing-with-permissions",
+    "capability": "Multi-computer collaborative editing with permissions",
+    "category": "networking/sync",
+    "tool": "QLab",
+    "tool_names": [
+      "Collaboration",
+      "primary",
+      "remote",
+      "view / edit / control access"
+    ],
+    "what_it_does": "Several Macs open one workspace over a LAN; each collaborator has view, edit or control permission, sees others' selections, keeps their own undo history; cues always run on the primary.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/networking/collaboration/"
+    ],
+    "max_status": "absent",
+    "max_closest": [],
+    "max_check": "max_system_model.json dimension 17: Max has no built-in multi-machine session. No object or userguide page read offers shared editing of one patch.",
+    "confidence": "high",
+    "advice": "",
+    "notes": "",
+    "theme": "",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--record-a-cue-sequence-by-playing-it-live",
+    "capability": "Record a cue sequence by playing it live",
+    "category": "workflow/authoring",
+    "tool": "QLab",
+    "tool_names": [
+      "Record Cue Sequence..."
+    ],
+    "what_it_does": "Run cues by hand while recording; QLab builds a Group of Start cues whose pre-waits match the timing played, as a Timeline group or as a chain of auto-continues.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/tools/tools-menu/"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "mtr",
+      "seq"
+    ],
+    "max_check": "mtr refpage: records and plays back messages with their timing, which captures the timing but produces no editable cue structure.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Scenes and cues as the structure of a show",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--fades-change-only-the-parameters-marked-active-so-many-fades-share-a-target",
+    "capability": "Fades change only the parameters marked active, so many fades share a target",
+    "category": "audio",
+    "tool": "QLab",
+    "tool_names": [
+      "Fade cue",
+      "active levels",
+      "Set Levels from Target"
+    ],
+    "what_it_does": "A Fade cue touches only the levels and parameters marked active; two Fade cues on one target with different active parameters run at once, each with its own curve and duration, without interfering.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/audio/fading-audio/",
+      "https://qlab.app/docs/v5/video/fading-video/"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "line~",
+      "pattrstorage"
+    ],
+    "max_check": "In Max a fade is a line or line~ per parameter (refpages); pattrstorage recall interpolates every stored client unless interp is set per client.",
+    "confidence": "high",
+    "advice": "Give each parameter its own ramp object and treat a 'fade' as a list of (parameter, target, time, curve) entries, so several fades on one player never fight; never recall a whole preset to move one value.",
+    "notes": "",
+    "theme": "Easing, smoothing and ramps",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--named-fade-curves-with-separate-rising-and-falling-shapes-and-an-audio-domain",
+    "capability": "Named fade curves with separate rising and falling shapes and an audio domain",
+    "category": "audio",
+    "tool": "QLab",
+    "tool_names": [
+      "S-Curve",
+      "Custom Curve",
+      "Parametric Curve",
+      "Linear Curve",
+      "Audio Domain"
+    ],
+    "what_it_does": "Fades choose S-curve (default), custom, parametric (one intensity number) or multi-step linear; rising and falling values have separate curves; audio fades choose a slider, decibel or linear domain. The manual gives recipes: equal power is parametric in the linear domain.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/audio/fading-audio/",
+      "https://qlab.app/docs/v5/lighting/light-cues/"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "curve~",
+      "line~",
+      "ease"
+    ],
+    "max_check": "curve~ refpage: exponential/log ramps by a curve parameter from -1 to 1. ease package (installed user package, refpage read): easing functions. Max has no 'domain' choice; dB fades need dbtoa/atodb around a ramp.",
+    "confidence": "high",
+    "advice": "Fade audio levels in dB or a console-style slider scale, not in linear gain, and use separate shapes for fade-ins and fade-outs; use curve~ or the ease package rather than a plain line~ for anything an audience hears.",
+    "notes": "",
+    "theme": "Easing, smoothing and ramps",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--a-trim-stage-that-automation-cannot-touch",
+    "capability": "A trim stage that automation cannot touch",
+    "category": "audio",
+    "tool": "QLab",
+    "tool_names": [
+      "Trim tab"
+    ],
+    "what_it_does": "Each cue has post-fader trims for main, outputs and objects that Fade cues, MIDI and OSC cannot change, so a whole built sequence can be corrected with one adjustment.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/audio/audio-cues/"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "live.gain~",
+      "gain~"
+    ],
+    "max_check": "Any Max gain object can be driven by any message; nothing marks a stage as off-limits to automation.",
+    "confidence": "high",
+    "advice": "Put one manual-only gain after every automated gain in a player and wire nothing but the operator's control to it; it is the fix-it knob for when the source files change.",
+    "notes": "",
+    "theme": "Mapping editor: slices, masks and warps on the output",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--workspace-wide-volume-limits-and-unsigned-levels-read-as-negative",
+    "capability": "Workspace-wide volume limits, and unsigned levels read as negative",
+    "category": "audio",
+    "tool": "QLab",
+    "tool_names": [
+      "Volume Limits",
+      "maximum volume limit",
+      "minimum volume limit"
+    ],
+    "what_it_does": "A workspace maximum (default +12 dB) caps every level from faders, fades, scripts and OSC; a minimum (default -60) is treated as silence and is set by walking the room. Typing a level without a sign means negative.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/fundamentals/workspace-settings/",
+      "https://qlab.app/docs/v5/audio/fading-audio/"
+    ],
+    "max_status": "better-elsewhere",
+    "max_closest": [
+      "live.gain~",
+      "clip~"
+    ],
+    "max_check": "live.gain~ refpage: per-object display range. No patch-wide cap exists; a relative or scripted change can push any gain past safe levels.",
+    "confidence": "medium",
+    "advice": "Clip every computed gain in a show patch to a ceiling set in one place, and treat the floor as silence (mute below it) so fades neither pop in nor hang just above inaudible.",
+    "notes": "",
+    "theme": "Audio levels and routing",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--panic-as-a-timed-fade-a-second-panic-as-a-hard-stop-on-a-key-nobody-can-reassign",
+    "capability": "Panic as a timed fade, a second panic as a hard stop, on a key nobody can reassign",
+    "category": "timeline/cueing/show control",
+    "tool": "QLab",
+    "tool_names": [
+      "Panic",
+      "Panic duration",
+      "hard stop",
+      "Esc"
+    ],
+    "what_it_does": "Esc fades everything out over the panic duration and stops it; a second Esc during the fade stops at once. The key cannot be reassigned, so anyone who knows QLab can stop any QLab system.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/fundamentals/workspace-settings/",
+      "https://qlab.app/docs/v5/general/keyboard-shortcuts/",
+      "https://qlab.app/docs/v5/fundamentals/workspace/"
+    ],
+    "max_status": "better-elsewhere",
+    "max_closest": [
+      "key",
+      "live.gain~",
+      "dac~"
+    ],
+    "max_check": "key refpage: reports key presses for any patch to act on. Max has a global audio on/off but no conventional panic that fades every player.",
+    "confidence": "high",
+    "advice": "Every show patch should have one panic path: a single key and message that fades all outputs over a short time, then stops players, with a second press cutting at once; document the key on the presentation view.",
+    "notes": "",
+    "theme": "Easing, smoothing and ramps",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--double-go-protection-and-key-up-re-arming",
+    "capability": "Double-GO protection and key-up re-arming",
+    "category": "timeline/cueing/show control",
+    "tool": "QLab",
+    "tool_names": [
+      "Minimum time required between each GO",
+      "Require a key up before re-arming GO"
+    ],
+    "what_it_does": "GO is ignored for a set time after each GO (the button turns red and flashes on refused presses); optionally the GO key must be released first, against bouncing keyboards.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/fundamentals/workspace-settings/"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "onebang",
+      "speedlim"
+    ],
+    "max_check": "speedlim refpage limits the rate of messages; built by hand, it gives no visual feedback of a refused GO.",
+    "confidence": "medium",
+    "advice": "Pass the GO trigger through a lockout (speedlim or a timed gate) and show the locked state on the GO button, so an operator sees a refused press instead of wondering.",
+    "notes": "",
+    "theme": "Scenes and cues as the structure of a show",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--show-mode-locks-editing-but-keeps-remote-control",
+    "capability": "Show mode locks editing but keeps remote control",
+    "category": "workflow/authoring",
+    "tool": "QLab",
+    "tool_names": [
+      "Show Mode",
+      "Edit Mode",
+      "Disable disruptive OS features in Show Mode"
+    ],
+    "what_it_does": "Show mode disables the inspector, toolbar and cue editing but not OSC, saving or settings; it is 'a safety mechanism, not a security mechanism'. With a preference it also blocks Cmd-Tab and Mission Control, prevents sleep and App Nap, and confirms before closing.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/fundamentals/workspace/",
+      "https://qlab.app/docs/v5/general/qlab-preferences/",
+      "https://qlab.app/docs/v5/general/preparing-your-mac/"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "thispatcher"
+    ],
+    "max_check": "max_system_model.json dimension 11: presentation mode is the performer view; locking a patch stops editing. No refpage or userguide page read blocks OS features during performance.",
+    "confidence": "medium",
+    "advice": "Ship show patches opening locked in presentation, with editing reachable only deliberately, and keep OSC control live in that state; check sleep and notifications on the show machine yourself, since Max will not.",
+    "notes": "",
+    "theme": "",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--broken-cues-keep-their-place-in-a-sequence",
+    "capability": "Broken cues keep their place in a sequence",
+    "category": "workflow/authoring",
+    "tool": "QLab",
+    "tool_names": [
+      "Broken Cues",
+      "Warnings tab",
+      "non-breaking warning",
+      "disconnection warning"
+    ],
+    "what_it_does": "A cue missing its file or output is marked broken with a reason; if it is in a sequence, QLab still runs its waits and continues so one broken cue does not derail the rest. The Warnings tab lists every problem with a link to the relevant manual section.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/tools/workspace-status-window/",
+      "https://qlab.app/docs/v5/audio/audio-cues/"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "print"
+    ],
+    "max_check": "max_system_model.json dimension 14: errors go to the Max Console; a missing file usually just leaves a player silent and the chain continues or stops depending on how it was wired.",
+    "confidence": "medium",
+    "advice": "Design sequences so a failed step still passes its timing on (the next step fires from the clock, not from the previous player's 'done' message), and check files and outputs at load with a visible status list.",
+    "notes": "",
+    "theme": "Scenes and cues as the structure of a show",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--layers-numbered-1-to-999-between-bottom-and-top-with-ties-broken-by-start-order",
+    "capability": "Layers numbered 1 to 999 between bottom and top, with ties broken by start order",
+    "category": "video I/O & playback",
+    "tool": "QLab",
+    "tool_names": [
+      "Layer",
+      "top",
+      "bottom"
+    ],
+    "what_it_does": "Every video cue sits on one of 1001 layers; on the same layer, the one started last is on top. Stages have layers too; same-layer stages order alphabetically.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/video/video-cues/",
+      "https://qlab.app/docs/v5/video/video-output/"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.gl.videoplane",
+      "jit.gl.layer"
+    ],
+    "max_check": "jit.group-gl refpage: layer (default 0) orders automatic rendering low to high, and 'objects in the same layer have no guarantee which will be rendered first'. jit.gl.layer is a mapping of jit.gl.videoplane (init/jitter-objectmappings.txt).",
+    "confidence": "high",
+    "advice": "Give every Jitter layer a distinct layer number, and if new clips must land on top, assign layer numbers in start order yourself; Max will not break ties for you.",
+    "notes": "",
+    "theme": "Effect chains: blend, amount and mask on each stage",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--per-cue-blend-mode-chosen-by-name-from-a-fixed-list",
+    "capability": "Per-cue blend mode chosen by name from a fixed list",
+    "category": "video I/O & playback",
+    "tool": "QLab",
+    "tool_names": [
+      "Blend Mode",
+      "Source Atop Compositing",
+      "Multiply",
+      "Screen"
+    ],
+    "what_it_does": "Each video cue picks one of 24 blend modes by name, from Darken to Source Atop Compositing, applied against the cues on lower layers.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/video/blend-modes/",
+      "https://qlab.app/docs/v5/scripting/parameter-reference/"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.gl.videoplane",
+      "jit.gl.slab"
+    ],
+    "max_check": "jit.group-gl refpage: blend names add, multiply, screen, exclusion, colorblend, alphablend, coloradd, alphaadd, mapped to OpenGL blend_mode pairs. Jitter Tools ships composite shaders for jit.gl.slab (co.overlay, co.softlight, co.hardlight, co.dodge, co.burn, co.difference and others in code/jxs/image-fx/composite), which take two inputs rather than acting on a layer.",
+    "confidence": "medium",
+    "advice": "When a Max video piece needs Overlay, Soft Light or similar, composite two textures with the Jitter Tools co.* shaders in jit.gl.slab rather than hunting for a blend_mode pair that does not exist.",
+    "notes": "MadMapper and cables.gl entries cover named blend modes; QLab's list and per-cue placement are noted for completeness.",
+    "theme": "Scenes and cues as the structure of a show",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--video-timing-follows-the-display-clock-or-the-audio-clock-chosen-per-cue",
+    "capability": "Video timing follows the display clock or the audio clock, chosen per cue",
+    "category": "video I/O & playback",
+    "tool": "QLab",
+    "tool_names": [
+      "Clock",
+      "Follow video clock",
+      "Follow audio clock"
+    ],
+    "what_it_does": "A Video cue either follows its display's refresh clock (smoothest picture, may drift from audio) or its audio patch's clock (stays sample-locked with other audio cues, may skip or repeat a frame).",
+    "source_urls": [
+      "https://qlab.app/docs/v5/video/video-cues/",
+      "https://qlab.app/docs/v5/audio/introduction-to-audio/"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.movie",
+      "jit.world"
+    ],
+    "max_check": "jit.movie refpage: rate, time, engine; no clock-source choice is described. max_system_model.json dimension 3: Max has separate scheduler, audio and frame clocks.",
+    "confidence": "medium",
+    "advice": "For long video with a separate soundtrack, decide which clock leads and resync the other to it at intervals; a movie and a sfplay~ started together will drift.",
+    "notes": "",
+    "theme": "Scenes and cues as the structure of a show",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--osc-every-property-readable-and-writable-with-live-increments-and-json-replies",
+    "capability": "OSC: every property readable and writable, with /live, +/- increments and JSON replies",
+    "category": "networking/sync",
+    "tool": "QLab",
+    "tool_names": [
+      "/cue/{cue_number}/{property}",
+      "/live",
+      "/+",
+      "/reply",
+      "/updates",
+      "passcode"
+    ],
+    "what_it_does": "About 1,176 OSC methods reach nearly every cue property and setting. A bare address reads, an argument writes, /+ n increments, /live changes the running value without saving or undo; replies are JSON; /updates pushes change notices; passcodes grant view, edit or control.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/scripting/osc-dictionary-v5/",
+      "https://qlab.app/docs/v5/networking/using-osc/",
+      "https://qlab.app/docs/v5/fundamentals/workspace-settings/"
+    ],
+    "max_status": "better-elsewhere",
+    "max_closest": [
+      "param.osc",
+      "udpreceive",
+      "pattrstorage"
+    ],
+    "max_check": "Max userguide OSC page: a built-in UDP server gives parameters OSC addresses (/<patcher>/param/<name>/...) with OSCQuery; param.osc refpage reports and controls parameters. Only Parameter Mode objects are covered; no increment syntax, live/saved split or permission levels are described.",
+    "confidence": "medium",
+    "advice": "When a Max patch is remote-controlled, give it a documented address scheme in which a bare address reads and an argument writes, and add increment and 'temporary' forms; reply with the value so remotes stay in sync.",
+    "notes": "",
+    "theme": "Every parameter addressable: OSC, learn, binding, expressions",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--osc-queries-embedded-in-outgoing-messages-kept-live-while-a-cue-runs",
+    "capability": "OSC queries embedded in outgoing messages, kept live while a cue runs",
+    "category": "data/tables/scripting",
+    "tool": "QLab",
+    "tool_names": [
+      "OSC queries",
+      "#/cue/selected/number#",
+      "liveAverageLevel"
+    ],
+    "what_it_does": "A Network cue can contain #/address# tokens that QLab replaces with live values when sending, refreshed continuously while the cue has a duration; liveAverageLevel/{output} {low} {high} returns RMS rescaled, so a microphone level can drive a light.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/scripting/osc-queries/",
+      "https://qlab.app/docs/v5/scripting/osc-dictionary-v5/"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "average~",
+      "scale",
+      "sprintf"
+    ],
+    "max_check": "In Max this is ordinary patching: average~ (refpage: RMS mode) into snapshot~ and scale, formatted with sprintf. QLab needs a special syntax because it has no patching.",
+    "confidence": "medium",
+    "advice": "QLab users ask for exactly this mic-to-light chain; a Max show patch can offer it as a small documented module (level follower with range in, OSC out) rather than leaving it to be rebuilt.",
+    "notes": "",
+    "theme": "Scenes and cues as the structure of a show",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--cue-properties-edited-in-an-inspector-with-batch-edit-and-selective-paste",
+    "capability": "Cue properties edited in an inspector with batch edit and selective paste",
+    "category": "workflow/authoring",
+    "tool": "QLab",
+    "tool_names": [
+      "Inspector",
+      "batch editing",
+      "Paste Cue Properties"
+    ],
+    "what_it_does": "All cues of the selection can be edited at once for shared properties, and Paste Cue Properties copies chosen groups of properties (levels, fade shape, geometry) from one cue onto many, with saved presets.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/fundamentals/cues/",
+      "https://qlab.app/docs/v5/tools/paste-cue-properties/"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "thispatcher",
+      "pattrstorage"
+    ],
+    "max_check": "Max's Inspector shows one object; editing many players at once is done with scripting or presets. No userguide page read describes pasting chosen attributes across objects.",
+    "confidence": "medium",
+    "advice": "When a patch holds many similar players, keep their settings in one table (a dict or coll keyed by cue) so a change can be applied to many rows at once, instead of clicking through boxes.",
+    "notes": "",
+    "theme": "Scenes and cues as the structure of a show",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--media-copied-into-a-project-folder-by-default-with-rotating-backups",
+    "capability": "Media copied into a project folder by default, with rotating backups",
+    "category": "workflow/authoring",
+    "tool": "QLab",
+    "tool_names": [
+      "Copy files into project folder",
+      "Automatically make backup copies",
+      "Rotate backups"
+    ],
+    "what_it_does": "Saving can copy every target file into audio, video and midi subfolders so the folder is the whole show; autosave writes backup copies (never the workspace itself) at 5-600 s intervals, plus a copy before each manual save, rotated to 20 in the last hour, one per hour for a day, one per day after.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/fundamentals/managing-workspaces/",
+      "https://qlab.app/docs/v5/fundamentals/workspace-settings/",
+      "https://qlab.app/docs/v5/general/qlab-preferences/"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [],
+    "max_check": "max_system_model.json dimension 20: Max projects track and consolidate dependencies on request; files are found by search path. No automatic rotating backup is described in the userguide pages read.",
+    "confidence": "medium",
+    "advice": "For a show built in Max, use a project and consolidate media into it before tech, and keep dated copies of the patch; Max will not version it for you.",
+    "notes": "",
+    "theme": "Files, projects and media management",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--a-crossfading-playlist-group-whose-second-trigger-means-next-or-previous",
+    "capability": "A crossfading playlist group whose second trigger means next or previous",
+    "category": "timeline/cueing/show control",
+    "tool": "QLab",
+    "tool_names": [
+      "Playlist Group",
+      "Crossfade",
+      "Auto-shuffle",
+      "Loop until stopped",
+      "plays next",
+      "plays previous"
+    ],
+    "what_it_does": "Children of a Playlist group play in order, optionally shuffled and looped, crossfading main audio level and opacity with separate fade-out and fade-in curves; GO while it plays can step to the next or previous child.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/fundamentals/group-cues/"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "playlist~",
+      "jit.playlist"
+    ],
+    "max_check": "playlist~ and jit.playlist refpages: next, loop, int to start a clip, pause; no crossfade attribute or shuffle is listed.",
+    "confidence": "medium",
+    "advice": "Build preshow music and slide loops from two alternating players with an equal-power crossfade between them, rather than one playlist~ that cuts.",
+    "notes": "TouchDesigner's gapless clip switching entry is related; QLab's difference is a crossfade with separate curves inside a cue type.",
+    "theme": "Effect chains: blend, amount and mask on each stage",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "qlab--lighting-cues-that-track-with-pulls-from-other-cues-and-parking",
+    "capability": "Lighting cues that track, with pulls from other cues and parking",
+    "category": "lighting/DMX/lasers",
+    "tool": "QLab",
+    "tool_names": [
+      "Light cue",
+      "Collate effects of previous light cues",
+      "pull",
+      "Park Selected Lights",
+      "Update Originating Cues"
+    ],
+    "what_it_does": "A light cue sets only the instruments it names; others keep their levels, so run order matters (collate makes a cue act as if all earlier ones ran). Commands can pull a level from another cue, scaled ('10 = cue A * .5'), updating when that cue changes; parked parameters ignore cues.",
+    "source_urls": [
+      "https://qlab.app/docs/v5/lighting/introduction-to-lighting/",
+      "https://qlab.app/docs/v5/lighting/lighting-command-language/",
+      "https://qlab.app/docs/v5/lighting/light-dashboard/"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "pattrstorage",
+      "dict"
+    ],
+    "max_check": "pattrstorage refpage: a recall sets every stored client unless clients are made inactive; no tracking or linked values between presets is described.",
+    "confidence": "medium",
+    "advice": "When a Max patch stores looks, let a look store only what it changes and allow one look to reference another's value, so editing the referenced look updates every look built on it.",
+    "notes": "Isadora's soft patch and MadMapper's DMX entries cover other lighting ground.",
+    "theme": "Scenes and cues as the structure of a show",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "vezer--each-timeline-chases-its-own-sync-source-internal-midi-clock-spp-or-mtc-with-a-smpte-offset",
+    "capability": "Each timeline chases its own sync source: internal, MIDI clock (SPP) or MTC, with a SMPTE offset",
+    "category": "networking/sync",
+    "tool": "Vezér",
+    "tool_names": [
+      "Composition",
+      "Tempo/Sync menu",
+      "SPP",
+      "MTC",
+      "Edit SMPTE Offset..."
+    ],
+    "what_it_does": "Every composition picks its own clock: normal speed, a BPM (manual, or measured from a MIDI clock), SPP (follow MIDI clock start, stop and song position) or MTC (follow timecode). An SMPTE offset sets where in the incoming timecode the composition starts, and the display counts down to it.",
+    "source_urls": [
+      "https://imimot.com/help/vezer/compositions/tempo-and-synchronisation"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "transport",
+      "rtin",
+      "sync~"
+    ],
+    "max_check": "No object named mtc, smpte, ltc or timecode in obj-qlookup.json (Max registry, core plus bundled packages); refpage text search for timecode/MTC finds only dsp/adstatus audio-driver settings. rtin refpage: receives MIDI real-time messages (clock, start, stop), so MIDI clock can be read by hand. transport refpage: a clocksource attribute ('other timing sources may also be used') and getclocksources, no MTC mentioned. sync~ refpage: follows tap, MIDI beat clock or a click track. query_packages: no timecode/MTC/SMPTE objects in installed packages.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "Overlaps the MadMapper 'chase external timecode' entry (unsure there). Vezér's angle is that each composition has its own sync choice and offset.",
+    "theme": "Timecode as a type, and chasing it",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "vezer--mtc-and-mmc-sent-per-timeline-with-the-timeline-s-index-as-the-mmc-device-id",
+    "capability": "MTC and MMC sent per timeline, with the timeline's index as the MMC device ID",
+    "category": "networking/sync",
+    "tool": "Vezér",
+    "tool_names": [
+      "Transmit MTC",
+      "Transmit MMC",
+      "DeviceID",
+      "SYNC button"
+    ],
+    "what_it_does": "A composition can send MIDI timecode while it plays, with a full-frame message whenever the playhead jumps, plus a start-time offset. It can also send MMC Play, Stop, Rewind and Locate. MMC normally goes to device ID 127 (all), but an option sends the composition's index as the device ID, so one Vezér composition drives the matching composition in another machine.",
+    "source_urls": [
+      "https://imimot.com/help/vezer/compositions/transmit-midi-timecode-mtc",
+      "https://imimot.com/help/vezer/compositions/transmit-midi-machine-control-mmc",
+      "https://imimot.com/help/vezer/tools/mtc-generator"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "sxformat",
+      "midiout",
+      "sync~"
+    ],
+    "max_check": "No MTC or MMC object in obj-qlookup.json (Max registry, core plus bundled packages). sxformat refpage: 'Prepare MIDI system exclusive messages', so MMC (a sysex message) can be built by hand and sent with midiout; quarter-frame MTC would also be hand-built. sync~ refpage generates MIDI beat clock, not timecode.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Timecode as a type, and chasing it",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "vezer--incoming-mmc-routed-by-device-id-0-the-master-transport-127-the-current-timeline-1-126-a-timeline-by-index",
+    "capability": "Incoming MMC routed by device ID: 0 the master transport, 127 the current timeline, 1-126 a timeline by index",
+    "category": "networking/sync",
+    "tool": "Vezér",
+    "tool_names": [
+      "MMC Transport",
+      "DeviceID"
+    ],
+    "what_it_does": "Vezér listens to MMC Play, Stop, Rewind, Record and Locate. The device ID picks the target: 0 is the master transport, 127 the selected composition, and 1 to 126 the composition with that index. The docs warn that Locate needs the composition's frame rate to match the sender, since MMC carries none.",
+    "source_urls": [
+      "https://imimot.com/help/vezer/controlling-vezer/mmc-transport"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "midiin",
+      "sxformat"
+    ],
+    "max_check": "No MMC parser in obj-qlookup.json (Max registry, core plus bundled packages); midiin gives raw bytes, so the sysex would be parsed in a patch or a v8. Max has no timeline to address by index.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Timecode as a type, and chasing it",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "vezer--many-independent-timelines-in-one-project-each-with-its-own-length-frame-rate-and-tempo-run-together-or-one-at-a-time",
+    "capability": "Many independent timelines in one project, each with its own length, frame rate and tempo, run together or one at a time",
+    "category": "timeline/cueing/show control",
+    "tool": "Vezér",
+    "tool_names": [
+      "Composition",
+      "Solo",
+      "Compositions List",
+      "/vezer/triggercompatindex"
+    ],
+    "what_it_does": "A project holds any number of compositions. Each is a group of tracks with its own duration, frame rate (up to 125 fps), BPM, sync source, loop range and cue track. Several can play at once, or Solo mode lets triggering one stop the others. OSC triggers a composition by index or name.",
+    "source_urls": [
+      "https://imimot.com/help/vezer/compositions/what-is-a-composition-in-vezer",
+      "https://imimot.com/help/vezer/compositions/composition-preferences",
+      "https://imimot.com/help/vezer/controlling-vezer/osc",
+      "https://imimot.com/help/vezer/changelog"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "transport",
+      "qlist",
+      "mtr"
+    ],
+    "max_check": "transport refpage: 'There can be multiple named transports running simultaneously', each with its own tempo and time signature. That is the clock half; Max has no lane or keyframe store tied to a named transport (max_system_model.json dimension 10).",
+    "confidence": "high",
+    "advice": "When a Max show has several timed sections, give each section its own named transport (transport @name) and keep its sequence data (qlist, mtr, function) inside that section's subpatcher, so sections can be started, stopped and retimed independently, as Vezér compositions are.",
+    "notes": "",
+    "theme": "Tempo and clocks",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "vezer--cue-points-that-stop-loop-n-times-or-loop-forever-with-a-reset-of-all-loop-counts",
+    "capability": "Cue points that stop, loop N times or loop forever, with a reset of all loop counts",
+    "category": "timeline/cueing/show control",
+    "tool": "Vezér",
+    "tool_names": [
+      "Cue",
+      "Stop",
+      "Marker",
+      "Play once",
+      "Loop",
+      "Infinite Loop",
+      "resetcuestates"
+    ],
+    "what_it_does": "Each composition has a cue track. A Stop cue pauses playback when reached, even when the composition follows external sync. A Marker does nothing but mark. Either kind can loop: a set number of times back to it from the next cue, or forever. Loops are broken by jumping to the next cue or switching cues off. An OSC message resets every cue's loop count and played state.",
+    "source_urls": [
+      "https://imimot.com/help/vezer/cues",
+      "https://imimot.com/help/vezer/cues/types",
+      "https://imimot.com/help/vezer/cues/repeats",
+      "https://imimot.com/help/vezer/cues/controls",
+      "https://imimot.com/help/vezer/cues/jumping-to-a-specific-cue"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "timepoint",
+      "transport",
+      "qlist"
+    ],
+    "max_check": "timepoint refpage: bangs when a transport reaches a time, only while moving forward; a patch can stop or relocate the transport from that bang. No object keeps a per-marker loop count or a 'reset loop counts' message.",
+    "confidence": "high",
+    "advice": "",
+    "notes": "MadMapper's marker entry covers pause/loop/jump; Vezér adds the per-cue loop count and an explicit reset of cue state.",
+    "theme": "Scenes and cues as the structure of a show",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "vezer--queue-mode-play-timelines-one-after-another-looping-the-queue",
+    "capability": "Queue mode: play timelines one after another, looping the queue",
+    "category": "timeline/cueing/show control",
+    "tool": "Vezér",
+    "tool_names": [
+      "Composition Queue mode",
+      "Queue toggle",
+      "Start Queue from the current Composition"
+    ],
+    "what_it_does": "With Queue on, the master Play button starts the first composition, and each composition starts the next when it reaches its end. The queue can loop back to the first, and can start from the selected composition.",
+    "source_urls": [
+      "https://imimot.com/help/vezer/general/composition-queue-mode",
+      "https://imimot.com/help/vezer/general/preferences-global-behaviours"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "transport",
+      "timepoint",
+      "counter"
+    ],
+    "max_check": "No playlist-of-timelines object in obj-qlookup.json (Max registry, core plus bundled packages). It would be built by hand from end-of-section bangs (timepoint at each section's length) into the next section's transport.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Keyframe timeline over any parameter",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "vezer--recording-creates-one-lane-per-incoming-address-and-can-keep-only-the-turning-points",
+    "capability": "Recording creates one lane per incoming address, and can keep only the turning points",
+    "category": "timeline/cueing/show control",
+    "tool": "Vezér",
+    "tool_names": [
+      "Recording",
+      "Normalised recording",
+      "Record Filtering",
+      "/xy#n"
+    ],
+    "what_it_does": "With record on and the composition playing, every incoming MIDI CC, note, OSC number or Art-Net channel that is not mapped to Vezér's own controls gets a track of the right type, named after its source, and later passes record into the same track. A multi-value OSC message becomes one track per argument. 'Normalised recording' stores a keyframe only when the value changes direction, so a recorded fader move becomes a few editable points rather than one per frame. A filter list picks which messages may be recorded.",
+    "source_urls": [
+      "https://imimot.com/help/vezer/recording/general",
+      "https://imimot.com/help/vezer/recording/filtering",
+      "https://imimot.com/help/vezer/general/preferences-global-behaviours"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "mtr",
+      "seq"
+    ],
+    "max_check": "mtr refpage: records messages per track (track numbers are the inlets you wire) and plays them back; tracks are not created from incoming addresses, and nothing thins a recording to its turning points. seq records raw MIDI bytes.",
+    "confidence": "high",
+    "advice": "",
+    "notes": "ossia score's 'Recording incoming messages as automation curves' is partial too; the turning-point thinning and auto-created track per source are what Vezér adds.",
+    "theme": "Keyframe timeline over any parameter",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "vezer--osc-flag-lanes-each-keyframe-carries-its-own-address-and-fixed-arguments",
+    "capability": "OSC Flag lanes: each keyframe carries its own address and fixed arguments",
+    "category": "data/tables/scripting",
+    "tool": "Vezér",
+    "tool_names": [
+      "OSC Flag Track",
+      "Flag Keyframe"
+    ],
+    "what_it_does": "On a Flag track the keyframe holds the OSC address, so one lane fires many different messages at points in time, with optional fixed arguments. Flags never interpolate.",
+    "source_urls": [
+      "https://imimot.com/help/vezer/tracks/osc-flag-track"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "qlist",
+      "mtr"
+    ],
+    "max_check": "qlist refpage: stores timed messages and can send each to a named receive, which is the same idea as a list rather than a lane on a timeline.",
+    "confidence": "high",
+    "advice": "Keep discrete events (cue triggers, scene changes) in their own qlist or message list, separate from continuous curves, so they can be read and edited as a list of what happens when; do not hide them as thresholds inside a curve.",
+    "notes": "",
+    "theme": "Keyframe timeline over any parameter",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "vezer--grouping-several-lanes-into-one-multi-argument-osc-message-with-address-n",
+    "capability": "Grouping several lanes into one multi-argument OSC message with /address#n",
+    "category": "data/tables/scripting",
+    "tool": "Vezér",
+    "tool_names": [
+      "Grouping OSC messages",
+      "#n"
+    ],
+    "what_it_does": "Tracks that share an address with #1, #2 ... appended are sent as one OSC message with the values in that order (numbers need not be continuous). So x and y can be drawn as separate curves but arrive together.",
+    "source_urls": [
+      "https://imimot.com/help/vezer/osc-track-extras/grouping-osc-messages"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "join",
+      "udpsend"
+    ],
+    "max_check": "join refpage (read for this repo's join rule): combines inlets into one list. In Max the grouping is wiring, not an address convention.",
+    "confidence": "high",
+    "advice": "When separate curves drive one multi-value destination, join them into one list right before the send (join @triggers -1 when they arrive independently), so the receiver gets one coherent message per frame instead of half-updated pairs.",
+    "notes": "",
+    "theme": "Keyframe timeline over any parameter",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "vezer--templated-osc-addresses-composition-name-index-track-name-the-lane-s-own-value-frame-number-and-fixed-arguments",
+    "capability": "Templated OSC addresses: composition name, index, track name, the lane's own value, frame number and fixed arguments",
+    "category": "data/tables/scripting",
+    "tool": "Vezér",
+    "tool_names": [
+      "$COMP",
+      "$COMPINDEX",
+      "$TRACK",
+      "$",
+      "<$F>",
+      "<$>",
+      "<\"string\">"
+    ],
+    "what_it_does": "An OSC track's address can contain $COMP, $COMPINDEX and $TRACK, filled from where the track lives; a bare $ puts the track's current value into the address (/layer$/trigger becomes /layer2/trigger). Fixed arguments go in angle brackets, <$> places the track's value among them, and <$F> sends the current frame number.",
+    "source_urls": [
+      "https://imimot.com/help/vezer/osc-track-extras/osc-address-special-parameters"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "sprintf",
+      "patcherargs",
+      "combine"
+    ],
+    "max_check": "Max builds such addresses with sprintf or combine (refpages); per-instance naming comes from #0 and patcherargs (max_system_model.json dimensions 8 and 9).",
+    "confidence": "high",
+    "advice": "Write OSC addresses from a template filled by the containing section's arguments (patcherargs or #1 into sprintf) rather than typing each address by hand, so a duplicated section addresses its own targets without editing.",
+    "notes": "",
+    "theme": "Keyframe timeline over any parameter",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "vezer--colour-lanes-that-send-standard-osc-colour-an-array-or-one-message-per-channel-and-convert-to-and-from-value-lanes",
+    "capability": "Colour lanes that send standard OSC colour, an array or one message per channel, and convert to and from value lanes",
+    "category": "data/tables/scripting",
+    "tool": "Vezér",
+    "tool_names": [
+      "Color Type Track",
+      "OSC Color Tracks",
+      "Standard",
+      "Arrays",
+      "Multiple messages",
+      "/vezer/rotatehue",
+      "ASE"
+    ],
+    "what_it_does": "Colour keyframes are drawn in their colour and interpolate linearly or not at all. Output can be the OSC colour type (RGBA), an array of numbers in a chosen range, or one message per channel with a suffix on the address, each format matched to a target app. Pasting colour keys onto a value lane uses luminance; pasting value keys onto a colour lane asks which RGB or HSB channels to drive. A global OSC message rotates the hue of all colour outputs, and Adobe swatch files import as colour keys.",
+    "source_urls": [
+      "https://imimot.com/help/vezer/tracks/color-type-track",
+      "https://imimot.com/help/vezer/tracks/osc-color-tracks",
+      "https://imimot.com/help/vezer/controlling-vezer/osc",
+      "https://imimot.com/help/vezer/import-export/ase"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "swatch",
+      "jit.colorspace",
+      "function"
+    ],
+    "max_check": "swatch refpage: 'Choose a color' (a picker, not a timeline). jit.colorspace refpage: converts a 4-plane char matrix between colour spaces (matrices, not single values). No object stores colour keyframes over time; colour sequences are built from several function or line objects. No ASE reader found in obj-qlookup.json (Max registry, core plus bundled packages) or query_packages.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Keyframe timeline over any parameter",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "vezer--optimised-sending-an-interpolating-lane-never-sends-the-same-value-twice-in-a-row",
+    "capability": "Optimised sending: an interpolating lane never sends the same value twice in a row",
+    "category": "data/tables/scripting",
+    "tool": "Vezér",
+    "tool_names": [
+      "Optimised value sending",
+      "Processing"
+    ],
+    "what_it_does": "Tracks run at the composition's frame rate. While interpolating, a value lane sends only when the value changes; keyframes themselves always send. A global preference turns this off to send every frame.",
+    "source_urls": [
+      "https://imimot.com/help/vezer/tracks/processing",
+      "https://imimot.com/help/vezer/general/preferences-global-behaviours"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "change",
+      "speedlim"
+    ],
+    "max_check": "change refpage: outputs a number only if it differs from the stored one. speedlim refpage: limits throughput to a time. In Max both are placed by hand.",
+    "confidence": "high",
+    "advice": "Put change after any curve or line that feeds a network or MIDI output, so a held value is not resent every tick; keep the first value and keyframe hits by not filtering bangs that mark events.",
+    "notes": "",
+    "theme": "Keyframe timeline over any parameter",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "vezer--on-start-jump-or-unmute-every-lane-resends-the-value-it-would-have-at-that-point",
+    "capability": "On start, jump or unmute, every lane resends the value it would have at that point",
+    "category": "timeline/cueing/show control",
+    "tool": "Vezér",
+    "tool_names": [
+      "Process First Keyframe on Start",
+      "Process Last Keyframe on Unpause/Jump",
+      "Reprocess on un-Mute",
+      "Process composition while scrubbing"
+    ],
+    "what_it_does": "Preferences make a composition push its state: on start, each track sends its first keyframe even if the playhead is not on one; after a jump or when starting mid-way, each track sends the last keyframe before the playhead; unmuting a track resends it; scrubbing can process the composition as the playhead moves.",
+    "source_urls": [
+      "https://imimot.com/help/vezer/general/preferences-global-behaviours",
+      "https://imimot.com/help/vezer/tracks/processing"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "function",
+      "pattrstorage",
+      "line"
+    ],
+    "max_check": "function refpage: gives an interpolated y for any x, so a patch can ask each curve for its value at the new time and send it. Nothing does this for a whole set of curves on a jump (max_system_model.json dimension 10).",
+    "confidence": "high",
+    "advice": "When a Max sequence can be started mid-way or jumped, add one 'chase' step that asks every curve or store for its value at the new time and sends it before playback resumes, so devices are never left at the values of the old position.",
+    "notes": "ossia score's 'value compilation' is the fuller version (absent). Vezér's is a set of simple per-lane preferences.",
+    "theme": "Keyframe timeline over any parameter",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "vezer--range-change-policy-for-keyframes-recalculate-clamp-or-delete",
+    "capability": "Range-change policy for keyframes: recalculate, clamp or delete",
+    "category": "data/tables/scripting",
+    "tool": "Vezér",
+    "tool_names": [
+      "Recalculate",
+      "Clamp",
+      "Delete",
+      "min/max range"
+    ],
+    "what_it_does": "When an OSC track's minimum or maximum changes, existing keyframes are rescaled into the new range, clamped to it, or deleted, as the user chooses.",
+    "source_urls": [
+      "https://imimot.com/help/vezer/tracks/osc-value-track"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "function"
+    ],
+    "max_check": "function refpage: setrange 'modifies the Y values of all breakpoints so that they remain in the same place given the new range', which is Vezér's Recalculate; the range attribute only changes the display range. No clamp or delete option.",
+    "confidence": "medium",
+    "advice": "When a curve's output range changes, decide explicitly whether its points keep their position (function setrange) or their value; say which in the patch, because both look right until the curve is replayed.",
+    "notes": "",
+    "theme": "Keyframe timeline over any parameter",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "vezer--remote-control-by-osc-with-a-visible-address-map-feedback-and-query-replies",
+    "capability": "Remote control by OSC with a visible address map, feedback and query replies",
+    "category": "networking/sync",
+    "tool": "Vezér",
+    "tool_names": [
+      "Show OSC Namespaces",
+      "OSC Feedback",
+      "/vezer/compinfowithname",
+      "/vezer/countofcomps",
+      "pausedbycue",
+      "playheadastime"
+    ],
+    "what_it_does": "Most interface items answer to OSC; turning on Show OSC Namespaces colours them yellow and shows the address of a clicked item. Feedback sends playhead (0-1 and as hh:mm:ss:ff), the name of a cue that paused playback, button states and the selected composition. Query messages return composition names and lengths, the number of compositions and cues, and each cue's name and frame time.",
+    "source_urls": [
+      "https://imimot.com/help/vezer/controlling-vezer/osc",
+      "https://imimot.com/help/vezer/controlling-vezer/osc-feedback-and-query",
+      "https://imimot.com/help/vezer/cues/jumping-to-a-specific-cue"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "udpreceive",
+      "param.osc",
+      "pattrstorage"
+    ],
+    "max_check": "Userguide OSC page: Max serves OSCQuery for parameters exposed as OSC (enabled in preferences). param.osc refpage: controls and reports info about parameters using OSC. Max has no transport-wide feedback set or query messages built in.",
+    "confidence": "high",
+    "advice": "Give a Max show a small, documented OSC surface: play, stop, go to cue by index and by name, plus feedback of the current cue and position, and reply to 'how many cues' and 'what is cue N' queries, so a controller can rebuild its display after reconnecting.",
+    "notes": "",
+    "theme": "Every parameter addressable: OSC, learn, binding, expressions",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "vezer--oscquery-browser-that-creates-a-lane-with-the-remote-parameter-s-range-and-type",
+    "capability": "OSCQuery browser that creates a lane with the remote parameter's range and type",
+    "category": "networking/sync",
+    "tool": "Vezér",
+    "tool_names": [
+      "OSC Query Server support",
+      "OSC Address-space window"
+    ],
+    "what_it_does": "When an OSCQuery server is found, its address space is listed and searchable; double-clicking an address creates a track with the matching min, max and type, or a Flag track for addresses without arguments.",
+    "source_urls": [
+      "https://imimot.com/help/vezer/osc-track-extras/osc-query-server-support"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "udpsend"
+    ],
+    "max_check": "Userguide OSC page describes Max serving OSCQuery, not reading another app's namespace. No OSCQuery client in obj-qlookup.json (Max registry, core plus bundled packages) or query_packages.",
+    "confidence": "high",
+    "advice": "",
+    "notes": "Same gap as ossia score's OSCQuery client entry; included because Vezér creates the lane with its range already set.",
+    "theme": "Keyframe timeline over any parameter",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "vezer--art-net-output-as-virtual-named-nodes-with-discovery-soft-patch-channel-lists-output-monitor-colour-master-and-blackout-on-mute",
+    "capability": "Art-Net output as virtual named nodes, with discovery, soft patch, channel lists, output monitor, colour master and blackout on mute",
+    "category": "lighting/DMX/lasers",
+    "tool": "Vezér",
+    "tool_names": [
+      "Art-Net Outputs",
+      "virtual output nodes",
+      "DMX Soft Patching",
+      "DMX Output Monitor",
+      "Art-Net Color Master Fader",
+      "DMX Blackout on Mute",
+      "1x10, 12, 24"
+    ],
+    "what_it_does": "Tracks send to named virtual nodes (up to 256: 16 subnets of 16 universes), which can be auto-created from discovered Art-Net devices. A soft patch reroutes source universe and channel to destination without touching tracks. One track can feed a channel list such as '1x10, 12, 24'; 16-bit values span two channels. A monitor shows a universe's output, a master fader scales all colour tracks, and muting a track or soloing another composition can send zero.",
+    "source_urls": [
+      "https://imimot.com/help/vezer/general/preferences-art-net",
+      "https://imimot.com/help/vezer/general/outputs-of-vezer",
+      "https://imimot.com/help/vezer/tools/dmx-soft-patching",
+      "https://imimot.com/help/vezer/tools/dmx-output-monitor",
+      "https://imimot.com/help/vezer/tools/art-net-color-master-fader",
+      "https://imimot.com/help/vezer/tracks/art-net-value-track",
+      "https://imimot.com/help/vezer/tracks/16-bit-art-net-support",
+      "https://imimot.com/help/vezer/general/preferences-global-behaviours"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "udpsend",
+      "serial"
+    ],
+    "max_check": "No artnet or dmx object in obj-qlookup.json (Max registry, core plus bundled packages). query_packages: only fxwdmxusbpro (Max for the Visual Arts), an abstraction sending DMX to an Enttec USB Pro over serial; nothing for Art-Net.",
+    "confidence": "high",
+    "advice": "",
+    "notes": "Art-Net is already listed absent from MadMapper, Isadora and ossia; this entry is about Vezér's output-side tools (virtual nodes, channel lists, blackout on mute).",
+    "theme": "Mapping editor: slices, masks and warps on the output",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "vezer--audio-file-on-a-lane-turned-into-keyframes-through-a-high-mid-or-low-filter",
+    "capability": "Audio file on a lane, turned into keyframes through a high, mid or low filter",
+    "category": "audio",
+    "tool": "Vezér",
+    "tool_names": [
+      "Audio Track",
+      "Convert Audio to Keyframes",
+      "Filtering"
+    ],
+    "what_it_does": "An audio track plays a file (wav, aif, mp3, m4a, aac, or audio from an mp4) at a start time on the timeline. Selecting part of its waveform and pasting it onto any other track turns the envelope into keyframes. A filter button (highpass, mid, lowpass, cutoff set by right-click) changes only what is converted, not what is heard.",
+    "source_urls": [
+      "https://imimot.com/help/vezer/tracks/audio-track",
+      "https://imimot.com/help/vezer/general/preferences-audio"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "peakamp~",
+      "average~",
+      "function",
+      "buffer~"
+    ],
+    "max_check": "peakamp~ refpage: reports a signal's maximum amplitude over an interval; average~ gives a running average. These give an envelope in real time; writing it into editable breakpoints (function, mtr) is done by hand. No offline audio-to-breakpoints object found.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Keyframe timeline over any parameter",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "vezer--typed-relative-and-absolute-edits-on-keyframe-time-and-value",
+    "capability": "Typed relative and absolute edits on keyframe time and value",
+    "category": "data/tables/scripting",
+    "tool": "Vezér",
+    "tool_names": [
+      "Active Keyframe",
+      "+2:00",
+      "-27",
+      "(-27)",
+      "i",
+      "Stretch"
+    ],
+    "what_it_does": "The active keyframe's time and value fields take absolute values (2:00:00, 2:00, 2, 27) or relative ones with a sign (+2:00, -27); negative absolutes go in brackets. Typing i inverts the selection in time or value. Alt-dragging the end keys of three or more selected keys stretches them. Arrow keys move OSC float keys by 1% of the track range.",
+    "source_urls": [
+      "https://imimot.com/help/vezer/keyframes/moving-and-stretching-keyframes",
+      "https://imimot.com/help/vezer/keyframes/the-active-keyframe"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "function"
+    ],
+    "max_check": "function refpage: points are changed by list (index x y), setdomain and setrange rescale all points; no relative edit or invert message.",
+    "confidence": "high",
+    "advice": "When building a curve editor in Max (function, multislider or a v8ui), accept relative edits (+n / -n) and an invert command by message as well as by mouse, so precise changes can be typed or sent from a controller.",
+    "notes": "",
+    "theme": "Keyframe timeline over any parameter",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "vezer--keyframes-import-from-json-and-the-whole-project-renders-to-xml-with-processed-values",
+    "capability": "Keyframes import from JSON and the whole project renders to XML with processed values",
+    "category": "data/tables/scripting",
+    "tool": "Vezér",
+    "tool_names": [
+      "JSON",
+      "Render to XML",
+      "Import MIDI File",
+      "Export MIDI Tracks"
+    ],
+    "what_it_does": "A JSON file with a keyframes array (time as H:M:S:F string or frame number, value, colour, flag address, linear interpolation) loads into any track. Render to XML writes composition and track info, keyframes and the processed values, for other software. Standard MIDI files import as note and CC tracks and MIDI tracks export as SMF type 1 at 120 BPM.",
+    "source_urls": [
+      "https://imimot.com/help/vezer/import-export/json",
+      "https://imimot.com/help/vezer/import-export/render-to-xml",
+      "https://imimot.com/help/vezer/import-export/midi-files"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "dict",
+      "function",
+      "seq",
+      "detonate",
+      "mtr"
+    ],
+    "max_check": "dict refpage: import and export JSON or YAML. seq refpage: reads and writes MIDI files; detonate refpage: score loaded from a MIDI file. mtr writes .txt or .json. No object writes a curve's processed per-frame values.",
+    "confidence": "high",
+    "advice": "Keep a Max show's sequence data in a dict-readable JSON (time, value, curve per point) so it can be generated, versioned and edited outside Max, and bake curves to per-frame values when another system must replay them exactly.",
+    "notes": "",
+    "theme": "Keyframe timeline over any parameter",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "vezer--choosing-a-midi-output-disables-the-same-named-input-to-stop-feedback-loops",
+    "capability": "Choosing a MIDI output disables the same-named input, to stop feedback loops",
+    "category": "networking/sync",
+    "tool": "Vezér",
+    "tool_names": [
+      "Outputs of Vezér",
+      "virtual MIDI destinations"
+    ],
+    "what_it_does": "When a track sends to a MIDI destination, Vezér turns that port off as an input, so its own output cannot come back in; the user can turn it back on. Vezér can also make virtual MIDI ports for other apps.",
+    "source_urls": [
+      "https://imimot.com/help/vezer/general/outputs-of-vezer"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "midiin",
+      "midiout"
+    ],
+    "max_check": "Max's midiin and midiout refpages describe choosing ports, nothing about loop protection. Max creates virtual 'from Max'/'to Max' ports on macOS (userguide MIDI page, heading list only).",
+    "confidence": "medium",
+    "advice": "In a Max patch that both listens to and sends MIDI on virtual ports, never listen on the port you send to; when a loop is possible, gate the input while sending or filter by port name.",
+    "notes": "",
+    "theme": "Mapping editor: slices, masks and warps on the output",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "vezer--project-loaded-by-osc-opened-at-login-no-quit-prompt-and-play-state-optionally-ignored-at-load",
+    "capability": "Project loaded by OSC, opened at login, no quit prompt and play state optionally ignored at load",
+    "category": "deployment",
+    "tool": "Vezér",
+    "tool_names": [
+      "/vezer/loadproject",
+      "Open Project on system startup",
+      "Disable confirm on Quit",
+      "Ignore Play buttons on loading"
+    ],
+    "what_it_does": "An OSC message loads a project file and closes the current one without asking. For installations the docs add the project file to macOS login items and turn off the quit confirmation. A preference decides whether compositions saved while playing start playing on load.",
+    "source_urls": [
+      "https://imimot.com/help/vezer/controlling-vezer/osc",
+      "https://imimot.com/help/vezer/tutorials/open-project-on-system-startup",
+      "https://imimot.com/help/vezer/general/preferences-global-behaviours"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "pcontrol",
+      "loadbang"
+    ],
+    "max_check": "pcontrol refpage: load and loadunique open a patcher file by name (with #1-#9 arguments), shroud opens it without a window. Standalones and login-item launch are covered in max_system_model.json dimension 18.",
+    "confidence": "high",
+    "advice": "For an unattended Max installation, decide in the patch whether playback starts at load (a loadbang into the transport, or not), so reopening after a crash does the same thing every time; switching whole shows can use pcontrol loadunique fired from a network message.",
+    "notes": "",
+    "theme": "Every parameter addressable: OSC, learn, binding, expressions",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "vezer--nmc-an-in-house-network-protocol-for-transport-and-locate-between-vez-r-and-mitti-instances",
+    "capability": "NMC: an in-house network protocol for transport and locate between Vezér and Mitti instances",
+    "category": "networking/sync",
+    "tool": "Vezér",
+    "tool_names": [
+      "NMC Protocol",
+      "Mitti"
+    ],
+    "what_it_does": "Transport and locate commands are broadcast on the local network so several Vezér or Mitti (Imimot's video player) instances follow each other. A dedicated wired network is recommended. The protocol itself is not documented.",
+    "source_urls": [
+      "https://imimot.com/help/vezer/general/nmc-protocol"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "udpsend",
+      "udpreceive",
+      "transport"
+    ],
+    "max_check": "max_system_model.json dimension 17: Max has no built-in multi-machine session; networking is done with udpsend/udpreceive. The Link package is installed in ~/Documents/Max 9/Packages (its objects were not read here).",
+    "confidence": "medium",
+    "advice": "If several Max machines must share a timeline, broadcast play, stop and locate (position in ms or frames) as OSC on a dedicated network, and have each machine's transport follow; send locate with every play so a late joiner lands on the right time.",
+    "notes": "",
+    "theme": "",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "vezer--per-keyframe-easing-from-a-fixed-menu-of-quadratic-cubic-quartic-quintic-sine-and-circular-curves",
+    "capability": "Per-keyframe easing from a fixed menu of quadratic, cubic, quartic, quintic, sine and circular curves",
+    "category": "data/tables/scripting",
+    "tool": "Vezér",
+    "tool_names": [
+      "Interpolations",
+      "No Interpolation",
+      "Linear Interpolation",
+      "Quadratic Ease-In",
+      "Sine Ease-In-Out",
+      "Circular Ease-Out"
+    ],
+    "what_it_does": "Right-clicking a keyframe (or several) sets the curve to the next one: none (step), linear, or ease in, out or in-out of quadratic, cubic, quartic, quintic, sine and circular (the menu screenshot is cut off after circular). JSON import only supports linear.",
+    "source_urls": [
+      "https://imimot.com/help/vezer/keyframes/interpolations",
+      "https://imimot.com/help/vezer/import-export/json"
+    ],
+    "max_status": "better-elsewhere",
+    "max_closest": [
+      "function",
+      "curve~",
+      "line"
+    ],
+    "max_check": "function refpage: per-segment curve factor (setcurve, xyc, mode), an exponential bend, not named ease families. The installed ease package and butter_ease.js provide named curves, but function has no ease menu per segment.",
+    "confidence": "medium",
+    "advice": "When a Max sequence needs fades, store a named ease per segment (as butter_ease.js names them) alongside each point, rather than a single curve factor, so a reader can see that a move is 'in_out_sine' rather than 0.35.",
+    "notes": "TouchDesigner's 'Easing shape as a menu choice' covers easing in general; this entry is per keyframe on a timeline.",
+    "theme": "Keyframe timeline over any parameter",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--a-clip-grid-layers-are-rows-columns-are-looks-one-clip-plays-per-layer",
+    "capability": "A clip grid: layers are rows, columns are looks, one clip plays per layer",
+    "category": "video I/O & playback",
+    "tool": "Resolume",
+    "tool_names": [
+      "Clip",
+      "Layer",
+      "Column",
+      "Column Triggering"
+    ],
+    "what_it_does": "Media sits in a grid. Each row is a layer and only one clip per layer plays at a time; clicking a clip starts it in its layer, and clicking a column header starts every clip in that column at once, which is how a whole look is changed with one click. Layers have previous and next clip buttons.",
+    "source_urls": [
+      "https://resolume.com/support/en/vocabulary",
+      "https://resolume.com/support/en/clips",
+      "https://resolume.com/support/en/layers",
+      "https://resolume.com/support/en/decks"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.playlist",
+      "jit.polymovie",
+      "jit.gl.layer"
+    ],
+    "max_check": "Registry: no grid or clip-launcher object. jit.playlist refpage: one object holds a list of clips, an int starts the clip with that index and 'next' plays the next one, so one jit.playlist behaves like one layer. jit.polymovie refpage: manages several jit.movie instances and preloads them for fast switching, one active at a time. Nothing in Max fires one clip in each of several players from a single 'column' message; that is built with send/receive or a message per player.",
+    "confidence": "high",
+    "advice": "",
+    "notes": "",
+    "theme": "Scenes and cues as the structure of a show",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--decks-banks-of-clips-that-switch-without-stopping-playback-with-persistent-clips",
+    "capability": "Decks: banks of clips that switch without stopping playback, with persistent clips",
+    "category": "workflow/authoring",
+    "tool": "Resolume",
+    "tool_names": [
+      "Deck",
+      "Persistent Clips",
+      "Composition browser"
+    ],
+    "what_it_does": "The clips of one composition are split into decks. Switching decks changes which clips are shown in the grid but does not interrupt what is playing. A clip marked persistent appears in the same slot in every deck (a logo, a live camera). A deck from another composition can be added during a show by double-clicking it.",
+    "source_urls": [
+      "https://resolume.com/support/en/decks",
+      "https://resolume.com/support/en/clips",
+      "https://resolume.com/support/en/vocabulary"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "jit.playlist",
+      "pattrstorage"
+    ],
+    "max_check": "Registry and userguide: nothing groups media into switchable banks. A Max patch would swap a jit.playlist's contents with clear/append (refpage), which stops nothing only if the playing clip lives elsewhere; there is no 'persistent slot' idea.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Scenes and cues as the structure of a show",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--clip-trigger-rules-normal-toggle-piano-clip-target-fader-start-ignore-column",
+    "capability": "Clip trigger rules: Normal / Toggle / Piano, clip target, fader start, ignore column",
+    "category": "timeline/cueing/show control",
+    "tool": "Resolume",
+    "tool_names": [
+      "Trigger Style",
+      "Clip Target",
+      "Fader Start",
+      "Ignore Column Trigger",
+      "Lock Content"
+    ],
+    "what_it_does": "Each clip (or the whole composition) chooses how a trigger behaves: Normal restarts, Toggle stops on a second press, Piano plays only while held. Clip Target sends the clip to its own layer, to the active layer, or to any free layer, so Piano plus Free Layer plays 'chords' of clips from a keyboard. Fader Start restarts a clip whenever its layer is faded up. A clip or layer can ignore column triggers, and a layer can be locked so nothing replaces its clip.",
+    "source_urls": [
+      "https://resolume.com/support/en/clips",
+      "https://resolume.com/support/en/layers",
+      "https://resolume.com/support/en/composition"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.playlist",
+      "jit.polymovie"
+    ],
+    "max_check": "Userguide mapping.json: Max's MIDI and key mappings have a Trigger Mode (Toggle, Momentary, Cycle, Bang) for a mapped control, which covers the press/hold part for one UI object. Nothing in Max routes a clip to 'whichever player is free' or ties a restart to a fader rising; jit.polymovie's autorestart (refpage) only chooses restart versus resume when an instance is toggled.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Scenes and cues as the structure of a show",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--beat-snap-a-triggered-clip-waits-for-the-next-beat-bar-or-n-bars",
+    "capability": "Beat Snap: a triggered clip waits for the next beat, bar or N bars",
+    "category": "video I/O & playback",
+    "tool": "Resolume",
+    "tool_names": [
+      "Beat Snap",
+      "Composition determined"
+    ],
+    "what_it_does": "A clip can be set to start on the next beat, the next bar, or in 2, 4 or more bars instead of at once, per clip or for the whole composition. The docs compare it to quantising in music software.",
+    "source_urls": [
+      "https://resolume.com/support/en/clips",
+      "https://resolume.com/support/en/quickstart-tutorial"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "metro",
+      "transport",
+      "jit.playlist"
+    ],
+    "max_check": "metro refpage: @quantize sends output only on a bars.beats.units, ticks or note-value boundary of the transport. jit.playlist and jit.movie refpages list no quantize attribute, so a quantised clip start is a quantised metro or a 'timepoint' into the player, built per patch.",
+    "confidence": "high",
+    "advice": "",
+    "notes": "",
+    "theme": "Tempo and clocks",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--bpm-sync-playback-a-clip-s-length-is-a-number-of-beats-and-follows-the-tempo",
+    "capability": "BPM Sync playback: a clip's length is a number of beats and follows the tempo",
+    "category": "video I/O & playback",
+    "tool": "Resolume",
+    "tool_names": [
+      "BPM Sync",
+      "Beats",
+      "Resync",
+      "Speed"
+    ],
+    "what_it_does": "Switching a clip's transport to BPM Sync makes its speed follow the global tempo. The clip is given a length in beats (guessed as the nearest power of two from its duration) and its speed control only moves in powers of two (1/8 ... 16x) so it stays on the beat. Stills and sources get a duration in beats too. Resync jumps everything set to BPM Sync back to beat 1 of the phrase.",
+    "source_urls": [
+      "https://resolume.com/support/en/video",
+      "https://resolume.com/support/en/bpm",
+      "https://resolume.com/support/en/stills",
+      "https://resolume.com/support/en/sources"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.movie",
+      "transport",
+      "metro"
+    ],
+    "max_check": "jit.movie refpage: rate is a plain speed factor and duration is read-only information; there is no 'length in beats' attribute. The transport refpage gives a tempo and time formats, so a patch can compute rate = (clip seconds) / (beats x 60/tempo) and resend it when the tempo changes. Nothing does this for you.",
+    "confidence": "high",
+    "advice": "",
+    "notes": "",
+    "theme": "Tempo and clocks",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--beat-looper-with-catch-up",
+    "capability": "Beat Looper with Catch Up",
+    "category": "video I/O & playback",
+    "tool": "Resolume",
+    "tool_names": [
+      "Beat Looper",
+      "Catch Up"
+    ],
+    "what_it_does": "On a BPM-synced clip, one click loops the last N beats (a stutter or climax effect). Turning it off either continues from where the playhead is or, with Catch Up, jumps to where the clip would have been had the loop never happened.",
+    "source_urls": [
+      "https://resolume.com/support/en/video"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "jit.movie"
+    ],
+    "max_check": "jit.movie refpage: looppoints / looppoints_ms set a loop region and position can be set, so a loop can be built; nothing tracks a 'virtual' playhead to catch up to when the loop ends.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Tempo and clocks",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--play-modes-for-returning-to-a-clip-and-for-random-jumping",
+    "capability": "Play modes for returning to a clip and for random jumping",
+    "category": "video I/O & playback",
+    "tool": "Resolume",
+    "tool_names": [
+      "Playmode Away",
+      "pick-up",
+      "relative pick-up",
+      "Random",
+      "Play Once and Eject",
+      "Play Once and Hold"
+    ],
+    "what_it_does": "When a clip is triggered again after a while, Playmode Away chooses: start from the beginning, pick up where it was last left, or start at the same relative position the previous clip in the layer had reached (the docs suggest this as a backup copy for a timecoded clip). A Random play mode jumps the playhead every Interval within a Distance. One-shot modes eject or hold the last frame at the end.",
+    "source_urls": [
+      "https://resolume.com/support/en/video",
+      "https://resolume.com/support/en/smpte"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.movie",
+      "jit.polymovie"
+    ],
+    "max_check": "jit.movie refpage: loop has off, normal, palindrome, playback-limits and seamless; no random-jump or hold-last-frame-then-eject mode, though 'off' stops on the last frame. jit.polymovie refpage: autorestart chooses restart versus resume per instance, which is pick-up; relative pick-up across files is not offered.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Movie playback",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--autopilot-automatic-advance-through-clips-and-columns",
+    "capability": "Autopilot: automatic advance through clips and columns",
+    "category": "timeline/cueing/show control",
+    "tool": "Resolume",
+    "tool_names": [
+      "Autopilot",
+      "Bag",
+      "Master Layer",
+      "Clip Actions",
+      "Column Actions"
+    ],
+    "what_it_does": "An autopilot on the composition, a group, a layer or a clip advances forward, backward or randomly (Any, Other, or Bag, which plays everything once before reshuffling). It advances after a time in seconds or beats, at the end of the clip, or at the end of the longest, shortest, top or bottom clip in the column. Each clip or column can override the action (go to first, last, a specific one, or do nothing), a Master Layer can drive the whole show, and the clip's choice overrides the layer's, which overrides the group's, which overrides the composition's.",
+    "source_urls": [
+      "https://resolume.com/support/en/autopilot",
+      "https://resolume.com/support/en/clips",
+      "https://resolume.com/support/en/layers"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "qlist",
+      "jit.playlist",
+      "random",
+      "urn"
+    ],
+    "max_check": "jit.playlist refpage: 'next' plays the next clip but there is no end-of-clip auto-advance policy or random-without-repeat choice. qlist refpage: a timed cue list, not a clip sequencer. Max has urn for drawing without repeats (registry), so 'Bag' is buildable, but no object combines duration rules, per-item actions and a priority order.",
+    "confidence": "high",
+    "advice": "",
+    "notes": "",
+    "theme": "Scenes and cues as the structure of a show",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--layer-transitions-any-blend-mode-as-a-timed-transition-between-clips",
+    "capability": "Layer transitions: any blend mode as a timed transition between clips",
+    "category": "video I/O & playback",
+    "tool": "Resolume",
+    "tool_names": [
+      "Layer Transition",
+      "Transition",
+      "Random"
+    ],
+    "what_it_does": "When a new clip is triggered in a layer it can fade in over 0 to 10 seconds using any blend or transition mode (Alpha crossfade, wipes, Cube, Twitch ...), including a random pick each time. A clip can override its layer's transition time and mode.",
+    "source_urls": [
+      "https://resolume.com/support/en/layers",
+      "https://resolume.com/support/en/clips",
+      "https://resolume.com/support/en/blend-modes"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.fx.tr.xfade",
+      "jit.fx.tr.dissolve",
+      "jit.fx.tr.gridwipe",
+      "jit.xfade"
+    ],
+    "max_check": "Jitter Tools refpages: a family of jit.fx.tr.* transition objects (xfade, dissolve, gridwipe, shrinkwipe, slide, zoomfade, huefade, rotfade, vignettes) each with an xfade-style amount. They mix two inputs, so a per-layer transition needs two players, the transition object and a ramp per layer, and choosing a random transition means switching objects.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Effect chains: blend, amount and mask on each stage",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--mask-layer-a-layer-s-brightness-hides-one-layer-below-or-all-layers-below",
+    "capability": "Mask layer: a layer's brightness hides one layer below or all layers below",
+    "category": "video I/O & playback",
+    "tool": "Resolume",
+    "tool_names": [
+      "Mask Mode",
+      "One Below",
+      "All Below",
+      "50Mask"
+    ],
+    "what_it_does": "Any layer can be set to Mask Mode: its black-and-white content shows or hides either the single layer underneath (like After Effects' luma track matte) or every layer below. Thumbnails turn grey as a reminder. A 50Mask blend mode does the same per clip.",
+    "source_urls": [
+      "https://resolume.com/support/en/layers",
+      "https://resolume.com/support/en/blend-modes"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.fx.co.lumakey",
+      "jit.lumakey",
+      "jit.fx.alphaglue"
+    ],
+    "max_check": "jit.fx.co.lumakey refpage: luminance keying with a secondary input. jit.lumakey is in the registry. Both act on the two textures wired into them; there is no notion of 'the layer below' because Max has no layer stack, so the matte is wired by hand.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Mapping editor: slices, masks and warps on the output",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--slice-transform-place-content-into-each-slice-of-the-stage-map-in-one-drag",
+    "capability": "Slice Transform: place content into each slice of the stage map in one drag",
+    "category": "projection mapping",
+    "tool": "Resolume",
+    "tool_names": [
+      "Slice Transform",
+      "Slices panel",
+      "Fill",
+      "Fit",
+      "Stretch",
+      "Mask"
+    ],
+    "what_it_does": "Dragging a screen, or a selection of slices, from the Slices panel onto a clip, layer, group or the composition makes a Slice Transform effect that puts a copy of the content into every slice, scaled to Fill, Fit or Stretch, or used as a mask. Each slice can be bypassed, soloed or mirrored. Changing the slice in the output map updates the content. A slice that no longer exists is shown in red while the rest keep working.",
+    "source_urls": [
+      "https://resolume.com/support/en/transform",
+      "https://resolume.com/support/en/input-maps"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "jit.gl.meshwarp",
+      "jit.gl.layer",
+      "jit.fx.subtexture"
+    ],
+    "max_check": "Registry: no object reads a shared stage map and places content per region. jit.gl.meshwarp refpage: warps one texture on one mesh. Placing a clip into N regions means N layers with hand-set position and scale.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Mapping editor: slices, masks and warps on the output",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--parameter-animations-that-restart-on-a-clip-trigger-or-column-trigger",
+    "capability": "Parameter animations that restart on a clip trigger or column trigger",
+    "category": "timeline/cueing/show control",
+    "tool": "Resolume",
+    "tool_names": [
+      "Start Settings",
+      "BPM Phase Lock"
+    ],
+    "what_it_does": "An animated parameter can be set to start running on composition load, on any clip trigger in its layer, on a column trigger, or only by hand. A BPM-synced animation can drop its phase lock so it starts its cycle when the clip starts instead of staying aligned with the master bar.",
+    "source_urls": [
+      "https://resolume.com/support/en/parameter-animation"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "line",
+      "phasor~",
+      "transport"
+    ],
+    "max_check": "Max has no built-in parameter animation, so no restart policy exists. In a patch the restart is a message from the trigger into whatever ramp object (line, a phasor or a transport-linked metro) drives the value.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Scenes and cues as the structure of a show",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--a-parameter-driven-by-the-clip-s-own-playhead",
+    "capability": "A parameter driven by the clip's own playhead",
+    "category": "timeline/cueing/show control",
+    "tool": "Resolume",
+    "tool_names": [
+      "Clip Position"
+    ],
+    "what_it_does": "On a clip, any parameter can follow the clip's playhead: scrub, skip, speed changes, direction changes and beat loops all move the parameter in step.",
+    "source_urls": [
+      "https://resolume.com/support/en/parameter-animation",
+      "https://resolume.com/support/en/stills"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.movie",
+      "function"
+    ],
+    "max_check": "jit.movie refpage: position is the normalized playhead (0. to 1.) and can be read, so polling it into a function or zmap drives anything. It is a poll per frame, not a binding, and has to be built.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Scenes and cues as the structure of a show",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--dj-player-sync-the-dj-s-loaded-track-triggers-and-drives-its-video",
+    "capability": "DJ-player sync: the DJ's loaded track triggers and drives its video",
+    "category": "networking/sync",
+    "tool": "Resolume",
+    "tool_names": [
+      "Denon StageLinQ",
+      "Pioneer Pro DJ Link",
+      "Player Layer Target",
+      "Fader"
+    ],
+    "what_it_does": "Arena watches Denon or Pioneer players on the network. A clip linked to a track is triggered when the track is loaded and its playhead follows the track through scratching and looping; the layer is locked until the song ends. The mixer's channel fader can drive the layer's opacity, and each player can send its videos to a chosen layer. Clips are matched by track title.",
+    "source_urls": [
+      "https://resolume.com/support/en/sync-to-denon-players",
+      "https://resolume.com/support/en/sync-to-pioneer-dj-players",
+      "https://resolume.com/support/en/sync-with-dj"
+    ],
+    "max_status": "absent",
+    "max_closest": [],
+    "max_check": "Registry and installed packages (query_packages.py: no StageLinQ, Pro DJ Link or TCNet objects). Max can receive MIDI clock or Link tempo (Link package: link.beat, link.session), which gives tempo, not the track's playhead.",
+    "confidence": "high",
+    "advice": "",
+    "notes": "",
+    "theme": "Keyframe timeline over any parameter",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--timecode-chase-per-clip-with-an-offset-and-a-delay",
+    "capability": "Timecode chase per clip with an offset and a delay",
+    "category": "networking/sync",
+    "tool": "Resolume",
+    "tool_names": [
+      "SMPTE",
+      "Offset",
+      "Delay"
+    ],
+    "what_it_does": "Arena reads LTC timecode from an audio input (two inputs at once, one per deck of a DJ mix). Any clip set to SMPTE 1 or 2 follows it; each clip has an offset (the docs' convention is one hour per show) and a delay in frames to compensate for the signal chain.",
+    "source_urls": [
+      "https://resolume.com/support/en/smpte",
+      "https://resolume.com/support/en/video",
+      "https://resolume.com/support/en/preferences"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "jit.movie"
+    ],
+    "max_check": "Registry: no smpte, ltc or mtc objects; query_packages.py search 'timecode' and 'smpte': no matches. Already a theme from MadMapper, Isadora and TouchDesigner; Resolume's difference is that the offset and delay live on each clip.",
+    "confidence": "high",
+    "advice": "",
+    "notes": "",
+    "theme": "Timecode as a type, and chasing it",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--rest-and-websocket-api-with-stable-ids-and-subscriptions",
+    "capability": "REST and WebSocket API with stable ids and subscriptions",
+    "category": "networking/sync",
+    "tool": "Resolume",
+    "tool_names": [
+      "REST API",
+      "Websocket API",
+      "by-id",
+      "subscribe",
+      "parameter_update"
+    ],
+    "what_it_does": "With the webserver on (port 8080), every column, layer, group, deck, clip and effect can be listed, added, moved and removed over HTTP, addressed by position, by a stable id that survives reordering, or as 'selected'. The WebSocket at /api/v1 sends the whole composition state on connect, then lets a client subscribe to parameters and get updates as they change, plus set, get, reset and trigger. Clip thumbnails and PNG snapshots of any monitor can be fetched. A custom index.html in the root folder becomes a browser control page.",
+    "source_urls": [
+      "https://resolume.com/support/en/restapi",
+      "https://resolume.com/support/en/websocket-api",
+      "https://resolume.com/docs/restapi/"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "maxurl",
+      "node.script",
+      "param.osc"
+    ],
+    "max_check": "maxurl refpage: an HTTP client (get, post, put, delete), not a server. Userguide OSC.json: Max can serve OSCQuery over HTTP, which describes parameters. A full read-write server with subscriptions is built in Node for Max (node.script), by hand.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--an-mcp-server-for-ai-apps-to-build-and-edit-the-composition",
+    "capability": "An MCP server for AI apps to build and edit the composition",
+    "category": "workflow/authoring",
+    "tool": "Resolume",
+    "tool_names": [
+      "Arena MCP Server",
+      "Wire MCP Server"
+    ],
+    "what_it_does": "Since 7.26 Resolume ships MCP servers. An AI desktop app can summarise a composition, load files, add or remove layers, columns, groups and effects, and (for Wire) build a patch, wire it, set values and write ISF shaders. It is limited to what the REST API does: no output mapping, shortcuts, cue points, presets, envelopes or dashboard.",
+    "source_urls": [
+      "https://resolume.com/support/en/mcp-servers"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "node.script"
+    ],
+    "max_check": "Registry and userguide: nothing in Max exposes a patch to an AI app as tools. (This repo's own claude2max MCP server looks up Max documentation; it does not edit a running patch.)",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "Docs page is dated 7.26.0; recent feature.",
+    "theme": "Effect chains: blend, amount and mask on each stage",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--keyboard-mouse-mode-hold-a-key-and-the-mouse-drives-a-parameter",
+    "capability": "Keyboard 'Mouse mode': hold a key and the mouse drives a parameter",
+    "category": "control surface/UI building",
+    "tool": "Resolume",
+    "tool_names": [
+      "Mouse Mode"
+    ],
+    "what_it_does": "A keyboard shortcut in Mouse mode makes horizontal or vertical mouse movement drive a parameter over a set range while the key is held, and freezes it on release. Assigning the same key to X and Y gives two-axis control.",
+    "source_urls": [
+      "https://resolume.com/support/en/keyboard-shortcuts"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "key",
+      "keyup",
+      "mousestate"
+    ],
+    "max_check": "Registry: key, keyup and mousestate exist. mousestate refpage: reports button and position inside a Max patcher window when polled. Gating it with key/keyup and scaling is a small patch; not a mapping mode.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Every parameter addressable: OSC, learn, binding, expressions",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--controller-feedback-per-clip-state-by-colour-per-device",
+    "capability": "Controller feedback per clip state, by colour, per device",
+    "category": "control surface/UI building",
+    "tool": "Resolume",
+    "tool_names": [
+      "MIDI Out",
+      "Clip Trigger shortcut",
+      "Multiple MIDI Devices"
+    ],
+    "what_it_does": "A clip-trigger shortcut sends a different velocity (pad colour) for each of a clip's five states, picked from colour tables for common controllers. Two identical controllers are told apart by detection order, and feedback goes only to the device that sent the input unless rerouted. Default layouts ship for APC40 Mk2, APC Mini and nanoKONTROL 2.",
+    "source_urls": [
+      "https://resolume.com/support/en/midi-shortcuts"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "noteout",
+      "ctlout"
+    ],
+    "max_check": "Userguide mapping.json: Max's mappings can send MIDI output for a mapped object's value. There are no clip states to report and no controller colour tables; per-state colours are noteout messages built by hand.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Movie playback",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--one-controller-channel-spread-over-a-whole-group-of-choices",
+    "capability": "One controller channel spread over a whole group of choices",
+    "category": "control surface/UI building",
+    "tool": "Resolume",
+    "tool_names": [
+      "Shortcut Groups",
+      "Select Next Item",
+      "Random Item"
+    ],
+    "what_it_does": "A shortcut on a dropdown or radio group can step to the next, previous or a random item, or cycle through chosen items on each press. One MIDI CC can trigger clip 1 to 128 of a layer by its value, and one DMX channel spreads its 0-255 range across the options of a dropdown or the clips of a layer.",
+    "source_urls": [
+      "https://resolume.com/support/en/midi-shortcuts",
+      "https://resolume.com/support/en/dmx-shortcuts",
+      "https://resolume.com/support/en/keyboard-shortcuts"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "umenu",
+      "live.tab"
+    ],
+    "max_check": "Userguide mapping.json: Max's Trigger Mode 'Cycle' toggles a mapped object between several options. A continuous CC mapped to a umenu's range does select by value. Next/previous/random and 'value N triggers item N of a player' are patch logic.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Audio levels and routing",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--dashboard-macro-dials-with-several-parameters-each",
+    "capability": "Dashboard macro dials with several parameters each",
+    "category": "control surface/UI building",
+    "tool": "Resolume",
+    "tool_names": [
+      "Dashboard",
+      "Dial Range",
+      "Invert"
+    ],
+    "what_it_does": "Clip, layer, group and composition each have eight dashboard dials. Any parameter, including toggles, dropdowns and palettes, can be dragged onto a dial; several parameters can share one dial, each with its own in and out points, invert, and a Dial Range that says which part of the dial's travel moves it, so one dial can sweep one effect and then another.",
+    "source_urls": [
+      "https://resolume.com/support/en/dashboard"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "live.dial",
+      "zmap",
+      "scale"
+    ],
+    "max_check": "Userguide parameter_mode.json: Max parameters have modulation modes (unipolar, bipolar, additive, absolute) for Live automation, not a macro that fans one control out to many. In a patch one live.dial feeds several zmap/scale objects with clipping to get the same result.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Every parameter addressable: OSC, learn, binding, expressions",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--a-layer-group-or-the-preview-used-as-a-source-in-another-layer",
+    "capability": "A layer, group or the preview used as a source in another layer",
+    "category": "video I/O & playback",
+    "tool": "Resolume",
+    "tool_names": [
+      "Video Router",
+      "Input Opacity",
+      "Input Bypass/Solo"
+    ],
+    "what_it_does": "The Video Router source takes one layer, one group, the layers below it, or the preview output and plays it as a clip in another layer, with switches that say whether the input's own opacity and bypass are respected (pre- or post-fader), so the same content can appear twice with different effects.",
+    "source_urls": [
+      "https://resolume.com/support/en/sources",
+      "https://resolume.com/support/en/slice-routing"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.gl.node",
+      "jit.gl.texture"
+    ],
+    "max_check": "jit.gl.node refpage: capture 1 renders its children to a texture whose name comes out the left outlet, which any other object can then use. That is the general mechanism; Max has no layer stack, so 'the layers below' must be grouped by hand.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Effect chains: blend, amount and mask on each stage",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--virtual-output-screens-and-screen-to-slice-routing-for-multi-stage-warping",
+    "capability": "Virtual output screens and screen-to-slice routing for multi-stage warping",
+    "category": "projection mapping",
+    "tool": "Resolume",
+    "tool_names": [
+      "Virtual Outputs",
+      "Routing Screens to Slices"
+    ],
+    "what_it_does": "A screen can be a virtual output whose result is used as the input of a slice on another screen, at a 0 or 1 frame delay. The docs' example: edge-blend two projectors first, then map content to objects in a virtual screen feeding them, without disturbing the blend.",
+    "source_urls": [
+      "https://resolume.com/support/en/screens",
+      "https://resolume.com/support/en/slice-routing"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.gl.node",
+      "jit.gl.meshwarp"
+    ],
+    "max_check": "jit.gl.node refpage: captures a sub-scene to a texture, and jit.gl.meshwarp refpage: warps a texture on a mesh, so chained stages are possible; nothing names a stage a 'screen' or keeps the stages as one saved output setup.",
+    "confidence": "low",
+    "advice": "",
+    "notes": "",
+    "theme": "Mapping editor: slices, masks and warps on the output",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--wire-patches-receive-the-host-s-projection-slices-as-shapes",
+    "capability": "Wire patches receive the host's projection slices as shapes",
+    "category": "projection mapping",
+    "tool": "Resolume",
+    "tool_names": [
+      "Slice In",
+      "Slices tab"
+    ],
+    "what_it_does": "A Wire source or effect with a Slice In node gets the slices from Arena's Advanced Output, chosen by dragging them onto the effect's Slices tab, and can draw outlines, chasers or fill shapes that line up with the stage. In Wire itself, dummy slice sets stand in.",
+    "source_urls": [
+      "https://resolume.com/support/en/wire-slices"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "jit.gl.meshwarp",
+      "jit.gl.sketch"
+    ],
+    "max_check": "Registry: no object shares a mapping layout as data with other objects. jit.gl.meshwarp refpage can output its mesh matrix (output_mesh_matrix), which is the nearest thing: one warp's geometry, not a stage of named slices.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Mapping editor: slices, masks and warps on the output",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--math-typed-into-any-number-field",
+    "capability": "Math typed into any number field",
+    "category": "workflow/authoring",
+    "tool": "Resolume",
+    "tool_names": [
+      "Expressions",
+      "Input Box Math"
+    ],
+    "what_it_does": "Any value box in Arena, Avenue and Wire accepts arithmetic and a few functions and constants (min, max, sin, cos, tan, abs, radians, sqrt, pi, tau, phi): '-1920/4' for a position, '/3' after a width to divide it.",
+    "source_urls": [
+      "https://resolume.com/support/en/expressions",
+      "https://resolume.com/support/en/parameters",
+      "https://resolume.com/support/en/input-selection"
+    ],
+    "max_status": "absent",
+    "max_closest": [
+      "flonum",
+      "expr"
+    ],
+    "max_check": "flonum refpage: displays and outputs numbers; nothing says typed expressions are evaluated. Max's arithmetic lives in objects (expr).",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--operator-monitoring-any-stage-on-any-screen-a-big-clock-and-a-notes-panel",
+    "capability": "Operator monitoring: any stage on any screen, a big clock and a notes panel",
+    "category": "control surface/UI building",
+    "tool": "Resolume",
+    "tool_names": [
+      "Monitors",
+      "Clip Time Panel",
+      "Notes Panel",
+      "Interface Layouts"
+    ],
+    "what_it_does": "Any panel can be undocked to another screen, and monitors can be duplicated to watch the composition, the preview, any layer or group, either crossfader bus, the selected item, or an output screen. A Clip Time panel shows wall-clock time and each playing clip's elapsed or remaining time in large type, and a Notes panel holds running orders. Layouts save as XML presets.",
+    "source_urls": [
+      "https://resolume.com/support/en/layouts",
+      "https://resolume.com/support/en/clip-time-panel",
+      "https://resolume.com/support/en/notes-panel"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.pworld",
+      "jit.gl.node"
+    ],
+    "max_check": "Max's interface is the patcher and its presentation view (max_system_model.json dimension 11). Watching an intermediate stage means capturing it (jit.gl.node) and showing it in a jit.pworld or second jit.world; no built-in remaining-time display for playing media.",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Mapping editor: slices, masks and warps on the output",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--offline-render-of-a-single-clip-with-its-effects-at-its-exact-length",
+    "capability": "Offline render of a single clip with its effects, at its exact length",
+    "category": "video I/O & playback",
+    "tool": "Resolume",
+    "tool_names": [
+      "Clip Renderer",
+      "Render to File",
+      "queue"
+    ],
+    "what_it_does": "Right-clicking a clip renders it, with its effects, to a file at the composition's resolution and exactly the clip's length, offline, so no frames drop; renders queue in a panel. BPM-synced clips render at the current tempo. Live inputs and the video router cannot be rendered.",
+    "source_urls": [
+      "https://resolume.com/support/en/clip-renderer",
+      "https://resolume.com/support/en/recording"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.record"
+    ],
+    "max_check": "jit.record refpage: @realtime 0 records frame by frame, and userguide non_realtime.json describes non-real-time video by banging the render with jit.world @enable 0. So offline render exists but is a patch you set up, not a per-clip command. Offline rendering is already a theme (Isadora, MadMapper, cables.gl).",
+    "confidence": "medium",
+    "advice": "",
+    "notes": "",
+    "theme": "Effect chains: blend, amount and mask on each stage",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--a-b-crossfader-with-buses-jump-behaviours-and-curves",
+    "capability": "A/B crossfader with buses, jump behaviours and curves",
+    "category": "video I/O & playback",
+    "tool": "Resolume",
+    "tool_names": [
+      "Crossfader",
+      "Jump",
+      "Jump & Return",
+      "Cut",
+      "Crossfader Phase"
+    ],
+    "what_it_does": "Layers and groups are assigned to bus A or B; each bus is composited first, then the crossfader mixes them with a chosen blend mode and curve. Its A and B buttons can jump, jump-and-return, or cut while held. The crossfader's position can also drive any parameter animation.",
+    "source_urls": [
+      "https://resolume.com/support/en/composition",
+      "https://resolume.com/support/en/parameter-animation"
+    ],
+    "max_status": "partial",
+    "max_closest": [
+      "jit.xfade",
+      "jit.fx.tr.xfade"
+    ],
+    "max_check": "jit.xfade refpage: crossfades two matrices by a 0-1 value; jit.fx.tr.xfade: the same for textures. Assigning layers to buses and the jump behaviours are patch work.",
+    "confidence": "high",
+    "advice": "",
+    "notes": "",
+    "theme": "Easing, smoothing and ramps",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--every-parameter-picks-its-animation-driver-from-one-menu",
+    "capability": "Every parameter picks its animation driver from one menu",
+    "category": "system model",
+    "tool": "Resolume",
+    "tool_names": [
+      "Phase source",
+      "Timeline",
+      "BPM Sync",
+      "FFT",
+      "Crossfader Phase",
+      "Clip Position",
+      "Dashboard"
+    ],
+    "what_it_does": "Each parameter's cogwheel menu sets what moves it: static, a timeline (with the same loop and play modes as a clip), BPM sync, audio analysis (composition, external input, or the clip/layer/group's own audio), the crossfader position, the clip's playhead, a layer transition, or a dashboard dial. The REST API calls this the parameter's phase source.",
+    "source_urls": [
+      "https://resolume.com/support/en/parameter-animation",
+      "https://resolume.com/docs/restapi/"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "line",
+      "phasor~",
+      "transport",
+      "pattrstorage"
+    ],
+    "max_check": "Max has no per-parameter animation layer: a value moves because some object sends it messages (max_system_model.json dimensions 1 and 7). The driver is an object you wire in.",
+    "confidence": "high",
+    "advice": "When a patch has many animatable controls, give each one the same small abstraction in front of it with a source menu (manual, LFO, tempo, envelope follower) instead of wiring a different driver to each, so every control can be animated the same way.",
+    "notes": "",
+    "theme": "Every parameter addressable: OSC, learn, binding, expressions",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--an-envelope-that-shapes-a-parameter-s-input-whatever-drives-it",
+    "capability": "An envelope that shapes a parameter's input, whatever drives it",
+    "category": "data/tables/scripting",
+    "tool": "Resolume",
+    "tool_names": [
+      "Envelope",
+      "phase",
+      "Interpolation Curves",
+      "Hold"
+    ],
+    "what_it_does": "An envelope sits on the parameter itself and reshapes whatever arrives: a timeline, BPM sync, FFT, the mouse, MIDI or OSC. Its x axis is 'phase' (0 to 1), not seconds, because the same envelope may run on beats or audio. Each keyframe chooses a curve to the previous one (Quadratic, Sine, Circular, Exponential, Elastic, Back, Bounce, In/Out or Hold), and envelopes save as presets.",
+    "source_urls": [
+      "https://resolume.com/support/en/envelopes",
+      "https://resolume.com/support/en/parameter-animation"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "function",
+      "zmap",
+      "curve~"
+    ],
+    "max_check": "function refpage: a breakpoint editor that gives an interpolated y for any x, with curve control. In Max the curve goes wherever it is wired, usually after one source; merging several sources first is up to the patch.",
+    "confidence": "high",
+    "advice": "Put the shaping curve directly in front of the control, after every source has been merged, so MIDI, OSC and automation all pass through the same curve and the control responds the same way whoever moves it.",
+    "notes": "",
+    "theme": "Easing, smoothing and ramps",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--toggles-menus-and-colour-palettes-animate-by-phase-too",
+    "capability": "Toggles, menus and colour palettes animate by phase too",
+    "category": "data/tables/scripting",
+    "tool": "Resolume",
+    "tool_names": [
+      "Basic",
+      "Color Interpolation",
+      "Palette"
+    ],
+    "what_it_does": "Animating a toggle, dropdown or colour palette shows its states along the timeline; an envelope snaps to them, so an animation can bounce between two of five menu items. 'Basic' mode drives a toggle or menu from a 0-1 slider (below 0.5 off, above on), which is also how a MIDI fader controls a button. A palette can interpolate colours as it cycles.",
+    "source_urls": [
+      "https://resolume.com/support/en/parameter-animation",
+      "https://resolume.com/support/en/envelopes",
+      "https://resolume.com/support/en/parameters"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "umenu",
+      "toggle",
+      "scale"
+    ],
+    "max_check": "In Max a umenu takes an index and a toggle takes 0/non-zero (refpages); a continuous source must be scaled and rounded by hand to drive them.",
+    "confidence": "medium",
+    "advice": "Give menus and toggles a 0-1 input path as well as their index, so any LFO, curve or fader can drive them without a scale-and-round chain in front.",
+    "notes": "",
+    "theme": "",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--osc-with-relative-operators-query-and-selected-addresses",
+    "capability": "OSC with relative operators, query, and 'selected' addresses",
+    "category": "networking/sync",
+    "tool": "Resolume",
+    "tool_names": [
+      "OSC",
+      "absolute address",
+      "relative address",
+      "Type Tags",
+      "Polling",
+      "Custom OSC Messages"
+    ],
+    "what_it_does": "Every control has a fixed address that exists without setup, and many also have a relative address (/composition/selectedlayer/...) that acts on whichever layer is selected. Values are normally 0-1 with the real range in the type tag; an 'a' argument sends an absolute value, '+', '-' or '*' change the current value, a string sets a choice by name, and '?' makes Resolume reply with the current value. Output can be all messages, or a preset of chosen items with an 'all layers/clips' scope, each with an optional custom address.",
+    "source_urls": [
+      "https://resolume.com/support/en/osc",
+      "https://resolume.com/support/en/midi-shortcuts"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "param.osc",
+      "udpreceive",
+      "pattrstorage"
+    ],
+    "max_check": "param.osc refpage: controls and reports parameters over OSC, auto-reports changes, and 'info' lists every parameter for discovery. Userguide OSC.json: parameters get OSC addresses automatically and Max can serve OSCQuery. Relative operators, '?' polling and 'selected' addressing were not found.",
+    "confidence": "medium",
+    "advice": "When a patch answers OSC, accept relative changes ('+ 0.1') and a '?' query that replies on the same address; a controller can then nudge values and ask for the state without the patch keeping a copy of every value it sent.",
+    "notes": "",
+    "theme": "Every parameter addressable: OSC, learn, binding, expressions",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--shortcut-target-by-position-this-item-or-the-selected-item",
+    "capability": "Shortcut target: by position, this item, or the selected item",
+    "category": "control surface/UI building",
+    "tool": "Resolume",
+    "tool_names": [
+      "Shortcut Target",
+      "By Position",
+      "This Clip, Layer or Group",
+      "Selected Clip, Layer or Group",
+      "Multiple Shortcuts",
+      "Range",
+      "Value",
+      "Piano"
+    ],
+    "what_it_does": "Every shortcut (keyboard, MIDI, OSC, DMX) says what it follows: the slot by position (fader 1 is always layer 1, whatever is moved), one specific item wherever it moves, or whatever is selected. A parameter can have several shortcuts, each with its own range, Toggle/Value/Piano mode and invert.",
+    "source_urls": [
+      "https://resolume.com/support/en/midi-shortcuts",
+      "https://resolume.com/support/en/keyboard-shortcuts",
+      "https://resolume.com/support/en/dmx-shortcuts"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "live.dial"
+    ],
+    "max_check": "Userguide mapping.json: a Max mapping binds a controller to one UI object (with min, max, exponent, steps, relative, trigger and pickup modes). 'Whatever is selected' and 'whatever is in slot N' are not mapping targets.",
+    "confidence": "medium",
+    "advice": "Decide for each controller whether it follows a fixed object, a position, or the current selection, and say so in the patch; a 'selected' layer of controls lets eight knobs edit any of many voices.",
+    "notes": "",
+    "theme": "Every parameter addressable: OSC, learn, binding, expressions",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--a-transform-is-the-first-effect-on-everything-and-more-can-be-added",
+    "capability": "A Transform is the first effect on everything, and more can be added",
+    "category": "rendering/3D",
+    "tool": "Resolume",
+    "tool_names": [
+      "Transform",
+      "Transform Widget",
+      "Transform Presets"
+    ],
+    "what_it_does": "Clip, layer, group and composition each start with a Transform (position, scale, rotation, anchor) that cannot be removed. More Transforms can go anywhere in the effect chain, each with its own opacity and blend mode, so content can be scaled, mirrored, then placed again. Transforms save presets for common picture-in-picture positions.",
+    "source_urls": [
+      "https://resolume.com/support/en/transform",
+      "https://resolume.com/support/en/effects"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.gl.layer",
+      "jit.gl.videoplane",
+      "jit.gl.node"
+    ],
+    "max_check": "transform-defaults.json: jit.gl.layer and jit.gl.videoplane carry position, scale, rotatexyz and anchor on the drawing object itself. A transform between two effects means rendering to a texture (jit.gl.node capture) and drawing again.",
+    "confidence": "medium",
+    "advice": "Keep placement separate from processing: apply position and scale on the object that draws, and when an effect must happen after a move, say so with a captured stage rather than hiding the move inside a shader.",
+    "notes": "",
+    "theme": "Effect chains: blend, amount and mask on each stage",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--effect-clips-act-like-adjustment-layers-you-can-trigger",
+    "capability": "Effect clips act like adjustment layers you can trigger",
+    "category": "video I/O & playback",
+    "tool": "Resolume",
+    "tool_names": [
+      "Effect Clips"
+    ],
+    "what_it_does": "Dropping effects on an empty clip makes an Effect Clip: when triggered, its effects apply to all layers below. Looks can then be triggered from MIDI, faded with layer transitions and sequenced by the autopilot like any clip.",
+    "source_urls": [
+      "https://resolume.com/support/en/effects"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.gl.slab",
+      "jit.gl.node"
+    ],
+    "max_check": "In Max an effect is an object in a chain; switching looks means routing (gate, selector) or bypass messages. jit.gl.node can capture a group to apply one effect to it.",
+    "confidence": "medium",
+    "advice": "Treat a set of effect settings as a cue that can be triggered and crossfaded, not only as objects you bypass one by one.",
+    "notes": "",
+    "theme": "Effect chains: blend, amount and mask on each stage",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--groups-composite-inside-themselves-then-join-the-stack-as-one-layer",
+    "capability": "Groups composite inside themselves, then join the stack as one layer",
+    "category": "rendering/3D",
+    "tool": "Resolume",
+    "tool_names": [
+      "Groups",
+      "Group Blending",
+      "Group to Slice Routing"
+    ],
+    "what_it_does": "In a group (Arena only) the first layer is drawn on transparent black and the others blend only with layers in the group; the result is flattened and blended into the composition with the group's own blend mode and opacity. Groups have their own column triggers, speed, bypass and effects, and cannot be nested.",
+    "source_urls": [
+      "https://resolume.com/support/en/groups"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.gl.node"
+    ],
+    "max_check": "jit.gl.node refpage: renders its children together and can capture them to a texture, which is then drawn as one item. Draw order inside is set by layer and depth settings (max_system_model.json dimension 15).",
+    "confidence": "medium",
+    "advice": "When several layers must mix with each other but not with what is under them, capture them in a jit.gl.node and blend the captured texture as one layer, instead of tuning their blend modes against the whole scene.",
+    "notes": "",
+    "theme": "Effect chains: blend, amount and mask on each stage",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--each-layer-renders-at-its-own-resolution-with-a-fit-rule",
+    "capability": "Each layer renders at its own resolution, with a fit rule",
+    "category": "rendering/3D",
+    "tool": "Resolume",
+    "tool_names": [
+      "Width & Height",
+      "Auto Size",
+      "Fill",
+      "Fit",
+      "Stretch"
+    ],
+    "what_it_does": "A layer can render at a smaller size than the composition (four 4K layers in the corners of an 8K composition each process only their own 4K). Auto Size sets every clip in a layer to Fill, Fit or Stretch the layer, and clips can be resized the same way.",
+    "source_urls": [
+      "https://resolume.com/support/en/layers",
+      "https://resolume.com/support/en/clips"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.gl.node",
+      "jit.gl.layer"
+    ],
+    "max_check": "jit.gl.node refpage: dim sets the capture size when adapt is 0. transform-defaults.json: jit.gl.layer preserves aspect by default (fit), jit.gl.videoplane does not; fill and stretch are done with scale.",
+    "confidence": "medium",
+    "advice": "Set the processing size where the work happens (dim on the stage that captures), not only the final output size, and name the fit rule (fit, fill, stretch) explicitly.",
+    "notes": "",
+    "theme": "Effect chains: blend, amount and mask on each stage",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--wire-s-three-flows-per-frame-on-change-and-at-compile-time",
+    "capability": "Wire's three flows: per frame, on change, and at compile time",
+    "category": "system model",
+    "tool": "Resolume",
+    "tool_names": [
+      "Signal flow",
+      "Event flow",
+      "Attribute flow",
+      "OnChange"
+    ],
+    "what_it_does": "Wire data flows in three ways shown by the port shape: signal (round) every frame, event (square) when something changes, possibly several times a frame, and attribute (diamond) only when the patch compiles, so changing it recompiles and it cannot be animated in the host. Event and attribute can feed signal; OnChange turns signal into events.",
+    "source_urls": [
+      "https://resolume.com/support/en/wire-node-anatomy"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "snapshot~",
+      "sig~",
+      "change"
+    ],
+    "max_check": "Max separates messages (events) from signals (audio) and converts with sig~ and snapshot~ (max_system_model.json dimensions 1 and 5); structural settings are creation arguments (dimension 22). Wire adds a frame-rate flow as the default.",
+    "confidence": "high",
+    "advice": "Mark which settings of an object are structural (change ports, need a rebuild) and which are live; Wire draws that distinction on every port.",
+    "notes": "",
+    "theme": "",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--a-wire-patch-s-inputs-become-the-host-s-controls-in-dashboard-order",
+    "capability": "A Wire patch's inputs become the host's controls, in dashboard order",
+    "category": "control surface/UI building",
+    "tool": "Resolume",
+    "tool_names": [
+      "Input nodes",
+      "Dashboard",
+      "input groups",
+      "Int In",
+      "category"
+    ],
+    "what_it_does": "Float, Int, Bool, Color and Trigger input nodes become sliders, menus or buttons, toggles, colour pickers and trigger buttons when the patch runs as an effect, source or mixer in Arena. Their order on Wire's Dashboard is their order in Arena, input groups become foldable sections, and a unit suffix can be shown. The docs advise keeping sliders 0-1 and mapping inside the patch.",
+    "source_urls": [
+      "https://resolume.com/support/en/wire-resolume-integration",
+      "https://resolume.com/support/en/wire-user-interface"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "live.dial",
+      "bpatcher",
+      "pattr"
+    ],
+    "max_check": "Userguide parameter_mode.json: Max parameters carry names, ranges, unit styles and an order attribute for initialisation, and appear in Live as device controls; a plain patch's controls are whatever UI objects are placed.",
+    "confidence": "medium",
+    "advice": "Expose an abstraction's controls in a declared order and in named groups, with 0-1 ranges at the surface and the mapping done inside, so every host or panel shows them the same way.",
+    "notes": "",
+    "theme": "Every parameter addressable: OSC, learn, binding, expressions",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--the-host-never-lets-a-setting-change-break-a-connection",
+    "capability": "The host never lets a setting change break a connection",
+    "category": "system model",
+    "tool": "Resolume",
+    "tool_names": [
+      "disconnection rule"
+    ],
+    "what_it_does": "In Wire, changing an attribute can hide an inlet and drop its cable. When the same patch runs inside Arena or Avenue, such changes are refused, because a vanishing connection would look like a bug to the performer.",
+    "source_urls": [
+      "https://resolume.com/support/en/wire-resolume-integration"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "thispatcher"
+    ],
+    "max_check": "max_system_model.json dimension 22: retyping a box makes a new object, and arguments that set inlet counts change the ports; cords to ports that disappear are lost.",
+    "confidence": "medium",
+    "advice": "An object meant for performers should keep its ports fixed while it runs and refuse settings that would remove one.",
+    "notes": "",
+    "theme": "",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--relocating-media-by-its-folder-structure-and-collecting-it-per-deck",
+    "capability": "Relocating media by its folder structure, and collecting it per deck",
+    "category": "workflow/authoring",
+    "tool": "Resolume",
+    "tool_names": [
+      "Media Manager",
+      "Relocate",
+      "Set Path",
+      "Collect Media"
+    ],
+    "what_it_does": "A composition stores file locations. When files go missing, pointing at one of them makes the Media Manager find the others by their position relative to it (same folder, subfolders, parent folders). Set Path swaps one file for a new version everywhere. Collect Media copies every file into a Media folder with a subfolder per deck and saves a copy of the composition beside it; it never deletes.",
+    "source_urls": [
+      "https://resolume.com/support/en/media-manager"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [],
+    "max_check": "Userguide search_path.json and projects.json: Max finds files by name through the search path, and a project can consolidate (copy dependencies into the project) or archive to .maxzip.",
+    "confidence": "medium",
+    "advice": "Keep a piece's media in one folder tree next to the patch so relative paths survive a move, and collect it with the project before a show.",
+    "notes": "",
+    "theme": "Scenes and cues as the structure of a show",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--undo-stacks-per-window-and-undo-shows-what-it-undid",
+    "capability": "Undo stacks per window, and undo shows what it undid",
+    "category": "workflow/authoring",
+    "tool": "Resolume",
+    "tool_names": [
+      "Undo"
+    ],
+    "what_it_does": "The main interface and the Advanced Output keep separate undo histories. Undo selects and shows the item it changed, switching decks if needed. Changes from MIDI, OSC and other external input, clip triggers, and automatic changes (animation, autopilot) are not undoable, because a live show cannot take back what the audience saw.",
+    "source_urls": [
+      "https://resolume.com/support/en/undo"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [],
+    "max_check": "Max has undo for patch edits; whether value changes are undoable and how undo is scoped per window was not checked in the userguide.",
+    "confidence": "low",
+    "advice": "",
+    "notes": "",
+    "theme": "",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--audio-analysis-set-per-parameter-including-audio-driving-speed",
+    "capability": "Audio analysis set per parameter, including audio driving speed",
+    "category": "audio",
+    "tool": "Resolume",
+    "tool_names": [
+      "Audio Analysis",
+      "External FFT",
+      "Composition FFT",
+      "Clip/Layer/Group FFT",
+      "Gain",
+      "Fall"
+    ],
+    "what_it_does": "Choosing FFT on any parameter shows a spectrum with L, M and H buttons and in/out points to pick a band, a gain and a fall time. The audio can push the value up, push it down, or set the speed at which the parameter moves in either direction. The audio can be the composition, an external input, or the clip's, layer's or group's own sound; Wire's Spectrum In gives 1024 bins with the same source choice.",
+    "source_urls": [
+      "https://resolume.com/support/en/parameter-animation",
+      "https://resolume.com/support/en/wire-fft"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "fffb~",
+      "peakamp~",
+      "slide",
+      "pfft~"
+    ],
+    "max_check": "Refpages: fffb~ is a fixed bandpass bank, peakamp~ reports peak amplitude, slide smooths values. Max has more analysis than Resolume, but it is built once per patch and wired to targets; MadMapper's named channels are already listed.",
+    "confidence": "medium",
+    "advice": "Offer 'audio sets the rate' as well as 'audio sets the value': feeding an envelope follower into a phasor's frequency gives motion that speeds up with the music without jittering.",
+    "notes": "",
+    "theme": "Every parameter addressable: OSC, learn, binding, expressions",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--tempo-tools-tap-resync-to-the-phrase-momentary-nudge",
+    "capability": "Tempo tools: tap, resync to the phrase, momentary nudge",
+    "category": "timeline/cueing/show control",
+    "tool": "Resolume",
+    "tool_names": [
+      "Tap",
+      "Resync",
+      "Nudge Up",
+      "Nudge Down",
+      "Tempo Nudge Range",
+      "metronome"
+    ],
+    "what_it_does": "The tempo is tapped in, then Resync on the first beat of a phrase sends everything BPM-synced back to bar 1. A square circling a square shows beats and lights every 16 beats. Nudge buttons speed up or slow the tempo by a set percentage only while held. A metronome can go to headphones. With Ableton Link on, Resync and pause are disabled.",
+    "source_urls": [
+      "https://resolume.com/support/en/bpm",
+      "https://resolume.com/support/en/link",
+      "https://resolume.com/support/en/midi-shortcuts",
+      "https://resolume.com/support/en/preferences"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "transport",
+      "link.session",
+      "link.beat"
+    ],
+    "max_check": "transport refpage: tempo, time signature and clock source. Link package (query_packages.py): link.beat and link.session. Tap tempo exists only in third-party packages (Upshot's upshot_transport). No momentary nudge was found.",
+    "confidence": "medium",
+    "advice": "Give a visual piece a held nudge, not only a tap: holding a button that adds a few percent to the tempo is how a running visual is brought back onto a live beat without a jump.",
+    "notes": "",
+    "theme": "Tempo and clocks",
+    "review": "unreviewed",
+    "review_notes": ""
+  },
+  {
+    "id": "resolume--blend-modes-include-transitions-and-50-variants-for-av-mixing",
+    "capability": "Blend modes include transitions and '50' variants for AV mixing",
+    "category": "video I/O & playback",
+    "tool": "Resolume",
+    "tool_names": [
+      "Blend Modes",
+      "50 Blends",
+      "Transitions",
+      "Displace",
+      "Luma is Alpha"
+    ],
+    "what_it_does": "One blend list (51 entries by OSC index) holds ordinary blends, transitions (wipes, push, dissolve, Cube) that run as the layer fades from 0 to 100%, and '50' variants that reach the full mix at 50% so the audio and video faders can both sit at the top. Every effect also has a blend mode and opacity. New blends can be made in Wire as mixers.",
+    "source_urls": [
+      "https://resolume.com/support/en/blend-modes",
+      "https://resolume.com/support/en/layers",
+      "https://resolume.com/support/en/osc",
+      "https://resolume.com/support/en/effects"
+    ],
+    "max_status": "different-approach",
+    "max_closest": [
+      "jit.fx.co.alphablend",
+      "jit.fx.co.screen",
+      "jit.fx.tr.xfade",
+      "jit.gl.layer"
+    ],
+    "max_check": "Jitter Tools refpages: composite modes (jit.fx.co.*) and transitions (jit.fx.tr.*) are separate objects; jit.gl.layer blends by OpenGL blend_mode factors (transform-defaults.json). A mode change means swapping or switching objects.",
+    "confidence": "medium",
+    "advice": "When a patch lets the performer choose how two images mix, put composites and transitions behind one menu with one 0-1 amount, so changing the mode never means rewiring.",
+    "notes": "",
+    "theme": "Effect chains: blend, amount and mask on each stage",
+    "review": "unreviewed",
+    "review_notes": ""
   }
 ]

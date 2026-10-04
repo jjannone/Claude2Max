@@ -1,0 +1,610 @@
+[
+ {
+  "id": 1,
+  "dimension": "Evaluation",
+  "summary": "Resolume renders a frame loop: every frame it composites the playing clips layer by layer, applies effects, and sends the result to the outputs. Parameters are re-evaluated per frame from their phase source. What runs is what is triggered: an empty or ejected layer costs nothing, and a bypassed layer is hidden. In Wire, nodes compute per frame (signal flow), on change (event flow) or only when the patch compiles (attribute flow).",
+  "details": [
+   "The composition composites all layers, applies the final effects and sends the result to the screen [composition]",
+   "Framerate on Auto follows the monitor's refresh rate; a cap gives even frame timing [composition]",
+   "Parameters are driven by a phase source: timeline, BPM sync, FFT, crossfader, clip position, dashboard [parameter-animation]",
+   "Wire signal flow is per frame, event flow per change and possibly several times a frame, attribute flow only at compile time [wire-node-anatomy]"
+  ],
+  "names": [
+   "composition",
+   "Framerate",
+   "phase source",
+   "Signal",
+   "Event",
+   "Attribute"
+  ],
+  "sources": [
+   "https://resolume.com/support/en/composition",
+   "https://resolume.com/support/en/parameter-animation",
+   "https://resolume.com/support/en/wire-node-anatomy"
+  ],
+  "what_a_max_user_would_notice": "Max computes when a message arrives (max_system_model.json dimension 1); a Jitter render loop must be built with jit.world. In Resolume the frame loop is the whole program, and nothing is 'sent' between parts: values are sampled each frame.",
+  "confidence": "medium",
+  "open_questions": "The docs do not say whether hidden (opacity 0) layers still decode and render."
+ },
+ {
+  "id": 2,
+  "dimension": "Ordering",
+  "summary": "Order is the stack. Layer 1 is the bottom and is painted first; each higher layer blends onto the result. Within a clip, layer, group or composition, effects run top to bottom in their list, with clip effects before layer effects, layer before group, and composition effects last. Autopilot conflicts are settled small to big: clip over layer over group over composition.",
+  "details": [
+   "The first layer is the bottom layer; later layers are painted on top [layers]",
+   "Effects stack in a slot and run from the top one down; dragging reorders them [effects]",
+   "Clip effects run before layer/group effects; composition effects run after mixing [effects]",
+   "Autopilot priority: the clip overrules the layer, the layer the group, the group the composition, when on the same frame [autopilot]",
+   "Crossfader buses are rendered first and pulled down to the first bused layer, so unbused layers between bused ones give odd results [composition]"
+  ],
+  "names": [
+   "Layer",
+   "effect stack",
+   "Autopilot priority",
+   "Crossfader"
+  ],
+  "sources": [
+   "https://resolume.com/support/en/layers",
+   "https://resolume.com/support/en/effects",
+   "https://resolume.com/support/en/autopilot",
+   "https://resolume.com/support/en/composition"
+  ],
+  "what_a_max_user_would_notice": "Max orders events depth-first and right to left (max_system_model.json dimension 2), and draw order in Jitter depends on depth testing and @layer. Resolume has no event order to reason about; the visible list order is the order.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 3,
+  "dimension": "Time",
+  "summary": "Three clocks matter: the render frame, a global BPM clock (tap, resync, nudge, MIDI clock, Ableton Link), and external timecode or DJ players that can own a clip's playhead. Each clip has its own transport (timeline in seconds, BPM Sync in beats, SMPTE, Denon or Pioneer). Parameter animations reuse the same transport, and their keyframes are placed in phase (0 to 1), not seconds.",
+  "details": [
+   "Clip transport modes: Timeline, BPM Sync, SMPTE 1/2, Denon, Pioneer [video, smpte, sync-to-denon-players, sync-to-pioneer-dj-players]",
+   "BPM set by typing, Tap, Resync to the phrase, Nudge; MIDI clock in; Ableton Link two-way [bpm, midi-shortcuts, link]",
+   "Global speed scales all clips except BPM-synced ones [composition]",
+   "Envelope x axis is phase because time may be seconds, beats or FFT [envelopes]",
+   "Clip Renderer works offline; recording is real time [clip-renderer]"
+  ],
+  "names": [
+   "Timeline",
+   "BPM Sync",
+   "SMPTE",
+   "Resync",
+   "Nudge",
+   "phase",
+   "Ableton Link"
+  ],
+  "sources": [
+   "https://resolume.com/support/en/video",
+   "https://resolume.com/support/en/bpm",
+   "https://resolume.com/support/en/link",
+   "https://resolume.com/support/en/envelopes",
+   "https://resolume.com/support/en/smpte",
+   "https://resolume.com/support/en/clip-renderer"
+  ],
+  "what_a_max_user_would_notice": "Max has a scheduler, the audio clock and a transport with bars.beats.units (max_system_model.json dimension 3). Resolume has no millisecond event scheduler a user can address; musical time is the main grid and every clip can follow it without wiring.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 4,
+  "dimension": "Data types",
+  "summary": "To the user, Resolume's data is media (video, audio, stills, sources, live inputs) and typed parameters. The REST API names the parameter types: boolean, choice, color (hex string with a palette), event, integer, range (float with min, max and in/out clamp), string, text and file, each with display hints (suffix, step, units, control type). Wire adds textures, numbers, vectors (Float2-4), colours, arrays (collections, instancing), MIDI, OSC, slices and spectrum data.",
+  "details": [
+   "Parameter schemas in the REST API: BooleanParameter, ChoiceParameter, ColorParameter, EventParameter, IntegerParameter, RangeParameter, StringParameter, TextParameter, FileParameter [docs/restapi]",
+   "ParameterView gives suffix, step, multiplier, display_units and control_type [docs/restapi]",
+   "Wire Spectrum In: 1024 floats [wire-fft]; Slice In brings the host's slices [wire-slices]; Insert Pack combines Floats into Float2/3/4 [fast-patching]",
+   "LUTs can be applied to colours as well as textures in Wire [lut]"
+  ],
+  "names": [
+   "RangeParameter",
+   "ChoiceParameter",
+   "ParameterView",
+   "Texture",
+   "Float2",
+   "Spectrum In"
+  ],
+  "sources": [
+   "https://resolume.com/docs/restapi/",
+   "https://resolume.com/support/en/wire-fft",
+   "https://resolume.com/support/en/wire-slices",
+   "https://resolume.com/support/en/fast-patching",
+   "https://resolume.com/support/en/lut"
+  ],
+  "what_a_max_user_would_notice": "Max passes atoms and names that point at storage (max_system_model.json dimension 4). Resolume users never see a message; they see parameters with a declared type, range and display unit.",
+  "confidence": "medium",
+  "open_questions": "Wire's own Data Types and Instancing articles are referenced but not published on the support site."
+ },
+ {
+  "id": 5,
+  "dimension": "Rates and channels",
+  "summary": "Video runs at the composition frame rate (auto or capped), audio at the chosen sample rate, DMX output at its own rate with a delay to line up with projectors, and Wire separates per-frame from per-event data. A layer can render at its own resolution. Composition bit depth is 8 or 16 bits per channel; a Wire patch can run at higher depth than the composition.",
+  "details": [
+   "Composition FrameRate and Bit Depth [composition, 10-bit-color-output]",
+   "Layer Width & Height set its render resolution [layers]",
+   "DMX Output Framerate and Delay (default 40 ms) in the DMX preferences, with ArtSync [dmx]",
+   "Wire patch texture bit depth 8-32; an 8-bit patch is upgraded in a 16-bit comp, a deeper patch keeps its depth [wire-resolume-integration]"
+  ],
+  "names": [
+   "FrameRate",
+   "Bit Depth",
+   "ArtSync",
+   "Delay",
+   "Width & Height"
+  ],
+  "sources": [
+   "https://resolume.com/support/en/composition",
+   "https://resolume.com/support/en/10-bit-color-output",
+   "https://resolume.com/support/en/layers",
+   "https://resolume.com/support/en/dmx",
+   "https://resolume.com/support/en/wire-resolume-integration"
+  ],
+  "what_a_max_user_would_notice": "Max keeps control, audio and frame rates apart with converter objects (max_system_model.json dimension 5). Resolume exposes rates only as settings; there is no per-part rate except DMX output and layer resolution.",
+  "confidence": "medium",
+  "open_questions": ""
+ },
+ {
+  "id": 6,
+  "dimension": "State and saving",
+  "summary": "A composition saves everything a show needs except the media itself: clips and their settings, decks, effects, parameter animations, envelopes and current values. Output setups (Advanced Output), shortcut mappings, interface layouts and presets are saved separately as XML files in the user's Documents folder, so one setup can serve many compositions. Media is referenced by path.",
+  "details": [
+   "A composition holds clips, effects, parameter settings and control shortcuts [vocabulary]",
+   "Advanced Output setups are presets independent of the composition [advanced-output]",
+   "Shortcut presets and layouts are XML files [midi-shortcuts, layouts]",
+   "The composition stores file locations, not media [media-manager]",
+   "Effect presets set values once and do not stay linked [effects]"
+  ],
+  "names": [
+   "Composition",
+   "Advanced Output preset",
+   "Shortcut Presets",
+   "Layout presets",
+   "Media Manager"
+  ],
+  "sources": [
+   "https://resolume.com/support/en/vocabulary",
+   "https://resolume.com/support/en/advanced-output",
+   "https://resolume.com/support/en/midi-shortcuts",
+   "https://resolume.com/support/en/layouts",
+   "https://resolume.com/support/en/media-manager",
+   "https://resolume.com/support/en/effects"
+  ],
+  "what_a_max_user_would_notice": "A .maxpat saves structure, not current values, unless a storage system keeps them (max_system_model.json dimension 6). Resolume keeps values with the composition, and keeps the stage setup and controller mapping out of it.",
+  "confidence": "medium",
+  "open_questions": "Whether every parameter's live value is restored on reopen is implied, not stated outright."
+ },
+ {
+  "id": 7,
+  "dimension": "Parameters",
+  "summary": "Everything adjustable is a parameter, and every parameter has the same machinery: reset to default, typed-in maths, a phase source for animation, an envelope, presets for its animation, a dashboard slot, keyboard/MIDI/OSC/DMX shortcuts, a fixed OSC address and a REST id. Toggles, dropdowns, events and colours are parameters too and can all be animated.",
+  "details": [
+   "'Everything in Resolume is controlled by parameters' with sliders, toggles, events, radio buttons, dropdowns and colours [parameters]",
+   "Every UI item has a fixed OSC address [osc]",
+   "Animation, envelopes and dashboard apply to toggles, dropdowns and palettes [parameter-animation, envelopes, dashboard]",
+   "Parameters have stable ids in the REST/WebSocket API [restapi, websocket-api]"
+  ],
+  "names": [
+   "Parameter",
+   "phase source",
+   "Envelope",
+   "Dashboard",
+   "OSC address"
+  ],
+  "sources": [
+   "https://resolume.com/support/en/parameters",
+   "https://resolume.com/support/en/osc",
+   "https://resolume.com/support/en/parameter-animation",
+   "https://resolume.com/support/en/envelopes",
+   "https://resolume.com/support/en/dashboard",
+   "https://resolume.com/support/en/websocket-api"
+  ],
+  "what_a_max_user_would_notice": "In Max only objects in Parameter Mode get names, ranges, OSC addresses and mapping (max_system_model.json dimension 7); most settings are attributes reached by message. In Resolume there is no distinction to manage.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 8,
+  "dimension": "Encapsulation and reuse",
+  "summary": "Inside Arena and Avenue the unit of reuse is the preset (effect, transform, envelope, animation, palette, shortcut, output setup) and the deck, which can be pulled from another composition. Groups are one level of sub-composition and cannot be nested. New effects, sources and blend modes are made in Wire, compiled to .wired (editable) or .cwired (locked) files that appear in the effects and sources lists.",
+  "details": [
+   "Groups are sub-compositions; no groups inside groups [groups]",
+   "Decks can be added from another composition [decks]",
+   "Wire patches are effects, sources or mixers, compiled editable or not [wire-saving-consolidating, patch-compatibility]",
+   "Copy Effects copies a whole stack with settings and animations [effects]"
+  ],
+  "names": [
+   "preset",
+   "Deck",
+   "Group",
+   "patch",
+   ".wired",
+   ".cwired"
+  ],
+  "sources": [
+   "https://resolume.com/support/en/groups",
+   "https://resolume.com/support/en/decks",
+   "https://resolume.com/support/en/wire-saving-consolidating",
+   "https://resolume.com/support/en/patch-compatibility",
+   "https://resolume.com/support/en/effects"
+  ],
+  "what_a_max_user_would_notice": "Max reuses by abstraction with arguments, instancing and poly~ (max_system_model.json dimension 8). Resolume users reuse settings, not graphs; graphs live in Wire, outside the performance tool.",
+  "confidence": "medium",
+  "open_questions": ""
+ },
+ {
+  "id": 9,
+  "dimension": "Names and scope",
+  "summary": "Things are found by path in a fixed tree (/composition/layers/2/clips/8/...) by position, by a stable id, or as the selected item. A shortcut likewise targets a position, a specific item, or the current selection. Names typed by the user are labels; a '#' in a layer name shows its position. A group's contents cannot be routed outside it.",
+  "details": [
+   "OSC absolute and relative (selectedlayer) addresses [osc]",
+   "REST access by index, by-id and selected [docs/restapi]",
+   "Shortcut Target: By Position, This, Selected [midi-shortcuts]",
+   "'#' in a layer name is replaced by its stack position [layers]",
+   "What happens in a group stays in the group; layers in a group cannot go to a router outside it [groups]"
+  ],
+  "names": [
+   "address",
+   "by-id",
+   "selected",
+   "Shortcut Target"
+  ],
+  "sources": [
+   "https://resolume.com/support/en/osc",
+   "https://resolume.com/docs/restapi/",
+   "https://resolume.com/support/en/midi-shortcuts",
+   "https://resolume.com/support/en/layers",
+   "https://resolume.com/support/en/groups"
+  ],
+  "what_a_max_user_would_notice": "Most Max names are global and chosen by the user (max_system_model.json dimension 9). Resolume users never invent a name to connect two things; the tree and the selection do it.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 10,
+  "dimension": "Show structure",
+  "summary": "A show is one composition: a grid of clips (layers by columns) split into decks, mixed through layers and groups, sent out through the Advanced Output. Columns are the looks; decks are the sets. Sequencing is the autopilot (clip, layer, group, column or composition level), BPM-quantised triggering, timecode or DJ-player sync, plus external control. There is no timeline view of the whole show.",
+  "details": [
+   "Composition, Deck, Layer, Group, Column, Clip [vocabulary, decks]",
+   "Autopilot sequences clips and columns, with a Master Layer for scripted shows [autopilot]",
+   "Trigger first clip on play and no quit confirmation for installations [layers, preferences]",
+   "Switching compositions takes time, so a show is prepared as one composition [vocabulary]"
+  ],
+  "names": [
+   "Composition",
+   "Deck",
+   "Column",
+   "Autopilot",
+   "Master Layer"
+  ],
+  "sources": [
+   "https://resolume.com/support/en/vocabulary",
+   "https://resolume.com/support/en/decks",
+   "https://resolume.com/support/en/autopilot",
+   "https://resolume.com/support/en/layers",
+   "https://resolume.com/support/en/preferences"
+  ],
+  "what_a_max_user_would_notice": "Max has no built-in scene, cue or timeline layer (max_system_model.json dimension 10). Resolume's structure is a performance instrument: a grid to play by hand, with automation added on top.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 11,
+  "dimension": "Interface",
+  "summary": "A fixed interface with dockable, undockable panels: the clip grid, clip/layer/group/composition panels with their effect stacks, browser tabs, monitors that can show any stage, a dashboard of eight dials per level, a clip-time clock and notes. Controls are generated from parameters; the user arranges panels, not controls. Wire patches get their controls in Arena from their input nodes, in dashboard order. Layouts save as presets. A webserver can host a custom HTML control page.",
+  "details": [
+   "Hide, move, undock panels; duplicate monitors; layout presets [layouts]",
+   "Dashboard dials at the top of each panel [dashboard]",
+   "Input node order on the Wire dashboard is the order in Arena [wire-resolume-integration]",
+   "Custom index.html in the webserver root [restapi]",
+   "Help window explains whatever is under the mouse [quickstart-tutorial]"
+  ],
+  "names": [
+   "panel",
+   "monitor",
+   "Dashboard",
+   "Clip Time",
+   "Notes",
+   "Layouts"
+  ],
+  "sources": [
+   "https://resolume.com/support/en/layouts",
+   "https://resolume.com/support/en/dashboard",
+   "https://resolume.com/support/en/wire-resolume-integration",
+   "https://resolume.com/support/en/restapi",
+   "https://resolume.com/support/en/quickstart-tutorial"
+  ],
+  "what_a_max_user_would_notice": "In Max controls are objects placed in a patcher and presentation view (max_system_model.json dimension 11). In Resolume you cannot build a control surface inside the app; you arrange panels or build one outside (TouchOSC, a web page).",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 12,
+  "dimension": "Editing while running",
+  "summary": "Resolume is always live: clips, effects and settings change while the output runs, and recording does not interrupt playback. Undo covers mouse edits in each window separately; external input, clip triggers and automation are not undoable. The Advanced Output can be prepared on virtual screens before outputs are connected. In Wire, changing an attribute-flow setting recompiles the patch; inside Arena such a change may not break connections.",
+  "details": [
+   "Undo scope and what is not undoable [undo]",
+   "Recording does not interrupt the output [recording]",
+   "Prepare screens without the outputs attached [screens]",
+   "Attribute flow forces a recompile [wire-node-anatomy]; disconnection rule [wire-resolume-integration]",
+   "Select a clip without triggering it by its name handle, to edit before going live [clips]"
+  ],
+  "names": [
+   "Undo",
+   "virtual screen",
+   "Attribute flow",
+   "disconnection rule"
+  ],
+  "sources": [
+   "https://resolume.com/support/en/undo",
+   "https://resolume.com/support/en/recording",
+   "https://resolume.com/support/en/screens",
+   "https://resolume.com/support/en/wire-node-anatomy",
+   "https://resolume.com/support/en/wire-resolume-integration",
+   "https://resolume.com/support/en/clips"
+  ],
+  "what_a_max_user_would_notice": "Max is also live but retyping a box replaces the object and its state (max_system_model.json dimension 12). Resolume's edits never reset what is playing unless a clip is retriggered.",
+  "confidence": "medium",
+  "open_questions": ""
+ },
+ {
+  "id": 13,
+  "dimension": "Scripting",
+  "summary": "Arena and Avenue have no built-in scripting language. Control from code comes from outside: OSC, the REST API, the WebSocket API, and (from 7.26) MCP servers for AI apps. Wire is the in-house programming environment, node-based, with ISF shaders as its text language; typed maths with a few functions and constants works in any value box.",
+  "details": [
+   "OSC, REST and WebSocket control [osc, restapi, websocket-api]",
+   "MCP servers for Arena and Wire [mcp-servers]",
+   "ISF fragment shaders in Wire; no vertex shaders as of 7.22 [isf]",
+   "Expressions: min, max, sin, cos, tan, abs, radians, sqrt; pi, tau, phi [expressions]"
+  ],
+  "names": [
+   "REST API",
+   "Websocket API",
+   "MCP",
+   "Wire",
+   "ISF",
+   "Expressions"
+  ],
+  "sources": [
+   "https://resolume.com/support/en/osc",
+   "https://resolume.com/support/en/restapi",
+   "https://resolume.com/support/en/websocket-api",
+   "https://resolume.com/support/en/mcp-servers",
+   "https://resolume.com/support/en/isf",
+   "https://resolume.com/support/en/expressions"
+  ],
+  "what_a_max_user_would_notice": "Max has JavaScript inside (v8), Node for Max, Lua and gen (max_system_model.json dimension 13). Resolume's logic must live in another program, which is why many users drive it from Max or TouchOSC.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 14,
+  "dimension": "Errors and debugging",
+  "summary": "Problems show as marks on the thing itself: an unplayable file shows a yellow X, a missing file shows red with a Relocate button, a missing slice in a Slice Transform turns red, overlapping DMX channels turn red, a polygon that cannot be triangulated is outlined in red, a duplicate shortcut is red in the list. Monitors show the last 200 OSC messages, incoming MIDI, and Art-Net per universe and channel. Wire has a Log, a Print node, a monitor of the selected node and a Stats panel of per-node load.",
+  "details": [
+   "Yellow X for unplayable video [video]; missing media marked red [media-manager]",
+   "Missing slices in red [transform]; overlapping channels in red [dmx]; untriangulatable polygon in red [input-selection]",
+   "OSC, MIDI and Art-Net monitors in the preferences [osc, midi-shortcuts, dmx-shortcuts]",
+   "Wire Log, Print node, monitor, Stats panel [wire-user-interface]"
+  ],
+  "names": [
+   "yellow X",
+   "Relocate",
+   "OSC monitor",
+   "Art-Net monitor",
+   "Log",
+   "Stats"
+  ],
+  "sources": [
+   "https://resolume.com/support/en/video",
+   "https://resolume.com/support/en/media-manager",
+   "https://resolume.com/support/en/transform",
+   "https://resolume.com/support/en/dmx",
+   "https://resolume.com/support/en/input-selection",
+   "https://resolume.com/support/en/osc",
+   "https://resolume.com/support/en/dmx-shortcuts",
+   "https://resolume.com/support/en/wire-user-interface"
+  ],
+  "what_a_max_user_would_notice": "Max reports errors in the Console and has probes and a debugger (max_system_model.json dimension 14), while unknown names often fail silently. Resolume shows faults where they are and has no debugger, because the user does not write logic.",
+  "confidence": "medium",
+  "open_questions": ""
+ },
+ {
+  "id": 15,
+  "dimension": "Rendering",
+  "summary": "A 2D compositor on the GPU: layers are textures blended in stack order by a blend mode and opacity, with groups flattened first and crossfader buses mixed first. Each clip, layer, group and the composition has a Transform and an effect chain. The Advanced Output then cuts the composition (or a routed layer, group or screen) into slices, warps them (perspective, linear, Bézier, polygon), masks them and sends them to screens, capture cards, NDI, Syphon/Spout or DMX fixtures. Wire is 2D too.",
+  "details": [
+   "Layers blend wet on wet, default Add [layers]",
+   "Group blending on transparent black [groups]",
+   "Input Selection then Output Transformation [input-selection, output-transformation]",
+   "Layer-to-slice routing bypasses blend modes and composition effects [slice-routing]",
+   "Wire has no vertex shaders because it is 2D [isf]"
+  ],
+  "names": [
+   "blend mode",
+   "Transform",
+   "slice",
+   "Output Transformation",
+   "Advanced Output"
+  ],
+  "sources": [
+   "https://resolume.com/support/en/layers",
+   "https://resolume.com/support/en/groups",
+   "https://resolume.com/support/en/input-selection",
+   "https://resolume.com/support/en/output-transformation",
+   "https://resolume.com/support/en/slice-routing",
+   "https://resolume.com/support/en/isf"
+  ],
+  "what_a_max_user_would_notice": "Jitter has a 3D render tree with depth testing, cameras and materials (max_system_model.json dimension 15). Resolume is flat and its draw order is never ambiguous.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 16,
+  "dimension": "Performance and concurrency",
+  "summary": "The GPU does the work: DXV is decoded on the GPU, rendering happens on the card driving the main display, and outputs on other cards cost a copy across the bus. The docs rank multi-output setups from one GPU (best) to several synced machines (worst). Stills load into memory only when triggered. FPS can be shown on the output; Alley converts files on all CPU cores.",
+  "details": [
+   "DXV decompression on the GPU [rendering-to-dxv, preparing-media]",
+   "Rendering on the card with the main monitor; second cards cost bandwidth; SLI/Crossfire unsupported [lots-of-outputs]",
+   "Deferred loading of stills [stills]",
+   "Show FPS [output-setup]; per-layer resolution saves render power [layers]"
+  ],
+  "names": [
+   "DXV",
+   "deferred loading",
+   "Show FPS"
+  ],
+  "sources": [
+   "https://resolume.com/support/en/rendering-to-dxv",
+   "https://resolume.com/support/en/preparing-media",
+   "https://resolume.com/support/en/lots-of-outputs",
+   "https://resolume.com/support/en/stills",
+   "https://resolume.com/support/en/output-setup",
+   "https://resolume.com/support/en/layers"
+  ],
+  "what_a_max_user_would_notice": "Max splits work across a main thread, scheduler and audio threads and shows little per-object cost (max_system_model.json dimension 16). Resolume's tuning is mostly codec choice and resolution.",
+  "confidence": "medium",
+  "open_questions": ""
+ },
+ {
+  "id": 17,
+  "dimension": "Several machines",
+  "summary": "Machines share tempo by Ableton Link or MIDI clock, video by NDI, and control by OSC (with Bonjour discovery), Art-Net or the REST API. The docs say plainly that syncing playheads across machines by timecode or OSC does not give frame-locked output and is a last resort.",
+  "details": [
+   "Link keeps BPM and bar position in sync across computers [link]",
+   "NDI in and out, each NDI screen a separate source [NDI_inputs_and_outputs]",
+   "OSC with ZeroConf/Bonjour [osc]",
+   "Multiple machines are the least recommended way to get many outputs [lots-of-outputs]"
+  ],
+  "names": [
+   "Ableton Link",
+   "NDI",
+   "OSC",
+   "Art-Net"
+  ],
+  "sources": [
+   "https://resolume.com/support/en/link",
+   "https://resolume.com/support/en/NDI_inputs_and_outputs",
+   "https://resolume.com/support/en/osc",
+   "https://resolume.com/support/en/lots-of-outputs"
+  ],
+  "what_a_max_user_would_notice": "Max likewise has no multi-machine session (max_system_model.json dimension 17). Resolume has Link and NDI built in, which Max reaches through packages.",
+  "confidence": "medium",
+  "open_questions": ""
+ },
+ {
+  "id": 18,
+  "dimension": "Deployment",
+  "summary": "Resolume runs as the full application on Mac or Windows; there is no player or export. Avenue and Arena are tiers of one product (Arena adds mapping, edge blending, timecode, DJ sync, DMX, capture-card output, groups and slice transforms). Licences are per machine with one backup, verified online every 30 days, or put permanently on a USB dongle for offline machines; installers run silent. Installations use 'trigger first clip on play' and no quit confirmation. Wire patches compile to files others can use without owning Wire.",
+  "details": [
+   "Arena-only feature list [avenue-arena-difference]",
+   "Online verification every 30 days; dongle [online-verification, dongle]",
+   "/SILENT and /VERYSILENT installs [installing]",
+   "Installation settings [preferences, layers]",
+   "Compiled Wire patches need no Wire licence [patch-compatibility]"
+  ],
+  "names": [
+   "Avenue",
+   "Arena",
+   "dongle",
+   "online verification",
+   ".cwired"
+  ],
+  "sources": [
+   "https://resolume.com/support/en/avenue-arena-difference",
+   "https://resolume.com/support/en/online-verification",
+   "https://resolume.com/support/en/dongle",
+   "https://resolume.com/support/en/installing",
+   "https://resolume.com/support/en/preferences",
+   "https://resolume.com/support/en/patch-compatibility"
+  ],
+  "what_a_max_user_would_notice": "Max can build standalones and Max for Live devices and exports through RNBO (max_system_model.json dimension 18). A Resolume show always needs a licensed copy of Resolume on the show machine.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 19,
+  "dimension": "Extending",
+  "summary": "New video effects and sources come as FFGL plugins (64-bit) dropped in the Extra Effects folder, audio effects as VST plugins, and Resolume's own way is Wire: a node patch saved as an effect, source or mixer (blend mode), optionally with ISF shaders inside. Wire inputs become the plugin's controls in Arena. Wire can be sold through Juicebar.",
+  "details": [
+   "FFGL for video, VST for audio, Extra Effects folder [effects, preferences]",
+   "Wire patches as effects, sources and mixers; custom blends via Create Mixer [wire-introduction, layers]",
+   "ISF node and ISF Resource node [isf]",
+   "Compile for Juicebar [wire-saving-consolidating]"
+  ],
+  "names": [
+   "FFGL",
+   "VST",
+   "Wire",
+   "ISF",
+   "Juicebar"
+  ],
+  "sources": [
+   "https://resolume.com/support/en/effects",
+   "https://resolume.com/support/en/preferences",
+   "https://resolume.com/support/en/wire-introduction",
+   "https://resolume.com/support/en/layers",
+   "https://resolume.com/support/en/isf",
+   "https://resolume.com/support/en/wire-saving-consolidating"
+  ],
+  "what_a_max_user_would_notice": "Max objects can be written in C, JS, gen, GLSL and as abstractions (max_system_model.json dimension 19), and they all look like boxes. Resolume extensions look like built-in effects and sources, but only the effect, source and mixer slots can be extended.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 20,
+  "dimension": "Media and files",
+  "summary": "Media is referenced by path, browsed in a Files panel with favourites, and organised into decks. The Media Manager relocates missing files by their folder structure and collects media per deck. DXV is the house codec (Alley converts to it, also from image sequences); other files go to the operating system's player, then FFmpeg. Recordings and renders can import themselves into an empty clip. Stills are deferred-loaded.",
+  "details": [
+   "File references and the Media Manager [media-manager]",
+   "Playback order: own player (DXV, Photo-JPEG, GIF, ProRes on PC), then OS, then FFmpeg [video]",
+   "Alley conversion and image sequences [conversion-with-alley, stills]",
+   "Recording can place the result on an empty clip [recording]",
+   "Audio and video kept as separate files and joined in one clip; the video is fitted to the audio's length [preparing-media, decks]"
+  ],
+  "names": [
+   "Media Manager",
+   "DXV",
+   "Alley",
+   "Files panel",
+   "Collect Media"
+  ],
+  "sources": [
+   "https://resolume.com/support/en/media-manager",
+   "https://resolume.com/support/en/video",
+   "https://resolume.com/support/en/conversion-with-alley",
+   "https://resolume.com/support/en/stills",
+   "https://resolume.com/support/en/recording",
+   "https://resolume.com/support/en/preparing-media",
+   "https://resolume.com/support/en/decks"
+  ],
+  "what_a_max_user_would_notice": "Max finds files by name on the search path and consolidates through projects (max_system_model.json dimension 20). Resolume tracks exact paths and repairs them as a group.",
+  "confidence": "medium",
+  "open_questions": ""
+ },
+ {
+  "id": 21,
+  "dimension": "Targeting by position, by identity, or by selection (system-level because every control path uses the same three choices)",
+  "summary": "Any control from outside can name its target in three ways: by its position in the grid or stack, by a fixed identity that survives reordering, or as whatever the operator has selected. Keyboard, MIDI and DMX shortcuts call these By Position, This, and Selected; OSC has absolute addresses and 'selected' relative ones; the REST API has by-index, by-id and selected paths. A controller layout therefore keeps working when the show is rearranged, or follows the operator's focus.",
+  "details": [
+   "Shortcut Target modes [midi-shortcuts, keyboard-shortcuts, dmx-shortcuts]",
+   "OSC absolute versus relative addresses [osc]",
+   "REST: by index (1-based), by-id, selected [docs/restapi]"
+  ],
+  "names": [
+   "By Position",
+   "This Clip, Layer or Group",
+   "Selected",
+   "by-id",
+   "selectedlayer"
+  ],
+  "sources": [
+   "https://resolume.com/support/en/midi-shortcuts",
+   "https://resolume.com/support/en/keyboard-shortcuts",
+   "https://resolume.com/support/en/dmx-shortcuts",
+   "https://resolume.com/support/en/osc",
+   "https://resolume.com/docs/restapi/"
+  ],
+  "what_a_max_user_would_notice": "In Max a mapping or send name points at one object, and 'the selected one' has no meaning at run time. Building a 'selected voice' control means routing every message through a selector by hand.",
+  "confidence": "high",
+  "open_questions": ""
+ }
+]

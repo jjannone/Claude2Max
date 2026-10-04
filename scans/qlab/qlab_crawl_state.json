@@ -1,0 +1,778 @@
+{
+  "https://qlab.app/docs/v5/": {
+    "title": "The QLab 5 Manual",
+    "url": "https://qlab.app/docs/v5/",
+    "group": "home",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/audio/": {
+    "title": "Audio",
+    "url": "https://qlab.app/docs/v5/audio/",
+    "group": "audio",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/audio/audio-cues/": {
+    "title": "Audio Cues",
+    "url": "https://qlab.app/docs/v5/audio/audio-cues/",
+    "group": "audio",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/audio/audio-map-editor/": {
+    "title": "The Audio Map Editor",
+    "url": "https://qlab.app/docs/v5/audio/audio-map-editor/",
+    "group": "audio",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/audio/audio-output-patch-editor/": {
+    "title": "The Audio Output Patch Editor",
+    "url": "https://qlab.app/docs/v5/audio/audio-output-patch-editor/",
+    "group": "audio",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/audio/fading-audio/": {
+    "title": "Fading Audio and Audio Effects",
+    "url": "https://qlab.app/docs/v5/audio/fading-audio/",
+    "group": "audio",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/audio/introduction-to-audio/": {
+    "title": "Introduction To Audio in QLab",
+    "url": "https://qlab.app/docs/v5/audio/introduction-to-audio/",
+    "group": "audio",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/audio/mic-cues/": {
+    "title": "Mic Cues",
+    "url": "https://qlab.app/docs/v5/audio/mic-cues/",
+    "group": "audio",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/audio/object-audio/": {
+    "title": "Object Audio in QLab",
+    "url": "https://qlab.app/docs/v5/audio/object-audio/",
+    "group": "audio",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/fundamentals/": {
+    "title": "Fundamentals",
+    "url": "https://qlab.app/docs/v5/fundamentals/",
+    "group": "fundamentals",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/fundamentals/cue-carts/": {
+    "title": "Cue Carts",
+    "url": "https://qlab.app/docs/v5/fundamentals/cue-carts/",
+    "group": "fundamentals",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/fundamentals/cue-lists/": {
+    "title": "Cue Lists",
+    "url": "https://qlab.app/docs/v5/fundamentals/cue-lists/",
+    "group": "fundamentals",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full. The published page ends mid-sentence in the On Stop / freewheel paragraph (checked in the raw HTML)."
+  },
+  "https://qlab.app/docs/v5/fundamentals/cue-sequences/": {
+    "title": "Cue Sequences",
+    "url": "https://qlab.app/docs/v5/fundamentals/cue-sequences/",
+    "group": "fundamentals",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/fundamentals/cues/": {
+    "title": "Cues",
+    "url": "https://qlab.app/docs/v5/fundamentals/cues/",
+    "group": "fundamentals",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/fundamentals/group-cues/": {
+    "title": "Group Cues",
+    "url": "https://qlab.app/docs/v5/fundamentals/group-cues/",
+    "group": "fundamentals",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/fundamentals/inspector/": {
+    "title": "The Inspector",
+    "url": "https://qlab.app/docs/v5/fundamentals/inspector/",
+    "group": "fundamentals",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/fundamentals/managing-workspaces/": {
+    "title": "Saving, Managing, and Moving Workspaces",
+    "url": "https://qlab.app/docs/v5/fundamentals/managing-workspaces/",
+    "group": "fundamentals",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/fundamentals/workspace-settings/": {
+    "title": "Workspace Settings",
+    "url": "https://qlab.app/docs/v5/fundamentals/workspace-settings/",
+    "group": "fundamentals",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/fundamentals/workspace-templates/": {
+    "title": "Workspace Templates",
+    "url": "https://qlab.app/docs/v5/fundamentals/workspace-templates/",
+    "group": "fundamentals",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/fundamentals/workspace/": {
+    "title": "The Workspace",
+    "url": "https://qlab.app/docs/v5/fundamentals/workspace/",
+    "group": "fundamentals",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/general/": {
+    "title": "General",
+    "url": "https://qlab.app/docs/v5/general/",
+    "group": "general",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/general/change-log/": {
+    "title": "QLab 5 Change Log",
+    "url": "https://qlab.app/docs/v5/general/change-log/",
+    "group": "general",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read the 5.6 release notes in full; earlier releases: headings only."
+  },
+  "https://qlab.app/docs/v5/general/features/": {
+    "title": "QLab 5 Features by License Type",
+    "url": "https://qlab.app/docs/v5/general/features/",
+    "group": "general",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/general/keyboard-shortcuts/": {
+    "title": "Keyboard Shortcuts",
+    "url": "https://qlab.app/docs/v5/general/keyboard-shortcuts/",
+    "group": "general",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read the default keyboard controls table; menu shortcut tables skimmed."
+  },
+  "https://qlab.app/docs/v5/general/licenses/": {
+    "title": "Licenses",
+    "url": "https://qlab.app/docs/v5/general/licenses/",
+    "group": "general",
+    "status": "skipped",
+    "session": "2026-10-03",
+    "notes": "Licence purchase, activation and USB-key instructions; not about how QLab works."
+  },
+  "https://qlab.app/docs/v5/general/new-in-qlab-5/": {
+    "title": "What's New In QLab 5?",
+    "url": "https://qlab.app/docs/v5/general/new-in-qlab-5/",
+    "group": "general",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/general/preparing-your-mac/": {
+    "title": "A Computer Prepares",
+    "url": "https://qlab.app/docs/v5/general/preparing-your-mac/",
+    "group": "general",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read the Show Mode section and performance tips; the macOS setting walkthroughs were skimmed."
+  },
+  "https://qlab.app/docs/v5/general/qlab-preferences/": {
+    "title": "Preferences",
+    "url": "https://qlab.app/docs/v5/general/qlab-preferences/",
+    "group": "general",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/general/system-recommendations/": {
+    "title": "System Recommendations",
+    "url": "https://qlab.app/docs/v5/general/system-recommendations/",
+    "group": "general",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/lighting/": {
+    "title": "Lighting",
+    "url": "https://qlab.app/docs/v5/lighting/",
+    "group": "lighting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/lighting/introduction-to-lighting/": {
+    "title": "Introduction to Lighting in QLab",
+    "url": "https://qlab.app/docs/v5/lighting/introduction-to-lighting/",
+    "group": "lighting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/lighting/light-cues/": {
+    "title": "Light Cues",
+    "url": "https://qlab.app/docs/v5/lighting/light-cues/",
+    "group": "lighting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/lighting/light-dashboard/": {
+    "title": "The Light Dashboard",
+    "url": "https://qlab.app/docs/v5/lighting/light-dashboard/",
+    "group": "lighting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/lighting/light-library/": {
+    "title": "The Light Library",
+    "url": "https://qlab.app/docs/v5/lighting/light-library/",
+    "group": "lighting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read the prose (storage as .qlablight JSON, global vs workspace library); the fixture list was skimmed."
+  },
+  "https://qlab.app/docs/v5/lighting/light-patch-editor/": {
+    "title": "The Light Patch Editor",
+    "url": "https://qlab.app/docs/v5/lighting/light-patch-editor/",
+    "group": "lighting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/lighting/lighting-command-language/": {
+    "title": "The Lighting Command Language",
+    "url": "https://qlab.app/docs/v5/lighting/lighting-command-language/",
+    "group": "lighting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/networking/": {
+    "title": "Networking, MIDI, and Show Control",
+    "url": "https://qlab.app/docs/v5/networking/",
+    "group": "networking",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/networking/collaboration/": {
+    "title": "Collaboration",
+    "url": "https://qlab.app/docs/v5/networking/collaboration/",
+    "group": "networking",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/networking/midi-cues/": {
+    "title": "MIDI Cues",
+    "url": "https://qlab.app/docs/v5/networking/midi-cues/",
+    "group": "networking",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/networking/midi-file-cues/": {
+    "title": "MIDI File cues",
+    "url": "https://qlab.app/docs/v5/networking/midi-file-cues/",
+    "group": "networking",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/networking/network-cues/": {
+    "title": "Network Cues",
+    "url": "https://qlab.app/docs/v5/networking/network-cues/",
+    "group": "networking",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/networking/qlab-remote/": {
+    "title": "QLab Remote",
+    "url": "https://qlab.app/docs/v5/networking/qlab-remote/",
+    "group": "networking",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/networking/show-control-broadcast/": {
+    "title": "Show Control Broadcast",
+    "url": "https://qlab.app/docs/v5/networking/show-control-broadcast/",
+    "group": "networking",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/networking/stream-deck/": {
+    "title": "Stream Deck",
+    "url": "https://qlab.app/docs/v5/networking/stream-deck/",
+    "group": "networking",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/networking/timecode-cues/": {
+    "title": "Timecode Cues",
+    "url": "https://qlab.app/docs/v5/networking/timecode-cues/",
+    "group": "networking",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/networking/using-midi-and-msc/": {
+    "title": "Using MIDI and MSC with QLab",
+    "url": "https://qlab.app/docs/v5/networking/using-midi-and-msc/",
+    "group": "networking",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/networking/using-osc/": {
+    "title": "Using OSC with QLab",
+    "url": "https://qlab.app/docs/v5/networking/using-osc/",
+    "group": "networking",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/networking/using-timecode/": {
+    "title": "Using Timecode with QLab",
+    "url": "https://qlab.app/docs/v5/networking/using-timecode/",
+    "group": "networking",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/other-cues/": {
+    "title": "Other Cues",
+    "url": "https://qlab.app/docs/v5/other-cues/",
+    "group": "other-cues",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/other-cues/arm-and-disarm-cues/": {
+    "title": "Arm and Disarm Cues",
+    "url": "https://qlab.app/docs/v5/other-cues/arm-and-disarm-cues/",
+    "group": "other-cues",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/other-cues/devamp-cues/": {
+    "title": "Devamp Cues",
+    "url": "https://qlab.app/docs/v5/other-cues/devamp-cues/",
+    "group": "other-cues",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/other-cues/goto-cues/": {
+    "title": "GoTo Cues",
+    "url": "https://qlab.app/docs/v5/other-cues/goto-cues/",
+    "group": "other-cues",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/other-cues/memo-cues/": {
+    "title": "Memo Cues",
+    "url": "https://qlab.app/docs/v5/other-cues/memo-cues/",
+    "group": "other-cues",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/other-cues/target-cues/": {
+    "title": "Target Cues",
+    "url": "https://qlab.app/docs/v5/other-cues/target-cues/",
+    "group": "other-cues",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/other-cues/transport-cues/": {
+    "title": "Transport Cues",
+    "url": "https://qlab.app/docs/v5/other-cues/transport-cues/",
+    "group": "other-cues",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/other-cues/wait-cues/": {
+    "title": "Wait Cues",
+    "url": "https://qlab.app/docs/v5/other-cues/wait-cues/",
+    "group": "other-cues",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/scripting/": {
+    "title": "Scripting and Automation",
+    "url": "https://qlab.app/docs/v5/scripting/",
+    "group": "scripting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/scripting/applescript-dictionary-v5/": {
+    "title": "QLab's AppleScript Dictionary",
+    "url": "https://qlab.app/docs/v5/scripting/applescript-dictionary-v5/",
+    "group": "scripting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read the introduction and the command list headings only; the OSC dictionary covers the same ground."
+  },
+  "https://qlab.app/docs/v5/scripting/examples/": {
+    "title": "OSC and Scripting Examples",
+    "url": "https://qlab.app/docs/v5/scripting/examples/",
+    "group": "scripting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/scripting/osc-dictionary-v5/": {
+    "title": "QLab's OSC Dictionary",
+    "url": "https://qlab.app/docs/v5/scripting/osc-dictionary-v5/",
+    "group": "scripting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read the introduction (ports, replies, updates, /live and +/- syntax, booleans), the whole Workspace messages section and selected cue entries (start, collateAndStart, liveAverageLevel, valuesForKeys, soloCueInTime, loadActionAt, tempDuration, maxTimeInCueSequence); listed all 1,176 method headings. Not every entry read."
+  },
+  "https://qlab.app/docs/v5/scripting/osc-queries/": {
+    "title": "OSC Queries",
+    "url": "https://qlab.app/docs/v5/scripting/osc-queries/",
+    "group": "scripting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/scripting/parameter-reference/": {
+    "title": "Parameter Reference",
+    "url": "https://qlab.app/docs/v5/scripting/parameter-reference/",
+    "group": "scripting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/scripting/script-cues/": {
+    "title": "Script Cues",
+    "url": "https://qlab.app/docs/v5/scripting/script-cues/",
+    "group": "scripting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/tools/": {
+    "title": "Workflow Tools",
+    "url": "https://qlab.app/docs/v5/tools/",
+    "group": "tools",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/tools/auditioning-cues/": {
+    "title": "Auditioning Cues",
+    "url": "https://qlab.app/docs/v5/tools/auditioning-cues/",
+    "group": "tools",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/tools/find/": {
+    "title": "Find",
+    "url": "https://qlab.app/docs/v5/tools/find/",
+    "group": "tools",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/tools/launcher-window/": {
+    "title": "The Launcher Window",
+    "url": "https://qlab.app/docs/v5/tools/launcher-window/",
+    "group": "tools",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/tools/monitor-windows/": {
+    "title": "Monitor Windows",
+    "url": "https://qlab.app/docs/v5/tools/monitor-windows/",
+    "group": "tools",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/tools/override-controls/": {
+    "title": "Override Controls",
+    "url": "https://qlab.app/docs/v5/tools/override-controls/",
+    "group": "tools",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/tools/paste-cue-properties/": {
+    "title": "Paste Cue Properties",
+    "url": "https://qlab.app/docs/v5/tools/paste-cue-properties/",
+    "group": "tools",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/tools/timecode-status-window/": {
+    "title": "The Timecode Status Window",
+    "url": "https://qlab.app/docs/v5/tools/timecode-status-window/",
+    "group": "tools",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/tools/tools-menu/": {
+    "title": "The Tools Menu",
+    "url": "https://qlab.app/docs/v5/tools/tools-menu/",
+    "group": "tools",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/tools/workspace-status-window/": {
+    "title": "The Workspace Status Window",
+    "url": "https://qlab.app/docs/v5/tools/workspace-status-window/",
+    "group": "tools",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/tutorials/": {
+    "title": "Tutorials",
+    "url": "https://qlab.app/docs/v5/tutorials/",
+    "group": "tutorials",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/tutorials/audio-workflow/": {
+    "title": "Audio Workflow",
+    "url": "https://qlab.app/docs/v5/tutorials/audio-workflow/",
+    "group": "tutorials",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/tutorials/basic-networking/": {
+    "title": "Basic Computer Networking for the Theater",
+    "url": "https://qlab.app/docs/v5/tutorials/basic-networking/",
+    "group": "tutorials",
+    "status": "skipped",
+    "session": "2026-10-03",
+    "notes": "General IP networking essay for theatre; headings read only."
+  },
+  "https://qlab.app/docs/v5/tutorials/blend-mode-demo/": {
+    "title": "Blend Mode Demo",
+    "url": "https://qlab.app/docs/v5/tutorials/blend-mode-demo/",
+    "group": "tutorials",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/tutorials/cue-sequences/": {
+    "title": "Cue Sequences",
+    "url": "https://qlab.app/docs/v5/tutorials/cue-sequences/",
+    "group": "tutorials",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/tutorials/fading-with-paths/": {
+    "title": "Fading With Paths",
+    "url": "https://qlab.app/docs/v5/tutorials/fading-with-paths/",
+    "group": "tutorials",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/tutorials/how-to-use-a-mac/": {
+    "title": "How To Use A Mac",
+    "url": "https://qlab.app/docs/v5/tutorials/how-to-use-a-mac/",
+    "group": "tutorials",
+    "status": "skipped",
+    "session": "2026-10-03",
+    "notes": "General macOS basics for beginners; headings read only."
+  },
+  "https://qlab.app/docs/v5/tutorials/intro-to-devamp-cues/": {
+    "title": "Introduction to Devamp Cues",
+    "url": "https://qlab.app/docs/v5/tutorials/intro-to-devamp-cues/",
+    "group": "tutorials",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/tutorials/object-audio-basics/": {
+    "title": "Object Audio Basics",
+    "url": "https://qlab.app/docs/v5/tutorials/object-audio-basics/",
+    "group": "tutorials",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/tutorials/sams-toolbox/": {
+    "title": "Sam's Toolbox",
+    "url": "https://qlab.app/docs/v5/tutorials/sams-toolbox/",
+    "group": "tutorials",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/tutorials/timecode-tools/": {
+    "title": "Timecode Tools",
+    "url": "https://qlab.app/docs/v5/tutorials/timecode-tools/",
+    "group": "tutorials",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/tutorials/understanding-usb-c/": {
+    "title": "Understanding USB-C",
+    "url": "https://qlab.app/docs/v5/tutorials/understanding-usb-c/",
+    "group": "tutorials",
+    "status": "skipped",
+    "session": "2026-10-03",
+    "notes": "General hardware essay on USB-C and Thunderbolt; headings read only."
+  },
+  "https://qlab.app/docs/v5/tutorials/zero-to-audio/": {
+    "title": "Zero To Audio",
+    "url": "https://qlab.app/docs/v5/tutorials/zero-to-audio/",
+    "group": "tutorials",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/tutorials/zero-to-network/": {
+    "title": "Zero To Network",
+    "url": "https://qlab.app/docs/v5/tutorials/zero-to-network/",
+    "group": "tutorials",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/tutorials/zero-to-video/": {
+    "title": "Zero To Video",
+    "url": "https://qlab.app/docs/v5/tutorials/zero-to-video/",
+    "group": "tutorials",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/video/": {
+    "title": "Video",
+    "url": "https://qlab.app/docs/v5/video/",
+    "group": "video",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/video/blend-modes/": {
+    "title": "Blend Modes",
+    "url": "https://qlab.app/docs/v5/video/blend-modes/",
+    "group": "video",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/video/camera-cues/": {
+    "title": "Camera Cues",
+    "url": "https://qlab.app/docs/v5/video/camera-cues/",
+    "group": "video",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/video/fading-video/": {
+    "title": "Fading Video and Video Effects",
+    "url": "https://qlab.app/docs/v5/video/fading-video/",
+    "group": "video",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/video/introduction-to-video/": {
+    "title": "Introduction To Video In QLab",
+    "url": "https://qlab.app/docs/v5/video/introduction-to-video/",
+    "group": "video",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/video/text-cues/": {
+    "title": "Text Cues",
+    "url": "https://qlab.app/docs/v5/video/text-cues/",
+    "group": "video",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/video/using-ndi/": {
+    "title": "Using NDI",
+    "url": "https://qlab.app/docs/v5/video/using-ndi/",
+    "group": "video",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/video/video-cues/": {
+    "title": "Video Cues",
+    "url": "https://qlab.app/docs/v5/video/video-cues/",
+    "group": "video",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  },
+  "https://qlab.app/docs/v5/video/video-output/": {
+    "title": "Video Output",
+    "url": "https://qlab.app/docs/v5/video/video-output/",
+    "group": "video",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text)."
+  }
+}

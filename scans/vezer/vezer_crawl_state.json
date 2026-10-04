@@ -1,0 +1,722 @@
+{
+  "https://imimot.com/blog/vezer-1-9-released/": {
+    "title": "Blog: Vezér 1.9 released",
+    "url": "https://imimot.com/blog/vezer-1-9-released/",
+    "group": "imimot.com",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer": {
+    "title": "Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer",
+    "group": "home",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/changelog": {
+    "title": "Changelog — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/changelog",
+    "group": "changelog",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full. Covers 1.8.5 (2019) to 1.9.9 (2026-02-17) only; older releases are not on the page."
+  },
+  "https://imimot.com/help/vezer/compositions": {
+    "title": "Compositions — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/compositions",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/compositions/composition-preferences": {
+    "title": "Composition Preferences — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/compositions/composition-preferences",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/compositions/faq": {
+    "title": "FAQ — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/compositions/faq",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/compositions/loop-points-working-range": {
+    "title": "Loop points/working range — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/compositions/loop-points-working-range",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/compositions/tempo-and-synchronisation": {
+    "title": "Tempo and Synchronisation — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/compositions/tempo-and-synchronisation",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/compositions/transmit-midi-machine-control-mmc": {
+    "title": "Transmit MIDI Machine Control (MMC) — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/compositions/transmit-midi-machine-control-mmc",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/compositions/transmit-midi-timecode-mtc": {
+    "title": "Transmit MIDI Timecode (MTC) — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/compositions/transmit-midi-timecode-mtc",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/compositions/what-is-a-composition-in-vezer": {
+    "title": "What is a Composition in Vezér? — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/compositions/what-is-a-composition-in-vezer",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/controlling-vezer": {
+    "title": "Controlling Vezér — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/controlling-vezer",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/controlling-vezer/midi": {
+    "title": "MIDI — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/controlling-vezer/midi",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/controlling-vezer/mmc-transport": {
+    "title": "MMC Transport — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/controlling-vezer/mmc-transport",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/controlling-vezer/osc": {
+    "title": "OSC — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/controlling-vezer/osc",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/controlling-vezer/osc-feedback-and-query": {
+    "title": "OSC Feedback and Query — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/controlling-vezer/osc-feedback-and-query",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/cues": {
+    "title": "Cues — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/cues",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/cues/controls": {
+    "title": "Controls — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/cues/controls",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/cues/creating-cues": {
+    "title": "Creating Cues — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/cues/creating-cues",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/cues/faq": {
+    "title": "FAQ — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/cues/faq",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/cues/jumping-to-a-specific-cue": {
+    "title": "Jumping to a specific Cue — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/cues/jumping-to-a-specific-cue",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/cues/move-keyframes-by-cues": {
+    "title": "Move Keyframes by Cues — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/cues/move-keyframes-by-cues",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/cues/moving-cues": {
+    "title": "Moving Cues — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/cues/moving-cues",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/cues/renaming-cues": {
+    "title": "Renaming Cues — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/cues/renaming-cues",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/cues/repeats": {
+    "title": "Repeats — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/cues/repeats",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/cues/settings": {
+    "title": "Settings — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/cues/settings",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/cues/special-commands-in-cue-names": {
+    "title": "Special commands in Cue names — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/cues/special-commands-in-cue-names",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/cues/types": {
+    "title": "Types — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/cues/types",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/faq": {
+    "title": "FAQ — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/faq",
+    "group": "faq",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/faq/activation-problems": {
+    "title": "Activation problems — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/faq/activation-problems",
+    "group": "faq",
+    "status": "skipped",
+    "session": "2026-10-03",
+    "notes": "Licensing and activation; not about how Vezér works."
+  },
+  "https://imimot.com/help/vezer/faq/download-legacy-versions": {
+    "title": "Download Legacy Versions — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/faq/download-legacy-versions",
+    "group": "faq",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/faq/i-lost-my-license-what-should-i-do": {
+    "title": "I lost my license. What should I do? — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/faq/i-lost-my-license-what-should-i-do",
+    "group": "faq",
+    "status": "skipped",
+    "session": "2026-10-03",
+    "notes": "Licensing and activation; not about how Vezér works."
+  },
+  "https://imimot.com/help/vezer/faq/license-management": {
+    "title": "License Management — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/faq/license-management",
+    "group": "account",
+    "status": "skipped",
+    "session": "2026-10-03",
+    "notes": "Licensing and activation; not about how Vezér works."
+  },
+  "https://imimot.com/help/vezer/general": {
+    "title": "General — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/general",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/general/composition-queue-mode": {
+    "title": "Composition Queue mode — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/general/composition-queue-mode",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/general/nmc-protocol": {
+    "title": "NMC Protocol — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/general/nmc-protocol",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/general/outputs-of-vezer": {
+    "title": "Outputs of Vezér — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/general/outputs-of-vezer",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/general/playhead-following-during-playback": {
+    "title": "Playhead following during Playback — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/general/playhead-following-during-playback",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Page has no text, only a screenshot (not viewed)."
+  },
+  "https://imimot.com/help/vezer/general/preferences-art-net": {
+    "title": "Preferences - Art-Net — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/general/preferences-art-net",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/general/preferences-audio": {
+    "title": "Preferences - Audio — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/general/preferences-audio",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/general/preferences-global-behaviours": {
+    "title": "Preferences - Global Behaviours — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/general/preferences-global-behaviours",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/general/search-and-replace": {
+    "title": "Search and Replace — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/general/search-and-replace",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/import-export": {
+    "title": "Import / Export — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/import-export",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/import-export/ase": {
+    "title": "ASE — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/import-export/ase",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/import-export/json": {
+    "title": "JSON — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/import-export/json",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/import-export/midi-files": {
+    "title": "MIDI Files — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/import-export/midi-files",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/import-export/render-to-xml": {
+    "title": "Render to XML — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/import-export/render-to-xml",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/keyframes": {
+    "title": "Keyframes — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/keyframes",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/keyframes/cut-copy-paste-paste-in-place": {
+    "title": "Cut/Copy/Paste/Paste in Place — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/keyframes/cut-copy-paste-paste-in-place",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/keyframes/interpolations": {
+    "title": "Interpolations — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/keyframes/interpolations",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full. The text is one sentence; the list of interpolations is only in a screenshot of the menu, which was viewed: No Interpolation, Linear, then Ease-In / Ease-Out / Ease-In-Out for Quadratic, Cubic, Quartic, Quintic, Sine, Circular (the screenshot is cut off below Circular Ease-Out)."
+  },
+  "https://imimot.com/help/vezer/keyframes/moving-and-stretching-keyframes": {
+    "title": "Moving and Stretching Keyframes — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/keyframes/moving-and-stretching-keyframes",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/keyframes/selecting-keyframes": {
+    "title": "Selecting Keyframes — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/keyframes/selecting-keyframes",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/keyframes/the-active-keyframe": {
+    "title": "The Active Keyframe — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/keyframes/the-active-keyframe",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/osc-track-extras": {
+    "title": "OSC Track Extras — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/osc-track-extras",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/osc-track-extras/grouping-osc-messages": {
+    "title": "Grouping OSC messages — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/osc-track-extras/grouping-osc-messages",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/osc-track-extras/osc-address-special-parameters": {
+    "title": "OSC address special parameters — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/osc-track-extras/osc-address-special-parameters",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/osc-track-extras/osc-presets": {
+    "title": "OSC Presets — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/osc-track-extras/osc-presets",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/osc-track-extras/osc-query-server-support": {
+    "title": "OSC Query Server support — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/osc-track-extras/osc-query-server-support",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/public-betas": {
+    "title": "Public Betas — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/public-betas",
+    "group": "account",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/recording": {
+    "title": "Recording — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/recording",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/recording/filtering": {
+    "title": "Filtering — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/recording/filtering",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/recording/general": {
+    "title": "General — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/recording/general",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tools": {
+    "title": "Tools — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tools",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tools/art-net-color-master-fader": {
+    "title": "Art-Net Color Master Fader — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tools/art-net-color-master-fader",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tools/dip-switch-calculator": {
+    "title": "DIP Switch Calculator — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tools/dip-switch-calculator",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tools/dmx-output-monitor": {
+    "title": "DMX Output Monitor — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tools/dmx-output-monitor",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tools/dmx-soft-patching": {
+    "title": "DMX Soft Patching — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tools/dmx-soft-patching",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tools/midi-clock-generator": {
+    "title": "MIDI Clock Generator — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tools/midi-clock-generator",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tools/mtc-generator": {
+    "title": "MTC Generator — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tools/mtc-generator",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tools/range-select": {
+    "title": "Range Select — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tools/range-select",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tracks": {
+    "title": "Tracks — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tracks",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tracks/14-bit-midi-support": {
+    "title": "14-bit MIDI support — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tracks/14-bit-midi-support",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tracks/16-bit-art-net-support": {
+    "title": "16-bit Art-Net support — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tracks/16-bit-art-net-support",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tracks/art-net-value-track": {
+    "title": "Art-Net Value Track — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tracks/art-net-value-track",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tracks/audio-track": {
+    "title": "Audio Track — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tracks/audio-track",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tracks/color-type-track": {
+    "title": "Color Type Track — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tracks/color-type-track",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tracks/display-the-value-flow": {
+    "title": "Display the value flow — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tracks/display-the-value-flow",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tracks/faq": {
+    "title": "FAQ — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tracks/faq",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tracks/midi-cc-track": {
+    "title": "MIDI CC Track — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tracks/midi-cc-track",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tracks/midi-notes-track": {
+    "title": "MIDI Notes Track — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tracks/midi-notes-track",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tracks/osc-color-tracks": {
+    "title": "OSC Color Tracks — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tracks/osc-color-tracks",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tracks/osc-flag-track": {
+    "title": "OSC Flag Track — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tracks/osc-flag-track",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tracks/osc-value-track": {
+    "title": "OSC Value Track — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tracks/osc-value-track",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tracks/processing": {
+    "title": "Processing — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tracks/processing",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tracks/sorting-tracks": {
+    "title": "Sorting Tracks — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tracks/sorting-tracks",
+    "group": "help",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tutorials": {
+    "title": "Tutorials — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tutorials",
+    "group": "tutorials",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tutorials/open-project-on-system-startup": {
+    "title": "Open Project on system startup — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tutorials/open-project-on-system-startup",
+    "group": "tutorials",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tutorials/other-softwares-and-vezer": {
+    "title": "Other softwares and Vezér — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tutorials/other-softwares-and-vezer",
+    "group": "tutorials",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/help/vezer/tutorials/using-vezer": {
+    "title": "Using Vezér — Vezér Help — Imimot Software",
+    "url": "https://imimot.com/help/vezer/tutorials/using-vezer",
+    "group": "tutorials",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (visible text)."
+  },
+  "https://imimot.com/vezer": {
+    "title": "Vezér product page",
+    "url": "https://imimot.com/vezer",
+    "group": "imimot.com",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full. Marketing page; claims a few things the help pages do not document (MIDI program changes, OSC strings, composition import)."
+  }
+}

@@ -34,6 +34,9 @@ TOOLS = [  # (label, path)
     ("cables.gl", SCANS / "cables-gl" / "cables_gl_system_model.json"),
     ("Pd / plugdata", SCANS / "plugdata" / "plugdata_system_model.json"),
     ("ossia score", SCANS / "ossia-score" / "ossia_score_system_model.json"),
+    ("QLab", SCANS / "qlab" / "qlab_system_model.json"),
+    ("Vezér", SCANS / "vezer" / "vezer_system_model.json"),
+    ("Resolume", SCANS / "resolume" / "resolume_system_model.json"),
 ]
 
 

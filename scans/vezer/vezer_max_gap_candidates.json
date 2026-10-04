@@ -1,0 +1,627 @@
+[
+ {
+  "capability": "Each timeline chases its own sync source: internal, MIDI clock (SPP) or MTC, with a SMPTE offset",
+  "category": "networking/sync",
+  "tool": "Vezér",
+  "tool_names": [
+   "Composition",
+   "Tempo/Sync menu",
+   "SPP",
+   "MTC",
+   "Edit SMPTE Offset..."
+  ],
+  "what_it_does": "Every composition picks its own clock: normal speed, a BPM (manual, or measured from a MIDI clock), SPP (follow MIDI clock start, stop and song position) or MTC (follow timecode). An SMPTE offset sets where in the incoming timecode the composition starts, and the display counts down to it.",
+  "source_urls": [
+   "https://imimot.com/help/vezer/compositions/tempo-and-synchronisation"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "transport",
+   "rtin",
+   "sync~"
+  ],
+  "max_check": "No object named mtc, smpte, ltc or timecode in obj-qlookup.json (Max registry, core plus bundled packages); refpage text search for timecode/MTC finds only dsp/adstatus audio-driver settings. rtin refpage: receives MIDI real-time messages (clock, start, stop), so MIDI clock can be read by hand. transport refpage: a clocksource attribute ('other timing sources may also be used') and getclocksources, no MTC mentioned. sync~ refpage: follows tap, MIDI beat clock or a click track. query_packages: no timecode/MTC/SMPTE objects in installed packages.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "Overlaps the MadMapper 'chase external timecode' entry (unsure there). Vezér's angle is that each composition has its own sync choice and offset."
+ },
+ {
+  "capability": "MTC and MMC sent per timeline, with the timeline's index as the MMC device ID",
+  "category": "networking/sync",
+  "tool": "Vezér",
+  "tool_names": [
+   "Transmit MTC",
+   "Transmit MMC",
+   "DeviceID",
+   "SYNC button"
+  ],
+  "what_it_does": "A composition can send MIDI timecode while it plays, with a full-frame message whenever the playhead jumps, plus a start-time offset. It can also send MMC Play, Stop, Rewind and Locate. MMC normally goes to device ID 127 (all), but an option sends the composition's index as the device ID, so one Vezér composition drives the matching composition in another machine.",
+  "source_urls": [
+   "https://imimot.com/help/vezer/compositions/transmit-midi-timecode-mtc",
+   "https://imimot.com/help/vezer/compositions/transmit-midi-machine-control-mmc",
+   "https://imimot.com/help/vezer/tools/mtc-generator"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "sxformat",
+   "midiout",
+   "sync~"
+  ],
+  "max_check": "No MTC or MMC object in obj-qlookup.json (Max registry, core plus bundled packages). sxformat refpage: 'Prepare MIDI system exclusive messages', so MMC (a sysex message) can be built by hand and sent with midiout; quarter-frame MTC would also be hand-built. sync~ refpage generates MIDI beat clock, not timecode.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Incoming MMC routed by device ID: 0 the master transport, 127 the current timeline, 1-126 a timeline by index",
+  "category": "networking/sync",
+  "tool": "Vezér",
+  "tool_names": [
+   "MMC Transport",
+   "DeviceID"
+  ],
+  "what_it_does": "Vezér listens to MMC Play, Stop, Rewind, Record and Locate. The device ID picks the target: 0 is the master transport, 127 the selected composition, and 1 to 126 the composition with that index. The docs warn that Locate needs the composition's frame rate to match the sender, since MMC carries none.",
+  "source_urls": [
+   "https://imimot.com/help/vezer/controlling-vezer/mmc-transport"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "midiin",
+   "sxformat"
+  ],
+  "max_check": "No MMC parser in obj-qlookup.json (Max registry, core plus bundled packages); midiin gives raw bytes, so the sysex would be parsed in a patch or a v8. Max has no timeline to address by index.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Many independent timelines in one project, each with its own length, frame rate and tempo, run together or one at a time",
+  "category": "timeline/cueing/show control",
+  "tool": "Vezér",
+  "tool_names": [
+   "Composition",
+   "Solo",
+   "Compositions List",
+   "/vezer/triggercompatindex"
+  ],
+  "what_it_does": "A project holds any number of compositions. Each is a group of tracks with its own duration, frame rate (up to 125 fps), BPM, sync source, loop range and cue track. Several can play at once, or Solo mode lets triggering one stop the others. OSC triggers a composition by index or name.",
+  "source_urls": [
+   "https://imimot.com/help/vezer/compositions/what-is-a-composition-in-vezer",
+   "https://imimot.com/help/vezer/compositions/composition-preferences",
+   "https://imimot.com/help/vezer/controlling-vezer/osc",
+   "https://imimot.com/help/vezer/changelog"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "transport",
+   "qlist",
+   "mtr"
+  ],
+  "max_check": "transport refpage: 'There can be multiple named transports running simultaneously', each with its own tempo and time signature. That is the clock half; Max has no lane or keyframe store tied to a named transport (max_system_model.json dimension 10).",
+  "advice": "When a Max show has several timed sections, give each section its own named transport (transport @name) and keep its sequence data (qlist, mtr, function) inside that section's subpatcher, so sections can be started, stopped and retimed independently, as Vezér compositions are.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Cue points that stop, loop N times or loop forever, with a reset of all loop counts",
+  "category": "timeline/cueing/show control",
+  "tool": "Vezér",
+  "tool_names": [
+   "Cue",
+   "Stop",
+   "Marker",
+   "Play once",
+   "Loop",
+   "Infinite Loop",
+   "resetcuestates"
+  ],
+  "what_it_does": "Each composition has a cue track. A Stop cue pauses playback when reached, even when the composition follows external sync. A Marker does nothing but mark. Either kind can loop: a set number of times back to it from the next cue, or forever. Loops are broken by jumping to the next cue or switching cues off. An OSC message resets every cue's loop count and played state.",
+  "source_urls": [
+   "https://imimot.com/help/vezer/cues",
+   "https://imimot.com/help/vezer/cues/types",
+   "https://imimot.com/help/vezer/cues/repeats",
+   "https://imimot.com/help/vezer/cues/controls",
+   "https://imimot.com/help/vezer/cues/jumping-to-a-specific-cue"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "timepoint",
+   "transport",
+   "qlist"
+  ],
+  "max_check": "timepoint refpage: bangs when a transport reaches a time, only while moving forward; a patch can stop or relocate the transport from that bang. No object keeps a per-marker loop count or a 'reset loop counts' message.",
+  "advice": "",
+  "confidence": "high",
+  "notes": "MadMapper's marker entry covers pause/loop/jump; Vezér adds the per-cue loop count and an explicit reset of cue state."
+ },
+ {
+  "capability": "Queue mode: play timelines one after another, looping the queue",
+  "category": "timeline/cueing/show control",
+  "tool": "Vezér",
+  "tool_names": [
+   "Composition Queue mode",
+   "Queue toggle",
+   "Start Queue from the current Composition"
+  ],
+  "what_it_does": "With Queue on, the master Play button starts the first composition, and each composition starts the next when it reaches its end. The queue can loop back to the first, and can start from the selected composition.",
+  "source_urls": [
+   "https://imimot.com/help/vezer/general/composition-queue-mode",
+   "https://imimot.com/help/vezer/general/preferences-global-behaviours"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "transport",
+   "timepoint",
+   "counter"
+  ],
+  "max_check": "No playlist-of-timelines object in obj-qlookup.json (Max registry, core plus bundled packages). It would be built by hand from end-of-section bangs (timepoint at each section's length) into the next section's transport.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Recording creates one lane per incoming address, and can keep only the turning points",
+  "category": "timeline/cueing/show control",
+  "tool": "Vezér",
+  "tool_names": [
+   "Recording",
+   "Normalised recording",
+   "Record Filtering",
+   "/xy#n"
+  ],
+  "what_it_does": "With record on and the composition playing, every incoming MIDI CC, note, OSC number or Art-Net channel that is not mapped to Vezér's own controls gets a track of the right type, named after its source, and later passes record into the same track. A multi-value OSC message becomes one track per argument. 'Normalised recording' stores a keyframe only when the value changes direction, so a recorded fader move becomes a few editable points rather than one per frame. A filter list picks which messages may be recorded.",
+  "source_urls": [
+   "https://imimot.com/help/vezer/recording/general",
+   "https://imimot.com/help/vezer/recording/filtering",
+   "https://imimot.com/help/vezer/general/preferences-global-behaviours"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "mtr",
+   "seq"
+  ],
+  "max_check": "mtr refpage: records messages per track (track numbers are the inlets you wire) and plays them back; tracks are not created from incoming addresses, and nothing thins a recording to its turning points. seq records raw MIDI bytes.",
+  "advice": "",
+  "confidence": "high",
+  "notes": "ossia score's 'Recording incoming messages as automation curves' is partial too; the turning-point thinning and auto-created track per source are what Vezér adds."
+ },
+ {
+  "capability": "OSC Flag lanes: each keyframe carries its own address and fixed arguments",
+  "category": "data/tables/scripting",
+  "tool": "Vezér",
+  "tool_names": [
+   "OSC Flag Track",
+   "Flag Keyframe"
+  ],
+  "what_it_does": "On a Flag track the keyframe holds the OSC address, so one lane fires many different messages at points in time, with optional fixed arguments. Flags never interpolate.",
+  "source_urls": [
+   "https://imimot.com/help/vezer/tracks/osc-flag-track"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "qlist",
+   "mtr"
+  ],
+  "max_check": "qlist refpage: stores timed messages and can send each to a named receive, which is the same idea as a list rather than a lane on a timeline.",
+  "advice": "Keep discrete events (cue triggers, scene changes) in their own qlist or message list, separate from continuous curves, so they can be read and edited as a list of what happens when; do not hide them as thresholds inside a curve.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Grouping several lanes into one multi-argument OSC message with /address#n",
+  "category": "data/tables/scripting",
+  "tool": "Vezér",
+  "tool_names": [
+   "Grouping OSC messages",
+   "#n"
+  ],
+  "what_it_does": "Tracks that share an address with #1, #2 ... appended are sent as one OSC message with the values in that order (numbers need not be continuous). So x and y can be drawn as separate curves but arrive together.",
+  "source_urls": [
+   "https://imimot.com/help/vezer/osc-track-extras/grouping-osc-messages"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "join",
+   "udpsend"
+  ],
+  "max_check": "join refpage (read for this repo's join rule): combines inlets into one list. In Max the grouping is wiring, not an address convention.",
+  "advice": "When separate curves drive one multi-value destination, join them into one list right before the send (join @triggers -1 when they arrive independently), so the receiver gets one coherent message per frame instead of half-updated pairs.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Templated OSC addresses: composition name, index, track name, the lane's own value, frame number and fixed arguments",
+  "category": "data/tables/scripting",
+  "tool": "Vezér",
+  "tool_names": [
+   "$COMP",
+   "$COMPINDEX",
+   "$TRACK",
+   "$",
+   "<$F>",
+   "<$>",
+   "<\"string\">"
+  ],
+  "what_it_does": "An OSC track's address can contain $COMP, $COMPINDEX and $TRACK, filled from where the track lives; a bare $ puts the track's current value into the address (/layer$/trigger becomes /layer2/trigger). Fixed arguments go in angle brackets, <$> places the track's value among them, and <$F> sends the current frame number.",
+  "source_urls": [
+   "https://imimot.com/help/vezer/osc-track-extras/osc-address-special-parameters"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "sprintf",
+   "patcherargs",
+   "combine"
+  ],
+  "max_check": "Max builds such addresses with sprintf or combine (refpages); per-instance naming comes from #0 and patcherargs (max_system_model.json dimensions 8 and 9).",
+  "advice": "Write OSC addresses from a template filled by the containing section's arguments (patcherargs or #1 into sprintf) rather than typing each address by hand, so a duplicated section addresses its own targets without editing.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Colour lanes that send standard OSC colour, an array or one message per channel, and convert to and from value lanes",
+  "category": "data/tables/scripting",
+  "tool": "Vezér",
+  "tool_names": [
+   "Color Type Track",
+   "OSC Color Tracks",
+   "Standard",
+   "Arrays",
+   "Multiple messages",
+   "/vezer/rotatehue",
+   "ASE"
+  ],
+  "what_it_does": "Colour keyframes are drawn in their colour and interpolate linearly or not at all. Output can be the OSC colour type (RGBA), an array of numbers in a chosen range, or one message per channel with a suffix on the address, each format matched to a target app. Pasting colour keys onto a value lane uses luminance; pasting value keys onto a colour lane asks which RGB or HSB channels to drive. A global OSC message rotates the hue of all colour outputs, and Adobe swatch files import as colour keys.",
+  "source_urls": [
+   "https://imimot.com/help/vezer/tracks/color-type-track",
+   "https://imimot.com/help/vezer/tracks/osc-color-tracks",
+   "https://imimot.com/help/vezer/controlling-vezer/osc",
+   "https://imimot.com/help/vezer/import-export/ase"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "swatch",
+   "jit.colorspace",
+   "function"
+  ],
+  "max_check": "swatch refpage: 'Choose a color' (a picker, not a timeline). jit.colorspace refpage: converts a 4-plane char matrix between colour spaces (matrices, not single values). No object stores colour keyframes over time; colour sequences are built from several function or line objects. No ASE reader found in obj-qlookup.json (Max registry, core plus bundled packages) or query_packages.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Optimised sending: an interpolating lane never sends the same value twice in a row",
+  "category": "data/tables/scripting",
+  "tool": "Vezér",
+  "tool_names": [
+   "Optimised value sending",
+   "Processing"
+  ],
+  "what_it_does": "Tracks run at the composition's frame rate. While interpolating, a value lane sends only when the value changes; keyframes themselves always send. A global preference turns this off to send every frame.",
+  "source_urls": [
+   "https://imimot.com/help/vezer/tracks/processing",
+   "https://imimot.com/help/vezer/general/preferences-global-behaviours"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "change",
+   "speedlim"
+  ],
+  "max_check": "change refpage: outputs a number only if it differs from the stored one. speedlim refpage: limits throughput to a time. In Max both are placed by hand.",
+  "advice": "Put change after any curve or line that feeds a network or MIDI output, so a held value is not resent every tick; keep the first value and keyframe hits by not filtering bangs that mark events.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "On start, jump or unmute, every lane resends the value it would have at that point",
+  "category": "timeline/cueing/show control",
+  "tool": "Vezér",
+  "tool_names": [
+   "Process First Keyframe on Start",
+   "Process Last Keyframe on Unpause/Jump",
+   "Reprocess on un-Mute",
+   "Process composition while scrubbing"
+  ],
+  "what_it_does": "Preferences make a composition push its state: on start, each track sends its first keyframe even if the playhead is not on one; after a jump or when starting mid-way, each track sends the last keyframe before the playhead; unmuting a track resends it; scrubbing can process the composition as the playhead moves.",
+  "source_urls": [
+   "https://imimot.com/help/vezer/general/preferences-global-behaviours",
+   "https://imimot.com/help/vezer/tracks/processing"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "function",
+   "pattrstorage",
+   "line"
+  ],
+  "max_check": "function refpage: gives an interpolated y for any x, so a patch can ask each curve for its value at the new time and send it. Nothing does this for a whole set of curves on a jump (max_system_model.json dimension 10).",
+  "advice": "When a Max sequence can be started mid-way or jumped, add one 'chase' step that asks every curve or store for its value at the new time and sends it before playback resumes, so devices are never left at the values of the old position.",
+  "confidence": "high",
+  "notes": "ossia score's 'value compilation' is the fuller version (absent). Vezér's is a set of simple per-lane preferences."
+ },
+ {
+  "capability": "Range-change policy for keyframes: recalculate, clamp or delete",
+  "category": "data/tables/scripting",
+  "tool": "Vezér",
+  "tool_names": [
+   "Recalculate",
+   "Clamp",
+   "Delete",
+   "min/max range"
+  ],
+  "what_it_does": "When an OSC track's minimum or maximum changes, existing keyframes are rescaled into the new range, clamped to it, or deleted, as the user chooses.",
+  "source_urls": [
+   "https://imimot.com/help/vezer/tracks/osc-value-track"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "function"
+  ],
+  "max_check": "function refpage: setrange 'modifies the Y values of all breakpoints so that they remain in the same place given the new range', which is Vezér's Recalculate; the range attribute only changes the display range. No clamp or delete option.",
+  "advice": "When a curve's output range changes, decide explicitly whether its points keep their position (function setrange) or their value; say which in the patch, because both look right until the curve is replayed.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Remote control by OSC with a visible address map, feedback and query replies",
+  "category": "networking/sync",
+  "tool": "Vezér",
+  "tool_names": [
+   "Show OSC Namespaces",
+   "OSC Feedback",
+   "/vezer/compinfowithname",
+   "/vezer/countofcomps",
+   "pausedbycue",
+   "playheadastime"
+  ],
+  "what_it_does": "Most interface items answer to OSC; turning on Show OSC Namespaces colours them yellow and shows the address of a clicked item. Feedback sends playhead (0-1 and as hh:mm:ss:ff), the name of a cue that paused playback, button states and the selected composition. Query messages return composition names and lengths, the number of compositions and cues, and each cue's name and frame time.",
+  "source_urls": [
+   "https://imimot.com/help/vezer/controlling-vezer/osc",
+   "https://imimot.com/help/vezer/controlling-vezer/osc-feedback-and-query",
+   "https://imimot.com/help/vezer/cues/jumping-to-a-specific-cue"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "udpreceive",
+   "param.osc",
+   "pattrstorage"
+  ],
+  "max_check": "Userguide OSC page: Max serves OSCQuery for parameters exposed as OSC (enabled in preferences). param.osc refpage: controls and reports info about parameters using OSC. Max has no transport-wide feedback set or query messages built in.",
+  "advice": "Give a Max show a small, documented OSC surface: play, stop, go to cue by index and by name, plus feedback of the current cue and position, and reply to 'how many cues' and 'what is cue N' queries, so a controller can rebuild its display after reconnecting.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "OSCQuery browser that creates a lane with the remote parameter's range and type",
+  "category": "networking/sync",
+  "tool": "Vezér",
+  "tool_names": [
+   "OSC Query Server support",
+   "OSC Address-space window"
+  ],
+  "what_it_does": "When an OSCQuery server is found, its address space is listed and searchable; double-clicking an address creates a track with the matching min, max and type, or a Flag track for addresses without arguments.",
+  "source_urls": [
+   "https://imimot.com/help/vezer/osc-track-extras/osc-query-server-support"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "udpsend"
+  ],
+  "max_check": "Userguide OSC page describes Max serving OSCQuery, not reading another app's namespace. No OSCQuery client in obj-qlookup.json (Max registry, core plus bundled packages) or query_packages.",
+  "advice": "",
+  "confidence": "high",
+  "notes": "Same gap as ossia score's OSCQuery client entry; included because Vezér creates the lane with its range already set."
+ },
+ {
+  "capability": "Art-Net output as virtual named nodes, with discovery, soft patch, channel lists, output monitor, colour master and blackout on mute",
+  "category": "lighting/DMX/lasers",
+  "tool": "Vezér",
+  "tool_names": [
+   "Art-Net Outputs",
+   "virtual output nodes",
+   "DMX Soft Patching",
+   "DMX Output Monitor",
+   "Art-Net Color Master Fader",
+   "DMX Blackout on Mute",
+   "1x10, 12, 24"
+  ],
+  "what_it_does": "Tracks send to named virtual nodes (up to 256: 16 subnets of 16 universes), which can be auto-created from discovered Art-Net devices. A soft patch reroutes source universe and channel to destination without touching tracks. One track can feed a channel list such as '1x10, 12, 24'; 16-bit values span two channels. A monitor shows a universe's output, a master fader scales all colour tracks, and muting a track or soloing another composition can send zero.",
+  "source_urls": [
+   "https://imimot.com/help/vezer/general/preferences-art-net",
+   "https://imimot.com/help/vezer/general/outputs-of-vezer",
+   "https://imimot.com/help/vezer/tools/dmx-soft-patching",
+   "https://imimot.com/help/vezer/tools/dmx-output-monitor",
+   "https://imimot.com/help/vezer/tools/art-net-color-master-fader",
+   "https://imimot.com/help/vezer/tracks/art-net-value-track",
+   "https://imimot.com/help/vezer/tracks/16-bit-art-net-support",
+   "https://imimot.com/help/vezer/general/preferences-global-behaviours"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "udpsend",
+   "serial"
+  ],
+  "max_check": "No artnet or dmx object in obj-qlookup.json (Max registry, core plus bundled packages). query_packages: only fxwdmxusbpro (Max for the Visual Arts), an abstraction sending DMX to an Enttec USB Pro over serial; nothing for Art-Net.",
+  "advice": "",
+  "confidence": "high",
+  "notes": "Art-Net is already listed absent from MadMapper, Isadora and ossia; this entry is about Vezér's output-side tools (virtual nodes, channel lists, blackout on mute)."
+ },
+ {
+  "capability": "Audio file on a lane, turned into keyframes through a high, mid or low filter",
+  "category": "audio",
+  "tool": "Vezér",
+  "tool_names": [
+   "Audio Track",
+   "Convert Audio to Keyframes",
+   "Filtering"
+  ],
+  "what_it_does": "An audio track plays a file (wav, aif, mp3, m4a, aac, or audio from an mp4) at a start time on the timeline. Selecting part of its waveform and pasting it onto any other track turns the envelope into keyframes. A filter button (highpass, mid, lowpass, cutoff set by right-click) changes only what is converted, not what is heard.",
+  "source_urls": [
+   "https://imimot.com/help/vezer/tracks/audio-track",
+   "https://imimot.com/help/vezer/general/preferences-audio"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "peakamp~",
+   "average~",
+   "function",
+   "buffer~"
+  ],
+  "max_check": "peakamp~ refpage: reports a signal's maximum amplitude over an interval; average~ gives a running average. These give an envelope in real time; writing it into editable breakpoints (function, mtr) is done by hand. No offline audio-to-breakpoints object found.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Typed relative and absolute edits on keyframe time and value",
+  "category": "data/tables/scripting",
+  "tool": "Vezér",
+  "tool_names": [
+   "Active Keyframe",
+   "+2:00",
+   "-27",
+   "(-27)",
+   "i",
+   "Stretch"
+  ],
+  "what_it_does": "The active keyframe's time and value fields take absolute values (2:00:00, 2:00, 2, 27) or relative ones with a sign (+2:00, -27); negative absolutes go in brackets. Typing i inverts the selection in time or value. Alt-dragging the end keys of three or more selected keys stretches them. Arrow keys move OSC float keys by 1% of the track range.",
+  "source_urls": [
+   "https://imimot.com/help/vezer/keyframes/moving-and-stretching-keyframes",
+   "https://imimot.com/help/vezer/keyframes/the-active-keyframe"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "function"
+  ],
+  "max_check": "function refpage: points are changed by list (index x y), setdomain and setrange rescale all points; no relative edit or invert message.",
+  "advice": "When building a curve editor in Max (function, multislider or a v8ui), accept relative edits (+n / -n) and an invert command by message as well as by mouse, so precise changes can be typed or sent from a controller.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Keyframes import from JSON and the whole project renders to XML with processed values",
+  "category": "data/tables/scripting",
+  "tool": "Vezér",
+  "tool_names": [
+   "JSON",
+   "Render to XML",
+   "Import MIDI File",
+   "Export MIDI Tracks"
+  ],
+  "what_it_does": "A JSON file with a keyframes array (time as H:M:S:F string or frame number, value, colour, flag address, linear interpolation) loads into any track. Render to XML writes composition and track info, keyframes and the processed values, for other software. Standard MIDI files import as note and CC tracks and MIDI tracks export as SMF type 1 at 120 BPM.",
+  "source_urls": [
+   "https://imimot.com/help/vezer/import-export/json",
+   "https://imimot.com/help/vezer/import-export/render-to-xml",
+   "https://imimot.com/help/vezer/import-export/midi-files"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "dict",
+   "function",
+   "seq",
+   "detonate",
+   "mtr"
+  ],
+  "max_check": "dict refpage: import and export JSON or YAML. seq refpage: reads and writes MIDI files; detonate refpage: score loaded from a MIDI file. mtr writes .txt or .json. No object writes a curve's processed per-frame values.",
+  "advice": "Keep a Max show's sequence data in a dict-readable JSON (time, value, curve per point) so it can be generated, versioned and edited outside Max, and bake curves to per-frame values when another system must replay them exactly.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Choosing a MIDI output disables the same-named input, to stop feedback loops",
+  "category": "networking/sync",
+  "tool": "Vezér",
+  "tool_names": [
+   "Outputs of Vezér",
+   "virtual MIDI destinations"
+  ],
+  "what_it_does": "When a track sends to a MIDI destination, Vezér turns that port off as an input, so its own output cannot come back in; the user can turn it back on. Vezér can also make virtual MIDI ports for other apps.",
+  "source_urls": [
+   "https://imimot.com/help/vezer/general/outputs-of-vezer"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "midiin",
+   "midiout"
+  ],
+  "max_check": "Max's midiin and midiout refpages describe choosing ports, nothing about loop protection. Max creates virtual 'from Max'/'to Max' ports on macOS (userguide MIDI page, heading list only).",
+  "advice": "In a Max patch that both listens to and sends MIDI on virtual ports, never listen on the port you send to; when a loop is possible, gate the input while sending or filter by port name.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Project loaded by OSC, opened at login, no quit prompt and play state optionally ignored at load",
+  "category": "deployment",
+  "tool": "Vezér",
+  "tool_names": [
+   "/vezer/loadproject",
+   "Open Project on system startup",
+   "Disable confirm on Quit",
+   "Ignore Play buttons on loading"
+  ],
+  "what_it_does": "An OSC message loads a project file and closes the current one without asking. For installations the docs add the project file to macOS login items and turn off the quit confirmation. A preference decides whether compositions saved while playing start playing on load.",
+  "source_urls": [
+   "https://imimot.com/help/vezer/controlling-vezer/osc",
+   "https://imimot.com/help/vezer/tutorials/open-project-on-system-startup",
+   "https://imimot.com/help/vezer/general/preferences-global-behaviours"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "pcontrol",
+   "loadbang"
+  ],
+  "max_check": "pcontrol refpage: load and loadunique open a patcher file by name (with #1-#9 arguments), shroud opens it without a window. Standalones and login-item launch are covered in max_system_model.json dimension 18.",
+  "advice": "For an unattended Max installation, decide in the patch whether playback starts at load (a loadbang into the transport, or not), so reopening after a crash does the same thing every time; switching whole shows can use pcontrol loadunique fired from a network message.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "NMC: an in-house network protocol for transport and locate between Vezér and Mitti instances",
+  "category": "networking/sync",
+  "tool": "Vezér",
+  "tool_names": [
+   "NMC Protocol",
+   "Mitti"
+  ],
+  "what_it_does": "Transport and locate commands are broadcast on the local network so several Vezér or Mitti (Imimot's video player) instances follow each other. A dedicated wired network is recommended. The protocol itself is not documented.",
+  "source_urls": [
+   "https://imimot.com/help/vezer/general/nmc-protocol"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "udpsend",
+   "udpreceive",
+   "transport"
+  ],
+  "max_check": "max_system_model.json dimension 17: Max has no built-in multi-machine session; networking is done with udpsend/udpreceive. The Link package is installed in ~/Documents/Max 9/Packages (its objects were not read here).",
+  "advice": "If several Max machines must share a timeline, broadcast play, stop and locate (position in ms or frames) as OSC on a dedicated network, and have each machine's transport follow; send locate with every play so a late joiner lands on the right time.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Per-keyframe easing from a fixed menu of quadratic, cubic, quartic, quintic, sine and circular curves",
+  "category": "data/tables/scripting",
+  "tool": "Vezér",
+  "tool_names": [
+   "Interpolations",
+   "No Interpolation",
+   "Linear Interpolation",
+   "Quadratic Ease-In",
+   "Sine Ease-In-Out",
+   "Circular Ease-Out"
+  ],
+  "what_it_does": "Right-clicking a keyframe (or several) sets the curve to the next one: none (step), linear, or ease in, out or in-out of quadratic, cubic, quartic, quintic, sine and circular (the menu screenshot is cut off after circular). JSON import only supports linear.",
+  "source_urls": [
+   "https://imimot.com/help/vezer/keyframes/interpolations",
+   "https://imimot.com/help/vezer/import-export/json"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "function",
+   "curve~",
+   "line"
+  ],
+  "max_check": "function refpage: per-segment curve factor (setcurve, xyc, mode), an exponential bend, not named ease families. The installed ease package and butter_ease.js provide named curves, but function has no ease menu per segment.",
+  "advice": "When a Max sequence needs fades, store a named ease per segment (as butter_ease.js names them) alongside each point, rather than a single curve factor, so a reader can see that a move is 'in_out_sine' rather than 0.35.",
+  "confidence": "medium",
+  "notes": "TouchDesigner's 'Easing shape as a menu choice' covers easing in general; this entry is per keyframe on a timeline."
+ }
+]

@@ -1,0 +1,1128 @@
+[
+ {
+  "capability": "A clip grid: layers are rows, columns are looks, one clip plays per layer",
+  "category": "video I/O & playback",
+  "tool": "Resolume",
+  "tool_names": [
+   "Clip",
+   "Layer",
+   "Column",
+   "Column Triggering"
+  ],
+  "what_it_does": "Media sits in a grid. Each row is a layer and only one clip per layer plays at a time; clicking a clip starts it in its layer, and clicking a column header starts every clip in that column at once, which is how a whole look is changed with one click. Layers have previous and next clip buttons.",
+  "source_urls": [
+   "https://resolume.com/support/en/vocabulary",
+   "https://resolume.com/support/en/clips",
+   "https://resolume.com/support/en/layers",
+   "https://resolume.com/support/en/decks"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.playlist",
+   "jit.polymovie",
+   "jit.gl.layer"
+  ],
+  "max_check": "Registry: no grid or clip-launcher object. jit.playlist refpage: one object holds a list of clips, an int starts the clip with that index and 'next' plays the next one, so one jit.playlist behaves like one layer. jit.polymovie refpage: manages several jit.movie instances and preloads them for fast switching, one active at a time. Nothing in Max fires one clip in each of several players from a single 'column' message; that is built with send/receive or a message per player.",
+  "advice": "",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Decks: banks of clips that switch without stopping playback, with persistent clips",
+  "category": "workflow/authoring",
+  "tool": "Resolume",
+  "tool_names": [
+   "Deck",
+   "Persistent Clips",
+   "Composition browser"
+  ],
+  "what_it_does": "The clips of one composition are split into decks. Switching decks changes which clips are shown in the grid but does not interrupt what is playing. A clip marked persistent appears in the same slot in every deck (a logo, a live camera). A deck from another composition can be added during a show by double-clicking it.",
+  "source_urls": [
+   "https://resolume.com/support/en/decks",
+   "https://resolume.com/support/en/clips",
+   "https://resolume.com/support/en/vocabulary"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "jit.playlist",
+   "pattrstorage"
+  ],
+  "max_check": "Registry and userguide: nothing groups media into switchable banks. A Max patch would swap a jit.playlist's contents with clear/append (refpage), which stops nothing only if the playing clip lives elsewhere; there is no 'persistent slot' idea.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Clip trigger rules: Normal / Toggle / Piano, clip target, fader start, ignore column",
+  "category": "timeline/cueing/show control",
+  "tool": "Resolume",
+  "tool_names": [
+   "Trigger Style",
+   "Clip Target",
+   "Fader Start",
+   "Ignore Column Trigger",
+   "Lock Content"
+  ],
+  "what_it_does": "Each clip (or the whole composition) chooses how a trigger behaves: Normal restarts, Toggle stops on a second press, Piano plays only while held. Clip Target sends the clip to its own layer, to the active layer, or to any free layer, so Piano plus Free Layer plays 'chords' of clips from a keyboard. Fader Start restarts a clip whenever its layer is faded up. A clip or layer can ignore column triggers, and a layer can be locked so nothing replaces its clip.",
+  "source_urls": [
+   "https://resolume.com/support/en/clips",
+   "https://resolume.com/support/en/layers",
+   "https://resolume.com/support/en/composition"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.playlist",
+   "jit.polymovie"
+  ],
+  "max_check": "Userguide mapping.json: Max's MIDI and key mappings have a Trigger Mode (Toggle, Momentary, Cycle, Bang) for a mapped control, which covers the press/hold part for one UI object. Nothing in Max routes a clip to 'whichever player is free' or ties a restart to a fader rising; jit.polymovie's autorestart (refpage) only chooses restart versus resume when an instance is toggled.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Beat Snap: a triggered clip waits for the next beat, bar or N bars",
+  "category": "video I/O & playback",
+  "tool": "Resolume",
+  "tool_names": [
+   "Beat Snap",
+   "Composition determined"
+  ],
+  "what_it_does": "A clip can be set to start on the next beat, the next bar, or in 2, 4 or more bars instead of at once, per clip or for the whole composition. The docs compare it to quantising in music software.",
+  "source_urls": [
+   "https://resolume.com/support/en/clips",
+   "https://resolume.com/support/en/quickstart-tutorial"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "metro",
+   "transport",
+   "jit.playlist"
+  ],
+  "max_check": "metro refpage: @quantize sends output only on a bars.beats.units, ticks or note-value boundary of the transport. jit.playlist and jit.movie refpages list no quantize attribute, so a quantised clip start is a quantised metro or a 'timepoint' into the player, built per patch.",
+  "advice": "",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "BPM Sync playback: a clip's length is a number of beats and follows the tempo",
+  "category": "video I/O & playback",
+  "tool": "Resolume",
+  "tool_names": [
+   "BPM Sync",
+   "Beats",
+   "Resync",
+   "Speed"
+  ],
+  "what_it_does": "Switching a clip's transport to BPM Sync makes its speed follow the global tempo. The clip is given a length in beats (guessed as the nearest power of two from its duration) and its speed control only moves in powers of two (1/8 ... 16x) so it stays on the beat. Stills and sources get a duration in beats too. Resync jumps everything set to BPM Sync back to beat 1 of the phrase.",
+  "source_urls": [
+   "https://resolume.com/support/en/video",
+   "https://resolume.com/support/en/bpm",
+   "https://resolume.com/support/en/stills",
+   "https://resolume.com/support/en/sources"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.movie",
+   "transport",
+   "metro"
+  ],
+  "max_check": "jit.movie refpage: rate is a plain speed factor and duration is read-only information; there is no 'length in beats' attribute. The transport refpage gives a tempo and time formats, so a patch can compute rate = (clip seconds) / (beats x 60/tempo) and resend it when the tempo changes. Nothing does this for you.",
+  "advice": "",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Beat Looper with Catch Up",
+  "category": "video I/O & playback",
+  "tool": "Resolume",
+  "tool_names": [
+   "Beat Looper",
+   "Catch Up"
+  ],
+  "what_it_does": "On a BPM-synced clip, one click loops the last N beats (a stutter or climax effect). Turning it off either continues from where the playhead is or, with Catch Up, jumps to where the clip would have been had the loop never happened.",
+  "source_urls": [
+   "https://resolume.com/support/en/video"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "jit.movie"
+  ],
+  "max_check": "jit.movie refpage: looppoints / looppoints_ms set a loop region and position can be set, so a loop can be built; nothing tracks a 'virtual' playhead to catch up to when the loop ends.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Play modes for returning to a clip and for random jumping",
+  "category": "video I/O & playback",
+  "tool": "Resolume",
+  "tool_names": [
+   "Playmode Away",
+   "pick-up",
+   "relative pick-up",
+   "Random",
+   "Play Once and Eject",
+   "Play Once and Hold"
+  ],
+  "what_it_does": "When a clip is triggered again after a while, Playmode Away chooses: start from the beginning, pick up where it was last left, or start at the same relative position the previous clip in the layer had reached (the docs suggest this as a backup copy for a timecoded clip). A Random play mode jumps the playhead every Interval within a Distance. One-shot modes eject or hold the last frame at the end.",
+  "source_urls": [
+   "https://resolume.com/support/en/video",
+   "https://resolume.com/support/en/smpte"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.movie",
+   "jit.polymovie"
+  ],
+  "max_check": "jit.movie refpage: loop has off, normal, palindrome, playback-limits and seamless; no random-jump or hold-last-frame-then-eject mode, though 'off' stops on the last frame. jit.polymovie refpage: autorestart chooses restart versus resume per instance, which is pick-up; relative pick-up across files is not offered.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Autopilot: automatic advance through clips and columns",
+  "category": "timeline/cueing/show control",
+  "tool": "Resolume",
+  "tool_names": [
+   "Autopilot",
+   "Bag",
+   "Master Layer",
+   "Clip Actions",
+   "Column Actions"
+  ],
+  "what_it_does": "An autopilot on the composition, a group, a layer or a clip advances forward, backward or randomly (Any, Other, or Bag, which plays everything once before reshuffling). It advances after a time in seconds or beats, at the end of the clip, or at the end of the longest, shortest, top or bottom clip in the column. Each clip or column can override the action (go to first, last, a specific one, or do nothing), a Master Layer can drive the whole show, and the clip's choice overrides the layer's, which overrides the group's, which overrides the composition's.",
+  "source_urls": [
+   "https://resolume.com/support/en/autopilot",
+   "https://resolume.com/support/en/clips",
+   "https://resolume.com/support/en/layers"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "qlist",
+   "jit.playlist",
+   "random",
+   "urn"
+  ],
+  "max_check": "jit.playlist refpage: 'next' plays the next clip but there is no end-of-clip auto-advance policy or random-without-repeat choice. qlist refpage: a timed cue list, not a clip sequencer. Max has urn for drawing without repeats (registry), so 'Bag' is buildable, but no object combines duration rules, per-item actions and a priority order.",
+  "advice": "",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Layer transitions: any blend mode as a timed transition between clips",
+  "category": "video I/O & playback",
+  "tool": "Resolume",
+  "tool_names": [
+   "Layer Transition",
+   "Transition",
+   "Random"
+  ],
+  "what_it_does": "When a new clip is triggered in a layer it can fade in over 0 to 10 seconds using any blend or transition mode (Alpha crossfade, wipes, Cube, Twitch ...), including a random pick each time. A clip can override its layer's transition time and mode.",
+  "source_urls": [
+   "https://resolume.com/support/en/layers",
+   "https://resolume.com/support/en/clips",
+   "https://resolume.com/support/en/blend-modes"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.fx.tr.xfade",
+   "jit.fx.tr.dissolve",
+   "jit.fx.tr.gridwipe",
+   "jit.xfade"
+  ],
+  "max_check": "Jitter Tools refpages: a family of jit.fx.tr.* transition objects (xfade, dissolve, gridwipe, shrinkwipe, slide, zoomfade, huefade, rotfade, vignettes) each with an xfade-style amount. They mix two inputs, so a per-layer transition needs two players, the transition object and a ramp per layer, and choosing a random transition means switching objects.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Mask layer: a layer's brightness hides one layer below or all layers below",
+  "category": "video I/O & playback",
+  "tool": "Resolume",
+  "tool_names": [
+   "Mask Mode",
+   "One Below",
+   "All Below",
+   "50Mask"
+  ],
+  "what_it_does": "Any layer can be set to Mask Mode: its black-and-white content shows or hides either the single layer underneath (like After Effects' luma track matte) or every layer below. Thumbnails turn grey as a reminder. A 50Mask blend mode does the same per clip.",
+  "source_urls": [
+   "https://resolume.com/support/en/layers",
+   "https://resolume.com/support/en/blend-modes"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.fx.co.lumakey",
+   "jit.lumakey",
+   "jit.fx.alphaglue"
+  ],
+  "max_check": "jit.fx.co.lumakey refpage: luminance keying with a secondary input. jit.lumakey is in the registry. Both act on the two textures wired into them; there is no notion of 'the layer below' because Max has no layer stack, so the matte is wired by hand.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Slice Transform: place content into each slice of the stage map in one drag",
+  "category": "projection mapping",
+  "tool": "Resolume",
+  "tool_names": [
+   "Slice Transform",
+   "Slices panel",
+   "Fill",
+   "Fit",
+   "Stretch",
+   "Mask"
+  ],
+  "what_it_does": "Dragging a screen, or a selection of slices, from the Slices panel onto a clip, layer, group or the composition makes a Slice Transform effect that puts a copy of the content into every slice, scaled to Fill, Fit or Stretch, or used as a mask. Each slice can be bypassed, soloed or mirrored. Changing the slice in the output map updates the content. A slice that no longer exists is shown in red while the rest keep working.",
+  "source_urls": [
+   "https://resolume.com/support/en/transform",
+   "https://resolume.com/support/en/input-maps"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "jit.gl.meshwarp",
+   "jit.gl.layer",
+   "jit.fx.subtexture"
+  ],
+  "max_check": "Registry: no object reads a shared stage map and places content per region. jit.gl.meshwarp refpage: warps one texture on one mesh. Placing a clip into N regions means N layers with hand-set position and scale.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Parameter animations that restart on a clip trigger or column trigger",
+  "category": "timeline/cueing/show control",
+  "tool": "Resolume",
+  "tool_names": [
+   "Start Settings",
+   "BPM Phase Lock"
+  ],
+  "what_it_does": "An animated parameter can be set to start running on composition load, on any clip trigger in its layer, on a column trigger, or only by hand. A BPM-synced animation can drop its phase lock so it starts its cycle when the clip starts instead of staying aligned with the master bar.",
+  "source_urls": [
+   "https://resolume.com/support/en/parameter-animation"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "line",
+   "phasor~",
+   "transport"
+  ],
+  "max_check": "Max has no built-in parameter animation, so no restart policy exists. In a patch the restart is a message from the trigger into whatever ramp object (line, a phasor or a transport-linked metro) drives the value.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "A parameter driven by the clip's own playhead",
+  "category": "timeline/cueing/show control",
+  "tool": "Resolume",
+  "tool_names": [
+   "Clip Position"
+  ],
+  "what_it_does": "On a clip, any parameter can follow the clip's playhead: scrub, skip, speed changes, direction changes and beat loops all move the parameter in step.",
+  "source_urls": [
+   "https://resolume.com/support/en/parameter-animation",
+   "https://resolume.com/support/en/stills"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.movie",
+   "function"
+  ],
+  "max_check": "jit.movie refpage: position is the normalized playhead (0. to 1.) and can be read, so polling it into a function or zmap drives anything. It is a poll per frame, not a binding, and has to be built.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "DJ-player sync: the DJ's loaded track triggers and drives its video",
+  "category": "networking/sync",
+  "tool": "Resolume",
+  "tool_names": [
+   "Denon StageLinQ",
+   "Pioneer Pro DJ Link",
+   "Player Layer Target",
+   "Fader"
+  ],
+  "what_it_does": "Arena watches Denon or Pioneer players on the network. A clip linked to a track is triggered when the track is loaded and its playhead follows the track through scratching and looping; the layer is locked until the song ends. The mixer's channel fader can drive the layer's opacity, and each player can send its videos to a chosen layer. Clips are matched by track title.",
+  "source_urls": [
+   "https://resolume.com/support/en/sync-to-denon-players",
+   "https://resolume.com/support/en/sync-to-pioneer-dj-players",
+   "https://resolume.com/support/en/sync-with-dj"
+  ],
+  "max_status": "absent",
+  "max_closest": [],
+  "max_check": "Registry and installed packages (query_packages.py: no StageLinQ, Pro DJ Link or TCNet objects). Max can receive MIDI clock or Link tempo (Link package: link.beat, link.session), which gives tempo, not the track's playhead.",
+  "advice": "",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Timecode chase per clip with an offset and a delay",
+  "category": "networking/sync",
+  "tool": "Resolume",
+  "tool_names": [
+   "SMPTE",
+   "Offset",
+   "Delay"
+  ],
+  "what_it_does": "Arena reads LTC timecode from an audio input (two inputs at once, one per deck of a DJ mix). Any clip set to SMPTE 1 or 2 follows it; each clip has an offset (the docs' convention is one hour per show) and a delay in frames to compensate for the signal chain.",
+  "source_urls": [
+   "https://resolume.com/support/en/smpte",
+   "https://resolume.com/support/en/video",
+   "https://resolume.com/support/en/preferences"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "jit.movie"
+  ],
+  "max_check": "Registry: no smpte, ltc or mtc objects; query_packages.py search 'timecode' and 'smpte': no matches. Already a theme from MadMapper, Isadora and TouchDesigner; Resolume's difference is that the offset and delay live on each clip.",
+  "advice": "",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "REST and WebSocket API with stable ids and subscriptions",
+  "category": "networking/sync",
+  "tool": "Resolume",
+  "tool_names": [
+   "REST API",
+   "Websocket API",
+   "by-id",
+   "subscribe",
+   "parameter_update"
+  ],
+  "what_it_does": "With the webserver on (port 8080), every column, layer, group, deck, clip and effect can be listed, added, moved and removed over HTTP, addressed by position, by a stable id that survives reordering, or as 'selected'. The WebSocket at /api/v1 sends the whole composition state on connect, then lets a client subscribe to parameters and get updates as they change, plus set, get, reset and trigger. Clip thumbnails and PNG snapshots of any monitor can be fetched. A custom index.html in the root folder becomes a browser control page.",
+  "source_urls": [
+   "https://resolume.com/support/en/restapi",
+   "https://resolume.com/support/en/websocket-api",
+   "https://resolume.com/docs/restapi/"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "maxurl",
+   "node.script",
+   "param.osc"
+  ],
+  "max_check": "maxurl refpage: an HTTP client (get, post, put, delete), not a server. Userguide OSC.json: Max can serve OSCQuery over HTTP, which describes parameters. A full read-write server with subscriptions is built in Node for Max (node.script), by hand.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "An MCP server for AI apps to build and edit the composition",
+  "category": "workflow/authoring",
+  "tool": "Resolume",
+  "tool_names": [
+   "Arena MCP Server",
+   "Wire MCP Server"
+  ],
+  "what_it_does": "Since 7.26 Resolume ships MCP servers. An AI desktop app can summarise a composition, load files, add or remove layers, columns, groups and effects, and (for Wire) build a patch, wire it, set values and write ISF shaders. It is limited to what the REST API does: no output mapping, shortcuts, cue points, presets, envelopes or dashboard.",
+  "source_urls": [
+   "https://resolume.com/support/en/mcp-servers"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "node.script"
+  ],
+  "max_check": "Registry and userguide: nothing in Max exposes a patch to an AI app as tools. (This repo's own claude2max MCP server looks up Max documentation; it does not edit a running patch.)",
+  "advice": "",
+  "confidence": "medium",
+  "notes": "Docs page is dated 7.26.0; recent feature."
+ },
+ {
+  "capability": "Keyboard 'Mouse mode': hold a key and the mouse drives a parameter",
+  "category": "control surface/UI building",
+  "tool": "Resolume",
+  "tool_names": [
+   "Mouse Mode"
+  ],
+  "what_it_does": "A keyboard shortcut in Mouse mode makes horizontal or vertical mouse movement drive a parameter over a set range while the key is held, and freezes it on release. Assigning the same key to X and Y gives two-axis control.",
+  "source_urls": [
+   "https://resolume.com/support/en/keyboard-shortcuts"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "key",
+   "keyup",
+   "mousestate"
+  ],
+  "max_check": "Registry: key, keyup and mousestate exist. mousestate refpage: reports button and position inside a Max patcher window when polled. Gating it with key/keyup and scaling is a small patch; not a mapping mode.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Controller feedback per clip state, by colour, per device",
+  "category": "control surface/UI building",
+  "tool": "Resolume",
+  "tool_names": [
+   "MIDI Out",
+   "Clip Trigger shortcut",
+   "Multiple MIDI Devices"
+  ],
+  "what_it_does": "A clip-trigger shortcut sends a different velocity (pad colour) for each of a clip's five states, picked from colour tables for common controllers. Two identical controllers are told apart by detection order, and feedback goes only to the device that sent the input unless rerouted. Default layouts ship for APC40 Mk2, APC Mini and nanoKONTROL 2.",
+  "source_urls": [
+   "https://resolume.com/support/en/midi-shortcuts"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "noteout",
+   "ctlout"
+  ],
+  "max_check": "Userguide mapping.json: Max's mappings can send MIDI output for a mapped object's value. There are no clip states to report and no controller colour tables; per-state colours are noteout messages built by hand.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "One controller channel spread over a whole group of choices",
+  "category": "control surface/UI building",
+  "tool": "Resolume",
+  "tool_names": [
+   "Shortcut Groups",
+   "Select Next Item",
+   "Random Item"
+  ],
+  "what_it_does": "A shortcut on a dropdown or radio group can step to the next, previous or a random item, or cycle through chosen items on each press. One MIDI CC can trigger clip 1 to 128 of a layer by its value, and one DMX channel spreads its 0-255 range across the options of a dropdown or the clips of a layer.",
+  "source_urls": [
+   "https://resolume.com/support/en/midi-shortcuts",
+   "https://resolume.com/support/en/dmx-shortcuts",
+   "https://resolume.com/support/en/keyboard-shortcuts"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "umenu",
+   "live.tab"
+  ],
+  "max_check": "Userguide mapping.json: Max's Trigger Mode 'Cycle' toggles a mapped object between several options. A continuous CC mapped to a umenu's range does select by value. Next/previous/random and 'value N triggers item N of a player' are patch logic.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Dashboard macro dials with several parameters each",
+  "category": "control surface/UI building",
+  "tool": "Resolume",
+  "tool_names": [
+   "Dashboard",
+   "Dial Range",
+   "Invert"
+  ],
+  "what_it_does": "Clip, layer, group and composition each have eight dashboard dials. Any parameter, including toggles, dropdowns and palettes, can be dragged onto a dial; several parameters can share one dial, each with its own in and out points, invert, and a Dial Range that says which part of the dial's travel moves it, so one dial can sweep one effect and then another.",
+  "source_urls": [
+   "https://resolume.com/support/en/dashboard"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "live.dial",
+   "zmap",
+   "scale"
+  ],
+  "max_check": "Userguide parameter_mode.json: Max parameters have modulation modes (unipolar, bipolar, additive, absolute) for Live automation, not a macro that fans one control out to many. In a patch one live.dial feeds several zmap/scale objects with clipping to get the same result.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "A layer, group or the preview used as a source in another layer",
+  "category": "video I/O & playback",
+  "tool": "Resolume",
+  "tool_names": [
+   "Video Router",
+   "Input Opacity",
+   "Input Bypass/Solo"
+  ],
+  "what_it_does": "The Video Router source takes one layer, one group, the layers below it, or the preview output and plays it as a clip in another layer, with switches that say whether the input's own opacity and bypass are respected (pre- or post-fader), so the same content can appear twice with different effects.",
+  "source_urls": [
+   "https://resolume.com/support/en/sources",
+   "https://resolume.com/support/en/slice-routing"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.gl.node",
+   "jit.gl.texture"
+  ],
+  "max_check": "jit.gl.node refpage: capture 1 renders its children to a texture whose name comes out the left outlet, which any other object can then use. That is the general mechanism; Max has no layer stack, so 'the layers below' must be grouped by hand.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Virtual output screens and screen-to-slice routing for multi-stage warping",
+  "category": "projection mapping",
+  "tool": "Resolume",
+  "tool_names": [
+   "Virtual Outputs",
+   "Routing Screens to Slices"
+  ],
+  "what_it_does": "A screen can be a virtual output whose result is used as the input of a slice on another screen, at a 0 or 1 frame delay. The docs' example: edge-blend two projectors first, then map content to objects in a virtual screen feeding them, without disturbing the blend.",
+  "source_urls": [
+   "https://resolume.com/support/en/screens",
+   "https://resolume.com/support/en/slice-routing"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.gl.node",
+   "jit.gl.meshwarp"
+  ],
+  "max_check": "jit.gl.node refpage: captures a sub-scene to a texture, and jit.gl.meshwarp refpage: warps a texture on a mesh, so chained stages are possible; nothing names a stage a 'screen' or keeps the stages as one saved output setup.",
+  "advice": "",
+  "confidence": "low",
+  "notes": ""
+ },
+ {
+  "capability": "Wire patches receive the host's projection slices as shapes",
+  "category": "projection mapping",
+  "tool": "Resolume",
+  "tool_names": [
+   "Slice In",
+   "Slices tab"
+  ],
+  "what_it_does": "A Wire source or effect with a Slice In node gets the slices from Arena's Advanced Output, chosen by dragging them onto the effect's Slices tab, and can draw outlines, chasers or fill shapes that line up with the stage. In Wire itself, dummy slice sets stand in.",
+  "source_urls": [
+   "https://resolume.com/support/en/wire-slices"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "jit.gl.meshwarp",
+   "jit.gl.sketch"
+  ],
+  "max_check": "Registry: no object shares a mapping layout as data with other objects. jit.gl.meshwarp refpage can output its mesh matrix (output_mesh_matrix), which is the nearest thing: one warp's geometry, not a stage of named slices.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Math typed into any number field",
+  "category": "workflow/authoring",
+  "tool": "Resolume",
+  "tool_names": [
+   "Expressions",
+   "Input Box Math"
+  ],
+  "what_it_does": "Any value box in Arena, Avenue and Wire accepts arithmetic and a few functions and constants (min, max, sin, cos, tan, abs, radians, sqrt, pi, tau, phi): '-1920/4' for a position, '/3' after a width to divide it.",
+  "source_urls": [
+   "https://resolume.com/support/en/expressions",
+   "https://resolume.com/support/en/parameters",
+   "https://resolume.com/support/en/input-selection"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "flonum",
+   "expr"
+  ],
+  "max_check": "flonum refpage: displays and outputs numbers; nothing says typed expressions are evaluated. Max's arithmetic lives in objects (expr).",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Operator monitoring: any stage on any screen, a big clock and a notes panel",
+  "category": "control surface/UI building",
+  "tool": "Resolume",
+  "tool_names": [
+   "Monitors",
+   "Clip Time Panel",
+   "Notes Panel",
+   "Interface Layouts"
+  ],
+  "what_it_does": "Any panel can be undocked to another screen, and monitors can be duplicated to watch the composition, the preview, any layer or group, either crossfader bus, the selected item, or an output screen. A Clip Time panel shows wall-clock time and each playing clip's elapsed or remaining time in large type, and a Notes panel holds running orders. Layouts save as XML presets.",
+  "source_urls": [
+   "https://resolume.com/support/en/layouts",
+   "https://resolume.com/support/en/clip-time-panel",
+   "https://resolume.com/support/en/notes-panel"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.pworld",
+   "jit.gl.node"
+  ],
+  "max_check": "Max's interface is the patcher and its presentation view (max_system_model.json dimension 11). Watching an intermediate stage means capturing it (jit.gl.node) and showing it in a jit.pworld or second jit.world; no built-in remaining-time display for playing media.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Offline render of a single clip with its effects, at its exact length",
+  "category": "video I/O & playback",
+  "tool": "Resolume",
+  "tool_names": [
+   "Clip Renderer",
+   "Render to File",
+   "queue"
+  ],
+  "what_it_does": "Right-clicking a clip renders it, with its effects, to a file at the composition's resolution and exactly the clip's length, offline, so no frames drop; renders queue in a panel. BPM-synced clips render at the current tempo. Live inputs and the video router cannot be rendered.",
+  "source_urls": [
+   "https://resolume.com/support/en/clip-renderer",
+   "https://resolume.com/support/en/recording"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.record"
+  ],
+  "max_check": "jit.record refpage: @realtime 0 records frame by frame, and userguide non_realtime.json describes non-real-time video by banging the render with jit.world @enable 0. So offline render exists but is a patch you set up, not a per-clip command. Offline rendering is already a theme (Isadora, MadMapper, cables.gl).",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "A/B crossfader with buses, jump behaviours and curves",
+  "category": "video I/O & playback",
+  "tool": "Resolume",
+  "tool_names": [
+   "Crossfader",
+   "Jump",
+   "Jump & Return",
+   "Cut",
+   "Crossfader Phase"
+  ],
+  "what_it_does": "Layers and groups are assigned to bus A or B; each bus is composited first, then the crossfader mixes them with a chosen blend mode and curve. Its A and B buttons can jump, jump-and-return, or cut while held. The crossfader's position can also drive any parameter animation.",
+  "source_urls": [
+   "https://resolume.com/support/en/composition",
+   "https://resolume.com/support/en/parameter-animation"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.xfade",
+   "jit.fx.tr.xfade"
+  ],
+  "max_check": "jit.xfade refpage: crossfades two matrices by a 0-1 value; jit.fx.tr.xfade: the same for textures. Assigning layers to buses and the jump behaviours are patch work.",
+  "advice": "",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Every parameter picks its animation driver from one menu",
+  "category": "system model",
+  "tool": "Resolume",
+  "tool_names": [
+   "Phase source",
+   "Timeline",
+   "BPM Sync",
+   "FFT",
+   "Crossfader Phase",
+   "Clip Position",
+   "Dashboard"
+  ],
+  "what_it_does": "Each parameter's cogwheel menu sets what moves it: static, a timeline (with the same loop and play modes as a clip), BPM sync, audio analysis (composition, external input, or the clip/layer/group's own audio), the crossfader position, the clip's playhead, a layer transition, or a dashboard dial. The REST API calls this the parameter's phase source.",
+  "source_urls": [
+   "https://resolume.com/support/en/parameter-animation",
+   "https://resolume.com/docs/restapi/"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "line",
+   "phasor~",
+   "transport",
+   "pattrstorage"
+  ],
+  "max_check": "Max has no per-parameter animation layer: a value moves because some object sends it messages (max_system_model.json dimensions 1 and 7). The driver is an object you wire in.",
+  "advice": "When a patch has many animatable controls, give each one the same small abstraction in front of it with a source menu (manual, LFO, tempo, envelope follower) instead of wiring a different driver to each, so every control can be animated the same way.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "An envelope that shapes a parameter's input, whatever drives it",
+  "category": "data/tables/scripting",
+  "tool": "Resolume",
+  "tool_names": [
+   "Envelope",
+   "phase",
+   "Interpolation Curves",
+   "Hold"
+  ],
+  "what_it_does": "An envelope sits on the parameter itself and reshapes whatever arrives: a timeline, BPM sync, FFT, the mouse, MIDI or OSC. Its x axis is 'phase' (0 to 1), not seconds, because the same envelope may run on beats or audio. Each keyframe chooses a curve to the previous one (Quadratic, Sine, Circular, Exponential, Elastic, Back, Bounce, In/Out or Hold), and envelopes save as presets.",
+  "source_urls": [
+   "https://resolume.com/support/en/envelopes",
+   "https://resolume.com/support/en/parameter-animation"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "function",
+   "zmap",
+   "curve~"
+  ],
+  "max_check": "function refpage: a breakpoint editor that gives an interpolated y for any x, with curve control. In Max the curve goes wherever it is wired, usually after one source; merging several sources first is up to the patch.",
+  "advice": "Put the shaping curve directly in front of the control, after every source has been merged, so MIDI, OSC and automation all pass through the same curve and the control responds the same way whoever moves it.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Toggles, menus and colour palettes animate by phase too",
+  "category": "data/tables/scripting",
+  "tool": "Resolume",
+  "tool_names": [
+   "Basic",
+   "Color Interpolation",
+   "Palette"
+  ],
+  "what_it_does": "Animating a toggle, dropdown or colour palette shows its states along the timeline; an envelope snaps to them, so an animation can bounce between two of five menu items. 'Basic' mode drives a toggle or menu from a 0-1 slider (below 0.5 off, above on), which is also how a MIDI fader controls a button. A palette can interpolate colours as it cycles.",
+  "source_urls": [
+   "https://resolume.com/support/en/parameter-animation",
+   "https://resolume.com/support/en/envelopes",
+   "https://resolume.com/support/en/parameters"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "umenu",
+   "toggle",
+   "scale"
+  ],
+  "max_check": "In Max a umenu takes an index and a toggle takes 0/non-zero (refpages); a continuous source must be scaled and rounded by hand to drive them.",
+  "advice": "Give menus and toggles a 0-1 input path as well as their index, so any LFO, curve or fader can drive them without a scale-and-round chain in front.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "OSC with relative operators, query, and 'selected' addresses",
+  "category": "networking/sync",
+  "tool": "Resolume",
+  "tool_names": [
+   "OSC",
+   "absolute address",
+   "relative address",
+   "Type Tags",
+   "Polling",
+   "Custom OSC Messages"
+  ],
+  "what_it_does": "Every control has a fixed address that exists without setup, and many also have a relative address (/composition/selectedlayer/...) that acts on whichever layer is selected. Values are normally 0-1 with the real range in the type tag; an 'a' argument sends an absolute value, '+', '-' or '*' change the current value, a string sets a choice by name, and '?' makes Resolume reply with the current value. Output can be all messages, or a preset of chosen items with an 'all layers/clips' scope, each with an optional custom address.",
+  "source_urls": [
+   "https://resolume.com/support/en/osc",
+   "https://resolume.com/support/en/midi-shortcuts"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "param.osc",
+   "udpreceive",
+   "pattrstorage"
+  ],
+  "max_check": "param.osc refpage: controls and reports parameters over OSC, auto-reports changes, and 'info' lists every parameter for discovery. Userguide OSC.json: parameters get OSC addresses automatically and Max can serve OSCQuery. Relative operators, '?' polling and 'selected' addressing were not found.",
+  "advice": "When a patch answers OSC, accept relative changes ('+ 0.1') and a '?' query that replies on the same address; a controller can then nudge values and ask for the state without the patch keeping a copy of every value it sent.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Shortcut target: by position, this item, or the selected item",
+  "category": "control surface/UI building",
+  "tool": "Resolume",
+  "tool_names": [
+   "Shortcut Target",
+   "By Position",
+   "This Clip, Layer or Group",
+   "Selected Clip, Layer or Group",
+   "Multiple Shortcuts",
+   "Range",
+   "Value",
+   "Piano"
+  ],
+  "what_it_does": "Every shortcut (keyboard, MIDI, OSC, DMX) says what it follows: the slot by position (fader 1 is always layer 1, whatever is moved), one specific item wherever it moves, or whatever is selected. A parameter can have several shortcuts, each with its own range, Toggle/Value/Piano mode and invert.",
+  "source_urls": [
+   "https://resolume.com/support/en/midi-shortcuts",
+   "https://resolume.com/support/en/keyboard-shortcuts",
+   "https://resolume.com/support/en/dmx-shortcuts"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "live.dial"
+  ],
+  "max_check": "Userguide mapping.json: a Max mapping binds a controller to one UI object (with min, max, exponent, steps, relative, trigger and pickup modes). 'Whatever is selected' and 'whatever is in slot N' are not mapping targets.",
+  "advice": "Decide for each controller whether it follows a fixed object, a position, or the current selection, and say so in the patch; a 'selected' layer of controls lets eight knobs edit any of many voices.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "A Transform is the first effect on everything, and more can be added",
+  "category": "rendering/3D",
+  "tool": "Resolume",
+  "tool_names": [
+   "Transform",
+   "Transform Widget",
+   "Transform Presets"
+  ],
+  "what_it_does": "Clip, layer, group and composition each start with a Transform (position, scale, rotation, anchor) that cannot be removed. More Transforms can go anywhere in the effect chain, each with its own opacity and blend mode, so content can be scaled, mirrored, then placed again. Transforms save presets for common picture-in-picture positions.",
+  "source_urls": [
+   "https://resolume.com/support/en/transform",
+   "https://resolume.com/support/en/effects"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.gl.layer",
+   "jit.gl.videoplane",
+   "jit.gl.node"
+  ],
+  "max_check": "transform-defaults.json: jit.gl.layer and jit.gl.videoplane carry position, scale, rotatexyz and anchor on the drawing object itself. A transform between two effects means rendering to a texture (jit.gl.node capture) and drawing again.",
+  "advice": "Keep placement separate from processing: apply position and scale on the object that draws, and when an effect must happen after a move, say so with a captured stage rather than hiding the move inside a shader.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Effect clips act like adjustment layers you can trigger",
+  "category": "video I/O & playback",
+  "tool": "Resolume",
+  "tool_names": [
+   "Effect Clips"
+  ],
+  "what_it_does": "Dropping effects on an empty clip makes an Effect Clip: when triggered, its effects apply to all layers below. Looks can then be triggered from MIDI, faded with layer transitions and sequenced by the autopilot like any clip.",
+  "source_urls": [
+   "https://resolume.com/support/en/effects"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.gl.slab",
+   "jit.gl.node"
+  ],
+  "max_check": "In Max an effect is an object in a chain; switching looks means routing (gate, selector) or bypass messages. jit.gl.node can capture a group to apply one effect to it.",
+  "advice": "Treat a set of effect settings as a cue that can be triggered and crossfaded, not only as objects you bypass one by one.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Groups composite inside themselves, then join the stack as one layer",
+  "category": "rendering/3D",
+  "tool": "Resolume",
+  "tool_names": [
+   "Groups",
+   "Group Blending",
+   "Group to Slice Routing"
+  ],
+  "what_it_does": "In a group (Arena only) the first layer is drawn on transparent black and the others blend only with layers in the group; the result is flattened and blended into the composition with the group's own blend mode and opacity. Groups have their own column triggers, speed, bypass and effects, and cannot be nested.",
+  "source_urls": [
+   "https://resolume.com/support/en/groups"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.gl.node"
+  ],
+  "max_check": "jit.gl.node refpage: renders its children together and can capture them to a texture, which is then drawn as one item. Draw order inside is set by layer and depth settings (max_system_model.json dimension 15).",
+  "advice": "When several layers must mix with each other but not with what is under them, capture them in a jit.gl.node and blend the captured texture as one layer, instead of tuning their blend modes against the whole scene.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Each layer renders at its own resolution, with a fit rule",
+  "category": "rendering/3D",
+  "tool": "Resolume",
+  "tool_names": [
+   "Width & Height",
+   "Auto Size",
+   "Fill",
+   "Fit",
+   "Stretch"
+  ],
+  "what_it_does": "A layer can render at a smaller size than the composition (four 4K layers in the corners of an 8K composition each process only their own 4K). Auto Size sets every clip in a layer to Fill, Fit or Stretch the layer, and clips can be resized the same way.",
+  "source_urls": [
+   "https://resolume.com/support/en/layers",
+   "https://resolume.com/support/en/clips"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.gl.node",
+   "jit.gl.layer"
+  ],
+  "max_check": "jit.gl.node refpage: dim sets the capture size when adapt is 0. transform-defaults.json: jit.gl.layer preserves aspect by default (fit), jit.gl.videoplane does not; fill and stretch are done with scale.",
+  "advice": "Set the processing size where the work happens (dim on the stage that captures), not only the final output size, and name the fit rule (fit, fill, stretch) explicitly.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Wire's three flows: per frame, on change, and at compile time",
+  "category": "system model",
+  "tool": "Resolume",
+  "tool_names": [
+   "Signal flow",
+   "Event flow",
+   "Attribute flow",
+   "OnChange"
+  ],
+  "what_it_does": "Wire data flows in three ways shown by the port shape: signal (round) every frame, event (square) when something changes, possibly several times a frame, and attribute (diamond) only when the patch compiles, so changing it recompiles and it cannot be animated in the host. Event and attribute can feed signal; OnChange turns signal into events.",
+  "source_urls": [
+   "https://resolume.com/support/en/wire-node-anatomy"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "snapshot~",
+   "sig~",
+   "change"
+  ],
+  "max_check": "Max separates messages (events) from signals (audio) and converts with sig~ and snapshot~ (max_system_model.json dimensions 1 and 5); structural settings are creation arguments (dimension 22). Wire adds a frame-rate flow as the default.",
+  "advice": "Mark which settings of an object are structural (change ports, need a rebuild) and which are live; Wire draws that distinction on every port.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "A Wire patch's inputs become the host's controls, in dashboard order",
+  "category": "control surface/UI building",
+  "tool": "Resolume",
+  "tool_names": [
+   "Input nodes",
+   "Dashboard",
+   "input groups",
+   "Int In",
+   "category"
+  ],
+  "what_it_does": "Float, Int, Bool, Color and Trigger input nodes become sliders, menus or buttons, toggles, colour pickers and trigger buttons when the patch runs as an effect, source or mixer in Arena. Their order on Wire's Dashboard is their order in Arena, input groups become foldable sections, and a unit suffix can be shown. The docs advise keeping sliders 0-1 and mapping inside the patch.",
+  "source_urls": [
+   "https://resolume.com/support/en/wire-resolume-integration",
+   "https://resolume.com/support/en/wire-user-interface"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "live.dial",
+   "bpatcher",
+   "pattr"
+  ],
+  "max_check": "Userguide parameter_mode.json: Max parameters carry names, ranges, unit styles and an order attribute for initialisation, and appear in Live as device controls; a plain patch's controls are whatever UI objects are placed.",
+  "advice": "Expose an abstraction's controls in a declared order and in named groups, with 0-1 ranges at the surface and the mapping done inside, so every host or panel shows them the same way.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "The host never lets a setting change break a connection",
+  "category": "system model",
+  "tool": "Resolume",
+  "tool_names": [
+   "disconnection rule"
+  ],
+  "what_it_does": "In Wire, changing an attribute can hide an inlet and drop its cable. When the same patch runs inside Arena or Avenue, such changes are refused, because a vanishing connection would look like a bug to the performer.",
+  "source_urls": [
+   "https://resolume.com/support/en/wire-resolume-integration"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "thispatcher"
+  ],
+  "max_check": "max_system_model.json dimension 22: retyping a box makes a new object, and arguments that set inlet counts change the ports; cords to ports that disappear are lost.",
+  "advice": "An object meant for performers should keep its ports fixed while it runs and refuse settings that would remove one.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Relocating media by its folder structure, and collecting it per deck",
+  "category": "workflow/authoring",
+  "tool": "Resolume",
+  "tool_names": [
+   "Media Manager",
+   "Relocate",
+   "Set Path",
+   "Collect Media"
+  ],
+  "what_it_does": "A composition stores file locations. When files go missing, pointing at one of them makes the Media Manager find the others by their position relative to it (same folder, subfolders, parent folders). Set Path swaps one file for a new version everywhere. Collect Media copies every file into a Media folder with a subfolder per deck and saves a copy of the composition beside it; it never deletes.",
+  "source_urls": [
+   "https://resolume.com/support/en/media-manager"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [],
+  "max_check": "Userguide search_path.json and projects.json: Max finds files by name through the search path, and a project can consolidate (copy dependencies into the project) or archive to .maxzip.",
+  "advice": "Keep a piece's media in one folder tree next to the patch so relative paths survive a move, and collect it with the project before a show.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Undo stacks per window, and undo shows what it undid",
+  "category": "workflow/authoring",
+  "tool": "Resolume",
+  "tool_names": [
+   "Undo"
+  ],
+  "what_it_does": "The main interface and the Advanced Output keep separate undo histories. Undo selects and shows the item it changed, switching decks if needed. Changes from MIDI, OSC and other external input, clip triggers, and automatic changes (animation, autopilot) are not undoable, because a live show cannot take back what the audience saw.",
+  "source_urls": [
+   "https://resolume.com/support/en/undo"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [],
+  "max_check": "Max has undo for patch edits; whether value changes are undoable and how undo is scoped per window was not checked in the userguide.",
+  "advice": "",
+  "confidence": "low",
+  "notes": ""
+ },
+ {
+  "capability": "Audio analysis set per parameter, including audio driving speed",
+  "category": "audio",
+  "tool": "Resolume",
+  "tool_names": [
+   "Audio Analysis",
+   "External FFT",
+   "Composition FFT",
+   "Clip/Layer/Group FFT",
+   "Gain",
+   "Fall"
+  ],
+  "what_it_does": "Choosing FFT on any parameter shows a spectrum with L, M and H buttons and in/out points to pick a band, a gain and a fall time. The audio can push the value up, push it down, or set the speed at which the parameter moves in either direction. The audio can be the composition, an external input, or the clip's, layer's or group's own sound; Wire's Spectrum In gives 1024 bins with the same source choice.",
+  "source_urls": [
+   "https://resolume.com/support/en/parameter-animation",
+   "https://resolume.com/support/en/wire-fft"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "fffb~",
+   "peakamp~",
+   "slide",
+   "pfft~"
+  ],
+  "max_check": "Refpages: fffb~ is a fixed bandpass bank, peakamp~ reports peak amplitude, slide smooths values. Max has more analysis than Resolume, but it is built once per patch and wired to targets; MadMapper's named channels are already listed.",
+  "advice": "Offer 'audio sets the rate' as well as 'audio sets the value': feeding an envelope follower into a phasor's frequency gives motion that speeds up with the music without jittering.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Tempo tools: tap, resync to the phrase, momentary nudge",
+  "category": "timeline/cueing/show control",
+  "tool": "Resolume",
+  "tool_names": [
+   "Tap",
+   "Resync",
+   "Nudge Up",
+   "Nudge Down",
+   "Tempo Nudge Range",
+   "metronome"
+  ],
+  "what_it_does": "The tempo is tapped in, then Resync on the first beat of a phrase sends everything BPM-synced back to bar 1. A square circling a square shows beats and lights every 16 beats. Nudge buttons speed up or slow the tempo by a set percentage only while held. A metronome can go to headphones. With Ableton Link on, Resync and pause are disabled.",
+  "source_urls": [
+   "https://resolume.com/support/en/bpm",
+   "https://resolume.com/support/en/link",
+   "https://resolume.com/support/en/midi-shortcuts",
+   "https://resolume.com/support/en/preferences"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "transport",
+   "link.session",
+   "link.beat"
+  ],
+  "max_check": "transport refpage: tempo, time signature and clock source. Link package (query_packages.py): link.beat and link.session. Tap tempo exists only in third-party packages (Upshot's upshot_transport). No momentary nudge was found.",
+  "advice": "Give a visual piece a held nudge, not only a tap: holding a button that adds a few percent to the tempo is how a running visual is brought back onto a live beat without a jump.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Blend modes include transitions and '50' variants for AV mixing",
+  "category": "video I/O & playback",
+  "tool": "Resolume",
+  "tool_names": [
+   "Blend Modes",
+   "50 Blends",
+   "Transitions",
+   "Displace",
+   "Luma is Alpha"
+  ],
+  "what_it_does": "One blend list (51 entries by OSC index) holds ordinary blends, transitions (wipes, push, dissolve, Cube) that run as the layer fades from 0 to 100%, and '50' variants that reach the full mix at 50% so the audio and video faders can both sit at the top. Every effect also has a blend mode and opacity. New blends can be made in Wire as mixers.",
+  "source_urls": [
+   "https://resolume.com/support/en/blend-modes",
+   "https://resolume.com/support/en/layers",
+   "https://resolume.com/support/en/osc",
+   "https://resolume.com/support/en/effects"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.fx.co.alphablend",
+   "jit.fx.co.screen",
+   "jit.fx.tr.xfade",
+   "jit.gl.layer"
+  ],
+  "max_check": "Jitter Tools refpages: composite modes (jit.fx.co.*) and transitions (jit.fx.tr.*) are separate objects; jit.gl.layer blends by OpenGL blend_mode factors (transform-defaults.json). A mode change means swapping or switching objects.",
+  "advice": "When a patch lets the performer choose how two images mix, put composites and transitions behind one menu with one 0-1 amount, so changing the mode never means rewiring.",
+  "confidence": "medium",
+  "notes": ""
+ }
+]

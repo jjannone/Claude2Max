@@ -1,0 +1,874 @@
+{
+  "https://resolume.com/docs/restapi/": {
+    "title": "Arena & Avenue REST API reference (swagger.yaml)",
+    "url": "https://resolume.com/docs/restapi/",
+    "group": "API reference",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read swagger.yaml: header (by index / by-id / selected access), path list, ParameterView and parameter-type schemas, phase-source, clip connect and monitors endpoints. Not every endpoint read."
+  },
+  "https://resolume.com/docs/wirerestapi/": {
+    "title": "Wire REST API reference (Swagger UI)",
+    "url": "https://resolume.com/docs/wirerestapi/",
+    "group": "API reference",
+    "status": "pending",
+    "session": null,
+    "notes": "Exists (fetched); its spec file was not located or read."
+  },
+  "https://resolume.com/support/en/10-bit-color-output": {
+    "title": "10-Bit Color Output",
+    "url": "https://resolume.com/support/en/10-bit-color-output",
+    "group": "Output",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/NDI_inputs_and_outputs": {
+    "title": "NDI Inputs and Outputs",
+    "url": "https://resolume.com/support/en/NDI_inputs_and_outputs",
+    "group": "Content",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/addressable-pixels": {
+    "title": "Addressable Pixels",
+    "url": "https://resolume.com/support/en/addressable-pixels",
+    "group": "Getting started with LED Strips",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/advanced-output": {
+    "title": "Advanced Output",
+    "url": "https://resolume.com/support/en/advanced-output",
+    "group": "Output",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/akai-apc64": {
+    "title": "Setting up the Akai APC64",
+    "url": "https://resolume.com/support/en/akai-apc64",
+    "group": "Troubleshooting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/audio-input-no-worky": {
+    "title": "Audio input no worky",
+    "url": "https://resolume.com/support/en/audio-input-no-worky",
+    "group": "Troubleshooting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/autopilot": {
+    "title": "Autopilot",
+    "url": "https://resolume.com/support/en/autopilot",
+    "group": "Workflow",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/avenue-arena-difference": {
+    "title": "Difference between Avenue and Arena",
+    "url": "https://resolume.com/support/en/avenue-arena-difference",
+    "group": "FAQ",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/better-snap-tool": {
+    "title": "Menus Disappearing?",
+    "url": "https://resolume.com/support/en/better-snap-tool",
+    "group": "Troubleshooting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/blend-modes": {
+    "title": "Blend Modes",
+    "url": "https://resolume.com/support/en/blend-modes",
+    "group": "Content",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/bpm": {
+    "title": "BPM",
+    "url": "https://resolume.com/support/en/bpm",
+    "group": "Best Practices",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/clip-renderer": {
+    "title": "Clip Renderer",
+    "url": "https://resolume.com/support/en/clip-renderer",
+    "group": "Content",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/clip-time-panel": {
+    "title": "Clip Time Panel",
+    "url": "https://resolume.com/support/en/clip-time-panel",
+    "group": "Workflow",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/clips": {
+    "title": "Clips",
+    "url": "https://resolume.com/support/en/clips",
+    "group": "Workflow",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/community": {
+    "title": "Community",
+    "url": "https://resolume.com/support/en/community",
+    "group": "FAQ",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/composition": {
+    "title": "Composition",
+    "url": "https://resolume.com/support/en/composition",
+    "group": "Workflow",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/connect-grandma2": {
+    "title": "Connect GrandMA2",
+    "url": "https://resolume.com/support/en/connect-grandma2",
+    "group": "Troubleshooting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/conversion-with-alley": {
+    "title": "Video Conversion with Alley",
+    "url": "https://resolume.com/support/en/conversion-with-alley",
+    "group": "Resolume Alley",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/dashboard": {
+    "title": "Dashboard",
+    "url": "https://resolume.com/support/en/dashboard",
+    "group": "Best Practices",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/decks": {
+    "title": "Decks",
+    "url": "https://resolume.com/support/en/decks",
+    "group": "Workflow",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/directory-list": {
+    "title": "Directory List",
+    "url": "https://resolume.com/support/en/directory-list",
+    "group": "Nerds",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/diy-pixel-lab": {
+    "title": "DIY Pixel Lab",
+    "url": "https://resolume.com/support/en/diy-pixel-lab",
+    "group": "Getting started with LED Strips",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full; the Arduino/ESP32 install steps were read but are hardware setup, not used."
+  },
+  "https://resolume.com/support/en/dmx": {
+    "title": "DMX Output",
+    "url": "https://resolume.com/support/en/dmx",
+    "group": "Output",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/dmx-shortcuts": {
+    "title": "DMX Shortcuts",
+    "url": "https://resolume.com/support/en/dmx-shortcuts",
+    "group": "Controlling Resolume",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/dongle": {
+    "title": "Registering Using a Dongle",
+    "url": "https://resolume.com/support/en/dongle",
+    "group": "Installing & Registering",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/downloading-footage-with-alley": {
+    "title": "Downloading Footage with Alley",
+    "url": "https://resolume.com/support/en/downloading-footage-with-alley",
+    "group": "Resolume Alley",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/edge-blending": {
+    "title": "Edge Blending",
+    "url": "https://resolume.com/support/en/edge-blending",
+    "group": "Best Practices",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/effects": {
+    "title": "Effects",
+    "url": "https://resolume.com/support/en/effects",
+    "group": "Content",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/envelopes": {
+    "title": "Envelopes",
+    "url": "https://resolume.com/support/en/envelopes",
+    "group": "Best Practices",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/expressions": {
+    "title": "Expressions",
+    "url": "https://resolume.com/support/en/expressions",
+    "group": "Nerds",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/fast-patching": {
+    "title": "Fast Patching",
+    "url": "https://resolume.com/support/en/fast-patching",
+    "group": "Resolume Wire",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/fixture-editor": {
+    "title": "Fixture Editor",
+    "url": "https://resolume.com/support/en/fixture-editor",
+    "group": "Nerds",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/freeze-when-enabling-output": {
+    "title": "Freeze when enabling output",
+    "url": "https://resolume.com/support/en/freeze-when-enabling-output",
+    "group": "Troubleshooting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/getting-started-with-led-strips": {
+    "title": "Getting Started",
+    "url": "https://resolume.com/support/en/getting-started-with-led-strips",
+    "group": "Getting started with LED Strips",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/glitches-with-nvidia-graphics-cards": {
+    "title": "Output glitches with Nvidia graphics card",
+    "url": "https://resolume.com/support/en/glitches-with-nvidia-graphics-cards",
+    "group": "Troubleshooting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/groups": {
+    "title": "Groups",
+    "url": "https://resolume.com/support/en/groups",
+    "group": "Workflow",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/input-maps": {
+    "title": "Input Maps",
+    "url": "https://resolume.com/support/en/input-maps",
+    "group": "Output",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/input-selection": {
+    "title": "Input Selection",
+    "url": "https://resolume.com/support/en/input-selection",
+    "group": "Output",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/installer-stuck": {
+    "title": "Installer stuck",
+    "url": "https://resolume.com/support/en/installer-stuck",
+    "group": "Troubleshooting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/installing": {
+    "title": "Installing",
+    "url": "https://resolume.com/support/en/installing",
+    "group": "Installing & Registering",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/isf": {
+    "title": "ISF",
+    "url": "https://resolume.com/support/en/isf",
+    "group": "Resolume Wire",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/keyboard-shortcuts": {
+    "title": "Keyboard Shortcuts",
+    "url": "https://resolume.com/support/en/keyboard-shortcuts",
+    "group": "Controlling Resolume",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/layers": {
+    "title": "Layers",
+    "url": "https://resolume.com/support/en/layers",
+    "group": "Workflow",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/layouts": {
+    "title": "Interface Layouts",
+    "url": "https://resolume.com/support/en/layouts",
+    "group": "Workflow",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/link": {
+    "title": "Ableton Link",
+    "url": "https://resolume.com/support/en/link",
+    "group": "Best Practices",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/live-inputs": {
+    "title": "Live Inputs",
+    "url": "https://resolume.com/support/en/live-inputs",
+    "group": "Content",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/lots-of-outputs": {
+    "title": "Lots of Outputs",
+    "url": "https://resolume.com/support/en/lots-of-outputs",
+    "group": "Output",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/lut": {
+    "title": "LUT",
+    "url": "https://resolume.com/support/en/lut",
+    "group": "Content",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/mcp-servers": {
+    "title": "MCP Servers",
+    "url": "https://resolume.com/support/en/mcp-servers",
+    "group": "Controlling Resolume",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/media-manager": {
+    "title": "Media Manager",
+    "url": "https://resolume.com/support/en/media-manager",
+    "group": "Best Practices",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/midi-shortcuts": {
+    "title": "MIDI Shortcuts",
+    "url": "https://resolume.com/support/en/midi-shortcuts",
+    "group": "Controlling Resolume",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/midi-troubles-on-windows-with-midi-2-0-update": {
+    "title": "MIDI Troubles on Windows 11 with MIDI 2.0 update",
+    "url": "https://resolume.com/support/en/midi-troubles-on-windows-with-midi-2-0-update",
+    "group": "Troubleshooting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/missing-effects": {
+    "title": "My effects are missing!",
+    "url": "https://resolume.com/support/en/missing-effects",
+    "group": "Troubleshooting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/modifiers": {
+    "title": "Modifiers and Shortcuts",
+    "url": "https://resolume.com/support/en/modifiers",
+    "group": "Nerds",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/no-output-with-docking-station": {
+    "title": "No Output with Docking Station",
+    "url": "https://resolume.com/support/en/no-output-with-docking-station",
+    "group": "Troubleshooting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/notes-panel": {
+    "title": "Notes Panel",
+    "url": "https://resolume.com/support/en/notes-panel",
+    "group": "Workflow",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/off-the-shelf-lab": {
+    "title": "Off the Shelf Lab",
+    "url": "https://resolume.com/support/en/off-the-shelf-lab",
+    "group": "Getting started with LED Strips",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/online-verification": {
+    "title": "Online Verification",
+    "url": "https://resolume.com/support/en/online-verification",
+    "group": "Installing & Registering",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/optimus-workaround": {
+    "title": "NVIDIA Optimus workaround",
+    "url": "https://resolume.com/support/en/optimus-workaround",
+    "group": "Troubleshooting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/osc": {
+    "title": "OSC",
+    "url": "https://resolume.com/support/en/osc",
+    "group": "Controlling Resolume",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/osx-outputs-are-overlapping": {
+    "title": "OSX outputs are overlapping",
+    "url": "https://resolume.com/support/en/osx-outputs-are-overlapping",
+    "group": "Troubleshooting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/output-setup": {
+    "title": "Output Setup",
+    "url": "https://resolume.com/support/en/output-setup",
+    "group": "Output",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/output-transformation": {
+    "title": "Output Transformation",
+    "url": "https://resolume.com/support/en/output-transformation",
+    "group": "Output",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/parameter-animation": {
+    "title": "Parameter Animation",
+    "url": "https://resolume.com/support/en/parameter-animation",
+    "group": "Controlling Resolume",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/parameters": {
+    "title": "Parameters",
+    "url": "https://resolume.com/support/en/parameters",
+    "group": "Controlling Resolume",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/patch-compatibility": {
+    "title": "Patch Compatibility",
+    "url": "https://resolume.com/support/en/patch-compatibility",
+    "group": "FAQ",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/playing-content": {
+    "title": "Playing Content",
+    "url": "https://resolume.com/support/en/playing-content",
+    "group": "Getting started with LED Strips",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/powering-your-pixels": {
+    "title": "Powering your Pixels",
+    "url": "https://resolume.com/support/en/powering-your-pixels",
+    "group": "Getting started with LED Strips",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/preferences": {
+    "title": "Preferences",
+    "url": "https://resolume.com/support/en/preferences",
+    "group": "Nerds",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/preparing-media": {
+    "title": "Preparing Media",
+    "url": "https://resolume.com/support/en/preparing-media",
+    "group": "Best Practices",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/quickstart-tutorial": {
+    "title": "Quickstart Tutorial",
+    "url": "https://resolume.com/support/en/quickstart-tutorial",
+    "group": "Workflow",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/recording": {
+    "title": "Recording",
+    "url": "https://resolume.com/support/en/recording",
+    "group": "Content",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/registering": {
+    "title": "Registering",
+    "url": "https://resolume.com/support/en/registering",
+    "group": "Installing & Registering",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/rendering-to-dxv": {
+    "title": "Rendering to DXV",
+    "url": "https://resolume.com/support/en/rendering-to-dxv",
+    "group": "Nerds",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/reporting-a-bug": {
+    "title": "Reporting a Bug",
+    "url": "https://resolume.com/support/en/reporting-a-bug",
+    "group": "FAQ",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/restapi": {
+    "title": "REST API & Webserver",
+    "url": "https://resolume.com/support/en/restapi",
+    "group": "Nerds",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/screens": {
+    "title": "Screens",
+    "url": "https://resolume.com/support/en/screens",
+    "group": "Output",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/shadowplay": {
+    "title": "Shadowplay",
+    "url": "https://resolume.com/support/en/shadowplay",
+    "group": "Troubleshooting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/shortcuts": {
+    "title": "Keyboard Shortcuts",
+    "url": "https://resolume.com/support/en/shortcuts",
+    "group": "Workflow",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/slice-routing": {
+    "title": "Slice Routing",
+    "url": "https://resolume.com/support/en/slice-routing",
+    "group": "Best Practices",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/smpte": {
+    "title": "SMPTE",
+    "url": "https://resolume.com/support/en/smpte",
+    "group": "Controlling Resolume",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/sources": {
+    "title": "Sources",
+    "url": "https://resolume.com/support/en/sources",
+    "group": "Content",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/stills": {
+    "title": "Stills",
+    "url": "https://resolume.com/support/en/stills",
+    "group": "Content",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/streaming": {
+    "title": "Live Streaming with Resolume & OBS Studio",
+    "url": "https://resolume.com/support/en/streaming",
+    "group": "Output",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/sync-to-denon-players": {
+    "title": "Sync to Denon DJ Players",
+    "url": "https://resolume.com/support/en/sync-to-denon-players",
+    "group": "Controlling Resolume",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/sync-to-pioneer-dj-players": {
+    "title": "Sync to Pioneer DJ Players",
+    "url": "https://resolume.com/support/en/sync-to-pioneer-dj-players",
+    "group": "Controlling Resolume",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/sync-with-dj": {
+    "title": "Sync with a DJ",
+    "url": "https://resolume.com/support/en/sync-with-dj",
+    "group": "Controlling Resolume",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/syphonspout": {
+    "title": "Syphon & Spout",
+    "url": "https://resolume.com/support/en/syphonspout",
+    "group": "Content",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/tech-specs": {
+    "title": "Tech Specs",
+    "url": "https://resolume.com/support/en/tech-specs",
+    "group": "Nerds",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/transform": {
+    "title": "Transform",
+    "url": "https://resolume.com/support/en/transform",
+    "group": "Content",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/undo": {
+    "title": "Undo",
+    "url": "https://resolume.com/support/en/undo",
+    "group": "Best Practices",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/updates": {
+    "title": "Yearly Renewals",
+    "url": "https://resolume.com/support/en/updates",
+    "group": "Installing & Registering",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/version-6-doesn-t-start-on-latest-osx": {
+    "title": "Version 6 doesn't start on latest OSX",
+    "url": "https://resolume.com/support/en/version-6-doesn-t-start-on-latest-osx",
+    "group": "Troubleshooting",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/video": {
+    "title": "Video",
+    "url": "https://resolume.com/support/en/video",
+    "group": "Content",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/vocabulary": {
+    "title": "Basic Vocabulary",
+    "url": "https://resolume.com/support/en/vocabulary",
+    "group": "Workflow",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/websocket-api": {
+    "title": "Websocket API",
+    "url": "https://resolume.com/support/en/websocket-api",
+    "group": "Nerds",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/wire-fft": {
+    "title": "FFT",
+    "url": "https://resolume.com/support/en/wire-fft",
+    "group": "Resolume Wire",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/wire-installing": {
+    "title": "Installing",
+    "url": "https://resolume.com/support/en/wire-installing",
+    "group": "Resolume Wire",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/wire-introduction": {
+    "title": "Introduction",
+    "url": "https://resolume.com/support/en/wire-introduction",
+    "group": "Resolume Wire",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/wire-midi": {
+    "title": "MIDI",
+    "url": "https://resolume.com/support/en/wire-midi",
+    "group": "Resolume Wire",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/wire-node-anatomy": {
+    "title": "Nodes",
+    "url": "https://resolume.com/support/en/wire-node-anatomy",
+    "group": "Resolume Wire",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/wire-osc": {
+    "title": "OSC",
+    "url": "https://resolume.com/support/en/wire-osc",
+    "group": "Resolume Wire",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/wire-resolume-integration": {
+    "title": "Integration",
+    "url": "https://resolume.com/support/en/wire-resolume-integration",
+    "group": "Resolume Wire",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/wire-saving-consolidating": {
+    "title": "Saving & Sharing",
+    "url": "https://resolume.com/support/en/wire-saving-consolidating",
+    "group": "Resolume Wire",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/wire-slices": {
+    "title": "Slices",
+    "url": "https://resolume.com/support/en/wire-slices",
+    "group": "Resolume Wire",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/wire-syphon-and-spout": {
+    "title": "Syphon and Spout",
+    "url": "https://resolume.com/support/en/wire-syphon-and-spout",
+    "group": "Resolume Wire",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  },
+  "https://resolume.com/support/en/wire-user-interface": {
+    "title": "User Interface",
+    "url": "https://resolume.com/support/en/wire-user-interface",
+    "group": "Resolume Wire",
+    "status": "extracted",
+    "session": "2026-10-03",
+    "notes": "Read in full (page text from <main>; images not seen)."
+  }
+}

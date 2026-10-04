@@ -21,6 +21,9 @@ userguide and refpages. The comparison and advice lines are written by hand in
 11. Using more cores. Most of these tools do the main work on one thread. TouchDesigner (Engine COMP) and Pd ([pd~]) reach for a second process. Max has separate scheduler and audio threads and can spread audio across top-level patchers or poly~ voices.
 12. Where the work ends up. plugdata runs the whole patch, editor included, as a plug-in in any DAW, and Heavy compiles patches to C++, plug-ins and Daisy. cables.gl exports a web page. TouchDesigner has a player-only runtime. Max builds standalones, Max for Live devices and RNBO exports. MadMapper and Isadora run only in their own app, with MadMapper's hardware players as the exception.
 13. Time as the program. ossia score is the one tool where the timeline drives execution: a process runs only while its interval plays, triggers hold the timeline until an event, conditions choose which branch runs, and seeking replays the latest state. Max has a transport and timed objects, but no score structure that decides what runs.
+14. The operator and GO. QLab is built around a person pressing GO: a shared playhead, auto-continue and auto-follow, panic and double-GO protection, and changes made while running that Reset clears. Isadora and MadMapper share parts of this; Max, TouchDesigner, cables.gl and Pd have none of it built in.
+15. Choosing what a control points at. Resolume and QLab let any outside control target an item by its position, by a fixed identity that survives reordering, or as whatever is selected. In Max a send name or a scripting name is one fixed identity.
+16. Tempo as the grid. Resolume makes the BPM clock the main time base: clips have lengths in beats, starts are quantised, and parameter animations follow the tempo. Max has the transport for this, but its objects choose to follow it one at a time.
 
 ## Dimensions
 
@@ -47,7 +50,7 @@ userguide and refpages. The comparison and advice lines are written by hand in
 
 ## 1. Evaluation
 
-**The difference:** Max pushes events and computes DSP every vector while audio is on. TouchDesigner pulls on demand and skips anything nobody watches. MadMapper, cables.gl and Gem draw once per frame, and cables.gl skips any branch the frame trigger does not reach. Isadora pulls from the end of each chain and can stop a whole upstream branch with a gated Gate. Pd works like Max. ossia score is driven by its timeline: a process runs only while its interval is playing.
+**The difference:** Max pushes events and computes DSP every vector while audio is on. TouchDesigner pulls on demand and skips anything nobody watches. MadMapper, cables.gl and Gem draw once per frame, and cables.gl skips any branch the frame trigger does not reach. Isadora pulls from the end of each chain and can stop a whole upstream branch with a gated Gate. Pd works like Max. ossia score is driven by its timeline: a process runs only while its interval is playing. QLab runs nothing until a cue starts. Vezér only plays back what was drawn or recorded. Resolume composites the playing clips every frame.
 
 **Advice for Max:** In Max, unused work keeps running until something upstream stops it, so stop it at the top: turn off the metro or close a gate above the heavy part, and switch whole audio sections off with mute~ or pcontrol. Put the stop above the expensive object, not below it.
 
@@ -94,9 +97,27 @@ Execution is driven by the score's time: while playing, each running interval ti
 - *Coming from Max:* In Max an object computes whenever a message reaches its hot inlet, at any time (max_system_model.json dimension 1). In score nothing runs unless the playhead is inside its interval, so a 'patch that just runs' has to be placed in an interval held open by a trigger.
 - *Confidence:* medium
 
+### QLab
+
+Nothing runs until a cue is started: by GO, a trigger (hotkey, MIDI, wall clock, timecode), another cue, OSC or AppleScript. A started cue runs its own action (play a file, fade, send a message) until it ends or is stopped; cues that are not running cost nothing beyond the list itself.
+- *Coming from Max:* In Max a message at a hot inlet makes an object compute (max_system_model.json dimension 1). In QLab there is no flow between cues at all; the unit of work is a whole cue, started by an event.
+- *Confidence:* high
+
+### Vezér
+
+Tracks are processed only while their composition plays, sampled at the composition's frame rate. Outside playback a track is processed only when its settings change, when the playhead is scrubbed or jumped (if 'Process composition while scrubbing' is on) or when a keyframe is dragged (if that preference is on). Interpolating value tracks skip repeated values unless optimised sending is off.
+- *Coming from Max:* Max computes when a message arrives (max_system_model.json dimension 1). Vezér is a frame loop over a timeline: nothing happens unless a composition is playing, and incoming messages are not processed into outputs at all, only recorded or used as remote control.
+- *Confidence:* high
+
+### Resolume
+
+Resolume renders a frame loop: every frame it composites the playing clips layer by layer, applies effects, and sends the result to the outputs. Parameters are re-evaluated per frame from their phase source. What runs is what is triggered: an empty or ejected layer costs nothing, and a bypassed layer is hidden. In Wire, nodes compute per frame (signal flow), on change (event flow) or only when the patch compiles (attribute flow).
+- *Coming from Max:* Max computes when a message arrives (max_system_model.json dimension 1); a Jitter render loop must be built with jit.world. In Resolume the frame loop is the whole program, and nothing is 'sent' between parts: values are sampled each frame.
+- *Confidence:* medium
+
 ## 2. Ordering
 
-**The difference:** Max and Pd follow each path to its end before the next. Max orders several cords from one outlet by screen position, right to left. Pd orders them by the order the cords were made, which nobody can see. TouchDesigner orders by dependency, cables.gl by the trigger graph, MadMapper by list order, and Isadora by pull plus top-to-bottom position where several links meet one input.
+**The difference:** Max and Pd follow each path to its end before the next. Max orders several cords from one outlet by screen position, right to left. Pd orders them by the order the cords were made, which nobody can see. TouchDesigner orders by dependency, cables.gl by the trigger graph, MadMapper by list order, and Isadora by pull plus top-to-bottom position where several links meet one input. QLab orders by the cue list, its continue modes and pre-waits. Resolume's stack is its order, layer 1 painted first. Vezér's docs don't say.
 
 **Advice for Max:** Whenever one outlet feeds more than one place and the order matters, use trigger. A patch that leans on screen position breaks when someone tidies the layout, and the same patch copied into Pd runs in a different order.
 
@@ -143,9 +164,27 @@ Within a tick, the order follows the dataflow graph of cables between processes,
 - *Coming from Max:* Max users manage right-to-left and depth-first order inside one event (max_system_model.json dimension 2). score's docs say little about message order within a tick; ordering is mostly a matter of time position and graph shape.
 - *Confidence:* low
 
+### QLab
+
+Order is the list order plus continue modes and waits: GO starts the standing-by cue; auto-continue and auto-follow chain the next; Timeline groups order by pre-wait. Light commands inside a cue are applied top to bottom. Two cues started by one action start 'simultaneously' at human perception.
+- *Coming from Max:* Max's depth-first, right-to-left message order (max_system_model.json dimension 2) has no counterpart; QLab's order is visible as rows and times, not as cord positions.
+- *Confidence:* high
+
+### Vezér
+
+not documented. Tracks are independent lanes; the docs say nothing about the order in which tracks in one composition, or several compositions, send within one frame. Grouped OSC tracks (#n) are merged into one message, which is the only ordering control described.
+- *Coming from Max:* Max's depth-first, right-to-left order and trigger (max_system_model.json dimension 2) have no counterpart; in Vezér order within a frame is not something the user sees or sets.
+- *Confidence:* medium
+
+### Resolume
+
+Order is the stack. Layer 1 is the bottom and is painted first; each higher layer blends onto the result. Within a clip, layer, group or composition, effects run top to bottom in their list, with clip effects before layer effects, layer before group, and composition effects last. Autopilot conflicts are settled small to big: clip over layer over group over composition.
+- *Coming from Max:* Max orders events depth-first and right to left (max_system_model.json dimension 2), and draw order in Jitter depends on depth testing and @layer. Resolume has no event order to reason about; the visible list order is the order.
+- *Confidence:* high
+
 ## 3. Time
 
-**The difference:** Max has several clocks side by side: the millisecond scheduler, the sample clock, the render frame and the transport. TouchDesigner is frame-based with local timelines per component. MadMapper has an engine frame rate, a global BPM, timelines and a Master Speed. Isadora has a frame clock and no global timeline. cables.gl has the frame plus one timeline. Pd has one logical clock for messages and audio. ossia score makes the timeline the master clock, counted in flicks, with speed, tempo and quantisation passed down nested intervals.
+**The difference:** Max has several clocks side by side: the millisecond scheduler, the sample clock, the render frame and the transport. TouchDesigner is frame-based with local timelines per component. MadMapper has an engine frame rate, a global BPM, timelines and a Master Speed. Isadora has a frame clock and no global timeline. cables.gl has the frame plus one timeline. Pd has one logical clock for messages and audio. ossia score makes the timeline the master clock, counted in flicks, with speed, tempo and quantisation passed down nested intervals. QLab keeps cues sample-locked to their audio device and can chase or send LTC and MTC. Vezér gives each composition its own sync (internal, MIDI clock or MTC). Resolume makes a global BPM clock the main time grid, with Link and DJ-player sync.
 
 **Advice for Max:** Choose the clock that matches what the result is for. Animation that ends up on screen should step with the render frame (jit.line, which loads as jit.mo.time, ramps in step with the render context) rather than the millisecond scheduler. Musical timing belongs on the transport.
 
@@ -190,6 +229,24 @@ One logical clock, kept as a 64-bit float in milliseconds, drives both messages 
 
 The timeline is the master clock. Model time is counted in flicks (705,600,000 per second) and is affected by speed controls; physical time is counted in audio samples. Each interval can run at its own speed, and tempo, time signature and quantisation pass down the hierarchy, so different sections can have different tempos. Transport can follow or drive JACK transport.
 - *Coming from Max:* Max has one scheduler, the sample clock and flat named transports at 480 PPQ (max_system_model.json dimension 3). score's time is a tree: a section can be slowed, paused or given its own tempo without touching the rest, and seeking replays state.
+- *Confidence:* high
+
+### QLab
+
+Times are seconds to the millisecond (shown to hundredths). Waits run on the system clock; cues with audio run on their audio device's clock and stay sample-locked within one output patch; video follows either the display or the audio clock. Timecode can be received (LTC/MTC) per list and generated by any number of Timecode cues. Rates 0.03 to 33 apply per cue; there is no tempo or metre (MIDI File cues are the exception).
+- *Coming from Max:* Max has a tempo-aware transport and note-value times (max_system_model.json dimension 3); QLab has none, but it does have timecode in and out, which Max lacks as objects.
+- *Confidence:* high
+
+### Vezér
+
+Each composition has its own clock: a frame rate (up to 125 fps), a duration, and a tempo. 120 BPM is normal speed; other BPMs speed up or slow down keyframe playback (not audio). A composition can instead follow MIDI clock (SPP) or MTC with a SMPTE offset, and can send MTC and MMC. Time is shown and typed as minutes:seconds:frames or hh:mm:ss:ff.
+- *Coming from Max:* Max's time is a millisecond scheduler plus transports at 480 PPQ (max_system_model.json dimension 3), and no timecode object. Vezér's time is frames, per composition, and timecode is native; 'tempo' is just a speed multiplier on a fixed timeline.
+- *Confidence:* high
+
+### Resolume
+
+Three clocks matter: the render frame, a global BPM clock (tap, resync, nudge, MIDI clock, Ableton Link), and external timecode or DJ players that can own a clip's playhead. Each clip has its own transport (timeline in seconds, BPM Sync in beats, SMPTE, Denon or Pioneer). Parameter animations reuse the same transport, and their keyframes are placed in phase (0 to 1), not seconds.
+- *Coming from Max:* Max has a scheduler, the audio clock and a transport with bars.beats.units (max_system_model.json dimension 3). Resolume has no millisecond event scheduler a user can address; musical time is the main grid and every clip can follow it without wiring.
 - *Confidence:* high
 
 ## 4. Data types
@@ -241,6 +298,24 @@ Ports carry audio (any number of channels), values, MIDI, textures and geometry.
 - *Coming from Max:* Max messages are atoms and lists, with big data passed by name (max_system_model.json dimension 4). score has typed vectors and an impulse type as first-class values, and a value can carry a unit.
 - *Confidence:* medium
 
+### QLab
+
+No user-visible data flow. A cue's properties are typed fields (times, dB levels, text cue numbers, colours, curves, matrices of levels, 2D paths). Values cross to the outside world as OSC (strings, ints, floats, OSC 1.1 booleans, impulse, null), MIDI, MSC, DMX, timecode, audio and video.
+- *Coming from Max:* Max users think in messages, signals and matrices on cords (max_system_model.json dimension 4); QLab users think in properties of cues.
+- *Confidence:* medium
+
+### Vezér
+
+Each track has one fixed kind: MIDI CC (7 or 14 bit), MIDI notes with velocity, OSC value (int, float or boolean, with min and max), OSC flag (address plus fixed arguments, no value), colour (RGBA, to OSC or Art-Net), Art-Net value (8 or 16 bit), and audio. Keyframes copied between kinds are converted: colour to value by luminance, value to colour by chosen channels, values rescaled to the target's range.
+- *Coming from Max:* Max's atoms, lists, signals, matrices and textures (max_system_model.json dimension 4) are a general toolkit. Vezér's types are output protocols: a track's type is the wire format it will send, and the conversions happen when editing, not while running.
+- *Confidence:* high
+
+### Resolume
+
+To the user, Resolume's data is media (video, audio, stills, sources, live inputs) and typed parameters. The REST API names the parameter types: boolean, choice, color (hex string with a palette), event, integer, range (float with min, max and in/out clamp), string, text and file, each with display hints (suffix, step, units, control type). Wire adds textures, numbers, vectors (Float2-4), colours, arrays (collections, instancing), MIDI, OSC, slices and spectrum data.
+- *Coming from Max:* Max passes atoms and names that point at storage (max_system_model.json dimension 4). Resolume users never see a message; they see parameters with a declared type, range and display unit.
+- *Confidence:* medium
+
 ## 5. Rates and channels
 
 **The difference:** Max and Pd keep control, audio and frame rates apart. Pd sets block size, overlap and resampling per window with [block~]. TouchDesigner makes rate a property of each CHOP's data, with everything cooking on the frame. Isadora and cables.gl have one frame rate and handle audio separately. Many channels are one MC cord in Max, one cord in Pd, a channel bundle in TouchDesigner.
@@ -290,9 +365,27 @@ Audio runs at the sound card rate with a buffer size; value and MIDI ports carry
 - *Coming from Max:* Max separates event, signal and frame domains with converter objects (max_system_model.json dimension 5). In score a value port inside an audio tick already carries sample-position timestamps, and the multichannel idea matches Max's MC.
 - *Confidence:* medium
 
+### QLab
+
+Audio runs at the device rate with automatic sample-rate and bit-depth conversion per file; a cue uses up to 24 channels and a patch up to 128 cue outputs and 128 device outputs. Video runs at each output's refresh rate, with cues of any frame rate mixed on one stage. Network cues can resend at 1 to 120 fps; DMX frames go out about every 23 ms.
+- *Coming from Max:* No control rate exists to manage; Max's event/signal/frame split (max_system_model.json dimension 5) is hidden inside cue types.
+- *Confidence:* medium
+
+### Vezér
+
+One rate per composition, its frame rate; every track in it is sampled at that rate. Audio tracks play at audio rate through a channel map to the default or a chosen device. 'Channels' in the Max sense are not documented; multi-value output is made by grouping tracks or by Art-Net channel lists.
+- *Coming from Max:* No control-rate/audio-rate split to manage: everything is frames, except audio playback. Several compositions can run at different frame rates side by side.
+- *Confidence:* medium
+
+### Resolume
+
+Video runs at the composition frame rate (auto or capped), audio at the chosen sample rate, DMX output at its own rate with a delay to line up with projectors, and Wire separates per-frame from per-event data. A layer can render at its own resolution. Composition bit depth is 8 or 16 bits per channel; a Wire patch can run at higher depth than the composition.
+- *Coming from Max:* Max keeps control, audio and frame rates apart with converter objects (max_system_model.json dimension 5). Resolume exposes rates only as settings; there is no per-part rate except DMX output and layer resolution.
+- *Confidence:* medium
+
 ## 6. State and saving
 
-**The difference:** Max and Pd save structure, not values: a slider position is gone on reopen unless something stores it. Pd does this on purpose and has no preset system. TouchDesigner, MadMapper, Isadora and cables.gl save every setting's value in the file, and MadMapper and Isadora add scenes or snapshots as built-in presets. ossia score saves the timeline and the values stored in its states, not live device values, and rebuilds state on a seek.
+**The difference:** Max and Pd save structure, not values: a slider position is gone on reopen unless something stores it. Pd does this on purpose and has no preset system. TouchDesigner, MadMapper, Isadora and cables.gl save every setting's value in the file, and MadMapper and Isadora add scenes or snapshots as built-in presets. ossia score saves the timeline and the values stored in its states, not live device values, and rebuilds state on a seek. QLab saves every cue property but treats changes made while running (fades, OSC) as temporary until Reset. Resolume saves the composition but keeps output setups and mappings in separate files, so one rig setup serves many shows.
 
 **Advice for Max:** Decide how a Max patch keeps its state before building it: Snapshots, pattrstorage with autopattr, or initial values in Parameter Mode. Without one, every control reopens at its default, and the operator sees a patch that has forgotten everything.
 
@@ -339,9 +432,27 @@ A .score file saves the whole timeline, processes, cables, device definitions an
 - *Coming from Max:* A Max patch saves structure and needs pattr, Snapshots or embed flags to keep values (max_system_model.json dimension 6). In score the stored values are the show itself: states on a timeline, and seeking reconstructs them.
 - *Confidence:* medium
 
+### QLab
+
+The workspace saves every cue property and all workspace settings. Runtime changes from Fade cues, Target cues and live OSC are temporary: not saved, not marked as edits, cleared by Reset. Autosave writes backup copies, never the workspace; a backup is kept before each manual save and rotated. Light definitions are embedded in the workspace.
+- *Coming from Max:* A Max patch saves structure, not values (max_system_model.json dimension 6). QLab saves everything designed, and explicitly separates designed values from performance-time changes.
+- *Confidence:* high
+
+### Vezér
+
+A project file (.vzr) holds all compositions, tracks, keyframes, cues and settings. Whether compositions were playing when saved is stored, and a preference decides whether that is honoured at load. OSC presets (namespace, track type, range) live in separate .plist preset-group files. Audio files are referenced, relatively if they sit next to the project or in a 'files' folder.
+- *Coming from Max:* In Max a patch saves structure, not values, unless a storage system is added (max_system_model.json dimension 6). In Vezér the document is the data: every keyframe is the saved state, and there is no separate preset layer.
+- *Confidence:* high
+
+### Resolume
+
+A composition saves everything a show needs except the media itself: clips and their settings, decks, effects, parameter animations, envelopes and current values. Output setups (Advanced Output), shortcut mappings, interface layouts and presets are saved separately as XML files in the user's Documents folder, so one setup can serve many compositions. Media is referenced by path.
+- *Coming from Max:* A .maxpat saves structure, not current values, unless a storage system keeps them (max_system_model.json dimension 6). Resolume keeps values with the composition, and keeps the stage setup and controller mapping out of it.
+- *Confidence:* medium
+
 ## 7. Parameters
 
-**The difference:** TouchDesigner, MadMapper, Isadora and cables.gl treat every setting as a named parameter with a range and a control. TouchDesigner adds four modes per parameter: constant, expression, export, bind. MadMapper gives every parameter an OSC address automatically. Max has attributes everywhere and an opt-in Parameter Mode layer that Snapshots, mapping, OSC and Live use. Pd has parameters only at the edges, through plugdata and Heavy. ossia score puts every parameter it controls in one device tree with type, range, clip mode and unit.
+**The difference:** TouchDesigner, MadMapper, Isadora and cables.gl treat every setting as a named parameter with a range and a control. TouchDesigner adds four modes per parameter: constant, expression, export, bind. MadMapper gives every parameter an OSC address automatically. Max has attributes everywhere and an opt-in Parameter Mode layer that Snapshots, mapping, OSC and Live use. Pd has parameters only at the edges, through plugdata and Heavy. ossia score puts every parameter it controls in one device tree with type, range, clip mode and unit. Resolume gives every parameter the same machinery: animation source, envelope, presets, shortcuts and a fixed OSC address. QLab cue types have fixed properties, all reachable by OSC. Vezér has no parameters of its own; its tracks point at other software's.
 
 **Advice for Max:** Turn on Parameter Mode for the controls an operator or a host should reach, so they gain a range, an initial value, mapping and an OSC address in one step. Max has no expressions on attributes, so a computed setting is an explicit object feeding an attrui or a message, where it can be seen.
 
@@ -386,6 +497,24 @@ Vanilla Pd has no parameter system. Settings are creation arguments, inlets and 
 
 Everything score controls is a parameter in a device tree, addressed as device:/path. Parameters carry a type, range or value set, clip mode, repetition filter, unit and more. Process controls are ports that can be given an address, automated, or cabled. There are no expressions on parameters; math lives in expression processes.
 - *Coming from Max:* In Max, settings are attributes and only parameter-enabled objects join the parameter system (max_system_model.json dimension 7). In score the parameter tree is the centre of the program: every external control is one, and the tree, not the patch, is what you browse.
+- *Confidence:* high
+
+### QLab
+
+Every cue setting is a fixed, named property of its cue type, reachable through the inspector, OSC (/cue/{n}/{property}) and AppleScript. Fade cues change chosen properties over time; there are no expressions or bindings between properties, except OSC queries in Network cues and light-command pulls.
+- *Coming from Max:* Max attributes and Parameter Mode are per object and open-ended (max_system_model.json dimension 7); QLab's parameter set is closed but uniformly addressable by OSC.
+- *Confidence:* high
+
+### Vezér
+
+Vezér does not expose parameters of its own patch; its tracks point at other software's parameters. Each OSC track carries the target's address, type and min/max, saved as reusable OSC Presets or filled in from an OSCQuery server. Vezér's own interface items are addressable by OSC (shown with Show OSC Namespaces) and by MIDI Learn.
+- *Coming from Max:* Max's parameters live on its own objects (max_system_model.json dimension 7). Vezér's 'parameters' are descriptions of someone else's: a track is a remote address with a range.
+- *Confidence:* high
+
+### Resolume
+
+Everything adjustable is a parameter, and every parameter has the same machinery: reset to default, typed-in maths, a phase source for animation, an envelope, presets for its animation, a dashboard slot, keyboard/MIDI/OSC/DMX shortcuts, a fixed OSC address and a REST id. Toggles, dropdowns, events and colours are parameters too and can all be animated.
+- *Coming from Max:* In Max only objects in Parameter Mode get names, ranges, OSC addresses and mapping (max_system_model.json dimension 7); most settings are attributes reached by message. In Resolume there is no distinction to manage.
 - *Confidence:* high
 
 ## 8. Encapsulation and reuse
@@ -437,9 +566,27 @@ Reuse happens through nesting and the library. A Scenario process puts a whole s
 - *Coming from Max:* Max reuses through abstractions with arguments and #0 instance names, and poly~ for many copies (max_system_model.json dimension 8). The docs read describe no equivalent of arguments or replication for a saved .scenario; reuse is by copying a fragment back in.
 - *Confidence:* medium
 
+### QLab
+
+Group cues (five modes) are the only container. Reuse is by cue templates (default settings per cue type, including per-network-patch defaults), workspace templates, settings import/export, Paste Cue Properties presets, and Script cues that edit the workspace.
+- *Coming from Max:* No abstractions, arguments or instancing (max_system_model.json dimension 8); a QLab designer repeats structure by copying cues and templates.
+- *Confidence:* high
+
+### Vezér
+
+Compositions can be duplicated, emptied and reordered; tracks can be duplicated, copied, moved to another composition and locked. OSC Presets reuse target descriptions across projects. $COMP, $COMPINDEX and $TRACK in addresses let a duplicated composition or track address different targets. The product page mentions composition import between projects, which the help pages do not describe. No nesting of compositions inside compositions is documented.
+- *Coming from Max:* Max has abstractions with arguments and replication (max_system_model.json dimension 8). Vezér's reuse is copy-and-rename, with address templating standing in for arguments; there is one level of structure, compositions of tracks.
+- *Confidence:* medium
+
+### Resolume
+
+Inside Arena and Avenue the unit of reuse is the preset (effect, transform, envelope, animation, palette, shortcut, output setup) and the deck, which can be pulled from another composition. Groups are one level of sub-composition and cannot be nested. New effects, sources and blend modes are made in Wire, compiled to .wired (editable) or .cwired (locked) files that appear in the effects and sources lists.
+- *Coming from Max:* Max reuses by abstraction with arguments, instancing and poly~ (max_system_model.json dimension 8). Resolume users reuse settings, not graphs; graphs live in Wire, outside the performance tool.
+- *Confidence:* medium
+
 ## 9. Names and scope
 
-**The difference:** Max and Pd names are global unless made local by hand (#0, ---, $0, pv). TouchDesigner names are paths in a hierarchy and every reference is drawn as a dashed line. Isadora seals each Scene and passes data on numbered channels. cables.gl variables reach the whole patch. MadMapper's item tree doubles as the OSC address space. ossia score addresses parameters by device and path, with pattern matching over many addresses at once.
+**The difference:** Max and Pd names are global unless made local by hand (#0, ---, $0, pv). TouchDesigner names are paths in a hierarchy and every reference is drawn as a dashed line. Isadora seals each Scene and passes data on numbered channels. cables.gl variables reach the whole patch. MadMapper's item tree doubles as the OSC address space. ossia score addresses parameters by device and path, with pattern matching over many addresses at once. Resolume and QLab let a control target an item by position, by a fixed identity, or as whatever is selected.
 
 **Advice for Max:** A send/receive pair in Max is a link nobody can see, unlike a TouchDesigner reference. Keep such links few, name them clearly in capitals, use a cord when the two ends are close, and give every name inside a copied thing its per-copy prefix.
 
@@ -486,9 +633,27 @@ Parameters are reached by path: device name, colon, slash path (OSCdevice:/track
 - *Coming from Max:* Max names are mostly global send/receive names with scope tricks like #0 and --- (max_system_model.json dimension 9). In score a name is a full path in a tree, so related controls are grouped by their path and can be addressed together with one pattern.
 - *Confidence:* high
 
+### QLab
+
+Cues are named by unique text cue numbers (workspace-wide) and permanent unique IDs; lists, patches, stages, routes and instruments have names. OSC addresses cues by number, selection, playhead or ID, with wildcards, and workspaces by name or ID; every workspace on a port receives unprefixed messages.
+- *Coming from Max:* Max's global send/receive names (max_system_model.json dimension 9) are replaced by one workspace-wide namespace of cue numbers, used both by operators and by remote systems.
+- *Confidence:* high
+
+### Vezér
+
+Compositions have unique names within a project and are addressed in OSC by name (/vezer/<compname>/...), by index, or as 'current'. Tracks are named for management only; a track's name matters to recording (renaming a recorded track makes the next pass start a new one) and to $TRACK. Outputs (MIDI, OSC, Art-Net) are named project-wide.
+- *Coming from Max:* Max names are mostly global with narrower scopes added (max_system_model.json dimension 9). Vezér has a flat two-level name space: project, then composition, with 'current' as the only indirection.
+- *Confidence:* high
+
+### Resolume
+
+Things are found by path in a fixed tree (/composition/layers/2/clips/8/...) by position, by a stable id, or as the selected item. A shortcut likewise targets a position, a specific item, or the current selection. Names typed by the user are labels; a '#' in a layer name shows its position. A group's contents cannot be routed outside it.
+- *Coming from Max:* Most Max names are global and chosen by the user (max_system_model.json dimension 9). Resolume users never invent a name to connect two things; the tree and the selection do it.
+- *Confidence:* high
+
 ## 10. Show structure
 
-**The difference:** Isadora is built as a row of Scenes with transitions handled by the host. MadMapper has a grid of Scenes and Cues and a master timeline. Max, TouchDesigner, cables.gl and Pd have one graph, and scenes and cues are built from parts. ossia score makes the timeline itself interactive: triggers wait for an event, conditions choose a branch, transitions loop or jump.
+**The difference:** Isadora is built as a row of Scenes with transitions handled by the host. MadMapper has a grid of Scenes and Cues and a master timeline. Max, TouchDesigner, cables.gl and Pd have one graph, and scenes and cues are built from parts. ossia score makes the timeline itself interactive: triggers wait for an event, conditions choose a branch, transitions loop or jump. QLab is cue lists with a playhead and GO, plus carts. Vezér is compositions with cue tracks that can loop, triggered by OSC, MIDI or MMC. Resolume is a grid of clips where a column is a look and a deck is a set.
 
 **Advice for Max:** A Max piece with sections needs its scene layer designed early: what each section turns on and off, how state is stored per section (pattrstorage or Snapshots), how cues are listed (qlist or coll), and how sections fade. Isadora's rule that an inactive section does nothing is worth copying: switch whole sections off, not just their outputs.
 
@@ -533,6 +698,24 @@ A work is one patch graph, with subpatches. There are no scenes, cues or timelin
 
 A show is one interactive score: intervals (blocks of time holding processes) between states (instants holding cues), joined at synchronisation points. Triggers hold the timeline until an event, conditions choose branches, transitions loop back, and sub-scenarios nest. Scenes are sequences of intervals each holding a sub-scenario.
 - *Coming from Max:* Max has no built-in show layer; structure is built from qlist, pattrstorage and the transport (max_system_model.json dimension 10). score is the show layer: its whole interface is a timeline that can wait, branch and loop.
+- *Confidence:* high
+
+### QLab
+
+The show is cue lists with playheads (sequential) and carts (non-sequential), containing cues and groups. Sequences are built from continue modes and Timeline groups; branching is limited to GoTo cues, Target cues, random groups and external triggers.
+- *Coming from Max:* This is the layer Max lacks (max_system_model.json dimension 10): QLab is almost nothing but show structure.
+- *Confidence:* high
+
+### Vezér
+
+A project is a set of compositions (scenes, songs, looks). Each is a timeline of tracks with a cue track. Cues stop or mark, optionally looping N times or forever. Compositions are triggered by OSC, MIDI or MMC, run in parallel or solo, or chained in Queue mode with an optional loop. Mute and solo apply per track; DMX tracks can black out when muted.
+- *Coming from Max:* This is the layer Max lacks (max_system_model.json dimension 10). Vezér is nothing but show structure: it computes nothing itself and leaves the patching to the apps it drives.
+- *Confidence:* high
+
+### Resolume
+
+A show is one composition: a grid of clips (layers by columns) split into decks, mixed through layers and groups, sent out through the Advanced Output. Columns are the looks; decks are the sets. Sequencing is the autopilot (clip, layer, group, column or composition level), BPM-quantised triggering, timecode or DJ-player sync, plus external control. There is no timeline view of the whole show.
+- *Coming from Max:* Max has no built-in scene, cue or timeline layer (max_system_model.json dimension 10). Resolume's structure is a performance instrument: a grid to play by hand, with automation added on top.
 - *Confidence:* high
 
 ## 11. Interface
@@ -584,6 +767,24 @@ One window holds a device explorer and libraries on the left, the timeline (or n
 - *Coming from Max:* In Max the controls are the dataflow and a presentation view is the performer view (max_system_model.json dimension 11). score's editor is a timeline, and a performer interface is a separate QML file that binds to ports and addresses by name.
 - *Confidence:* medium
 
+### QLab
+
+One main window: GO button, standby display and notes (masthead), the cue list, and a tabbed inspector, plus secondary windows for other lists and carts, floating secondary inspectors, monitor windows, the Light Dashboard and a Workspace Status window. The operator interface is the cue list itself; remote interfaces are QLab Remote (iOS), Stream Deck and OSC.
+- *Coming from Max:* There is no presentation view to design (max_system_model.json dimension 11): every QLab show looks the same to its operator, which is the point.
+- *Confidence:* high
+
+### Vezér
+
+One fixed window: the composition list, the timeline with its cue track, and track lanes with per-track settings (output, address, range, bang, enable). There is no performer view separate from the editing view. Vezér's controls can be MIDI-learned or driven by OSC; tools such as the DMX monitor, soft patch and range select open in their own windows.
+- *Coming from Max:* Max lets each patch build its own interface and a separate presentation view (max_system_model.json dimension 11). Vezér's interface is the editor; a performer drives it by OSC or MIDI from another app such as TouchOSC.
+- *Confidence:* medium
+
+### Resolume
+
+A fixed interface with dockable, undockable panels: the clip grid, clip/layer/group/composition panels with their effect stacks, browser tabs, monitors that can show any stage, a dashboard of eight dials per level, a clip-time clock and notes. Controls are generated from parameters; the user arranges panels, not controls. Wire patches get their controls in Arena from their input nodes, in dashboard order. Layouts save as presets. A webserver can host a custom HTML control page.
+- *Coming from Max:* In Max controls are objects placed in a patcher and presentation view (max_system_model.json dimension 11). In Resolume you cannot build a control surface inside the app; you arrange panels or build one outside (TouchOSC, a web page).
+- *Confidence:* high
+
 ## 12. Editing while running
 
 **The difference:** All six keep running while edited. Isadora adds Blind Mode, editing one Scene while another runs the show. TouchDesigner has wide undo and a Safe Mode for crashed files. In Max and Pd, retyping a box makes a new object and loses its state.
@@ -631,6 +832,24 @@ Edit mode and run mode differ only in what a click does; the patch keeps running
 
 The score keeps playing while you edit: processes, sounds and shaders can be added, removed or changed during playback, and code processes recompile on Compile or Ctrl+Enter. Invalid code leaves the running version in place. Devices cannot be added during playback, and execution settings need a restart of playback.
 - *Coming from Max:* Both run while edited. In Max, retyping an object resets it (max_system_model.json dimension 12); in score a code process keeps running its old version when new code fails to compile.
+- *Confidence:* medium
+
+### QLab
+
+Cues can be edited while running; level changes act live. Live fade preview (per workspace) makes edits to Fade cues audible while the target plays, or off to prepare fades blind. Light cues are edited 'blind' in the inspector, live in the Dashboard. Show mode locks editing. Collaborators edit on other Macs while cues run on the primary.
+- *Coming from Max:* Like Max, the show keeps running during edits (max_system_model.json dimension 12), but QLab adds explicit live-versus-blind choices that Max leaves to the patch author.
+- *Confidence:* medium
+
+### Vezér
+
+Compositions keep playing while tracks and keyframes are edited; with 'Process keyframe while dragging' on, a dragged keyframe sends its value live. Recording and playing the same track at once is not possible. Undo is mentioned among the global preferences' scope but not described.
+- *Coming from Max:* Like Max, the show runs while you edit; unlike Max, a track being recorded goes silent until recording stops.
+- *Confidence:* medium
+
+### Resolume
+
+Resolume is always live: clips, effects and settings change while the output runs, and recording does not interrupt playback. Undo covers mouse edits in each window separately; external input, clip triggers and automation are not undoable. The Advanced Output can be prepared on virtual screens before outputs are connected. In Wire, changing an attribute-flow setting recompiles the patch; inside Arena such a change may not break connections.
+- *Coming from Max:* Max is also live but retyping a box replaces the object and its state (max_system_model.json dimension 12). Resolume's edits never reset what is playing unless a clip is retriggered.
 - *Confidence:* medium
 
 ## 13. Scripting
@@ -682,6 +901,24 @@ JavaScript (ES7, through QML) is built in at two levels: JS processes that run i
 - *Coming from Max:* Max has v8 objects and thispatcher for patch scripting, plus gen and node.script (max_system_model.json dimension 13). score's script API works on the timeline as a document: creating boxes at a time, automating an address, setting curve points.
 - *Confidence:* high
 
+### QLab
+
+AppleScript only, in Script cues (by default in a separate process) or from outside; a large AppleScript dictionary mirrors the OSC dictionary. Scripts mostly build and edit cues. OSC from Network cues back to QLab (localhost) plus queries is the other automation route.
+- *Coming from Max:* No JavaScript or object-building scripting (max_system_model.json dimension 13); scripting edits the document rather than defining new behaviour.
+- *Confidence:* high
+
+### Vezér
+
+not documented. No scripting language is mentioned in the help pages. The nearest things are JSON keyframe import (for keyframes made by external scripts) and the OSC API.
+- *Coming from Max:* Max has v8, node.script and more (max_system_model.json dimension 13). Vezér deliberately has none; its own marketing sets visible keyframes against 'hidden scripts'. Logic lives in the apps it drives.
+- *Confidence:* medium
+
+### Resolume
+
+Arena and Avenue have no built-in scripting language. Control from code comes from outside: OSC, the REST API, the WebSocket API, and (from 7.26) MCP servers for AI apps. Wire is the in-house programming environment, node-based, with ISF shaders as its text language; typed maths with a few functions and constants works in any value box.
+- *Coming from Max:* Max has JavaScript inside (v8), Node for Max, Lua and gen (max_system_model.json dimension 13). Resolume's logic must live in another program, which is why many users drive it from Max or TouchOSC.
+- *Confidence:* high
+
 ## 14. Errors and debugging
 
 **The difference:** TouchDesigner, cables.gl and Isadora put errors on the node that raised them, and TouchDesigner repeats the mark on every containing component. Max and Pd print to a console that links back to the object. Max adds watchpoints, breakpoints and probes. MadMapper has no console, only monitors.
@@ -731,9 +968,27 @@ Errors from code processes appear in the editor's log pane. Messages in and out 
 - *Coming from Max:* Max has a console linked to objects, probes, watchpoints and Illustration Mode (max_system_model.json dimension 14). score's per-process CPU benchmark has no Max equivalent named in max_system_model.json, while Max's stepping debugger has none in score's docs.
 - *Confidence:* medium
 
+### QLab
+
+Each cue knows if it is broken and why (red X with a tooltip); the Warnings tab lists broken cues, breaking and non-breaking warnings, disconnections and flags, with a help button to the matching manual section. Logs record triggers, MIDI in, OSC in and OSC out. Video Metrics show fps and render time per stage. A broken cue in a sequence still runs its timing.
+- *Coming from Max:* Max reports to a console and leaves silent failures silent (max_system_model.json dimension 14); QLab validates every cue against its required settings before the show.
+- *Confidence:* high
+
+### Vezér
+
+Debugging is visual: 'Display value flow on Tracks' draws each track's current value as a grey area, the DMX Output Monitor shows a universe's channel values, and OSC Feedback reports playhead and state. Error reporting is not documented.
+- *Coming from Max:* Max has a console, probes and a debugger (max_system_model.json dimension 14). Vezér shows what each lane is sending on the lane itself, which a Max patch only gets by putting a display in the path.
+- *Confidence:* medium
+
+### Resolume
+
+Problems show as marks on the thing itself: an unplayable file shows a yellow X, a missing file shows red with a Relocate button, a missing slice in a Slice Transform turns red, overlapping DMX channels turn red, a polygon that cannot be triangulated is outlined in red, a duplicate shortcut is red in the list. Monitors show the last 200 OSC messages, incoming MIDI, and Art-Net per universe and channel. Wire has a Log, a Print node, a monitor of the selected node and a Stats panel of per-node load.
+- *Coming from Max:* Max reports errors in the Console and has probes and a debugger (max_system_model.json dimension 14), while unknown names often fail silently. Resolume shows faults where they are and has no debugger, because the user does not write logic.
+- *Confidence:* medium
+
 ## 15. Rendering
 
-**The difference:** Jitter joins objects to a named render context and orders them by depth testing, or by a layer number when depth testing is off on those objects. cables.gl and Gem treat the chain as a render tree where state applies to what is under it. TouchDesigner makes rendering an operator that outputs an image. MadMapper and Isadora order by list or layer number.
+**The difference:** Jitter joins objects to a named render context and orders them by depth testing, or by a layer number when depth testing is off on those objects. cables.gl and Gem treat the chain as a render tree where state applies to what is under it. TouchDesigner makes rendering an operator that outputs an image. MadMapper and Isadora order by list or layer number. QLab and Resolume are 2D compositors with numbered layers and blend modes feeding an output stage of regions, warps, masks and edge blends.
 
 **Advice for Max:** For 2D layering in Jitter, set @layer on each object and turn depth testing off on those same objects, or use jit.gl.layer, whose defaults are already depth off and blending on. Max's userguide says depth testing overrides the layer value otherwise. This corrects the repo's own forum notes, which put depth_enable on jit.world.
 
@@ -779,6 +1034,24 @@ Gem draws by passing a frame message down chains that start at [gemhead]. Object
 Video uses Qt RHI over OpenGL, Vulkan, Metal or Direct3D. Video processes form a render graph in its own thread; each writes to a render target, and outputs are Window, Spout, Syphon, NDI or shared-memory devices. Shaders are ISF (fragment), VSA (vertex points), CSF (compute) or raw raster pipelines, all declared by a JSON header.
 - *Coming from Max:* Jitter uses named contexts that objects join with @drawto, depth testing and @layer (max_system_model.json dimension 15). In score a video chain ends at an output device chosen on a port, and the docs do not describe a draw-order rule for overlapping images.
 - *Confidence:* medium
+
+### QLab
+
+A Metal video engine: cues draw on stages (up to 16384 x 16384) on 1001 layers with per-cue blend modes and video effects; stages are cut into regions, warped (perspective, linear, Bezier), masked by image, edge-blended, and sent through routes to displays, Blackmagic, Syphon or NDI.
+- *Coming from Max:* Jitter's open GL graph (max_system_model.json dimension 15) against a fixed 2D compositing pipeline with strong output mapping built in.
+- *Confidence:* high
+
+### Vezér
+
+not documented; Vezér renders no graphics. Its only visual output is its own interface.
+- *Coming from Max:* Not applicable: Vezér drives visual software (Resolume, MadMapper, Modul8, CoGe, VDMX per its tutorials) rather than drawing.
+- *Confidence:* high
+
+### Resolume
+
+A 2D compositor on the GPU: layers are textures blended in stack order by a blend mode and opacity, with groups flattened first and crossfader buses mixed first. Each clip, layer, group and the composition has a Transform and an effect chain. The Advanced Output then cuts the composition (or a routed layer, group or screen) into slices, warps them (perspective, linear, Bézier, polygon), masks them and sends them to screens, capture cards, NDI, Syphon/Spout or DMX fixtures. Wire is 2D too.
+- *Coming from Max:* Jitter has a 3D render tree with depth testing, cameras and materials (max_system_model.json dimension 15). Resolume is flat and its draw order is never ambiguous.
+- *Confidence:* high
 
 ## 16. Performance and concurrency
 
@@ -827,6 +1100,24 @@ Pd computes messages and audio in one thread. The GUI is a separate process, and
 
 Audio runs in the audio thread; video renders in a separate thread; a Parallel setting spreads processes over CPU cores. Processes outside the active part of the score cost nothing. Benchmark mode shows each process's share of CPU. Pd patches must not run in Parallel mode.
 - *Coming from Max:* Max splits work by thread priority, Overdrive and per-patcher audio threads (max_system_model.json dimension 16). In score the timeline itself limits cost: only what is playing runs.
+- *Confidence:* medium
+
+### QLab
+
+The manual frames performance as hardware choice: processor load grows with running cues, media resolution and effects; GPU matters only for video. Script cues run in a separate process by default. Loading reduces start latency. Video Metrics and frame-time percentages expose render cost.
+- *Coming from Max:* No threads to configure (max_system_model.json dimension 16); a QLab user tunes media formats and the Mac instead.
+- *Confidence:* medium
+
+### Vezér
+
+not documented. The docs give performance advice only for audio: turning off pre-processing of audio filters saves memory and speeds file loading.
+- *Coming from Max:* Nothing to compare with Max's threads and Overdrive (max_system_model.json dimension 16); the docs are silent.
+- *Confidence:* low
+
+### Resolume
+
+The GPU does the work: DXV is decoded on the GPU, rendering happens on the card driving the main display, and outputs on other cards cost a copy across the bus. The docs rank multi-output setups from one GPU (best) to several synced machines (worst). Stills load into memory only when triggered. FPS can be shown on the output; Alley converts files on all CPU cores.
+- *Coming from Max:* Max splits work across a main thread, scheduler and audio threads and shows little per-object cost (max_system_model.json dimension 16). Resolume's tuning is mostly codec choice and resolution.
 - *Confidence:* medium
 
 ## 17. Several machines
@@ -878,9 +1169,27 @@ Talking to other machines and programs is the core of score: every protocol is a
 - *Coming from Max:* Max's networking is a set of objects and an OSCQuery server for its own parameters (max_system_model.json dimension 17). score reads other programs' parameter trees as if they were its own, which Max does not do.
 - *Confidence:* high
 
+### QLab
+
+Collaboration (shared editing, cues run on the primary), OSC and MSC show control broadcast to follow or drive other systems, OSC control from other QLabs, timecode in and out, NDI and Syphon video, Dante/AVB audio through the OS.
+- *Coming from Max:* Max builds networking from objects and has no shared-editing session (max_system_model.json dimension 17).
+- *Confidence:* high
+
+### Vezér
+
+Timeline sync is built in: Vezér can lead or follow by MTC, MIDI clock (SPP) and MMC, with composition-level device IDs, and NMC, Imimot's own protocol, broadcasts transport and locate to other Vezér or Mitti instances on the local network. Outputs to other machines are OSC (with Bonjour auto-discovery and reconnect, and OSCQuery) and Art-Net.
+- *Coming from Max:* Max has no built-in multi-machine session or timecode (max_system_model.json dimension 17). Vezér's whole purpose is to keep other machines in step, so sync in and out is first-class.
+- *Confidence:* high
+
+### Resolume
+
+Machines share tempo by Ableton Link or MIDI clock, video by NDI, and control by OSC (with Bonjour discovery), Art-Net or the REST API. The docs say plainly that syncing playheads across machines by timecode or OSC does not give frame-locked output and is a last resort.
+- *Coming from Max:* Max likewise has no multi-machine session (max_system_model.json dimension 17). Resolume has Link and NDI built in, which Max reaches through packages.
+- *Confidence:* medium
+
 ## 18. Deployment
 
-**The difference:** Max builds standalones, Max for Live devices and RNBO exports. plugdata runs the full patch as a plug-in in any DAW, and Heavy compiles patches to C++, plug-ins and Daisy. cables.gl exports a web page. TouchDesigner has a player-only runtime and licence tiers. MadMapper and Isadora run only in their own app. ossia score has no separate player: the same open-source app runs headless or full screen on a Raspberry Pi.
+**The difference:** Max builds standalones, Max for Live devices and RNBO exports. plugdata runs the full patch as a plug-in in any DAW, and Heavy compiles patches to C++, plug-ins and Daisy. cables.gl exports a web page. TouchDesigner has a player-only runtime and licence tiers. MadMapper and Isadora run only in their own app. ossia score has no separate player: the same open-source app runs headless or full screen on a Raspberry Pi. QLab, Vezér and Resolume run only as their own app, with licence tiers that unlock features.
 
 **Advice for Max:** When a patch must run inside a DAW other than Live, or on embedded hardware, RNBO is Max's route. Plan for its narrower object set from the start rather than porting a finished patch.
 
@@ -925,6 +1234,24 @@ Pd runs as an app, headless from the command line (-nogui, -batch, -send), or em
 
 There is no separate player: the same open-source application runs scores, with command-line flags for no GUI, autoplay, a start delay and no restore dialog. It runs on Windows, macOS, Linux (including Raspberry Pi and other ARM boards, with an EGLFS full-screen mode), FreeBSD and partly the web.
 - *Coming from Max:* Max ships standalones and frozen devices on macOS and Windows, with RNBO for Raspberry Pi (max_system_model.json dimension 18). score deploys by installing the editor itself, free, on the target, including small Linux boards.
+- *Confidence:* high
+
+### QLab
+
+Mac-only application, free to run with paid Audio, Video, Lighting (or Bundle) licences that unlock features; unlicensed cues using licensed features are broken. No standalone export or plug-in form. The workspace and its project folder are the deliverable; QLab Remote and Stream Deck extend control.
+- *Coming from Max:* Max builds standalones, devices and RNBO exports (max_system_model.json dimension 18); QLab ships as the workspace plus a licensed copy of QLab.
+- *Confidence:* high
+
+### Vezér
+
+A macOS application (demo free, licence for two computers). For installations the docs suggest opening the project at login, turning off the quit confirmation and deciding whether saved play states start on load; an OSC command loads a project by path. No player-only runtime, export target or plug-in form is documented.
+- *Coming from Max:* Max can build standalones and devices (max_system_model.json dimension 18). Vezér runs only as itself, on macOS.
+- *Confidence:* high
+
+### Resolume
+
+Resolume runs as the full application on Mac or Windows; there is no player or export. Avenue and Arena are tiers of one product (Arena adds mapping, edge blending, timecode, DJ sync, DMX, capture-card output, groups and slice transforms). Licences are per machine with one backup, verified online every 30 days, or put permanently on a USB dongle for offline machines; installers run silent. Installations use 'trigger first clip on play' and no quit confirmation. Wire patches compile to files others can use without owning Wire.
+- *Coming from Max:* Max can build standalones and Max for Live devices and exports through RNBO (max_system_model.json dimension 18). A Resolume show always needs a licensed copy of Resolume on the show machine.
 - *Confidence:* high
 
 ## 19. Extending
@@ -976,6 +1303,24 @@ Every process in score comes from a plug-in. New ones are written in C++ with Av
 - *Coming from Max:* Max extends through C/C++ externals, JS, gen and abstractions that all appear as boxes (max_system_model.json dimension 19). score's Avendish objects can also be built for other hosts, and a C++ process can be compiled inside the running app.
 - *Confidence:* medium
 
+### QLab
+
+Users extend QLab with AudioUnit effects, light definitions (JSON), network device descriptions requested from Figure 53, AppleScript, OSC from other software, and templates. There is no SDK for new cue types in the pages read.
+- *Coming from Max:* Max lets anyone write new objects in C, JS or gen (max_system_model.json dimension 19); QLab's cue types are fixed.
+- *Confidence:* medium
+
+### Vezér
+
+not documented. No SDK, plug-in format or scripting is described. Extension happens outside: Vezér talks to any app over OSC, MIDI and Art-Net, and imports JSON keyframes.
+- *Coming from Max:* Max is built to be extended (max_system_model.json dimension 19). Vezér is closed and relies on protocols for everything it does not do.
+- *Confidence:* medium
+
+### Resolume
+
+New video effects and sources come as FFGL plugins (64-bit) dropped in the Extra Effects folder, audio effects as VST plugins, and Resolume's own way is Wire: a node patch saved as an effect, source or mixer (blend mode), optionally with ISF shaders inside. Wire inputs become the plugin's controls in Arena. Wire can be sold through Juicebar.
+- *Coming from Max:* Max objects can be written in C, JS, gen, GLSL and as abstractions (max_system_model.json dimension 19), and they all look like boxes. Resolume extensions look like built-in effects and sources, but only the effect, source and mixer slots can be extended.
+- *Confidence:* high
+
 ## 20. Media and files
 
 **The difference:** Max finds files by name along a search path, and Projects collect dependencies. MadMapper and TouchDesigner can collect or embed media in the project. Isadora preloads the next Scene's media before a jump. cables.gl uploads assets into the patch. Pd has search paths and no collect step.
@@ -1023,6 +1368,24 @@ Files are found along search paths: [declare] paths for this patch, the patch's 
 
 Media files are dropped onto the timeline. Relative paths are looked up in the project folder (the folder of the .score file) first; <PROJECT>: and <LIBRARY>: prefixes name the project or user library. A system library in Documents/ossia/score/packages holds shared presets, shaders, fixtures and scripts. Sound files stream from disk when they match the project rate, otherwise load to RAM.
 - *Coming from Max:* Max finds files through a search path and projects (max_system_model.json dimension 20). score's lookup is simpler: project folder, then the library, with explicit prefixes.
+- *Confidence:* medium
+
+### QLab
+
+Cues target files directly; saving can create a project folder and copy every target into audio, video and midi subfolders, deduplicating identical files. A file target search tool relinks missing files. Fonts and AudioUnits are not copied. Collaboration remotes see only files inside the workspace folder.
+- *Coming from Max:* Max finds files by search path and consolidates projects on request (max_system_model.json dimension 20); QLab gathers media into the show folder as you work.
+- *Confidence:* high
+
+### Vezér
+
+Audio files are referenced from tracks; placing them next to the project or in a 'files' folder beside it makes the paths relative and the project portable. Imports: standard MIDI files (SMF 0 and 1, notes without length and CC only), ASE colour swatches, JSON keyframes. Exports: MIDI tracks as SMF 1 at 120 BPM, and the whole project to XML with processed values. OSC presets are .plist files in a preferences folder.
+- *Coming from Max:* Max finds files through a search path and projects (max_system_model.json dimension 20). Vezér has one rule, files beside the project, and is more about exchanging data (MIDI, JSON, XML) than media.
+- *Confidence:* high
+
+### Resolume
+
+Media is referenced by path, browsed in a Files panel with favourites, and organised into decks. The Media Manager relocates missing files by their folder structure and collects media per deck. DXV is the house codec (Alley converts to it, also from image sequences); other files go to the operating system's player, then FFmpeg. Recordings and renders can import themselves into an empty clip. Stills are deferred-loaded.
+- *Coming from Max:* Max finds files by name on the search path and consolidates through projects (max_system_model.json dimension 20). Resolume tracks exact paths and repairs them as a group.
 - *Confidence:* medium
 
 ## Dimensions only one tool named
@@ -1079,6 +1442,19 @@ per tool: the same number means different things in different files.
 ### ossia score
 
 - **Units and dataspaces (system-level because the conversion rules apply to every connection).** Values can carry a unit from a family (distance, position, orientation, colour, angle, gain, time...). Whenever a value crosses any connection, whether a cable, a read from a device or a write to one, score converts between units of one family, otherwise maps ranges, and never drops a value because of a unit.
+
+### QLab
+
+- **The operator and the playhead (system-level because every way of starting a cue is defined by whether it moves the playhead).** QLab assumes a human operator pressing GO. Each list's playhead is shared state that GO advances; triggers, Start cues, previews and OSC starts deliberately do not move it, GoTo cues and playhead commands do. Safety features (double-GO protection, panic, show mode, notes in the masthead) are built around that operator.
+- **Licences gate features in the same file (system-level because a workspace's behaviour depends on the licences of the machine that runs it).** The same workspace runs differently with and without licences: without an Audio licence a cue uses only two channels and no effects; without a Video licence only one output device and no custom geometry; cues using unlicensed features are broken. In collaboration, every Mac behaves according to the primary's licences.
+
+### Vezér
+
+- **Output addressing as part of the document (system-level because every track's meaning depends on it).** Every track ends at a named output (a MIDI port and channel, an OSC output plus address, or an Art-Net virtual node plus channel list), and project-wide layers sit between tracks and the wire: search and replace across all addresses and channels, DMX soft patch, track sorting by address or channel, output-port loop protection, Art-Net colour master and blackout on mute. Retargeting a show to a new rig is a project-wide edit, not per-track work.
+
+### Resolume
+
+- **Targeting by position, by identity, or by selection (system-level because every control path uses the same three choices).** Any control from outside can name its target in three ways: by its position in the grid or stack, by a fixed identity that survives reordering, or as whatever the operator has selected. Keyboard, MIDI and DMX shortcuts call these By Position, This, and Selected; OSC has absolute addresses and 'selected' relative ones; the REST API has by-index, by-id and selected paths. A controller layout therefore keeps working when the show is rearranged, or follows the operator's focus.
 
 ## Sources
 

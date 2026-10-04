@@ -1,0 +1,512 @@
+[
+ {
+  "id": 1,
+  "dimension": "Evaluation",
+  "summary": "Tracks are processed only while their composition plays, sampled at the composition's frame rate. Outside playback a track is processed only when its settings change, when the playhead is scrubbed or jumped (if 'Process composition while scrubbing' is on) or when a keyframe is dragged (if that preference is on). Interpolating value tracks skip repeated values unless optimised sending is off.",
+  "details": [
+   "Tracks are processed at the composition's FPS [tracks/processing]",
+   "Exceptions: settings change, scrubbing, keyframe dragging [tracks/processing]",
+   "Optimised value sending skips repeats; keyframes always send [general/preferences-global-behaviours]"
+  ],
+  "names": [
+   "Processing",
+   "Optimised value sending",
+   "Process composition while scrubbing"
+  ],
+  "sources": [
+   "https://imimot.com/help/vezer/tracks/processing",
+   "https://imimot.com/help/vezer/general/preferences-global-behaviours"
+  ],
+  "what_a_max_user_would_notice": "Max computes when a message arrives (max_system_model.json dimension 1). Vezér is a frame loop over a timeline: nothing happens unless a composition is playing, and incoming messages are not processed into outputs at all, only recorded or used as remote control.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 2,
+  "dimension": "Ordering",
+  "summary": "not documented. Tracks are independent lanes; the docs say nothing about the order in which tracks in one composition, or several compositions, send within one frame. Grouped OSC tracks (#n) are merged into one message, which is the only ordering control described.",
+  "details": [
+   "Grouping #n merges several tracks into one message [osc-track-extras/grouping-osc-messages]"
+  ],
+  "names": [
+   "#n"
+  ],
+  "sources": [
+   "https://imimot.com/help/vezer/osc-track-extras/grouping-osc-messages"
+  ],
+  "what_a_max_user_would_notice": "Max's depth-first, right-to-left order and trigger (max_system_model.json dimension 2) have no counterpart; in Vezér order within a frame is not something the user sees or sets.",
+  "confidence": "medium",
+  "open_questions": ""
+ },
+ {
+  "id": 3,
+  "dimension": "Time",
+  "summary": "Each composition has its own clock: a frame rate (up to 125 fps), a duration, and a tempo. 120 BPM is normal speed; other BPMs speed up or slow down keyframe playback (not audio). A composition can instead follow MIDI clock (SPP) or MTC with a SMPTE offset, and can send MTC and MMC. Time is shown and typed as minutes:seconds:frames or hh:mm:ss:ff.",
+  "details": [
+   "Composition duration and FPS [compositions/composition-preferences]",
+   "Maximum FPS raised to 125 in 1.9.9 [changelog]",
+   "BPM scales playback speed; tempo does not affect audio [compositions/tempo-and-synchronisation]",
+   "Sync: SPP, MTC, SMPTE offset [compositions/tempo-and-synchronisation]",
+   "MTC/MMC transmit [compositions/transmit-midi-timecode-mtc]",
+   "Time fields accept H:M:S:F with relative +/- [keyframes/moving-and-stretching-keyframes]",
+   "MIDI Clock and MTC generators [tools/midi-clock-generator, tools/mtc-generator]"
+  ],
+  "names": [
+   "FPS",
+   "BPM",
+   "SPP",
+   "MTC",
+   "SMPTE Offset",
+   "MMC"
+  ],
+  "sources": [
+   "https://imimot.com/help/vezer/compositions/tempo-and-synchronisation",
+   "https://imimot.com/help/vezer/compositions/composition-preferences",
+   "https://imimot.com/help/vezer/compositions/transmit-midi-timecode-mtc",
+   "https://imimot.com/help/vezer/changelog",
+   "https://imimot.com/help/vezer/keyframes/moving-and-stretching-keyframes",
+   "https://imimot.com/help/vezer/tools/midi-clock-generator",
+   "https://imimot.com/help/vezer/tools/mtc-generator"
+  ],
+  "what_a_max_user_would_notice": "Max's time is a millisecond scheduler plus transports at 480 PPQ (max_system_model.json dimension 3), and no timecode object. Vezér's time is frames, per composition, and timecode is native; 'tempo' is just a speed multiplier on a fixed timeline.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 4,
+  "dimension": "Data types",
+  "summary": "Each track has one fixed kind: MIDI CC (7 or 14 bit), MIDI notes with velocity, OSC value (int, float or boolean, with min and max), OSC flag (address plus fixed arguments, no value), colour (RGBA, to OSC or Art-Net), Art-Net value (8 or 16 bit), and audio. Keyframes copied between kinds are converted: colour to value by luminance, value to colour by chosen channels, values rescaled to the target's range.",
+  "details": [
+   "Track kinds [tracks]",
+   "14-bit MIDI [tracks/14-bit-midi-support]",
+   "16-bit Art-Net [tracks/16-bit-art-net-support]",
+   "OSC types and range [tracks/osc-value-track]",
+   "Flag track [tracks/osc-flag-track]",
+   "Colour conversion on paste [tracks/color-type-track]",
+   "Pasted values converted to target range [keyframes/cut-copy-paste-paste-in-place]"
+  ],
+  "names": [
+   "MIDI CC Track",
+   "MIDI Notes Track",
+   "OSC Value Track",
+   "OSC Flag Track",
+   "Color Type Track",
+   "Art-Net Value Track",
+   "Audio Track"
+  ],
+  "sources": [
+   "https://imimot.com/help/vezer/tracks",
+   "https://imimot.com/help/vezer/tracks/osc-value-track",
+   "https://imimot.com/help/vezer/tracks/osc-flag-track",
+   "https://imimot.com/help/vezer/tracks/color-type-track",
+   "https://imimot.com/help/vezer/tracks/14-bit-midi-support",
+   "https://imimot.com/help/vezer/tracks/16-bit-art-net-support",
+   "https://imimot.com/help/vezer/keyframes/cut-copy-paste-paste-in-place"
+  ],
+  "what_a_max_user_would_notice": "Max's atoms, lists, signals, matrices and textures (max_system_model.json dimension 4) are a general toolkit. Vezér's types are output protocols: a track's type is the wire format it will send, and the conversions happen when editing, not while running.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 5,
+  "dimension": "Rates and channels",
+  "summary": "One rate per composition, its frame rate; every track in it is sampled at that rate. Audio tracks play at audio rate through a channel map to the default or a chosen device. 'Channels' in the Max sense are not documented; multi-value output is made by grouping tracks or by Art-Net channel lists.",
+  "details": [
+   "Composition FPS [tracks/processing]",
+   "Audio channel mapping [general/preferences-audio]",
+   "Art-Net channel lists 1x10, 12 [tracks/art-net-value-track]"
+  ],
+  "names": [
+   "FPS",
+   "Channel Mapping"
+  ],
+  "sources": [
+   "https://imimot.com/help/vezer/tracks/processing",
+   "https://imimot.com/help/vezer/general/preferences-audio",
+   "https://imimot.com/help/vezer/tracks/art-net-value-track"
+  ],
+  "what_a_max_user_would_notice": "No control-rate/audio-rate split to manage: everything is frames, except audio playback. Several compositions can run at different frame rates side by side.",
+  "confidence": "medium",
+  "open_questions": ""
+ },
+ {
+  "id": 6,
+  "dimension": "State and saving",
+  "summary": "A project file (.vzr) holds all compositions, tracks, keyframes, cues and settings. Whether compositions were playing when saved is stored, and a preference decides whether that is honoured at load. OSC presets (namespace, track type, range) live in separate .plist preset-group files. Audio files are referenced, relatively if they sit next to the project or in a 'files' folder.",
+  "details": [
+   "/vezer/loadproject example uses .vzr [controlling-vezer/osc]",
+   "Ignore Play buttons on loading [general/preferences-global-behaviours]",
+   "OSC Preset .plist files [osc-track-extras/osc-presets]",
+   "Relative audio paths [tracks/audio-track]"
+  ],
+  "names": [
+   ".vzr",
+   "OSC Presets",
+   "Ignore Play buttons on loading"
+  ],
+  "sources": [
+   "https://imimot.com/help/vezer/controlling-vezer/osc",
+   "https://imimot.com/help/vezer/general/preferences-global-behaviours",
+   "https://imimot.com/help/vezer/osc-track-extras/osc-presets",
+   "https://imimot.com/help/vezer/tracks/audio-track"
+  ],
+  "what_a_max_user_would_notice": "In Max a patch saves structure, not values, unless a storage system is added (max_system_model.json dimension 6). In Vezér the document is the data: every keyframe is the saved state, and there is no separate preset layer.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 7,
+  "dimension": "Parameters",
+  "summary": "Vezér does not expose parameters of its own patch; its tracks point at other software's parameters. Each OSC track carries the target's address, type and min/max, saved as reusable OSC Presets or filled in from an OSCQuery server. Vezér's own interface items are addressable by OSC (shown with Show OSC Namespaces) and by MIDI Learn.",
+  "details": [
+   "OSC track type and range [tracks/osc-value-track]",
+   "OSC Presets store namespace, type, min/max [osc-track-extras/osc-presets]",
+   "OSCQuery fills range and type [osc-track-extras/osc-query-server-support]",
+   "MIDI Learn [controlling-vezer/midi]",
+   "Show OSC Namespaces [controlling-vezer/osc]"
+  ],
+  "names": [
+   "OSC Presets",
+   "OSC Query",
+   "MIDI Learn",
+   "Show OSC Namespaces"
+  ],
+  "sources": [
+   "https://imimot.com/help/vezer/tracks/osc-value-track",
+   "https://imimot.com/help/vezer/osc-track-extras/osc-presets",
+   "https://imimot.com/help/vezer/osc-track-extras/osc-query-server-support",
+   "https://imimot.com/help/vezer/controlling-vezer/midi",
+   "https://imimot.com/help/vezer/controlling-vezer/osc"
+  ],
+  "what_a_max_user_would_notice": "Max's parameters live on its own objects (max_system_model.json dimension 7). Vezér's 'parameters' are descriptions of someone else's: a track is a remote address with a range.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 8,
+  "dimension": "Encapsulation and reuse",
+  "summary": "Compositions can be duplicated, emptied and reordered; tracks can be duplicated, copied, moved to another composition and locked. OSC Presets reuse target descriptions across projects. $COMP, $COMPINDEX and $TRACK in addresses let a duplicated composition or track address different targets. The product page mentions composition import between projects, which the help pages do not describe. No nesting of compositions inside compositions is documented.",
+  "details": [
+   "Duplicate/Empty composition [compositions/what-is-a-composition-in-vezer]",
+   "Move/copy/lock tracks [tracks/faq]",
+   "Address keywords [osc-track-extras/osc-address-special-parameters]",
+   "Composition import (product page only) [imimot.com/vezer]"
+  ],
+  "names": [
+   "Duplicate",
+   "$COMP",
+   "$TRACK",
+   "OSC Presets",
+   "Lock"
+  ],
+  "sources": [
+   "https://imimot.com/help/vezer/compositions/what-is-a-composition-in-vezer",
+   "https://imimot.com/help/vezer/tracks/faq",
+   "https://imimot.com/help/vezer/osc-track-extras/osc-address-special-parameters",
+   "https://imimot.com/vezer"
+  ],
+  "what_a_max_user_would_notice": "Max has abstractions with arguments and replication (max_system_model.json dimension 8). Vezér's reuse is copy-and-rename, with address templating standing in for arguments; there is one level of structure, compositions of tracks.",
+  "confidence": "medium",
+  "open_questions": ""
+ },
+ {
+  "id": 9,
+  "dimension": "Names and scope",
+  "summary": "Compositions have unique names within a project and are addressed in OSC by name (/vezer/<compname>/...), by index, or as 'current'. Tracks are named for management only; a track's name matters to recording (renaming a recorded track makes the next pass start a new one) and to $TRACK. Outputs (MIDI, OSC, Art-Net) are named project-wide.",
+  "details": [
+   "Unique composition names [compositions/faq]",
+   "/vezer/current/ [controlling-vezer/osc]",
+   "Track names for management only [tracks]",
+   "Rename to start a new recording track [recording/general]",
+   "Named Art-Net virtual nodes [general/preferences-art-net]"
+  ],
+  "names": [
+   "/vezer/current/",
+   "compname",
+   "$TRACK"
+  ],
+  "sources": [
+   "https://imimot.com/help/vezer/compositions/faq",
+   "https://imimot.com/help/vezer/controlling-vezer/osc",
+   "https://imimot.com/help/vezer/tracks",
+   "https://imimot.com/help/vezer/recording/general",
+   "https://imimot.com/help/vezer/general/preferences-art-net"
+  ],
+  "what_a_max_user_would_notice": "Max names are mostly global with narrower scopes added (max_system_model.json dimension 9). Vezér has a flat two-level name space: project, then composition, with 'current' as the only indirection.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 10,
+  "dimension": "Show structure",
+  "summary": "A project is a set of compositions (scenes, songs, looks). Each is a timeline of tracks with a cue track. Cues stop or mark, optionally looping N times or forever. Compositions are triggered by OSC, MIDI or MMC, run in parallel or solo, or chained in Queue mode with an optional loop. Mute and solo apply per track; DMX tracks can black out when muted.",
+  "details": [
+   "Compositions [compositions/what-is-a-composition-in-vezer]",
+   "Cues and repeats [cues, cues/repeats]",
+   "Queue mode [general/composition-queue-mode]",
+   "Triggering [controlling-vezer/osc]",
+   "Mute/Solo [tracks/faq]",
+   "DMX Blackout on Mute/Solo [general/preferences-global-behaviours]"
+  ],
+  "names": [
+   "Composition",
+   "Cue",
+   "Queue",
+   "Solo",
+   "Mute"
+  ],
+  "sources": [
+   "https://imimot.com/help/vezer/compositions/what-is-a-composition-in-vezer",
+   "https://imimot.com/help/vezer/cues",
+   "https://imimot.com/help/vezer/cues/repeats",
+   "https://imimot.com/help/vezer/general/composition-queue-mode",
+   "https://imimot.com/help/vezer/controlling-vezer/osc",
+   "https://imimot.com/help/vezer/tracks/faq",
+   "https://imimot.com/help/vezer/general/preferences-global-behaviours"
+  ],
+  "what_a_max_user_would_notice": "This is the layer Max lacks (max_system_model.json dimension 10). Vezér is nothing but show structure: it computes nothing itself and leaves the patching to the apps it drives.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 11,
+  "dimension": "Interface",
+  "summary": "One fixed window: the composition list, the timeline with its cue track, and track lanes with per-track settings (output, address, range, bang, enable). There is no performer view separate from the editing view. Vezér's controls can be MIDI-learned or driven by OSC; tools such as the DMX monitor, soft patch and range select open in their own windows.",
+  "details": [
+   "Track common controls [tracks]",
+   "MIDI Learn [controlling-vezer/midi]",
+   "Tools windows [tools]"
+  ],
+  "names": [
+   "Compositions List",
+   "Cue Track",
+   "Bang button",
+   "MIDI Learn"
+  ],
+  "sources": [
+   "https://imimot.com/help/vezer/tracks",
+   "https://imimot.com/help/vezer/controlling-vezer/midi",
+   "https://imimot.com/help/vezer/tools"
+  ],
+  "what_a_max_user_would_notice": "Max lets each patch build its own interface and a separate presentation view (max_system_model.json dimension 11). Vezér's interface is the editor; a performer drives it by OSC or MIDI from another app such as TouchOSC.",
+  "confidence": "medium",
+  "open_questions": ""
+ },
+ {
+  "id": 12,
+  "dimension": "Editing while running",
+  "summary": "Compositions keep playing while tracks and keyframes are edited; with 'Process keyframe while dragging' on, a dragged keyframe sends its value live. Recording and playing the same track at once is not possible. Undo is mentioned among the global preferences' scope but not described.",
+  "details": [
+   "Process keyframe while dragging [general/preferences-global-behaviours]",
+   "Cannot play back and record a track at once [recording/general]",
+   "Crash on undo after deleting a composition fixed in 1.9.5 [changelog]"
+  ],
+  "names": [
+   "Process keyframe while dragging"
+  ],
+  "sources": [
+   "https://imimot.com/help/vezer/general/preferences-global-behaviours",
+   "https://imimot.com/help/vezer/recording/general",
+   "https://imimot.com/help/vezer/changelog"
+  ],
+  "what_a_max_user_would_notice": "Like Max, the show runs while you edit; unlike Max, a track being recorded goes silent until recording stops.",
+  "confidence": "medium",
+  "open_questions": ""
+ },
+ {
+  "id": 13,
+  "dimension": "Scripting",
+  "summary": "not documented. No scripting language is mentioned in the help pages. The nearest things are JSON keyframe import (for keyframes made by external scripts) and the OSC API.",
+  "details": [
+   "JSON keyframe import [import-export/json]",
+   "Product page: 'keyframes ... instead of hidden scripts' [imimot.com/vezer]"
+  ],
+  "names": [
+   "JSON"
+  ],
+  "sources": [
+   "https://imimot.com/help/vezer/import-export/json",
+   "https://imimot.com/vezer"
+  ],
+  "what_a_max_user_would_notice": "Max has v8, node.script and more (max_system_model.json dimension 13). Vezér deliberately has none; its own marketing sets visible keyframes against 'hidden scripts'. Logic lives in the apps it drives.",
+  "confidence": "medium",
+  "open_questions": ""
+ },
+ {
+  "id": 14,
+  "dimension": "Errors and debugging",
+  "summary": "Debugging is visual: 'Display value flow on Tracks' draws each track's current value as a grey area, the DMX Output Monitor shows a universe's channel values, and OSC Feedback reports playhead and state. Error reporting is not documented.",
+  "details": [
+   "Display value flow [tracks/display-the-value-flow]",
+   "DMX Output Monitor [tools/dmx-output-monitor]",
+   "OSC Feedback [controlling-vezer/osc-feedback-and-query]"
+  ],
+  "names": [
+   "Display value flow",
+   "DMX Output Monitor"
+  ],
+  "sources": [
+   "https://imimot.com/help/vezer/tracks/display-the-value-flow",
+   "https://imimot.com/help/vezer/tools/dmx-output-monitor",
+   "https://imimot.com/help/vezer/controlling-vezer/osc-feedback-and-query"
+  ],
+  "what_a_max_user_would_notice": "Max has a console, probes and a debugger (max_system_model.json dimension 14). Vezér shows what each lane is sending on the lane itself, which a Max patch only gets by putting a display in the path.",
+  "confidence": "medium",
+  "open_questions": ""
+ },
+ {
+  "id": 15,
+  "dimension": "Rendering",
+  "summary": "not documented; Vezér renders no graphics. Its only visual output is its own interface.",
+  "details": [],
+  "names": [],
+  "sources": [],
+  "what_a_max_user_would_notice": "Not applicable: Vezér drives visual software (Resolume, MadMapper, Modul8, CoGe, VDMX per its tutorials) rather than drawing.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 16,
+  "dimension": "Performance and concurrency",
+  "summary": "not documented. The docs give performance advice only for audio: turning off pre-processing of audio filters saves memory and speeds file loading.",
+  "details": [
+   "Pre-Process Audio Filters option [general/preferences-audio]"
+  ],
+  "names": [
+   "Pre-Process Audio Filters"
+  ],
+  "sources": [
+   "https://imimot.com/help/vezer/general/preferences-audio"
+  ],
+  "what_a_max_user_would_notice": "Nothing to compare with Max's threads and Overdrive (max_system_model.json dimension 16); the docs are silent.",
+  "confidence": "low",
+  "open_questions": ""
+ },
+ {
+  "id": 17,
+  "dimension": "Several machines",
+  "summary": "Timeline sync is built in: Vezér can lead or follow by MTC, MIDI clock (SPP) and MMC, with composition-level device IDs, and NMC, Imimot's own protocol, broadcasts transport and locate to other Vezér or Mitti instances on the local network. Outputs to other machines are OSC (with Bonjour auto-discovery and reconnect, and OSCQuery) and Art-Net.",
+  "details": [
+   "MTC/SPP/MMC [compositions/tempo-and-synchronisation, controlling-vezer/mmc-transport]",
+   "NMC [general/nmc-protocol]",
+   "Bonjour OSC targets reconnect [tracks/osc-value-track]",
+   "Auto-discover OSC inputs [general/outputs-of-vezer]"
+  ],
+  "names": [
+   "NMC",
+   "MTC",
+   "MMC",
+   "SPP",
+   "Bonjour"
+  ],
+  "sources": [
+   "https://imimot.com/help/vezer/compositions/tempo-and-synchronisation",
+   "https://imimot.com/help/vezer/controlling-vezer/mmc-transport",
+   "https://imimot.com/help/vezer/general/nmc-protocol",
+   "https://imimot.com/help/vezer/tracks/osc-value-track",
+   "https://imimot.com/help/vezer/general/outputs-of-vezer"
+  ],
+  "what_a_max_user_would_notice": "Max has no built-in multi-machine session or timecode (max_system_model.json dimension 17). Vezér's whole purpose is to keep other machines in step, so sync in and out is first-class.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 18,
+  "dimension": "Deployment",
+  "summary": "A macOS application (demo free, licence for two computers). For installations the docs suggest opening the project at login, turning off the quit confirmation and deciding whether saved play states start on load; an OSC command loads a project by path. No player-only runtime, export target or plug-in form is documented.",
+  "details": [
+   "macOS 10.13 and later, two-computer licence [imimot.com/vezer]",
+   "Open project on startup [tutorials/open-project-on-system-startup]",
+   "/vezer/loadproject [controlling-vezer/osc]",
+   "Legacy versions for old OS X [faq/download-legacy-versions]"
+  ],
+  "names": [
+   "/vezer/loadproject",
+   "Disable confirm on Quit"
+  ],
+  "sources": [
+   "https://imimot.com/vezer",
+   "https://imimot.com/help/vezer/tutorials/open-project-on-system-startup",
+   "https://imimot.com/help/vezer/controlling-vezer/osc",
+   "https://imimot.com/help/vezer/faq/download-legacy-versions"
+  ],
+  "what_a_max_user_would_notice": "Max can build standalones and devices (max_system_model.json dimension 18). Vezér runs only as itself, on macOS.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 19,
+  "dimension": "Extending",
+  "summary": "not documented. No SDK, plug-in format or scripting is described. Extension happens outside: Vezér talks to any app over OSC, MIDI and Art-Net, and imports JSON keyframes.",
+  "details": [
+   "JSON import [import-export/json]"
+  ],
+  "names": [],
+  "sources": [
+   "https://imimot.com/help/vezer/import-export/json"
+  ],
+  "what_a_max_user_would_notice": "Max is built to be extended (max_system_model.json dimension 19). Vezér is closed and relies on protocols for everything it does not do.",
+  "confidence": "medium",
+  "open_questions": ""
+ },
+ {
+  "id": 20,
+  "dimension": "Media and files",
+  "summary": "Audio files are referenced from tracks; placing them next to the project or in a 'files' folder beside it makes the paths relative and the project portable. Imports: standard MIDI files (SMF 0 and 1, notes without length and CC only), ASE colour swatches, JSON keyframes. Exports: MIDI tracks as SMF 1 at 120 BPM, and the whole project to XML with processed values. OSC presets are .plist files in a preferences folder.",
+  "details": [
+   "Relative audio paths [tracks/audio-track]",
+   "MIDI import/export [import-export/midi-files]",
+   "ASE [import-export/ase]",
+   "JSON [import-export/json]",
+   "XML [import-export/render-to-xml]",
+   "Preset .plist [osc-track-extras/osc-presets]"
+  ],
+  "names": [
+   "files folder",
+   "SMF",
+   "ASE",
+   "JSON",
+   "Render to XML"
+  ],
+  "sources": [
+   "https://imimot.com/help/vezer/tracks/audio-track",
+   "https://imimot.com/help/vezer/import-export/midi-files",
+   "https://imimot.com/help/vezer/import-export/ase",
+   "https://imimot.com/help/vezer/import-export/json",
+   "https://imimot.com/help/vezer/import-export/render-to-xml",
+   "https://imimot.com/help/vezer/osc-track-extras/osc-presets"
+  ],
+  "what_a_max_user_would_notice": "Max finds files through a search path and projects (max_system_model.json dimension 20). Vezér has one rule, files beside the project, and is more about exchanging data (MIDI, JSON, XML) than media.",
+  "confidence": "high",
+  "open_questions": ""
+ },
+ {
+  "id": 21,
+  "dimension": "Output addressing as part of the document (system-level because every track's meaning depends on it)",
+  "summary": "Every track ends at a named output (a MIDI port and channel, an OSC output plus address, or an Art-Net virtual node plus channel list), and project-wide layers sit between tracks and the wire: search and replace across all addresses and channels, DMX soft patch, track sorting by address or channel, output-port loop protection, Art-Net colour master and blackout on mute. Retargeting a show to a new rig is a project-wide edit, not per-track work.",
+  "details": [
+   "Named outputs per track [general/outputs-of-vezer]",
+   "Search and Replace [general/search-and-replace]",
+   "DMX Soft Patch [tools/dmx-soft-patching]",
+   "Sorting by address or channel [tracks/sorting-tracks]",
+   "Loop protection [general/outputs-of-vezer]",
+   "Colour master [tools/art-net-color-master-fader]"
+  ],
+  "names": [
+   "Outputs",
+   "Search and Replace",
+   "DMX Soft Patching",
+   "Sorting Tracks"
+  ],
+  "sources": [
+   "https://imimot.com/help/vezer/general/outputs-of-vezer",
+   "https://imimot.com/help/vezer/general/search-and-replace",
+   "https://imimot.com/help/vezer/tools/dmx-soft-patching",
+   "https://imimot.com/help/vezer/tracks/sorting-tracks",
+   "https://imimot.com/help/vezer/tools/art-net-color-master-fader"
+  ],
+  "what_a_max_user_would_notice": "In Max, destinations are scattered through the patch as udpsend, ctlout and s boxes with no project-wide view or remap layer. Vezér treats the mapping from lanes to the outside world as one editable layer of the show.",
+  "confidence": "medium",
+  "open_questions": "Whether Search and Replace covers OSC addresses as well as Art-Net channels and track names: the page lists only those two types, while its summary mentions OSC addresses."
+ }
+]

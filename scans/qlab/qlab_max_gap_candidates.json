@@ -1,0 +1,1061 @@
+[
+ {
+  "capability": "A cue list with a playhead, a GO button and a standby display",
+  "category": "timeline/cueing/show control",
+  "tool": "QLab",
+  "tool_names": [
+   "GO",
+   "playhead",
+   "standby display",
+   "Notes field"
+  ],
+  "what_it_does": "An ordered list of whole actions (play a file, fade, send OSC). GO starts the cue standing by and moves the playhead to the next cue or sequence; the standby display and an operator note for that cue sit beside the GO button. Each list has its own playhead.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/fundamentals/workspace/",
+   "https://qlab.app/docs/v5/fundamentals/cue-lists/",
+   "https://qlab.app/docs/v5/fundamentals/cues/"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "qlist",
+   "coll"
+  ],
+  "max_check": "qlist refpage: stores timed or untimed cues as messages; next outputs lines up to the next numeric line. It holds messages, not media actions, and has no standby display, notes or playhead UI. obj-qlookup.json (Max registry, core plus bundled packages) has no cue-list object.",
+  "advice": "",
+  "confidence": "high",
+  "notes": "Isadora's scene list and cue sheet entries cover neighbouring ground; QLab's difference is the per-cue property model and the playhead/GO convention."
+ },
+ {
+  "capability": "Pre-wait, post-wait and two continue modes (auto-continue vs auto-follow)",
+  "category": "timeline/cueing/show control",
+  "tool": "QLab",
+  "tool_names": [
+   "Pre Wait",
+   "Post Wait",
+   "Auto-continue",
+   "Auto-follow",
+   "cue sequence"
+  ],
+  "what_it_does": "Every cue has a pre-wait, a duration and a post-wait. Auto-continue starts the next cue when this one starts (after the post-wait); auto-follow starts it when this one ends, whatever its length. Chained cues form one sequence started by one GO.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/fundamentals/cue-sequences/",
+   "https://qlab.app/docs/v5/fundamentals/inspector/"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "delay",
+   "pipe",
+   "qlist"
+  ],
+  "max_check": "delay and pipe refpages: delay a bang or a message by a time. qlist refpage: lines that start with a number wait that many ms before the next. None distinguishes 'start next when I start' from 'start next when I finish', and none knows a media file's duration.",
+  "advice": "",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Group cue modes: Timeline, Playlist, Start First, Start First And Enter, Start Random",
+  "category": "timeline/cueing/show control",
+  "tool": "QLab",
+  "tool_names": [
+   "Group cue",
+   "Timeline",
+   "Playlist",
+   "Start First",
+   "Start First And Enter",
+   "Start Random"
+  ],
+  "what_it_does": "One container type with five behaviours: start all children at once (placed by pre-wait), play children one after another with optional crossfade, shuffle and loop, start the first child and run the rest as a background sequence, act as a folder, or start a random armed and idle child, each once before any repeats.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/fundamentals/group-cues/"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "urn",
+   "playlist~",
+   "jit.playlist",
+   "trigger"
+  ],
+  "max_check": "urn refpage: random numbers without duplicates until all are used, which matches Start Random's round robin for numbers only. playlist~ and jit.playlist refpages: next, loop, int to play a clip; no crossfade attribute is listed in either refpage. No Max object groups arbitrary actions with a selectable start policy.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Timeline editor for a group, with snapping, nudge, trim and slip",
+  "category": "workflow/authoring",
+  "tool": "QLab",
+  "tool_names": [
+   "Timeline tab",
+   "Pin",
+   "Slip",
+   "Trim",
+   "Nudge"
+  ],
+  "what_it_does": "Children of a Timeline Group are drawn as lanes; dragging changes their pre-wait and snaps to the start and end of other cues, their slices and the current playback line; keys nudge by 0.1 or 0.01 s; edges trim; option-drag slips media without moving it.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/fundamentals/group-cues/"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "mtr",
+   "transport"
+  ],
+  "max_check": "Searched obj-qlookup.json (Max registry, core plus bundled packages) for timeline: none. mtr refpage records and plays message tracks but draws no lanes. max_system_model.json dimension 10: no built-in timeline layer.",
+  "advice": "",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Second-trigger policy and hold-to-play on release",
+  "category": "timeline/cueing/show control",
+  "tool": "QLab",
+  "tool_names": [
+   "Second Triggers",
+   "Second trigger on release"
+  ],
+  "what_it_does": "What a running cue does when told to start again is a per-cue setting: nothing, panic, stop, hard stop, hard stop and restart, or devamp. 'On release' treats the key or MIDI note release as the second trigger, giving sampler-style hold-to-play.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/fundamentals/inspector/"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "sfplay~",
+   "onebang",
+   "gate"
+  ],
+  "max_check": "No refpage read describes a per-object retrigger policy. sfplay~ and playlist~ simply restart or follow the message sent. Hold-to-play is built by hand from key/keyup or notein velocity 0.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Fade and stop others, and duck others while a cue runs",
+  "category": "audio",
+  "tool": "QLab",
+  "tool_names": [
+   "Fade & Stop Others Over Time",
+   "Duck/Boost Audio of Other Cues In This List While Running"
+  ],
+  "what_it_does": "Starting a cue can fade and stop its peers, its whole list, or every cue, over a set time; or duck (or boost) the audio of the other cues in its list by a level for as long as it runs.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/fundamentals/inspector/"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "live.gain~",
+   "line~"
+  ],
+  "max_check": "No Max object knows which other players are 'peers'. Ducking is built with live.gain~ or line~ per player plus s/r. No refpage read offers a scope-based fade-and-stop.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Slices with per-slice play counts, zero-count skip and infinite loops",
+  "category": "audio",
+  "tool": "QLab",
+  "tool_names": [
+   "Slices",
+   "slice marker",
+   "play count"
+  ],
+  "what_it_does": "Markers split an Audio or Video cue into slices; each slice plays its own number of times, 0 skips it seamlessly, a letter loops it forever. Markers in AIFF/WAV files are imported; markers must be at least 0.05 s apart.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/audio/audio-cues/",
+   "https://qlab.app/docs/v5/general/new-in-qlab-5/"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "groove~",
+   "sfplay~",
+   "jit.movie"
+  ],
+  "max_check": "groove~ refpage: setloop sets one pair of loop points; startloop. sfplay~ refpage: preload defines numbered cue regions and loopone loops one. jit.movie refpage: looppoints, loopreport. None holds a list of regions with play counts that advances by itself.",
+  "advice": "",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Devamp: leave a loop at the end of the current slice, and fire the next cue on that exact moment",
+  "category": "audio",
+  "tool": "QLab",
+  "tool_names": [
+   "Devamp cue",
+   "Start next cue when target reaches the end of the current slice",
+   "Stop target"
+  ],
+  "what_it_does": "A Devamp cue waits until its looping target reaches the end of the current slice, then lets it play on, or also starts the next cue at that instant (post-wait computed from the playback position), or stops it and starts the next: a timed musical hand-off.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/other-cues/devamp-cues/",
+   "https://qlab.app/docs/v5/tutorials/intro-to-devamp-cues/"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "groove~",
+   "jit.movie",
+   "edge~"
+  ],
+  "max_check": "jit.movie refpage: loopreport sends loopnotify at the loop point, a hook for a hand-off at frame rate. groove~ has no loop-end notification in its refpage; edge~ (refpage: detects logical signal transitions) on groove~'s sync output would be the hand-built route. Nothing does the 'exit after this pass' policy.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Audio matrix in two stages: per-cue matrix into a per-patch matrix, with main, input, output and crosspoint levels in dB",
+  "category": "audio",
+  "tool": "QLab",
+  "tool_names": [
+   "cue matrix mixer",
+   "patch matrix mixer",
+   "audio output patch",
+   "cue outputs",
+   "main level"
+  ],
+  "what_it_does": "Each cue has its own matrix (file channels x cue outputs) with input, output, crosspoint and main levels; cue outputs feed an output patch whose own matrix routes up to 128 cue outputs to device outputs. Levels are typed in dB; a level without a sign is read as negative.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/audio/introduction-to-audio/",
+   "https://qlab.app/docs/v5/audio/audio-cues/",
+   "https://qlab.app/docs/v5/audio/audio-output-patch-editor/"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "matrix~",
+   "mc.matrix~",
+   "crosspatch",
+   "live.gain~"
+  ],
+  "max_check": "matrix~ refpage: three-number lists set a gain per inlet/outlet pair, with a ramp time; no row/column master levels. crosspatch refpage: a patching UI for matrix~ connections. Gains are linear; dB needs dbtoa. Building QLab's layout is plain patching but laborious.",
+  "advice": "",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Several audio devices at once, one per output patch, plus separate input devices",
+  "category": "audio",
+  "tool": "QLab",
+  "tool_names": [
+   "audio output patch",
+   "audio input patch",
+   "Using different devices for input and output"
+  ],
+  "what_it_does": "Any number of output patches, each on its own audio device (or the same one), are live together; Mic cues may take input from a different device than they output to, with drift kept under the two buffer sizes plus a small margin.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/audio/mic-cues/",
+   "https://qlab.app/docs/v5/fundamentals/workspace-settings/",
+   "https://qlab.app/docs/v5/general/new-in-qlab-5/"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "dac~",
+   "adc~"
+  ],
+  "max_check": "Max userguide, Preferences > Audio: one Input Device and one Output Device are chosen for the selected driver, for the whole application. Several physical devices at once need a macOS aggregate device. The userguide pages read do not describe drift compensation between different input and output devices.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Object audio: marks that store output levels, with gravity, shadow, filters and object spread",
+  "category": "audio",
+  "tool": "QLab",
+  "tool_names": [
+   "audio map",
+   "mark",
+   "gravity",
+   "shadow",
+   "filter",
+   "spread",
+   "map object",
+   "heatmap"
+  ],
+  "what_it_does": "Sound sources are objects moved on a 2D map. Marks are points that store a full set of output levels; an object's levels come from its distance to the marks, shaped by each mark's gravity (0.1-5) and shadow (0-90 degrees), cut by filter lines, and widened by spread. A heatmap shows one output's level everywhere.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/audio/object-audio/",
+   "https://qlab.app/docs/v5/audio/audio-map-editor/"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "nodes",
+   "abc.vbap~",
+   "pan~"
+  ],
+  "max_check": "nodes refpage: overlapping circular regions give weights by distance from a slider. Package library: abclib abc.vbap~ (VBAP), Panning Tools pan~. None stores arbitrary level sets at points with gravity, shadow or blocking lines, and none draws a heatmap.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Relative fades, absolute-supersedes-relative, and Revert Fade Action",
+  "category": "audio",
+  "tool": "QLab",
+  "tool_names": [
+   "Absolute Fade",
+   "relative fade",
+   "Revert Fade Action"
+  ],
+  "what_it_does": "A fade can set end values or add/multiply (levels and translation add, scale and opacity multiply). An absolute fade clears earlier relative changes. Revert Fade Action undoes only the changes one fade made, keeping anything changed since.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/audio/fading-audio/",
+   "https://qlab.app/docs/v5/video/fading-video/"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "line",
+   "line~",
+   "pattrstorage"
+  ],
+  "max_check": "line and line~ ramp to absolute targets. pattrstorage refpage: recall and recallmulti interpolate between stored presets; no relative recall or per-fade undo is described.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "2D path fades with merge, smoothing, looping and a circle tool",
+  "category": "audio",
+  "tool": "QLab",
+  "tool_names": [
+   "2D Path",
+   "Merge",
+   "Smooth path",
+   "Loop",
+   "circle tool"
+  ],
+  "what_it_does": "One fade moves two parameters along a drawn path (object position, video translation/rotation/scale, or two OSC values). If the target is not at the start, merge eases it onto the path over a chosen percentage of the fade; paths can be smoothed and looped (5.6).",
+  "source_urls": [
+   "https://qlab.app/docs/v5/audio/fading-audio/",
+   "https://qlab.app/docs/v5/video/fading-video/",
+   "https://qlab.app/docs/v5/networking/network-cues/",
+   "https://qlab.app/docs/v5/general/change-log/"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "nodes",
+   "function"
+  ],
+  "max_check": "function refpage: a 1D breakpoint editor. nodes refpage: weights from a slider position, not a path over time. No refpage read draws or plays a 2D path.",
+  "advice": "",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Audition: every output class rerouted for rehearsal, by one switch",
+  "category": "workflow/authoring",
+  "tool": "QLab",
+  "tool_names": [
+   "Audition",
+   "Audition GO",
+   "Audition Preview",
+   "Always audition",
+   "Audition window"
+  ],
+  "what_it_does": "Per output class (audio, video, MIDI, MTC, LTC, network, light) the workspace defines what an audition does: no change, silence, an alternate patch, or for video a monitor window. Audition GO plays a sequence through those; Always audition makes GO do so for a whole session.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/tools/auditioning-cues/",
+   "https://qlab.app/docs/v5/fundamentals/workspace-settings/"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "gate",
+   "selector~",
+   "send"
+  ],
+  "max_check": "No Max object or userguide page read describes a patch-wide rehearsal routing. It is built by hand with gates or send names per output.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Override controls: suspend each protocol's input or output globally",
+  "category": "networking/sync",
+  "tool": "QLab",
+  "tool_names": [
+   "Override Controls",
+   "/overrides/*"
+  ],
+  "what_it_does": "Global switches cut MIDI voice, MSC, SysEx, external network, local network, timecode and DMX traffic separately in each direction; affected cues show a red symbol and the footer warns.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/tools/override-controls/",
+   "https://qlab.app/docs/v5/scripting/osc-dictionary-v5/"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "gate",
+   "midiin",
+   "udpreceive"
+  ],
+  "max_check": "Max preferences and the userguide pages read have no global per-protocol mute; each input object (midiin, udpreceive) is gated by hand.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Automatic edge blend from overlapping regions of one stage",
+  "category": "projection mapping",
+  "tool": "QLab",
+  "tool_names": [
+   "region",
+   "Edge blend",
+   "Auto edge blends",
+   "Blend gamma"
+  ],
+  "what_it_does": "Overlap two regions of a stage and QLab blends the overlap automatically, sending the shared pixels to both projectors with complementary ramps; widths can be set by hand and one gamma applies per stage.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/video/video-output/"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.gl.slab",
+   "jit.gl.meshwarp",
+   "jit.gl.cornerpin"
+  ],
+  "max_check": "Searched obj-qlookup.json (Max registry, core plus bundled packages) for blend/edge: only jit.alphablend and edge detectors, no edge-blend object. Jitter Tools ships the shader tr.edgeblend.jxs ('generates gradient alpha for edge-blending', a vec4 fade parameter) for jit.gl.slab, so the ramp exists; the widths must be set by hand per output. jit.gl.meshwarp and jit.gl.cornerpin refpages: geometry only.",
+  "advice": "",
+  "confidence": "high",
+  "notes": "MadMapper, Isadora and TouchDesigner entries already cover edge blending; QLab's difference is that the blend width comes from the region overlap on the stage itself."
+ },
+ {
+  "capability": "Stage masks as image files that reload when edited",
+  "category": "projection mapping",
+  "tool": "QLab",
+  "tool_names": [
+   "Load mask...",
+   "stage mask"
+  ],
+  "what_it_does": "A greyscale image (black hides, white shows) masks a whole stage. QLab has no mask editor; it watches the file and reloads it on change, so any paint program edits the mask live.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/video/video-output/"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.alphablend",
+   "filewatch",
+   "jit.gl.meshwarp"
+  ],
+  "max_check": "jit.alphablend refpage: blends two images by an alpha image. filewatch refpage: bangs whenever a watched file is altered, so reload-on-edit is plain patching. jit.gl.meshwarp refpage: mask_mode and apply_mask, masks drawn as polygons in the object. What Max lacks is a mask stage built into its output path.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Stage, region, route and device as separate layers of video output",
+  "category": "projection mapping",
+  "tool": "QLab",
+  "tool_names": [
+   "stage",
+   "region",
+   "output route",
+   "device",
+   "Scaling mode",
+   "Rear projection"
+  ],
+  "what_it_does": "Cues draw on a stage; regions of the stage go to routes; routes go to devices. Swapping a projector means picking a new device on the route and a scaling mode (center, fit, stretch, fill), with 90-degree rotation and rear-projection mirroring, without touching cues.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/video/video-output/",
+   "https://qlab.app/docs/v5/video/introduction-to-video/"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.world",
+   "jit.gl.node",
+   "jit.gl.videoplane",
+   "jit.gl.cornerpin"
+  ],
+  "max_check": "jit.gl.node refpage: render a group of objects to a sub-context and capture it, which can play the stage. jit.gl.videoplane refpage: preserve_aspect. No object models routes independent of devices; it is plain patching with named textures.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Warping per region with perspective, linear or Bezier meshes and linked points across regions",
+  "category": "projection mapping",
+  "tool": "QLab",
+  "tool_names": [
+   "Warping tab",
+   "Perspective",
+   "Linear",
+   "Bezier",
+   "Mesh splits",
+   "linked control points"
+  ],
+  "what_it_does": "Each region is warped onto its route with a mesh of 1 to 32 splits per axis; coincident control points of several regions can be linked so, for example, three regions on three faces of a cube move as one object.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/video/video-output/"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "jit.gl.meshwarp",
+   "jit.gl.cornerpin"
+  ],
+  "max_check": "jit.gl.meshwarp refpage (Jitter Tools package): meshdim, nurbs_order/curvature, read/save JSON. jit.gl.cornerpin: four corners. Linking points across separate meshwarps is not described.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Load and load-to-time a whole sequence, with negative times from the end",
+  "category": "timeline/cueing/show control",
+  "tool": "QLab",
+  "tool_names": [
+   "Load cue",
+   "Load to Time",
+   "Auto-load",
+   "loadActionAt"
+  ],
+  "what_it_does": "A cue or a whole sequence can be prepared to start instantly, or to start partway through for rehearsal; negative times count back from the end. QLab waits until every cue in a sequence is ready before starting it.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/other-cues/transport-cues/",
+   "https://qlab.app/docs/v5/tools/tools-menu/",
+   "https://qlab.app/docs/v5/scripting/osc-dictionary-v5/"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "sfplay~",
+   "jit.movie",
+   "buffer~"
+  ],
+  "max_check": "sfplay~ refpage: preload defines cue regions ahead of playback; seek is always deferred to low priority. jit.movie refpage: asyncread. No object loads a group of players to a common time.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Temporary properties that revert on reset, separate from saved values",
+  "category": "workflow/authoring",
+  "tool": "QLab",
+  "tool_names": [
+   "temporary properties",
+   "Reset cue",
+   "/live",
+   "Target cue"
+  ],
+  "what_it_does": "Changes made by Fade cues, Target cues and live OSC messages are temporary: they never mark the file as edited and vanish when a cue or the workspace is reset, which makes the workspace behave 'as though it was just opened'.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/fundamentals/workspace/",
+   "https://qlab.app/docs/v5/other-cues/transport-cues/",
+   "https://qlab.app/docs/v5/other-cues/target-cues/",
+   "https://qlab.app/docs/v5/scripting/osc-dictionary-v5/"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "pattrstorage",
+   "pattr"
+  ],
+  "max_check": "max_system_model.json dimension 6: a .maxpat saves structure, not state. pattrstorage refpage: presets can be recalled to restore a start state, but there is no built-in split between saved and live values per parameter.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Incoming timecode with lookback rules, freewheel and mid-cue starts",
+  "category": "networking/sync",
+  "tool": "QLab",
+  "tool_names": [
+   "Sync cues in this list to incoming timecode",
+   "On Start",
+   "lookback time",
+   "On Stop",
+   "Freewheel time"
+  ],
+  "what_it_does": "A list listens to LTC or MTC. When timecode starts, it can also start cues whose triggers fall in the last minute, hour, X seconds, or ever; cues start partway in and follow jumps; on stop they pause, stop or run on, ignoring dropouts up to a 0-2 s freewheel.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/fundamentals/cue-lists/",
+   "https://qlab.app/docs/v5/networking/using-timecode/",
+   "https://qlab.app/docs/v5/tools/timecode-status-window/"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "rtin",
+   "sync~",
+   "transport"
+  ],
+  "max_check": "Searched obj-qlookup.json (Max registry, core plus bundled packages) and the package library for timecode, LTC, SMPTE: nothing. rtin refpage receives MIDI real-time messages only. sync~ refpage: tempo sync from beat clock or click, not timecode.",
+  "advice": "",
+  "confidence": "high",
+  "notes": "Isadora, TouchDesigner and MadMapper entries cover timecode; QLab's difference is the lookback policy for cues before the first frame."
+ },
+ {
+  "capability": "Show control broadcast with subscriptions and a templated outgoing format",
+  "category": "networking/sync",
+  "tool": "QLab",
+  "tool_names": [
+   "/listen",
+   "/ignore",
+   "/eventFormat",
+   "/qlab/event/workspace/go"
+  ],
+  "what_it_does": "A client sends /listen (or a scoped form such as /listen/go/number) and QLab reports GO, start, stop, playhead and the all-cue actions. /eventFormat rewrites what is sent using tokens, so QLab can fire another system's cues in its own syntax.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/networking/show-control-broadcast/"
+  ],
+  "max_status": "absent",
+  "max_closest": [
+   "udpsend",
+   "param.osc"
+  ],
+  "max_check": "param.osc refpage: reports parameter changes over OSC (with an info message listing every parameter). It reports parameter values, not show events, and has no per-client subscription or format template.",
+  "advice": "",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Multi-computer collaborative editing with permissions",
+  "category": "networking/sync",
+  "tool": "QLab",
+  "tool_names": [
+   "Collaboration",
+   "primary",
+   "remote",
+   "view / edit / control access"
+  ],
+  "what_it_does": "Several Macs open one workspace over a LAN; each collaborator has view, edit or control permission, sees others' selections, keeps their own undo history; cues always run on the primary.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/networking/collaboration/"
+  ],
+  "max_status": "absent",
+  "max_closest": [],
+  "max_check": "max_system_model.json dimension 17: Max has no built-in multi-machine session. No object or userguide page read offers shared editing of one patch.",
+  "advice": "",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Record a cue sequence by playing it live",
+  "category": "workflow/authoring",
+  "tool": "QLab",
+  "tool_names": [
+   "Record Cue Sequence..."
+  ],
+  "what_it_does": "Run cues by hand while recording; QLab builds a Group of Start cues whose pre-waits match the timing played, as a Timeline group or as a chain of auto-continues.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/tools/tools-menu/"
+  ],
+  "max_status": "partial",
+  "max_closest": [
+   "mtr",
+   "seq"
+  ],
+  "max_check": "mtr refpage: records and plays back messages with their timing, which captures the timing but produces no editable cue structure.",
+  "advice": "",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Fades change only the parameters marked active, so many fades share a target",
+  "category": "audio",
+  "tool": "QLab",
+  "tool_names": [
+   "Fade cue",
+   "active levels",
+   "Set Levels from Target"
+  ],
+  "what_it_does": "A Fade cue touches only the levels and parameters marked active; two Fade cues on one target with different active parameters run at once, each with its own curve and duration, without interfering.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/audio/fading-audio/",
+   "https://qlab.app/docs/v5/video/fading-video/"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "line~",
+   "pattrstorage"
+  ],
+  "max_check": "In Max a fade is a line or line~ per parameter (refpages); pattrstorage recall interpolates every stored client unless interp is set per client.",
+  "advice": "Give each parameter its own ramp object and treat a 'fade' as a list of (parameter, target, time, curve) entries, so several fades on one player never fight; never recall a whole preset to move one value.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Named fade curves with separate rising and falling shapes and an audio domain",
+  "category": "audio",
+  "tool": "QLab",
+  "tool_names": [
+   "S-Curve",
+   "Custom Curve",
+   "Parametric Curve",
+   "Linear Curve",
+   "Audio Domain"
+  ],
+  "what_it_does": "Fades choose S-curve (default), custom, parametric (one intensity number) or multi-step linear; rising and falling values have separate curves; audio fades choose a slider, decibel or linear domain. The manual gives recipes: equal power is parametric in the linear domain.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/audio/fading-audio/",
+   "https://qlab.app/docs/v5/lighting/light-cues/"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "curve~",
+   "line~",
+   "ease"
+  ],
+  "max_check": "curve~ refpage: exponential/log ramps by a curve parameter from -1 to 1. ease package (installed user package, refpage read): easing functions. Max has no 'domain' choice; dB fades need dbtoa/atodb around a ramp.",
+  "advice": "Fade audio levels in dB or a console-style slider scale, not in linear gain, and use separate shapes for fade-ins and fade-outs; use curve~ or the ease package rather than a plain line~ for anything an audience hears.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "A trim stage that automation cannot touch",
+  "category": "audio",
+  "tool": "QLab",
+  "tool_names": [
+   "Trim tab"
+  ],
+  "what_it_does": "Each cue has post-fader trims for main, outputs and objects that Fade cues, MIDI and OSC cannot change, so a whole built sequence can be corrected with one adjustment.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/audio/audio-cues/"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "live.gain~",
+   "gain~"
+  ],
+  "max_check": "Any Max gain object can be driven by any message; nothing marks a stage as off-limits to automation.",
+  "advice": "Put one manual-only gain after every automated gain in a player and wire nothing but the operator's control to it; it is the fix-it knob for when the source files change.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Workspace-wide volume limits, and unsigned levels read as negative",
+  "category": "audio",
+  "tool": "QLab",
+  "tool_names": [
+   "Volume Limits",
+   "maximum volume limit",
+   "minimum volume limit"
+  ],
+  "what_it_does": "A workspace maximum (default +12 dB) caps every level from faders, fades, scripts and OSC; a minimum (default -60) is treated as silence and is set by walking the room. Typing a level without a sign means negative.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/fundamentals/workspace-settings/",
+   "https://qlab.app/docs/v5/audio/fading-audio/"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "live.gain~",
+   "clip~"
+  ],
+  "max_check": "live.gain~ refpage: per-object display range. No patch-wide cap exists; a relative or scripted change can push any gain past safe levels.",
+  "advice": "Clip every computed gain in a show patch to a ceiling set in one place, and treat the floor as silence (mute below it) so fades neither pop in nor hang just above inaudible.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Panic as a timed fade, a second panic as a hard stop, on a key nobody can reassign",
+  "category": "timeline/cueing/show control",
+  "tool": "QLab",
+  "tool_names": [
+   "Panic",
+   "Panic duration",
+   "hard stop",
+   "Esc"
+  ],
+  "what_it_does": "Esc fades everything out over the panic duration and stops it; a second Esc during the fade stops at once. The key cannot be reassigned, so anyone who knows QLab can stop any QLab system.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/fundamentals/workspace-settings/",
+   "https://qlab.app/docs/v5/general/keyboard-shortcuts/",
+   "https://qlab.app/docs/v5/fundamentals/workspace/"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "key",
+   "live.gain~",
+   "dac~"
+  ],
+  "max_check": "key refpage: reports key presses for any patch to act on. Max has a global audio on/off but no conventional panic that fades every player.",
+  "advice": "Every show patch should have one panic path: a single key and message that fades all outputs over a short time, then stops players, with a second press cutting at once; document the key on the presentation view.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Double-GO protection and key-up re-arming",
+  "category": "timeline/cueing/show control",
+  "tool": "QLab",
+  "tool_names": [
+   "Minimum time required between each GO",
+   "Require a key up before re-arming GO"
+  ],
+  "what_it_does": "GO is ignored for a set time after each GO (the button turns red and flashes on refused presses); optionally the GO key must be released first, against bouncing keyboards.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/fundamentals/workspace-settings/"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "onebang",
+   "speedlim"
+  ],
+  "max_check": "speedlim refpage limits the rate of messages; built by hand, it gives no visual feedback of a refused GO.",
+  "advice": "Pass the GO trigger through a lockout (speedlim or a timed gate) and show the locked state on the GO button, so an operator sees a refused press instead of wondering.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Show mode locks editing but keeps remote control",
+  "category": "workflow/authoring",
+  "tool": "QLab",
+  "tool_names": [
+   "Show Mode",
+   "Edit Mode",
+   "Disable disruptive OS features in Show Mode"
+  ],
+  "what_it_does": "Show mode disables the inspector, toolbar and cue editing but not OSC, saving or settings; it is 'a safety mechanism, not a security mechanism'. With a preference it also blocks Cmd-Tab and Mission Control, prevents sleep and App Nap, and confirms before closing.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/fundamentals/workspace/",
+   "https://qlab.app/docs/v5/general/qlab-preferences/",
+   "https://qlab.app/docs/v5/general/preparing-your-mac/"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "thispatcher"
+  ],
+  "max_check": "max_system_model.json dimension 11: presentation mode is the performer view; locking a patch stops editing. No refpage or userguide page read blocks OS features during performance.",
+  "advice": "Ship show patches opening locked in presentation, with editing reachable only deliberately, and keep OSC control live in that state; check sleep and notifications on the show machine yourself, since Max will not.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Broken cues keep their place in a sequence",
+  "category": "workflow/authoring",
+  "tool": "QLab",
+  "tool_names": [
+   "Broken Cues",
+   "Warnings tab",
+   "non-breaking warning",
+   "disconnection warning"
+  ],
+  "what_it_does": "A cue missing its file or output is marked broken with a reason; if it is in a sequence, QLab still runs its waits and continues so one broken cue does not derail the rest. The Warnings tab lists every problem with a link to the relevant manual section.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/tools/workspace-status-window/",
+   "https://qlab.app/docs/v5/audio/audio-cues/"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "print"
+  ],
+  "max_check": "max_system_model.json dimension 14: errors go to the Max Console; a missing file usually just leaves a player silent and the chain continues or stops depending on how it was wired.",
+  "advice": "Design sequences so a failed step still passes its timing on (the next step fires from the clock, not from the previous player's 'done' message), and check files and outputs at load with a visible status list.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Layers numbered 1 to 999 between bottom and top, with ties broken by start order",
+  "category": "video I/O & playback",
+  "tool": "QLab",
+  "tool_names": [
+   "Layer",
+   "top",
+   "bottom"
+  ],
+  "what_it_does": "Every video cue sits on one of 1001 layers; on the same layer, the one started last is on top. Stages have layers too; same-layer stages order alphabetically.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/video/video-cues/",
+   "https://qlab.app/docs/v5/video/video-output/"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.gl.videoplane",
+   "jit.gl.layer"
+  ],
+  "max_check": "jit.group-gl refpage: layer (default 0) orders automatic rendering low to high, and 'objects in the same layer have no guarantee which will be rendered first'. jit.gl.layer is a mapping of jit.gl.videoplane (init/jitter-objectmappings.txt).",
+  "advice": "Give every Jitter layer a distinct layer number, and if new clips must land on top, assign layer numbers in start order yourself; Max will not break ties for you.",
+  "confidence": "high",
+  "notes": ""
+ },
+ {
+  "capability": "Per-cue blend mode chosen by name from a fixed list",
+  "category": "video I/O & playback",
+  "tool": "QLab",
+  "tool_names": [
+   "Blend Mode",
+   "Source Atop Compositing",
+   "Multiply",
+   "Screen"
+  ],
+  "what_it_does": "Each video cue picks one of 24 blend modes by name, from Darken to Source Atop Compositing, applied against the cues on lower layers.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/video/blend-modes/",
+   "https://qlab.app/docs/v5/scripting/parameter-reference/"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.gl.videoplane",
+   "jit.gl.slab"
+  ],
+  "max_check": "jit.group-gl refpage: blend names add, multiply, screen, exclusion, colorblend, alphablend, coloradd, alphaadd, mapped to OpenGL blend_mode pairs. Jitter Tools ships composite shaders for jit.gl.slab (co.overlay, co.softlight, co.hardlight, co.dodge, co.burn, co.difference and others in code/jxs/image-fx/composite), which take two inputs rather than acting on a layer.",
+  "advice": "When a Max video piece needs Overlay, Soft Light or similar, composite two textures with the Jitter Tools co.* shaders in jit.gl.slab rather than hunting for a blend_mode pair that does not exist.",
+  "confidence": "medium",
+  "notes": "MadMapper and cables.gl entries cover named blend modes; QLab's list and per-cue placement are noted for completeness."
+ },
+ {
+  "capability": "Video timing follows the display clock or the audio clock, chosen per cue",
+  "category": "video I/O & playback",
+  "tool": "QLab",
+  "tool_names": [
+   "Clock",
+   "Follow video clock",
+   "Follow audio clock"
+  ],
+  "what_it_does": "A Video cue either follows its display's refresh clock (smoothest picture, may drift from audio) or its audio patch's clock (stays sample-locked with other audio cues, may skip or repeat a frame).",
+  "source_urls": [
+   "https://qlab.app/docs/v5/video/video-cues/",
+   "https://qlab.app/docs/v5/audio/introduction-to-audio/"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "jit.movie",
+   "jit.world"
+  ],
+  "max_check": "jit.movie refpage: rate, time, engine; no clock-source choice is described. max_system_model.json dimension 3: Max has separate scheduler, audio and frame clocks.",
+  "advice": "For long video with a separate soundtrack, decide which clock leads and resync the other to it at intervals; a movie and a sfplay~ started together will drift.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "OSC: every property readable and writable, with /live, +/- increments and JSON replies",
+  "category": "networking/sync",
+  "tool": "QLab",
+  "tool_names": [
+   "/cue/{cue_number}/{property}",
+   "/live",
+   "/+",
+   "/reply",
+   "/updates",
+   "passcode"
+  ],
+  "what_it_does": "About 1,176 OSC methods reach nearly every cue property and setting. A bare address reads, an argument writes, /+ n increments, /live changes the running value without saving or undo; replies are JSON; /updates pushes change notices; passcodes grant view, edit or control.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/scripting/osc-dictionary-v5/",
+   "https://qlab.app/docs/v5/networking/using-osc/",
+   "https://qlab.app/docs/v5/fundamentals/workspace-settings/"
+  ],
+  "max_status": "better-elsewhere",
+  "max_closest": [
+   "param.osc",
+   "udpreceive",
+   "pattrstorage"
+  ],
+  "max_check": "Max userguide OSC page: a built-in UDP server gives parameters OSC addresses (/<patcher>/param/<name>/...) with OSCQuery; param.osc refpage reports and controls parameters. Only Parameter Mode objects are covered; no increment syntax, live/saved split or permission levels are described.",
+  "advice": "When a Max patch is remote-controlled, give it a documented address scheme in which a bare address reads and an argument writes, and add increment and 'temporary' forms; reply with the value so remotes stay in sync.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "OSC queries embedded in outgoing messages, kept live while a cue runs",
+  "category": "data/tables/scripting",
+  "tool": "QLab",
+  "tool_names": [
+   "OSC queries",
+   "#/cue/selected/number#",
+   "liveAverageLevel"
+  ],
+  "what_it_does": "A Network cue can contain #/address# tokens that QLab replaces with live values when sending, refreshed continuously while the cue has a duration; liveAverageLevel/{output} {low} {high} returns RMS rescaled, so a microphone level can drive a light.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/scripting/osc-queries/",
+   "https://qlab.app/docs/v5/scripting/osc-dictionary-v5/"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "average~",
+   "scale",
+   "sprintf"
+  ],
+  "max_check": "In Max this is ordinary patching: average~ (refpage: RMS mode) into snapshot~ and scale, formatted with sprintf. QLab needs a special syntax because it has no patching.",
+  "advice": "QLab users ask for exactly this mic-to-light chain; a Max show patch can offer it as a small documented module (level follower with range in, OSC out) rather than leaving it to be rebuilt.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Cue properties edited in an inspector with batch edit and selective paste",
+  "category": "workflow/authoring",
+  "tool": "QLab",
+  "tool_names": [
+   "Inspector",
+   "batch editing",
+   "Paste Cue Properties"
+  ],
+  "what_it_does": "All cues of the selection can be edited at once for shared properties, and Paste Cue Properties copies chosen groups of properties (levels, fade shape, geometry) from one cue onto many, with saved presets.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/fundamentals/cues/",
+   "https://qlab.app/docs/v5/tools/paste-cue-properties/"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "thispatcher",
+   "pattrstorage"
+  ],
+  "max_check": "Max's Inspector shows one object; editing many players at once is done with scripting or presets. No userguide page read describes pasting chosen attributes across objects.",
+  "advice": "When a patch holds many similar players, keep their settings in one table (a dict or coll keyed by cue) so a change can be applied to many rows at once, instead of clicking through boxes.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "Media copied into a project folder by default, with rotating backups",
+  "category": "workflow/authoring",
+  "tool": "QLab",
+  "tool_names": [
+   "Copy files into project folder",
+   "Automatically make backup copies",
+   "Rotate backups"
+  ],
+  "what_it_does": "Saving can copy every target file into audio, video and midi subfolders so the folder is the whole show; autosave writes backup copies (never the workspace itself) at 5-600 s intervals, plus a copy before each manual save, rotated to 20 in the last hour, one per hour for a day, one per day after.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/fundamentals/managing-workspaces/",
+   "https://qlab.app/docs/v5/fundamentals/workspace-settings/",
+   "https://qlab.app/docs/v5/general/qlab-preferences/"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [],
+  "max_check": "max_system_model.json dimension 20: Max projects track and consolidate dependencies on request; files are found by search path. No automatic rotating backup is described in the userguide pages read.",
+  "advice": "For a show built in Max, use a project and consolidate media into it before tech, and keep dated copies of the patch; Max will not version it for you.",
+  "confidence": "medium",
+  "notes": ""
+ },
+ {
+  "capability": "A crossfading playlist group whose second trigger means next or previous",
+  "category": "timeline/cueing/show control",
+  "tool": "QLab",
+  "tool_names": [
+   "Playlist Group",
+   "Crossfade",
+   "Auto-shuffle",
+   "Loop until stopped",
+   "plays next",
+   "plays previous"
+  ],
+  "what_it_does": "Children of a Playlist group play in order, optionally shuffled and looped, crossfading main audio level and opacity with separate fade-out and fade-in curves; GO while it plays can step to the next or previous child.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/fundamentals/group-cues/"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "playlist~",
+   "jit.playlist"
+  ],
+  "max_check": "playlist~ and jit.playlist refpages: next, loop, int to start a clip, pause; no crossfade attribute or shuffle is listed.",
+  "advice": "Build preshow music and slide loops from two alternating players with an equal-power crossfade between them, rather than one playlist~ that cuts.",
+  "confidence": "medium",
+  "notes": "TouchDesigner's gapless clip switching entry is related; QLab's difference is a crossfade with separate curves inside a cue type."
+ },
+ {
+  "capability": "Lighting cues that track, with pulls from other cues and parking",
+  "category": "lighting/DMX/lasers",
+  "tool": "QLab",
+  "tool_names": [
+   "Light cue",
+   "Collate effects of previous light cues",
+   "pull",
+   "Park Selected Lights",
+   "Update Originating Cues"
+  ],
+  "what_it_does": "A light cue sets only the instruments it names; others keep their levels, so run order matters (collate makes a cue act as if all earlier ones ran). Commands can pull a level from another cue, scaled ('10 = cue A * .5'), updating when that cue changes; parked parameters ignore cues.",
+  "source_urls": [
+   "https://qlab.app/docs/v5/lighting/introduction-to-lighting/",
+   "https://qlab.app/docs/v5/lighting/lighting-command-language/",
+   "https://qlab.app/docs/v5/lighting/light-dashboard/"
+  ],
+  "max_status": "different-approach",
+  "max_closest": [
+   "pattrstorage",
+   "dict"
+  ],
+  "max_check": "pattrstorage refpage: a recall sets every stored client unless clients are made inactive; no tracking or linked values between presets is described.",
+  "advice": "When a Max patch stores looks, let a look store only what it changes and allow one look to reference another's value, so editing the referenced look updates every look built on it.",
+  "confidence": "medium",
+  "notes": "Isadora's soft patch and MadMapper's DMX entries cover other lighting ground."
+ }
+]
