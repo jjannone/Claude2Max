@@ -244,8 +244,7 @@ class _GateResolver:
         # Union the help-corpus observed set; keyed by the box text token (the
         # same name the spec uses), so a direct lookup on `name` is correct even
         # after alias resolution — the corpus sees the abbreviated form.
-        observed = self._observed.get(name, set())
-        return own | self._base_attrs | observed, "c74-refpage"
+        return own | self._base_attrs | self.observed_attrs(name), "c74-refpage"
 
     def base_attrs(self):
         """The jbox base-class attribute set every box inherits (read-only copy).
@@ -263,8 +262,14 @@ class _GateResolver:
         is a POSITIVE allowlist only — a non-empty return confirms an attr is real
         (seen in shipped help patches); it never licenses flagging an attr absent
         from it, since the object's full attr space is unknown.
+
+        Also includes every key the class's own C74 help file writes on its own
+        boxes, with no frequency floor: that file is Max's canonical instance of
+        the class, not one-off noise. This is what makes a codebox's `code`
+        valid — Max writes it on every codebox, but the corpus saw
+        gen.codebox~ on one box only, under the floor (2026-10-03).
         """
-        return set(self._observed.get(name, set()))
+        return set(self._observed.get(name, set())) | help_box_keys(name)
 
     def messages_for(self, name):
         """Documented message (method) names for an object, from its refpage methodlist.
@@ -1586,6 +1591,24 @@ class HelpBoxCache:
 
 
 HELP_BOX_CACHE = HelpBoxCache(REFPAGE_CACHE._c74)
+
+_HELP_BOX_KEYS = {}
+
+
+def help_box_keys(maxclass):
+    """Attribute keys Max wrote on the boxes of `maxclass` in its own C74 help
+    file (`gen.codebox~` -> gen.codebox~.maxhelp), minus structural keys and
+    RNBO / freeze stamps. Empty when the class has no help file. Read by
+    _GateResolver.observed_attrs, so an attribute Max itself saves on its own
+    example box is never reported as invented."""
+    if maxclass not in _HELP_BOX_KEYS:
+        keys = set()
+        patcher = _help_patcher(REFPAGE_CACHE._c74, maxclass)
+        if patcher is not None:
+            _walk_help_boxes(patcher, maxclass, lambda b: keys.update(b))
+        _HELP_BOX_KEYS[maxclass] = {k for k in keys if k not in _MAXPAT_STRUCTURAL_KEYS
+                                    and not k.startswith(("rnbo", "frozen"))}
+    return _HELP_BOX_KEYS[maxclass]
 
 
 
@@ -3360,6 +3383,12 @@ _PRESERVE_ATTRS = {"bgcolor", "textcolor", "color", "fontsize", "fontface", "fon
     # playlist~ / jit.playlist keep their loaded clips under `data` — content
     # the operator drops in at runtime, the same class of state as umenu items.
     "data",
+    # A codebox's text (gen.codebox~, v8.codebox, jit.gl.pix.codebox, …) is
+    # the box key `code`. It was listed as a derived key, but nothing derives
+    # it except the spec embed, which sync skips anyway, so a codebox added in
+    # Max reached the spec empty and the next convert wrote it blank
+    # (2026-10-03, found checking butter.carve~).
+    "code",
     # Script-loading UI objects: jsui / v8ui link their script through the
     # `filename` box key and pass creation args via `jsarguments`. Dropping
     # either on sync makes the next convert emit an unlinked, blank object —
@@ -3520,11 +3549,11 @@ def _patcher_extras(patcher):
 
 
 # Box keys the converter derives from the spec itself, so sync never copies
-# them: identity, ports, geometry, text, the nested patcher, the codebox body,
-# and the line counts build_box computes.
+# them: identity, ports, geometry, text, the nested patcher, and the line
+# counts build_box computes.
 _BOX_DERIVED_KEYS = frozenset({
     "id", "maxclass", "numinlets", "numoutlets", "outlettype", "patching_rect",
-    "presentation", "presentation_rect", "text", "patcher", "code",
+    "presentation", "presentation_rect", "text", "patcher",
     "linecount", "presentation_linecount",
 })
 

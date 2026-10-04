@@ -1326,7 +1326,8 @@ def _classify_attr(object_name: str, attr: str):
 
     - valid / refpage          — object-specific attr listed in the C74 refpage
     - valid / jbox-base        — universal box attr inherited from jbox
-    - valid / observed-in-help — attr seen on ≥3 shipped help patches (corpus)
+    - valid / observed-in-help — attr seen on ≥3 shipped help patches (corpus),
+                                 or on the class's own box in its own help file
     - invalid                  — object HAS a refpage and attr is in none of the
                                  three sources (matches a gate ERROR)
     - cannot-verify            — object has NO refpage and attr not in the
