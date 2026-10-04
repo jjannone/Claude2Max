@@ -213,6 +213,12 @@ Any tool that degrades to a simpler path when its preferred path fails — an LL
 
 The recognition signal: any `except` whose body is `pass`, or any branch that returns a "no results" shape without recording which path produced it. Capture the exception type (not the secret-bearing message) and put it in the result the caller sees. For instance: `assess()` in the MCP server reported `method: keyword-fallback` and a `_fallback` reason, so a missing API key was diagnosable in one call. `search_packages()` swallowed its exception, and a candidate-ordering bug hid for as long as it took someone to step through the semantic path by hand.
 
+## Decide What Counts as Evidence by Where It Came From — Never Thin It by Count — Binding Rule
+
+When a tool learns from a body of examples, decide what counts as evidence by where each example came from, and then keep all of it. Do not add a minimum count, a "seen at least N times" floor, to remove noise. A rare true thing and a common false thing both get past a count, so the floor throws away real examples and still lets the real errors through. If some examples might be wrong, name the reason they might be wrong, and filter on that reason.
+
+For instance: the attribute check ignored any key Max had saved on fewer than 3 boxes, as "one-off noise". Nobody had measured that. Measured on 2026-10-03, it dropped 1,861 real keys Max writes (`style`, `linecount`, `parameter_enable`, a codebox's `code`), because files Max saved contain no typos. The real risks had their own causes: files our converter wrote, and boxes inside `rnbo~` or `gen~`, which are another language. The check now reads every key from files Max saved, on Max boxes only, with no minimum (John, 2026-10-03). The recognition signal: writing a threshold to separate good data from bad without being able to say what makes the bad data bad.
+
 ## Rank by Breadth of Match Before Applying a Candidate Cap — Binding Rule
 
 When several search terms feed one substring scan and a cap bounds how many candidates go forward (to a reranker, a prompt, a display), order the candidates by **how many terms hit each record** before any other key. One short term can match hundreds of records by accident — "IR" matches every name or description containing "ir" — and if those ties break on something relevance-blind, such as name order, the cap fills with alphabetical noise and the genuine multi-term hits never reach the next stage. The stage after the cap then correctly reports nothing, and the failure looks like a no-match (see the rule above).

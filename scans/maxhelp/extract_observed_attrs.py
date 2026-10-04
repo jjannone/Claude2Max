@@ -18,6 +18,16 @@ Three document kinds, all the same `.maxpat` JSON structure:
     the embedded maxpat JSON; we locate the first `{` and `raw_decode` one
     JSON object, ignoring trailing binary. High-value for `live.*` attrs.
 
+What counts as evidence: every box Max saved, in any version, and nothing
+else. Two things are not evidence. A file Max did not save (written by this
+toolkit's converter, or by hand) can hold any key at all. Boxes inside a
+`gen~`, `jit.gen`, `jit.gl.pix` or `rnbo~` patcher belong to another language
+with the same object names. Everything else is kept with no minimum count: a
+key Max wrote once is as real as one it wrote a thousand times, because Max
+does not write typos. Older versions are kept too; restricting to the
+installed version was measured on 2026-10-03 to lose 3,756 real keys
+(`style`, `linecount`, `bgcolor`) against at most 392 that Max 9 never writes.
+
 No MCT decode is needed and everything is local (no network). See
 `scans/maxhelp/MAXHELP_CRAWL_LOG.md` for how this fits the session workflow and
 `TASK_QUEUE.md` ("`.maxhelp` Corpus Crawl") for the full rationale.
@@ -32,7 +42,7 @@ Outputs (written next to this script):
     maxhelp_observed_attrs.json  -- object -> {boxes, attrs:{name:count}}
     maxhelp_crawl_state.json     -- per-file status + maxclass coverage
 
-Stdlib only.
+Stdlib plus spec2maxpat (for `saved_by_max` and `iter_boxes`).
 """
 
 import argparse
@@ -42,6 +52,9 @@ import os
 import sys
 from collections import Counter, defaultdict
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+import spec2maxpat  # noqa: E402
 
 # Document kinds, by file extension. All parse to the same patcher JSON.
 KIND_EXTENSIONS = {
@@ -100,15 +113,9 @@ def object_name(box):
 
 
 def walk_boxes(patcher):
-    """Yield every box dict in a patcher, recursing into nested subpatchers."""
-    for entry in patcher.get("boxes", []):
-        box = entry.get("box")
-        if not isinstance(box, dict):
-            continue
-        yield box
-        sub = box.get("patcher")
-        if isinstance(sub, dict):
-            yield from walk_boxes(sub)
+    """Yield every Max box in a patcher, at every depth, skipping patchers
+    written in another language (gen, Jitter gen, RNBO)."""
+    yield from spec2maxpat.iter_boxes(patcher, max_only=True)
 
 
 def box_attrs(box):
@@ -132,8 +139,13 @@ def box_attrs(box):
     return keys
 
 
+class NotSavedByMax(ValueError):
+    """A patch file this toolkit or a person wrote, so not evidence."""
+
+
 def load_patcher(path, kind):
     """Return the patcher dict for one corpus file, or raise on failure.
+    Raises NotSavedByMax for a file Max did not write.
 
     `.maxhelp` / `.maxpat` are plain JSON. `.amxd` (Max for Live) prefixes the
     maxpat JSON with a binary `ampf` chunk header, so we find the first `{` and
@@ -153,7 +165,10 @@ def load_patcher(path, kind):
         text = raw[start:].decode("utf-8", errors="replace")
         doc, _ = decoder.raw_decode(text)
     else:
-        doc = decoder.decode(path.read_text(encoding="utf-8", errors="replace"))
+        raw = path.read_bytes()
+        doc = decoder.decode(raw.decode("utf-8", errors="replace"))
+    if not spec2maxpat.saved_by_max(raw):
+        raise NotSavedByMax("not saved by Max")
     patcher = doc.get("patcher")
     if not isinstance(patcher, dict):
         raise ValueError("no patcher root")
@@ -189,12 +204,16 @@ def extract(kinds=DEFAULT_KINDS, limit=None, verbose=False):
     state = {}  # path -> {tier, kind, status, boxes, objects, error}
     kind_counts = Counter()  # kind -> files scanned
 
-    files_scanned = files_failed = total_boxes = 0
+    files_scanned = files_failed = files_not_max = total_boxes = 0
 
     for tier, kind, path in iter_corpus(kinds, limit=limit):
         key = str(path)
         try:
             patcher = load_patcher(path, kind)
+        except NotSavedByMax:
+            files_not_max += 1
+            state[key] = {"tier": tier, "kind": kind, "status": "not-saved-by-max"}
+            continue
         except Exception as exc:  # malformed / unreadable
             files_failed += 1
             state[key] = {"tier": tier, "kind": kind, "status": "skipped",
@@ -236,14 +255,16 @@ def extract(kinds=DEFAULT_KINDS, limit=None, verbose=False):
             "files_scanned": files_scanned,
             "files_by_kind": dict(kind_counts),
             "files_failed": files_failed,
+            "files_not_saved_by_max": files_not_max,
             "total_boxes": total_boxes,
             "distinct_objects": len(attrs_by_obj),
             "corpus_roots": [str(r) for _, r in CORPUS_ROOTS],
             "structural_excluded": sorted(STRUCTURAL_KEYS),
             "note": ("attrs map: object name (newobj -> first text token; "
                      "else maxclass) -> {attr: occurrence count} across the "
-                     "corpus (.maxhelp + .maxpat + .amxd). Union into "
-                     "spec2maxpat valid-attr set."),
+                     "corpus (.maxhelp + .maxpat + .amxd), from files Max saved "
+                     "and Max boxes only. Every key is evidence; no minimum "
+                     "count. Union into spec2maxpat valid-attr set."),
         },
         "objects": {
             name: {
@@ -288,6 +309,7 @@ def main():
     print(f"kinds scanned : {meta['kinds_scanned']}")
     print(f"files scanned : {meta['files_scanned']}  by-kind={meta['files_by_kind']}")
     print(f"files failed  : {meta['files_failed']}")
+    print(f"not by Max    : {meta['files_not_saved_by_max']}")
     print(f"total boxes   : {meta['total_boxes']}")
     print(f"distinct objs : {meta['distinct_objects']}")
     if not args.no_write:

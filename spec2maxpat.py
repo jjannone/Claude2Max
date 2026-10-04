@@ -130,9 +130,10 @@ class _GateResolver:
     def _load_observed_attrs(self):
         """Load the maxhelp corpus observed-attrs map, pre-filtered.
 
-        Applies the three integration cautions from scans/maxhelp/maxhelp_insights.md:
-        - Drop rnbo*/frozen* artifact keys (RNBO-export / freeze metadata, not user attrs)
-        - Apply ≥3-box frequency floor (drops one-off noise / version cruft)
+        Every key in the file is evidence: the extractor already reads only
+        files Max saved, and only Max boxes (not those inside gen~ / rnbo~), so
+        nothing here is thinned by how often it appears. A key Max wrote once is
+        as real as one it wrote often (scans/maxhelp/maxhelp_insights.md).
         - For no-refpage objects the observed set is a positive allowlist only;
           attrs_for() still returns None for those — the caller must not use the
           observed set to flag attrs on objects whose full attr space is unknown.
@@ -148,12 +149,8 @@ class _GateResolver:
                 if obj_name.startswith("_"):
                     continue
                 attrs = data.get("attrs", {}) if isinstance(data, dict) else {}
-                filtered = {
-                    k for k, v in attrs.items()
-                    if v >= 3 and not k.startswith(("rnbo", "frozen"))
-                }
-                if filtered:
-                    result[obj_name] = filtered
+                if attrs:
+                    result[obj_name] = set(attrs)
             return result
         except (OSError, KeyError, TypeError, _json.JSONDecodeError) as exc:
             # A Silent Fallback Is Indistinguishable From a Genuine No-Match:
@@ -225,7 +222,7 @@ class _GateResolver:
         """Complete valid-attribute set for an object.
 
         Returns (set, source) where set = own refpage attrs ∪ jbox base attrs
-        ∪ help-corpus observed attrs (≥3-box floor, rnbo/frozen filtered).
+        ∪ help-corpus observed attrs (every key Max saved on a Max box).
         Returns (None, "no-refpage") when the object has no refpage — callers
         must treat None as "can't enumerate" and NOT use the observed set to
         flag attrs on such objects (positive allowlist only for no-refpage objects).
@@ -256,20 +253,14 @@ class _GateResolver:
         return set(self._base_attrs)
 
     def observed_attrs(self, name):
-        """Help-corpus observed attrs for one object (≥3-box floor, filtered).
+        """Help-corpus observed attrs for one object: every key Max saved on it.
 
         Empty set when the object isn't in the corpus. For no-refpage objects this
         is a POSITIVE allowlist only — a non-empty return confirms an attr is real
         (seen in shipped help patches); it never licenses flagging an attr absent
         from it, since the object's full attr space is unknown.
-
-        Also includes every key the class's own C74 help file writes on its own
-        boxes, with no frequency floor: that file is Max's canonical instance of
-        the class, not one-off noise. This is what makes a codebox's `code`
-        valid — Max writes it on every codebox, but the corpus saw
-        gen.codebox~ on one box only, under the floor (2026-10-03).
         """
-        return set(self._observed.get(name, set())) | help_box_keys(name)
+        return set(self._observed.get(name, set()))
 
     def messages_for(self, name):
         """Documented message (method) names for an object, from its refpage methodlist.
@@ -1591,26 +1582,6 @@ class HelpBoxCache:
 
 
 HELP_BOX_CACHE = HelpBoxCache(REFPAGE_CACHE._c74)
-
-_HELP_BOX_KEYS = {}
-
-
-def help_box_keys(maxclass):
-    """Attribute keys Max wrote on the boxes of `maxclass` in its own C74 help
-    file (`gen.codebox~` -> gen.codebox~.maxhelp), minus structural keys and
-    RNBO / freeze stamps. Empty when the class has no help file. Read by
-    _GateResolver.observed_attrs, so an attribute Max itself saves on its own
-    example box is never reported as invented."""
-    if maxclass not in _HELP_BOX_KEYS:
-        keys = set()
-        patcher = _help_patcher(REFPAGE_CACHE._c74, maxclass)
-        if patcher is not None:
-            _walk_help_boxes(patcher, maxclass, lambda b: keys.update(b))
-        _HELP_BOX_KEYS[maxclass] = {k for k in keys if k not in _MAXPAT_STRUCTURAL_KEYS
-                                    and not k.startswith(("rnbo", "frozen"))}
-    return _HELP_BOX_KEYS[maxclass]
-
-
 
 # ── Port counts: fixed, flexible, or not yet known ────────────────────────────
 #

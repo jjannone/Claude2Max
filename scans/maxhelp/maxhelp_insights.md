@@ -49,8 +49,8 @@ emerge.
   `loadmess`, `loadbang`, `print`, `t`) — both are real, broadly-inherited.
 
 **Integration:** union `maxhelp_observed_attrs.json` into the valid set so it
-becomes `own refpage ∪ jbox ∪ observed-in-help`. Apply a frequency floor
-(observed on ≥3 boxes) to drop one-off noise. This cuts false positives without
+becomes `own refpage ∪ jbox ∪ observed-in-help`. Every key Max saved on a Max
+box counts, with no minimum: see caution 3. This cuts false positives without
 weakening real-error detection. See cautions below.
 
 ### 2. The 4 gate-flagged production attrs are confirmed silent no-ops — [resolved]
@@ -103,12 +103,25 @@ When wiring `maxhelp_observed_attrs.json` into `spec2maxpat.build_resolver`:
    keys RNBO-export and the freeze feature inject, which are not user-facing
    object attributes: `rnbo_serial` (6,442×), `rnbo_classname`, `rnbo_uniqueid`,
    `rnbo_extra_attributes`, `rnboinfo`, `rnboattrcache`, `rnboversion`,
-   `frozen_object_attributes`, `frozen_box_attributes`. Drop any key matching
-   `^rnbo` or `^frozen` at integration time. Harmless if left in (a user would
-   never typo them), but they pollute the "real attributes of this object" view.
+   `frozen_object_attributes`, `frozen_box_attributes`. *Superseded 2026-10-03:*
+   the `rnbo*` stamps sit on boxes inside `rnbo~`, which the extractor now skips
+   as another language, and the `frozen*` keys are real keys Max writes, so no
+   name filter is applied. The verifier still hides both from its reports.
 
-3. **Apply a frequency floor.** Use observed-on-≥3-boxes to admit an attr into
-   the union; one-off keys are more likely export/version cruft than real attrs.
+3. **No minimum count — retired 2026-10-03.** This note used to say "admit an
+   attr only when seen on ≥3 boxes; one-off keys are more likely export/version
+   cruft." That was never measured, and it was wrong. Measured on 2026-10-03,
+   the minimum dropped 1,861 keys absent from the refpage and jbox, nearly all
+   real keys Max writes (`style` 662, `linecount` 319, `bgcolor` 105,
+   `parameter_enable` 54, `textfile` / `filename` on script boxes, a codebox's
+   `code`). Files Max saved hold no typos, so rarity is no sign of error.
+   Evidence is now decided by source: files Max saved (`saved_by_max`, which
+   rejects our converter's two-space output), Max boxes only (not inside
+   `gen~` / `jit.gen` / `jit.gl.pix` / `rnbo~`), every Max version. Restricting
+   to the installed version was measured too: it would lose 3,756 real keys to
+   guard against at most 392 that Max 9 never writes, most of them third-party
+   data. Allowed keys went from 8,611 to 15,514; the four confirmed no-ops in
+   finding 2 are still rejected.
 
 4. **Object-name keying matches the resolver.** The map keys objects exactly as
    the resolver looks them up: first whitespace token of `text` for `newobj`,

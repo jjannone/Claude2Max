@@ -1326,8 +1326,7 @@ def _classify_attr(object_name: str, attr: str):
 
     - valid / refpage          — object-specific attr listed in the C74 refpage
     - valid / jbox-base        — universal box attr inherited from jbox
-    - valid / observed-in-help — attr seen on ≥3 shipped help patches (corpus),
-                                 or on the class's own box in its own help file
+    - valid / observed-in-help — attr Max saved on this class in a shipped patch
     - invalid                  — object HAS a refpage and attr is in none of the
                                  three sources (matches a gate ERROR)
     - cannot-verify            — object has NO refpage and attr not in the
@@ -1372,7 +1371,7 @@ def lookup_attribute(object_name: str, attr: str) -> dict:
 
     Validity matches the convert gate exactly — an attribute is valid if it is in
     the object's own refpage, OR a universal box attr inherited from jbox
-    (textcolor, hidden, presentation, …), OR observed on ≥3 shipped help patches.
+    (textcolor, hidden, presentation, …), OR saved by Max on this class in a shipped patch.
     So `verify_spec`/convert and this tool never disagree.
 
     Return keys
@@ -1450,7 +1449,7 @@ def lookup_attribute(object_name: str, attr: str) -> dict:
             "source":          "observed-in-help",
             "summary": (
                 f"VALID (observed-in-help): '{attr}' is used on '{object_name}' "
-                f"in shipped Max help patches (≥3 occurrences), but the object has "
+                f"in patches Max saved, but the object has "
                 f"no enumerable refpage, so type/default metadata isn't available. "
                 f"The name is real; consult the package docs for its value range."
             ),

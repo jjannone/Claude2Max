@@ -4,10 +4,10 @@ Run: python3 tests/test_codebox_code_attr.py
 
 Max writes a codebox's text as `code` on the box (gen.codebox~.maxhelp:
 {"maxclass": "gen.codebox~", "code": "Param amp(0.5);..."}). No refpage lists
-it, and the help corpus saw gen.codebox~ on one box only, under its 3-box
-floor, so the gate reported `'code' is not a valid attribute of 'gen.codebox~'`
-and blocked butter.carve~.maxpat (2026-10-03). The fix: a key a class's own C74
-help file writes on its own boxes is valid for that class.
+it, and the help corpus saw gen.codebox~ on one box only, under a 3-box
+minimum, so the gate reported `'code' is not a valid attribute of 'gen.codebox~'`
+and blocked butter.carve~.maxpat (2026-10-03). The minimum is gone: every key
+Max saved on a Max box is evidence, however rare.
 
 - `code` is valid on every codebox class, each named here by hand
 - a guessed attribute on the same class is still an error
