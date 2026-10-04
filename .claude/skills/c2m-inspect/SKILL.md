@@ -70,7 +70,7 @@ All dumps include `tag`, `kind`, `name`, `ts` (unix ms).
 1. **Scripting Name (zero wiring).** Set the coll/table's **Scripting Name** (`@varname`) equal to the `<name>` you pass, and keep `[c2m.inspect]` in the **same patcher**. The dumper uses `this.patcher.getnamed(name).message("write", file)`.
 2. **`[receive]` relay (cross-patcher).** Wire `[receive <NAME>_INSPECT] → [coll <NAME>]` (or `[table <NAME>]`). The dumper falls back to `messnamed("<NAME>_INSPECT", "write", file)`, which reaches the `[receive]`.
 
-If neither is set up, the result is a structured error naming both options — not a silent empty dump. Whether `messnamed` reaches a bare `coll NAME` or `table NAME` has not been tested (it does reach `buffer~ NAME`, John 2026-10-04), so one of the two setups above is required.
+If neither is set up, the result is a structured error naming both options — not a silent empty dump. `messnamed` does not reach a bare `coll NAME` or `table NAME`: the message goes to their hidden shared-data object, which rejects it (tested in Max, John 2026-10-04; `buffer~ NAME` does answer). So one of the two setups above is required.
 
 ## Caps (truncation)
 
