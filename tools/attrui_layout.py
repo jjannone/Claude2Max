@@ -38,6 +38,9 @@ import sys, json, collections
 CLASSES = {'attrui'}
 
 ROW_GAP = 1          # between stacked rows — a hairline, not a separator
+TEXT_GAP = 8         # beside a message box of more than one line: each is its own item to read
+                     # (John, 2026-10-04, on the butter_comment help file)
+ONE_LINE = 24        # a box taller than this holds more than one line
 HEAD_GAP = 6         # between a group's comment and its first row
 BLOCK_GAP = 14       # between one group and the next
 PORT_INSET = 9.5     # a box's first port's centre, from its left edge (Max 9's saved cords; rules._PORT_INSET_PX)
@@ -177,7 +180,9 @@ def lay_out(P, name, report):
 
         y = column[0]['patching_rect'][1]
         first = True
-        for b in column:
+        tall = lambda m: m is not None and m.get('maxclass') == 'message' and m['patching_rect'][3] > ONE_LINE
+        for k, b in enumerate(column):
+            nxt = column[k + 1] if k + 1 < len(column) else None
             r = b['patching_rect']
             if b.get('maxclass') == 'comment':
                 if not first:
@@ -195,7 +200,7 @@ def lay_out(P, name, report):
                     for m in rows.get(b['id'], []) + labels.get(b['id'], []):   # the row and its label ride along
                         m['patching_rect'][1] = y
                     r[1] = y; moved += 1
-                y += r[3] + (UNDER_ROW if rows.get(b['id']) else ROW_GAP)
+                y += r[3] + (UNDER_ROW if rows.get(b['id']) else TEXT_GAP if tall(b) or tall(nxt) else ROW_GAP)
             first = False
 
         if _overlaps(P) > before:

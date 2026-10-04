@@ -5,10 +5,10 @@ Copied on 2026-10-03 into Butter_tools as the first section of `docs/IDEAS.md`, 
 ossia score is not used or installed here. This file only takes ideas from its
 documentation (read in `ossia_score_insights.md`, sources there) and asks which
 would make good Butter_tools objects. Each idea is checked against what
-Butter_tools already has or plans (`Butter_tools/README.md`, `docs/BTR_WRAPPERS.md`,
+Butter_tools already has or plans (`Butter_tools/README.md`, `docs/B_WRAPPERS.md`,
 `docs/BUTTER_PAT.md`, `docs/BUTTER_INSPECTOR_PLAN.md`), so nothing here repeats a
 plan already written. Names follow the package's rules: an object (a script)
-takes an underscore, an abstraction a dot, a wrapper `btr.`, anything for video
+takes an underscore, an abstraction a dot, a wrapper `b.`, anything for video
 `jit.`. All are suggestions; nothing is built. (2026-10-03.)
 
 ## New objects
@@ -29,7 +29,7 @@ inlet). Max's nearest pieces are `qlist`, `timepoint` and `transport`, which run
 a fixed list.
 
 One design point to settle first: JavaScript runs on Max's low-priority thread,
-which is why `BTR_WRAPPERS.md` keeps timing objects real. So `butter_score`
+which is why `B_WRAPPERS.md` keeps timing objects real. So `butter_score`
 should decide *what* happens and let a real clock (`transport`, `metro` inside a
 `butter.score` abstraction) decide *when*, or accept millisecond-level drift
 and say so.
@@ -73,7 +73,7 @@ through them on each bang. A `v8` can do this with `messnamed`.
 
 ## Additions to planned tools
 
-### 6. `btr.` wrappers: two more outlet extras, one more inlet extra, more units
+### 6. `b.` wrappers: two more outlet extras, one more inlet extra, more units
 
 From ossia's parameter metadata, which every parameter carries:
 

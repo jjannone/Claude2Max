@@ -4,17 +4,17 @@ Resolume is not used or installed here. This file only takes ideas from its
 manual (read in `resolume_insights.md`, sources there) and asks which would
 make good Butter_tools objects. Each idea was checked against what
 Butter_tools already has or plans (`Butter_tools/README.md`,
-`docs/BTR_WRAPPERS.md`, `docs/BUTTER_PAT.md`, `docs/BUTTER_MC_JIT.md`,
+`docs/B_WRAPPERS.md`, `docs/BUTTER_PAT.md`, `docs/BUTTER_MC_JIT.md`,
 `docs/BUTTER_INSPECTOR_PLAN.md`) and against the ideas already in
 `docs/IDEAS.md` (the ossia score list: `butter_score`, `butter.map`,
 `butter_zones`, `butter_query`, `butter.spread`, the wrapper and `butter.pat`
 additions). None repeats those. Names follow the package's rules: an object (a
-script) takes an underscore, an abstraction a dot, a wrapper `btr.`, anything
+script) takes an underscore, an abstraction a dot, a wrapper `b.`, anything
 for video `jit.`. All are suggestions; nothing is built. Not yet copied into
 `IDEAS.md`. (2026-10-03.)
 
 A rule that shapes several of these: JavaScript in Max runs on the
-low-priority thread, which is why `BTR_WRAPPERS.md` keeps timing objects real.
+low-priority thread, which is why `B_WRAPPERS.md` keeps timing objects real.
 So wherever an idea below has to land on a beat or a frame, the script decides
 *what* happens and a real object (`metro @quantize`, `transport`, `line`,
 `jit.world`'s frame) decides *when*.
@@ -77,7 +77,7 @@ sweep one effect and the rest another.
 As a Butter tool: a `v8` with one inlet and one outlet per target (or `name
 value` pairs out one outlet). Each target gets `target <n> <out low> <out high>
 <dial from> <dial to> [invert] [curve]`, with the curves from `butter_ease.js`.
-The `btr.` wrappers already scale one port; the new part is one value fanned
+The `b.` wrappers already scale one port; the new part is one value fanned
 out to many targets over chosen segments. A `v8ui` version could draw the
 segments as bars under the dial.
 
@@ -175,7 +175,7 @@ target among named Butter controls (or numbered rows of `jit.butter_grid`)
 and relays incoming control messages to it, would let eight knobs edit any of
 many voices. It pairs with the learn idea already in `IDEAS.md` #8.
 
-### 10. `btr.` wrappers: inlet modes for endless knobs and buttons
+### 10. `b.` wrappers: inlet modes for endless knobs and buttons
 
 From Resolume's MIDI shortcut modes (`midi-shortcuts`):
 

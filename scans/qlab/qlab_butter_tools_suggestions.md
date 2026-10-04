@@ -3,18 +3,18 @@
 QLab is not used or installed here. This file only takes ideas from its manual
 (read in `qlab_insights.md`, sources there) and asks which would make good
 Butter_tools objects. Each idea was checked against what Butter_tools already
-has or plans: `Butter_tools/README.md`, `docs/BTR_WRAPPERS.md`,
+has or plans: `Butter_tools/README.md`, `docs/B_WRAPPERS.md`,
 `docs/BUTTER_PAT.md` (including its *Later: scenes and timelines* list),
 `docs/BUTTER_INSPECTOR_PLAN.md`, `docs/BUTTER_CARVE_PLAN.md` and the ossia
 score section of `docs/IDEAS.md` (`butter_score`, `butter.map`,
-`butter_zones`, `butter_query`, `butter.spread`, the `btr.` extras, recall
+`butter_zones`, `butter_query`, `butter.spread`, the `b.` extras, recall
 "as of" a cue, start and reset states, the control list with learn,
 `butter.alias`, ease from the current value, record a control as a curve).
 Nothing below repeats those; where an idea touches one, it says how it differs.
 
 Names follow the package's rules: an object (a script) takes an underscore, an
-abstraction a dot, a wrapper `btr.`, anything for video `jit.`. JavaScript in
-Max runs on the low-priority thread (`BTR_WRAPPERS.md`, and the Max userguide's
+abstraction a dot, a wrapper `b.`, anything for video `jit.`. JavaScript in
+Max runs on the low-priority thread (`B_WRAPPERS.md`, and the Max userguide's
 *Scheduler and Priority* page), so every idea below keeps the timing in real
 Max objects and uses a script only for the list, the drawing and the decisions.
 All are suggestions; nothing is built. (2026-10-03.)

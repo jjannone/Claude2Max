@@ -9,12 +9,12 @@ const start = TEST.indexOf('const FONTS');
 const end = TEST.indexOf('let failures = 0');
 const stub = TEST.slice(start, end).replace(/^const SCRIPT[\s\S]*?;\n/m, '');
 const mod = { fs, vm, SCRIPT, exports: {} };
-const fn = new Function('fs', 'vm', 'SCRIPT', 'console', stub + '\nreturn makeCtx;');
-const makeCtx = fn(fs, vm, SCRIPT, console);
-const BASE = { fontname: "Monaco", fontsize: 10, fontface: 0, textcolor: [0.9,0.9,0.92,1], textjustification: 0 };
+const fn = new Function('fs', 'vm', 'SCRIPT', 'console', 'require', stub + '\nreturn makeCtx;');
+const makeCtx = fn(fs, vm, SCRIPT, console, require);
+const BASE = { fontname: process.env.BC_FONTNAME || "Monaco", fontsize: +(process.env.BC_FONTSIZE || 10), fontface: 0, textcolor: [0.9,0.9,0.92,1], textjustification: 0 };
 const h = makeCtx(BASE, { size: [WIDTH, 2000] });
 const text = fs.readFileSync(SRC_FILE, 'utf8');
-h.ctx.set_z_text.apply(h.ctx, [text]);   // the same entry point the box attribute uses
+(h.ctx.set_text || h.ctx.set_z_text).apply(h.ctx, [text]);   // the same entry point the box attribute uses
 h.ctx.paint();
 let unknown = h.posts.filter(p => /unknown|not installed|could not/i.test(p));
 if (process.env.BC_QUIET) {

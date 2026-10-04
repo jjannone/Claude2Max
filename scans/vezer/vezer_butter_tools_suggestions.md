@@ -3,17 +3,17 @@
 Vezér is not used or installed here. This file only takes ideas from its help
 pages (read in `vezer_insights.md`, sources there) and asks which would make good
 Butter_tools objects. Each idea was checked against what Butter_tools already
-has or plans: `Butter_tools/README.md`, `docs/BTR_WRAPPERS.md`,
+has or plans: `Butter_tools/README.md`, `docs/B_WRAPPERS.md`,
 `docs/BUTTER_PAT.md` (including *Later: scenes and timelines*) and
 `docs/IDEAS.md`, whose ossia score section already holds `butter_score`, recall
 "as of" a cue, `@outN_repeat`, easing from the live value and recording a
 control as a curve. Nothing here repeats those; where an idea extends one, it
 says which. Names follow the package's rules: an object (a script) takes an
-underscore, an abstraction a dot, a wrapper `btr.`, anything for video `jit.`.
+underscore, an abstraction a dot, a wrapper `b.`, anything for video `jit.`.
 All are suggestions; nothing is built. (2026-10-03.)
 
 JavaScript in Max runs on the low-priority thread (the reason
-`BTR_WRAPPERS.md` keeps timing objects real and `butter.arpplayer` exists). Every
+`B_WRAPPERS.md` keeps timing objects real and `butter.arpplayer` exists). Every
 idea below that plays something in time is split the same way: a script decides
 *what*, and real Max objects decide *when*.
 
