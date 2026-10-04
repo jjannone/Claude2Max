@@ -253,6 +253,12 @@ The cheap way to find these is to break the code on purpose and check that a tes
 
 For instance: `test_text_bearing_classes_keep_the_text_estimate` in `tests/test_ui_default_size.py` looped over `spec2maxpat.TEXT_SIZED_CLASSES`. Deleting the guard the test existed to protect emptied that constant, so the loop ran zero times and the test passed. It now names `newobj`, `message` and `comment` literally and asserts each is in the constant. Found by mutation-testing every new test in the file rather than trusting a green run. (2026-09-15.)
 
+## A Test of a Connection Sends Something Only the Connection Can Carry — Binding Rule
+
+A test passes for the wrong reason when its input reaches both ends by another route. The two ends then agree whether they are joined or not, and the test proves nothing. So feed the input to one end only, and check it at the other. Also include a step that breaks the connection, and check that the output stops following. A test that has never been seen to fail with the connection broken has not tested the connection.
+
+For instance: the first `butter_carve` link test wired the position slider to both `butter_carveui` and `butter.carve~`, so the drawing and the sound moved together even without the link. Now position goes into the UI only and reaches the player over the link, a `shape` change rewrites the shared buffer, and each tab has a control that breaks the link. (John, 2026-10-04.) The same holds beyond Max: a client and server that both read one config file, or two processes that both receive the same input. The recognition signal: one control or source cabled to both ends of the thing being tested.
+
 ## Re-Read the Whole Branch After Inserting Into It, and Test What Is Drawn — Binding Rule {!core}
 
 When a change adds a line inside an `if … else` chain, a `switch`, or any other set of branches, re-read the whole chain afterwards. A line dropped between an `if` and its `else` quietly takes the `else` for itself: the code still runs, nothing errors, and one case silently stops doing its job. The same goes for any construct where position decides meaning: a `return` that ends a function early, a statement pulled inside a loop, a line that lands after the `break`.
