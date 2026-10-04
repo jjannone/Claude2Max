@@ -269,6 +269,12 @@ Do what Cycling '74's own help file for that object does. For a `preset` that is
 
 For instance: the `butter_arp` help file saved `pattrstorage ARP_PRESETS` as an attribute on its `preset`, and the preset stored and recalled nothing. C74's `pattrstorage.maxhelp` binds with a message box and saves no such attribute on the box. (John, 2026-09-28.) The recognition signal: writing an object's name into another object's attributes.
 
+## A Tool That Fixes a File Leaves Its Own Output Alone — Binding Rule
+
+A tool that lays out, routes, tidies or repairs a file will be run again on a file it has already fixed: after a later edit, as one step of a larger pass, or by a session that does not know it already ran. The second run must change nothing. A tool that keeps changing its own output fails quietly, because each run looks like the first one did: a box moves a pixel more, a column it set by hand is reset, a box it meant to keep is removed. So test every such tool by running it twice and checking that the second run changes nothing, and make that check part of its tests.
+
+For instance: Butter_tools' `chip_layout.py` was right on its first run. On a second run it deleted the one shared `s` it meant to keep, so every chip's cord pointed at a box that no longer existed. It moved every chip down 1 px, because it measured from the chips' own offset. And it merged two chip columns that had been split to fit the tab into one column that ran off the bottom. `tests/chip_layout_rerun.py` now runs it twice. (John, 2026-10-04.) The recognition signal: writing a tool whose input can be its own output.
+
 ## A Test Never Changes the Files a Running Program Reads — Binding Rule
 
 Anything a test writes on purpose — a deliberately broken copy of the code, a scratch config, a generated fixture — goes into a copy, never over the real file. The real file is also what a running program reads: Max, a dev server, a synced folder. Max caches a script the first time it loads it, so a patch opened while a broken copy is in place keeps that copy for the rest of the session. Nothing says so. The object simply misbehaves, and the debugging starts on code that is fine. Restoring the file afterwards does not help, because the damage is the read that already happened; and in a synced folder the rewrites can spawn conflicted copies too.

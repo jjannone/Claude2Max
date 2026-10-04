@@ -1987,7 +1987,8 @@ def rule_tab_window_too_small(ctx: SpecContext) -> list:
     )]
 
 
-HELP_TAB_MAX = (1000, 800)   # past this a tab does not fit a laptop screen
+HELP_TAB_MAX = (1000, 1000)  # a laptop screen is about 1000 × 800; a crowded tab may
+                             # grow taller and scroll (MAX_PATCHING.md help-file rule 3)
 
 
 def _tab_name(obj: dict) -> str:
