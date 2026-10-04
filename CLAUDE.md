@@ -884,6 +884,10 @@ For instance: the `butter_keys` comparison bench placed `kslider` and `butter_ke
 
 Claude Sonnet is the default and handles most tasks. **Do not proceed silently on Sonnet when Opus is warranted** — pause and prompt the user first. Use the exact phrasing below so the prompt is unambiguous.
 
+### Always Name the Right Model — Binding Rule
+
+For every task, say which model fits it before starting, even when the answer is "Sonnet is fine, stay here." Then watch for the task changing. A job that began as simple edits can turn into design or analysis, and a job that began as hard thinking can settle into routine work. When the demands change in either direction, say so and suggest switching, at the moment it changes, not at the end. The user cannot see the model's limits from outside, so the suggestion has to come from Claude. The Opus triggers below are examples of demanding work, not the full list. (John, 2026-10-03.)
+
 ### Prompt to switch to Opus
 
 When any of the following tasks arises, stop before beginning and say:
