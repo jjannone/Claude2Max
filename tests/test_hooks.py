@@ -75,19 +75,28 @@ def _read_hook(path):
     return p.stdout.strip()
 
 
+_FIXTURE_DIR = tempfile.mkdtemp(prefix="c2m_hook_fixture_")
+
+
 def _patch_without_scripts():
-    """A repo patch whose check passes in a bare temp folder (no .js beside it needed)."""
-    for f in sorted((_REPO / "patches").glob("*.maxpat")):
-        if '"v8 ' in f.read_text(errors="replace") or '"js ' in f.read_text(errors="replace"):
-            continue
-        with tempfile.TemporaryDirectory() as d:
-            copy = Path(d) / f.name
-            shutil.copy(f, copy)
-            r = subprocess.run([sys.executable, str(_REPO / "spec2maxpat.py"), "sync", "-i", str(copy), "--check"],
-                               capture_output=True, text=True)
-            if r.returncode == 0:
-                return f
-    raise AssertionError("no script-free patch in patches/ passes sync --check")
+    """A freshly converted patch, so its spec matches its boxes by construction.
+
+    It used to be the first repo patch that passed `sync --check`, which tied
+    these tests to whether the repo's patches happened to be synced: changing
+    the converter's width estimate (2026-09-27) left none passing until synced.
+    """
+    path = Path(_FIXTURE_DIR) / "hook-fixture.maxpat"
+    if not path.exists():
+        spec = {"objects": {"metro": {"type": "newobj", "text": "metro 500", "pos": [30, 30]},
+                            "counter": {"type": "newobj", "text": "counter 0 7", "pos": [30, 90]},
+                            "label": {"type": "comment", "text": "steps", "pos": [165, 90]}},
+                "connections": [["metro", 0, "counter", 0]]}
+        subprocess.run([sys.executable, str(_REPO / "spec2maxpat.py"), "convert", "-o", str(path)],
+                       input=json.dumps(spec), capture_output=True, text=True, check=True)
+    r = subprocess.run([sys.executable, str(_REPO / "spec2maxpat.py"), "sync", "-i", str(path), "--check"],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+    return path
 
 
 def test_matching_patch_is_silent_and_untouched():

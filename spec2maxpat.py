@@ -2393,11 +2393,20 @@ def _guess_newobj_io_base(text):
     return None
 
 
+# Width planned per character and per box, for a monospace font whatever font
+# the patch sets: a reader's Max may draw in one, and it is the widest text Max
+# is likely to draw. John's monospace Max drew ~9.5 px/char + 8 px (2026-09-27);
+# the old 7 px/char + 20 was an Arial figure and boxes ran into their labels.
+# Rule: MAX_PATCHING.md > Plan every width for a monospace font.
+TEXT_PX_PER_CHAR = 10
+TEXT_PX_PAD = 10
+
+
 def estimate_text_width(text):
-    """Estimate pixel width for an object's text."""
+    """Estimate pixel width for an object's text, planned for a monospace font."""
     if not text:
         return 40
-    return max(len(text) * 7 + 20, 40)
+    return max(len(text) * TEXT_PX_PER_CHAR + TEXT_PX_PAD, 40)
 
 
 def _size_is_default(maxclass, text, w, h, ports=None):
@@ -3177,6 +3186,32 @@ def _pair_by_geometry(sids, bids, spec_objects, boxes):
                     sorted(bids, key=lambda i: trim(bgeo[i], ref))))
 
 
+def _patching_size_drift(sobj, box):
+    """{spec, patch} when sync would change this object's patching `size`, else None.
+
+    The spec's `size` must equal the box's; a spec with no `size` must describe
+    a box at the width convert writes (_size_is_default, the same test sync
+    uses). The second case is what goes stale when the width estimate changes:
+    a box written at the old estimate, under a spec with no `size`, would be
+    resized by the next convert. Sync records its real size and ends the drift.
+    """
+    r = box.get("patching_rect")
+    if not isinstance(r, list) or len(r) < 4:
+        return None
+    w, h = int(r[2]), int(r[3])
+    size = sobj.get("size")
+    if isinstance(size, (list, tuple)) and len(size) >= 2:
+        try:
+            if (int(size[0]), int(size[1])) == (w, h):
+                return None
+        except (TypeError, ValueError):
+            pass
+        return {"spec": list(size[:2]), "patch": [w, h]}
+    if _size_is_default(box.get("maxclass", "newobj"), box.get("text", ""), w, h, _saved_ports(box)):
+        return None
+    return {"spec": None, "patch": [w, h]}
+
+
 def _one_to_one_drift(report, key, sobj, box, fmt, scope, stream):
     """Compare one spec object against the box it pairs with: presentation,
     attributes, and — when both hold a patcher — the scope inside it."""
@@ -3195,6 +3230,9 @@ def _one_to_one_drift(report, key, sobj, box, fmt, scope, stream):
             {"key": fmt(key), "spec": s_rect, "patch": b_rect, "what": "rect"})
     for d in _attr_drift(sobj, box):
         report["attribute_drift"].append(dict(d, key=fmt(key)))
+    d = _patching_size_drift(sobj, box)
+    if d is not None:
+        report["size_drift"].append(dict(d, key=fmt(key)))
     if isinstance(sobj.get("patcher"), dict) and isinstance(box.get("patcher"), dict):
         sub = spec_matches_patch({"patcher": box["patcher"]}, spec=sobj["patcher"],
                                  scope=(scope + "/" if scope else "") + fmt(key), stream=stream)
@@ -3230,6 +3268,9 @@ def spec_matches_patch(maxpat, spec=None, scope="", stream=None):
                             connections as [src_key, outlet, dst_key, inlet].
         presentation_drift  [{key, spec, patch}] rect or presence differences
                             on objects matched one-to-one.
+        size_drift          [{key, spec, patch}] patching sizes sync would
+                            change: a spec `size` unlike the box's, or no
+                            `size` for a box convert would not reproduce.
         attribute_drift     [{key, attr, spec, patch, what}] attributes both the
                             spec and the box carry with different values, on
                             paired objects. Long values (an embedded script) are
@@ -3248,7 +3289,8 @@ def spec_matches_patch(maxpat, spec=None, scope="", stream=None):
         "spec_objects": 0, "boxes": 0,
         "only_in_spec": [], "only_in_patch": [],
         "connection_diff": {"only_in_spec": [], "only_in_patch": []},
-        "presentation_drift": [], "attribute_drift": [], "nested": {}, "summary": "",
+        "presentation_drift": [], "attribute_drift": [], "size_drift": [],
+        "nested": {}, "summary": "",
     }
     if spec is None:
         report["summary"] = "no embedded spec — nothing to compare"
@@ -3322,7 +3364,8 @@ def spec_matches_patch(maxpat, spec=None, scope="", stream=None):
     report["matches"] = not (
         report["only_in_spec"] or report["only_in_patch"]
         or report["connection_diff"]["only_in_spec"] or report["connection_diff"]["only_in_patch"]
-        or report["presentation_drift"] or report["attribute_drift"] or report["nested"]
+        or report["presentation_drift"] or report["attribute_drift"]
+        or report["size_drift"] or report["nested"]
     )
     where = f" in {scope}" if scope else ""
     if report["matches"]:
@@ -3341,6 +3384,8 @@ def spec_matches_patch(maxpat, spec=None, scope="", stream=None):
             parts.append(f"{len(report['presentation_drift'])} presentation rect(s) drifted")
         if report["attribute_drift"]:
             parts.append(f"{len(report['attribute_drift'])} attribute(s) drifted")
+        if report["size_drift"]:
+            parts.append(f"{len(report['size_drift'])} patching size(s) drifted")
         if report["nested"]:
             parts.append(f"{len(report['nested'])} subpatcher(s) differ")
         report["summary"] = (f"spec is STALE{where} — {report['spec_objects']} spec objects vs "
@@ -3365,6 +3410,9 @@ def format_spec_match_report(report, indent="  "):
     for d in report.get("attribute_drift", []):
         lines.append(f"{indent}attribute drift on [{d['key']}]: "
                      f"{d['attr']} = {d['spec']} in spec vs {d['patch']} in patch")
+    for d in report.get("size_drift", []):
+        lines.append(f"{indent}patching size drift on [{d['key']}]: "
+                     f"{d['spec'] or 'no size'} in spec vs {d['patch']} in patch")
     for key, sub in report["nested"].items():
         lines.append(f"{indent}subpatcher [{key}]:")
         lines.extend(format_spec_match_report(sub, indent + "  ").splitlines()[1:])

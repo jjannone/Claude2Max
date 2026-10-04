@@ -100,6 +100,19 @@ _NOMINAL_UI_SIZES = {
     "textedit": (200, 80),
 }
 
+# Text-box width per character and per box — a MIRROR of
+# spec2maxpat.TEXT_PX_PER_CHAR / TEXT_PX_PAD, planned for a monospace font
+# (MAX_PATCHING.md > Plan every width for a monospace font). A test in
+# tests/test_verify.py asserts both agree with the converter's estimate.
+_TEXT_PX_PER_CHAR = 10
+_TEXT_PX_PAD = 10
+
+
+def _text_width(text) -> int:
+    """Width convert gives a text box with no `size` (spec2maxpat.estimate_text_width)."""
+    return max(len(text) * _TEXT_PX_PER_CHAR + _TEXT_PX_PAD, 40) if text else 40
+
+
 # Objects whose first argument is a user-defined NAME that the ALL-CAPS naming
 # convention applies to.  Maps object-class → token index of the name argument.
 _NAMED_FIRST_ARG = {
@@ -332,7 +345,8 @@ class SpecContext:
         `size` is often absent: after a `sync`, reconcile_spec records it only
         when the live height differs from 22. Fallbacks mirror the converter:
         a UI class takes its nominal size (_NOMINAL_UI_SIZES); a text box is
-        22 px high and `len(text) * 7 + 20` wide (spec2maxpat.estimate_text_width).
+        22 px high and `len(text) * 10 + 10` wide, planned for a monospace font
+        (_text_width, a mirror of spec2maxpat.estimate_text_width).
         """
         if not isinstance(obj, dict):
             return None
@@ -354,7 +368,7 @@ class SpecContext:
             w, h = _NOMINAL_UI_SIZES[mc]
             return [x, y, float(w), float(h)]
         text = cls.text(obj)
-        w = max(len(text) * 7 + 20, 40) if text else 40
+        w = _text_width(text)
         if mc == "newobj":
             w = max(w, _min_object_box_width(obj) or 0)
         return [x, y, float(w), 22.0]
@@ -808,6 +822,13 @@ def rule_debug_marking(ctx: SpecContext) -> list:
 #   cord-long                        198          0     169 leave an r~ that could sit by its inlet
 #   box-off-canvas                    13          0     one per patch; every shootout's presentation overruns its window
 #   off-grid                           1          0     silent unless ≥80% of ≥5 boxes share a grid
+#
+# Added 2026-09-27 with the monospace width estimate (10 px/char + 10), over the
+# 29 patches in `patches/` after a sync (unsynced specs model their text boxes
+# at the new width and report far more):
+#   patching-overlap                  53          —     unchanged from the old estimate once synced
+#   label-in-cord-path                40          —     17 files; mostly labels above sliders and number boxes
+#   number-box-default-width         135          —     19 files; a prompt to check the range, not a finding
 #
 # Geometry and presentation rules read `pos` / presentation rects, which a
 # native-derived spec does not carry, so their corpus count is structurally 0.
@@ -1769,6 +1790,112 @@ def rule_patching_overlap(ctx: SpecContext) -> list:
     return out
 
 
+_LABEL_GAP_PX = 15.0   # a comment this close above or below a box sits in its cords' path
+
+
+def _segment_hits_rect(p0, p1, r, inset=1.0) -> bool:
+    """True when the straight segment p0→p1 passes through rect r (shrunk by `inset`)."""
+    left, top = r[0] + inset, r[1] + inset
+    right, bottom = r[0] + r[2] - inset, r[1] + r[3] - inset
+    if right <= left or bottom <= top:
+        return False
+    steps = max(1, int(max(abs(p1[0] - p0[0]), abs(p1[1] - p0[1]))))
+    for i in range(steps + 1):
+        t = i / steps
+        x, y = p0[0] + (p1[0] - p0[0]) * t, p0[1] + (p1[1] - p0[1]) * t
+        if left < x < right and top < y < bottom:
+            return True
+    return False
+
+
+def rule_label_in_cord_path(ctx: SpecContext) -> list:
+    """A comment directly above or below a box, with a cord of that box drawn
+    through its text, is a label in the cords' path.
+
+    Cords leave a box at the bottom and enter at the top, so a label there is
+    crossed by them. Put it to the right of the box, on the same row. Local
+    cords count here, unlike cord-crosses-unrelated-box, which skips them; a
+    cord that rule already reports through this comment is not repeated.
+    Source: MAX_PATCHING.md > In the patching view, a label goes to the right
+    of its box.
+    """
+    rects = {oid: ctx.box_rect(o) for oid, o in ctx.objects.items()
+             if _laid_out(ctx, oid, o)}
+    comments = {oid: r for oid, r in rects.items()
+                if r is not None and ctx.maxclass(ctx.objects[oid]) == "comment"}
+    out, seen = [], set()
+    for i, conn in enumerate(ctx.connections):
+        if not isinstance(conn, (list, tuple)) or len(conn) < 4:
+            continue
+        g = _cord_geometry(ctx, conn)
+        if g is None:
+            continue
+        sr, dr, _ = g
+        s, d = ctx.objects.get(conn[0]), ctx.objects.get(conn[2])
+        p0 = (_port_x(sr, conn[1], s.get("outlets") if isinstance(s, dict) else None), sr[1] + sr[3])
+        p1 = (_port_x(dr, conn[3], d.get("inlets") if isinstance(d, dict) else None), dr[1])
+        already, _ = _cord_crossings(ctx, conn, rects)
+        for cid, cr in comments.items():
+            if cid in (conn[0], conn[2]) or cid in already or (cid, i) in seen:
+                continue
+            labelled = where = None
+            for bid, br in ((conn[2], dr), (conn[0], sr)):
+                ox = min(cr[0] + cr[2], br[0] + br[2]) - max(cr[0], br[0])
+                if ox <= 0:
+                    continue
+                if -1 <= br[1] - (cr[1] + cr[3]) <= _LABEL_GAP_PX:
+                    labelled, where = bid, "above"
+                elif -1 <= cr[1] - (br[1] + br[3]) <= _LABEL_GAP_PX:
+                    labelled, where = bid, "below"
+                if labelled:
+                    break
+            if labelled is None or not _segment_hits_rect(p0, p1, cr):
+                continue
+            seen.add((cid, i))
+            out.append(Violation(
+                "label-in-cord-path", STYLE, cid,
+                f"Comment '{cid}' sits directly {where} '{labelled}', and the cord "
+                f"{conn[0]}:{conn[1]} → {conn[2]}:{conn[3]} is drawn through it. Move the "
+                f"label to the right of '{labelled}', on the same row.",
+                "MAX_PATCHING.md > In the patching view, a label goes to the right of its box",
+            ))
+    return out
+
+
+_NUMBER_BOX_CLASSES = ("number", "flonum", "live.numbox")
+
+
+def rule_number_box_default_width(ctx: SpecContext) -> list:
+    """A number box left at its default width may cut off the value it shows.
+
+    Fires on `number`, `flonum` and `live.numbox` with no `size`, or a `size`
+    no wider than the class's default. The verifier cannot know the range a box
+    will display, so this is a prompt to check it, not a finding.
+    Source: MAX_PATCHING.md > Size a number box to the widest value it will show.
+    """
+    out = []
+    for oid, obj in ctx.objects.items():
+        if not _laid_out(ctx, oid, obj):
+            continue
+        mc = ctx.maxclass(obj)
+        if mc not in _NUMBER_BOX_CLASSES or mc not in _NOMINAL_UI_SIZES:
+            continue
+        default_w = _NOMINAL_UI_SIZES[mc][0]
+        size = obj.get("size")
+        try:
+            w = float(size[0]) if isinstance(size, (list, tuple)) and size else float(default_w)
+        except (TypeError, ValueError):
+            continue
+        if w <= default_w:
+            out.append(Violation(
+                "number-box-default-width", STYLE, oid,
+                f"'{oid}' ({mc}) is {w:.0f} px wide, its default. Check it fits the widest "
+                f"value it will show, at ~10 px per character: `2000.` or `0.005` needs about 70 px.",
+                "MAX_PATCHING.md > Size a number box to the widest value it will show",
+            ))
+    return out
+
+
 def rule_long_cord(ctx: SpecContext) -> list:
     """A cord that crosses the patch is a candidate for s / r.
 
@@ -2597,6 +2724,8 @@ REGISTRY = [
     # whole-patch layout — folded in from c2m_layout.py (2026-09-16)
     rule_patching_overlap,
     rule_box_too_narrow,
+    rule_label_in_cord_path,
+    rule_number_box_default_width,
     rule_long_cord,
     rule_box_off_canvas,
     rule_tab_window_too_small,

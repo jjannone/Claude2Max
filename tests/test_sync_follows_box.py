@@ -24,9 +24,10 @@ def test_widened_newobj_keeps_its_size():
     out = s.reconcile_spec(copy.deepcopy(spec), m)
     assert out["objects"]["logic"].get("size") == [560, 22], out["objects"]["logic"]
     # a box left at the converter's own width carries no size field; for
-    # counter's 5 inlets that is 24 + 15 * 5 = 99 px, above its 97 px text
-    # estimate (MAX_PATCHING.md > Give every port room)
-    box["patching_rect"][2] = 99
+    # "counter 0 7" that is its text estimate, 11 chars * 10 + 10 = 120 px,
+    # above the 99 px its 5 inlets need (MAX_PATCHING.md > Plan every width
+    # for a monospace font; > Give every port room)
+    box["patching_rect"][2] = 120
     out2 = s.reconcile_spec(copy.deepcopy(spec), m)
     assert "size" not in out2["objects"]["logic"], out2["objects"]["logic"]
 
