@@ -820,7 +820,7 @@ def rule_debug_marking(ctx: SpecContext) -> list:
 #   cord-crosses-unrelated-box        95          0     panels excluded; attrui columns dominate
 #                                                       (2026-09-16: ports moved toward the box edges as Max
 #                                                       draws them; 228 fewer hits over 25 patches with a
-#                                                       3.5 px inset, before the measured 19 px replaced it)
+#                                                       3.5 px inset; 19 px from 2026-09-16, 9.5 px from 2026-10-04)
 #   feeder-below-target                0          0
 #   fanout-order                       2          0
 #   cord-too-short                   103          0     older repo layouts used 25–30 px rows
@@ -1442,15 +1442,20 @@ _CORD_MIN_OVERLAP_AREA = 20.0
 _CORD_TOO_SHORT_PX = 15.0
 
 
-_PORT_INSET_PX = 19.0   # port centre to box edge, both sides; measured by John in Max 2026-09-16
+# Port centre to box edge, both sides. Max's saved cords say 9.5: in files Max 9
+# saved, a cord with bends enters inlet 0 at 9.5 px from the box's left edge
+# 6,669 times out of 7,095, and the last inlet 9.5 px from the right edge 1,019
+# of 1,029. John's 2026-09-16 screen measurement of 19 is exactly double, as a
+# Retina screenshot would read it; John chose 9.5 on 2026-10-04.
+_PORT_INSET_PX = 9.5
 
 
 def _port_x(rect, index, count) -> float:
     """x of the centre of outlet/inlet `index` on a box with `count` ports.
 
-    Max centres the first port 19 px in from the box's left edge and the last
-    port 19 px in from its right edge, and spreads the rest evenly between them.
-    So port 0 is at x + 19 whatever the count. With the count unknown, a port
+    Max centres the first port 9.5 px in from the box's left edge and the last
+    port 9.5 px in from its right edge, and spreads the rest evenly between them.
+    So port 0 is at x + 9.5 whatever the count. With the count unknown, a port
     other than 0 falls back to the centre. A box narrower than two insets is not
     measured; its ports are clamped to the centre (an assumption, not checked).
     """

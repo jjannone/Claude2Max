@@ -966,7 +966,7 @@ def test_a_column_header_comment_is_not_a_crossing():
 
 def test_cord_port_zero_sits_at_left_edge():
     # An attrui staircase: each box 30 px right of the one above, every cord
-    # dropping from its first outlet (19 px in from the left edge) to the
+    # dropping from its first outlet (9.5 px in from the left edge) to the
     # target's first inlet. No cord touches the attruis below it; a centre
     # port model would put every cord through them.
     objs = {"target": {"type": "newobj", "text": "abl.device.delay~", "pos": [100, 300]}}
@@ -978,7 +978,7 @@ def test_cord_port_zero_sits_at_left_edge():
 
 
 def test_cord_last_port_sits_at_right_edge():
-    # The last outlet of a wide box is 19 px in from its right edge, so a box
+    # The last outlet of a wide box is 9.5 px in from its right edge, so a box
     # under that edge is crossed even though it is far from the box's centre.
     objs = {"src": {"type": "newobj", "text": "unjoin 2", "pos": [100, 40], "size": [400, 22], "outlets": 3},
             "under": {"type": "newobj", "text": "print X", "pos": [480, 150]},

@@ -40,7 +40,8 @@ def test_column_over_the_inlet_runs_straight():
     assert m["m1"] == [] and m["m2"] == [] and m["m3"] == [], m
     # the row's cord goes along the gap under it to the column's line, then
     # straight down: its last point is on the inlet's x, at the gap's height
-    assert len(m["r1"]) == 4 and m["r1"][2] == 23, m["r1"]
+    # (box x 20 + the 9.5 px port inset Max 9's saved cords show)
+    assert len(m["r1"]) == 4 and m["r1"][2] == 29.5, m["r1"]
 
 
 def test_column_beside_the_inlet_keeps_its_bend():
