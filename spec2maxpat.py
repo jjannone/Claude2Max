@@ -966,7 +966,7 @@ NEWOBJ_IO = {
     "gate":     {"numinlets": 2, "numoutlets": 1, "outlettype": [""]},
     "switch":   {"numinlets": 3, "numoutlets": 1, "outlettype": [""]},
     "spray":    {"numinlets": 2, "numoutlets": 2, "outlettype": ["", ""]},
-    "funnel":   {"numinlets": 2, "numoutlets": 2, "outlettype": ["int", ""]},
+    "funnel":   {"numinlets": 2, "numoutlets": 1, "outlettype": ["list"]},
     "join":     {"numinlets": 2, "numoutlets": 1, "outlettype": [""]},
     "unjoin":   {"numinlets": 1, "numoutlets": 2, "outlettype": ["", ""]},
     "selector~": {"numinlets": 3, "numoutlets": 1, "outlettype": ["signal"]},
@@ -1078,12 +1078,12 @@ NEWOBJ_IO = {
     "meter~":   {"numinlets": 1, "numoutlets": 1, "outlettype": ["float"]},
     "avg~":     {"numinlets": 1, "numoutlets": 1, "outlettype": ["float"]},
     "peakamp~": {"numinlets": 2, "numoutlets": 1, "outlettype": ["float"]},
-    "groove~":  {"numinlets": 3, "numoutlets": 3, "outlettype": ["signal", "signal", "signal"]},
+    "groove~":  {"numinlets": 3, "numoutlets": 2, "outlettype": ["signal", "signal"]},
     "play~":    {"numinlets": 1, "numoutlets": 2, "outlettype": ["signal", "bang"]},
     "record~":  {"numinlets": 3, "numoutlets": 1, "outlettype": ["signal"]},
     "buffer~":  {"numinlets": 1, "numoutlets": 2, "outlettype": ["float", "bang"]},
     "sfplay~":  {"numinlets": 2, "numoutlets": 2, "outlettype": ["signal", "bang"]},
-    "sfrecord~": {"numinlets": 2, "numoutlets": 1, "outlettype": ["signal"]},
+    "sfrecord~": {"numinlets": 1, "numoutlets": 1, "outlettype": ["signal"]},
     "adsr~":    {"numinlets": 5, "numoutlets": 4, "outlettype": ["signal", "signal", "", ""]},
     "function": {"numinlets": 1, "numoutlets": 4, "outlettype": ["float", "", "", "bang"]},
     "mc.cycle~": {"numinlets": 2, "numoutlets": 1, "outlettype": ["multichannelsignal"]},
@@ -1631,6 +1631,272 @@ PORTS_FROM_CONTENTS = frozenset({
     "rnbo~", "amxd~", "vst~", "mc.vst~",
 })
 
+# Classes whose ports are worked out from an argument or attribute by a rule
+# written from the refpage (_argument_ports), because Max's saved boxes are too
+# few or too alike to show it: nearly every saved wave~ and record~ is mono, so
+# the registry would otherwise call them fixed at one channel.
+#
+# REFPAGE_PORT_FORMULAS holds the ones a single term states (the terms are
+# those of *Port formulas fitted from saved boxes* below): (inlets, outlets,
+# outlet-type pattern). Each was read from the refpage's argument description
+# and agrees with every box of the class Max saved, 2026-10-01; the saved boxes
+# were too few to fit (three texts, or one). The classes that need more than
+# one term are written out in _argument_ports.
+REFPAGE_PORT_FORMULAS = {
+    # "The first argument sets the number of inlets"; none = 2.
+    "funnel": ([["arg", 0], 0, 2], ["const", 1], {"body": "list", "tail": []}),
+    # "Sets the number of inlets" / "of outlets"; each box has one more of both.
+    "router": ([["arg", 0], 1, None], [["arg", 1], 1, None], None),
+    # "Sets the number of outlets. The default is one outlet."
+    "decode": (["const", 3], [["arg", 0], 0, 1], {"body": "int", "tail": []}),
+    # "Number of outlets" / "Number of inlets (default 2)".
+    "mc.deinterleave~": (["const", 1], [["arg", 0], 0, 2], {"body": "multichannelsignal", "tail": []}),
+    "mc.interleave~": ([["arg", 0], 0, 2], ["const", 1], {"body": "multichannelsignal", "tail": []}),
+    # "The first argument specifies the number of inlets ... default is 2";
+    # "the second ... outlets ... 2 outlets will be created".
+    "mc.transpose~": ([["arg", 0], 0, 2], [["arg", 1], 0, 2], {"body": "multichannelsignal", "tail": []}),
+    # "The number of inlets will be one more than the argument value"; none = 16.
+    "mpeformat": ([["arg", 0], 1, 16], ["const", 2], None),
+    # "match keys ... Determines the number of outlets", plus one for no match;
+    # inlets follow, as with routepass.
+    "array.routepass": ([["nargs"], 1, None], [["nargs"], 1, None], None),
+    "string.withpass": ([["nargs"], 1, None], [["nargs"], 1, None], None),
+}
+
+ARGUMENT_PORT_CLASSES = frozenset({
+    "groove~", "play~", "wave~", "2d.wave~", "record~", "sfrecord~", "sfplay~",
+    "jit.scissors", "jit.glue",
+}) | frozenset(REFPAGE_PORT_FORMULAS)
+
+# ── Port formulas fitted from saved boxes ─────────────────────────────────────
+# Many classes take their port counts from their box text: `select a b c`,
+# `route x y`, `cycle 3`, `jit.pack 3`, `pak 0. 0. 0.`, `gate 4`, `matrix~ 4 2`,
+# `sprintf %s %d`, `if $i1 > $i2 then …`, `dict.pack a: b:`, `r NAME`.
+# The rule differs per class, and a hand-written table of them drifts. So the
+# registry fits one per class from the boxes Max saved: each of inlets and
+# outlets is a constant, or one term plus an offset.
+#
+#   ["nargs"]            how many positional arguments the box has
+#   ["nargs", m]         the same, but never less than m (`pipe 200` = `pipe 0 200`)
+#   ["arg", i]           the i-th positional argument, read as a count
+#   ["int", 0]           the first positional argument that is an integer
+#   ["attr", name]       an attribute's first value, read as a count
+#   ["flag", name]       1 when an attribute is set to a nonzero value
+#   ["hasargs"]          0 when the box has any positional argument (`r NAME`)
+#   ["hasint"]           0 when any positional argument is an integer (`notein 3`)
+#   ["dollar"]           the highest `$` argument index (`if $i1 < $i3`)
+#   ["percent"]          how many `%` conversions the text holds (`sprintf`)
+#   ["colons"]           how many tokens hold a colon (`dict.pack a: b:`)
+#   ["word", w]          1 when the literal argument w is present (`if … out2 …`)
+#   ["argprod", i, j]    two positional arguments multiplied
+#   ["attrprod", a, b]   two attributes multiplied (absent = 1)
+#
+# A term gives None for a box that does not carry it, and the stored formula
+# [term, offset, count_when_absent] then answers with the third field.
+#
+# What makes a fit trustworthy, each bound found by fitting on Max's own
+# patches and checking against the user packages, and the other way round
+# (2026-10-01):
+#   - the class has at least _FORMULA_MIN_TEXTS different box texts;
+#   - the term was seen with two different values, or for a yes/no term in two
+#     different texts on each side;
+#   - at most _FORMULA_MAX_MISS of the texts, and of the boxes, disagree. Saved
+#     patches hold a few boxes that follow no rule: an abstraction sharing a
+#     class's name, a box saved by an older Max inside a newer file;
+#   - it leaves at most a quarter of the texts a plain constant leaves. Without
+#     this, any term that is absent from nearly every box would "explain" a
+#     class that is nearly always one count.
+_FORMULA_MIN_TEXTS = 4
+_FORMULA_MAX_MISS = 0.04
+_ARG_TOKEN = re.compile(r'"(?:[^"\\]|\\.)*"|\S+')
+_DOLLAR_ARG = re.compile(r"\$[a-zA-Z]?(\d+)")
+_YES_NO_TERMS = ("flag", "hasargs", "hasint", "word")
+
+
+def _box_features(args_text):
+    """(positional args, {attribute: [values]}) of a box's text after its class
+    name. A double-quoted phrase is one argument."""
+    pos, attrs, cur = [], {}, None
+    for tok in _ARG_TOKEN.findall(args_text or ""):
+        if tok.startswith("@"):
+            cur = attrs.setdefault(tok[1:], [])
+        elif cur is None:
+            pos.append(tok)
+        else:
+            cur.append(tok)
+    return pos, attrs
+
+
+def _as_count(tok):
+    """A token as a port count (at least 1), or None when it is not an integer."""
+    try:
+        return max(int(tok), 1)
+    except (TypeError, ValueError):
+        return None
+
+
+def _port_term_value(term, pos, attrs):
+    """What a formula term reads from one box, or None when the box lacks it."""
+    kind = term[0]
+    if kind == "nargs":
+        return (max(len(pos), term[1]) if len(term) > 1 else len(pos)) if pos else None
+    if kind == "arg":
+        return _as_count(pos[term[1]]) if term[1] < len(pos) else None
+    if kind == "int":
+        return next((c for c in map(_as_count, pos) if c is not None), None)
+    if kind == "attr":
+        return _as_count((attrs.get(term[1]) or [None])[0])
+    if kind == "flag":
+        try:
+            return 1 if int((attrs.get(term[1]) or [0])[0]) else None
+        except ValueError:
+            return None
+    if kind == "hasargs":
+        return 0 if pos else None
+    if kind == "hasint":
+        return 0 if any(_as_count(t) is not None for t in pos) else None
+    if kind == "dollar":
+        found = [int(n) for t in pos for n in _DOLLAR_ARG.findall(t)]
+        return max(found) if found and max(found) > 0 else None
+    if kind == "percent":
+        return sum(t.replace("%%", "").count("%") for t in pos) or None
+    if kind == "colons":
+        return sum(1 for t in pos if ":" in t) or None
+    if kind == "word":
+        return 1 if term[1] in pos else None
+    if kind == "argprod":
+        a, b = (_as_count(pos[i]) if i < len(pos) else None for i in term[1:3])
+        return None if a is None or b is None else a * b
+    if kind == "attrprod":
+        if not any(n in attrs for n in term[1:3]):
+            return None
+        a, b = (_as_count((attrs.get(n) or [None])[0]) or 1 for n in term[1:3])
+        return a * b
+    return None
+
+
+def _port_formula_value(formula, pos, attrs):
+    """The count a fitted formula gives one box; None when it cannot say."""
+    if formula[0] == "const":
+        return formula[1]
+    term, offset, absent = formula
+    value = _port_term_value(term, pos, attrs)
+    return absent if value is None else value + offset
+
+
+def _candidate_terms(rows):
+    names = sorted({n for r in rows for n in r[1]})
+    width = min(max(len(r[0]) for r in rows), 5)
+    words = collections.Counter(t for r in rows for t in set(r[0])
+                                if _as_count(t) is None and not t.startswith(("$", '"')))
+    words = sorted(w for w, n in words.items() if 3 <= n <= 0.8 * len(rows))[:40]
+    terms = [["nargs"], ["nargs", 2]] + [["arg", i] for i in range(width)] + [["int", 0]]
+    terms += [["dollar"], ["percent"], ["colons"], ["hasargs"], ["hasint"]]
+    terms += [["attr", n] for n in names] + [["flag", n] for n in names]
+    terms += [["word", w] for w in words]
+    terms += [["argprod", i, j] for i in range(width) for j in range(i + 1, width)]
+    terms += [["attrprod", a, b] for i, a in enumerate(names) for b in names[i + 1:]]
+    return terms
+
+
+def _fit_port_formula(rows):
+    """rows: [(pos, attrs, count, boxes)], one per box text. The formula that
+    leaves the fewest texts unexplained, within the bounds above, or None.
+    Returns (formula, texts it gets wrong)."""
+    texts, boxes = len(rows), sum(r[3] for r in rows)
+    tally = collections.Counter()
+    for r in rows:
+        tally[r[2]] += 1
+    common, n_common = tally.most_common(1)[0]
+    if n_common == texts:
+        return ["const", common], 0
+    if texts < _FORMULA_MIN_TEXTS:
+        return None, None
+    const_missed = texts - n_common
+    best = None
+    for term in _candidate_terms(rows):
+        offsets, absent = collections.Counter(), collections.Counter()
+        values, present, absent_shapes = set(), 0, set()
+        for pos, attrs, count, n in rows:
+            v = _port_term_value(term, pos, attrs)
+            if v is None:
+                absent[count] += 1
+                absent_shapes.add(tuple(sorted(attrs)))
+            else:
+                offsets[count - v] += 1
+                values.add(v)
+                present += 1
+        if not offsets:
+            continue
+        if term[0] in _YES_NO_TERMS:
+            if present < 2 or sum(absent.values()) < 2:
+                continue
+        elif len(values) < 2:
+            continue
+        offset = offsets.most_common(1)[0][0]
+        absent_count = absent.most_common(1)[0][0] if absent else None
+        # The count without the term is not known when every box lacking it
+        # carries the same attributes: `mcs.sig~ @chans 4` is the only kind of
+        # box of its class with no positional argument, and its 4 inlets come
+        # from `@chans`, not from the arguments being absent.
+        if len(absent_shapes) == 1 and absent_shapes != {()}:
+            absent_count = None
+        formula = [term, offset, absent_count]
+        got = [_port_formula_value(formula, r[0], r[1]) for r in rows]
+        missed = [r for r, g in zip(rows, got) if g is not None and g != r[2]]
+        silent = sum(1 for g in got if g is None)
+        if (len(missed) <= _FORMULA_MAX_MISS * texts
+                and sum(r[3] for r in missed) <= _FORMULA_MAX_MISS * boxes
+                and len(missed) + silent <= 0.25 * const_missed
+                and (best is None or len(missed) + silent < best[1])):
+            best = (formula, len(missed) + silent, len(missed))
+    return (best[0], best[2]) if best else (None, None)
+
+
+def _short_name_aliases():
+    """{short name: full name} for names that are the same object: `b` ->
+    bangbang, `t` -> trigger, `r` -> receive. Max's registry also uses `alias`
+    for "is implemented by" (154 `mc.` classes -> the `mc.*~` wrapper, 98
+    operators -> jit.op, the `zl.` modes -> zl), and those do not share ports,
+    so a target that many names point at is left out."""
+    aliases = REFPAGE_CACHE.object_db()[1]
+    targets = collections.Counter(aliases.values())
+    return {k: v for k, v in aliases.items() if targets[v] <= 2}
+
+
+def _outlet_type_pattern(type_lists):
+    """{"body": t, "tail": [...]} when every saved outlettype list of a class is
+    one type repeated and then a common ending (`signal … signal bang`), so the
+    types of an unseen count can be written. None when the lists do not share
+    that shape, as with `trigger`, whose types follow its arguments, or when
+    only one length was saved and it mixes types, which shows no pattern."""
+    lists = [list(t) for t in type_lists if t]
+    if not lists:
+        return None
+    if len({x for t in lists for x in t}) == 1:
+        return {"body": lists[0][0], "tail": []}
+    if len({len(t) for t in lists}) < 2:
+        return None
+    tail = []
+    for i in range(1, min(len(t) for t in lists) + 1):
+        if len({t[-i] for t in lists}) != 1:
+            break
+        tail.insert(0, lists[0][-i])
+    bodies = {x for t in lists for x in t[:len(t) - len(tail)]}
+    if len(bodies) != 1:
+        return None
+    body = bodies.pop()
+    while tail and tail[0] == body:
+        tail.pop(0)
+    return {"body": body, "tail": tail}
+
+
+def _outlet_types(pattern, n):
+    if not pattern:
+        return [""] * n
+    tail = list(pattern["tail"])[-n:] if n else []
+    return [pattern["body"]] * (n - len(tail)) + tail
+
 _FIXED_MIN_ARGLISTS = 2   # different positional argument lists that must agree
 _FIXED_MIN_BOXES = 3
 
@@ -1789,7 +2055,7 @@ class PortCounts:
             counts = sorted({c for k in e["keys"].values() for c in k})
             boxes = sum(sum(k.values()) for k in e["keys"].values())
             entry = {"arglists": len(e["keys"]), "boxes": boxes}
-            if len(counts) > 1:
+            if len(counts) > 1 or name in ARGUMENT_PORT_CLASSES:
                 entry["kind"] = "flexible"
                 entry["counts"] = [list(c) for c in counts]
             elif len(e["keys"]) >= _FIXED_MIN_ARGLISTS and boxes >= _FIXED_MIN_BOXES:
@@ -1804,9 +2070,34 @@ class PortCounts:
                 by_text = {t: list(next(iter(c))) for t, c in e.get("texts", {}).items() if len(c) == 1}
                 if by_text:
                     entry["by_text"] = dict(sorted(by_text.items()))
+                pattern = _outlet_type_pattern(t for (c, t) in e["types"])
+                if pattern:
+                    entry["types"] = pattern
             if e["ui"]:
                 entry["ui"] = True
             objects[name] = entry
+        # Formulas. A class and its aliases (`b` / `bangbang`, `r` / `receive`,
+        # from Max's own object registry) are one object, so their boxes are
+        # fitted together and each name gets the result.
+        aliases = _short_name_aliases()
+        groups = collections.defaultdict(list)
+        for name, e in ev.items():
+            if not e["ui"] and name not in PORTS_FROM_CONTENTS and name not in ARGUMENT_PORT_CLASSES:
+                groups[aliases.get(name, name)].append(name)
+        for names in groups.values():
+            rows = []
+            for name in names:
+                for text, counts in ev[name].get("texts", {}).items():
+                    count, n = counts.most_common(1)[0]
+                    rows.append((*_box_features(text), count, n))
+            if len({r[2] for r in rows}) < 2:
+                continue
+            fits = [_fit_port_formula([(p, a, c[i], n) for p, a, c, n in rows]) for i in (0, 1)]
+            # Two constants say nothing: the class varies, and not with its text.
+            if all(f[0] for f in fits) and any(f[0][0] != "const" for f in fits):
+                for name in names:
+                    objects[name]["formula"] = {"in": fits[0][0], "out": fits[1][0]}
+                    objects[name]["formula_fit"] = {"texts": len(rows), "missed": max(f[1] for f in fits)}
         return cls({"_about": ("Port counts per Max object class, from boxes Max itself saved. "
                                "Built by scans/maxhelp/extract_port_counts.py; see PortCounts in "
                                "spec2maxpat.py."),
@@ -1848,18 +2139,49 @@ class PortCounts:
 
     def for_text(self, text):
         """Counts for an object box's text: the class's fixed counts, or for a
-        flexible or unmarked class the counts Max saved for this exact text."""
+        flexible or unmarked class the counts Max saved for this exact text, or
+        failing that what the class's fitted formula gives (see *Port formulas
+        fitted from saved boxes* above)."""
         toks = (text or "").split()
         if not toks:
             return None
         hit = self.fixed(toks[0])
         if hit:
             return hit
-        e = self.data["objects"].get(toks[0])
-        c = (e or {}).get("by_text", {}).get(" ".join(toks[1:]))
+        e = self.data["objects"].get(toks[0]) or {}
+        args_text = " ".join(toks[1:])
+        c = e.get("by_text", {}).get(args_text)
+        if not c and e.get("formula"):
+            pos, attrs = _box_features(args_text)
+            c = [_port_formula_value(e["formula"][k], pos, attrs) for k in ("in", "out")]
+            if None in c:
+                c = None
+        if not c and self.same_arguments:
+            c = self._by_arguments(toks[0], e).get(" ".join(_positional_args(toks[1:])))
         if c:
-            return {"numinlets": c[0], "numoutlets": c[1], "outlettype": [""] * c[1]}
+            return {"numinlets": c[0], "numoutlets": c[1],
+                    "outlettype": _outlet_types(e.get("types"), c[1])}
         return None
+
+    # Set False to answer only from fixed counts, exact texts and formulas.
+    same_arguments = True
+
+    def _by_arguments(self, name, e):
+        """{positional arguments: counts} for a class, from its saved texts,
+        keeping an argument list only when every saved text that has it agrees.
+
+        This answers a box that differs from the saved ones only in its
+        attributes: `midiformat @hires 1` after `midiformat`, `timer @format
+        bbu` after `timer`. An attribute that does change the ports
+        (`line~ @activeout 1`) makes the saved texts disagree, and then the
+        argument list is not kept."""
+        cache = self.__dict__.setdefault("_args_cache", {})
+        if name not in cache:
+            seen = {}
+            for text, counts in e.get("by_text", {}).items():
+                seen.setdefault(" ".join(_positional_args(text.split())), set()).add(tuple(counts))
+            cache[name] = {k: list(next(iter(v))) for k, v in seen.items() if len(v) == 1}
+        return cache[name]
 
     # ── learning ──────────────────────────────────────────────────────────────
     def observe(self, box, source=""):
@@ -1886,6 +2208,7 @@ class PortCounts:
         if key in self._seen:
             return False
         self._seen.add(key)
+        self.__dict__.get("_args_cache", {}).pop(r["cls"], None)
         counts = tuple(r["counts"])
         objs = self.data["objects"]
         e = objs.get(r["cls"])
@@ -1908,13 +2231,25 @@ class PortCounts:
             e["arglists"] = e.get("arglists", 0) + 1
             e["boxes"] = e.get("boxes", 0) + 1
             if e["kind"] == "unmarked":
-                if len(e["counts"]) > 1:
+                if len(e["counts"]) > 1 or r["cls"] in ARGUMENT_PORT_CLASSES:
                     e["kind"] = "flexible"; changed = True
                 elif e["arglists"] >= _FIXED_MIN_ARGLISTS and e["boxes"] >= _FIXED_MIN_BOXES:
                     (ni, no), = e.pop("counts")
                     e.update(kind="fixed", numinlets=ni, numoutlets=no, outlettype=list(r.get("types") or []))
                     e.pop("by_text", None)
                     changed = True
+        if e.get("formula"):
+            pos, attrs = _box_features(r["text"])
+            want = [_port_formula_value(e["formula"][k], pos, attrs) for k in ("in", "out")]
+            fit = e.setdefault("formula_fit", {"texts": _FORMULA_MIN_TEXTS, "missed": 0})
+            fit["texts"] += 1
+            if want != list(counts):
+                # A saved box the formula gets wrong. A few are expected; past
+                # the bound the formula was fitted under, it is retired.
+                fit["missed"] += 1
+                if fit["missed"] > max(_FORMULA_MAX_MISS * fit["texts"], 0):
+                    del e["formula"], e["formula_fit"]
+                changed = True
         if e["kind"] != "fixed" and not r.get("ui") and r["cls"] not in PORTS_FROM_CONTENTS:
             by_text = e.setdefault("by_text", {})
             prior = by_text.get(r["text"])
@@ -2256,6 +2591,85 @@ def _int_arg(args, index, default):
 _EXPR_DOLLAR_ARG = re.compile(r"\$[ifs](\d+)")
 
 
+def _argument_ports(text):
+    """Ports of a class in ARGUMENT_PORT_CLASSES, from the rule its refpage
+    states, or None for any other class.
+
+    These are the classes whose saved boxes are too few or too alike for the
+    registry to fit a formula. For the audio readers and recorders, each
+    refpage names a "number of output channels" (or input channels)
+    argument that decides how many outlets (or inlets) the box has, default 1.
+    Its position differs per class, and @attributes are never positional:
+
+      groove~ NAME n        n signal outlets + loop sync        3 inlets
+      play~ NAME n          n signal outlets + bang             1 inlet
+      wave~ NAME start end n        n signal outlets            3 inlets
+      2d.wave~ NAME start end n     n signal outlets            4 inlets
+      record~ NAME n        n signal inlets + start + end       1 outlet
+      sfrecord~ n           n signal inlets                     1 outlet
+      sfplay~ [SFLIST] n bufsize posflag [NAME]
+                            n signal outlets + posflag position outlets + bang
+
+    jit.scissors and jit.glue take theirs from two attributes. The refpages:
+    "the number of outlets [inlets, for jit.glue] will be equal to the number
+    of rows multiplied by the number of columns", each 1 by default.
+
+      jit.scissors @rows r @columns c     r * c matrix outlets + dumpout
+      jit.glue @rows r @columns c         r * c matrix inlets
+
+    Checked against every box Max saved in the C74 install, 2026-09-27. The
+    registry could not supply this: mono boxes outnumber the rest, so it had
+    wave~ and record~ as fixed at one channel, and NEWOBJ_IO gave groove~
+    three outlets whatever its argument.
+    """
+    toks = (text or "").split()
+    if not toks:
+        return None
+    name, args = toks[0], _positional_args(toks[1:])
+    if name in REFPAGE_PORT_FORMULAS:
+        f_in, f_out, pattern = REFPAGE_PORT_FORMULAS[name]
+        pos, attrs = _box_features(" ".join(toks[1:]))
+        ni, no = _port_formula_value(f_in, pos, attrs), _port_formula_value(f_out, pos, attrs)
+        if ni is None or no is None:
+            return None                  # a bare box the refpage gives no count for
+        return {"numinlets": ni, "numoutlets": no, "outlettype": _outlet_types(pattern, no)}
+    if name in ("jit.scissors", "jit.glue"):
+        attrs = _box_features(" ".join(toks[1:]))[1]
+        cells = (_as_count((attrs.get("rows") or [None])[0]) or 1) * \
+                (_as_count((attrs.get("columns") or [None])[0]) or 1)
+        if name == "jit.glue":
+            return {"numinlets": cells, "numoutlets": 2, "outlettype": ["jit_matrix", ""]}
+        return {"numinlets": 1, "numoutlets": cells + 1,
+                "outlettype": ["jit_matrix"] * cells + [""]}
+    if name == "groove~":
+        n = max(_int_arg(args, 1, 1), 1)
+        return {"numinlets": 3, "numoutlets": n + 1, "outlettype": ["signal"] * (n + 1)}
+    if name == "play~":
+        n = max(_int_arg(args, 1, 1), 1)
+        return {"numinlets": 1, "numoutlets": n + 1, "outlettype": ["signal"] * n + ["bang"]}
+    if name in ("wave~", "2d.wave~"):
+        n = max(_int_arg(args, 3, 1), 1)
+        return {"numinlets": 3 if name == "wave~" else 4, "numoutlets": n,
+                "outlettype": ["signal"] * n}
+    if name == "record~":
+        n = max(_int_arg(args, 1, 1), 1)
+        return {"numinlets": n + 2, "numoutlets": 1, "outlettype": ["signal"]}
+    if name == "sfrecord~":
+        n = max(_int_arg(args, 0, 1), 1)
+        return {"numinlets": n, "numoutlets": 1, "outlettype": ["signal"]}
+    if name == "sfplay~":
+        nums = list(args)
+        if nums and _int_arg(nums, 0, None) is None:
+            nums = nums[1:]                  # leading sflist~ name
+        if nums and _int_arg(nums, len(nums) - 1, None) is None:
+            nums = nums[:-1]                 # trailing reference name
+        n = max(_int_arg(nums, 0, 1), 1)
+        pos = _int_arg(nums, 2, 0) if _int_arg(nums, 2, 0) in (1, 2) else 0
+        return {"numinlets": 2, "numoutlets": n + pos + 1,
+                "outlettype": ["signal"] * (n + pos) + ["bang"]}
+    return None
+
+
 def guess_newobj_io(text):
     """Guess inlet/outlet counts for a newobj from its text.
 
@@ -2267,8 +2681,17 @@ def guess_newobj_io(text):
     `expr` / `vexpr` box with `$` arguments in Max's own help patches (102 of
     them, checked 2026-09-16) saves exactly that count. gen's `expr`, which names
     its inputs `in1`, `in2`, has no `$` arguments and is left alone.
+
+    Order: a rule written from the refpage (_argument_ports) for the few
+    classes that have one; then the registry, which answers a fixed class, an
+    exact text Max saved, or a formula fitted from the class's saved boxes
+    (`select a b c`, `cycle 3`, `jit.pack 3`, `pak 0. 0. 0.`); then the older
+    tables, refpages and package library.
     """
-    known = PORT_COUNTS.for_text(text)      # known-fixed class, or this exact text seen saved by Max
+    ruled = _argument_ports(text)
+    if ruled is not None:
+        return ruled
+    known = PORT_COUNTS.for_text(text)
     if known is not None:
         return known
     info = _guess_newobj_io_base(text)
@@ -2347,7 +2770,7 @@ def _guess_newobj_io_base(text):
         elif obj_name in ("funnel",):
             n = _int_arg(args, 0, 2)
             info["numinlets"] = n
-            info["numoutlets"] = 2
+            info["numoutlets"] = 1
         elif obj_name in ("join",):
             n = _int_arg(args, 0, 2)
             info["numinlets"] = n
@@ -2379,6 +2802,11 @@ def _guess_newobj_io_base(text):
 
     # Fallback to C74 refpage (on-demand, cached)
     refpage = REFPAGE_CACHE.lookup(obj_name)
+    if refpage is None:
+        # `<=`, `&`, `!-~`: the refpage file is named with a word (lessthaneq),
+        # and its root's `name` attribute carries the real name.
+        stem = REFPAGE_CACHE.name_aliases().get(obj_name)
+        refpage = REFPAGE_CACHE.lookup(stem) if stem else None
     if refpage is not None:
         return dict(refpage)
 
