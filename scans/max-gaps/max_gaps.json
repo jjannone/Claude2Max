@@ -70,15 +70,15 @@
     ],
     "max_status": "partial",
     "max_closest": [
+      "jit.gl.meshwarp",
       "jit.gl.slab",
-      "jit.gl.cornerpin",
-      "jit.gl.meshwarp"
+      "jit.gl.cornerpin"
     ],
     "max_check": "Searched Max object registry (interfaces/obj-qlookup.json, plus the mira package registry: 1,326 names with digests) and refpage digests and descriptions (1,389 pages: max-ref, msp-ref, jit-ref, m4l-ref and the bundled packages' docs) for 'edge blend' and 'soft edge': no match. packages/query_packages.py search (installed third-party packages) 'edge blend': no match. It could be built from a shader in jit.gl.slab or jit.gl.pix, but nothing ready-made was found.",
     "confidence": "medium",
     "notes": "",
     "review": "confirmed",
-    "review_notes": "Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Edge blending ships as a shader: Jitter Tools (bundled) has code/jxs/image-fx/transition/tr.edgeblend.jxs, 'generates gradient alpha for edge-blending', with a per-side fade vec4, used through jit.gl.slab. The installed Max for the Visual Arts package has patchers/Projection/GLCorner_edgeblend.maxpat. What Max lacks is the automatic part: no object works out the overlap, and the shader has no gamma or knee control. TouchDesigner's grid setup with per-projector gamma and blank-out has no Max equivalent.",
+    "review_notes": "Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Edge blending ships as a shader: Jitter Tools (bundled) has code/jxs/image-fx/transition/tr.edgeblend.jxs, 'generates gradient alpha for edge-blending', with a per-side fade vec4, used through jit.gl.slab. The installed Max for the Visual Arts package has patchers/Projection/GLCorner_edgeblend.maxpat. What Max lacks is the automatic part: no object works out the overlap, and the shader has no gamma or knee control. TouchDesigner's grid setup with per-projector gamma and blank-out has no Max equivalent. Max 9.2 (2026-10-03, read from refpages, not run in Max): jit.gl.meshwarp (bundled Jitter Tools) gained edge blending, with edgeblendleft / edgeblendright / edgeblendtop / edgeblendbottom (width in normalized mesh space) and edgeblendcurve<side> (0.1 to 10, 1 is linear) per side, plus maskfeather and a checkerboard test pattern on its output. The blend is set by hand per projector; nothing works out the overlap.",
     "theme": "Automatic edge blending between projectors",
     "advice": "",
     "installable": [
@@ -839,15 +839,15 @@
     ],
     "max_status": "partial",
     "max_closest": [
-      "jweb",
-      "jweb~",
-      "jit.desktop"
+      "jit.web~",
+      "jit.web",
+      "jweb"
     ],
     "max_check": "Read jweb's refpage: a Chromium-based browser as a patcher UI object, with an offscreen render mode for drawing in the patcher. jweb~ adds audio output. Neither refpage describes a texture or matrix output. jit.desktop can copy a screen region.",
     "confidence": "medium",
     "notes": "",
-    "review": "unreviewed",
-    "review_notes": "",
+    "review": "rejected",
+    "review_notes": "Max 9.2 (2026-10-03, read from refpages, not run in Max): jit.web renders a Chromium page, WebGL and WebGPU included, to a jit.gl.texture or jit.matrix, with mouse and keyboard input and transparent backgrounds; jit.web~ adds the page's stereo audio as two signal outlets. jit.gl.web and jit.gl.web~ are the same objects with output_texture on (init/jitter-objectmappings.txt). That is what this entry describes, so Max 9.2 has it.",
     "theme": "Web page as a texture",
     "advice": "",
     "installable": []
@@ -2170,6 +2170,7 @@
     ],
     "max_status": "partial",
     "max_closest": [
+      "jit.gl.meshwarp",
       "jit.gl.slab",
       "jit.gl.cornerpin",
       "jit.gl.pix"
@@ -2178,7 +2179,7 @@
     "confidence": "high",
     "notes": "The automatic overlap calculation is the part with no Max equivalent; the ramp itself is a simple shader.",
     "review": "confirmed",
-    "review_notes": "Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Edge blending ships as a shader: Jitter Tools (bundled) has code/jxs/image-fx/transition/tr.edgeblend.jxs, 'generates gradient alpha for edge-blending', with a per-side fade vec4, used through jit.gl.slab. The installed Max for the Visual Arts package has patchers/Projection/GLCorner_edgeblend.maxpat. What Max lacks is the automatic part: no object works out the overlap, and the shader has no gamma or knee control.",
+    "review_notes": "Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Edge blending ships as a shader: Jitter Tools (bundled) has code/jxs/image-fx/transition/tr.edgeblend.jxs, 'generates gradient alpha for edge-blending', with a per-side fade vec4, used through jit.gl.slab. The installed Max for the Visual Arts package has patchers/Projection/GLCorner_edgeblend.maxpat. What Max lacks is the automatic part: no object works out the overlap, and the shader has no gamma or knee control. Max 9.2 (2026-10-03, read from refpages, not run in Max): jit.gl.meshwarp (bundled Jitter Tools) gained edge blending, with edgeblendleft / edgeblendright / edgeblendtop / edgeblendbottom (width in normalized mesh space) and edgeblendcurve<side> (0.1 to 10, 1 is linear) per side, plus maskfeather and a checkerboard test pattern on its output. The blend is set by hand per projector; nothing works out the overlap.",
     "theme": "Automatic edge blending between projectors",
     "advice": "",
     "installable": [
@@ -2577,13 +2578,14 @@
     "max_closest": [
       "jit.gl.cornerpin",
       "jit.gl.text",
-      "jit.gl.sketch"
+      "jit.gl.sketch",
+      "jit.gl.meshwarp"
     ],
     "max_check": "Searched Max 9.1.5's object registry (obj-qlookup.json), refpage names, digests and text, the userguide topics, and the repo's package library (query_packages.py). jit.gl.cornerpin's refpage has 'drawcorners', 'corner_color', 'hover' attributes, so its handles are visible in the output window. No ready test pattern or output cursor was found; both can be drawn with jit.gl.sketch or jit.gl.text.",
     "confidence": "low",
     "notes": "",
     "review": "unreviewed",
-    "review_notes": "",
+    "review_notes": "Max 9.2 (refpage, not run in Max): jit.gl.meshwarp's checkerboard attribute shows a checkerboard test pattern on its output instead of the input, with checkerboardscale for the square size.",
     "theme": "Mapping editor: slices, masks and warps on the output",
     "advice": "",
     "installable": []
@@ -4479,15 +4481,15 @@
     ],
     "max_status": "partial",
     "max_closest": [
+      "jit.gl.meshwarp",
       "jit.gl.slab",
-      "jit.gl.cornerpin",
-      "jit.gl.meshwarp"
+      "jit.gl.cornerpin"
     ],
     "max_check": "Grepped all refpages and bundled package docs for 'edgeblend' and 'keystone': no files. Userguide grep 'edge blend': none. Package library search 'blend' and 'edge': audio and geometry hits only. jit.gl.meshwarp (refpage read) has apply_mask and mask_mode attributes but no blend-between-projectors function.",
     "confidence": "high",
     "notes": "A shader in jit.gl.slab could do it; nothing shipped or installed does.",
     "review": "confirmed",
-    "review_notes": "Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Edge blending ships as a shader: Jitter Tools (bundled) has code/jxs/image-fx/transition/tr.edgeblend.jxs, 'generates gradient alpha for edge-blending', with a per-side fade vec4, used through jit.gl.slab. The installed Max for the Visual Arts package has patchers/Projection/GLCorner_edgeblend.maxpat. What Max lacks is the automatic part: no object works out the overlap, and the shader has no gamma or knee control. The entry's note that 'nothing shipped does' is wrong: the shader ships with Max.",
+    "review_notes": "Reviewed 2026-10-03 (agent check against registries, refpages, installed packages and the web; not run in Max). Edge blending ships as a shader: Jitter Tools (bundled) has code/jxs/image-fx/transition/tr.edgeblend.jxs, 'generates gradient alpha for edge-blending', with a per-side fade vec4, used through jit.gl.slab. The installed Max for the Visual Arts package has patchers/Projection/GLCorner_edgeblend.maxpat. What Max lacks is the automatic part: no object works out the overlap, and the shader has no gamma or knee control. The entry's note that 'nothing shipped does' is wrong: the shader ships with Max. Max 9.2 (2026-10-03, read from refpages, not run in Max): jit.gl.meshwarp (bundled Jitter Tools) gained edge blending, with edgeblendleft / edgeblendright / edgeblendtop / edgeblendbottom (width in normalized mesh space) and edgeblendcurve<side> (0.1 to 10, 1 is linear) per side, plus maskfeather and a checkerboard test pattern on its output. The blend is set by hand per projector; nothing works out the overlap.",
     "theme": "Automatic edge blending between projectors",
     "advice": "",
     "installable": [
@@ -5946,6 +5948,7 @@
     ],
     "max_status": "partial",
     "max_closest": [
+      "jit.web",
       "jweb",
       "jit.gl.text",
       "jit.gl.camera"
@@ -5954,7 +5957,7 @@
     "confidence": "medium",
     "notes": "In cables this is free because the canvas is already inside a web page.",
     "review": "unreviewed",
-    "review_notes": "",
+    "review_notes": "Max 9.2 (2026-10-03, read from refpages, not run in Max): jit.web renders a Chromium page, WebGL and WebGPU included, to a jit.gl.texture or jit.matrix, with mouse and keyboard input and transparent backgrounds; jit.web~ adds the page's stereo audio as two signal outlets. jit.gl.web and jit.gl.web~ are the same objects with output_texture on (init/jitter-objectmappings.txt). A jit.web texture on a jit.gl.videoplane can be placed in 3D, so an HTML panel can sit in the scene; per-element pinning is still not there.",
     "theme": "",
     "advice": "",
     "installable": []
@@ -5972,8 +5975,9 @@
       "https://cables.gl/op/Ops.Extension.HtmlToTexture.HtmlToTexture",
       "https://cables.gl/docs/faq/features/htmltexture/htmltexture"
     ],
-    "max_status": "unsure",
+    "max_status": "partial",
     "max_closest": [
+      "jit.web",
       "jweb",
       "jit.desktop"
     ],
@@ -5981,7 +5985,7 @@
     "confidence": "low",
     "notes": "The cables FAQ says a website cannot be rendered to a texture, which conflicts with this op's name. What the op really does is not documented.",
     "review": "unreviewed",
-    "review_notes": "",
+    "review_notes": "Max 9.2 (2026-10-03, read from refpages, not run in Max): jit.web renders a Chromium page, WebGL and WebGPU included, to a jit.gl.texture or jit.matrix, with mouse and keyboard input and transparent backgrounds; jit.web~ adds the page's stereo audio as two signal outlets. jit.gl.web and jit.gl.web~ are the same objects with output_texture on (init/jitter-objectmappings.txt). It renders a whole page, not one element, so cropping to an element is left to the page's own HTML or to jit.gl.texture.",
     "theme": "Web page as a texture",
     "advice": "",
     "installable": []
@@ -19174,8 +19178,8 @@
     ],
     "max_status": "partial",
     "max_closest": [
-      "jit.gl.cornerpin",
       "jit.gl.meshwarp",
+      "jit.gl.cornerpin",
       "jit.world",
       "jit.gl.slab"
     ],
@@ -19185,7 +19189,7 @@
     "notes": "soft_edge.frag was read for its first 60 lines; the nfp shaders were not read. These are example patches, not Gem objects.",
     "theme": "Files, projects and media management",
     "review": "unreviewed",
-    "review_notes": "",
+    "review_notes": "Max 9.2 (2026-10-03, read from refpages, not run in Max): jit.gl.meshwarp (bundled Jitter Tools) gained edge blending, with edgeblendleft / edgeblendright / edgeblendtop / edgeblendbottom (width in normalized mesh space) and edgeblendcurve<side> (0.1 to 10, 1 is linear) per side, plus maskfeather and a checkerboard test pattern on its output. The blend is set by hand per projector; nothing works out the overlap.",
     "installable": []
   },
   {
@@ -19262,7 +19266,8 @@
     "max_closest": [
       "jit.noise",
       "jit.gl.bfg",
-      "av.testpattern"
+      "av.testpattern",
+      "jit.gl.meshwarp"
     ],
     "max_check": "Searched all refpages for 'test pattern', 'color bars' and 'SMPTE': no core object. jit.noise and jit.gl.bfg generate noise and procedural textures. The third-party av-toolbox package installed on this machine has av.testpattern ('display a testpattern image on a layer ... also outputs the texture').",
     "confidence": "medium",
@@ -19270,7 +19275,7 @@
     "notes": "",
     "theme": "Textures and image formats",
     "review": "unreviewed",
-    "review_notes": "",
+    "review_notes": "Max 9.2 (refpage, not run in Max): jit.gl.meshwarp's checkerboard attribute shows a checkerboard test pattern on its output instead of the input, with checkerboardscale for the square size.",
     "installable": []
   },
   {
@@ -21694,8 +21699,8 @@
     ],
     "max_status": "partial",
     "max_closest": [
-      "jit.gl.slab",
       "jit.gl.meshwarp",
+      "jit.gl.slab",
       "jit.gl.cornerpin"
     ],
     "max_check": "Searched obj-qlookup.json (Max registry, core plus bundled packages) for blend/edge: only jit.alphablend and edge detectors, no edge-blend object. Jitter Tools ships the shader tr.edgeblend.jxs ('generates gradient alpha for edge-blending', a vec4 fade parameter) for jit.gl.slab, so the ramp exists; the widths must be set by hand per output. jit.gl.meshwarp and jit.gl.cornerpin refpages: geometry only.",
@@ -21704,7 +21709,7 @@
     "notes": "MadMapper, Isadora and TouchDesigner entries already cover edge blending; QLab's difference is that the blend width comes from the region overlap on the stage itself.",
     "theme": "Mapping editor: slices, masks and warps on the output",
     "review": "unreviewed",
-    "review_notes": "",
+    "review_notes": "Max 9.2 (2026-10-03, read from refpages, not run in Max): jit.gl.meshwarp (bundled Jitter Tools) gained edge blending, with edgeblendleft / edgeblendright / edgeblendtop / edgeblendbottom (width in normalized mesh space) and edgeblendcurve<side> (0.1 to 10, 1 is linear) per side, plus maskfeather and a checkerboard test pattern on its output. The blend is set by hand per projector; nothing works out the overlap.",
     "installable": []
   },
   {

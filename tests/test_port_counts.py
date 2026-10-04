@@ -53,6 +53,22 @@ def test_only_the_installed_major_version_is_evidence():
     assert not s.counts_as_port_evidence(older, raw)
 
 
+def test_a_newer_version_than_the_installed_one_is_not_evidence():
+    v = s.installed_max_version()
+    if v is None:
+        return
+    raw = b'{\n    "patcher": {\n        "fileversion": 1'
+    major, minor, rev = v
+    same = {"patcher": {"appversion": {"major": major, "minor": minor, "revision": rev}}}
+    older_minor = {"patcher": {"appversion": {"major": major, "minor": 0, "revision": 0}}}
+    newer_minor = {"patcher": {"appversion": {"major": major, "minor": minor + 1, "revision": 0}}}
+    newer_rev = {"patcher": {"appversion": {"major": major, "minor": minor, "revision": rev + 1}}}
+    assert s.counts_as_port_evidence(same, raw)
+    assert s.counts_as_port_evidence(older_minor, raw)
+    assert not s.counts_as_port_evidence(newer_minor, raw)
+    assert not s.counts_as_port_evidence(newer_rev, raw)
+
+
 def test_classification_from_evidence():
     from collections import Counter, defaultdict
     ev = defaultdict(lambda: {"ui": False, "keys": defaultdict(Counter),
@@ -96,6 +112,22 @@ def test_real_registry_examples():
 def test_route_has_an_inlet_per_argument():
     cases = {"route a b c": (4, 4), "routepass x y": (3, 3), "route": (2, 2),
              'route center edge "rim tip"': (4, 4)}
+    for text, want in cases.items():
+        got = s.guess_newobj_io(text)
+        assert (got["numinlets"], got["numoutlets"]) == want, (text, got)
+
+
+def test_a_named_receive_has_no_inlet():
+    cases = {"r NEVER_SAVED_NAME_X": (0, 1), "receive NEVER_SAVED_NAME_Y": (0, 1),
+             "r #0-never-saved": (0, 1), "r": (1, 1), "receive": (1, 1)}
+    for text, want in cases.items():
+        got = s.guess_newobj_io(text)
+        assert (got["numinlets"], got["numoutlets"]) == want, (text, got)
+
+
+def test_selector_has_a_control_inlet_plus_one_per_input():
+    cases = {"mc.selector~ 3": (4, 1), "mc.selector~ 7 1 @ramptime 20": (8, 1),
+             "selector~ 9": (10, 1), "mc.selector~": (2, 1)}
     for text, want in cases.items():
         got = s.guess_newobj_io(text)
         assert (got["numinlets"], got["numoutlets"]) == want, (text, got)

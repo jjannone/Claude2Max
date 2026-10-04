@@ -1627,38 +1627,55 @@ def saved_by_max(raw) -> bool:
     return bool(m) and m.group(1) != b"  "
 
 
-_INSTALLED_MAX_MAJOR = "unread"
+_INSTALLED_MAX_VERSION = "unread"
 
 
-def installed_max_major():
-    """The major version of the Max install, from its own Info.plist, or None."""
-    global _INSTALLED_MAX_MAJOR
-    if _INSTALLED_MAX_MAJOR == "unread":
-        _INSTALLED_MAX_MAJOR = None
+def installed_max_version():
+    """The Max install's version as (major, minor, revision), from its own
+    Info.plist, or None."""
+    global _INSTALLED_MAX_VERSION
+    if _INSTALLED_MAX_VERSION == "unread":
+        _INSTALLED_MAX_VERSION = None
         c74 = REFPAGE_CACHE._c74
         if c74 is not None:
             try:
                 import plistlib
                 info = plistlib.loads((c74.parent.parent / "Info.plist").read_bytes())
-                _INSTALLED_MAX_MAJOR = int(str(info["CFBundleShortVersionString"]).split(".")[0])
+                nums = re.findall(r"\d+", str(info["CFBundleShortVersionString"]).split(" ")[0])
+                _INSTALLED_MAX_VERSION = tuple((int(n) for n in nums[:3])) + (0,) * (3 - len(nums[:3]))
             except (OSError, KeyError, ValueError, plistlib.InvalidFileException):
                 pass
-    return _INSTALLED_MAX_MAJOR
+    return _INSTALLED_MAX_VERSION
+
+
+def installed_max_major():
+    """The major version of the Max install, or None."""
+    v = installed_max_version()
+    return v[0] if v else None
 
 
 def counts_as_port_evidence(maxpat, raw) -> bool:
     """True when a patch shows what the installed Max does with ports: Max
-    wrote it, and the same major version as the one installed.
+    wrote it, with the same major version as the one installed, and not with
+    a newer version than the one installed.
 
     Older versions saved some objects differently. Max 9 gives `route a b c`
     four inlets, one per argument plus one; patches Max 7 saved show one. Those
     files are right for their own version and wrong evidence for this one.
+    Newer versions are wrong evidence too: Max 9.2 ships `jit.web.maxhelp`
+    saved by a 9.3 build, whose `metro` has three outlets to 9.2's one.
     """
     if not saved_by_max(raw):
         return False
-    major = installed_max_major()
-    saved = ((maxpat.get("patcher") or {}).get("appversion") or {}).get("major")
-    return major is not None and saved == major
+    installed = installed_max_version()
+    av = (maxpat.get("patcher") or {}).get("appversion") or {}
+    if installed is None or av.get("major") != installed[0]:
+        return False
+    try:
+        saved = (int(av.get("minor") or 0), int(av.get("revision") or 0))
+    except (TypeError, ValueError):
+        return False
+    return saved <= installed[1:]
 
 
 # Boxes whose inner patcher is written in another language (gen, Jitter gen,
@@ -2238,6 +2255,17 @@ def guess_newobj_io(text):
         # arguments, which count as one). Older Max saved a single inlet.
         n = max(len(_quoted_args(text)), 1)
         info = dict(info, numinlets=n + 1, numoutlets=n + 1, outlettype=[""] * (n + 1))
+    if info and text.split()[0] in ("receive", "r"):
+        # A named receive has no inlet; a bare one has an inlet for setting the
+        # name. Every saved box agrees (Max 9.2's install and packages,
+        # 2026-10-03: 2,618 named `r` boxes save 0 inlets, the bare ones 1).
+        info = dict(info, numinlets=0 if _positional_args(text.split()[1:]) else 1)
+    if info and text.split()[0] in ("selector~", "mc.selector~"):
+        # A control inlet plus one per input; the first argument is the number
+        # of inputs, 1 when absent. Every saved box of both classes agrees
+        # (Max 9.2 install and packages, 2026-10-03: bare -> 2, `2` -> 3, `4 1` -> 5).
+        n = _int_arg(_positional_args(text.split()[1:]), 0, 1)
+        info = dict(info, numinlets=n + 1)
     if info and text.split()[0] in ("expr", "vexpr"):
         indexes = [int(n) for n in _EXPR_DOLLAR_ARG.findall(text)]
         if indexes:

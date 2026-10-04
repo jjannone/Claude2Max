@@ -448,6 +448,58 @@ not directly relevant to spec-driven generation. Recording for completeness.
 
 Toggle the whole feature with Preferences → Enable Patching Mechanics.
 
+### The User Guide's ⌘J is wrong — read shortcuts from Max's own files
+
+Source: `patching.json`, checked against `maxinterface.json` and in Max.
+
+The *Patching* page says ⌘J (Ctrl+J) is Auto Align. It is not. In Max 9,
+**⌘Y is Auto Align and ⌘J is Fix Width**. John confirmed this in Max on
+2026-09-23. The Windows Auto Align key is Ctrl+Shift+A, per the menu file.
+
+So the User Guide's shortcuts are not a reliable source. Max ships two
+files that are the real bindings, and both are plain to read:
+
+- `C74/interfaces/maxinterface.json` — every menu command. Each entry in
+  `interface.commands` carries `shortcut` (⌘ on Mac, Ctrl on Windows, plus
+  any `shift+` / `option+`), or `shortcut_mac` / `shortcut_windows` where
+  the two differ.
+- `C74/init/max-keycommands.txt` — the single-key commands in an unlocked
+  patcher (`n`, `m`, `b`, `t`, `x`, …), one `max definecommand` line each.
+
+This is an instance of *Prefer the Tool's Own Registry Over
+Reconstructing One* in `CLAUDE.md`: the prose documentation drifted, and
+the file Max actually reads did not.
+
+---
+
+## Custom UI Objects (jspainter)
+
+Source: `custom_ui_objects.json`, section *Hidden jspainter attributes*,
+new in Max 9.2 (found by diffing the 9.1.5 and 9.2 userguides, 2026-10-03).
+
+### Parameter controls have attributes only a jspainter script can set `[PROMOTION-CANDIDATE]`
+
+A jspainter script draws a built-in control (a `live.dial`, `live.slider`,
+`live.gain~` and the other parameter controls) in its own way. Max 9.2
+documents attributes that the Inspector does not show; the script sets them
+with `box.setattr()` and reads them with `box.getattr()`:
+
+- `jspainterfocus` (`-1` | `0` | `1`, read and write). `-1`, the default,
+  keeps the old behaviour: `live.gain~`, `live.slider` and `live.dial` always
+  draw their focus border, other objects only when the script calls
+  `mgraphics.parentpaint()`. `0` never draws it (only for those three). `1`
+  always draws a standard four-corner border in `focusbordercolor`.
+- `hasfocus` (`0` | `1`, read only): whether the control is focused.
+- `jspainterautomation` (`-1` | `0` | `1`): when the automation, modulation
+  and macro dots are drawn. `-1` only with `parentpaint`, `0` never (so the
+  script can draw its own), `1` always.
+- `automationpoint` (`x y`): the top-left corner of the dots. Set it after
+  calling `parentpaint`, which can recalculate it.
+- `isautomated`, `ismodulated`, `ismacroassigned` (`0` | `1`, read only).
+
+This matters for Butter_tools and M4L work: a custom-drawn control can keep
+Live's automation feedback, or replace it, instead of losing it.
+
 ---
 
 ## Cross-references
