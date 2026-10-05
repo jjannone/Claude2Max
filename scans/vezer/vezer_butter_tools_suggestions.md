@@ -13,7 +13,7 @@ underscore, an abstraction a dot, a wrapper `b.`, anything for video `jit.`.
 All are suggestions; nothing is built. (2026-10-03.)
 
 JavaScript in Max runs on the low-priority thread (the reason
-`B_WRAPPERS.md` keeps timing objects real and `butter.arpplayer` exists). Every
+`B_WRAPPERS.md` keeps timing objects real and `butter.arp` exists). Every
 idea below that plays something in time is split the same way: a script decides
 *what*, and real Max objects decide *when*.
 
@@ -50,7 +50,7 @@ As a `v8ui`, one box with several lanes:
 - **Show the value flow**: a shaded area for each lane's current output, so a
   step lane between keys still shows where it is.
 
-Timing: a `butter.lanesplayer` abstraction, on the `butter.arpplayer` pattern,
+Timing: a `butter.lanesplayer` abstraction, on the `butter.arp` pattern,
 holds the clock (`transport` or `metro`), asks the lanes for their values at
 each tick and sends them at high priority. With `@clock transport <name>`
 several `butter_lanes` follow one named transport, which is Vezér's
