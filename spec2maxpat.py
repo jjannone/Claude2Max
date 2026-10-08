@@ -3829,6 +3829,14 @@ def format_spec_match_report(report, indent="  "):
 # .maxpat → spec  (reverse conversion)
 # ---------------------------------------------------------------------------
 
+# KEEP IN SYNC: purebutter (../purebutter) has a JavaScript copy of this
+# reverse conversion — sync_spec() and what it calls: extract_spec(),
+# reconcile_spec(), maxpat_to_spec() and their helpers — so it can open
+# .maxpat files in the browser. (It also copies convert_spec(), the forward
+# conversion, for Save As .maxpat; see the note there.) A change here must be made there too; its
+# test converts sample patches with both copies and compares the specs.
+# See purebutter/PLAN.md, "File format".
+
 # Box IDs that are internal Claude2Max scaffolding, never spec objects
 _SKIP_BOX_IDS = {"obj-spec-embed", "obj-title"}
 
@@ -4589,6 +4597,10 @@ def convert_patcher(spec, script_dirs=None):
     return patcher
 
 
+# KEEP IN SYNC: purebutter (../purebutter) has a JavaScript copy of
+# convert_spec() and what it calls, used when a .pb patch is saved as
+# .maxpat. A change here must be made there too. See purebutter/PLAN.md,
+# "File format".
 def convert_spec(spec, script_dirs=None):
     """Convert a spec dict to a complete .maxpat dict with embedded spec.
     `script_dirs`: where `v8 … @embed 1` boxes look for their .js (build_box)."""

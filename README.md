@@ -39,6 +39,8 @@ A Claude2Max spec is a JSON file with two main sections — `objects` and `conne
 
 Every `.maxpat` produced by Claude2Max contains a hidden `text.codebox` carrying the full spec wrapped in `--- CLAUDE2MAX SPEC ---` delimiters. This makes the patch its own source of truth: there are no stray `.json` files cluttering the project, and Claude can `extract`, edit, and `convert` against any patch — including patches the user has been hand-editing in Max.
 
+**Copy in purebutter.** [purebutter](https://github.com/jjannone/purebutter), John's web-based Pd, opens `.maxpat` files with a JavaScript copy of this reverse conversion (`sync_spec()` in `spec2maxpat.py`), and saves `.maxpat` with a copy of the forward one (`convert_spec()`). Keep the copies in sync: a change to one must be made in the other.
+
 ### Sync — Capture Manual Edits Before Re-Converting
 
 The `sync` command reads a `.maxpat`, diffs the live boxes against the embedded spec, and updates the spec to reflect manual changes (moved objects, hidden cords, edited attributes). Running it before `convert` prevents the regenerator from silently overwriting GUI work the user did in Max. A pre-edit hook auto-runs sync whenever Claude reads a `.maxpat`, and the `/c2m-sync` slash command makes it explicit and pedagogical for students.
