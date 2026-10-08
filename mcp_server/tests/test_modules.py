@@ -20,7 +20,7 @@ import server  # noqa: E402
 
 
 def test_core_contains_every_tagged_heading():
-    core = server.load(["core"])
+    core = server._assemble_knowledge(["core"])
     heads = server._tagged_headings("core")
     assert len(heads) >= 25, f"expected the tagging pass, found {len(heads)} {{!core}} headings"
     for h in heads:
@@ -29,7 +29,7 @@ def test_core_contains_every_tagged_heading():
 
 def test_no_tag_literal_survives():
     for dom in ("core", "layout", "networking", "msp", "spec", "gen", "jitter", "m4l"):
-        text = server.load([dom])
+        text = server._assemble_knowledge([dom])
         body = text.replace("sections tagged {!", "")      # the banner names the tag on purpose
         body = re.sub(r"tagged `\{!\w+\}`", "", body)       # prose that names the tag
         body = re.sub(r"\{!core\}` / `\{!layout\}`", "", body)
@@ -40,7 +40,7 @@ def test_no_tag_literal_survives():
 
 
 def test_core_carries_pitfalls_rules_and_table():
-    core = server.load(["core"])
+    core = server._assemble_knowledge(["core"])
     for needle in ("## Common Pitfalls",
                    "## Always Create a Presentation View",
                    "## Never Hide Patchcords or Boxes",
@@ -55,12 +55,12 @@ def test_core_carries_pitfalls_rules_and_table():
 
 
 def test_layout_module_is_tag_built():
-    lay = server.load(["layout"])
+    lay = server._assemble_knowledge(["layout"])
     for needle in ("## Patching Layout — Avoiding Cord Tangles",
                    "## Presentation View Design Principles",
                    "## UI Layout — Label and Control Spacing"):
         assert needle in lay, needle
-        assert needle not in server.load(["core"]), f"{needle} should be layout-only"
+        assert needle not in server._assemble_knowledge(["core"]), f"{needle} should be layout-only"
     assert "[Unknown domain" not in lay
 
 
@@ -71,7 +71,7 @@ def _headings(text):
 
 def test_networking_module_gains_tagged_section():
     net_heads = _headings(server._build_module("networking"))
-    core_heads = _headings(server.load(["core"]))
+    core_heads = _headings(server._assemble_knowledge(["core"]))
     target = [h for h in net_heads if h.startswith("Never Render an Empty Container")]
     assert target, "the {!networking} section should be appended to the networking module"
     assert not any(h.startswith("Never Render an Empty Container") for h in core_heads), \
@@ -95,7 +95,7 @@ def test_assess_lists_layout():
 
 
 def test_sizes_reported():
-    core = len(server.load(["core"]))                 # core on its own
+    core = len(server._assemble_knowledge(["core"]))                 # core on its own
     layout = len(server._build_module("layout"))      # the module on its own
     print(f"    sizes: core={core:,} chars, layout(alone)={layout:,} chars")
     assert core > 40_000          # verbatim rules, not a digest
@@ -106,15 +106,15 @@ def test_core_is_sent_only_when_asked_for():
     """load() used to put all of core (~40k tokens) in front of every module, so a
     session adding a domain mid-task received core a second time (2026-09-16)."""
     stance = "## Operating stance"
-    layout_alone = server.load(["layout"])
+    layout_alone = server._assemble_knowledge(["layout"])
     assert stance not in layout_alone
     assert "Core is not included in this load" in layout_alone
     assert "## Patching Layout — Avoiding Cord Tangles" in layout_alone
     for request in (["core"], ["core", "layout"], []):
-        text = server.load(request)
+        text = server._assemble_knowledge(request)
         assert stance in text, request
         assert "Core is not included" not in text, request
-    assert len(layout_alone) < len(server.load(["core"])) / 2
+    assert len(layout_alone) < len(server._assemble_knowledge(["core"])) / 2
 
 
 def test_essentials_duplicate_tool_is_gone():
@@ -152,3 +152,31 @@ def test_search_pitfalls_reaches_common_pitfalls_bullets():
     assert len(common) > 20
     hit = server.search_pitfalls("textedit output", limit=3)
     assert any(p["source"] == "Common Pitfalls" for p in hit["pitfalls"])
+
+
+
+def test_load_pages_large_loads():
+    """load() returns parts under the size limit that together hold everything."""
+    full = server._assemble_knowledge(["core", "layout", "spec"])
+    first = server.load(["core", "layout", "spec"])
+    assert "part 1 of" in first and "part=2" in first
+    n = int(first.split("part 1 of ")[1].split()[0])
+    assert n >= 2
+    bodies = []
+    for k in range(1, n + 1):
+        text = server.load(["core", "layout", "spec"], part=k)
+        assert len(text) < server._LOAD_PART_CHARS + 1000
+        body = text.split(" -->\n\n", 1)[1].rsplit("\n\n---\n**Part", 1)[0]
+        bodies.append(body)
+    assert "the last" in server.load(["core", "layout", "spec"], part=n)
+    # Nothing lost: every heading of the full text appears in some part.
+    joined = "\n".join(bodies)
+    for line in full.splitlines():
+        if line.startswith("### "):
+            assert line in joined, line
+
+
+def test_load_small_returns_whole():
+    small = server._assemble_knowledge(["gen"])
+    if len(small) <= server._LOAD_PART_CHARS:
+        assert server.load(["gen"]) == small

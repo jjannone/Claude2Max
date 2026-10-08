@@ -1447,3 +1447,58 @@ def _run():
 
 if __name__ == "__main__":
     sys.exit(0 if _run() else 1)
+
+
+# ── text-box-too-narrow / presentation-font-not-monospace (2026-10-08) ──────
+# From a reference patch whose labels were sized by eye: "toggle" at 60 px
+# wrapped as "toggl / e" in presentation, and nothing flagged it.
+
+def _spec_hits(spec, rule):
+    return [v["location"] for v in verify_spec(spec)["violations"] if v["rule"] == rule]
+
+
+def test_text_box_too_narrow_presentation():
+    spec = {"objects": {"l": {"type": "comment", "text": "toggle", "pos": [30, 30],
+                              "presentation": [60, 30, 60, 22]}}, "connections": []}
+    assert _spec_hits(spec, "text-box-too-narrow") == ["l"]          # needs 70 px
+    spec["objects"]["l"]["presentation"] = [60, 30, 70, 22]
+    assert _spec_hits(spec, "text-box-too-narrow") == []
+
+
+def test_text_box_too_narrow_patching_and_message():
+    spec = {"objects": {"m": {"type": "message", "text": "0, 1 1000", "pos": [30, 30],
+                              "size": [80, 22]}}, "connections": []}
+    assert _spec_hits(spec, "text-box-too-narrow") == ["m"]          # needs 100 px
+
+
+def test_text_box_planned_wrap_not_flagged():
+    tall = {"objects": {"l": {"type": "comment", "text": "a long note that wraps",
+                              "pos": [30, 30], "size": [100, 40]}}, "connections": []}
+    assert _spec_hits(tall, "text-box-too-narrow") == []
+    unsized = {"objects": {"l": {"type": "comment", "text": "toggle", "pos": [30, 30]}},
+               "connections": []}
+    assert _spec_hits(unsized, "text-box-too-narrow") == []          # converter sizes it
+
+
+def test_presentation_font_not_monospace():
+    spec = {"objects": {"l": {"type": "comment", "text": "toggle", "pos": [30, 30],
+                              "presentation": [60, 30, 70, 22]}}, "connections": []}
+    assert _spec_hits(spec, "presentation-font-not-monospace") == ["l"]
+    spec["patcher_extras"] = {"default_fontname": "Menlo"}
+    assert _spec_hits(spec, "presentation-font-not-monospace") == []
+    spec["objects"]["l"]["attrs"] = {"fontname": "Arial"}       # a box can override back
+    assert _spec_hits(spec, "presentation-font-not-monospace") == ["l"]
+    spec["objects"]["l"]["attrs"] = {"fontname": "Monaco"}
+    assert _spec_hits(spec, "presentation-font-not-monospace") == []
+
+
+def test_unpresented_text_needs_no_monospace():
+    spec = {"objects": {"l": {"type": "comment", "text": "note", "pos": [30, 30]}},
+            "connections": []}
+    assert _spec_hits(spec, "presentation-font-not-monospace") == []
+
+
+def test_number_box_default_width_is_a_warning():
+    spec = {"objects": {"n": {"type": "flonum", "pos": [30, 30]}}, "connections": []}
+    sev = [v["severity"] for v in verify_spec(spec)["violations"] if v["rule"] == "number-box-default-width"]
+    assert sev == ["warning"]

@@ -720,8 +720,68 @@ def assess(task_description: str) -> dict:
     }
 
 
+# A tool result over the client's limit is cut off or refused, and the
+# knowledge then reaches the model only through a summary, which drops rules.
+# (2026-10-08: core + layout + spec came to ~375k characters; the summary kept
+# "plan widths for monospace" but lost "monospace font throughout", and a patch
+# shipped with both broken.) So load() pages: each part stays under this size.
+_LOAD_PART_CHARS = 60_000
+
+
+def _split_parts(text: str, limit: int = _LOAD_PART_CHARS) -> list:
+    """Split text into parts of at most `limit` characters, breaking before a
+    markdown heading where possible, else at a blank line, else hard."""
+    parts = []
+    while len(text) > limit:
+        window = text[:limit]
+        cut = max(window.rfind("\n# "), window.rfind("\n## "), window.rfind("\n### "))
+        if cut < limit // 2:
+            cut = window.rfind("\n\n")
+        if cut < limit // 2:
+            cut = limit
+        parts.append(text[:cut])
+        text = text[cut:].lstrip("\n")
+    parts.append(text)
+    return parts
+
+
 @mcp.tool()
-def load(domains: list) -> str:
+def load(domains: list, part: int = 1) -> str:
+    """
+    Load Max/MSP knowledge modules into context, one part at a time.
+
+    Large loads are split into parts of about 60k characters, broken at
+    section headings. Read every part: call load(domains, part=2), 3, ... as
+    the footer of each part says, until it says it is the last. Do not
+    summarize or skip parts; rules are spread across all of them.
+
+    Parameters
+    ----------
+    domains — as for _assemble_knowledge (below).
+    part    — which part to return, from 1.
+
+    Returns
+    -------
+    The requested part, with a header naming it ("part 2 of 5") and a footer
+    giving the next call. A load that fits in one part returns it whole.
+    """
+    text = _assemble_knowledge(domains)
+    parts = _split_parts(text)
+    if len(parts) == 1:
+        return text
+    n = len(parts)
+    k = max(1, min(int(part), n))
+    head = f"<!-- Claude2Max knowledge: part {k} of {n} for load({list(domains)!r}) -->\n\n"
+    if k < n:
+        foot = (f"\n\n---\n**Part {k} of {n}.** Read on: call "
+                f"`load(domains={list(domains)!r}, part={k + 1})`. Rules are spread across "
+                f"all parts; do not summarize or stop early.")
+    else:
+        foot = f"\n\n---\n**Part {n} of {n}: the last.** The knowledge for {list(domains)!r} is complete."
+    return head + parts[k - 1] + foot
+
+
+def _assemble_knowledge(domains: list) -> str:
     """
     Load Max/MSP knowledge modules into context.
 

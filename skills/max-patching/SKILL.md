@@ -32,6 +32,12 @@ mcp__claude2max__load(domains=["core", ...])   ← use the list from assess()
 
 **If this session has already read `CLAUDE.md`, `SPEC_REFERENCE.md` and `patching/MAX_PATCHING.md` in full, leave `"core"` out of the list.** Core is cut verbatim from those three files, so loading it too sends about 40k tokens twice. Otherwise keep it.
 
+**Large loads come in parts.** If the result begins "part 1 of N", call
+`mcp__claude2max__load(domains=[...same list...], part=2)`, then 3, and so on until a part
+says it is the last. Read every part yourself. Do not hand the parts to a subagent to
+summarize: summaries drop rules (2026-10-08, a reference patch lost "Monospace font
+throughout" that way, and its labels wrapped).
+
 Read the returned markdown — it is your working knowledge for this session.
 It contains binding rules, Common Pitfalls, preferred objects, and domain guidance.
 `core` is every repo doc section tagged `{!core}`, verbatim. If the task will place boxes

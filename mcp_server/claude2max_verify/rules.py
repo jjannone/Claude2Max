@@ -843,6 +843,10 @@ def rule_debug_marking(ctx: SpecContext) -> list:
 #   label-in-cord-path                40          —     17 files; mostly labels above sliders and number boxes
 #   number-box-default-width         135          —     19 files; a prompt to check the range, not a finding
 #
+# Added 2026-10-08 (no corpus run yet): text-box-too-narrow and
+# presentation-font-not-monospace (warnings); number-box-default-width raised
+# from style to warning.
+#
 # Geometry and presentation rules read `pos` / presentation rects, which a
 # native-derived spec does not carry, so their corpus count is structurally 0.
 # ───────────────────────────────────────────────────────────────────────────
@@ -1867,7 +1871,9 @@ def rule_number_box_default_width(ctx: SpecContext) -> list:
 
     Fires on `number`, `flonum` and `live.numbox` with no `size`, or a `size`
     no wider than the class's default. The verifier cannot know the range a box
-    will display, so this is a prompt to check it, not a finding.
+    will display, so this is a prompt to check it. A warning, not a style note,
+    since 2026-10-08: as a style note it was easy to wave off, and the value
+    got cut off ("250. m" in an attrui-driven reference patch).
     Source: MAX_PATCHING.md > Size a number box to the widest value it will show.
     """
     out = []
@@ -1885,12 +1891,100 @@ def rule_number_box_default_width(ctx: SpecContext) -> list:
             continue
         if w <= default_w:
             out.append(Violation(
-                "number-box-default-width", STYLE, oid,
+                "number-box-default-width", WARNING, oid,
                 f"'{oid}' ({mc}) is {w:.0f} px wide, its default. Check it fits the widest "
                 f"value it will show, at ~10 px per character: `2000.` or `0.005` needs about 70 px.",
                 "MAX_PATCHING.md > Size a number box to the widest value it will show",
             ))
     return out
+
+
+_TEXT_BOX_CLASSES = ("comment", "message")
+_ONE_LINE_MAX_H = 30   # a box this short is one line; taller means wrapping is planned
+
+
+def rule_text_box_too_narrow(ctx: SpecContext) -> list:
+    """A comment or message box sized narrower than its text wraps onto a
+    second line and runs into whatever is below it.
+
+    Fires when an explicit width (patching `size`, or a presentation rect) is
+    under the monospace estimate (10 px per character + 10 px) and the box is
+    one line tall. A taller box, or text with a line break, is a planned wrap
+    and is left alone.
+    Source: MAX_PATCHING.md > Plan every width for a monospace font.
+    (Added 2026-10-08: a reference patch's labels sized by eye at 60 px wrapped
+    as "toggl / e"; nothing flagged them.)
+    """
+    out = []
+    for oid, obj in ctx.objects.items():
+        if ctx.maxclass(obj) not in _TEXT_BOX_CLASSES:
+            continue
+        text = ctx.text(obj)
+        if not text or "\n" in text:
+            continue
+        need = _text_width(text)
+        views = []
+        size = obj.get("size")
+        if isinstance(size, (list, tuple)) and len(size) >= 2:
+            views.append(("patching view", size[0], size[1]))
+        pr = ctx.pres_rect(obj)
+        if pr:
+            views.append(("presentation", pr[2], pr[3]))
+        for view, w, h in views:
+            try:
+                w, h = float(w), float(h)
+            except (TypeError, ValueError):
+                continue
+            if w < need and h < _ONE_LINE_MAX_H:
+                out.append(Violation(
+                    "text-box-too-narrow", WARNING, oid,
+                    f"'{oid}' ({ctx.maxclass(obj)}) is {w:.0f} px wide in the {view}, but "
+                    f"\"{text[:40]}\" needs about {need} px at monospace widths (10 px per "
+                    f"character + 10). It will wrap onto a second line. Widen it to {need}, "
+                    f"or make the box taller if two lines are meant.",
+                    "MAX_PATCHING.md > Plan every width for a monospace font",
+                ))
+    return out
+
+
+_MONOSPACE_HINTS = ("mono", "courier", "menlo", "monaco", "consolas", "console")
+
+
+def _is_monospace(fontname) -> bool:
+    return isinstance(fontname, str) and any(h in fontname.lower() for h in _MONOSPACE_HINTS)
+
+
+def rule_presentation_font_not_monospace(ctx: SpecContext) -> list:
+    """Presented text should be in a monospace font, set per box (`fontname`)
+    or for the whole patch (`patcher_extras.default_fontname`).
+
+    Fires once per patch, naming up to five presented comments and message
+    boxes whose font isn't monospace.
+    Source: MAX_PATCHING.md > Monospace font throughout.
+    (Added 2026-10-08 with text-box-too-narrow.)
+    """
+    extras = ctx.spec.get("patcher_extras") if isinstance(ctx.spec.get("patcher_extras"), dict) else {}
+    default_mono = _is_monospace(extras.get("default_fontname"))
+    offenders = []
+    for oid, obj in ctx.objects.items():
+        if ctx.maxclass(obj) not in _TEXT_BOX_CLASSES or not _is_presented(ctx, obj):
+            continue
+        font = ctx.attrs(obj).get("fontname")
+        if font is not None:
+            if not _is_monospace(font):
+                offenders.append(oid)
+        elif not default_mono:
+            offenders.append(oid)
+    if not offenders:
+        return []
+    shown = ", ".join(f"'{o}'" for o in offenders[:5]) + (" …" if len(offenders) > 5 else "")
+    return [Violation(
+        "presentation-font-not-monospace", WARNING, offenders[0],
+        f"{len(offenders)} presented text box(es) are not in a monospace font: {shown}. "
+        f"Set `patcher_extras.default_fontname` (e.g. \"Menlo\" or \"Monaco\") or "
+        f"`attrs.fontname` on each.",
+        "MAX_PATCHING.md > Monospace font throughout",
+    )]
 
 
 def rule_long_cord(ctx: SpecContext) -> list:
@@ -2728,6 +2822,8 @@ REGISTRY = [
     rule_box_too_narrow,
     rule_label_in_cord_path,
     rule_number_box_default_width,
+    rule_text_box_too_narrow,
+    rule_presentation_font_not_monospace,
     rule_long_cord,
     rule_box_off_canvas,
     rule_tab_window_too_small,
